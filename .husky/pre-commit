@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+#(TODO: renable once tests are in place)
+#yarn test
+
+echo '🎨  Formatting code... Please stand by.'
+npm run lint-staged
+echo '🖼️  Done!'
