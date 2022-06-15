@@ -11,14 +11,14 @@
     "dev": "vite",
     "build": "tsc && vite build --emptyOutDir",
     "preview": "vite preview",
+    "format": "prettier --write './src/**/*.{ts,tsx}'",
     "lint": "eslint --ext .ts,.tsx src",
-    "lint-staged": "lint-staged",
-    "format": "prettier --write './src/**/*.{js,ts,tsx}'",
-    "format:json": "prettier --write '*.json'"
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
