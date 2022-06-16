@@ -16,9 +16,11 @@
     "lint-staged": "lint-staged"
   },
   "dependencies": {
+    "ethers": "^5.6.8",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "wagmi": "^0.4.12"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
