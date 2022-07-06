@@ -6,7 +6,12 @@ export const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   ...props
 }) => {
   return (
-    <button className={`px-2 border-2 ${className || ''}`} {...props}>
+    <button
+      className={`px-2 border-2 border-brand-bond-blue text-white ${
+        className || ''
+      }`}
+      {...props}
+    >
       {children}
     </button>
   );

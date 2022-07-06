@@ -4,7 +4,7 @@ import { Button } from '..';
 
 export const Navbar: FC = () => {
   return (
-    <div className="flex justify-evenly">
+    <div className="flex justify-evenly py-4">
       <Link to="/">
         <Button>Home</Button>
       </Link>

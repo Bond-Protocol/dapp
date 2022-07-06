@@ -8,8 +8,10 @@ export const App: FC = () => {
   return (
     <Providers>
       <Router>
-        <Navbar />
-        <Routes />
+        <div className="text-brand-texas-rose bg-brand-covenant h-[100vh]">
+          <Navbar />
+          <Routes />
+        </div>
       </Router>
     </Providers>
   );
