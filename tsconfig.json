@@ -19,8 +19,10 @@
     "paths": {
       "components/*": ["src/components/*"],
       "components": ["src/components/index"],
-      "views/*": ["src/views/*"],
-      "views": ["src/views/index"]
+      "pages/*": ["src/pages/*"],
+      "pages": ["src/pages/index"],
+      "services/*": ["src/services/*"],
+      "services": ["src/services/index"]
     }
   },
   "include": ["src"],
