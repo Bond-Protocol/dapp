@@ -1,0 +1,9 @@
+overwrite: true
+schema: "https://api.thegraph.com/subgraphs/name/bond-labs/bond-labs-rinkeby"
+documents: 'src/graphql/queries.ts'
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-query"

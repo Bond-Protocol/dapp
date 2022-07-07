@@ -13,17 +13,26 @@
     "preview": "vite preview",
     "format": "prettier --write './src/**/*.{ts,tsx}'",
     "lint": "eslint --ext .ts,.tsx src",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
+    "@graphql-codegen/cli": "^2.7.0",
+    "@graphql-codegen/typescript-react-query": "^3.5.15",
     "@mui/base": "^5.0.0-alpha.88",
     "ethers": "^5.6.8",
+    "graphql": "^16.5.0",
+    "graphql-request": "^4.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
     "wagmi": "^0.4.12"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.7.0",
+    "@graphql-codegen/typescript": "2.6.0",
+    "@graphql-codegen/typescript-operations": "2.4.3",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
