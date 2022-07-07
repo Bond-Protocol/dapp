@@ -1,5 +1,6 @@
 import { getSubgraphEndpoints } from 'services/subgraph-endpoints';
 import {
+  Market,
   useListMarketsGoerliQuery,
   useListMarketsRinkebyQuery,
 } from '../generated/graphql';
@@ -8,8 +9,8 @@ import { useEffect, useState } from 'react';
 export function useMarkets() {
   const endpoints = getSubgraphEndpoints();
 
-  const [mainnetMarkets, setMainnetMarkets] = useState<any[]>([]);
-  const [testnetMarkets, setTestnetMarkets] = useState<any[]>([]);
+  const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
+  const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
   const { data: rinkebyData } = useListMarketsRinkebyQuery({
     endpoint: endpoints[0],

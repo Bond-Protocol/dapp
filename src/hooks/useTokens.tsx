@@ -1,5 +1,6 @@
 import { getSubgraphEndpoints } from 'services/subgraph-endpoints';
 import {
+  Token,
   useListTokensGoerliQuery,
   useListTokensRinkebyQuery,
 } from '../generated/graphql';
@@ -8,8 +9,8 @@ import { useEffect, useState } from 'react';
 export function useTokens() {
   const endpoints = getSubgraphEndpoints();
 
-  const [mainnet, setMainnet] = useState<any[]>([]);
-  const [testnet, setTestnet] = useState<any[]>([]);
+  const [mainnet, setMainnet] = useState<Token[]>([]);
+  const [testnet, setTestnet] = useState<Token[]>([]);
 
   const { data: rinkebyData } = useListTokensRinkebyQuery({
     endpoint: endpoints[0],
