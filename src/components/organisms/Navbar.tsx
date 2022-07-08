@@ -11,6 +11,9 @@ export const Navbar: FC = () => {
       <Link to="/wallet">
         <Button>wallet</Button>
       </Link>
+      <Link to="/createMarket">
+        <Button>Create Market</Button>
+      </Link>
     </div>
   );
 };
