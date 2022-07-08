@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useAccount, useConnect, useNetwork } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import {useEffect} from "react";
+import {useAccount, useConnect, useNetwork} from "wagmi";
+import {InjectedConnector} from "wagmi/connectors/injected";
 
 export const NetworkView = () => {
   const account = useAccount();
@@ -16,7 +16,7 @@ export const NetworkView = () => {
   }, []);
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div style={{ textAlign: "center" }}>
       <h1>hello {account.data?.address}</h1>
       <div>
         <p>Connected to {network?.activeChain?.name}</p>

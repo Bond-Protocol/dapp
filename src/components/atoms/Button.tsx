@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, FC } from 'react';
+import type {ButtonHTMLAttributes, FC} from "react";
 
 export const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   children,
@@ -8,7 +8,7 @@ export const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({
   return (
     <button
       className={`px-2 border-2 border-brand-bond-blue text-white ${
-        className || ''
+        className || ""
       }`}
       {...props}
     >

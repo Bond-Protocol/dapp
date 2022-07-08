@@ -1,5 +1,5 @@
-import type { FC, ReactNode } from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import type {FC, ReactNode} from "react";
+import {QueryClient, QueryClientProvider} from "react-query";
 
 const client = new QueryClient();
 

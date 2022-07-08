@@ -1,5 +1,5 @@
-import type { FC, ReactNode } from 'react';
-import { WagmiConfig, createClient } from 'wagmi';
+import type {FC, ReactNode} from "react";
+import {createClient, WagmiConfig} from "wagmi";
 
 const client = createClient();
 
