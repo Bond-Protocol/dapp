@@ -1,7 +1,7 @@
-import {useAccount, useConnect, useNetwork} from "wagmi";
-import {InjectedConnector} from "wagmi/connectors/injected";
-import {useEffect} from "react";
-import {useForm} from "react-hook-form";
+import { useAccount, useConnect, useNetwork } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 export const CreateMarketView = () => {
   const account = useAccount();

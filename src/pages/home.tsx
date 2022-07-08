@@ -1,7 +1,7 @@
-import {Link} from "react-router-dom";
-import {useMarkets} from "../hooks/useMarkets";
-import {useTokens} from "../hooks/useTokens";
-import {useState} from "react";
+import { Link } from "react-router-dom";
+import { useMarkets } from "../hooks/useMarkets";
+import { useTokens } from "../hooks/useTokens";
+import { useState } from "react";
 
 export const Home = () => {
   const [testnet, setTestnet] = useState(true);

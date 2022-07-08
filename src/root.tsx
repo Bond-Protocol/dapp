@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 //App Entry Point
-import {App} from "./App";
+import { App } from "./App";
 
 //Style Entry Point
 import "./styles/index.css";

@@ -1,6 +1,6 @@
-import type {FC} from "react";
-import {Route, Routes as Switch} from "react-router-dom";
-import {CreateMarketView, Home, NetworkView} from "pages";
+import type { FC } from "react";
+import { Route, Routes as Switch } from "react-router-dom";
+import { CreateMarketView, Home, NetworkView } from "pages";
 
 export const Routes: FC = () => {
   return (

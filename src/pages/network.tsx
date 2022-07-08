@@ -1,6 +1,6 @@
-import {useEffect} from "react";
-import {useAccount, useConnect, useNetwork} from "wagmi";
-import {InjectedConnector} from "wagmi/connectors/injected";
+import { useEffect } from "react";
+import { useAccount, useConnect, useNetwork } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export const NetworkView = () => {
   const account = useAccount();

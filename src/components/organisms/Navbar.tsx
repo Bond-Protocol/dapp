@@ -1,6 +1,6 @@
-import type {FC} from "react";
-import {Link} from "react-router-dom";
-import {Button} from "..";
+import type { FC } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "..";
 
 export const Navbar: FC = () => {
   return (
