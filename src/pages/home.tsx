@@ -1,15 +1,62 @@
 import { Link } from 'react-router-dom';
+import { useMarkets } from '../hooks/useMarkets';
+import { useTokens } from '../hooks/useTokens';
+import { useState } from 'react';
 
 export const Home = () => {
+  const [testnet, setTestnet] = useState(true);
+
+  const mainnetTokens = useTokens().mainnet;
+  const testnetTokens = useTokens().testnet;
+  const mainnetMarkets = useMarkets().mainnet;
+  const testnetMarkets = useMarkets().testnet;
+
+  function toggleTestnet() {
+    setTestnet(!testnet);
+  }
+
+  function renderMarkets() {
+    const markets = testnet ? testnetMarkets : mainnetMarkets;
+    return (
+      <div>
+        {markets.map((market) => (
+          <div key={market.id}>
+            Market Id: {market.marketId} / Chain: {market.network} / Quote:{' '}
+            {market.quoteToken.symbol} / Payout: {market.payoutToken.symbol}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  function renderTokens() {
+    const tokens = testnet ? testnetTokens : mainnetTokens;
+    return (
+      <div>
+        {tokens.map((token) => (
+          <div key={token.id}>
+            Token: {token.symbol} ({token.name}) / Chain: {token.network} /
+            Address: {token.address}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <>
-      <div className="bg-yellow-500" style={{ textAlign: 'center' }}>
+      <div className="bg-yellow-500 text-white" style={{ textAlign: 'center' }}>
         <h1>why hello</h1>
         <div>
           <Link to="wallet">
             <button>wallet</button>
           </Link>
         </div>
+        <div>
+          <button onClick={toggleTestnet}>testnet: {testnet.toString()}</button>
+        </div>
+        {renderMarkets()}
+        {renderTokens()}
       </div>
     </>
   );
