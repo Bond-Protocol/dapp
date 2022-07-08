@@ -3,7 +3,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
+    "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
@@ -19,10 +19,14 @@
     "paths": {
       "components/*": ["src/components/*"],
       "components": ["src/components/index"],
+      "context/*": ["src/context/*"],
+      "context": ["src/context/index"],
       "pages/*": ["src/pages/*"],
       "pages": ["src/pages/index"],
       "services/*": ["src/services/*"],
-      "services": ["src/services/index"]
+      "services": ["src/services/index"],
+      "hooks/*": ["src/hooks/*"],
+      "hooks": ["src/hooks/index"]
     }
   },
   "include": ["src"],

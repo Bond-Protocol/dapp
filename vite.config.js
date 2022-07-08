@@ -13,8 +13,10 @@ export default defineConfig({
   resolve: {
     alias: {
       components: path.join(__dirname, './src/components'),
+      context: path.join(__dirname, './src/context'),
       pages: path.join(__dirname, './src/pages'),
       services: path.join(__dirname, './src/services'),
+      hooks: path.join(__dirname, './src/hooks'),
     },
   },
 });
