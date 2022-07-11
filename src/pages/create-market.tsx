@@ -4,6 +4,8 @@ import { useForm } from "react-hook-form";
 import { Tooltip } from "@material-tailwind/react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
+import { providers } from "services/read-providers";
+import { ethers } from "ethers";
 
 export const CreateMarketView = () => {
   const { data: signer, status } = useSigner();
@@ -17,8 +19,8 @@ export const CreateMarketView = () => {
     watch,
     formState: { errors },
   } = useForm();
+
   const onSubmit = async (data: any) => {
-    console.log("wtf");
     contractLibrary.createMarket(
       {
         payoutToken: data.payoutToken,
@@ -46,6 +48,8 @@ export const CreateMarketView = () => {
   };
 
   const [selectedChain, setSelectedChain] = useState(watch("chain"));
+  const [payoutTokenInfo, setPayoutTokenInfo] = useState("");
+  const [quoteTokenInfo, setQuoteTokenInfo] = useState("");
 
   const switchChain = async (e: Event) => {
     e.preventDefault();
@@ -56,6 +60,45 @@ export const CreateMarketView = () => {
   useEffect(() => {
     setSelectedChain(watch("chain"));
   }, [watch("chain")]);
+
+  const getTokenInfo = async (address: string, isPayout: boolean) => {
+    const contract = contractLibrary.IERC20__factory.connect(
+      address,
+      providers.rinkeby[0]
+    );
+    try {
+      const [name, symbol] = await Promise.all([
+        contract.name(),
+        contract.symbol(),
+      ]);
+
+      const result = name + " (" + symbol + ")";
+      isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
+    } catch (e) {
+      console.log(e.message);
+      const result =
+        "Not an ERC-20 token, please double check the address and chain.";
+      isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
+    }
+  };
+
+  useEffect(() => {
+    const address = watch("payoutToken");
+    if (ethers.utils.isAddress(address)) {
+      void getTokenInfo(address, true);
+    } else {
+      setPayoutTokenInfo("");
+    }
+  }, [watch("payoutToken")]);
+
+  useEffect(() => {
+    const address = watch("quoteToken");
+    if (ethers.utils.isAddress(address)) {
+      void getTokenInfo(address, false);
+    } else {
+      setQuoteTokenInfo("");
+    }
+  }, [watch("quoteToken")]);
 
   interface InputParams {
     label: string;
@@ -94,8 +137,7 @@ export const CreateMarketView = () => {
           <div className="justify-self-start">
             {errors[params.fieldName]?.type?.toString() === "required" &&
               "Required"}
-            {(errors[params.fieldName]?.type?.toString() === "maxLength" ||
-              errors[params.fieldName]?.type?.toString() === "minLength") &&
+            {errors[params.fieldName]?.type?.toString() === "isAddress" &&
               "Invalid Address"}
           </div>
         </div>
@@ -135,10 +177,12 @@ export const CreateMarketView = () => {
             tooltip: "The token to be paid out to the bond purchaser.",
             options: {
               required: true,
-              maxLength: 42,
-              minLength: 42,
+              validate: {
+                isAddress: (value: string) => ethers.utils.isAddress(value),
+              },
             },
           })}
+          {payoutTokenInfo}
           {renderInputBlock({
             label: "Quote Token Address",
             fieldName: "quoteToken",
@@ -148,10 +192,12 @@ export const CreateMarketView = () => {
               "The token to be received by the market owner. Can be a single asset or an LP Pair",
             options: {
               required: true,
-              maxLength: 42,
-              minLength: 42,
+              validate: {
+                isAddress: (value: string) => ethers.utils.isAddress(value),
+              },
             },
           })}
+          {quoteTokenInfo}
           {renderInputBlock({
             label: "Callback Address",
             fieldName: "callback",
@@ -160,8 +206,9 @@ export const CreateMarketView = () => {
             tooltip: "Good explanation coming soon",
             options: {
               required: true,
-              maxLength: 42,
-              minLength: 42,
+              validate: {
+                isAddress: (value: string) => ethers.utils.isAddress(value),
+              },
             },
           })}
           {renderInputBlock({
