@@ -66,7 +66,7 @@
     json5 "^2.2.1"
     semver "^6.3.0"
 
-"@babel/generator@^7.14.0", "@babel/generator@^7.15.8", "@babel/generator@^7.18.6", "@babel/generator@^7.18.7":
+"@babel/generator@^7.14.0", "@babel/generator@^7.18.6", "@babel/generator@^7.18.7":
   version "7.18.7"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.18.7.tgz#2aa78da3c05aadfc82dbac16c99552fc802284bd"
   integrity sha512-shck+7VLlY72a2w9c3zYWuE1pwOKEiQHV7GTUbSnhyl5eu3i04t30tBY82ZRWrDfo3gkakCFtevExnxbkf2a3A==
@@ -239,7 +239,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/parser@^7.14.0", "@babel/parser@^7.15.8", "@babel/parser@^7.16.8", "@babel/parser@^7.18.6", "@babel/parser@^7.18.8":
+"@babel/parser@^7.14.0", "@babel/parser@^7.16.8", "@babel/parser@^7.18.6", "@babel/parser@^7.18.8":
   version "7.18.8"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.18.8.tgz#822146080ac9c62dac0823bb3489622e0bc1cbdf"
   integrity sha512-RSKRfYX20dyH+elbJK2uqAkVyucL+xXzhqlMD5/ZXx+dAAwpyB7HsvnHe/ZUGOF+xLr5Wx9/JoXVTj6BQE2/oA==
@@ -499,7 +499,7 @@
     "@babel/parser" "^7.18.6"
     "@babel/types" "^7.18.6"
 
-"@babel/traverse@^7.13.0", "@babel/traverse@^7.14.0", "@babel/traverse@^7.15.4", "@babel/traverse@^7.16.8", "@babel/traverse@^7.18.6", "@babel/traverse@^7.18.8":
+"@babel/traverse@^7.13.0", "@babel/traverse@^7.14.0", "@babel/traverse@^7.16.8", "@babel/traverse@^7.18.6", "@babel/traverse@^7.18.8":
   version "7.18.8"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.18.8.tgz#f095e62ab46abf1da35e5a2011f43aee72d8d5b0"
   integrity sha512-UNg/AcSySJYR/+mIcJQDCv00T+AqRO7j/ZEJLzpaYtgM48rMg5MnkJgyNqkzo88+p4tfRvZJCEiwwfG6h4jkRg==
@@ -515,7 +515,7 @@
     debug "^4.1.0"
     globals "^11.1.0"
 
-"@babel/types@^7.0.0", "@babel/types@^7.15.6", "@babel/types@^7.16.8", "@babel/types@^7.18.6", "@babel/types@^7.18.7", "@babel/types@^7.18.8":
+"@babel/types@^7.0.0", "@babel/types@^7.16.8", "@babel/types@^7.18.6", "@babel/types@^7.18.7", "@babel/types@^7.18.8":
   version "7.18.8"
   resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.18.8.tgz#c5af199951bf41ba4a6a9a6d0d8ad722b30cd42f"
   integrity sha512-qwpdsmraq0aJ3osLJRApsc2ouSJCdnMeZwB0DhbtHAtRpZNZCdlbRnHIgcRKzdE1g0iOGg644fzjOBcdOz9cPw==
@@ -523,7 +523,7 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
-"@coinbase/wallet-sdk@^3.2.0":
+"@coinbase/wallet-sdk@^3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-3.3.0.tgz#e77383bce1388e5367dc35f8309702e73be47503"
   integrity sha512-Prmxs5eYRxe5i+kDSsny97oPG4Pa5PhLmNDx8f7UQrvlPowGy5Tg0gHOqCie6ck2shVMdW8sKJ+RCLIRZ9kIjA==
@@ -1773,10 +1773,10 @@
     react-refresh "^0.13.0"
     resolve "^1.22.0"
 
-"@wagmi/core@^0.3.8":
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.3.8.tgz#7f2d13a25f6d86e5ddcb31ec1d1c9af7efaa4736"
-  integrity sha512-9wsd8YGW2ivjFwpkgAETn7cRbKOAddZz91vuh2VmIP2bWGiDuFA6RXy5/KLV/tGpvIIiCyGFO0JXpx+n4hFhgQ==
+"@wagmi/core@^0.4.7":
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.4.7.tgz#14fdc8f44f6b07de07e863ec6911b739b89451a3"
+  integrity sha512-YpD9bxE22qV1vhCKDy18Yq5B6ArRRH15XpMnZhB/1Hdbk9nLK1heSJ1HoCetn1uCxrdUByTAzlmuxL3FbeXM5A==
   dependencies:
     eventemitter3 "^4.0.7"
     zustand "^4.0.0-rc.1"
@@ -6771,16 +6771,6 @@ value-or-promise@1.0.11, value-or-promise@^1.0.11:
   resolved "https://registry.yarnpkg.com/value-or-promise/-/value-or-promise-1.0.11.tgz#3e90299af31dd014fe843fe309cefa7c1d94b140"
   integrity sha512-41BrgH+dIbCFXClcSapVs5M6GkENd3gQOJpEfPDNa71LsUGMXDL0jMWpI/Rh7WhX+Aalfz2TTS3Zt5pUsbnhLg==
 
-vite-plugin-require-transform@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/vite-plugin-require-transform/-/vite-plugin-require-transform-1.0.3.tgz#fcab87248dc26849809402c32a2b69ca3abb3adc"
-  integrity sha512-zTymn40H+T3GVAhEP9Aqk5R4gKngiPCb3KImDBI91f97126hoS15ugOO2fnlCJwuIj/J78A9oU+xS6QD8ytCaw==
-  dependencies:
-    "@babel/generator" "^7.15.8"
-    "@babel/parser" "^7.15.8"
-    "@babel/traverse" "^7.15.4"
-    "@babel/types" "^7.15.6"
-
 vite@^2.9.9:
   version "2.9.14"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.9.14.tgz#c438324c6594afd1050df3777da981dee988bb1b"
@@ -6793,13 +6783,13 @@ vite@^2.9.9:
   optionalDependencies:
     fsevents "~2.3.2"
 
-wagmi@^0.4.12:
-  version "0.4.12"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.4.12.tgz#c79be680ceb17ab071c713ddc86e61fc01145522"
-  integrity sha512-YfpRAJyGL9YvtecYDf6cUT6yaIBksHK9JZyq3WlVMUfeTleFmsqCiIaIaKhlPcE+NZxSsUHz1jbZw8KLWTcwvA==
+wagmi@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.5.9.tgz#7e1c3eaa4b5cc5680072c66b59622c2cb5a7bfff"
+  integrity sha512-B9wL+1J3J/9sVqj3DMJtTYuBSx0QdFFu6QwPlw2zVvB995lWivG2vABTYwoWuyUbXwcVvSVHEgPyFBRx5zoPqw==
   dependencies:
-    "@coinbase/wallet-sdk" "^3.2.0"
-    "@wagmi/core" "^0.3.8"
+    "@coinbase/wallet-sdk" "^3.3.0"
+    "@wagmi/core" "^0.4.7"
     "@walletconnect/ethereum-provider" "^1.7.8"
     react-query "^4.0.0-beta.23"
     use-sync-external-store "^1.1.0"

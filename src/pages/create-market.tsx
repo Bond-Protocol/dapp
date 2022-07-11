@@ -1,22 +1,61 @@
-import { useAccount, useConnect, useNetwork } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { useEffect } from "react";
+import { useConnect, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Tooltip } from "@material-tailwind/react";
+import * as contractLibrary from "@bond-labs/contract-library";
+import * as bondLibrary from "@bond-labs/bond-library";
 
 export const CreateMarketView = () => {
-  const account = useAccount();
+  const { data: signer, status } = useSigner();
+  const connect = useConnect();
   const network = useNetwork();
+  const { error, switchNetwork } = useSwitchNetwork();
 
-  const { connect, isConnected } = useConnect({
-    connector: new InjectedConnector(),
-  });
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = async (data: any) => {
+    console.log("wtf");
+    contractLibrary.createMarket(
+      {
+        payoutToken: data.payoutToken,
+        quoteToken: data.quoteToken,
+        callbackAddr: data.callback,
+        capacity: data.capacity,
+        capacityInQuote: data.capacityInQuote,
+        formattedInitialPrice: data.formattedInitialPrice,
+        formattedMinimumPrice: data.formattedMinimumPrice,
+        debtBuffer: data.debtBuffer,
+        vesting: data.vesting,
+        conclusion: data.conclusion,
+        depositInterval: data.depositInterval,
+        scaleAdjustment: data.scaleAdjustment,
+      },
+      contractLibrary.BOND_TYPE.FIXED_TERM,
+      data.chain,
+      // @ts-ignore
+      signer,
+      {
+        gasPrice: 100,
+        gasLimit: 10000000,
+      }
+    );
+  };
+
+  const [selectedChain, setSelectedChain] = useState(watch("chain"));
+
+  const switchChain = async (e: Event) => {
+    e.preventDefault();
+    const newChain = Number("0x" + selectedChain);
+    switchNetwork?.(newChain);
+  };
 
   useEffect(() => {
-    if (!isConnected) {
-      connect();
-    }
-  }, []);
+    setSelectedChain(watch("chain"));
+  }, [watch("chain")]);
 
   interface InputParams {
     label: string;
@@ -24,6 +63,7 @@ export const CreateMarketView = () => {
     type: string;
     placeholder?: string;
     tooltip?: string;
+    selectValues?: { value: any; displayName: string }[];
     options?: Partial<any>;
   }
 
@@ -35,11 +75,20 @@ export const CreateMarketView = () => {
             <span className="text-gray-700">{params.label}</span>
           </div>
           <div>
-            <input
-              type={params.type}
-              placeholder={params.placeholder}
-              {...register(params.fieldName, params.options)}
-            />
+            {params.type !== "select" && (
+              <input
+                type={params.type}
+                placeholder={params.placeholder}
+                {...register(params.fieldName, params.options)}
+              />
+            )}
+            {params.type === "select" && params.selectValues && (
+              <select {...register(params.fieldName, params.options)}>
+                {params.selectValues.map((option) => (
+                  <option value={option.value}>{option.displayName}</option>
+                ))}
+              </select>
+            )}
             {params.tooltip && <Tooltip content={params.tooltip}>wtf?</Tooltip>}
           </div>
           <div className="justify-self-start">
@@ -54,21 +103,33 @@ export const CreateMarketView = () => {
     );
   }
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = (data: any) => console.log(data);
-
   return (
     <div style={{ textAlign: "center" }}>
       <h1>Create Market</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-8 grid grid-cols-1 gap-6 items-start">
           {renderInputBlock({
+            label: "Bond Type",
+            fieldName: "bondType",
+            type: "select",
+            selectValues: Object.values(contractLibrary.BOND_TYPE).map(
+              (value) => ({ value: value, displayName: value })
+            ),
+          })}
+          {renderInputBlock({
+            label: "Chain",
+            fieldName: "chain",
+            type: "select",
+            selectValues: bondLibrary.SUPPORTED_CHAINS.map(
+              (supportedChain) => ({
+                value: supportedChain.chainId,
+                displayName: supportedChain.chainName,
+              })
+            ),
+          })}
+          {renderInputBlock({
             label: "Payout Token Address",
-            fieldName: "payoutTokenAddress",
+            fieldName: "payoutToken",
             type: "text",
             placeholder: "0x...",
             tooltip: "The token to be paid out to the bond purchaser.",
@@ -80,7 +141,7 @@ export const CreateMarketView = () => {
           })}
           {renderInputBlock({
             label: "Quote Token Address",
-            fieldName: "quoteTokenAddress",
+            fieldName: "quoteToken",
             type: "text",
             placeholder: "0x...",
             tooltip:
@@ -93,7 +154,7 @@ export const CreateMarketView = () => {
           })}
           {renderInputBlock({
             label: "Callback Address",
-            fieldName: "callbackAddress",
+            fieldName: "callback",
             type: "text",
             placeholder: "0x...",
             tooltip: "Good explanation coming soon",
@@ -109,13 +170,11 @@ export const CreateMarketView = () => {
             type: "text",
             placeholder: "0",
             tooltip: "Good explanation coming soon",
-            options: {
-              required: true,
-            },
+            options: { required: true },
           })}
           {renderInputBlock({
             label: "Capacity in Quote Token?",
-            fieldName: "capacityInQuoteToken",
+            fieldName: "capacityInQuote",
             type: "checkbox",
             tooltip: "Good explanation coming soon",
           })}
@@ -142,19 +201,15 @@ export const CreateMarketView = () => {
             type: "text",
             placeholder: "0",
             tooltip: "Good explanation coming soon",
-            options: {
-              required: true,
-            },
+            options: { required: true },
           })}
           {renderInputBlock({
             label: "Vesting Period",
-            fieldName: "vestingPeriod",
+            fieldName: "vesting",
             type: "text",
             placeholder: "0",
             tooltip: "Good explanation coming soon",
-            options: {
-              required: true,
-            },
+            options: { required: true },
           })}
           {renderInputBlock({
             label: "Conclusion",
@@ -177,8 +232,12 @@ export const CreateMarketView = () => {
             tooltip: "Good explanation coming soon",
             placeholder: "0",
           })}
-
-          <input type="submit" value="Submit" />
+          {network.chain && network.chain.id == selectedChain ? (
+            <input type="submit" value="Submit" />
+          ) : (
+            // @ts-ignore
+            <button onClick={switchChain}>Switch Chain</button>
+          )}
         </div>
       </form>
     </div>
