@@ -5,18 +5,20 @@ import * as bondLibrary from "@bond-labs/bond-library";
 
 import { providers } from "services/read-providers";
 
-export const useLoadApp = () => {
-  const [initialState, setState] = useState();
+type AppState = {
+  markets: unknown;
+};
 
-  // example provider
+export const useLoadApp = () => {
+  const [state, setState] = useState<AppState>();
 
   useEffect(() => {
     // we can load/call everything we need in here
     // and set it as state afterwards
     // should be simpler than having a store
-    async function loadApp() {
-      const goerliProvider: Provider = providers.goerli[0];
-      const rinkebyProvider: Provider = providers.rinkeby[0];
+    function loadApp() {
+      const goerliProvider: Provider = providers.goerli;
+      const rinkebyProvider: Provider = providers.rinkeby;
 
       console.log({
         contractLibrary,
@@ -31,12 +33,13 @@ export const useLoadApp = () => {
       //   '0xwhatever',
       //   goerliProvider
       // );
+
       //just set whatever we need as state bellow
-      //setState()
+      //setState({ markets: {} })
     }
 
     void loadApp();
-  });
+  }, []);
 
-  return { initialState };
+  return state;
 };
