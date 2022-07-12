@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
 
-import { providers } from "services/read-providers";
+import { providers } from "services/owned-providers";
 
 type AppState = {
   markets: unknown;
