@@ -16,15 +16,15 @@ export type ProviderOptions = {
   chainId: string;
 };
 
-const { env } = import.meta;
-
 const providerConfiguration: ProviderOptions[] = [
   {
     name: "goerli",
     chainId: "5",
     rpcs: [
       {
-        url: `https://eth-goerli.g.alchemy.com/v2/${env.VITE_ALCHEMY_GOERLI_KEY}`,
+        url: `https://eth-goerli.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_GOERLI_KEY
+        }`,
         weight: 1,
         priority: 1,
       },
@@ -35,7 +35,9 @@ const providerConfiguration: ProviderOptions[] = [
     chainId: "4",
     rpcs: [
       {
-        url: `https://eth-rinkeby.alchemyapi.io/v2/${env.VITE_ALCHEMY_RINKEBY_KEY}`,
+        url: `https://eth-rinkeby.alchemyapi.io/v2/${
+          import.meta.env.VITE_ALCHEMY_RINKEBY_KEY
+        }`,
         weight: 1,
         priority: 1,
       },
@@ -58,7 +60,7 @@ export const providers: { [key: string]: Provider } =
     //Add the default ethers provider with the lowest priority as backup
     const defaultProvider = {
       priority: 9,
-      provider: ethers.getDefaultProvider(config.chainId),
+      provider: ethers.getDefaultProvider(config.name),
     };
 
     //Bring everything under one managed Provider instance
