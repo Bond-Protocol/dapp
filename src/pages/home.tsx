@@ -23,8 +23,10 @@ export const Home = () => {
       <div>
         {markets.map((market) => (
           <div key={market.id}>
-            Market Id: {market.marketId} / Chain: {market.network} / Quote:{" "}
-            {market.quoteToken.symbol} / Payout: {market.payoutToken.symbol}
+            Market Id: {market.marketId} /
+            Chain: {market.network} /
+            Quote: {market.quoteToken.symbol} /
+            Payout: {market.payoutToken.symbol}
           </div>
         ))}
       </div>
@@ -40,8 +42,8 @@ export const Home = () => {
             Token: {token.symbol} ({token.name}) /
             Chain: {token.network} /
             CG Price: ${coingeckoPrices.get(token.id)} /
-            NOM Price: ${nomicsPrices.get(token.id)} /
-            Custom Price: ${customPrices.get(token.id)}
+            NOM Price: ${nomicsPrices.get(token.id)}
+            {customPrices.get(token.id) && " / Custom Price: $" + customPrices.get(token.id)}
           </div>
         ))}
       </div>
