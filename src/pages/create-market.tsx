@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { Tooltip } from "@material-tailwind/react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
-import { providers } from "services/read-providers";
+import { providers } from "services/owned-providers";
 import { ethers } from "ethers";
 
 export const CreateMarketView = () => {
