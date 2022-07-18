@@ -1,22 +1,23 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  root: 'src',
-  publicDir: 'src',
+  root: "src",
+  envDir: "..",
+  publicDir: "src",
   build: {
-    outDir: '../dist',
+    outDir: "../dist",
   },
 
   resolve: {
     alias: {
-      components: path.join(__dirname, './src/components'),
-      context: path.join(__dirname, './src/context'),
-      pages: path.join(__dirname, './src/pages'),
-      services: path.join(__dirname, './src/services'),
-      hooks: path.join(__dirname, './src/hooks'),
+      components: path.join(__dirname, "./src/components"),
+      context: path.join(__dirname, "./src/context"),
+      pages: path.join(__dirname, "./src/pages"),
+      services: path.join(__dirname, "./src/services"),
+      hooks: path.join(__dirname, "./src/hooks"),
     },
   },
 });
