@@ -15,6 +15,7 @@ export function useTokens() {
   const [testnet, setTestnet] = useState<Token[]>([]);
   const [coingeckoPrices, setCoingeckoPrices] = useState(new Map());
   const [nomicsPrices, setNomicsPrices] = useState(new Map());
+  const [customPrices, setCustomPrices] = useState(new Map());
   const apiIds = bondLibrary.getUniqueApiIds();
 
   const { data: rinkebyData } = useListTokensRinkebyQuery({
@@ -68,6 +69,39 @@ export function useTokens() {
     }
   }
 
+  async function getCustomPrices() {
+    const requests: Set<Promise<string>> = new Set();
+    const fns: Map<() => Promise<string>, string[]> = new Map();
+    const pricesMap = new Map();
+
+    try {
+      bondLibrary.TOKENS.forEach((value: any, key: any) => {
+        const currentValue = fns.get(value.customPriceFunction) || [];
+
+        if (currentValue.length === 0) {
+          value.customPriceFunction &&
+            requests.add(
+              value.customPriceFunction().then((result: any) => {
+                currentValue.forEach((value) => {
+                  pricesMap.set(value, result);
+                });
+                return result;
+              })
+            );
+        }
+
+        currentValue.push(key);
+        value.customPriceFunction &&
+          fns.set(value.customPriceFunction, currentValue);
+      });
+    } catch (e) {
+      console.log("Error loading custom prices: ", e);
+    }
+
+    await Promise.all(requests);
+    setCustomPrices(pricesMap);
+  }
+
   useEffect(() => {
     if (rinkebyData && rinkebyData.tokens && goerliData && goerliData.tokens) {
       const allMarkets = rinkebyData.tokens.concat(goerliData.tokens);
@@ -75,6 +109,7 @@ export function useTokens() {
       setTestnet(allMarkets);
       void getCoingeckoPrices();
       void getNomicsPrices();
+      void getCustomPrices();
     }
   }, [rinkebyData, goerliData]);
 
@@ -83,5 +118,6 @@ export function useTokens() {
     testnet: testnet,
     coingeckoPrices: coingeckoPrices,
     nomicsPrices: nomicsPrices,
+    customPrices: customPrices,
   };
 }
