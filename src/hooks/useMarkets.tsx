@@ -1,10 +1,10 @@
-import { getSubgraphEndpoints } from 'services/subgraph-endpoints';
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
 import {
   Market,
   useListMarketsGoerliQuery,
   useListMarketsRinkebyQuery,
-} from '../generated/graphql';
-import { useEffect, useState } from 'react';
+} from "../generated/graphql";
+import { useEffect, useState } from "react";
 
 export function useMarkets() {
   const endpoints = getSubgraphEndpoints();

@@ -12,6 +12,7 @@ generated
 dist
 dist-ssr
 *.local
+src/generated/*
 
 # Editor directories and files
 .vscode/*

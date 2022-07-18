@@ -14,18 +14,21 @@
     "format": "prettier --write './src/**/*.{ts,tsx}'",
     "lint": "eslint --ext .ts,.tsx src",
     "lint-staged": "lint-staged",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "postinstall": "yarn codegen"
   },
   "dependencies": {
+    "@material-tailwind/react": "^1.0.6",
     "@mui/base": "^5.0.0-alpha.88",
     "ethers": "^5.6.8",
     "graphql": "^16.5.0",
     "graphql-request": "^4.3.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-hook-form": "^7.33.1",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
-    "wagmi": "^0.4.12"
+    "wagmi": "^0.5.9"
   },
   "devDependencies": {
     "@graphql-codegen/cli": "2.7.0",

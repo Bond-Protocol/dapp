@@ -3,6 +3,18 @@
 ### Dev setup (for now)
 
 ```bash
-npm install
-npm run dev
+yarn install
+
+#Assuming you've installed these libraries locally before using `yarn link` on each
+yarn link @bond-labs/bond-library @bond-labs/contract-library
+
+#Running
+yarn dev
+
+#Other Commands
+
+#Building for prod
+yarn build
+#Serve prod/compiled code locally
+yarn preview
 ```

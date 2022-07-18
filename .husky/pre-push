@@ -2,5 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 echo '🛠️   Building your code before pushing...'
-npm run lint; npm run build
+#npm run lint; npm run build
 echo '🏗️   Code compiled!'

@@ -1,7 +1,6 @@
-import { Link } from 'react-router-dom';
-import { useMarkets } from '../hooks/useMarkets';
-import { useTokens } from '../hooks/useTokens';
-import { useState } from 'react';
+import { useMarkets } from "../hooks/useMarkets";
+import { useTokens } from "../hooks/useTokens";
+import { useState } from "react";
 
 export const Home = () => {
   const [testnet, setTestnet] = useState(true);
@@ -21,7 +20,7 @@ export const Home = () => {
       <div>
         {markets.map((market) => (
           <div key={market.id}>
-            Market Id: {market.marketId} / Chain: {market.network} / Quote:{' '}
+            Market Id: {market.marketId} / Chain: {market.network} / Quote:{" "}
             {market.quoteToken.symbol} / Payout: {market.payoutToken.symbol}
           </div>
         ))}
@@ -45,13 +44,8 @@ export const Home = () => {
 
   return (
     <>
-      <div className="bg-yellow-500 text-white" style={{ textAlign: 'center' }}>
+      <div className="text-white" style={{ textAlign: "center" }}>
         <h1>why hello</h1>
-        <div>
-          <Link to="wallet">
-            <button>wallet</button>
-          </Link>
-        </div>
         <div>
           <button onClick={toggleTestnet}>testnet: {testnet.toString()}</button>
         </div>

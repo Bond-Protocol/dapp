@@ -1,6 +1,6 @@
-import type { FC } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '..';
+import type { FC } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "..";
 
 export const Navbar: FC = () => {
   return (
@@ -10,6 +10,9 @@ export const Navbar: FC = () => {
       </Link>
       <Link to="/wallet">
         <Button>wallet</Button>
+      </Link>
+      <Link to="/createMarket">
+        <Button>Create Market</Button>
       </Link>
     </div>
   );

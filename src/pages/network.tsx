@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
-import { useAccount, useConnect, useNetwork } from 'wagmi';
-import { InjectedConnector } from 'wagmi/connectors/injected';
+import { useEffect } from "react";
+import { useAccount, useConnect, useNetwork } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export const NetworkView = () => {
-  const account = useAccount();
+  const { address, isConnected } = useAccount();
   const network = useNetwork();
-  const { connect, isConnected } = useConnect({
+  const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
 
@@ -16,13 +16,13 @@ export const NetworkView = () => {
   }, []);
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h1>hello {account.data?.address}</h1>
+    <div style={{ textAlign: "center" }}>
+      <h1>hello {address}</h1>
       <div>
-        <p>Connected to {network?.activeChain?.name}</p>
-        <p>Network Id: {network?.activeChain?.id}</p>
+        <p>Connected to {network?.chain?.name}</p>
+        <p>Network Id: {network?.chain?.id}</p>
       </div>
-      <button onClick={() => connect()}>connec</button>
+      {!isConnected && <button onClick={() => connect()}>connec</button>}
     </div>
   );
 };
