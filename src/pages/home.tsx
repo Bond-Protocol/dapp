@@ -7,6 +7,8 @@ export const Home = () => {
 
   const mainnetTokens = useTokens().mainnet;
   const testnetTokens = useTokens().testnet;
+  const coingeckoPrices = useTokens().coingeckoPrices;
+  const nomicsPrices = useTokens().nomicsPrices;
   const mainnetMarkets = useMarkets().mainnet;
   const testnetMarkets = useMarkets().testnet;
 
@@ -34,8 +36,9 @@ export const Home = () => {
       <div>
         {tokens.map((token) => (
           <div key={token.id}>
-            Token: {token.symbol} ({token.name}) / Chain: {token.network} /
-            Address: {token.address}
+            Token: {token.symbol} ({token.name}) / Chain: {token.network} / CG
+            Price: ${coingeckoPrices.get(token.id)} / NOM Price: $
+            {nomicsPrices.get(token.id)}
           </div>
         ))}
       </div>
