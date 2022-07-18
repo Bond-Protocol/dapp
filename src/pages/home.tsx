@@ -37,10 +37,11 @@ export const Home = () => {
       <div>
         {tokens.map((token) => (
           <div key={token.id}>
-            Token: {token.symbol} ({token.name}) / Chain: {token.network} / CG
-            Price: ${coingeckoPrices.get(token.id)} / NOM Price: $
-            {nomicsPrices.get(token.id)} / Custom Price: $
-            {customPrices.get(token.id)}
+            Token: {token.symbol} ({token.name}) /
+            Chain: {token.network} /
+            CG Price: ${coingeckoPrices.get(token.id)} /
+            NOM Price: ${nomicsPrices.get(token.id)} /
+            Custom Price: ${customPrices.get(token.id)}
           </div>
         ))}
       </div>

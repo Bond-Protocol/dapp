@@ -21,7 +21,7 @@ export const CreateMarketView = () => {
   } = useForm();
 
   const onSubmit = async (data: any) => {
-    contractLibrary.createMarket(
+    const tx = await contractLibrary.createMarket(
       {
         payoutToken: data.payoutToken,
         quoteToken: data.quoteToken,
@@ -51,7 +51,7 @@ export const CreateMarketView = () => {
   const [payoutTokenInfo, setPayoutTokenInfo] = useState("");
   const [quoteTokenInfo, setQuoteTokenInfo] = useState("");
 
-  const switchChain = async (e: Event) => {
+  const switchChain = (e: Event) => {
     e.preventDefault();
     const newChain = Number("0x" + selectedChain);
     switchNetwork?.(newChain);
@@ -74,7 +74,7 @@ export const CreateMarketView = () => {
 
       const result = name + " (" + symbol + ")";
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
-    } catch (e) {
+    } catch (e: any) {
       console.log(e.message);
       const result =
         "Not an ERC-20 token, please double check the address and chain.";
@@ -128,7 +128,7 @@ export const CreateMarketView = () => {
             {params.type === "select" && params.selectValues && (
               <select {...register(params.fieldName, params.options)}>
                 {params.selectValues.map((option) => (
-                  <option value={option.value}>{option.displayName}</option>
+                  <option key={option.value} value={option.value}>{option.displayName}</option>
                 ))}
               </select>
             )}

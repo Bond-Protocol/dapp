@@ -6,7 +6,7 @@ import {
 } from "../generated/graphql";
 import { useEffect, useState } from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 
 export function useTokens() {
   const endpoints = getSubgraphEndpoints();
@@ -27,17 +27,18 @@ export function useTokens() {
   });
 
   async function getCoingeckoPrices() {
-    let tokenIds = [...apiIds.coingecko].join(",");
-    let resp: any;
+    const tokenIds = [...apiIds.coingecko].join(",");
+    let resp: AxiosResponse;
 
     try {
       resp = await axios.get(
         `https://api.coingecko.com/api/v3/simple/price?ids=${tokenIds}&vs_currencies=usd`
       );
       const pricesMap = new Map();
-      bondLibrary.TOKENS.forEach((value: any, key: any) => {
+      bondLibrary.TOKENS.forEach((value: bondLibrary.Token, key: string) => {
+        value.coingeckoId &&
         resp.data[value.coingeckoId] &&
-          pricesMap.set(key, resp.data[value.coingeckoId].usd);
+        pricesMap.set(key, resp.data[value.coingeckoId].usd);
       });
       setCoingeckoPrices(pricesMap);
     } catch (e) {
@@ -46,22 +47,21 @@ export function useTokens() {
   }
 
   async function getNomicsPrices() {
-    let tokenIds = [...apiIds.nomics].join(",");
-    let resp: any;
-
+    const apiKey: string = import.meta.env.VITE_NOMICS_API_KEY;
+    const tokenIds = [...apiIds.nomics].join(",");
+    let resp: AxiosResponse;
     try {
       resp = await axios.get(
-        `https://api.nomics.com/v1/currencies/ticker?ids=${tokenIds}&key=` +
-          import.meta.env.VITE_NOMICS_API_KEY
+        `https://api.nomics.com/v1/currencies/ticker?ids=${tokenIds}&key=${apiKey}`
       );
       const pricesMap = new Map();
-      const nomicsMap = resp.data.reduce(function (result: any, item: any) {
+      const nomicsMap = resp.data.reduce(function (result: Map<string, string>, item: { id: string, price: string }) {
         return result.set(item.id, item.price);
       }, new Map());
 
-      bondLibrary.TOKENS.forEach((value: any, key: any) => {
+      bondLibrary.TOKENS.forEach((value: bondLibrary.Token, key: string) => {
         nomicsMap.get(value.nomicsId) &&
-          pricesMap.set(key, nomicsMap.get(value.nomicsId));
+        pricesMap.set(key, nomicsMap.get(value.nomicsId));
       });
       setNomicsPrices(pricesMap);
     } catch (e) {
@@ -71,28 +71,30 @@ export function useTokens() {
 
   async function getCustomPrices() {
     const requests: Set<Promise<string>> = new Set();
-    const fns: Map<() => Promise<string>, string[]> = new Map();
+    const functions: Map<() => Promise<string>, string[]> = new Map();
     const pricesMap = new Map();
 
     try {
-      bondLibrary.TOKENS.forEach((value: any, key: any) => {
-        const currentValue = fns.get(value.customPriceFunction) || [];
+      bondLibrary.TOKENS.forEach((value: bondLibrary.Token, key: string) => {
+        if (value.customPriceFunction != undefined) {
+          const currentValue = functions.get(value.customPriceFunction) || [];
 
-        if (currentValue.length === 0) {
-          value.customPriceFunction &&
+          if (currentValue.length === 0) {
+            value.customPriceFunction &&
             requests.add(
-              value.customPriceFunction().then((result: any) => {
-                currentValue.forEach((value) => {
+              value.customPriceFunction().then((result: string) => {
+                currentValue.forEach((value: string) => {
                   pricesMap.set(value, result);
                 });
                 return result;
               })
             );
-        }
+          }
 
-        currentValue.push(key);
-        value.customPriceFunction &&
-          fns.set(value.customPriceFunction, currentValue);
+          currentValue.push(key);
+          value.customPriceFunction &&
+          functions.set(value.customPriceFunction, currentValue);
+        }
       });
     } catch (e) {
       console.log("Error loading custom prices: ", e);
