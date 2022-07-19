@@ -86,8 +86,6 @@ export function useTokens() {
   useEffect(() => {
     if (coingeckoQuery.data && nomicsQuery.data && customPriceQuery.data) {
       const currentPricesMap = new Map();
-      const coingeckoPricesMap = new Map();
-      const nomicsPricesMap = new Map();
 
       bondLibrary.TOKENS.forEach((value: bondLibrary.Token, tokenKey: string) => {
         const prices: { price: string, source: string }[] = [];
@@ -96,11 +94,9 @@ export function useTokens() {
           switch (priceSource.source) {
           case "coingecko":
             price = coingeckoQuery.data[priceSource.apiId] && coingeckoQuery.data[priceSource.apiId].usd;
-            coingeckoPricesMap.set(tokenKey, price);
             break;
           case "nomics":
             price = nomicsQuery.data.get(priceSource.apiId);
-            nomicsPricesMap.set(tokenKey, price);
             break;
           case "custom":
             price = customPriceQuery.data.get(tokenKey);
