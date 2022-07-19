@@ -69,7 +69,6 @@ export function useTokens() {
     }
   });
 
-
   /*
   Loads custom price data. As these may be from varying sources, it is the responsibility of the customPriceFunction
   defined on the Token in the bond-library to ensure these requests return a price string on success.
