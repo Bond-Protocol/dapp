@@ -97,7 +97,7 @@ export function useTokens() {
                 priceSource.customPriceFunction()
                   .then((result: string) => {
                     // When the request resolves, store the price in the pricesMap,
-                    // using the priceSource as the keyand the result (price) as the value.
+                    // using the priceSource as the key and the result (price) as the value.
                     tokenIds.forEach((priceSource: string) => {
                       pricesMap.set(priceSource, result);
                     });
