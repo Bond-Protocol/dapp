@@ -10,21 +10,23 @@ export function useTokens() {
 
   const [mainnet, setMainnet] = useState<Token[]>([]);
   const [testnet, setTestnet] = useState<Token[]>([]);
-  const [coingeckoPrices, setCoingeckoPrices] = useState(new Map());
-  const [nomicsPrices, setNomicsPrices] = useState(new Map());
-  const [customPrices, setCustomPrices] = useState(new Map());
   const [currentPrices, setCurrentPrices] = useState(new Map());
+  const [customPriceData, setCustomPriceData] = useState(new Map());
+  const [coingeckoData, setCoingeckoData] = useState(null);
+  const [nomicsData, setNomicsData] = useState(null);
+
   const apiIds = bondLibrary.getUniqueApiIds();
 
-  const { data: rinkebyData } = useListTokensRinkebyQuery({
+  const {data: rinkebyData} = useListTokensRinkebyQuery({
     endpoint: endpoints[0],
   });
 
-  const { data: goerliData } = useListTokensGoerliQuery({
+  const {data: goerliData} = useListTokensGoerliQuery({
     endpoint: endpoints[1],
   });
 
-  async function getCoingeckoPrices() {
+  async function getCoingeckoData() {
+    console.log("cdc");
     const tokenIds = [...apiIds.coingecko].join(",");
     let resp: AxiosResponse;
 
@@ -32,19 +34,14 @@ export function useTokens() {
       resp = await axios.get(
         `https://api.coingecko.com/api/v3/simple/price?ids=${tokenIds}&vs_currencies=usd`
       );
-      const pricesMap = new Map();
-      bondLibrary.TOKENS.forEach((value: bondLibrary.Token, key: string) => {
-        value.coingeckoId &&
-        resp.data[value.coingeckoId] &&
-        pricesMap.set(key, resp.data[value.coingeckoId].usd);
-      });
-      setCoingeckoPrices(pricesMap);
+
+      setCoingeckoData(resp.data);
     } catch (e) {
       console.log("coingecko api error: ", e);
     }
   }
 
-  async function getNomicsPrices() {
+  async function getNomicsData() {
     const apiKey: string = import.meta.env.VITE_NOMICS_API_KEY;
     const tokenIds = [...apiIds.nomics].join(",");
     let resp: AxiosResponse;
@@ -52,16 +49,11 @@ export function useTokens() {
       resp = await axios.get(
         `https://api.nomics.com/v1/currencies/ticker?ids=${tokenIds}&key=${apiKey}`
       );
-      const pricesMap = new Map();
       const nomicsMap = resp.data.reduce(function (result: Map<string, string>, item: { id: string, price: string }) {
         return result.set(item.id, item.price);
       }, new Map());
 
-      bondLibrary.TOKENS.forEach((value: bondLibrary.Token, key: string) => {
-        nomicsMap.get(value.nomicsId) &&
-        pricesMap.set(key, nomicsMap.get(value.nomicsId));
-      });
-      setNomicsPrices(pricesMap);
+      setNomicsData(nomicsMap);
     } catch (e) {
       console.log("Nomics API error: ", e);
     }
@@ -71,7 +63,6 @@ export function useTokens() {
     const requests: Set<Promise<string>> = new Set();
     const functions: Map<() => Promise<string>, string[]> = new Map();
     const pricesMap = new Map();
-
     try {
       bondLibrary.TOKENS.forEach((value: bondLibrary.Token, key: string) => {
         if (value.customPriceFunction != undefined) {
@@ -99,26 +90,31 @@ export function useTokens() {
     }
 
     await Promise.all(requests);
-    setCustomPrices(pricesMap);
+    setCustomPriceData(pricesMap);
   }
 
   useEffect(() => {
-    if (coingeckoPrices && nomicsPrices && customPrices) {
+    if (coingeckoData && nomicsData && customPriceData) {
       const currentPricesMap = new Map();
+      const coingeckoPricesMap = new Map();
+      const nomicsPricesMap = new Map();
+
       bondLibrary.TOKENS.forEach((value: bondLibrary.Token, tokenKey: string) => {
         const prices: { price: string, source: string }[] = [];
         value.priceSources.forEach((priceSource: SupportedPriceSource | CustomPriceSource, priority: number) => {
           let price;
           switch (priceSource.source) {
-            case "coingecko":
-              price = coingeckoPrices.get(tokenKey);
-              break;
-            case "nomics":
-              price = nomicsPrices.get(tokenKey);
-              break;
-            case "custom":
-              price = customPrices.get(tokenKey);
-              break;
+          case "coingecko":
+            price = coingeckoData[priceSource.apiId] && coingeckoData[priceSource.apiId].usd;
+            coingeckoPricesMap.set(tokenKey, price);
+            break;
+          case "nomics":
+            price = nomicsData.get(priceSource.apiId);
+            nomicsPricesMap.set(tokenKey, price);
+            break;
+          case "custom":
+            price = customPriceData.get(tokenKey);
+            break;
           }
           prices[priority] = {
             price: price,
@@ -127,17 +123,18 @@ export function useTokens() {
         });
         currentPricesMap.set(tokenKey, prices);
       });
+
       setCurrentPrices(currentPricesMap);
     }
-  }, [coingeckoPrices, nomicsPrices, customPrices])
+  }, [coingeckoData, nomicsData, customPriceData]);
 
   useEffect(() => {
     if (rinkebyData && rinkebyData.tokens && goerliData && goerliData.tokens) {
       const allMarkets = rinkebyData.tokens.concat(goerliData.tokens);
       // @ts-ignore
       setTestnet(allMarkets);
-      void getCoingeckoPrices();
-      void getNomicsPrices();
+      void getCoingeckoData();
+      void getNomicsData();
       void getCustomPrices();
     }
   }, [rinkebyData, goerliData]);
@@ -145,9 +142,7 @@ export function useTokens() {
   return {
     mainnet: mainnet,
     testnet: testnet,
-    coingeckoPrices: coingeckoPrices,
-    nomicsPrices: nomicsPrices,
-    customPrices: customPrices,
+    customPrices: customPriceData,
     currentPrices: currentPrices,
   };
 }

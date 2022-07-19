@@ -39,7 +39,14 @@ export const Home = () => {
           <div key={token.id}>
             Token: {token.symbol} ({token.name}) /
             Chain: {token.network} /
-            Default Price: ${currentPrices.get(token.id)[0].price + " (" + currentPrices.get(token.id)[0].source + ")"}
+            {
+              currentPrices.get(token.id) && currentPrices.get(token.id)[0] ? (
+                "Default Price: $" + currentPrices.get(token.id)[0].price + " (" + currentPrices.get(token.id)[0].source + ")"
+              ) : (
+                "No price found!"
+              )
+            }
+
           </div>
         ))}
       </div>
