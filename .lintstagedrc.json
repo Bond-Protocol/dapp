@@ -1,3 +1,3 @@
 {
-  "*.{json,js,ts,tsx}": ["prettier --write"]
+  "*.{json,js,ts,tsx}": ["eslint"]
 }
