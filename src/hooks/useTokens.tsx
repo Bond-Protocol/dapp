@@ -29,8 +29,8 @@ export function useTokens() {
       return axios.get(
         `https://api.coingecko.com/api/v3/simple/price?ids=${tokenIds}&vs_currencies=usd`
       ).then((response: AxiosResponse) => response.data);
-    } catch (e) {
-      console.log("coingecko api error: ", e);
+    } catch (e: any) {
+      throw new Error("Coingecko API error" + e);
     }
   });
 
@@ -45,8 +45,8 @@ export function useTokens() {
           return result.set(item.id, item.price);
         }, new Map());
       });
-    } catch (e) {
-      console.log("Nomics API error: ", e);
+    } catch (e: any) {
+      throw new Error("Nomics API error", e);
     }
   });
 
@@ -76,8 +76,8 @@ export function useTokens() {
           functions.set(value.customPriceFunction, currentValue);
         }
       });
-    } catch (e) {
-      console.log("Error loading custom prices: ", e);
+    } catch (e: any) {
+      throw new Error("Error loading custom prices", e);
     }
 
     return Promise.all(requests).then(() => pricesMap);
