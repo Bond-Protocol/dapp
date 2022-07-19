@@ -56,25 +56,28 @@ export function useTokens() {
     const pricesMap = new Map();
     try {
       bondLibrary.TOKENS.forEach((value: bondLibrary.Token, key: string) => {
-        if (value.customPriceFunction != undefined) {
-          const currentValue = functions.get(value.customPriceFunction) || [];
+        value.priceSources.forEach((priceSource: any | CustomPriceSource) => {
+          if (priceSource.customPriceFunction != undefined) {
+            const currentValue = functions.get(priceSource.customPriceFunction) || [];
 
-          if (currentValue.length === 0) {
-            value.customPriceFunction &&
-            requests.add(
-              value.customPriceFunction().then((result: string) => {
-                currentValue.forEach((value: string) => {
-                  pricesMap.set(value, result);
-                });
-                return result;
-              })
-            );
+            if (currentValue.length === 0) {
+              priceSource.customPriceFunction &&
+              requests.add(
+                priceSource.customPriceFunction().then((result: string) => {
+                  currentValue.forEach((priceSource: string) => {
+                    pricesMap.set(priceSource, result);
+                  });
+                  return result;
+                })
+              );
+            }
+
+            currentValue.push(key);
+            priceSource.customPriceFunction &&
+            functions.set(priceSource.customPriceFunction, currentValue);
           }
 
-          currentValue.push(key);
-          value.customPriceFunction &&
-          functions.set(value.customPriceFunction, currentValue);
-        }
+        });
       });
     } catch (e: any) {
       throw new Error("Error loading custom prices", e);
