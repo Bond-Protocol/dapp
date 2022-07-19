@@ -31,6 +31,18 @@ export const Home = () => {
     );
   }
 
+  function renderPrice(id: string) {
+    const value = (<span>No price found!</span>);
+    const sources = currentPrices.get(id);
+    for(const source of sources) {
+      if (source == undefined || source.price == undefined) {
+        continue;
+      }
+      return (<span>Default Price: ${source.price} ({source.source})</span>);
+    }
+    return value;
+  }
+
   function renderTokens() {
     const tokens = testnet ? testnetTokens : mainnetTokens;
     return (
@@ -39,14 +51,7 @@ export const Home = () => {
           <div key={token.id}>
             Token: {token.symbol} ({token.name}) /
             Chain: {token.network} /
-            {
-              currentPrices.get(token.id) && currentPrices.get(token.id)[0] ? (
-                "Default Price: $" + currentPrices.get(token.id)[0].price + " (" + currentPrices.get(token.id)[0].source + ")"
-              ) : (
-                "No price found!"
-              )
-            }
-
+            {renderPrice(token.id)}
           </div>
         ))}
       </div>
@@ -55,7 +60,7 @@ export const Home = () => {
 
   return (
     <>
-      <div className="text-white" style={{ textAlign: "center" }}>
+      <div className="text-white" style={{textAlign: "center"}}>
         <h1>why hello</h1>
         <div>
           <button onClick={toggleTestnet}>testnet: {testnet.toString()}</button>
