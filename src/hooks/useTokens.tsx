@@ -1,11 +1,8 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import {
-  Token,
-  useListTokensGoerliQuery,
-  useListTokensRinkebyQuery,
-} from "../generated/graphql";
-import { useEffect, useState } from "react";
+import {getSubgraphEndpoints} from "services/subgraph-endpoints";
+import {Token, useListTokensGoerliQuery, useListTokensRinkebyQuery,} from "../generated/graphql";
+import {useEffect, useState} from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
+import {CustomPriceSource, SupportedPriceSource} from "@bond-labs/bond-library";
 import axios, {AxiosResponse} from "axios";
 
 export function useTokens() {
@@ -16,6 +13,7 @@ export function useTokens() {
   const [coingeckoPrices, setCoingeckoPrices] = useState(new Map());
   const [nomicsPrices, setNomicsPrices] = useState(new Map());
   const [customPrices, setCustomPrices] = useState(new Map());
+  const [currentPrices, setCurrentPrices] = useState(new Map());
   const apiIds = bondLibrary.getUniqueApiIds();
 
   const { data: rinkebyData } = useListTokensRinkebyQuery({
@@ -42,7 +40,7 @@ export function useTokens() {
       });
       setCoingeckoPrices(pricesMap);
     } catch (e) {
-      // console.log("coingecko api error: ", e);
+      console.log("coingecko api error: ", e);
     }
   }
 
@@ -105,6 +103,35 @@ export function useTokens() {
   }
 
   useEffect(() => {
+    if (coingeckoPrices && nomicsPrices && customPrices) {
+      const currentPricesMap = new Map();
+      bondLibrary.TOKENS.forEach((value: bondLibrary.Token, tokenKey: string) => {
+        const prices: { price: string, source: string }[] = [];
+        value.priceSources.forEach((priceSource: SupportedPriceSource | CustomPriceSource, priority: number) => {
+          let price;
+          switch (priceSource.source) {
+            case "coingecko":
+              price = coingeckoPrices.get(tokenKey);
+              break;
+            case "nomics":
+              price = nomicsPrices.get(tokenKey);
+              break;
+            case "custom":
+              price = customPrices.get(tokenKey);
+              break;
+          }
+          prices[priority] = {
+            price: price,
+            source: priceSource.source
+          };
+        });
+        currentPricesMap.set(tokenKey, prices);
+      });
+      setCurrentPrices(currentPricesMap);
+    }
+  }, [coingeckoPrices, nomicsPrices, customPrices])
+
+  useEffect(() => {
     if (rinkebyData && rinkebyData.tokens && goerliData && goerliData.tokens) {
       const allMarkets = rinkebyData.tokens.concat(goerliData.tokens);
       // @ts-ignore
@@ -121,5 +148,6 @@ export function useTokens() {
     coingeckoPrices: coingeckoPrices,
     nomicsPrices: nomicsPrices,
     customPrices: customPrices,
+    currentPrices: currentPrices,
   };
 }

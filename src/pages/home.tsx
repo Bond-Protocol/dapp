@@ -1,15 +1,13 @@
-import { useMarkets } from "../hooks/useMarkets";
-import { useTokens } from "../hooks/useTokens";
-import { useState } from "react";
+import {useMarkets} from "../hooks/useMarkets";
+import {useTokens} from "../hooks/useTokens";
+import {useState} from "react";
 
 export const Home = () => {
   const [testnet, setTestnet] = useState(true);
 
   const mainnetTokens = useTokens().mainnet;
   const testnetTokens = useTokens().testnet;
-  const coingeckoPrices = useTokens().coingeckoPrices;
-  const nomicsPrices = useTokens().nomicsPrices;
-  const customPrices = useTokens().customPrices;
+  const currentPrices = useTokens().currentPrices;
   const mainnetMarkets = useMarkets().mainnet;
   const testnetMarkets = useMarkets().testnet;
 
@@ -41,9 +39,7 @@ export const Home = () => {
           <div key={token.id}>
             Token: {token.symbol} ({token.name}) /
             Chain: {token.network} /
-            CG Price: ${coingeckoPrices.get(token.id)} /
-            NOM Price: ${nomicsPrices.get(token.id)}
-            {customPrices.get(token.id) && " / Custom Price: $" + customPrices.get(token.id)}
+            Default Price: ${currentPrices.get(token.id)[0].price + " (" + currentPrices.get(token.id)[0].source + ")"}
           </div>
         ))}
       </div>
