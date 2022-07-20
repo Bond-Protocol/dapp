@@ -43,7 +43,7 @@ export function useMarkets() {
     } else {
       setSelectedMarkets(mainnetMarkets);
     }
-  }, [testnet]);
+  }, [testnet, mainnetMarkets, testnetMarkets]);
 
   return {
     markets: selectedMarkets,
