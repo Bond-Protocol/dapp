@@ -34,6 +34,7 @@ export const Home = () => {
   function renderPrice(id: string) {
     const value = (<span>No price found!</span>);
     const sources = currentPrices.get(id);
+    if (!sources) return value;
     for(const source of sources) {
       if (source == undefined || source.price == undefined) {
         continue;
