@@ -1,19 +1,11 @@
 import {useMarkets} from "../hooks/useMarkets";
 import {useTokens} from "../hooks/useTokens";
-import {useAtom} from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 import { Token, Market } from "../generated/graphql";
 
 export const Home = () => {
-  const [testnet, setTestnet] = useAtom(testnetMode);
-
   const tokens = useTokens().tokens;
   const currentPrices = useTokens().currentPrices;
   const markets = useMarkets().markets;
-
-  function toggleTestnet() {
-    setTestnet(!testnet);
-  }
 
   function renderMarkets() {
     return (
@@ -61,10 +53,9 @@ export const Home = () => {
     <>
       <div className="text-white" style={{textAlign: "center"}}>
         <h1>why hello</h1>
-        <div>
-          <button onClick={toggleTestnet}>testnet: {testnet.toString()}</button>
-        </div>
+        <br />
         {renderMarkets()}
+        <br />
         {renderTokens()}
       </div>
     </>
