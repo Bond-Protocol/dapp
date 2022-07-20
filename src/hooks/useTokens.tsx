@@ -187,7 +187,7 @@ export function useTokens() {
     } else {
       setSelectedTokens(mainnetTokens);
     }
-  }, [testnet])
+  }, [testnet]);
 
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks

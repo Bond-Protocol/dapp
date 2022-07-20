@@ -7,7 +7,7 @@ import { Token, Market } from "../generated/graphql";
 export const Home = () => {
   const [testnet, setTestnet] = useAtom(testnetMode);
 
-  const tokens = useTokens().tokens
+  const tokens = useTokens().tokens;
   const currentPrices = useTokens().currentPrices;
   const markets = useMarkets().markets;
 
