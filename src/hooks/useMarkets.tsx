@@ -5,10 +5,14 @@ import {
   useListMarketsRinkebyQuery,
 } from "../generated/graphql";
 import { useEffect, useState } from "react";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export function useMarkets() {
   const endpoints = getSubgraphEndpoints();
 
+  const [testnet, setTestnet] = useAtom(testnetMode);
+  const [selectedMarkets, setSelectedMarkets] = useState<Market[]>([]);
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
@@ -33,8 +37,15 @@ export function useMarkets() {
     }
   }, [rinkebyData, goerliData]);
 
+  useEffect(() => {
+    if (testnet) {
+      setSelectedMarkets(testnetMarkets);
+    } else {
+      setSelectedMarkets(mainnetMarkets);
+    }
+  }, [testnet]);
+
   return {
-    mainnet: mainnetMarkets,
-    testnet: testnetMarkets,
+    markets: selectedMarkets,
   };
 }

@@ -1,25 +1,24 @@
 import {useMarkets} from "../hooks/useMarkets";
 import {useTokens} from "../hooks/useTokens";
-import {useState} from "react";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
+import { Token, Market } from "../generated/graphql";
 
 export const Home = () => {
-  const [testnet, setTestnet] = useState(true);
+  const [testnet, setTestnet] = useAtom(testnetMode);
 
-  const mainnetTokens = useTokens().mainnet;
-  const testnetTokens = useTokens().testnet;
+  const tokens = useTokens().tokens
   const currentPrices = useTokens().currentPrices;
-  const mainnetMarkets = useMarkets().mainnet;
-  const testnetMarkets = useMarkets().testnet;
+  const markets = useMarkets().markets;
 
   function toggleTestnet() {
     setTestnet(!testnet);
   }
 
   function renderMarkets() {
-    const markets = testnet ? testnetMarkets : mainnetMarkets;
     return (
       <div>
-        {markets.map((market) => (
+        {markets.map((market: Market) => (
           <div key={market.id}>
             Market Id: {market.marketId} /
             Chain: {market.network} /
@@ -45,10 +44,9 @@ export const Home = () => {
   }
 
   function renderTokens() {
-    const tokens = testnet ? testnetTokens : mainnetTokens;
     return (
       <div>
-        {tokens.map((token) => (
+        {tokens.map((token: Token) => (
           <div key={token.id}>
             Token: {token.symbol} ({token.name}) /
             Chain: {token.network} /
