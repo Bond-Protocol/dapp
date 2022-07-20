@@ -4,13 +4,6 @@ import { BaseSyntheticEvent, FC } from "react";
 import { Button } from "..";
 
 const sampleTokens = [{ label: "ETH" }, { label: "OHM" }];
-const bondInfo = {
-  icon: "icon-url",
-  ticker: "OHM",
-  description:
-    " Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit... ",
-  bondContract: "",
-};
 
 export type BondListCardProps = {
   icon: string;
@@ -43,6 +36,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
           </div>
         </div>
         <div className="flex">
+          {/*TODO: load wallet tokens*/}
           <Select
             label="Token"
             placeholder="Select Token"
