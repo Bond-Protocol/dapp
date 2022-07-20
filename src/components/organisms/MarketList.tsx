@@ -1,6 +1,6 @@
 import { ExpandableRow } from "components/molecules/ExpandableRow";
 import { FC } from "react";
-import { BondListCard } from "./BondListCard";
+import { BondListCard, BondListCardProps } from "./BondListCard";
 
 type MarketRow = {
   bond: string;
@@ -10,6 +10,7 @@ type MarketRow = {
   performance: string;
   created: string;
   expiry: string;
+  details: BondListCardProps;
 };
 
 type MarketListProps = {
@@ -28,8 +29,8 @@ export const MarketList: FC<MarketListProps> = ({ rows }) => {
         <th>Created</th>
         <th>Expiry Date</th>
       </tr>
-      {rows.map((r) => (
-        <ExpandableRow expanded={<BondListCard />}>
+      {rows.map((r, i) => (
+        <ExpandableRow key={i} expanded={<BondListCard {...r.details} />}>
           <td>{r.bond}</td>
           <td>{r.payoutAsset}</td>
           <td>{r.discount}%</td>
@@ -37,7 +38,6 @@ export const MarketList: FC<MarketListProps> = ({ rows }) => {
           <td>{r.performance}%</td>
           <td>{r.created}</td>
           <td>{r.expiry}</td>
-          <td>V</td>
         </ExpandableRow>
       ))}
     </table>

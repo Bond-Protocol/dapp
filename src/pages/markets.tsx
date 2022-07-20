@@ -2,7 +2,7 @@ import { PageContainer } from "components/atoms/PageContainer";
 import { Tabs } from "components/molecules/Tabs";
 import { MarketList } from "components/organisms/MarketList";
 
-const exampleRows = [
+const exampleAllBonds = [
   {
     bond: "OHM-DAI SLP",
     payoutAsset: "OHM",
@@ -11,6 +11,12 @@ const exampleRows = [
     performance: "+30",
     created: "13 Sep 93",
     expiry: "24 Dec 93",
+    details: {
+      icon: "icon-url",
+      ticker: "OHM",
+      description: "The decentralized reserve currency",
+      bondContract: "",
+    },
   },
   {
     bond: "BPG-DAI SLP",
@@ -20,12 +26,36 @@ const exampleRows = [
     performance: "+12930",
     created: "13 Sep 93",
     expiry: "24 Dec 93",
+    details: {
+      icon: "icon-url",
+      ticker: "BPG",
+      description: "The next evolution of Bonds-As-A-Service",
+      bondContract: "",
+    },
+  },
+];
+
+const exampleMyBonds = [
+  {
+    bond: "BPG-DAI SLP",
+    payoutAsset: "BPG",
+    discount: "69",
+    tbv: "2143456670",
+    performance: "+12930",
+    created: "13 Sep 93",
+    expiry: "24 Dec 93",
+    details: {
+      icon: "icon-url",
+      ticker: "BPG",
+      description: "The next evolution of Bonds-As-A-Service",
+      bondContract: "",
+    },
   },
 ];
 
 const tabsConfig = [
-  { label: "My Bonds", component: <MarketList rows={exampleRows} /> },
-  { label: "All Bonds", component: <MarketList rows={exampleRows} /> },
+  { label: "My Bonds", component: <MarketList rows={exampleMyBonds} /> },
+  { label: "All Bonds", component: <MarketList rows={exampleAllBonds} /> },
   { label: "Auctions", component: <div>Auctions r cool</div> },
 ];
 

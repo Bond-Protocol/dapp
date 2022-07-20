@@ -18,8 +18,9 @@ export const Tabs: FC<TabProps> = ({ tabs }) => {
           },
         }}
       >
-        {tabs.map(({ label }) => (
+        {tabs.map(({ label }, i) => (
           <TabUnstyled
+            key={i}
             componentsProps={{
               root: {
                 className: "border px-4 mx-1",
@@ -31,7 +32,9 @@ export const Tabs: FC<TabProps> = ({ tabs }) => {
         ))}
       </TabsListUnstyled>
       {tabs.map(({ component }, i) => (
-        <TabPanelUnstyled value={i}>{component}</TabPanelUnstyled>
+        <TabPanelUnstyled value={i} key={i}>
+          {component}
+        </TabPanelUnstyled>
       ))}
     </TabsUnstyled>
   );
