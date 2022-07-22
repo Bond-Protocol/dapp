@@ -32,13 +32,17 @@ export function useTokens() {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const {data: rinkebyData} = useListTokensRinkebyQuery({
-    endpoint: endpoints[0],
-  });
+  const {data: rinkebyData} = useListTokensRinkebyQuery(
+    {endpoint: endpoints[0]},
+    {},
+    {staleTime: 5 * 60 * 1000} // 5 minutes
+  );
 
-  const {data: goerliData} = useListTokensGoerliQuery({
-    endpoint: endpoints[1],
-  });
+  const {data: goerliData} = useListTokensGoerliQuery(
+    {endpoint: endpoints[1]},
+    {},
+    {staleTime: 5 * 60 * 1000} // 5 minutes
+  );
 
   /*
   Loads token price data from Coingecko.
@@ -52,6 +56,8 @@ export function useTokens() {
     } catch (e: any) {
       throw new Error("Coingecko API error" + e);
     }
+  }, {
+    staleTime: 5 * 60 * 1000 // 5 minutes
   });
 
   /*
@@ -71,6 +77,8 @@ export function useTokens() {
     } catch (e: any) {
       throw new Error("Nomics API error", e);
     }
+  }, {
+    staleTime: 5 * 60 * 1000 // 5 minutes
   });
 
   /*
@@ -121,6 +129,8 @@ export function useTokens() {
 
     // When all the Promises have settled, return the pricesMap, which was populated by each request's 'then' callback.
     return Promise.allSettled(requests).then(() => pricesMap);
+  }, {
+    staleTime: 5 * 60 * 1000 // 5 minutes
   });
 
   /*

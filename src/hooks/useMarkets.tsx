@@ -1,10 +1,6 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import {
-  Market,
-  useListMarketsGoerliQuery,
-  useListMarketsRinkebyQuery,
-} from "../generated/graphql";
-import { useEffect, useState } from "react";
+import {getSubgraphEndpoints} from "services/subgraph-endpoints";
+import {Market, useListMarketsGoerliQuery, useListMarketsRinkebyQuery,} from "../generated/graphql";
+import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
@@ -16,13 +12,17 @@ export function useMarkets() {
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
-  const { data: rinkebyData } = useListMarketsRinkebyQuery({
-    endpoint: endpoints[0],
-  });
+  const {data: rinkebyData} = useListMarketsRinkebyQuery(
+    {endpoint: endpoints[0]},
+    {},
+    {staleTime: 5 * 60 * 1000} // 5 minutes
+  );
 
-  const { data: goerliData } = useListMarketsGoerliQuery({
-    endpoint: endpoints[1],
-  });
+  const {data: goerliData} = useListMarketsGoerliQuery(
+    {endpoint: endpoints[1]},
+    {},
+    {staleTime: 5 * 60 * 1000} // 5 minutes
+  );
 
   useEffect(() => {
     if (
