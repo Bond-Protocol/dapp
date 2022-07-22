@@ -63,8 +63,6 @@ export function useBondPrices(currentPrices: Map<string, Price[]>, markets: Mark
     }
 
     return Promise.allSettled(requests).then(() => bondPricesMap);
-  }, {
-    staleTime: 5 * 60 * 1000 // 5 minutes
   });
 
   useEffect(() => {

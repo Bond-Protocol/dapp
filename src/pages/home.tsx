@@ -2,12 +2,15 @@ import {useMarkets} from "../hooks/useMarkets";
 import {useTokens} from "../hooks/useTokens";
 import { Token, Market } from "../generated/graphql";
 import {useBondPrices} from "hooks/useBondPrices";
+import {useQueryClient} from "react-query";
 
 export const Home = () => {
+  const queryClient = useQueryClient();
+
   const tokens = useTokens().tokens;
   const currentPrices = useTokens().currentPrices;
   const markets = useMarkets().markets;
-  const bondPrices = useBondPrices(currentPrices, markets).bondPrices;
+  const bondPrices = queryClient.getQueryData("bondPrices");
 
   function renderMarkets() {
     return (
@@ -20,7 +23,8 @@ export const Home = () => {
             Payout: {market.payoutToken.symbol} /
             {renderMarketPrice(market.payoutToken.id)} /
             {renderBondPrice(market.id)} /
-            {renderBondDiscount(market.id)}
+            {renderBondDiscount(market.id)} /
+            Vesting: {market.vesting}
           </div>
         ))}
       </div>
@@ -51,7 +55,7 @@ export const Home = () => {
     const value = (<span>No price found!</span>);
     const bondPrice = bondPrices.get(id);
     if (!bondPrice) return value;
-    return (<span>Discount: {bondPrice.bondDiscount}%</span>);
+    return (<span>Discount: {bondPrice.discount}%</span>);
   }
 
   function renderTokens() {
