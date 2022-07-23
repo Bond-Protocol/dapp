@@ -1,14 +1,14 @@
 import {FC} from "react";
 import {HashRouter as Router} from "react-router-dom";
 import {Navbar, Routes} from "components/organisms";
-import {useBondPrices, useLoadApp, useMarkets, useTokens} from "./hooks";
+import {useCalculatedMarkets, useLoadApp, useMarkets, useTokens} from "./hooks";
 
 export const App: FC = () => {
   const state = useLoadApp();
   const tokens = useTokens().tokens;
   const currentPrices = useTokens().currentPrices;
   const markets = useMarkets().markets;
-  const bondPrices = useBondPrices(currentPrices, markets).bondPrices;
+  const calculatedMarkets = useCalculatedMarkets(currentPrices, markets).calculatedMarkets;
 
   return (
     <Router>

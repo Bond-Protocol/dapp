@@ -1,4 +1,4 @@
-import { gql } from "graphql-request";
+import {gql} from "graphql-request";
 
 export const listMarketsRinkeby = gql`
   query ListMarketsRinkeby {
@@ -18,6 +18,7 @@ export const listMarketsRinkeby = gql`
         symbol
       }
       vesting
+      vestingType
       isInstantSwap
     }
   }
@@ -41,6 +42,7 @@ export const listMarketsGoerli = gql`
         symbol
       }
       vesting
+      vestingType
       isInstantSwap
     }
   }

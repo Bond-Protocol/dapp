@@ -7,9 +7,9 @@ import {useProvider} from "wagmi";
 import {providers} from "services/owned-providers";
 import {Market} from "src/generated/graphql";
 
-export function useBondPrices(currentPrices: Map<string, Price[]>, markets: Market[]) {
+export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, markets: Market[]) {
   const provider = useProvider();
-  const [bondPrices, setBondPrices] = useState(new Map());
+  const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
 
   function getPrice(id: string): string {
     const sources = currentPrices.get(id);
@@ -23,9 +23,9 @@ export function useBondPrices(currentPrices: Map<string, Price[]>, markets: Mark
     return "";
   }
 
-  const calculatePrices = useQuery("bondPrices", async () => {
+  const calculatePrices = useQuery("calculatedMarkets", async () => {
     const requests: Promise<CalculatedMarket>[] = [];
-    const bondPricesMap = new Map();
+    const calculatedMarketsMap = new Map();
     try {
       if (currentPrices.size > 0 && markets) {
         markets.forEach((market) => {
@@ -37,6 +37,8 @@ export function useBondPrices(currentPrices: Map<string, Price[]>, markets: Mark
             {
               id: market.id,
               auctioneer: market.auctioneer,
+              vesting: market.vesting,
+              vestingType: market.vestingType,
               payoutToken: {
                 id: market.payoutToken.id,
                 decimals: market.payoutToken.decimals,
@@ -53,7 +55,7 @@ export function useBondPrices(currentPrices: Map<string, Price[]>, markets: Mark
               }
             }
           ).then((result: CalculatedMarket) => {
-            bondPricesMap.set(result.id, result);
+            calculatedMarketsMap.set(result.id, result);
             return result;
           }));
         });
@@ -62,7 +64,7 @@ export function useBondPrices(currentPrices: Map<string, Price[]>, markets: Mark
       throw new Error("Error loading bond prices", e);
     }
 
-    return Promise.allSettled(requests).then(() => bondPricesMap);
+    return Promise.allSettled(requests).then(() => calculatedMarketsMap);
   });
 
   useEffect(() => {
@@ -74,11 +76,11 @@ export function useBondPrices(currentPrices: Map<string, Price[]>, markets: Mark
 
   useEffect(() => {
     if (calculatePrices && calculatePrices.data) {
-      setBondPrices(calculatePrices.data);
+      setCalculatedMarkets(calculatePrices.data);
     }
   }, [calculatePrices.data]);
 
   return {
-    bondPrices: bondPrices,
+    calculatedMarkets: calculatedMarkets,
   };
 }
