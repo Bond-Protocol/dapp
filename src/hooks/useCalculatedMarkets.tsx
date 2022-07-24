@@ -36,11 +36,14 @@ export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, market
             import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
             {
               id: market.id,
+              network: market.network,
               auctioneer: market.auctioneer,
+              teller: market.teller,
               vesting: market.vesting,
               vestingType: market.vestingType,
               payoutToken: {
                 id: market.payoutToken.id,
+                address: market.payoutToken.address,
                 decimals: market.payoutToken.decimals,
                 name: market.payoutToken.name,
                 symbol: market.payoutToken.symbol,
@@ -48,6 +51,7 @@ export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, market
               },
               quoteToken: {
                 id: market.quoteToken.id,
+                address: market.quoteToken.address,
                 decimals: market.quoteToken.decimals,
                 name: market.quoteToken.name,
                 symbol: market.quoteToken.symbol,

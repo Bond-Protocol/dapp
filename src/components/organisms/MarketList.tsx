@@ -3,6 +3,7 @@ import {useMarkets} from "hooks";
 import {Market} from "src/generated/graphql";
 import {useQueryClient} from "react-query";
 import {CalculatedMarket} from "@bond-labs/contract-library";
+import {BondListCard} from "components/organisms/BondListCard";
 
 export const MarketList = () => {
   const queryClient = useQueryClient();
@@ -29,7 +30,7 @@ export const MarketList = () => {
           {markets.map((market: Market) => {
             const calculatedMarket = calculatedMarkets?.get(market.id);
             return (
-              <ExpandableRow key={market.id} expanded={<div/>} className="gap-x-2">
+              <ExpandableRow key={market.id} expanded={<BondListCard market={calculatedMarket} />} className="gap-x-2">
                 <td>{market.quoteToken.symbol}</td>
                 <td>{market.payoutToken.symbol}</td>
                 <td>
