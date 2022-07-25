@@ -9,6 +9,7 @@ import {useAccount, useBalance, useConnect, useProvider, useSigner, useSwitchNet
 import {providers} from "services/owned-providers";
 import {BigNumberish, ContractTransaction} from "ethers";
 import {InjectedConnector} from "wagmi/connectors/injected";
+import ConfirmPurchaseDialog from "./ConfirmPurchaseDialog";
 
 export type BondListCardProps = {
   market: CalculatedMarket
@@ -99,27 +100,6 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
 
     await signer?.provider?.waitForTransaction(approval.hash)
       .then(() => void getAllowance());
-  }
-
-  async function bond() {
-    const minimumOut = Number(payout) * 0.005;
-    const approval: ContractTransaction = await contractLibrary.purchase(
-      address,
-      import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
-      props.market.marketId,
-      amount,
-      minimumOut.toString(),
-      props.market.teller,
-      signer,
-      {
-        gasPrice: 100,
-        gasLimit: 10000000,
-      }
-    );
-
-    await signer?.provider?.waitForTransaction(approval.hash)
-      .then(() => console.log("Bond Purchased!"))
-      .catch((error) => console.log(error));
   }
 
   async function getPayoutFor(amount: string) {
@@ -218,9 +198,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
         }
 
         {correctChain && hasSufficientAllowance &&
-            <Button className="w-full" onClick={bond}>
-                Bond
-            </Button>
+            <ConfirmPurchaseDialog amount={amount} market={props.market} />
         }
       </div>
     </div>
