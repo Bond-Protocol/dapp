@@ -30,7 +30,11 @@ export const MarketList = () => {
           {markets.map((market: Market) => {
             const calculatedMarket = calculatedMarkets?.get(market.id);
             return (
-              <ExpandableRow key={market.id} expanded={<BondListCard market={calculatedMarket} />} className="gap-x-2">
+              <ExpandableRow key={market.id} expanded={
+                calculatedMarket ?
+                  (<BondListCard market={calculatedMarket} />) :
+                  (<div>Loading...</div>)
+              } className="gap-x-2">
                 <td>{market.quoteToken.symbol}</td>
                 <td>{market.payoutToken.symbol}</td>
                 <td>
