@@ -2,7 +2,7 @@ import {gql} from "graphql-request";
 
 export const listMarketsRinkeby = gql`
     query ListMarketsRinkeby {
-        markets {
+        markets(where: {isLive: true}) {
             id
             name
             network
@@ -14,11 +14,13 @@ export const listMarketsRinkeby = gql`
                 id
                 address
                 symbol
+                decimals
             }
             quoteToken {
                 id
                 address
                 symbol
+                decimals
             }
             vesting
             vestingType
@@ -29,7 +31,7 @@ export const listMarketsRinkeby = gql`
 
 export const listMarketsGoerli = gql`
     query ListMarketsGoerli {
-        markets {
+        markets(where: {isLive: true}) {
             id
             name
             network
@@ -41,11 +43,13 @@ export const listMarketsGoerli = gql`
                 id
                 address
                 symbol
+                decimals
             }
             quoteToken {
                 id
                 address
                 symbol
+                decimals
             }
             vesting
             vestingType
@@ -90,6 +94,58 @@ export const listTokensGoerli = gql`
                 }
                 token1 {
                     id
+                }
+            }
+        }
+    }
+`;
+
+export const getOwnerBalancesByOwnerRinkeby = gql`
+    query GetOwnerBalancesByOwnerRinkeby($owner: String!) {
+        ownerBalances(where:
+        {
+            owner_contains_nocase: $owner,
+            balance_gt: 0
+        }) {
+            id
+            tokenId
+            owner
+            balance
+            bondToken {
+                id
+                expiry
+                network
+                type
+                teller
+                underlying {
+                    symbol
+                    decimals
+                }
+            }
+        }
+    }
+`;
+
+export const getOwnerBalancesByOwnerGoerli = gql`
+    query GetOwnerBalancesByOwnerGoerli($owner: String!) {
+        ownerBalances(where:
+        {
+            owner_contains_nocase: $owner,
+            balance_gt: 0
+        }) {
+            id
+            tokenId
+            owner
+            balance
+            bondToken {
+                id
+                expiry
+                network
+                type
+                teller
+                underlying {
+                    symbol
+                    decimals
                 }
             }
         }

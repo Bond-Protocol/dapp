@@ -137,12 +137,14 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
         <div className="flex justify-between mb-2">
           {isConnected ?
             (<p>Balance: {balance + " " + props.market.quoteToken.symbol}</p>) :
+            //@ts-ignore
             (<p>Balance: <Button onClick={connect}>Connect Wallet!</Button></p>)
           }
           <div>
             <Chip value="25%" className="mr-2"/>
             <Chip value="50%" className="mr-2"/>
             <Chip value="75%" className="mr-2"/>
+            {/*@ts-ignore*/}
             <Chip value="MAX" className="mr-2" onClick={setMax}/>
           </div>
         </div>
@@ -180,12 +182,14 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
       <div className="flex pt-2">
         {/*TODO: add proper handlers*/}
         {!isConnected &&
+            //@ts-ignore
             <Button className="w-full" onClick={connect}>
                 Connect Wallet
             </Button>
         }
 
         {isConnected && !correctChain &&
+        //@ts-ignore
             <Button className="w-full" onClick={switchChain}>
                 Switch to {props.market.network}
             </Button>

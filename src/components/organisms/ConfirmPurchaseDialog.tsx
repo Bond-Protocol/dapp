@@ -4,6 +4,7 @@ import ModalUnstyled from "@mui/base/ModalUnstyled";
 import Button from "components/atoms/Button";
 import * as contractLibrary from "@bond-labs/contract-library";
 import {CalculatedMarket} from "@bond-labs/contract-library";
+import * as bondLibrary from "@bond-labs/bond-library";
 import {BigNumberish, ContractTransaction} from "ethers";
 import {useAccount, useSigner} from "wagmi";
 import {useTokens} from "hooks";
@@ -23,9 +24,25 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
   const [market, setMarket] = useState<CalculatedMarket>(props.market);
   const [slippage, setSlippage] = useState<number>(0.5);
   const [transactionStatus, setTransactionStatus] = useState<string>("");
+  const [transactionReceipt, setTransactionReceipt] = useState<any>(null);
+  const [blockExplorerUrl, setBlockExplorerUrl] = useState(bondLibrary.CHAINS.get(market.network)?.blockExplorerUrls[0].replace("#", "tx"));
+  const [blockExplorerName, setBlockExplorerName] = useState(bondLibrary.CHAINS.get(market.network)?.blockExplorerName);
+
   const timerRef = useRef<NodeJS.Timeout>();
 
+  const twitterLink =
+    "https://twitter.com/intent/tweet?text=I just received a " +
+    props.market.discount +
+    "%25 discount on $" +
+    props.market.payoutToken.symbol +
+    " thanks to @Bond_Protocol bonds. Don't miss out on yours! " +
+    //  (bond.socials.twitter ? bond.socials.twitter + `,` : "") +
+    " %0A%0Abondprotocol.finance";
+
   const handleOpen = () => {
+    setTransactionStatus("");
+    setSlippage(0.5);
+    setPayout("0");
     setOpen(true);
 
     timerRef.current = setInterval(() => {
@@ -39,9 +56,6 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
 
   const handleClose = () => {
     clearInterval(timerRef.current);
-    setTransactionStatus("");
-    setSlippage(0.5);
-    setPayout("0");
     setOpen(false);
   };
 
@@ -63,7 +77,9 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
 
   async function bond() {
     const minimumOut = Number(payout) - (Number(payout) * (slippage / 100));
+
     const bondTx: ContractTransaction = await contractLibrary.purchase(
+      // @ts-ignore
       address,
       import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
       props.market.marketId,
@@ -83,12 +99,14 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
     await signer?.provider?.waitForTransaction(bondTx.hash)
       .then((result) => {
         result.status === 0 ? setTransactionStatus("reverted") : setTransactionStatus("success");
+        setTransactionReceipt(result);
       })
       .catch((error) => console.log(error));
   }
 
   async function refreshMarket() {
     void await contractLibrary.calcMarket(
+      // @ts-ignore
       signer?.provider,
       import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
       {
@@ -122,6 +140,7 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
 
   async function getPayoutFor() {
     const payout: BigNumberish = await contractLibrary.payoutFor(
+      // @ts-ignore
       signer?.provider,
       props.amount,
       props.market.marketId,
@@ -141,7 +160,8 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
         open={open}
         onClose={handleClose}
       >
-        <div className="bg-brand-covenant w-[35rem] h-[35rem] text-brand-texas-rose fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+        <div
+          className="bg-brand-covenant w-[35rem] h-[35rem] text-brand-texas-rose fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
           <Button onClick={handleClose}>X</Button>
           {
             transactionStatus === "" &&
@@ -157,8 +177,11 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
                 </div>
                 <p>You will spend: {props.amount} {props.market.quoteToken.symbol}</p>
                 <p>You will get a maximum of: {payout} {props.market.payoutToken.symbol}</p>
-                <p>You will get a minimum of: {Number(payout) - (Number(payout) * (slippage / 100))} {props.market.payoutToken.symbol} ({slippage}% Slippage)</p>
-                <p>Bond Price: {props.market.formattedDiscountedPrice} per {props.market.payoutToken.symbol} (Market: {props.market.formattedFullPrice})</p>
+                <p>You will get a minimum
+                  of: {Number(payout) - (Number(payout) * (slippage / 100))} {props.market.payoutToken.symbol} ({slippage}%
+                  Slippage)</p>
+                <p>Bond
+                  Price: {props.market.formattedDiscountedPrice} per {props.market.payoutToken.symbol} (Market: {props.market.formattedFullPrice})</p>
                 <p>Discount: {market.discount}%</p>
                 <Button className="w-full" onClick={bond}>Bond</Button>
               </>
@@ -178,7 +201,16 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
             (
               <>
                 <h1 id="title">Bond Purchased!</h1>
-                <p>You gonna be rich bruv</p>
+                <p>You will
+                  receive {parseInt(transactionReceipt.logs[1].data) / Math.pow(10, market.payoutToken.decimals)} {market.payoutToken.symbol}</p>
+                <div>
+                  <a target="_blank" href={twitterLink} rel="noreferrer">Share on Twitter</a>
+                </div>
+                <p>View on <a href={blockExplorerUrl + transactionReceipt.transactionHash} target="_blank"
+                  rel="noopener noreferrer">
+                  {blockExplorerName}
+                </a>
+                </p>
                 <Button className="w-full" onClick={handleClose}>Close</Button>
               </>
             )

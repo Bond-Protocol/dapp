@@ -1,33 +1,107 @@
 import {ExpandableRow} from "components/molecules/ExpandableRow";
-import {useMarkets} from "hooks";
-import {Market} from "src/generated/graphql";
 import {useQueryClient} from "react-query";
 import {CalculatedMarket} from "@bond-labs/contract-library";
 import {BondListCard} from "components/organisms/BondListCard";
+import {useEffect, useState} from "react";
 
 export const MarketList = () => {
   const queryClient = useQueryClient();
 
-  const markets = useMarkets().markets;
   const calculatedMarkets: Map<string, CalculatedMarket> | undefined = queryClient.getQueryData("calculatedMarkets");
+  const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>([]);
+  const [currentSort, setCurrentSort] = useState({sortBy: "discount", ascending: false});
+
+  const numericSort = function(value1: number, value2: number, ascending: boolean) {
+    return ascending ?
+      value1 - value2:
+      value2 - value1;
+  };
+
+  const alphabeticSort = function(value1: string, value2: string, ascending: boolean) {
+    return ascending ?
+      (value1 > value2 ? 1 : -1):
+      (value2 > value1 ? 1 : -1);
+  };
+
+  const sortMarkets = function(compareFunction: (m1: CalculatedMarket, m2: CalculatedMarket) => number) {
+    const arr: CalculatedMarket[] = [];
+    calculatedMarkets?.forEach(value => arr.push(value));
+    setSortedMarkets(arr.sort(compareFunction));
+  };
+
+  const sortByQuote = function() {
+    const ascending = currentSort.sortBy === "quote" ?
+      !currentSort.ascending:
+      true;
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      alphabeticSort(m1.quoteToken.symbol, m2.quoteToken.symbol, ascending)
+    );
+    setCurrentSort({sortBy: "quote", ascending: ascending});
+  };
+
+  const sortByPayout = function() {
+    const ascending = currentSort.sortBy === "payout" ?
+      !currentSort.ascending:
+      true;
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      alphabeticSort(m1.payoutToken.symbol, m2.payoutToken.symbol, ascending)
+    );
+    setCurrentSort({sortBy: "payout", ascending: ascending});
+  };
+
+  const sortByPrice = function() {
+    const ascending = currentSort.sortBy === "price" ?
+      !currentSort.ascending:
+      true;
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      numericSort(m1.discountedPrice, m2.discountedPrice, ascending)
+    );
+    setCurrentSort({sortBy: "price", ascending: ascending});
+  };
+
+  const sortByDiscount = function() {
+    const ascending = currentSort.sortBy === "discount" ?
+      !currentSort.ascending:
+      false;
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      numericSort(m1.discount, m2.discount, ascending)
+    );
+    setCurrentSort({sortBy: "discount", ascending: ascending});
+  };
+
+  const sortByExpiry = function() {
+    const ascending = currentSort.sortBy === "expiry" ?
+      !currentSort.ascending:
+      true;
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      numericSort(m1.vesting, m2.vesting, ascending)
+    );
+    setCurrentSort({sortBy: "expiry", ascending: ascending});
+  };
+
+  useEffect(() => {
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      numericSort(m1.discount, m2.discount, false)
+    );
+  }, [calculatedMarkets]);
 
   return (
     <>
       <table className="w-full text-left table-fixed">
         <thead>
           <tr>
-            <th>Bond</th>
-            <th>Payout Asset</th>
-            <th>Price</th>
-            <th>Discount</th>
+            <th onClick={sortByQuote}>Bond</th>
+            <th onClick={sortByPayout}>Payout Asset</th>
+            <th onClick={sortByPrice}>Price</th>
+            <th onClick={sortByDiscount}>Discount</th>
             <th>TBV</th>
             <th>30D Perf.</th>
-            <th>Expiry</th>
+            <th onClick={sortByExpiry}>Expiry</th>
           </tr>
         </thead>
 
         <tbody>
-          {markets.map((market: Market) => {
+          {sortedMarkets.map((market: CalculatedMarket) => {
             const calculatedMarket = calculatedMarkets?.get(market.id);
             return (
               <ExpandableRow key={market.id} expanded={

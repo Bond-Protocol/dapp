@@ -11,16 +11,16 @@ export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, market
   const provider = useProvider();
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
 
-  function getPrice(id: string): string {
+  function getPrice(id: string): number {
     const sources = currentPrices.get(id);
-    if (!sources) return "";
+    if (!sources) return 0;
     for (const source of sources) {
       if (source == undefined || source.price == undefined) {
         continue;
       }
-      return source.price;
+      return Number(source.price);
     }
-    return "";
+    return 0;
   }
 
   const calculatePrices = useQuery("calculatedMarkets", async () => {
