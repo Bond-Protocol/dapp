@@ -36,7 +36,7 @@ export const CreateMarketView = () => {
         depositInterval: data.depositInterval,
         scaleAdjustment: data.scaleAdjustment,
       },
-      contractLibrary.BOND_TYPE.FIXED_EXPIRATION,
+      data.bondType,
       data.chain,
       // @ts-ignore
       signer,
