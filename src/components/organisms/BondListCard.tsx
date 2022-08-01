@@ -41,6 +41,8 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
   const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
   const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
   const [correctChain, setCorrectChain] = useState<boolean>(false);
+  const [blockExplorerUrl, setBlockExplorerUrl] = useState(bondLibrary.CHAINS.get(props.market.network)?.blockExplorerUrls[0].replace("#", "address"));
+  const [blockExplorerName, setBlockExplorerName] = useState(bondLibrary.CHAINS.get(props.market.network)?.blockExplorerName);
 
   useEffect(() => {
     setHasSufficientAllowance(Number(allowance) > 0 && Number(allowance) >= Number(amount));
@@ -48,7 +50,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
 
   useEffect(() => {
     setHasSufficientBalance(Number(balance) > 0 && Number(balance) >= Number(amount));
-  }, [balance, amount])
+  }, [balance, amount]);
 
   useEffect(() => {
     void getPayoutFor(amount);
@@ -173,29 +175,26 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
           props.market.maxAmountAccepted + " " + props.market.quoteToken.symbol
         }/>
 
-        <DataRow
-          leftContent="Bond Contract"
-          rightContent={"View"}
-          onClick={() =>
-            window.location.replace(
-              //TODO: dynamically link the blockexplorer based on network
-              `https://etherscan.io/${props.bondContract}`
-            )
-          }
-        />
+        <DataRow leftContent="Bond Contract" rightContent={(
+          <p>View on <a href={blockExplorerUrl + props.market.teller + "#code"}
+            target="_blank"
+            rel="noopener noreferrer">
+            {blockExplorerName}
+          </a>
+          </p>
+        )}/>
       </div>
 
       <div className="flex pt-2">
-        {/*TODO: add proper handlers*/}
         {!isConnected &&
-          //@ts-ignore
+        //@ts-ignore
             <Button className="w-full" onClick={connect}>
                 Connect Wallet
             </Button>
         }
 
         {isConnected && !correctChain &&
-          //@ts-ignore
+        //@ts-ignore
             <Button className="w-full" onClick={switchChain}>
                 Switch to {props.market.network}
             </Button>
@@ -203,9 +202,9 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
 
         {correctChain && !hasSufficientBalance &&
             <a className="w-full px-2 border-2 border-brand-bond-blue text-white text-center"
-               href="https://app.sushi.com/swap"
-               target="_blank"
-               rel="noopener noreferrer">
+              href="https://app.sushi.com/swap"
+              target="_blank"
+              rel="noopener noreferrer">
                 Buy {props.market.quoteToken.symbol}
             </a>
         }
