@@ -151,3 +151,69 @@ export const getOwnerBalancesByOwnerGoerli = gql`
         }
     }
 `;
+
+export const listOwnedMarketsRinkeby = gql`
+    query ListOwnedMarketsRinkeby($owner: String!) {
+        markets(where:
+        {
+            owner_contains_nocase: $owner
+        }) {
+            id
+            name
+            network
+            auctioneer
+            teller
+            marketId
+            owner
+            payoutToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            quoteToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            vesting
+            vestingType
+            isInstantSwap
+            isLive
+        }
+    }
+`;
+
+export const listOwnedMarketsGoerli = gql`
+    query ListOwnedMarketsGoerli($owner: String!) {
+        markets(where:
+        {
+            owner_contains_nocase: $owner
+        }) {
+            id
+            name
+            network
+            auctioneer
+            teller
+            marketId
+            owner
+            payoutToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            quoteToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            vesting
+            vestingType
+            isInstantSwap
+            isLive
+        }
+    }
+`;

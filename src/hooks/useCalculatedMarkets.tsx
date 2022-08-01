@@ -7,7 +7,7 @@ import {useProvider} from "wagmi";
 import {providers} from "services/owned-providers";
 import {Market} from "src/generated/graphql";
 
-export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, markets: Market[]) {
+export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, markets: Market[], queryKey: string) {
   const provider = useProvider();
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
 
@@ -23,7 +23,7 @@ export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, market
     return 0;
   }
 
-  const calculatePrices = useQuery("calculatedMarkets", async () => {
+  const calculatePrices = useQuery(queryKey, async () => {
     const requests: Promise<CalculatedMarket>[] = [];
     const calculatedMarketsMap = new Map();
     try {
@@ -41,6 +41,8 @@ export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, market
               teller: market.teller,
               vesting: market.vesting,
               vestingType: market.vestingType,
+              isLive: market.isLive,
+              isInstantSwap: market.isInstantSwap,
               payoutToken: {
                 id: market.payoutToken.id,
                 address: market.payoutToken.address,

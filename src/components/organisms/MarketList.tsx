@@ -1,37 +1,39 @@
 import {ExpandableRow} from "components/molecules/ExpandableRow";
-import {useQueryClient} from "react-query";
 import {CalculatedMarket} from "@bond-labs/contract-library";
 import {BondListCard} from "components/organisms/BondListCard";
-import {useEffect, useState} from "react";
+import {FC, useEffect, useState} from "react";
+import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 
-export const MarketList = () => {
-  const queryClient = useQueryClient();
+type MarketListProps = {
+  calculatedMarkets: CalculatedMarket[];
+  allowManagement: boolean
+}
 
-  const calculatedMarkets: Map<string, CalculatedMarket> | undefined = queryClient.getQueryData("calculatedMarkets");
+export const MarketList: FC<MarketListProps> = ({calculatedMarkets, allowManagement}) => {
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>([]);
   const [currentSort, setCurrentSort] = useState({sortBy: "discount", ascending: false});
 
-  const numericSort = function(value1: number, value2: number, ascending: boolean) {
+  const numericSort = function (value1: number, value2: number, ascending: boolean) {
     return ascending ?
-      value1 - value2:
+      value1 - value2 :
       value2 - value1;
   };
 
-  const alphabeticSort = function(value1: string, value2: string, ascending: boolean) {
+  const alphabeticSort = function (value1: string, value2: string, ascending: boolean) {
     return ascending ?
-      (value1 > value2 ? 1 : -1):
+      (value1 > value2 ? 1 : -1) :
       (value2 > value1 ? 1 : -1);
   };
 
-  const sortMarkets = function(compareFunction: (m1: CalculatedMarket, m2: CalculatedMarket) => number) {
+  const sortMarkets = function (compareFunction: (m1: CalculatedMarket, m2: CalculatedMarket) => number) {
     const arr: CalculatedMarket[] = [];
     calculatedMarkets?.forEach(value => arr.push(value));
     setSortedMarkets(arr.sort(compareFunction));
   };
 
-  const sortByQuote = function() {
+  const sortByQuote = function () {
     const ascending = currentSort.sortBy === "quote" ?
-      !currentSort.ascending:
+      !currentSort.ascending :
       true;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
       alphabeticSort(m1.quoteToken.symbol, m2.quoteToken.symbol, ascending)
@@ -39,9 +41,9 @@ export const MarketList = () => {
     setCurrentSort({sortBy: "quote", ascending: ascending});
   };
 
-  const sortByPayout = function() {
+  const sortByPayout = function () {
     const ascending = currentSort.sortBy === "payout" ?
-      !currentSort.ascending:
+      !currentSort.ascending :
       true;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
       alphabeticSort(m1.payoutToken.symbol, m2.payoutToken.symbol, ascending)
@@ -49,9 +51,9 @@ export const MarketList = () => {
     setCurrentSort({sortBy: "payout", ascending: ascending});
   };
 
-  const sortByPrice = function() {
+  const sortByPrice = function () {
     const ascending = currentSort.sortBy === "price" ?
-      !currentSort.ascending:
+      !currentSort.ascending :
       true;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
       numericSort(m1.discountedPrice, m2.discountedPrice, ascending)
@@ -59,9 +61,9 @@ export const MarketList = () => {
     setCurrentSort({sortBy: "price", ascending: ascending});
   };
 
-  const sortByDiscount = function() {
+  const sortByDiscount = function () {
     const ascending = currentSort.sortBy === "discount" ?
-      !currentSort.ascending:
+      !currentSort.ascending :
       false;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
       numericSort(m1.discount, m2.discount, ascending)
@@ -69,14 +71,24 @@ export const MarketList = () => {
     setCurrentSort({sortBy: "discount", ascending: ascending});
   };
 
-  const sortByExpiry = function() {
+  const sortByExpiry = function () {
     const ascending = currentSort.sortBy === "expiry" ?
-      !currentSort.ascending:
+      !currentSort.ascending :
       true;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
       numericSort(m1.vesting, m2.vesting, ascending)
     );
     setCurrentSort({sortBy: "expiry", ascending: ascending});
+  };
+
+  const sortByStatus = function () {
+    const ascending = currentSort.sortBy === "status" ?
+      !currentSort.ascending :
+      true;
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      numericSort(Number(m1.isLive), Number(m2.isLive), ascending)
+    );
+    setCurrentSort({sortBy: "status", ascending: ascending});
   };
 
   useEffect(() => {
@@ -97,6 +109,7 @@ export const MarketList = () => {
             <th>TBV</th>
             <th>30D Perf.</th>
             <th onClick={sortByExpiry}>Expiry</th>
+            {allowManagement && <th onClick={sortByStatus}>Status</th>}
           </tr>
         </thead>
 
@@ -106,7 +119,10 @@ export const MarketList = () => {
             return (
               <ExpandableRow key={market.id} expanded={
                 calculatedMarket ?
-                  (<BondListCard market={calculatedMarket} />) :
+                  (allowManagement ?
+                    (<CloseMarketCard market={calculatedMarket} />) :
+                    (<BondListCard market={calculatedMarket}/>)
+                  ) :
                   (<div>Loading...</div>)
               } className="gap-x-2">
                 <td>{market.quoteToken.symbol}</td>
@@ -119,6 +135,7 @@ export const MarketList = () => {
                 <td>${0}</td>
                 <td>{0}%</td>
                 <td>{calculatedMarket?.formattedLongVesting}</td>
+                {allowManagement && <td>{calculatedMarket.isLive ? "Live": "Closed"}</td>}
               </ExpandableRow>
             );
           })}
