@@ -3,6 +3,7 @@ import {CalculatedMarket} from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
 import {Chip, Input} from "@material-tailwind/react";
 import {DataRow} from "components/atoms/DataRow";
+import * as React from "react";
 import {BaseSyntheticEvent, FC, useEffect, useState} from "react";
 import {Button} from "..";
 import {useAccount, useBalance, useConnect, useProvider, useSigner, useSwitchNetwork} from "wagmi";
@@ -38,11 +39,16 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
   const [allowance, setAllowance] = useState<string>("0");
   const [payout, setPayout] = useState<string>("0");
   const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
+  const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
   const [correctChain, setCorrectChain] = useState<boolean>(false);
 
   useEffect(() => {
     setHasSufficientAllowance(Number(allowance) > 0 && Number(allowance) >= Number(amount));
   }, [allowance, amount]);
+
+  useEffect(() => {
+    setHasSufficientBalance(Number(balance) > 0 && Number(balance) >= Number(amount));
+  }, [balance, amount])
 
   useEffect(() => {
     void getPayoutFor(amount);
@@ -182,27 +188,36 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
       <div className="flex pt-2">
         {/*TODO: add proper handlers*/}
         {!isConnected &&
-            //@ts-ignore
+          //@ts-ignore
             <Button className="w-full" onClick={connect}>
                 Connect Wallet
             </Button>
         }
 
         {isConnected && !correctChain &&
-        //@ts-ignore
+          //@ts-ignore
             <Button className="w-full" onClick={switchChain}>
                 Switch to {props.market.network}
             </Button>
         }
 
-        {correctChain && !hasSufficientAllowance &&
+        {correctChain && !hasSufficientBalance &&
+            <a className="w-full px-2 border-2 border-brand-bond-blue text-white text-center"
+               href="https://app.sushi.com/swap"
+               target="_blank"
+               rel="noopener noreferrer">
+                Buy {props.market.quoteToken.symbol}
+            </a>
+        }
+
+        {correctChain && hasSufficientBalance && !hasSufficientAllowance &&
             <Button className="w-full" onClick={approve}>
                 Approve {props.market.quoteToken.symbol}
             </Button>
         }
 
-        {correctChain && hasSufficientAllowance &&
-            <ConfirmPurchaseDialog amount={amount} market={props.market} />
+        {correctChain && hasSufficientBalance && hasSufficientAllowance &&
+            <ConfirmPurchaseDialog amount={amount} market={props.market}/>
         }
       </div>
     </div>
