@@ -7,7 +7,7 @@ import {InjectedConnector} from "wagmi/connectors/injected";
 import { OwnerBalance } from "src/generated/graphql";
 
 export const MyBondsList = () => {
-  const {myBonds} = useMyBonds();
+  const {myBonds, refetch} = useMyBonds();
   const {data: signer} = useSigner();
   const {address, isConnected} = useAccount();
   const { connect } = useConnect({
@@ -27,6 +27,12 @@ export const MyBondsList = () => {
         gasLimit: 10000000,
       }
     );
+
+    await signer?.provider?.waitForTransaction(redeemTx.hash)
+      .then((result) => {
+        refetch();
+      })
+      .catch((error) => console.log(error));
   }
 
   // @ts-ignore
@@ -51,8 +57,8 @@ export const MyBondsList = () => {
           <tbody className="gap-x-2">
             {myBonds.map((bond: OwnerBalance) => {
               const date = new Date(bond.bondToken?.expiry * 1000);
-              const now = new Date(Date.now()).getTime();
-              const canClaim = bond.bondToken?.expiry >= now;
+              const now = new Date(Date.now());
+              const canClaim = now >= date;
               const balance = bond.balance / Math.pow(10, bond.bondToken?.underlying.decimals);
               return (
                 <tr key={bond.id}>

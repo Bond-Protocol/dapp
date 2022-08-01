@@ -13,19 +13,25 @@ export function useMyBonds() {
   const [testnetBonds, setTestnetBonds] = useState<OwnerBalance[]>([]);
   const [mainnetBonds, setMainnetBonds] = useState<OwnerBalance[]>([]);
   const [myBonds, setMyBonds] = useState<OwnerBalance[]>([]);
+  const [refetchRequest, setRefetchRequest] = useState(0);
 
   /*
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const {data: rinkebyData} = useGetOwnerBalancesByOwnerRinkebyQuery(
+  const {data: rinkebyData, refetch: rinkebyRefetch} = useGetOwnerBalancesByOwnerRinkebyQuery(
     {endpoint: endpoints[0]},
     {owner: address || ""}
   );
-  const {data: goerliData} = useGetOwnerBalancesByOwnerGoerliQuery(
+  const {data: goerliData, refetch: goerliRefetch} = useGetOwnerBalancesByOwnerGoerliQuery(
     {endpoint: endpoints[1]},
     {owner: address || ""}
   );
+
+  const refetchQueries = () => {
+    void rinkebyRefetch().then(() => setRefetchRequest(refetchRequest + 1));
+    void goerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
+  };
 
   /*
   We get a list of all user bonds by concatenating the .bondTokens data from each Subgraph request.
@@ -36,7 +42,7 @@ export function useMyBonds() {
       // @ts-ignore
       setTestnetBonds(allTokens);
     }
-  }, [rinkebyData, goerliData]);
+  }, [rinkebyData, goerliData, refetchRequest]);
 
   /*
   If the user switches between mainnet/testnet mode, update myBonds.
@@ -61,5 +67,6 @@ export function useMyBonds() {
    */
   return {
     myBonds: myBonds,
+    refetch: () => refetchQueries(),
   };
 }
