@@ -5,6 +5,7 @@ import * as contractLibrary from "@bond-labs/contract-library";
 import {useAccount, useConnect, useSigner} from "wagmi";
 import {InjectedConnector} from "wagmi/connectors/injected";
 import { OwnerBalance } from "src/generated/graphql";
+import {useEffect, useRef, useState} from "react";
 
 export const MyBondsList = () => {
   const {myBonds, refetch} = useMyBonds();
@@ -13,6 +14,16 @@ export const MyBondsList = () => {
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
+
+  const [numBonds, setNumBonds] = useState<number>(myBonds.length);
+  const timerRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    if (myBonds.length < numBonds) {
+      clearInterval(timerRef.current);
+      setNumBonds(myBonds.length);
+    }
+  }, [myBonds]);
 
   async function redeem(bond: OwnerBalance) {
     const redeemTx: ContractTransaction = await contractLibrary.redeem(
@@ -30,7 +41,9 @@ export const MyBondsList = () => {
 
     await signer?.provider?.waitForTransaction(redeemTx.hash)
       .then((result) => {
-        refetch();
+        timerRef.current = setInterval(() => {
+          void refetch();
+        }, 5 * 1000);
       })
       .catch((error) => console.log(error));
   }
