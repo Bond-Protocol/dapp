@@ -35,12 +35,10 @@ export const MyBondsList = () => {
     switchNetwork?.(newChain);
   };
 
-
   async function redeem(bond: OwnerBalance) {
     const redeemTx: ContractTransaction = await contractLibrary.redeem(
       bond.tokenId,
       bond.bondToken?.teller,
-      // @ts-ignore
       bond.bondToken?.type,
       bond.balance.toString(),
       signer,
@@ -59,7 +57,6 @@ export const MyBondsList = () => {
       .catch((error) => console.log(error));
   }
 
-  // @ts-ignore
   return (
     isConnected ? (
       <>
@@ -68,6 +65,9 @@ export const MyBondsList = () => {
             (<span className="flex justify-center py-2">Showing bonds for {address}</span>) :
             (<span className="flex justify-center py-2">No bonds found for {address}</span>)
         }
+        <p className="flex justify-end p-2">
+          <Button onClick={refetch}>Refresh</Button>
+        </p>
         <table className="w-full text-left table-fixed">
           <thead>
             <tr>
