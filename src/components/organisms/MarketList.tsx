@@ -5,13 +5,16 @@ import {FC, useEffect, useState} from "react";
 import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 
 type MarketListProps = {
-  calculatedMarkets: CalculatedMarket[];
+  markets: Map<string, CalculatedMarket>;
   allowManagement: boolean
 }
 
-export const MarketList: FC<MarketListProps> = ({calculatedMarkets, allowManagement}) => {
-  const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>([]);
+export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
+  const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(Array.from(markets.values()));
   const [currentSort, setCurrentSort] = useState({sortBy: "discount", ascending: false});
+
+  useEffect(() => {
+  }, [markets]);
 
   const numericSort = function (value1: number, value2: number, ascending: boolean) {
     return ascending ?
@@ -27,7 +30,7 @@ export const MarketList: FC<MarketListProps> = ({calculatedMarkets, allowManagem
 
   const sortMarkets = function (compareFunction: (m1: CalculatedMarket, m2: CalculatedMarket) => number) {
     const arr: CalculatedMarket[] = [];
-    calculatedMarkets?.forEach(value => arr.push(value));
+    markets?.forEach(value => arr.push(value));
     setSortedMarkets(arr.sort(compareFunction));
   };
 
@@ -95,7 +98,7 @@ export const MarketList: FC<MarketListProps> = ({calculatedMarkets, allowManagem
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
       numericSort(m1.discount, m2.discount, false)
     );
-  }, [calculatedMarkets]);
+  }, [markets]);
 
   return (
     <>
@@ -115,7 +118,7 @@ export const MarketList: FC<MarketListProps> = ({calculatedMarkets, allowManagem
 
         <tbody>
           {sortedMarkets.map((market: CalculatedMarket) => {
-            const calculatedMarket = calculatedMarkets?.get(market.id);
+            const calculatedMarket = markets?.get(market.id);
             return (
               <ExpandableRow key={market.id} expanded={
                 calculatedMarket ?
@@ -135,7 +138,7 @@ export const MarketList: FC<MarketListProps> = ({calculatedMarkets, allowManagem
                 <td>${0}</td>
                 <td>{0}%</td>
                 <td>{calculatedMarket?.formattedLongVesting}</td>
-                {allowManagement && <td>{calculatedMarket.isLive ? "Live": "Closed"}</td>}
+                {allowManagement && <td>{calculatedMarket && calculatedMarket.isLive ? "Live": "Closed"}</td>}
               </ExpandableRow>
             );
           })}

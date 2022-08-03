@@ -29,6 +29,7 @@
     "react-hook-form": "^7.33.1",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
+    "use-deep-compare-effect": "^1.8.1",
     "wagmi": "^0.5.9"
   },
   "devDependencies": {
