@@ -1,10 +1,12 @@
 import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {Token, useListTokensGoerliQuery, useListTokensRinkebyQuery,} from "../generated/graphql";
+import {Token, useListTokensGoerliQuery, useListTokensRinkebyQuery} from "../generated/graphql";
 import {useEffect, useState} from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
 import {CustomPriceSource, SupportedPriceSource} from "@bond-labs/bond-library";
 import axios, {AxiosResponse} from "axios";
 import {useQuery} from "react-query";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export interface Price {
   price: string;
@@ -14,8 +16,10 @@ export interface Price {
 export function useTokens() {
   const endpoints = getSubgraphEndpoints();
 
-  const [mainnet, setMainnet] = useState<Token[]>([]);
-  const [testnet, setTestnet] = useState<Token[]>([]);
+  const [testnet, setTestnet] = useAtom(testnetMode);
+  const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
+  const [mainnetTokens, setMainnetTokens] = useState<Token[]>([]);
+  const [testnetTokens, setTestnetTokens] = useState<Token[]>([]);
   const [currentPrices, setCurrentPrices] = useState(new Map<string, Price[]>);
 
   /*
@@ -28,13 +32,8 @@ export function useTokens() {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const {data: rinkebyData} = useListTokensRinkebyQuery({
-    endpoint: endpoints[0],
-  });
-
-  const {data: goerliData} = useListTokensGoerliQuery({
-    endpoint: endpoints[1],
-  });
+  const {data: rinkebyData} = useListTokensRinkebyQuery({endpoint: endpoints[0]});
+  const {data: goerliData} = useListTokensGoerliQuery({endpoint: endpoints[1]});
 
   /*
   Loads token price data from Coingecko.
@@ -170,18 +169,27 @@ export function useTokens() {
     if (rinkebyData && rinkebyData.tokens && goerliData && goerliData.tokens) {
       const allTokens = rinkebyData.tokens.concat(goerliData.tokens);
       // @ts-ignore
-      setTestnet(allTokens);
+      setTestnetTokens(allTokens);
     }
   }, [rinkebyData, goerliData]);
 
   /*
-  mainnet:        An array of all Tokens the Subgraph has picked up on mainnet networks
-  testnet:        An array of all Tokens the Subgraph has picked up on testnet networks
+  If the user switches between mainnet/testnet mode, update selectedTokens.
+   */
+  useEffect(() => {
+    if (testnet) {
+      setSelectedTokens(testnetTokens);
+    } else {
+      setSelectedTokens(mainnetTokens);
+    }
+  }, [testnet, mainnetTokens, testnetTokens]);
+
+  /*
+  tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
    */
   return {
-    mainnet: mainnet,
-    testnet: testnet,
+    tokens: selectedTokens,
     currentPrices: currentPrices,
   };
 }

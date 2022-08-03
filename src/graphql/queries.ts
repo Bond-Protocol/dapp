@@ -1,89 +1,219 @@
-import { gql } from "graphql-request";
+import {gql} from "graphql-request";
 
 export const listMarketsRinkeby = gql`
-  query ListMarketsRinkeby {
-    markets {
-      id
-      name
-      network
-      auctioneer
-      marketId
-      owner
-      payoutToken {
-        id
-        symbol
-      }
-      quoteToken {
-        id
-        symbol
-      }
-      vesting
-      isInstantSwap
+    query ListMarketsRinkeby {
+        markets(where: {isLive: true}) {
+            id
+            name
+            network
+            auctioneer
+            teller
+            marketId
+            owner
+            payoutToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            quoteToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            vesting
+            vestingType
+            isInstantSwap
+        }
     }
-  }
 `;
 
 export const listMarketsGoerli = gql`
-  query ListMarketsGoerli {
-    markets {
-      id
-      name
-      network
-      auctioneer
-      marketId
-      owner
-      payoutToken {
-        id
-        symbol
-      }
-      quoteToken {
-        id
-        symbol
-      }
-      vesting
-      isInstantSwap
+    query ListMarketsGoerli {
+        markets(where: {isLive: true}) {
+            id
+            name
+            network
+            auctioneer
+            teller
+            marketId
+            owner
+            payoutToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            quoteToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            vesting
+            vestingType
+            isInstantSwap
+        }
     }
-  }
 `;
 
 export const listTokensRinkeby = gql`
-  query ListTokensRinkeby {
-    tokens {
-      id
-      network
-      address
-      decimals
-      symbol
-      name
-      lpPair {
-        token0 {
-          id
+    query ListTokensRinkeby {
+        tokens {
+            id
+            network
+            address
+            decimals
+            symbol
+            name
+            lpPair {
+                token0 {
+                    id
+                }
+                token1 {
+                    id
+                }
+            }
         }
-        token1 {
-          id
-        }
-      }
     }
-  }
 `;
 
 export const listTokensGoerli = gql`
-  query ListTokensGoerli {
-    tokens {
-      id
-      network
-      address
-      decimals
-      symbol
-      name
-      lpPair {
-        token0 {
-          id
+    query ListTokensGoerli {
+        tokens {
+            id
+            network
+            address
+            decimals
+            symbol
+            name
+            lpPair {
+                token0 {
+                    id
+                }
+                token1 {
+                    id
+                }
+            }
         }
-        token1 {
-          id
-        }
-      }
     }
-  }
+`;
+
+export const getOwnerBalancesByOwnerRinkeby = gql`
+    query GetOwnerBalancesByOwnerRinkeby($owner: String!) {
+        ownerBalances(where:
+        {
+            owner_contains_nocase: $owner,
+            balance_gt: 0
+        }) {
+            id
+            tokenId
+            owner
+            balance
+            bondToken {
+                id
+                expiry
+                network
+                type
+                teller
+                underlying {
+                    symbol
+                    decimals
+                }
+            }
+        }
+    }
+`;
+
+export const getOwnerBalancesByOwnerGoerli = gql`
+    query GetOwnerBalancesByOwnerGoerli($owner: String!) {
+        ownerBalances(where:
+        {
+            owner_contains_nocase: $owner,
+            balance_gt: 0
+        }) {
+            id
+            tokenId
+            owner
+            balance
+            bondToken {
+                id
+                expiry
+                network
+                type
+                teller
+                underlying {
+                    symbol
+                    decimals
+                }
+            }
+        }
+    }
+`;
+
+export const listOwnedMarketsRinkeby = gql`
+    query ListOwnedMarketsRinkeby($owner: String!) {
+        markets(where:
+        {
+            owner_contains_nocase: $owner
+        }) {
+            id
+            name
+            network
+            auctioneer
+            teller
+            marketId
+            owner
+            payoutToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            quoteToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            vesting
+            vestingType
+            isInstantSwap
+            isLive
+        }
+    }
+`;
+
+export const listOwnedMarketsGoerli = gql`
+    query ListOwnedMarketsGoerli($owner: String!) {
+        markets(where:
+        {
+            owner_contains_nocase: $owner
+        }) {
+            id
+            name
+            network
+            auctioneer
+            teller
+            marketId
+            owner
+            payoutToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            quoteToken {
+                id
+                address
+                symbol
+                decimals
+            }
+            vesting
+            vestingType
+            isInstantSwap
+            isLive
+        }
+    }
 `;

@@ -1,11 +1,11 @@
-import { useConnect, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Tooltip } from "@material-tailwind/react";
+import {useConnect, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
+import {useEffect, useState} from "react";
+import {useForm} from "react-hook-form";
+import {Tooltip} from "@material-tailwind/react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
-import { providers } from "services/owned-providers";
-import { ethers } from "ethers";
+import {providers} from "services/owned-providers";
+import {ethers} from "ethers";
 
 export const CreateMarketView = () => {
   const { data: signer, status } = useSigner();
@@ -36,7 +36,7 @@ export const CreateMarketView = () => {
         depositInterval: data.depositInterval,
         scaleAdjustment: data.scaleAdjustment,
       },
-      contractLibrary.BOND_TYPE.FIXED_TERM,
+      data.bondType,
       data.chain,
       // @ts-ignore
       signer,
