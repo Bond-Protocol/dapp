@@ -1,15 +1,22 @@
-import {Price} from "hooks/useTokens";
-import {useQuery} from "react-query";
+import {useTokens} from "hooks/useTokens";
+import {useQueries} from "react-query";
 import {useEffect, useState} from "react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import {CalculatedMarket} from "@bond-labs/contract-library";
 import {useProvider} from "wagmi";
 import {providers} from "services/owned-providers";
 import {Market} from "src/generated/graphql";
+import useDeepCompareEffect from "use-deep-compare-effect";
+import {useMarkets} from "hooks/useMarkets";
+import {useMyMarkets} from "hooks/useMyMarkets";
 
-export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, markets: Market[], queryKey: string) {
+export function useCalculatedMarkets() {
+  const {markets: markets} = useMarkets();
+  const {markets: myMarkets} = useMyMarkets();
+  const currentPrices = useTokens().currentPrices;
   const provider = useProvider();
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
+  const [myCalculatedMarkets, setMyCalculatedMarkets] = useState(new Map());
 
   function getPrice(id: string): number {
     const sources = currentPrices.get(id);
@@ -23,70 +30,80 @@ export function useCalculatedMarkets(currentPrices: Map<string, Price[]>, market
     return 0;
   }
 
-  const calculatePrices = useQuery(queryKey, async () => {
-    const requests: Promise<CalculatedMarket>[] = [];
-    const calculatedMarketsMap = new Map();
-    try {
-      if (currentPrices.size > 0 && markets) {
-        markets.forEach((market) => {
-          const requestProvider = providers[market.network] || provider;
-
-          requests.push(contractLibrary.calcMarket(
-            requestProvider,
-            import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
-            {
-              id: market.id,
-              network: market.network,
-              auctioneer: market.auctioneer,
-              teller: market.teller,
-              vesting: market.vesting,
-              vestingType: market.vestingType,
-              isLive: market.isLive,
-              isInstantSwap: market.isInstantSwap,
-              payoutToken: {
-                id: market.payoutToken.id,
-                address: market.payoutToken.address,
-                decimals: market.payoutToken.decimals,
-                name: market.payoutToken.name,
-                symbol: market.payoutToken.symbol,
-                price: getPrice(market.payoutToken.id),
-              },
-              quoteToken: {
-                id: market.quoteToken.id,
-                address: market.quoteToken.address,
-                decimals: market.quoteToken.decimals,
-                name: market.quoteToken.name,
-                symbol: market.quoteToken.symbol,
-                price: getPrice(market.payoutToken.id),
-              }
-            }
-          ).then((result: CalculatedMarket) => {
-            calculatedMarketsMap.set(result.id, result);
-            return result;
-          }));
-        });
+  const calculateMarket = (market: Market) => {
+    const requestProvider = providers[market.network] || provider;
+    return contractLibrary.calcMarket(
+      requestProvider,
+      import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
+      {
+        id: market.id,
+        network: market.network,
+        auctioneer: market.auctioneer,
+        teller: market.teller,
+        vesting: market.vesting,
+        vestingType: market.vestingType,
+        isLive: market.isLive,
+        isInstantSwap: market.isInstantSwap,
+        payoutToken: {
+          id: market.payoutToken.id,
+          address: market.payoutToken.address,
+          decimals: market.payoutToken.decimals,
+          name: market.payoutToken.name,
+          symbol: market.payoutToken.symbol,
+          price: getPrice(market.payoutToken.id),
+        },
+        quoteToken: {
+          id: market.quoteToken.id,
+          address: market.quoteToken.address,
+          decimals: market.quoteToken.decimals,
+          name: market.quoteToken.name,
+          symbol: market.quoteToken.symbol,
+          price: getPrice(market.payoutToken.id),
+        }
       }
-    } catch (e: any) {
-      throw new Error("Error loading bond prices", e);
-    }
+    ).then((result: CalculatedMarket) => result);
+  };
 
-    return Promise.allSettled(requests).then(() => calculatedMarketsMap);
-  });
+  const calculateAllMarkets = useQueries(
+    markets.map(market => {
+      return {
+        queryKey: market.id,
+        queryFn: () => calculateMarket(market),
+        enabled: markets && currentPrices && currentPrices.size > 0
+      };
+    })
+  );
 
-  useEffect(() => {
-    if (currentPrices && markets) {
-      void calculatePrices.refetch();
-    }
-  }, [currentPrices, markets]);
+  const calculateMyMarkets = useQueries(
+    myMarkets.map(market => {
+      return {
+        queryKey: market.id,
+        queryFn: () => calculateMarket(market),
+        enabled: myMarkets && currentPrices && currentPrices.size > 0
+      };
+    })
+  );
 
+  useDeepCompareEffect(() => {
+    const calculatedPricesMap = new Map();
+    calculateAllMarkets.forEach((result) => {
+      result.data && calculatedPricesMap.set(result.data.id, result.data);
+    });
 
-  useEffect(() => {
-    if (calculatePrices && calculatePrices.data) {
-      setCalculatedMarkets(calculatePrices.data);
-    }
-  }, [calculatePrices.data]);
+    setCalculatedMarkets(calculatedPricesMap);
+  }, [calculateAllMarkets]);
+
+  useDeepCompareEffect(() => {
+    const calculatedPricesMap = new Map();
+    calculateMyMarkets.forEach((result) => {
+      result.data && calculatedPricesMap.set(result.data.id, result.data);
+    });
+
+    setMyCalculatedMarkets(calculatedPricesMap);
+  }, [calculateMyMarkets]);
 
   return {
-    calculatedMarkets: calculatedMarkets,
+    allMarkets: calculatedMarkets,
+    myMarkets: myCalculatedMarkets
   };
 }

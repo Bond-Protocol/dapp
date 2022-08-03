@@ -2,31 +2,30 @@ import {PageContainer} from "components/atoms/PageContainer";
 import {Tabs} from "components/molecules/Tabs";
 import {MarketList} from "components/organisms/MarketList";
 import {MyBondsList} from "components/organisms/MyBondsList";
-import {useQueryClient} from "react-query";
-import {CalculatedMarket} from "@bond-labs/contract-library";
 import {useEffect, useState} from "react";
+import {useCalculatedMarkets} from "hooks";
 
 export const MarketsView = () => {
-  const queryClient = useQueryClient();
-  const allMarkets: Map<string, CalculatedMarket> | undefined = queryClient.getQueryData("allMarkets");
-  const myMarkets: Map<string, CalculatedMarket> | undefined = queryClient.getQueryData("myMarkets");
+  const allMarkets = useCalculatedMarkets().allMarkets;
+  const myMarkets = useCalculatedMarkets().myMarkets;
+
   const [tabsConfig, setTabsConfig] = useState([
-    {label: "All Markets", component: <MarketList calculatedMarkets={allMarkets} allowManagement={false}/>},
+    {label: "All Markets", component: <MarketList markets={allMarkets} allowManagement={false}/>},
     {label: "My Bonds", component: <MyBondsList/>},
   ]);
 
   useEffect(() => {
     myMarkets?.size > 0 ?
       setTabsConfig([
-        {label: "All Markets", component: <MarketList calculatedMarkets={allMarkets} allowManagement={false}/>},
+        {label: "All Markets", component: <MarketList markets={allMarkets} allowManagement={false}/>},
         {label: "My Bonds", component: <MyBondsList/>},
-        {label: "My Markets", component: <MarketList calculatedMarkets={myMarkets} allowManagement={true}/>},
+        {label: "My Markets", component: <MarketList markets={myMarkets} allowManagement={true}/>},
       ]) :
       setTabsConfig([
-        {label: "All Markets", component: <MarketList calculatedMarkets={allMarkets} allowManagement={false}/>},
+        {label: "All Markets", component: <MarketList markets={allMarkets} allowManagement={false}/>},
         {label: "My Bonds", component: <MyBondsList/>},
       ]);
-  }, [myMarkets]);
+  }, [allMarkets, myMarkets]);
 
 
   return (
