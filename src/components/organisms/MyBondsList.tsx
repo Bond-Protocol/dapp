@@ -2,16 +2,19 @@ import {useMyBonds} from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
 import {ContractTransaction} from "ethers";
 import * as contractLibrary from "@bond-labs/contract-library";
-import {useAccount, useConnect, useSigner} from "wagmi";
+import {useAccount, useConnect, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import {InjectedConnector} from "wagmi/connectors/injected";
-import { OwnerBalance } from "src/generated/graphql";
+import {OwnerBalance} from "src/generated/graphql";
 import {useEffect, useRef, useState} from "react";
+import {providers} from "services/owned-providers";
 
 export const MyBondsList = () => {
   const {myBonds, refetch} = useMyBonds();
   const {data: signer} = useSigner();
   const {address, isConnected} = useAccount();
-  const { connect } = useConnect({
+  const {switchNetwork} = useSwitchNetwork();
+  const {chain} = useNetwork();
+  const {connect} = useConnect({
     connector: new InjectedConnector(),
   });
 
@@ -22,8 +25,16 @@ export const MyBondsList = () => {
     if (myBonds.length < numBonds) {
       clearInterval(timerRef.current);
       setNumBonds(myBonds.length);
+      refetch();
     }
   }, [myBonds]);
+
+  const switchChain = (e: Event, selectedChain: string) => {
+    e.preventDefault();
+    const newChain = Number("0x" + providers[selectedChain].network.chainId.toString());
+    switchNetwork?.(newChain);
+  };
+
 
   async function redeem(bond: OwnerBalance) {
     const redeemTx: ContractTransaction = await contractLibrary.redeem(
@@ -76,10 +87,17 @@ export const MyBondsList = () => {
               return (
                 <tr key={bond.id}>
                   <td>{bond.bondToken?.underlying.symbol}</td>
-                  <td>{bond.bondToken?.network}</td>
+                  <td>{bond.network}</td>
                   <td>{date.toDateString()}</td>
                   <td>{balance + " " + bond.bondToken?.underlying.symbol}</td>
-                  <td>{canClaim && <Button onClick={() => redeem(bond)}>Claim</Button>}</td>
+                  <td>
+                    {canClaim && bond.network !== chain?.network &&
+                      <Button onClick={(e) => switchChain(e, bond.network)}>Switch Chain</Button>
+                    }
+                    {canClaim && bond.network === chain?.network &&
+                      <Button onClick={() => redeem(bond)}>Claim</Button>
+                    }
+                  </td>
                 </tr>
               );
             })}
