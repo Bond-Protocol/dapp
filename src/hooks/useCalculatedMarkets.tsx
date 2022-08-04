@@ -84,6 +84,14 @@ export function useCalculatedMarkets() {
     })
   );
 
+  const refetchAllMarkets = () => {
+    calculateAllMarkets.forEach((result) => result.refetch());
+  }
+
+  const refetchMyMarkets = () => {
+    calculateMyMarkets.forEach((result) => result.refetch());
+  }
+
   useDeepCompareEffect(() => {
     const calculatedPricesMap = new Map();
     calculateAllMarkets.forEach((result) => {
@@ -104,6 +112,8 @@ export function useCalculatedMarkets() {
 
   return {
     allMarkets: calculatedMarkets,
-    myMarkets: myCalculatedMarkets
+    myMarkets: myCalculatedMarkets,
+    refetchAllMarkets: () => refetchAllMarkets(),
+    refetchMyMarkets: () => refetchMyMarkets(),
   };
 }

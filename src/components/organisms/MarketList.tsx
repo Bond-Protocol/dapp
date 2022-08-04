@@ -3,6 +3,8 @@ import {CalculatedMarket} from "@bond-labs/contract-library";
 import {BondListCard} from "components/organisms/BondListCard";
 import {FC, useEffect, useState} from "react";
 import {CloseMarketCard} from "components/organisms/CloseMarketCard";
+import Button from "../atoms/Button";
+import {useCalculatedMarkets} from "hooks";
 
 type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
@@ -10,6 +12,7 @@ type MarketListProps = {
 }
 
 export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
+  const {refetchAllMarkets, refetchMyMarkets} = useCalculatedMarkets();
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(Array.from(markets.values()));
   const [currentSort, setCurrentSort] = useState({sortBy: "discount", ascending: false});
 
@@ -102,6 +105,12 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
 
   return (
     <>
+      <p className="flex justify-end p-2">
+        {allowManagement ?
+          <Button onClick={refetchMyMarkets}>Refresh</Button> :
+          <Button onClick={refetchAllMarkets}>Refresh</Button>
+        }
+      </p>
       <table className="w-full text-left table-fixed">
         <thead>
           <tr>
