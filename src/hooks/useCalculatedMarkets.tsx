@@ -86,7 +86,7 @@ export function useCalculatedMarkets() {
 
   const refetchOne = (id: string) => {
     calculateAllMarkets.forEach((result) => {
-      if (result.data && result.data.id === id) result.refetch();
+      if (result.data && result.data.id === id) void result.refetch();
     });
   };
 

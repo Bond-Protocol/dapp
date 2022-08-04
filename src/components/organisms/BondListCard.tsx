@@ -177,8 +177,8 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
 
         <DataRow leftContent="Bond Contract" rightContent={(
           <p>View on <a href={blockExplorerUrl + props.market.teller + "#code"}
-                        target="_blank"
-                        rel="noopener noreferrer">
+            target="_blank"
+            rel="noopener noreferrer">
             {blockExplorerName}
           </a>
           </p>
@@ -187,14 +187,14 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
 
       <div className="flex pt-2">
         {!isConnected &&
-          //@ts-ignore
+        //@ts-ignore
             <Button className="w-full" onClick={connect}>
                 Connect Wallet
             </Button>
         }
 
         {isConnected && !correctChain &&
-          //@ts-ignore
+        //@ts-ignore
             <Button className="w-full" onClick={switchChain}>
                 Switch to {props.market.network}
             </Button>
@@ -202,9 +202,9 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
 
         {correctChain && !hasSufficientBalance &&
             <a className="w-full px-2 border-2 border-brand-bond-blue text-white text-center"
-               href="https://app.sushi.com/swap"
-               target="_blank"
-               rel="noopener noreferrer">
+              href="https://app.sushi.com/swap"
+              target="_blank"
+              rel="noopener noreferrer">
                 Buy {props.market.quoteToken.symbol}
             </a>
         }
