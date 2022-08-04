@@ -113,51 +113,51 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
       </p>
       <table className="w-full text-left table-fixed">
         <thead>
-        <tr>
-          <th onClick={sortByQuote}>Bond</th>
-          <th onClick={sortByPayout}>Payout Asset</th>
-          <th onClick={sortByPrice}>Price</th>
-          <th onClick={sortByDiscount}>Discount</th>
-          <th>TBV</th>
-          <th>30D Perf.</th>
-          <th onClick={sortByExpiry}>Expiry</th>
-          {allowManagement && <th onClick={sortByStatus}>Status</th>}
-        </tr>
+          <tr>
+            <th onClick={sortByQuote}>Bond</th>
+            <th onClick={sortByPayout}>Payout Asset</th>
+            <th onClick={sortByPrice}>Price</th>
+            <th onClick={sortByDiscount}>Discount</th>
+            <th>TBV</th>
+            <th>30D Perf.</th>
+            <th onClick={sortByExpiry}>Expiry</th>
+            {allowManagement && <th onClick={sortByStatus}>Status</th>}
+          </tr>
         </thead>
 
         <tbody>
-        {sortedMarkets.map((market: CalculatedMarket) => {
-          const calculatedMarket = markets?.get(market.id);
-          return (
-            <ExpandableRow key={market.id}
-                           onOpen={() => {
-                             timerRef.current = setInterval(() => {
-                               refetchOne(market.id);
-                             }, 13 * 1000);
-                           }}
-                           onClose={() => clearInterval(timerRef.current)}
-                           expanded={
-                             calculatedMarket ?
-                               (allowManagement ?
-                                   (<CloseMarketCard market={calculatedMarket} />) :
-                                   (<BondListCard market={calculatedMarket}/>)
-                               ) :
-                               (<div>Loading...</div>)
-                           } className="gap-x-2">
-              <td>{market.quoteToken.symbol}</td>
-              <td>{market.payoutToken.symbol}</td>
-              <td>
-                <p>{calculatedMarket?.formattedDiscountedPrice}</p>
-                <p className="text-xs">(Market: {calculatedMarket?.formattedFullPrice})</p>
-              </td>
-              <td>{calculatedMarket?.discount}%</td>
-              <td>${0}</td>
-              <td>{0}%</td>
-              <td>{calculatedMarket?.formattedLongVesting}</td>
-              {allowManagement && <td>{calculatedMarket && calculatedMarket.isLive ? "Live": "Closed"}</td>}
-            </ExpandableRow>
-          );
-        })}
+          {sortedMarkets.map((market: CalculatedMarket) => {
+            const calculatedMarket = markets?.get(market.id);
+            return (
+              <ExpandableRow key={market.id}
+                onOpen={() => {
+                  timerRef.current = setInterval(() => {
+                    refetchOne(market.id);
+                  }, 13 * 1000);
+                }}
+                onClose={() => clearInterval(timerRef.current)}
+                expanded={
+                  calculatedMarket ?
+                    (allowManagement ?
+                      (<CloseMarketCard market={calculatedMarket} />) :
+                      (<BondListCard market={calculatedMarket}/>)
+                    ) :
+                    (<div>Loading...</div>)
+                } className="gap-x-2">
+                <td>{market.quoteToken.symbol}</td>
+                <td>{market.payoutToken.symbol}</td>
+                <td>
+                  <p>{calculatedMarket?.formattedDiscountedPrice}</p>
+                  <p className="text-xs">(Market: {calculatedMarket?.formattedFullPrice})</p>
+                </td>
+                <td>{calculatedMarket?.discount}%</td>
+                <td>${0}</td>
+                <td>{0}%</td>
+                <td>{calculatedMarket?.formattedLongVesting}</td>
+                {allowManagement && <td>{calculatedMarket && calculatedMarket.isLive ? "Live": "Closed"}</td>}
+              </ExpandableRow>
+            );
+          })}
         </tbody>
       </table>
     </>
