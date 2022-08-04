@@ -84,6 +84,12 @@ export function useCalculatedMarkets() {
     })
   );
 
+  const refetchOne = (id: string) => {
+    calculateAllMarkets.forEach((result) => {
+      if (result.data && result.data.id === id) result.refetch();
+    });
+  };
+
   const refetchAllMarkets = () => {
     calculateAllMarkets.forEach((result) => result.refetch());
   };
@@ -115,5 +121,6 @@ export function useCalculatedMarkets() {
     myMarkets: myCalculatedMarkets,
     refetchAllMarkets: () => refetchAllMarkets(),
     refetchMyMarkets: () => refetchMyMarkets(),
+    refetchOne: (id: string) => refetchOne(id),
   };
 }

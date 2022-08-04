@@ -7,7 +7,7 @@ import {CalculatedMarket} from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
 import {BigNumberish, ContractTransaction} from "ethers";
 import {useAccount, useSigner} from "wagmi";
-import {useTokens} from "hooks";
+import {useCalculatedMarkets, useTokens} from "hooks";
 
 export type ConfirmPurchaseDialogProps = {
   amount: string
@@ -17,7 +17,7 @@ export type ConfirmPurchaseDialogProps = {
 export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps) {
   const {data: signer} = useSigner();
   const {address} = useAccount();
-  const currentPrices = useTokens().currentPrices;
+  const {refetchOne} = useCalculatedMarkets();
 
   const [open, setOpen] = React.useState(false);
   const [payout, setPayout] = useState<string>("0");
@@ -47,11 +47,11 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
 
     timerRef.current = setInterval(() => {
       void getPayoutFor();
-      void refreshMarket();
-    }, 5 * 1000);
+      refetchOne(market.id);
+    }, 13 * 1000);
 
     void getPayoutFor();
-    void refreshMarket();
+    refetchOne(market.id);
   };
 
   const handleClose = () => {
@@ -62,18 +62,6 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
   useEffect(() => {
     return () => clearInterval(timerRef.current);
   }, [timerRef]);
-
-  function getPrice(id: string): string {
-    const sources = currentPrices.get(id);
-    if (!sources) return "";
-    for (const source of sources) {
-      if (source == undefined || source.price == undefined) {
-        continue;
-      }
-      return source.price;
-    }
-    return "";
-  }
 
   async function bond() {
     const minimumOut = Number(payout) - (Number(payout) * (slippage / 100));
@@ -102,40 +90,6 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
         setTransactionReceipt(result);
       })
       .catch((error) => console.log(error));
-  }
-
-  async function refreshMarket() {
-    void await contractLibrary.calcMarket(
-      // @ts-ignore
-      signer?.provider,
-      import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
-      {
-        id: market.id,
-        network: market.network,
-        auctioneer: market.auctioneer,
-        teller: market.teller,
-        vesting: market.vesting,
-        vestingType: market.vestingType,
-        payoutToken: {
-          id: market.payoutToken.id,
-          address: market.payoutToken.address,
-          decimals: market.payoutToken.decimals,
-          name: market.payoutToken.name,
-          symbol: market.payoutToken.symbol,
-          price: getPrice(market.payoutToken.id),
-        },
-        quoteToken: {
-          id: market.quoteToken.id,
-          address: market.quoteToken.address,
-          decimals: market.quoteToken.decimals,
-          name: market.quoteToken.name,
-          symbol: market.quoteToken.symbol,
-          price: getPrice(market.payoutToken.id),
-        }
-      }
-    ).then((result: CalculatedMarket) => {
-      setMarket(result);
-    });
   }
 
   async function getPayoutFor() {
