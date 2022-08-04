@@ -111,6 +111,7 @@ export const getOwnerBalancesByOwnerRinkeby = gql`
             tokenId
             owner
             balance
+            network
             bondToken {
                 id
                 expiry
@@ -137,6 +138,7 @@ export const getOwnerBalancesByOwnerGoerli = gql`
             tokenId
             owner
             balance
+            network
             bondToken {
                 id
                 expiry

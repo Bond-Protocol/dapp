@@ -1,11 +1,19 @@
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 
 export const ExpandableRow: FC<{
   children: React.ReactNode;
   expanded: React.ReactNode;
   className: string;
-}> = ({ children, expanded, className }) => {
+  onOpen?: () => any;
+  onClose?: () => any;
+}> = ({ children, expanded, className, onOpen, onClose }) => {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    open && onOpen && onOpen();
+    !open && onClose && onClose();
+  }, [open]);
+
   return (
     <>
       <tr

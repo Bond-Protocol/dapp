@@ -84,6 +84,20 @@ export function useCalculatedMarkets() {
     })
   );
 
+  const refetchOne = (id: string) => {
+    calculateAllMarkets.forEach((result) => {
+      if (result.data && result.data.id === id) result.refetch();
+    });
+  };
+
+  const refetchAllMarkets = () => {
+    calculateAllMarkets.forEach((result) => result.refetch());
+  };
+
+  const refetchMyMarkets = () => {
+    calculateMyMarkets.forEach((result) => result.refetch());
+  };
+
   useDeepCompareEffect(() => {
     const calculatedPricesMap = new Map();
     calculateAllMarkets.forEach((result) => {
@@ -104,6 +118,9 @@ export function useCalculatedMarkets() {
 
   return {
     allMarkets: calculatedMarkets,
-    myMarkets: myCalculatedMarkets
+    myMarkets: myCalculatedMarkets,
+    refetchAllMarkets: () => refetchAllMarkets(),
+    refetchMyMarkets: () => refetchMyMarkets(),
+    refetchOne: (id: string) => refetchOne(id),
   };
 }

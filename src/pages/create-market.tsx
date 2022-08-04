@@ -1,4 +1,4 @@
-import {useConnect, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
+import {useAccount, useConnect, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {Tooltip} from "@material-tailwind/react";
@@ -6,18 +6,20 @@ import * as contractLibrary from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
 import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
+import {Button} from "components";
 
 export const CreateMarketView = () => {
-  const { data: signer, status } = useSigner();
-  const connect = useConnect();
+  const {address, isConnected} = useAccount();
+  const {data: signer} = useSigner();
+  const {connect} = useConnect();
   const network = useNetwork();
-  const { error, switchNetwork } = useSwitchNetwork();
+  const {switchNetwork} = useSwitchNetwork();
 
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
 
   const onSubmit = async (data: any) => {
@@ -64,7 +66,7 @@ export const CreateMarketView = () => {
   const getTokenInfo = async (address: string, isPayout: boolean) => {
     const contract = contractLibrary.IERC20__factory.connect(
       address,
-      providers.rinkeby[0]
+      providers[selectedChain]
     );
     try {
       const [name, symbol] = await Promise.all([
@@ -146,8 +148,9 @@ export const CreateMarketView = () => {
   }
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div style={{textAlign: "center"}}>
       <h1>Create Market</h1>
+      {isConnected && <p>Owner: {address}</p>}
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-8 grid grid-cols-1 gap-6 items-start">
           {renderInputBlock({
@@ -155,7 +158,7 @@ export const CreateMarketView = () => {
             fieldName: "bondType",
             type: "select",
             selectValues: Object.values(contractLibrary.BOND_TYPE).map(
-              (value) => ({ value: value, displayName: value })
+              (value) => ({value: value, displayName: value})
             ),
           })}
           {renderInputBlock({
@@ -164,8 +167,8 @@ export const CreateMarketView = () => {
             type: "select",
             selectValues: bondLibrary.SUPPORTED_CHAINS.map(
               (supportedChain) => ({
-                value: supportedChain.chainId,
-                displayName: supportedChain.chainName,
+                value: supportedChain.chainName,
+                displayName: supportedChain.displayName,
               })
             ),
           })}
@@ -217,7 +220,7 @@ export const CreateMarketView = () => {
             type: "text",
             placeholder: "0",
             tooltip: "Good explanation coming soon",
-            options: { required: true },
+            options: {required: true},
           })}
           {renderInputBlock({
             label: "Capacity in Quote Token?",
@@ -232,7 +235,7 @@ export const CreateMarketView = () => {
             placeholder: "0",
             tooltip:
               "The start price for the bond sale. Price will decrease automatically until users purchase bonds.",
-            options: { required: true },
+            options: {required: true},
           })}
           {renderInputBlock({
             label: "Formatted Minimum Price",
@@ -240,7 +243,7 @@ export const CreateMarketView = () => {
             type: "text",
             placeholder: "0",
             tooltip: "The minimum acceptable price for a bond sale.",
-            options: { required: true },
+            options: {required: true},
           })}
           {renderInputBlock({
             label: "Debt Buffer",
@@ -248,7 +251,7 @@ export const CreateMarketView = () => {
             type: "text",
             placeholder: "0",
             tooltip: "Good explanation coming soon",
-            options: { required: true },
+            options: {required: true},
           })}
           {renderInputBlock({
             label: "Vesting Period",
@@ -256,7 +259,7 @@ export const CreateMarketView = () => {
             type: "text",
             placeholder: "0",
             tooltip: "Good explanation coming soon",
-            options: { required: true },
+            options: {required: true},
           })}
           {renderInputBlock({
             label: "Conclusion",
@@ -279,12 +282,15 @@ export const CreateMarketView = () => {
             tooltip: "Good explanation coming soon",
             placeholder: "0",
           })}
-          {network.chain && network.chain.id == selectedChain ? (
-            <input type="submit" value="Submit" />
-          ) : (
-            // @ts-ignore
-            <button onClick={switchChain}>Switch Chain</button>
-          )}
+          {!isConnected ?
+            <Button onClick={connect}>Connect Wallet</Button> :
+            (network.chain && network.chain.network == selectedChain ? (
+              <input type="submit" value="Submit"/>
+            ) : (
+              // @ts-ignore
+              <Button onClick={switchChain}>Switch Chain</Button>
+            ))
+          }
         </div>
       </form>
     </div>
