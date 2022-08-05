@@ -184,6 +184,18 @@ export function useTokens() {
     }
   }, [testnet, mainnetTokens, testnetTokens]);
 
+  function getPrice(id: string): number {
+    const sources = currentPrices.get(id);
+    if (!sources) return 0;
+    for (const source of sources) {
+      if (source == undefined || source.price == undefined) {
+        continue;
+      }
+      return Number(source.price);
+    }
+    return 0;
+  }
+
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
@@ -191,5 +203,6 @@ export function useTokens() {
   return {
     tokens: selectedTokens,
     currentPrices: currentPrices,
+    getPrice: (id: string) => getPrice(id),
   };
 }

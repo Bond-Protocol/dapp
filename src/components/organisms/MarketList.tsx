@@ -13,6 +13,7 @@ type MarketListProps = {
 
 export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
   const {refetchAllMarkets, refetchMyMarkets, refetchOne} = useCalculatedMarkets();
+
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(Array.from(markets.values()));
 
   const marketsRef = useRef(markets);
@@ -76,6 +77,16 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
     setCurrentSort({sortBy: sortByDiscount, ascending: ascending});
   }
 
+  function sortByTbv() {
+    const ascending = currentSort.sortBy.toString() === sortByTbv.toString() ?
+      !currentSort.ascending :
+      false;
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      numericSort(m1.tbvUsd, m2.tbvUsd, ascending)
+    );
+    setCurrentSort({sortBy: sortByTbv, ascending: ascending});
+  }
+
   function sortByExpiry() {
     const ascending = currentSort.sortBy.toString() === sortByExpiry.toString() ?
       !currentSort.ascending :
@@ -118,7 +129,7 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
             <th onClick={sortByPayout}>Payout Asset</th>
             <th onClick={sortByPrice}>Price</th>
             <th onClick={sortByDiscount}>Discount</th>
-            <th>TBV</th>
+            <th onClick={sortByTbv}>TBV</th>
             <th>30D Perf.</th>
             <th onClick={sortByExpiry}>Expiry</th>
             {allowManagement && <th onClick={sortByStatus}>Status</th>}
@@ -127,7 +138,6 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
 
         <tbody>
           {sortedMarkets.map((market: CalculatedMarket) => {
-            const calculatedMarket = markets?.get(market.id);
             return (
               <ExpandableRow key={market.id}
                 onOpen={() => {
@@ -137,24 +147,27 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
                 }}
                 onClose={() => clearInterval(timerRef.current)}
                 expanded={
-                  calculatedMarket ?
+                  market ?
                     (allowManagement ?
-                      (<CloseMarketCard market={calculatedMarket} />) :
-                      (<BondListCard market={calculatedMarket}/>)
+                      (<CloseMarketCard market={market} />) :
+                      (<BondListCard market={market}/>)
                     ) :
                     (<div>Loading...</div>)
                 } className="gap-x-2">
                 <td>{market.quoteToken.symbol}</td>
                 <td>{market.payoutToken.symbol}</td>
                 <td>
-                  <p>{calculatedMarket?.formattedDiscountedPrice}</p>
-                  <p className="text-xs">(Market: {calculatedMarket?.formattedFullPrice})</p>
+                  <p>{market?.formattedDiscountedPrice}</p>
+                  <p className="text-xs">(Market: {market?.formattedFullPrice})</p>
                 </td>
-                <td>{calculatedMarket?.discount}%</td>
-                <td>${0}</td>
+                <td>{market?.discount}%</td>
+                <td>
+                  <p>{Math.trunc(market.totalBondedAmount) + " " + market.quoteToken.symbol}</p>
+                  <p className="text-xs">({market.formattedTbvUsd})</p>
+                </td>
                 <td>{0}%</td>
-                <td>{calculatedMarket?.formattedLongVesting}</td>
-                {allowManagement && <td>{calculatedMarket && calculatedMarket.isLive ? "Live": "Closed"}</td>}
+                <td>{market?.formattedLongVesting}</td>
+                {allowManagement && <td>{market && market.isLive ? "Live": "Closed"}</td>}
               </ExpandableRow>
             );
           })}
