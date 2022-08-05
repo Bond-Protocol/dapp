@@ -25,6 +25,8 @@ export const listMarketsRinkeby = gql`
             vesting
             vestingType
             isInstantSwap
+            totalBondedAmount
+            totalPayoutAmount
         }
     }
 `;
@@ -54,6 +56,8 @@ export const listMarketsGoerli = gql`
             vesting
             vestingType
             isInstantSwap
+            totalBondedAmount
+            totalPayoutAmount
         }
     }
 `;
@@ -183,6 +187,8 @@ export const listOwnedMarketsRinkeby = gql`
             vestingType
             isInstantSwap
             isLive
+            totalBondedAmount
+            totalPayoutAmount
         }
     }
 `;
@@ -216,6 +222,8 @@ export const listOwnedMarketsGoerli = gql`
             vestingType
             isInstantSwap
             isLive
+            totalBondedAmount
+            totalPayoutAmount
         }
     }
 `;

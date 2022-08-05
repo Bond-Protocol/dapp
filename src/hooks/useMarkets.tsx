@@ -9,6 +9,7 @@ export function useMarkets() {
 
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [selectedMarkets, setSelectedMarkets] = useState<Market[]>([]);
+  const [marketsMap, setMarketsMap] = useState<Map<string, Market>>(new Map());
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
@@ -36,7 +37,16 @@ export function useMarkets() {
     }
   }, [testnet, mainnetMarkets, testnetMarkets]);
 
+  useEffect(() => {
+    const map: Map<string, Market> = new Map();
+    selectedMarkets.forEach((market) => {
+      map.set(market.id, market);
+    });
+    setMarketsMap(map);
+  }, [marketsMap]);
+
   return {
     markets: selectedMarkets,
+    marketsMap: marketsMap,
   };
 }

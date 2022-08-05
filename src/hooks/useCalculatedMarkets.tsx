@@ -1,6 +1,6 @@
 import {useTokens} from "hooks/useTokens";
 import {useQueries} from "react-query";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import {CalculatedMarket} from "@bond-labs/contract-library";
 import {useProvider} from "wagmi";
@@ -13,22 +13,11 @@ import {useMyMarkets} from "hooks/useMyMarkets";
 export function useCalculatedMarkets() {
   const {markets: markets} = useMarkets();
   const {markets: myMarkets} = useMyMarkets();
-  const currentPrices = useTokens().currentPrices;
+  const {currentPrices, getPrice} = useTokens();
   const provider = useProvider();
+
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [myCalculatedMarkets, setMyCalculatedMarkets] = useState(new Map());
-
-  function getPrice(id: string): number {
-    const sources = currentPrices.get(id);
-    if (!sources) return 0;
-    for (const source of sources) {
-      if (source == undefined || source.price == undefined) {
-        continue;
-      }
-      return Number(source.price);
-    }
-    return 0;
-  }
 
   const calculateMarket = (market: Market) => {
     const requestProvider = providers[market.network] || provider;
@@ -44,6 +33,8 @@ export function useCalculatedMarkets() {
         vestingType: market.vestingType,
         isLive: market.isLive,
         isInstantSwap: market.isInstantSwap,
+        totalBondedAmount: market.totalBondedAmount,
+        totalPayoutAmount: market.totalPayoutAmount,
         payoutToken: {
           id: market.payoutToken.id,
           address: market.payoutToken.address,
@@ -58,7 +49,7 @@ export function useCalculatedMarkets() {
           decimals: market.quoteToken.decimals,
           name: market.quoteToken.name,
           symbol: market.quoteToken.symbol,
-          price: getPrice(market.payoutToken.id),
+          price: getPrice(market.quoteToken.id),
         }
       }
     ).then((result: CalculatedMarket) => result);
