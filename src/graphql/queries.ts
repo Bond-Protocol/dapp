@@ -227,3 +227,39 @@ export const listOwnedMarketsGoerli = gql`
         }
     }
 `;
+
+export const listErc20BondTokensRinkeby = gql`
+    query ListErc20BondTokensRinkeby {
+        bondTokens(where:
+        {
+            type: "fixed-expiration"
+        }) {
+            id
+            underlying {
+                symbol
+                decimals
+            }
+            expiry
+            teller
+            network
+        }
+    }
+`;
+
+export const listErc20BondTokensGoerli = gql`
+    query ListErc20BondTokensGoerli {
+        bondTokens(where:
+        {
+            type: "fixed-expiration"
+        }) {
+            id
+            underlying {
+                symbol
+                decimals
+            }
+            expiry
+            teller
+            network
+        }
+    }
+`;
