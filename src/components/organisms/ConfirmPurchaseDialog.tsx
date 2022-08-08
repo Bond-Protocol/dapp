@@ -18,6 +18,7 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
   const {data: signer} = useSigner();
   const {address} = useAccount();
   const {refetchOne} = useCalculatedMarkets();
+  const {getTokenDetails} = useTokens();
 
   const [open, setOpen] = React.useState(false);
   const [payout, setPayout] = useState<string>("0");
@@ -104,6 +105,8 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
     setPayout((Number(payout) / Math.pow(10, 18)).toString());
   }
 
+  const quoteToken = getTokenDetails(props.market.quoteToken);
+  const payoutToken = getTokenDetails(props.market.payoutToken);
   return (
     <div className="w-full">
       <Button disabled={(Number(props.amount) <= 0)} className="w-full" onClick={handleOpen}>
@@ -129,13 +132,13 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
                   <Button onClick={() => setSlippage(1)}>1%</Button>
                   <Button onClick={() => setSlippage(2)}>2%</Button>
                 </div>
-                <p>You will spend: {props.amount} {props.market.quoteToken.symbol}</p>
-                <p>You will get a maximum of: {payout} {props.market.payoutToken.symbol}</p>
+                <p>You will spend: {props.amount} {quoteToken.symbol}</p>
+                <p>You will get a maximum of: {payout} {payoutToken.symbol}</p>
                 <p>You will get a minimum
-                  of: {Number(payout) - (Number(payout) * (slippage / 100))} {props.market.payoutToken.symbol} ({slippage}%
+                  of: {Number(payout) - (Number(payout) * (slippage / 100))} {payoutToken.symbol} ({slippage}%
                   Slippage)</p>
                 <p>Bond
-                  Price: {props.market.formattedDiscountedPrice} per {props.market.payoutToken.symbol} (Market: {props.market.formattedFullPrice})</p>
+                  Price: {props.market.formattedDiscountedPrice} per {payoutToken.symbol} (Market: {props.market.formattedFullPrice})</p>
                 <p>Discount: {market.discount}%</p>
                 <Button className="w-full" onClick={bond}>Bond</Button>
               </>
@@ -156,7 +159,7 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
               <>
                 <h1 id="title">Bond Purchased!</h1>
                 <p>You will
-                  receive {parseInt(transactionReceipt.logs[1].data) / Math.pow(10, market.payoutToken.decimals)} {market.payoutToken.symbol}</p>
+                  receive {parseInt(transactionReceipt.logs[1].data) / Math.pow(10, market.payoutToken.decimals)} {payoutToken.symbol}</p>
                 <div>
                   <a target="_blank" href={twitterLink} rel="noreferrer">Share on Twitter</a>
                 </div>

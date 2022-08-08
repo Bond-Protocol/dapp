@@ -11,6 +11,7 @@ import {providers} from "services/owned-providers";
 import {BigNumberish, ContractTransaction} from "ethers";
 import ConfirmPurchaseDialog from "./ConfirmPurchaseDialog";
 import {ConnectButton, useConnectModal} from "@rainbow-me/rainbowkit";
+import {useTokens} from "hooks";
 
 export type BondListCardProps = {
   market: CalculatedMarket
@@ -22,6 +23,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
   const {address, isConnected} = useAccount();
   const {switchNetwork} = useSwitchNetwork();
   const {openConnectModal} = useConnectModal();
+  const {getTokenDetails} = useTokens();
 
   const {data} = useBalance({
     token: props.market.quoteToken.address,
@@ -128,6 +130,8 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
     setPayout((Number(payout) / Math.pow(10, 18)).toString());
   }
 
+  const quoteToken = getTokenDetails(props.market.quoteToken);
+  const payoutToken = getTokenDetails(props.market.payoutToken);
   return (
     <div className="px-2 pb-2 w-[90vw]">
       <div className="my-4 flex justify-between">
@@ -144,7 +148,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
       <div>
         <div className="flex justify-between mb-2">
           {isConnected ?
-            (<p>Balance: {balance + " " + props.market.quoteToken.symbol}</p>) :
+            (<p>Balance: {balance + " " + quoteToken.symbol}</p>) :
             (<p>Balance: <ConnectButton/></p>)
           }
           <div>
@@ -167,11 +171,11 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
       </div>
       <div className="pt-2">
         <DataRow leftContent="You Will Get" rightContent={
-          payout + " " + props.market.payoutToken.symbol
+          payout + " " + payoutToken.symbol
         }/>
 
         <DataRow leftContent="Max Accepted" rightContent={
-          props.market.maxAmountAccepted + " " + props.market.quoteToken.symbol
+          props.market.maxAmountAccepted + " " + quoteToken.symbol
         }/>
 
         <DataRow leftContent="Bond Contract" rightContent={(
@@ -201,13 +205,13 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
               href="https://app.sushi.com/swap"
               target="_blank"
               rel="noopener noreferrer">
-                Buy {props.market.quoteToken.symbol}
+                Buy {payoutToken.symbol}
             </a>
         }
 
         {isConnected && correctChain && hasSufficientBalance && !hasSufficientAllowance &&
             <Button className="w-full" onClick={approve}>
-                Approve {props.market.quoteToken.symbol}
+                Approve {quoteToken.symbol}
             </Button>
         }
 

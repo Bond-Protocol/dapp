@@ -4,7 +4,7 @@ import {BondListCard} from "components/organisms/BondListCard";
 import {FC, useEffect, useRef, useState} from "react";
 import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
-import {useCalculatedMarkets} from "hooks";
+import {useCalculatedMarkets, useTokens} from "hooks";
 
 type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
@@ -13,6 +13,7 @@ type MarketListProps = {
 
 export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
   const {refetchAllMarkets, refetchMyMarkets, refetchOne} = useCalculatedMarkets();
+  const {getTokenDetails} = useTokens();
 
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(Array.from(markets.values()));
 
@@ -138,6 +139,8 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
 
         <tbody>
           {sortedMarkets.map((market: CalculatedMarket) => {
+            const quoteToken = getTokenDetails(market.quoteToken);
+            const payoutToken = getTokenDetails(market.payoutToken);
             return (
               <ExpandableRow key={market.id}
                 onOpen={() => {
@@ -149,25 +152,25 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
                 expanded={
                   market ?
                     (allowManagement ?
-                      (<CloseMarketCard market={market} />) :
+                      (<CloseMarketCard market={market}/>) :
                       (<BondListCard market={market}/>)
                     ) :
                     (<div>Loading...</div>)
                 } className="gap-x-2">
-                <td>{market.quoteToken.symbol}</td>
-                <td>{market.payoutToken.symbol}</td>
+                <td>{quoteToken.symbol}</td>
+                <td>{payoutToken.symbol}</td>
                 <td>
                   <p>{market?.formattedDiscountedPrice}</p>
                   <p className="text-xs">(Market: {market?.formattedFullPrice})</p>
                 </td>
                 <td>{market?.discount}%</td>
                 <td>
-                  <p>{Math.trunc(market.totalBondedAmount) + " " + market.quoteToken.symbol}</p>
+                  <p>{Math.trunc(market.totalBondedAmount) + " " + quoteToken.symbol}</p>
                   <p className="text-xs">({market.formattedTbvUsd})</p>
                 </td>
                 <td>{0}%</td>
                 <td>{market?.formattedLongVesting}</td>
-                {allowManagement && <td>{market && market.isLive ? "Live": "Closed"}</td>}
+                {allowManagement && <td>{market && market.isLive ? "Live" : "Closed"}</td>}
               </ExpandableRow>
             );
           })}
