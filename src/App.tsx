@@ -8,8 +8,7 @@ export const App: FC = () => {
   const currentPrices = useTokens().currentPrices;
   const {markets: allMarkets} = useMarkets();
   const {markets: myMarkets} = useMyMarkets();
-  const allCalculatedMarkets = useCalculatedMarkets(currentPrices, allMarkets).allMarkets;
-  const myCalculatedMarkets = useCalculatedMarkets(currentPrices, myMarkets).allMarkets;
+  const {allMarkets: allCalculatedMarkets, myMarkets: myCalculatedMarkets} = useCalculatedMarkets();
 
   return (
     <Router>

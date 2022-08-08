@@ -116,6 +116,7 @@ export function useMyBonds() {
   useEffect(() => {
     if (rinkebyErc20Data && goerliErc20Data) {
       const bondTokens = rinkebyErc20Data.bondTokens.concat(goerliErc20Data.bondTokens);
+      // @ts-ignore
       getBalances(bondTokens);
     }
   }, [address, rinkebyErc20Data, goerliErc20Data]);
