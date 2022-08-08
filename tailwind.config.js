@@ -2,7 +2,7 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 const withMT = require("@material-tailwind/react/utils/withMT");
 
-module.exports = withMT({
+module.exports = {
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
@@ -12,6 +12,10 @@ module.exports = withMT({
         "brand-texas-rose": "#F2A94A",
         "brand-champagne": "#F0DEC4",
         "brand-opal": "#9CC1C7",
+        "brand-turtle-gold": "#E7AC5C",
+        "brand-twin-white": "#FCFAEC",
+        "brand-space-blue": "#14182D",
+        "brand-exiled-gold": "#73562E",
       },
       fontFamily: {
         sans: ["PP Fraktion Sans", ...defaultTheme.fontFamily.sans],
@@ -25,4 +29,4 @@ module.exports = withMT({
       addVariant("child-hover", "& > *:hover");
     },
   ],
-});
+};
