@@ -7,6 +7,8 @@ import * as bondLibrary from "@bond-labs/bond-library";
 import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
 import {Button} from "components";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
+import * as React from "react";
 
 export const CreateMarketView = () => {
   const {address, isConnected} = useAccount();
@@ -283,7 +285,7 @@ export const CreateMarketView = () => {
             placeholder: "0",
           })}
           {!isConnected ?
-            <Button onClick={connect}>Connect Wallet</Button> :
+            <ConnectButton /> :
             (network.chain && network.chain.network == selectedChain ? (
               <input type="submit" value="Submit"/>
             ) : (

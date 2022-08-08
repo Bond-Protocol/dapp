@@ -6,11 +6,11 @@ import {DataRow} from "components/atoms/DataRow";
 import * as React from "react";
 import {BaseSyntheticEvent, FC, useEffect, useState} from "react";
 import {Button} from "..";
-import {useAccount, useBalance, useConnect, useProvider, useSigner, useSwitchNetwork} from "wagmi";
+import {useAccount, useBalance, useProvider, useSigner, useSwitchNetwork} from "wagmi";
 import {providers} from "services/owned-providers";
 import {BigNumberish, ContractTransaction} from "ethers";
-import {InjectedConnector} from "wagmi/connectors/injected";
 import ConfirmPurchaseDialog from "./ConfirmPurchaseDialog";
+import {ConnectButton, useConnectModal} from "@rainbow-me/rainbowkit";
 
 export type BondListCardProps = {
   market: CalculatedMarket
@@ -20,8 +20,8 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
   const provider = useProvider();
   const {data: signer} = useSigner();
   const {address, isConnected} = useAccount();
-  const {connect} = useConnect({connector: new InjectedConnector()});
   const {switchNetwork} = useSwitchNetwork();
+  const {openConnectModal} = useConnectModal();
 
   const {data} = useBalance({
     token: props.market.quoteToken.address,
@@ -97,7 +97,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
   }
 
   async function approve() {
-    if (!address || !signer) connect();
+    if (!address || !signer) openConnectModal && openConnectModal();
     const approval: ContractTransaction = await contractLibrary.changeApproval(
       props.market.quoteToken.address,
       props.market.auctioneer,
@@ -132,7 +132,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
     <div className="px-2 pb-2 w-[90vw]">
       <div className="my-4 flex justify-between">
         <div>
-          <span>{props.icon}</span>
+          <span>{/*icon*/}</span>
           <span className="mx-2 text-4xl">
             {protocol && protocol.name}
           </span>
@@ -145,8 +145,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
         <div className="flex justify-between mb-2">
           {isConnected ?
             (<p>Balance: {balance + " " + props.market.quoteToken.symbol}</p>) :
-            //@ts-ignore
-            (<p>Balance: <Button onClick={connect}>Connect Wallet!</Button></p>)
+            (<p>Balance: <ConnectButton/></p>)
           }
           <div>
             <Chip value="25%" className="mr-2"/>
@@ -187,10 +186,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
 
       <div className="flex pt-2">
         {!isConnected &&
-        //@ts-ignore
-            <Button className="w-full" onClick={connect}>
-                Connect Wallet
-            </Button>
+            <ConnectButton/>
         }
 
         {isConnected && !correctChain &&
@@ -200,7 +196,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
             </Button>
         }
 
-        {correctChain && !hasSufficientBalance &&
+        {isConnected && correctChain && !hasSufficientBalance &&
             <a className="w-full px-2 border-2 border-brand-bond-blue text-white text-center"
               href="https://app.sushi.com/swap"
               target="_blank"
@@ -209,13 +205,13 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
             </a>
         }
 
-        {correctChain && hasSufficientBalance && !hasSufficientAllowance &&
+        {isConnected && correctChain && hasSufficientBalance && !hasSufficientAllowance &&
             <Button className="w-full" onClick={approve}>
                 Approve {props.market.quoteToken.symbol}
             </Button>
         }
 
-        {correctChain && hasSufficientBalance && hasSufficientAllowance &&
+        {isConnected && correctChain && hasSufficientBalance && hasSufficientAllowance &&
             <ConfirmPurchaseDialog amount={amount} market={props.market}/>
         }
       </div>

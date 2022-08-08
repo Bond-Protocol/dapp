@@ -2,11 +2,12 @@ import {useMyBonds} from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
 import {ContractTransaction} from "ethers";
 import * as contractLibrary from "@bond-labs/contract-library";
-import {useAccount, useConnect, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
-import {InjectedConnector} from "wagmi/connectors/injected";
+import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import {OwnerBalance} from "src/generated/graphql";
+import * as React from "react";
 import {useEffect, useRef, useState} from "react";
 import {providers} from "services/owned-providers";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 export const MyBondsList = () => {
   const {myBonds, refetch} = useMyBonds();
@@ -14,9 +15,6 @@ export const MyBondsList = () => {
   const {address, isConnected} = useAccount();
   const {switchNetwork} = useSwitchNetwork();
   const {chain} = useNetwork();
-  const {connect} = useConnect({
-    connector: new InjectedConnector(),
-  });
 
   const [numBonds, setNumBonds] = useState<number>(myBonds.length);
   const timerRef = useRef<NodeJS.Timeout>();
@@ -39,6 +37,7 @@ export const MyBondsList = () => {
     const redeemTx: ContractTransaction = await contractLibrary.redeem(
       bond.tokenId,
       bond.bondToken?.teller,
+      // @ts-ignore
       bond.bondToken?.type,
       bond.balance.toString(),
       signer,
@@ -92,6 +91,7 @@ export const MyBondsList = () => {
                   <td>{balance + " " + bond.bondToken?.underlying.symbol}</td>
                   <td>
                     {canClaim && bond.network !== chain?.network &&
+                    // @ts-ignore
                       <Button onClick={(e) => switchChain(e, bond.network)}>Switch Chain</Button>
                     }
                     {canClaim && bond.network === chain?.network &&
@@ -110,8 +110,7 @@ export const MyBondsList = () => {
           <p>Please connect your wallet!</p>
         </div>
         <div className="flex justify-center py-2">
-          {/*@ts-ignore*/}
-          <Button onClick={connect}>Connect</Button>
+          <ConnectButton/>
         </div>
       </>
     )

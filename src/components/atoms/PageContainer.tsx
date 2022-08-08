@@ -1,6 +1,8 @@
-import { TailwindComponent } from "src/types/TailwindComponent";
+// @ts-ignore
+import {TailwindComponent} from "src/types/TailwindComponent";
 
 export const PageContainer: TailwindComponent = ({
+  // @ts-ignore
   children,
   className = "",
 }) => {

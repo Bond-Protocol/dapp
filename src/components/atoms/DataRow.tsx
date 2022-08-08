@@ -1,8 +1,8 @@
-import { FC } from "react";
+import {FC, ReactNode} from "react";
 
 type DataRowProps = {
   leftContent: string;
-  rightContent: string;
+  rightContent: any;
   onClick?: () => void;
 };
 

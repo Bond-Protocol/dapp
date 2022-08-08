@@ -7,11 +7,13 @@ import {useAccount, useConnect, useProvider, useSigner, useSwitchNetwork} from "
 import {providers} from "services/owned-providers";
 import {ContractTransaction} from "ethers";
 import {InjectedConnector} from "wagmi/connectors/injected";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 export type CloseMarketCardProps = {
   market: CalculatedMarket
 };
 
+// @ts-ignore
 export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
   const {data: signer} = useSigner();
   const {isConnected} = useAccount();
@@ -39,6 +41,7 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
     const closeMarketTx: ContractTransaction = await contractLibrary.closeMarket(
       props.market.marketId,
       providers[props.market.network].network.chainId.toString(),
+      // @ts-ignore
       signer,
       {
         gasPrice: 100,
@@ -51,10 +54,7 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
     props.market.isLive && <div className="px-2 pb-2 w-[90vw]">
       <div className="flex pt-2">
         {!isConnected &&
-        //@ts-ignore
-            <Button className="w-full" onClick={connect}>
-                Connect Wallet
-            </Button>
+            <ConnectButton />
         }
 
         {isConnected && !correctChain &&
