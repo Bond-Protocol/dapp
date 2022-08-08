@@ -8,6 +8,7 @@ import * as React from "react";
 import {useEffect, useRef, useState} from "react";
 import {providers} from "services/owned-providers";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
+import {useTokens} from "hooks";
 
 export const MyBondsList = () => {
   const {myBonds, refetch} = useMyBonds();
@@ -15,6 +16,7 @@ export const MyBondsList = () => {
   const {address, isConnected} = useAccount();
   const {switchNetwork} = useSwitchNetwork();
   const {chain} = useNetwork();
+  const {getTokenDetails} = useTokens();
 
   const [numBonds, setNumBonds] = useState<number>(myBonds.length);
   const timerRef = useRef<NodeJS.Timeout>();
@@ -83,12 +85,13 @@ export const MyBondsList = () => {
               const now = new Date(Date.now());
               const canClaim = now >= date;
               const balance = bond.balance / Math.pow(10, bond.bondToken?.underlying.decimals);
+              const underlying = bond.bondToken && getTokenDetails(bond.bondToken.underlying);
               return (
                 <tr key={bond.id}>
-                  <td>{bond.bondToken?.underlying.symbol}</td>
+                  <td>{underlying?.symbol}</td>
                   <td>{bond.network}</td>
                   <td>{date.toDateString()}</td>
-                  <td>{balance + " " + bond.bondToken?.underlying.symbol}</td>
+                  <td>{balance + " " + underlying?.symbol}</td>
                   <td>
                     {canClaim && bond.network !== chain?.network &&
                     // @ts-ignore

@@ -196,6 +196,18 @@ export function useTokens() {
     return 0;
   }
 
+  function getTokenDetails(token: any) {
+    const bondLibraryToken = bondLibrary.TOKENS.get(token.id);
+    return {
+      id: token.id,
+      address: token.address,
+      network: token.network,
+      name: bondLibraryToken ? bondLibraryToken.name : token.name,
+      symbol: bondLibraryToken ? bondLibraryToken.symbol : token.symbol,
+      decimals: token.decimals,
+    };
+  }
+
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
@@ -204,5 +216,6 @@ export function useTokens() {
     tokens: selectedTokens,
     currentPrices: currentPrices,
     getPrice: (id: string) => getPrice(id),
+    getTokenDetails: (token: any) => getTokenDetails(token),
   };
 }

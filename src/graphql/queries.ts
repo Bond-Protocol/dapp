@@ -123,6 +123,7 @@ export const getOwnerBalancesByOwnerRinkeby = gql`
                 type
                 teller
                 underlying {
+                    id
                     symbol
                     decimals
                 }
@@ -150,6 +151,7 @@ export const getOwnerBalancesByOwnerGoerli = gql`
                 type
                 teller
                 underlying {
+                    id
                     symbol
                     decimals
                 }
@@ -236,6 +238,7 @@ export const listErc20BondTokensRinkeby = gql`
         }) {
             id
             underlying {
+                id
                 symbol
                 decimals
             }
@@ -254,6 +257,7 @@ export const listErc20BondTokensGoerli = gql`
         }) {
             id
             underlying {
+                id
                 symbol
                 decimals
             }
