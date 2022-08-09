@@ -82,8 +82,14 @@ WithIcon.args = {
   children: <sample.Complex />,
 };
 
-export const Variants = VariantsTemplate.bind({});
-Variants.args = {
+export const IconOnly = Template.bind({});
+IconOnly.args = {
+  children: <TestIcon />,
+  icon: true,
+};
+
+export const States = VariantsTemplate.bind({});
+States.args = {
   buttons: [
     { children: "Normal", variant: "primary" },
     { children: "Hover", variant: "primary", id: "hover" },
@@ -102,7 +108,7 @@ Variants.args = {
   ],
 };
 
-Variants.parameters = {
+States.parameters = {
   pseudo: {
     hover: ["#hover"],
     active: ["#active"],
