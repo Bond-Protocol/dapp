@@ -3,6 +3,7 @@ import {useCalculatedMarkets} from "hooks";
 import {getProtocolByAddress, PROTOCOLS} from "@bond-labs/bond-library";
 import {ethers} from "ethers";
 import {Button} from "components";
+import {IssuerCard} from "components/molecules/IssuerCard";
 
 export const IssuerList: FC<any> = () => {
   const {allMarkets} = useCalculatedMarkets();
@@ -42,14 +43,14 @@ export const IssuerList: FC<any> = () => {
 
   return (
     <>
-      {verifiedIssuers.map(issuer => <span key={issuer}>{PROTOCOLS.get(issuer)?.name}</span>)}
+      {verifiedIssuers.map(issuer => <IssuerCard key={issuer} issuer={PROTOCOLS.get(issuer)} />)}
       <br />
       {showUnverified ?
         <Button onClick={() => setShowUnverified(false)}>Hide Unverified</Button> :
         <Button onClick={() => setShowUnverified(true)}>Show Unverified</Button>
       }
       <br />
-      {showUnverified && unverifiedIssuers.map(issuer => <span key={issuer}>{issuer}</span>)}
+      {showUnverified && unverifiedIssuers.map(issuer => <IssuerCard key={issuer} issuer={issuer} />)}
     </>
   );
 };
