@@ -4,6 +4,7 @@ import {MarketList} from "components/organisms/MarketList";
 import {MyBondsList} from "components/organisms/MyBondsList";
 import {useEffect, useState} from "react";
 import {useCalculatedMarkets} from "hooks";
+import {IssuerList} from "components/organisms/IssuerList";
 
 export const MarketsView = () => {
   const allMarkets = useCalculatedMarkets().allMarkets;
@@ -11,6 +12,7 @@ export const MarketsView = () => {
 
   const [tabsConfig, setTabsConfig] = useState([
     {label: "All Markets", component: <MarketList markets={allMarkets} allowManagement={false}/>},
+    {label: "Bond Issuers", component: <IssuerList />},
     {label: "My Bonds", component: <MyBondsList/>},
   ]);
 
@@ -18,11 +20,13 @@ export const MarketsView = () => {
     myMarkets?.size > 0 ?
       setTabsConfig([
         {label: "All Markets", component: <MarketList markets={allMarkets} allowManagement={false}/>},
+        {label: "Bond Issuers", component: <IssuerList />},
         {label: "My Bonds", component: <MyBondsList/>},
         {label: "My Markets", component: <MarketList markets={myMarkets} allowManagement={true}/>},
       ]) :
       setTabsConfig([
         {label: "All Markets", component: <MarketList markets={allMarkets} allowManagement={false}/>},
+        {label: "Bond Issuers", component: <IssuerList />},
         {label: "My Bonds", component: <MyBondsList/>},
       ]);
   }, [allMarkets, myMarkets]);
