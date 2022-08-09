@@ -1,6 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import TestIcon from "../styles/icons/test-icon";
-
 import { Button } from "../components/atoms/Button";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -14,27 +13,47 @@ export default {
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 
-const MultiButtons: ComponentStory<any> = (args) => {
+const MultiTemplate: ComponentStory<any> = ({ buttons, ...args }) => {
   return (
-    <div className="flex">
-      {args.buttons.map((b: any, i: number) => (
+    <div className="">
+      {buttons.map((b: any, i: number) => (
         <>
           {args.showIndex ? `${i}:` : ""}
-          <Button {...b} key={i} className="m-2" />
+          <Button {...b} {...args} key={i} className="m-2 max-w-[160px]" />
         </>
       ))}
     </div>
   );
 };
 
+const VariantsTemplate: ComponentStory<any> = (args) => {
+  return (
+    <>
+      <div className="flex justify-around w-1/3">
+        <p>Primary</p>
+        <p>Secondary</p>
+        <p>Ghost</p>
+      </div>
+      <div className="grid grid-rows-4 grid-flow-col w-1/3">
+        {args.buttons.map((b: any, i: number) => (
+          <>
+            {args.showIndex ? `${i}:` : ""}
+            <Button {...b} key={i} className="m-2 max-w-[160px]" />
+          </>
+        ))}
+      </div>
+    </>
+  );
+};
+
 const sample = {
   text: "LABEL",
   icon: <TestIcon />,
-  Element: (props: any) => <div {...props}>LABEL</div>,
+  Element: (props: any) => <p {...props}>LABEL</p>,
   Complex: () => (
-    <div className="flex ">
+    <div className="flex text-center items-center">
       <TestIcon className="mx-2" />
-      LABEL
+      <p>LABEL</p>
     </div>
   ),
 };
@@ -43,12 +62,19 @@ const sample = {
 export const Primary = Template.bind({});
 Primary.args = {
   children: sample.text,
+  variant: "primary",
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
   children: <sample.Element />,
-  secondary: true,
+  variant: "secondary",
+};
+
+export const Ghost = Template.bind({});
+Ghost.args = {
+  children: <sample.Element />,
+  variant: "ghost",
 };
 
 export const WithIcon = Template.bind({});
@@ -56,20 +82,64 @@ WithIcon.args = {
   children: <sample.Complex />,
 };
 
-export const Alignment = MultiButtons.bind({});
+export const Variants = VariantsTemplate.bind({});
+Variants.args = {
+  buttons: [
+    { children: "Normal", variant: "primary" },
+    { children: "Hover", variant: "primary", id: "hover" },
+    { children: "Disabled", variant: "primary", disabled: true },
+    { children: "Active", variant: "primary", id: "active" },
+
+    { children: "Normal", variant: "secondary" },
+    { children: "Hover", variant: "secondary", id: "hover" },
+    { children: "Disabled", variant: "secondary", disabled: true },
+    { children: "Active", variant: "secondary", id: "active" },
+
+    { children: "Normal", variant: "ghost" },
+    { children: "Hover", variant: "ghost", id: "hover" },
+    { children: "Disabled", variant: "ghost", disabled: true },
+    { children: "Active", variant: "ghost", id: "active" },
+  ],
+};
+
+Variants.parameters = {
+  pseudo: {
+    hover: ["#hover"],
+    active: ["#active"],
+  },
+};
+
+export const Alignment = MultiTemplate.bind({});
 Alignment.args = {
   buttons: [
     {
-      children: <sample.Element />,
+      children: "left",
       align: "left",
     },
-
     {
-      children: <sample.Element />,
-      secondary: true,
+      children: "center",
+      align: "left",
+    },
+    {
+      children: "right",
       align: "right",
     },
   ],
+};
 
-  showIndex: false,
+export const Sizes = MultiTemplate.bind({});
+Sizes.args = {
+  buttons: [
+    {
+      children: "smol",
+      size: "sm",
+    },
+    {
+      children: "medium",
+    },
+    {
+      children: "chonky",
+      size: "lg",
+    },
+  ],
 };

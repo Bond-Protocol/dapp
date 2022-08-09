@@ -1,6 +1,7 @@
 import "../src/styles/index.css";
 import { ThemeProvider } from "@material-tailwind/react";
-import defaultTheme from "../src/styles/base-theme";
+import { colors } from "../contants.json";
+import theme from "./theme";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -10,11 +11,23 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  backgrounds: {
+    default: "dark",
+    values: [
+      { name: "black", value: "#000000" },
+      { name: "white", value: "#ffffff" },
+      { name: "dark", value: "#333333" },
+      ...colors,
+    ],
+  },
+  docs: {
+    theme,
+  },
 };
 
 export const decorators = [
   (Story) => (
-    <ThemeProvider value={defaultTheme}>
+    <ThemeProvider>
       <Story />
     </ThemeProvider>
   ),

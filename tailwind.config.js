@@ -1,32 +1,50 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const withMT = require("@material-tailwind/react/utils/withMT");
+const { colors } = require("./contants.json");
 
-module.exports = {
+const brandColors = colors.reduce(
+  (acc, c) => ({
+    ...acc,
+    ["brand-" + c.name]: c.value,
+  }),
+  {}
+);
+
+module.exports = withMT({
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      colors: {
-        "brand-covenant": "#12172B",
-        "brand-bond-blue": "#40749B",
-        "brand-texas-rose": "#F2A94A",
-        "brand-champagne": "#F0DEC4",
-        "brand-opal": "#9CC1C7",
-        "brand-turtle-gold": "#E7AC5C",
-        "brand-twin-white": "#FCFAEC",
-        "brand-space-blue": "#14182D",
-        "brand-exiled-gold": "#73562E",
-      },
+      colors: brandColors,
       fontFamily: {
-        sans: ["PP Fraktion Sans", ...defaultTheme.fontFamily.sans],
-        circular: ["Circular Std", ...defaultTheme.fontFamily.serif],
+        sans: ["PPFraktionSans", ...defaultTheme.fontFamily.sans],
+        jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
       },
     },
   },
   plugins: [
+    plugin(function ({ addBase }) {
+      addBase({
+        "@font-face": {
+          fontFamily: "PPFraktionSans",
+          fontWeight: "700",
+          src: "url(/fonts/PPFraktionSans-Bold.woff2) format('woff2')",
+        },
+      });
+    }),
+    plugin(function ({ addBase }) {
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "800",
+          src: "url(/fonts/PlusJakartaSans-Medium.woff) format('woff')",
+        },
+      });
+    }),
     function ({ addVariant }) {
       addVariant("child", "& > *");
       addVariant("child-hover", "& > *:hover");
     },
   ],
-};
+});
