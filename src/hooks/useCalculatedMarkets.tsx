@@ -29,6 +29,7 @@ export function useCalculatedMarkets() {
         network: market.network,
         auctioneer: market.auctioneer,
         teller: market.teller,
+        owner: market.owner,
         vesting: market.vesting,
         vestingType: market.vestingType,
         isLive: market.isLive,

@@ -7,8 +7,7 @@ import {useCalculatedMarkets} from "hooks";
 import {IssuerList} from "components/organisms/IssuerList";
 
 export const MarketsView = () => {
-  const allMarkets = useCalculatedMarkets().allMarkets;
-  const myMarkets = useCalculatedMarkets().myMarkets;
+  const {allMarkets, myMarkets} = useCalculatedMarkets();
 
   const [tabsConfig, setTabsConfig] = useState([
     {label: "All Markets", component: <MarketList markets={allMarkets} allowManagement={false}/>},
