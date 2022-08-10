@@ -21,12 +21,12 @@ export const Routes: FC = () => {
       <Route path="/issuers" element={<IssuerList/>}/>
       <Route path="/my-bonds" element={<MyBondsList/>}/>
       <Route path="/create-market" element={<CreateMarketView/>}/>
-      {verifiedIssuers.map(issuer => <Route key={issuer}
-        path={"/issuers/" + issuer}
-        element={<IssuerPage issuer={issuer}/>}/>)}
-      {unverifiedIssuers.map(issuer => <Route key={issuer}
-        path={"/issuers/" + issuer}
-        element={<IssuerPage issuer={issuer}/>}/>)}
+      {verifiedIssuers.map(issuer =>
+        <Route key={issuer} path={"/issuers/" + issuer} element={<IssuerPage issuer={issuer}/>}/>
+      )}
+      {unverifiedIssuers.map(issuer =>
+        <Route key={issuer} path={"/issuers/" + issuer} element={<IssuerPage issuer={issuer}/>}/>
+      )}
     </Switch>
   );
 };
