@@ -1,21 +1,27 @@
 import type {FC} from "react";
 import {Link, Route, Routes as Switch} from "react-router-dom";
-import {CreateMarketView, Issuer, MarketsView} from "pages";
+import {CreateMarketView, Issuer} from "pages";
 import {Button} from "..";
 import {useAtom} from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 import {useCalculatedMarkets} from "hooks";
+import {MarketList} from "components/organisms/MarketList";
+import {IssuerList} from "components/organisms/IssuerList";
+import {MyBondsList} from "components/organisms/MyBondsList";
 
 export const Routes: FC = () => {
-  const {verifiedIssuers, unverifiedIssuers} = useCalculatedMarkets();
+  const {allMarkets, myMarkets, verifiedIssuers, unverifiedIssuers} = useCalculatedMarkets();
 
   return (
     <Switch>
-      <Route index element={<MarketsView/>}/>
+      <Route index element={<MarketList markets={allMarkets} allowManagement={false}/>}/>
+      <Route path="/markets" element={<MarketList markets={allMarkets} allowManagement={false}/>}/>
+      <Route path="/my-markets" element={<MarketList markets={myMarkets} allowManagement={true}/>}/>
+      <Route path="/issuers" element={<IssuerList />}/>
+      <Route path="/my-bonds" element={<MyBondsList />}/>
       <Route path="/create-market" element={<CreateMarketView/>}/>
-      <Route path="/markets" element={<MarketsView/>}/>
-      {verifiedIssuers.map(issuer => <Route key={issuer} path={"/issuer/" + issuer} element={<Issuer issuer={issuer}/>}/>)}
-      {unverifiedIssuers.map(issuer => <Route key={issuer} path={"/issuer/" + issuer} element={<Issuer issuer={issuer}/>}/>)}
+      {verifiedIssuers.map(issuer => <Route key={issuer} path={"/issuers/" + issuer} element={<Issuer issuer={issuer}/>}/>)}
+      {unverifiedIssuers.map(issuer => <Route key={issuer} path={"/issuers/" + issuer} element={<Issuer issuer={issuer}/>}/>)}
     </Switch>
   );
 };
@@ -29,10 +35,6 @@ export const Navbar: FC = () => {
 
   return (
     <div className="flex child:mx-1 justify-center py-4">
-      <Link to="/markets">
-        <Button>Markets</Button>
-      </Link>
-
       <Link to="/create-market">
         <Button>Create Market</Button>
       </Link>

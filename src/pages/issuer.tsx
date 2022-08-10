@@ -11,10 +11,8 @@ type IssuersProps = {
 export const Issuer: FC<IssuersProps> = ({issuer}) => {
   const verified = !ethers.utils.isAddress(issuer);
   return (
-    <PageContainer className="border">
-      <div className="flex justify-between content-center">
-        <h1 className="text-5xl">{issuer} ({verified ? "Verified" : "Unverified"})</h1>
-      </div>
-    </PageContainer>
+    <div className="flex justify-between content-center">
+      <h1 className="text-5xl">{issuer} ({verified ? "Verified" : "Unverified"})</h1>
+    </div>
   );
 };
