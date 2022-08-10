@@ -1,6 +1,6 @@
 import {useTokens} from "hooks/useTokens";
 import {useQueries} from "react-query";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import {CalculatedMarket} from "@bond-labs/contract-library";
 import {useProvider} from "wagmi";
@@ -9,6 +9,8 @@ import {Market} from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import {useMarkets} from "hooks/useMarkets";
 import {useMyMarkets} from "hooks/useMyMarkets";
+import {ethers} from "ethers";
+import {getProtocolByAddress} from "@bond-labs/bond-library";
 
 export function useCalculatedMarkets() {
   const {markets: markets} = useMarkets();
@@ -108,9 +110,45 @@ export function useCalculatedMarkets() {
     setMyCalculatedMarkets(calculatedPricesMap);
   }, [calculateMyMarkets]);
 
+  const [verifiedIssuers, setVerifiedIssuers] = useState([]);
+  const [unverifiedIssuers, setUnverifiedIssuers] = useState([]);
+  const [verifiedMarkets, setVerifiedMarkets] = useState(new Map());
+  const [unverifiedMarkets, setUnverifiedMarkets] = useState(new Map());
+
+  useEffect(() => {
+    const markets = Array.from(calculatedMarkets.values());
+
+    const verified = new Map();
+    const unverified = new Map();
+
+    markets.forEach(market => {
+      const protocol = getProtocolByAddress(market.owner, market.network);
+      const id = protocol?.id || market.owner;
+      if (ethers.utils.isAddress(id)) {
+        const value = unverified.get(market.owner) || [];
+        value.push(market);
+        unverified.set(id, value);
+      } else {
+        const value = verified.get(protocol?.id) || [];
+        value.push(market);
+        verified.set(id, value);
+      }
+    });
+
+    setVerifiedIssuers(Array.from(verified.keys()));
+    setUnverifiedIssuers(Array.from(unverified.keys()));
+
+    setVerifiedMarkets(verified);
+    setUnverifiedMarkets(unverified);
+  }, [calculatedMarkets]);
+
   return {
     allMarkets: calculatedMarkets,
     myMarkets: myCalculatedMarkets,
+    verifiedIssuers: verifiedIssuers,
+    unverifiedIssuers: unverifiedIssuers,
+    verifiedMarkets: verifiedMarkets,
+    unverifiedMarkets: unverifiedMarkets,
     refetchAllMarkets: () => refetchAllMarkets(),
     refetchMyMarkets: () => refetchMyMarkets(),
     refetchOne: (id: string) => refetchOne(id),

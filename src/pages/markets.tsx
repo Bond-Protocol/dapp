@@ -30,7 +30,6 @@ export const MarketsView = () => {
       ]);
   }, [allMarkets, myMarkets]);
 
-
   return (
     <PageContainer className="border">
       <div className="flex justify-between content-center">
