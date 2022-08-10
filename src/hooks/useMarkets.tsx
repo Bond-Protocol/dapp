@@ -43,7 +43,7 @@ export function useMarkets() {
       map.set(market.id, market);
     });
     setMarketsMap(map);
-  }, [marketsMap]);
+  }, [selectedMarkets]);
 
   return {
     markets: selectedMarkets,
