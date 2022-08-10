@@ -14,7 +14,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({issuer, markets}) => {
 
   const handleClick = (event: any, name: string) => {
     event.preventDefault();
-    navigate("/issuers/" + name);
+    navigate("/issuers/" + name.toLowerCase());
   };
 
   return ethers.utils.isAddress(issuer) ?

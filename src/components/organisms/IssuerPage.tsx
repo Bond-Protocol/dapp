@@ -1,14 +1,11 @@
-import {PageContainer} from "components/atoms/PageContainer";
-import {Tabs} from "components/molecules/Tabs";
-import {useParams} from "react-router-dom";
 import {FC} from "react";
 import {ethers} from "ethers";
 
-type IssuersProps = {
+type IssuerPageProps = {
   issuer: string;
 }
 
-export const Issuer: FC<IssuersProps> = ({issuer}) => {
+export const IssuerPage: FC<IssuerPageProps> = ({issuer}) => {
   const verified = !ethers.utils.isAddress(issuer);
   return (
     <div className="flex justify-between content-center">
