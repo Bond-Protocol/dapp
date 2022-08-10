@@ -5,5 +5,5 @@
 #yarn test
 
 echo '🎨  Formatting code... Please stand by.'
-npm run lint
+#npm run lint
 echo '🖼️  Done!'
