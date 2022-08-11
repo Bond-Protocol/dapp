@@ -5,22 +5,12 @@ import {Button} from "components";
 import {IssuerCard} from "components/molecules/IssuerCard";
 
 export const IssuerList: FC<any> = () => {
-  const {verifiedMarkets, unverifiedMarkets, verifiedIssuers, unverifiedIssuers} = useCalculatedMarkets();
-  const [showUnverified, setShowUnverified] = useState(false);
+  const {marketsByIssuer, issuers} = useCalculatedMarkets();
 
   return (
     <>
-      {verifiedIssuers.map(issuer =>
-        <IssuerCard key={issuer} issuer={PROTOCOLS.get(issuer)} markets={verifiedMarkets.get(issuer)}/>)
-      }
-      <br/>
-      {showUnverified ?
-        <Button onClick={() => setShowUnverified(false)}>Hide Unverified</Button> :
-        <Button onClick={() => setShowUnverified(true)}>Show Unverified</Button>
-      }
-      <br/>
-      {showUnverified && unverifiedIssuers.map(issuer =>
-        <IssuerCard key={issuer} issuer={issuer} markets={unverifiedMarkets.get(issuer)}/>)
+      {issuers.map(issuer =>
+        <IssuerCard key={issuer} issuer={PROTOCOLS.get(issuer)} markets={marketsByIssuer.get(issuer)}/>)
       }
     </>
   );

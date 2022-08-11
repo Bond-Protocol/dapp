@@ -11,7 +11,7 @@ import {MyBondsList} from "components/organisms/MyBondsList";
 import {IssuerPage} from "./IssuerPage";
 
 export const Routes: FC = () => {
-  const {allMarkets, myMarkets, verifiedIssuers, unverifiedIssuers} = useCalculatedMarkets();
+  const {allMarkets, myMarkets, issuers} = useCalculatedMarkets();
 
   return (
     <Switch>
@@ -21,10 +21,7 @@ export const Routes: FC = () => {
       <Route path="/issuers" element={<IssuerList/>}/>
       <Route path="/my-bonds" element={<MyBondsList/>}/>
       <Route path="/create-market" element={<CreateMarketView/>}/>
-      {verifiedIssuers.map(issuer =>
-        <Route key={issuer} path={"/issuers/" + issuer} element={<IssuerPage issuer={issuer}/>}/>
-      )}
-      {unverifiedIssuers.map(issuer =>
+      {issuers.map(issuer =>
         <Route key={issuer} path={"/issuers/" + issuer} element={<IssuerPage issuer={issuer}/>}/>
       )}
     </Switch>

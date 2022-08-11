@@ -1,8 +1,11 @@
 import {gql} from "graphql-request";
 
 export const listMarketsRinkeby = gql`
-    query ListMarketsRinkeby {
-        markets(where: {isLive: true}) {
+    query ListMarketsRinkeby($addresses: [String!]!) {
+        markets(where: {
+            isLive: true,
+            owner_in: $addresses,
+        }) {
             id
             name
             network
@@ -32,8 +35,11 @@ export const listMarketsRinkeby = gql`
 `;
 
 export const listMarketsGoerli = gql`
-    query ListMarketsGoerli {
-        markets(where: {isLive: true}) {
+    query ListMarketsGoerli($addresses: [String!]!) {
+        markets(where: {
+            isLive: true,
+            owner_in: $addresses,
+        }) {
             id
             name
             network

@@ -1,31 +1,44 @@
 import {FC, useEffect, useState} from "react";
-import {ethers} from "ethers";
 import {useCalculatedMarkets} from "hooks";
-import {Protocol, PROTOCOLS } from "@bond-labs/bond-library";
+import {Protocol, PROTOCOLS} from "@bond-labs/bond-library";
 import {MarketList} from "components/organisms/MarketList";
+import { CalculatedMarket } from "@bond-labs/contract-library";
 
 type IssuerPageProps = {
   issuer: string;
 }
 
 export const IssuerPage: FC<IssuerPageProps> = ({issuer}) => {
-  const {verifiedMarkets, unverifiedMarkets, verifiedIssuers} = useCalculatedMarkets();
-  const verified = !ethers.utils.isAddress(issuer);
-  const [markets, setMarkets] = useState([]);
-  const [protocol, setProtocol] = useState<Protocol | undefined>(undefined);
+  const {marketsByIssuer} = useCalculatedMarkets();
+  const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
+  const [protocol, setProtocol] = useState<Protocol>(PROTOCOLS.get(issuer));
+  const [tbv, setTbv] = useState(0);
 
   useEffect(() => {
-    setMarkets(verified ? verifiedMarkets.get(issuer) : unverifiedMarkets.get(issuer));
-    verified && setProtocol(PROTOCOLS.get(issuer));
-  }, [verifiedMarkets, unverifiedMarkets]);
+    setMarkets(marketsByIssuer && marketsByIssuer.get(issuer));
+  }, [marketsByIssuer]);
+
+  useEffect(() => {
+    if (markets) {
+      let tbv = 0;
+      markets.forEach(market => tbv = tbv + market.tbvUsd);
+      setTbv(tbv);
+    }
+  }, [markets]);
 
   return (
     <>
-      <div className="flex justify-between content-center">
-        <h1 className="text-5xl">{protocol ? protocol.name : issuer} ({verified ? "Verified" : "Unverified"})</h1>
+      <div className="flex flex-col content-center">
+        <div>
+          <h1 className="text-5xl">{protocol.name}</h1>
+        </div>
+        <div>
+          <p>{protocol.description}</p>
+        </div>
+        <div>TBV: ${Math.floor(tbv)}</div>
       </div>
 
-      {markets && <MarketList markets={markets} allowManagement={false} />}
+      {markets && <MarketList markets={markets} allowManagement={false}/>}
     </>
   );
 };
