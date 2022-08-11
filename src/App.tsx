@@ -7,7 +7,7 @@ import {PageContainer} from "components/atoms/PageContainer";
 import {Tabs} from "components/molecules/Tabs";
 
 export const App: FC = () => {
-  const currentPrices = useTokens().currentPrices;
+  const {currentPrices} = useTokens();
   const {markets: allMarkets} = useMarkets();
   const {markets: myMarkets} = useMyMarkets();
   const {allMarkets: allCalculatedMarkets, myMarkets: myCalculatedMarkets} = useCalculatedMarkets();
