@@ -27,21 +27,22 @@ const styles = {
     primary: {
       base: "bg-brand-yella text-brand-covenant border-brand-yella",
       hover: "hover:bg-white hover:border-white",
-      disabled: "disabled:bg-brand-not-gold disabled:border-brand-not-gold",
+      disabled:
+        "disabled:bg-brand-not-gold disabled:border-brand-not-gold disabled:cursor-not-allowed",
       active: "active:bg-white active:border-white",
     },
     secondary: {
       base: "text-white border border-brand-yella",
       hover: "hover:border-brand-covenant hover:text-brand-yella",
       disabled:
-        "disabled:bg-none disabled:border-brand-not-gold disabled:text-grey-500",
+        "disabled:bg-none disabled:border-brand-not-gold disabled:text-grey-500 disabled:cursor-not-allowed",
       active:
         "active:bg-brand-yella active:border-brand-yella active:text-brand-covenant",
     },
     ghost: {
       base: "border-transparent text-white",
       hover: "hover:text-brand-yella",
-      disabled: "disabled:text-grey-500",
+      disabled: "disabled:text-grey-500 disabled:cursor-not-allowed",
       active: "active:text-brand-yella",
     },
   },
