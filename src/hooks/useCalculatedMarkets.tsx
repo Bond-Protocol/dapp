@@ -9,6 +9,7 @@ import {Market} from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import {useMarkets} from "hooks/useMarkets";
 import {useMyMarkets} from "hooks/useMyMarkets";
+import {getProtocolByAddress} from "@bond-labs/bond-library";
 
 export function useCalculatedMarkets() {
   const {markets: markets} = useMarkets();
@@ -18,6 +19,8 @@ export function useCalculatedMarkets() {
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [myCalculatedMarkets, setMyCalculatedMarkets] = useState(new Map());
+  const [issuers, setIssuers] = useState<string[]>([]);
+  const [marketsByIssuer, setMarketsByIssuer] = useState(new Map());
 
   const calculateMarket = (market: Market) => {
     const requestProvider = providers[market.network] || provider;
@@ -29,6 +32,7 @@ export function useCalculatedMarkets() {
         network: market.network,
         auctioneer: market.auctioneer,
         teller: market.teller,
+        owner: market.owner,
         vesting: market.vesting,
         vestingType: market.vestingType,
         isLive: market.isLive,
@@ -91,11 +95,23 @@ export function useCalculatedMarkets() {
 
   useDeepCompareEffect(() => {
     const calculatedPricesMap = new Map();
+    const issuerMarkets = new Map();
+
     calculateAllMarkets.forEach((result) => {
-      result.data && calculatedPricesMap.set(result.data.id, result.data);
+      if (result && result.data) {
+        calculatedPricesMap.set(result.data.id, result.data);
+
+        const protocol = getProtocolByAddress(result.data.owner, result.data.network);
+        const id = protocol?.id;
+        const value = issuerMarkets.get(protocol?.id) || [];
+        value.push(result.data);
+        issuerMarkets.set(id, value);
+      }
     });
 
     setCalculatedMarkets(calculatedPricesMap);
+    setIssuers(Array.from(issuerMarkets.keys()));
+    setMarketsByIssuer(issuerMarkets);
   }, [calculateAllMarkets]);
 
   useDeepCompareEffect(() => {
@@ -110,6 +126,8 @@ export function useCalculatedMarkets() {
   return {
     allMarkets: calculatedMarkets,
     myMarkets: myCalculatedMarkets,
+    issuers: issuers,
+    marketsByIssuer: marketsByIssuer,
     refetchAllMarkets: () => refetchAllMarkets(),
     refetchMyMarkets: () => refetchMyMarkets(),
     refetchOne: (id: string) => refetchOne(id),

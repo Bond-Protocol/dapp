@@ -3,6 +3,7 @@ import {Market, useListMarketsGoerliQuery, useListMarketsRinkebyQuery} from "../
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import {CHAIN_ID, getAddressesByChain} from "@bond-labs/bond-library";
 
 export function useMarkets() {
   const endpoints = getSubgraphEndpoints();
@@ -13,8 +14,14 @@ export function useMarkets() {
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
-  const {data: rinkebyData} = useListMarketsRinkebyQuery({endpoint: endpoints[0]});
-  const {data: goerliData} = useListMarketsGoerliQuery({endpoint: endpoints[1]});
+  const {data: rinkebyData} = useListMarketsRinkebyQuery(
+    {endpoint: endpoints[0]},
+    {addresses: getAddressesByChain(CHAIN_ID.RINKEBY_TESTNET)}
+  );
+  const {data: goerliData} = useListMarketsGoerliQuery(
+    {endpoint: endpoints[1]},
+    {addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET)}
+  );
 
   useEffect(() => {
     if (
@@ -43,7 +50,7 @@ export function useMarkets() {
       map.set(market.id, market);
     });
     setMarketsMap(map);
-  }, [marketsMap]);
+  }, [selectedMarkets]);
 
   return {
     markets: selectedMarkets,

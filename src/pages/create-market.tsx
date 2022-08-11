@@ -1,4 +1,4 @@
-import {useAccount, useConnect, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
+import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {Tooltip} from "@material-tailwind/react";
@@ -13,7 +13,6 @@ import * as React from "react";
 export const CreateMarketView = () => {
   const {address, isConnected} = useAccount();
   const {data: signer} = useSigner();
-  const {connect} = useConnect();
   const network = useNetwork();
   const {switchNetwork} = useSwitchNetwork();
 

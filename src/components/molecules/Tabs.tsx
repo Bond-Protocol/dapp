@@ -5,7 +5,7 @@ import TabPanelUnstyled from "@mui/base/TabPanelUnstyled";
 import TabUnstyled from "@mui/base/TabUnstyled";
 
 type TabProps = {
-  tabs: Array<{ label: string; component: React.ReactNode }>;
+  tabs: Array<{ label: string; handleClick: () => void }>;
 };
 
 export const Tabs: FC<TabProps> = ({ tabs }) => {
@@ -18,9 +18,10 @@ export const Tabs: FC<TabProps> = ({ tabs }) => {
           },
         }}
       >
-        {tabs.map(({ label }, i) => (
+        {tabs.map(({ label, handleClick }, i) => (
           <TabUnstyled
             key={i}
+            onClick={handleClick}
             componentsProps={{
               root: {
                 className: "border px-4 mx-1",
@@ -31,11 +32,6 @@ export const Tabs: FC<TabProps> = ({ tabs }) => {
           </TabUnstyled>
         ))}
       </TabsListUnstyled>
-      {tabs.map(({ component }, i) => (
-        <TabPanelUnstyled value={i} key={i}>
-          {component}
-        </TabPanelUnstyled>
-      ))}
     </TabsUnstyled>
   );
 };

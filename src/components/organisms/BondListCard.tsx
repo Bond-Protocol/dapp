@@ -1,6 +1,5 @@
 import * as contractLibrary from "@bond-labs/contract-library";
 import {CalculatedMarket} from "@bond-labs/contract-library";
-import * as bondLibrary from "@bond-labs/bond-library";
 import {Chip, Input} from "@material-tailwind/react";
 import {DataRow} from "components/atoms/DataRow";
 import * as React from "react";
@@ -12,6 +11,7 @@ import {BigNumberish, ContractTransaction} from "ethers";
 import ConfirmPurchaseDialog from "./ConfirmPurchaseDialog";
 import {ConnectButton, useConnectModal} from "@rainbow-me/rainbowkit";
 import {useTokens} from "hooks";
+import {CHAINS, getProtocolByAddress} from "@bond-labs/bond-library";
 
 export type BondListCardProps = {
   market: CalculatedMarket
@@ -31,9 +31,9 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
     chainId: providers[props.market.network].network.chainId,
   });
 
-  const protocol = bondLibrary.getProtocolByAddress(
-    props.market.payoutToken.address,
-    providers[props.market.network].network.chainId.toString()
+  const protocol = getProtocolByAddress(
+    props.market.owner,
+    props.market.network,
   );
 
   const [amount, setAmount] = useState<string>("0");
@@ -43,8 +43,8 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
   const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
   const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
   const [correctChain, setCorrectChain] = useState<boolean>(false);
-  const [blockExplorerUrl, setBlockExplorerUrl] = useState(bondLibrary.CHAINS.get(props.market.network)?.blockExplorerUrls[0].replace("#", "address"));
-  const [blockExplorerName, setBlockExplorerName] = useState(bondLibrary.CHAINS.get(props.market.network)?.blockExplorerName);
+  const [blockExplorerUrl, setBlockExplorerUrl] = useState(CHAINS.get(props.market.network)?.blockExplorerUrls[0].replace("#", "address"));
+  const [blockExplorerName, setBlockExplorerName] = useState(CHAINS.get(props.market.network)?.blockExplorerName);
 
   useEffect(() => {
     setHasSufficientAllowance(Number(allowance) > 0 && Number(allowance) >= Number(amount));
