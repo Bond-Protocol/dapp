@@ -1,5 +1,6 @@
 import {ExpandableRow} from "components/molecules/ExpandableRow";
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import {CalculatedMarket, Token} from "@bond-labs/contract-library";
+import {getToken} from "@bond-labs/bond-library";
 import {BondListCard} from "components/organisms/BondListCard";
 import {FC, useEffect, useRef, useState} from "react";
 import {CloseMarketCard} from "components/organisms/CloseMarketCard";
@@ -110,6 +111,37 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
 
   const [currentSort, setCurrentSort] = useState({sortBy: sortByDiscount, ascending: true});
 
+  const singleLogo = (token: Token, network: string) => {
+    const tokenDetails = getToken(network + "_" + token.address);
+    return tokenDetails?.logoUrl && tokenDetails.logoUrl != "" ?
+      tokenDetails.logoUrl :
+      "/placeholders/token-placeholder.png";
+  };
+
+  const quoteLogo = (market: CalculatedMarket) => {
+    if (market?.quoteToken.lpPair != undefined) {
+      const token0 = getToken(market?.quoteToken.lpPair.token0.id);
+      const token1 = getToken(market?.quoteToken.lpPair.token1.id);
+
+      return (
+        <div className="flex flex-row">
+          <img className="h-[32px] w-[32px]" src={singleLogo(token0, market?.network)}/>
+          <img className="h-[32px] w-[32px] flex self-end ml-[-8px]" src={singleLogo(token1, market?.network)}/>
+        </div>
+      );
+    } else {
+      const quote = singleLogo(market?.quoteToken, market?.network);
+      const payout = singleLogo(market?.payoutToken, market?.network);
+
+      return (
+        <div className="flex flex-row">
+          <img className="h-[32px] w-[32px]" src={quote}/>
+          <img className="h-[16px] w-[16px] flex self-end ml-[-8px]" src={payout}/>
+        </div>
+      );
+    }
+  };
+
   useEffect(() => {
     marketsRef.current = markets;
     currentSort.sortBy();
@@ -127,7 +159,6 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
         <thead>
           <tr>
             <th onClick={sortByQuote}>Bond</th>
-            <th onClick={sortByPayout}>Payout Asset</th>
             <th onClick={sortByPrice}>Price</th>
             <th onClick={sortByDiscount}>Discount</th>
             <th onClick={sortByTbv}>TBV</th>
@@ -157,11 +188,15 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
                     ) :
                     (<div>Loading...</div>)
                 } className="gap-x-2">
-                <td>{quoteToken.symbol}</td>
-                <td>{payoutToken.symbol}</td>
-                <td>
-                  <p>{market?.formattedDiscountedPrice}</p>
-                  <p className="text-xs">(Market: {market?.formattedFullPrice})</p>
+                <td>{quoteLogo(market)}</td>
+                <td className="flex flex-row">
+                  <div>
+                    <img className="h-[32px] w-[32px]" src={singleLogo(market?.payoutToken, market?.network)}/>
+                  </div>
+                  <div>
+                    <p>{market?.formattedDiscountedPrice}</p>
+                    <p className="text-xs">(Market: {market?.formattedFullPrice})</p>
+                  </div>
                 </td>
                 <td>{market?.discount}%</td>
                 <td>

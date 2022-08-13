@@ -18,12 +18,30 @@ export const listMarketsRinkeby = gql`
                 address
                 symbol
                 decimals
+                name
             }
             quoteToken {
                 id
                 address
                 symbol
                 decimals
+                name
+                lpPair {
+                    token0 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                    }
+                    token1 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                    }
+                }
             }
             vesting
             vestingType
@@ -52,12 +70,30 @@ export const listMarketsGoerli = gql`
                 address
                 symbol
                 decimals
+                name
             }
             quoteToken {
                 id
                 address
                 symbol
                 decimals
+                name
+                lpPair {
+                    token0 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                    }
+                    token1 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                    }
+                }
             }
             vesting
             vestingType
@@ -184,12 +220,30 @@ export const listOwnedMarketsRinkeby = gql`
                 address
                 symbol
                 decimals
+                name
             }
             quoteToken {
                 id
                 address
                 symbol
                 decimals
+                name
+                lpPair {
+                    token0 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                    }
+                    token1 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                    }
+                }
             }
             vesting
             vestingType
@@ -219,12 +273,30 @@ export const listOwnedMarketsGoerli = gql`
                 address
                 symbol
                 decimals
+                name
             }
             quoteToken {
                 id
                 address
                 symbol
                 decimals
+                name
+                lpPair {
+                    token0 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                    }
+                    token1 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                    }
+                }
             }
             vesting
             vestingType
