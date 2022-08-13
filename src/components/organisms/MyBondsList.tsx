@@ -9,6 +9,7 @@ import {useEffect, useRef, useState} from "react";
 import {providers} from "services/owned-providers";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 import {useTokens} from "hooks";
+import {getToken} from "@bond-labs/bond-library";
 
 export const MyBondsList = () => {
   const {myBonds, refetch} = useMyBonds();
@@ -86,12 +87,28 @@ export const MyBondsList = () => {
               const canClaim = now >= date;
               const balance = bond.balance / Math.pow(10, bond.bondToken?.underlying.decimals);
               const underlying = bond.bondToken && getTokenDetails(bond.bondToken.underlying);
+              const tokenDetails = getToken(underlying?.id);
+              const logoUrl = tokenDetails?.logoUrl && tokenDetails.logoUrl != "" ?
+                tokenDetails.logoUrl :
+                "/placeholders/token-placeholder.png";
+
               return (
                 <tr key={bond.id}>
-                  <td>{underlying?.symbol}</td>
+                  <td className="flex flex-row">
+                    <img className="h-[32px] w-[32px]" src={logoUrl}/>
+                    {underlying?.symbol}
+                  </td>
                   <td>{bond.network}</td>
                   <td>{date.toDateString()}</td>
-                  <td>{balance + " " + underlying?.symbol}</td>
+                  <td className="flex flex-row">
+                    <div>
+                      <img className="h-[32px] w-[32px]" src={logoUrl}/>
+                    </div>
+                    <div>
+                      <p>{balance.toFixed(2) + " " + underlying?.symbol}</p>
+                      <p className="text-xs">(Market: $???)</p>
+                    </div>
+                  </td>
                   <td>
                     {canClaim && bond.network !== chain?.network &&
                     // @ts-ignore
