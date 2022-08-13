@@ -54,6 +54,7 @@ export function useCalculatedMarkets() {
           name: market.quoteToken.name,
           symbol: market.quoteToken.symbol,
           price: getPrice(market.quoteToken.id),
+          lpPair: market.quoteToken.lpPair,
         }
       }
     ).then((result: CalculatedMarket) => result);

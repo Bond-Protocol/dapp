@@ -1,29 +1,43 @@
-import {FC} from "react";
+import {FC, useEffect, useState} from "react";
 import {Protocol} from "@bond-labs/bond-library";
 import {ethers} from "ethers";
 import { Market } from "src/generated/graphql";
 import {useNavigate} from "react-router-dom";
+import { CalculatedMarket } from "@bond-labs/contract-library";
 
 type IssuerCardProps = {
-  issuer: Protocol | string;
-  markets: Market[];
+  issuer: Protocol;
+  markets: CalculatedMarket[];
 }
 
 export const IssuerCard: FC<IssuerCardProps> = ({issuer, markets}) => {
   const navigate = useNavigate();
+
+  const [tbv, setTbv] = useState(0);
+
+  useEffect(() => {
+    if (markets) {
+      let tbv = 0;
+      markets.forEach(market => tbv = tbv + market.tbvUsd);
+      setTbv(tbv);
+    }
+  }, [markets]);
+
+  const logo = () => {
+    return issuer.logo && issuer.logo != "" ? issuer.logo : "/placeholders/token-placeholder.png";
+  };
 
   const handleClick = (event: any, name: string) => {
     event.preventDefault();
     navigate("/issuers/" + name.toLowerCase());
   };
 
-  return ethers.utils.isAddress(issuer) ?
-    <div onClick={() => handleClick(event, issuer)}>
-      <p>{issuer}</p>
-      <p>Markets: {markets.length}</p>
-    </div> :
+  return (
     <div onClick={() => handleClick(event, issuer.id)}>
+      <img className="h-[64px] w-[64px]" src={logo()} />
       <p>{issuer.name}</p>
-      <p>Markets: {markets.length}</p>
-    </div>;
+      <p>{markets.length} Markets</p>
+      <p>TBV ${Math.floor(tbv)}</p>
+    </div>
+  );
 };
