@@ -32,11 +32,11 @@ export function useMyBonds() {
    */
   const {data: rinkebyData, refetch: rinkebyRefetch} = useGetOwnerBalancesByOwnerRinkebyQuery(
     {endpoint: endpoints[0]},
-    {owner: address || ""}
+    {owner: address}
   );
   const {data: goerliData, refetch: goerliRefetch} = useGetOwnerBalancesByOwnerGoerliQuery(
     {endpoint: endpoints[1]},
-    {owner: address || ""}
+    {owner: address}
   );
   const {data: rinkebyErc20Data, refetch: rinkebyErc20Refetch} = useListErc20BondTokensRinkebyQuery(
     {endpoint: endpoints[0]},

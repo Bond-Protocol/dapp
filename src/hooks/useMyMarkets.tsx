@@ -16,11 +16,11 @@ export function useMyMarkets() {
 
   const {data: rinkebyData} = useListOwnedMarketsRinkebyQuery(
     {endpoint: endpoints[0]},
-    {owner: address || ""}
+    {owner: address}
   );
   const {data: goerliData} = useListOwnedMarketsGoerliQuery(
     {endpoint: endpoints[1]},
-    {owner: address || ""}
+    {owner: address}
   );
 
   useEffect(() => {

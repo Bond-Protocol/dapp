@@ -147,7 +147,7 @@ export const listTokensGoerli = gql`
 `;
 
 export const getOwnerBalancesByOwnerRinkeby = gql`
-    query GetOwnerBalancesByOwnerRinkeby($owner: String!) {
+    query GetOwnerBalancesByOwnerRinkeby($owner: String) {
         ownerBalances(where:
         {
             owner_contains_nocase: $owner,
@@ -175,7 +175,7 @@ export const getOwnerBalancesByOwnerRinkeby = gql`
 `;
 
 export const getOwnerBalancesByOwnerGoerli = gql`
-    query GetOwnerBalancesByOwnerGoerli($owner: String!) {
+    query GetOwnerBalancesByOwnerGoerli($owner: String) {
         ownerBalances(where:
         {
             owner_contains_nocase: $owner,
@@ -203,7 +203,7 @@ export const getOwnerBalancesByOwnerGoerli = gql`
 `;
 
 export const listOwnedMarketsRinkeby = gql`
-    query ListOwnedMarketsRinkeby($owner: String!) {
+    query ListOwnedMarketsRinkeby($owner: String) {
         markets(where:
         {
             owner_contains_nocase: $owner
@@ -256,7 +256,7 @@ export const listOwnedMarketsRinkeby = gql`
 `;
 
 export const listOwnedMarketsGoerli = gql`
-    query ListOwnedMarketsGoerli($owner: String!) {
+    query ListOwnedMarketsGoerli($owner: String) {
         markets(where:
         {
             owner_contains_nocase: $owner
