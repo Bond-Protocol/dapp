@@ -46,6 +46,7 @@ export const listMarketsRinkeby = gql`
             vesting
             vestingType
             isInstantSwap
+            isLive
             totalBondedAmount
             totalPayoutAmount
         }
@@ -98,6 +99,7 @@ export const listMarketsGoerli = gql`
             vesting
             vestingType
             isInstantSwap
+            isLive
             totalBondedAmount
             totalPayoutAmount
         }
