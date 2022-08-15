@@ -1,6 +1,7 @@
 import {useTokens} from "hooks/useTokens";
 import {useQueries} from "react-query";
 import {useState} from "react";
+import * as bondLibrary from "@bond-labs/bond-library";
 import * as contractLibrary from "@bond-labs/contract-library";
 import {CalculatedMarket} from "@bond-labs/contract-library";
 import {useProvider} from "wagmi";
@@ -24,6 +25,11 @@ export function useCalculatedMarkets() {
 
   const calculateMarket = (market: Market) => {
     const requestProvider = providers[market.network] || provider;
+    const lpPair = market.quoteToken.lpPair;
+    if (lpPair != undefined) {
+      lpPair.token0.price = getPrice(lpPair.token0.id);
+      lpPair.token1.price = getPrice(lpPair.token1.id);
+    }
     return contractLibrary.calcMarket(
       requestProvider,
       import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
@@ -56,7 +62,10 @@ export function useCalculatedMarkets() {
           price: getPrice(market.quoteToken.id),
           lpPair: market.quoteToken.lpPair,
         }
-      }
+      },
+      bondLibrary.TOKENS.get(market.quoteToken.id) ?
+        bondLibrary.LP_TYPES.get(bondLibrary.TOKENS.get(market.quoteToken.id)?.lpType) :
+        null,
     ).then((result: CalculatedMarket) => result);
   };
 

@@ -171,7 +171,6 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
         <tbody>
           {sortedMarkets.map((market: CalculatedMarket) => {
             const quoteToken = getTokenDetails(market.quoteToken);
-            const payoutToken = getTokenDetails(market.payoutToken);
             return (
               <ExpandableRow key={market.id}
                 onOpen={() => {
