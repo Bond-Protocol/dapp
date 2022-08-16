@@ -187,14 +187,21 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
                     ) :
                     (<div>Loading...</div>)
                 } className="gap-x-2">
-                <td>{quoteLogo(market)}</td>
-                <td className="flex flex-row">
-                  <div>
-                    <img className="h-[32px] w-[32px]" src={singleLogo(market?.payoutToken, market?.network)}/>
+                <td>
+                  <div className="flex flex-row">
+                    <div>{quoteLogo(market)}</div>
+                    <div>{market?.payoutToken.symbol}</div>
                   </div>
-                  <div>
-                    <p>{market?.formattedDiscountedPrice}</p>
-                    <p className="text-xs">(Market: {market?.formattedFullPrice})</p>
+                </td>
+                <td>
+                  <div className="flex flex-row">
+                    <div>
+                      <img className="h-[32px] w-[32px]" src={singleLogo(market?.payoutToken, market?.network)}/>
+                    </div>
+                    <div>
+                      <p>{market?.formattedDiscountedPrice}</p>
+                      <p className="text-xs">(Market: {market?.formattedFullPrice})</p>
+                    </div>
                   </div>
                 </td>
                 <td>{market?.discount}%</td>
