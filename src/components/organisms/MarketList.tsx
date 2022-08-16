@@ -190,7 +190,7 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
                 <td>
                   <div className="flex flex-row">
                     <div>{quoteLogo(market)}</div>
-                    <div>{market?.payoutToken.symbol}</div>
+                    <div>{quoteToken.symbol}</div>
                   </div>
                 </td>
                 <td>
