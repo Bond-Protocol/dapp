@@ -16,10 +16,17 @@ module.exports = withMT({
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      colors: brandColors,
+      colors: {
+        ...brandColors,
+        light: {
+          primary: {
+            500: "#40749B",
+          },
+        },
+      },
       fontFamily: {
-        sans: ["PPFraktionSans", ...defaultTheme.fontFamily.sans],
-        jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
+        sans: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
+        fraktion: ["FraktionSans", ...defaultTheme.fontFamily.sans],
       },
     },
   },
@@ -27,18 +34,30 @@ module.exports = withMT({
     plugin(function ({ addBase }) {
       addBase({
         "@font-face": {
-          fontFamily: "PPFraktionSans",
+          fontFamily: "FraktionSans",
           fontWeight: "700",
           src: "url(/fonts/PPFraktionSans-Bold.woff2) format('woff2')",
         },
       });
-    }),
-    plugin(function ({ addBase }) {
       addBase({
         "@font-face": {
           fontFamily: "PlusJakartaSans",
           fontWeight: "800",
           src: "url(/fonts/PlusJakartaSans-Medium.woff) format('woff')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "400",
+          src: "url(/fonts/PlusJakartaSans-Light.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "200",
+          src: "url(/fonts/PlusJakartaSans-ExtraLight.woff2) format('woff2')",
         },
       });
     }),

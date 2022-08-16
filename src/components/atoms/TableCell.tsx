@@ -5,13 +5,18 @@ export type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {
 };
 
 export const TableCell = forwardRef(function TableCell(
-  props: TableCellProps,
+  { heading, ...props }: TableCellProps,
   ref: React.ForwardedRef<HTMLTableCellElement>
 ) {
-  const CellType = props.heading ? "th" : "td";
+  const CellType = heading ? "th" : "td";
+  const border = heading ? "" : "border-gray-700";
 
   return (
-    <CellType {...props} ref={ref} className={`${props.className}`}>
+    <CellType
+      {...props}
+      ref={ref}
+      className={`py-4 border-b text-jakarta font-extralight ${border} ${props.className}`}
+    >
       {props.children}
     </CellType>
   );

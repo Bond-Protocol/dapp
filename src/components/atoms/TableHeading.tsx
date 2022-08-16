@@ -17,9 +17,7 @@ export const TableHeading = (props: TableHeadingProps) => {
     <TableCell
       {...props}
       heading
-      className={`${
-        props.onClick && "cursor-pointer"
-      } w-2 border-b border-white opacity-100`}
+      className={`${props.onClick && "cursor-pointer"} w-2`}
       onClick={(e) => {
         if (!props.onClick) return;
         if (sorting) setAscending((a) => !a);
@@ -29,17 +27,19 @@ export const TableHeading = (props: TableHeadingProps) => {
       }}
     >
       <div className="flex justify-around max-w-fit">
-        <div
-          className="mr-1 my-auto cursor-pointer"
-          onClick={props.onClickIcon}
-        >
-          <ArrowDownIcon
-            width="16"
-            className={`${ascending ? "rotate-180" : ""} ${
-              sorting ? "opacity-100" : "opacity-0"
-            } mt-[1px] transition-all ease-in-out fill-white`}
-          />
-        </div>
+        {sorting && (
+          <div
+            className="mr-1 my-auto cursor-pointer"
+            onClick={props.onClickIcon}
+          >
+            <ArrowDownIcon
+              width="16"
+              className={`${ascending ? "rotate-180" : ""} ${
+                sorting ? "opacity-100" : "opacity-0"
+              } mt-[1px] fill-white`}
+            />
+          </div>
+        )}
 
         {props.children}
         {props.tooltip && (

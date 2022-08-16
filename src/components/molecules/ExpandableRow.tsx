@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import { FC, useEffect, useState } from "react";
 
 export const ExpandableRow: FC<{
   children: React.ReactNode;
@@ -17,7 +17,7 @@ export const ExpandableRow: FC<{
   return (
     <>
       <tr
-        className={"hover:cursor-pointer justify-between " + className}
+        className={"hover:cursor-pointer justify-between" + className}
         onClick={() => setOpen((prev) => !prev)}
       >
         {children}

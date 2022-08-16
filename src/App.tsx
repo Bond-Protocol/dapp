@@ -22,12 +22,12 @@ export const App: FC = () => {
   ]);
 
   return (
-    <div className="text-brand-texas-rose bg-brand-covenant h-[100vh]">
+    <>
       <Navbar />
-      <PageContainer className="border">
+      <PageContainer>
         <Tabs tabs={tabsConfig} />
         <Routes />
       </PageContainer>
-    </div>
+    </>
   );
 };
