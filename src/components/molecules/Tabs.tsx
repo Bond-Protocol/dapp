@@ -1,7 +1,6 @@
-import type { FC } from "react";
+import { FC, useState } from "react";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import TabsListUnstyled from "@mui/base/TabsListUnstyled";
-import TabPanelUnstyled from "@mui/base/TabPanelUnstyled";
 import TabUnstyled from "@mui/base/TabUnstyled";
 
 type TabProps = {
@@ -9,22 +8,32 @@ type TabProps = {
 };
 
 export const Tabs: FC<TabProps> = ({ tabs }) => {
+  const [selected, setSelected] = useState(0);
+
   return (
-    <TabsUnstyled defaultValue={0}>
+    <TabsUnstyled
+      defaultValue={0}
+      className="bg-white/10 pt-8 border-transparent rounded-t-lg overflow-hidden"
+    >
       <TabsListUnstyled
         componentsProps={{
           root: {
-            className: "m-2 border-white flex justify-center",
+            className: "mt-2 flex justify-center",
           },
         }}
       >
         {tabs.map(({ label, handleClick }, i) => (
           <TabUnstyled
             key={i}
-            onClick={handleClick}
+            onClick={() => {
+              setSelected(i);
+              handleClick();
+            }}
             componentsProps={{
               root: {
-                className: "border px-4 mx-1",
+                className: `${
+                  selected === i ? "bg-light-primary-900" : "bg-transparent"
+                } border-transparent rounded-t-lg px-6 py-4`,
               },
             }}
           >

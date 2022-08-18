@@ -17,7 +17,7 @@ export const TableHeading = (props: TableHeadingProps) => {
     <TableCell
       {...props}
       heading
-      className={`${props.onClick && "cursor-pointer"} w-2`}
+      className={`${props.onClick && "cursor-pointer"} w-2 ${props.className}`}
       onClick={(e) => {
         if (!props.onClick) return;
         if (sorting) setAscending((a) => !a);
@@ -26,7 +26,7 @@ export const TableHeading = (props: TableHeadingProps) => {
         props.onClick(e);
       }}
     >
-      <div className="flex justify-around max-w-fit">
+      <div className="flex justify-around max-w-fit font-fraktion tracking-widest">
         {sorting && (
           <div
             className="mr-1 my-auto cursor-pointer"
