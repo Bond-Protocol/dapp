@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Navbar, Routes} from "components/organisms";
 import {useCalculatedMarkets, useMarkets, useTokens} from "./hooks";
@@ -17,22 +17,8 @@ export const App: FC = () => {
     {label: "All Markets", handleClick: () => navigate("/markets")},
     {label: "Bond Issuers", handleClick: () => navigate("/issuers")},
     {label: "My Bonds", handleClick: () => navigate("/my-bonds")},
+    {label: "My Markets", handleClick: () => navigate("/my-markets")},
   ]);
-
-  useEffect(() => {
-    myMarkets?.length > 0 ?
-      setTabsConfig([
-        {label: "All Markets", handleClick: () => navigate("/markets")},
-        {label: "Bond Issuers", handleClick: () => navigate("/issuers")},
-        {label: "My Bonds", handleClick: () => navigate("/my-bonds")},
-        {label: "My Markets", handleClick: () => navigate("/my-markets")},
-      ]) :
-      setTabsConfig([
-        {label: "All Markets", handleClick: () => navigate("/markets")},
-        {label: "Bond Issuers", handleClick: () => navigate("/issuers")},
-        {label: "My Bonds", handleClick: () => navigate("/my-bonds")},
-      ]);
-  }, [allMarkets, myMarkets]);
 
   return (
     <div className="text-brand-texas-rose bg-brand-covenant h-[100vh]">

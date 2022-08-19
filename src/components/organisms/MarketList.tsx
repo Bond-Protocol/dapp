@@ -7,7 +7,7 @@ import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
 import {useCalculatedMarkets, useTokens} from "hooks";
 
-type MarketListProps = {
+export type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
   allowManagement: boolean
 }
