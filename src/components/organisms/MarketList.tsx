@@ -7,6 +7,7 @@ import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
 import {useCalculatedMarkets, useTokens} from "hooks";
 import {Input} from "@material-tailwind/react";
+import {alphabeticSort, numericSort} from "services/sort";
 
 export type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
@@ -22,18 +23,6 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
   const marketsRef = useRef(markets);
   const searchRef = useRef("");
   const timerRef = useRef<NodeJS.Timeout>();
-
-  const numericSort = function (value1: number, value2: number, ascending: boolean) {
-    return ascending ?
-      value1 - value2 :
-      value2 - value1;
-  };
-
-  const alphabeticSort = function (value1: string, value2: string, ascending: boolean) {
-    return ascending ?
-      (value1 > value2 ? 1 : -1) :
-      (value2 > value1 ? 1 : -1);
-  };
 
   const sortMarkets = function (compareFunction: (m1: CalculatedMarket, m2: CalculatedMarket) => number) {
     const arr: CalculatedMarket[] = [];
