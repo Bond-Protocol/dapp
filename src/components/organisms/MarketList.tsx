@@ -6,6 +6,7 @@ import {FC, useEffect, useRef, useState} from "react";
 import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
 import {useCalculatedMarkets, useTokens} from "hooks";
+import {Input} from "@material-tailwind/react";
 
 export type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
@@ -19,6 +20,7 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(Array.from(markets.values()));
 
   const marketsRef = useRef(markets);
+  const searchRef = useRef("");
   const timerRef = useRef<NodeJS.Timeout>();
 
   const numericSort = function (value1: number, value2: number, ascending: boolean) {
@@ -35,7 +37,16 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
 
   const sortMarkets = function (compareFunction: (m1: CalculatedMarket, m2: CalculatedMarket) => number) {
     const arr: CalculatedMarket[] = [];
-    marketsRef.current.forEach(value => arr.push(value));
+    marketsRef.current.forEach(value => {
+      if (
+        value.quoteToken.symbol.toLowerCase().indexOf(searchRef.current) != -1 ||
+          value.quoteToken.name.toLowerCase().indexOf(searchRef.current) != -1 ||
+          value.payoutToken.symbol.toLowerCase().indexOf(searchRef.current) != -1 ||
+          value.payoutToken.name.toLowerCase().indexOf(searchRef.current) != -1
+      ) {
+        arr.push(value);
+      }
+    });
     setSortedMarkets(arr.sort(compareFunction));
   };
 
@@ -147,8 +158,17 @@ export const MarketList: FC<MarketListProps> = ({markets, allowManagement}) => {
     currentSort.sortBy();
   }, [markets]);
 
+  const updateSearch = () => {
+    // @ts-ignore
+    searchRef.current = event.target.value;
+    currentSort.sortBy();
+  };
+
   return (
     <>
+      <p className="flex justify-start">
+        <Input onChange={updateSearch} />
+      </p>
       <p className="flex justify-end p-2">
         {allowManagement ?
           <Button onClick={refetchMyMarkets}>Refresh</Button> :
