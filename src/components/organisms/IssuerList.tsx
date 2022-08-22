@@ -22,25 +22,25 @@ export const IssuerList: FC<any> = () => {
       arr.push(issuer);
     });
     setSortedIssuers(arr.sort(compareFunction));
-  }
+  };
 
   function sortByName() {
     const ascending = currentSort.sortBy.toString() === sortByName.toString() ?
-        !currentSort.ascending :
-        true;
+      !currentSort.ascending :
+      true;
     sortIssuers((i1: string, i2: string) =>
-        alphabeticSort(PROTOCOLS.get(i1).name, PROTOCOLS.get(i2).name, ascending)
+      alphabeticSort(PROTOCOLS.get(i1).name, PROTOCOLS.get(i2).name, ascending)
     );
     setCurrentSort({sortBy: sortByName, ascending: ascending});
   }
 
   function sortByTbv() {
     const ascending = currentSort.sortBy.toString() === sortByTbv.toString() ?
-        !currentSort.ascending :
-        false;
+      !currentSort.ascending :
+      false;
 
     sortIssuers((i1: string, i2: string) =>
-        numericSort(tbvMapRef.current.get(i1), tbvMapRef.current.get(i2), ascending)
+      numericSort(tbvMapRef.current.get(i1), tbvMapRef.current.get(i2), ascending)
     );
     setCurrentSort({sortBy: sortByTbv, ascending: ascending});
   }
@@ -56,7 +56,7 @@ export const IssuerList: FC<any> = () => {
     marketsByIssuer.forEach((value, key) => {
       let tbv = 0;
       value.forEach(market => tbv = tbv + market.tbvUsd);
-      map.set(key, tbv)
+      map.set(key, tbv);
     });
     tbvMapRef.current = map;
 
@@ -74,7 +74,7 @@ export const IssuerList: FC<any> = () => {
       </p>
       {sortedIssuers.map(issuer => {
         const protocol = PROTOCOLS.get(issuer);
-        if (protocol.name.toLowerCase().indexOf(search) != -1) return (<IssuerCard key={issuer} issuer={protocol} markets={marketsByIssuer.get(issuer)}/>)
+        if (protocol.name.toLowerCase().indexOf(search) != -1) return (<IssuerCard key={issuer} issuer={protocol} markets={marketsByIssuer.get(issuer)}/>);
       })}
     </>
   );
