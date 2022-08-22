@@ -4,13 +4,14 @@ import {PROTOCOLS} from "@bond-labs/bond-library";
 import {IssuerCard} from "components/molecules/IssuerCard";
 import {Input} from "@material-tailwind/react";
 import {alphabeticSort, numericSort} from "services/sort";
+import {Button} from "components";
 
 export const IssuerList: FC<any> = () => {
   const {marketsByIssuer, issuers} = useCalculatedMarkets();
 
   const [search, setSearch] = useState("");
   const [sortedIssuers, setSortedIssuers] = useState(issuers);
-  const [currentSort, setCurrentSort] = useState({sortBy: sortByTbv, ascending: true});
+  const [currentSort, setCurrentSort] = useState({sortBy: sortByTbv, ascending: false});
 
   const issuersRef = useRef(issuers);
   const tbvMapRef = useRef(new Map());
@@ -26,7 +27,7 @@ export const IssuerList: FC<any> = () => {
   function sortByName() {
     const ascending = currentSort.sortBy.toString() === sortByName.toString() ?
         !currentSort.ascending :
-        false;
+        true;
     sortIssuers((i1: string, i2: string) =>
         alphabeticSort(PROTOCOLS.get(i1).name, PROTOCOLS.get(i2).name, ascending)
     );
@@ -36,7 +37,7 @@ export const IssuerList: FC<any> = () => {
   function sortByTbv() {
     const ascending = currentSort.sortBy.toString() === sortByTbv.toString() ?
         !currentSort.ascending :
-        true;
+        false;
 
     sortIssuers((i1: string, i2: string) =>
         numericSort(tbvMapRef.current.get(i1), tbvMapRef.current.get(i2), ascending)
@@ -66,6 +67,10 @@ export const IssuerList: FC<any> = () => {
     <>
       <p className="flex justify-start">
         <Input onChange={updateSearch} />
+      </p>
+      <p className="flex justify-start">
+        <Button onClick={sortByName}>Sort by Name</Button>
+        <Button onClick={sortByTbv}>Sort by TBV</Button>
       </p>
       {sortedIssuers.map(issuer => {
         const protocol = PROTOCOLS.get(issuer);
