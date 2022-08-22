@@ -9,6 +9,7 @@ import {MarketList} from "components/organisms/MarketList";
 import {IssuerList} from "components/organisms/IssuerList";
 import {MyBondsList} from "components/organisms/MyBondsList";
 import {IssuerPage} from "./IssuerPage";
+import {MyMarkets} from "components/organisms/MyMarkets";
 
 export const Routes: FC = () => {
   const {allMarkets, myMarkets, issuers} = useCalculatedMarkets();
@@ -17,7 +18,7 @@ export const Routes: FC = () => {
     <Switch>
       <Route index element={<MarketList markets={allMarkets} allowManagement={false}/>}/>
       <Route path="/markets" element={<MarketList markets={allMarkets} allowManagement={false}/>}/>
-      <Route path="/my-markets" element={<MarketList markets={myMarkets} allowManagement={true}/>}/>
+      <Route path="/my-markets" element={<MyMarkets/>}/>
       <Route path="/issuers" element={<IssuerList/>}/>
       <Route path="/my-bonds" element={<MyBondsList/>}/>
       <Route path="/create-market" element={<CreateMarketView/>}/>
