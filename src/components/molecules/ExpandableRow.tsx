@@ -12,7 +12,7 @@ export const ExpandableRow: FC<{
   useEffect(() => {
     open && onOpen && onOpen();
     !open && onClose && onClose();
-  }, [open]);
+  }, [open, onClose, onOpen]);
 
   return (
     <>

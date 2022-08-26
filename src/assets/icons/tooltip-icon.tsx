@@ -3,7 +3,7 @@ const Icon = ({
   ...props
 }: {
   className?: string;
-  width?: string;
+  width?: string | number;
 }) => (
   <h1>
     <svg

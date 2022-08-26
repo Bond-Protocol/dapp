@@ -40,7 +40,7 @@ const styles = {
         "active:bg-brand-yella active:border-brand-yella active:text-brand-covenant",
     },
     ghost: {
-      base: "border-transparent text-white",
+      base: "border text-white",
       hover: "hover:text-brand-yella",
       disabled: "disabled:text-grey-500 disabled:cursor-not-allowed",
       active: "active:text-brand-yella",

@@ -18,12 +18,15 @@ import ConfirmPurchaseDialog from "./ConfirmPurchaseDialog";
 import { ConnectButton, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useTokens } from "hooks";
 import { CHAINS, getProtocolByAddress } from "@bond-labs/bond-library";
+import { InfoLabel } from "components/atoms/InfoLabel";
+import { InputCard } from "components/molecules/InputCard";
+import { BondPurchaseCard } from "./BondPurchaseCard";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
 };
 
-export const BondListCard: FC<BondListCardProps> = (props) => {
+export const BondListCardV2: FC<BondListCardProps> = (props) => {
   const provider = useProvider();
   const { data: signer } = useSigner();
   const { address, isConnected } = useAccount();
@@ -156,108 +159,34 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
   const payoutToken = getTokenDetails(props.market.payoutToken);
 
   return (
-    <div className="px-2 pb-2 w-[80vw] flex">
-      <div className="my-4 flex justify-between">
-        <div>
-          <span>{/*icon*/}</span>
-          <span className="mx-2 text-4xl">{protocol && protocol.name}</span>
-          <p>{protocol && protocol.description}</p>
-        </div>
-        {/*TODO: insert graph and decide on what data we need*/}
-        <div className="border-2">GRAPH GOES HERE</div>
+    <>
+      <div className="flex justify-between w-[80vw] p-4">
+        <div>TOKEN NAME</div>
+        <Button thin variant="secondary">
+          VIEW INSIGHTS
+        </Button>
       </div>
-      <div>
-        <div className="flex justify-between mb-2">
-          {isConnected ? (
-            <p>Balance: {balance + " " + quoteToken.symbol}</p>
-          ) : (
-            <p>
-              Balance: <ConnectButton />
-            </p>
-          )}
-          <div>
-            <Chip value="25%" className="mr-2" />
-            <Chip value="50%" className="mr-2" />
-            <Chip value="75%" className="mr-2" />
-            {/*@ts-ignore*/}
-            <Chip value="MAX" className="mr-2" onClick={setMax} />
+      <div className="flex w-[80vw] mt-4">
+        <div className="w-1/2">
+          <p>TOKEN DESCRIPTION</p>
+          <div>GRAPH HERE</div>
+        </div>
+        <div className="w-1/2 flex flex-col">
+          <div className="flex justify-evenly">
+            <InfoLabel
+              label="Vesting Term"
+              tooltip="tooltip popup"
+              value="365 DAYS"
+            />
+            <InfoLabel
+              label="Remaining Capacity"
+              tooltip="tooltip popup"
+              value="70%"
+            />
           </div>
-        </div>
-        <div className="flex">
-          <Input
-            value={amount}
-            placeholder="Enter an amount to bond"
-            onChange={(event: BaseSyntheticEvent) => {
-              setAmount(event.target.value);
-            }}
-          />
+          <BondPurchaseCard />
         </div>
       </div>
-      <div className="pt-2">
-        <DataRow
-          leftContent="You Will Get"
-          rightContent={payout + " " + payoutToken.symbol}
-        />
-        <DataRow
-          leftContent="Max Accepted"
-          rightContent={
-            props.market.maxAmountAccepted + " " + quoteToken.symbol
-          }
-        />
-        <DataRow
-          leftContent="Bond Contract"
-          rightContent={
-            <p>
-              View on{" "}
-              <a
-                href={blockExplorerUrl + props.market.teller + "#code"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {blockExplorerName}
-              </a>
-            </p>
-          }
-        />
-      </div>
-
-      <div className="flex pt-2">
-        {!isConnected && <ConnectButton />}
-
-        {isConnected && !correctChain && (
-          //@ts-ignore
-          <Button className="w-full" onClick={switchChain}>
-            Switch to {props.market.network}
-          </Button>
-        )}
-
-        {isConnected && correctChain && !hasSufficientBalance && (
-          <a
-            className="w-full px-2 border-2 border-brand-bond-blue text-white text-center"
-            href="https://app.sushi.com/swap"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Buy {payoutToken.symbol}
-          </a>
-        )}
-
-        {isConnected &&
-          correctChain &&
-          hasSufficientBalance &&
-          !hasSufficientAllowance && (
-            <Button className="w-full" onClick={approve}>
-              Approve {quoteToken.symbol}
-            </Button>
-          )}
-
-        {isConnected &&
-          correctChain &&
-          hasSufficientBalance &&
-          hasSufficientAllowance && (
-            <ConfirmPurchaseDialog amount={amount} market={props.market} />
-          )}
-      </div>
-    </div>
+    </>
   );
 };

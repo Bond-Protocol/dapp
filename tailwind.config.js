@@ -23,11 +23,13 @@ module.exports = withMT({
             500: "#40749B",
             900: "#14182D",
           },
+          success: "#88F6D7",
         },
       },
       fontFamily: {
         sans: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
         fraktion: ["FraktionSans", ...defaultTheme.fontFamily.sans],
+        inter: ["Inter", ...defaultTheme.fontFamily.sans],
       },
     },
   },
@@ -59,6 +61,13 @@ module.exports = withMT({
           fontFamily: "PlusJakartaSans",
           fontWeight: "200",
           src: "url(/fonts/PlusJakartaSans-ExtraLight.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "Inter",
+          fontWeight: "700",
+          src: "url(/fonts/Inter-Regular.woff2) format('woff2')",
         },
       });
     }),

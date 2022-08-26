@@ -11,6 +11,7 @@ import { MyBondsList } from "components/organisms/MyBondsList";
 import { IssuerPage } from "./IssuerPage";
 import { MyMarkets } from "components/organisms/MyMarkets";
 import logo from "../../assets/logo.svg";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const Routes: FC = () => {
   const { allMarkets, myMarkets, issuers } = useCalculatedMarkets();
@@ -61,6 +62,7 @@ export const Navbar: FC = () => {
           </Button>
         </div>
       </div>
+      <ConnectButton />
     </div>
   );
 };
