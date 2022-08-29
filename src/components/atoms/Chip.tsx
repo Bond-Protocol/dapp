@@ -10,7 +10,7 @@ export const Chip = (props: ButtonUnstyledProps) => {
       componentsProps={{
         root: {
           className:
-            "border-transparent rounded-full text-[12px] py-1 px-3 bg-white/[.05] transition-all font-light hover:bg-white/[.15]",
+            "border-transparent rounded-full text-[12px] py-1 px-3 bg-white/10 transition-all font-light hover:bg-white/15",
         },
       }}
       {...props}

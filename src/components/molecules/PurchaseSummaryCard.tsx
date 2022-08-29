@@ -6,7 +6,7 @@ export type PurchaseSummaryCardProps = {
     tooltip?: string;
     value: string | React.ReactNode;
   }>;
-  className: string;
+  className?: string;
 };
 
 export const PurchaseSummaryCard = (props: PurchaseSummaryCardProps) => {
@@ -20,7 +20,7 @@ export const PurchaseSummaryCard = (props: PurchaseSummaryCardProps) => {
             <p className="font-jakarta font-light ml-2 mr-1">{f.label}</p>
             {f.tooltip && <Tooltip content={f.tooltip} />}
           </div>
-          <span className="mx-2 font-bold">{f.value}</span>
+          <span className="mx-2 my-auto font-bold">{f.value}</span>
         </li>
       ))}
     </ol>

@@ -68,7 +68,7 @@ export const Button = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
+          className: `uppercase font-fraktion font-bold tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
         }),
       }}
     />

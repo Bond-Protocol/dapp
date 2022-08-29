@@ -1,10 +1,10 @@
 import type { FC } from "react";
 import { Link, Route, Routes as Switch } from "react-router-dom";
-import { CreateMarketView } from "pages";
+import { CreateMarketView } from "../../pages";
 import { Button } from "..";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
-import { useCalculatedMarkets } from "hooks";
+import { useCalculatedMarkets } from "../../hooks";
 import { MarketList } from "components/organisms/MarketList";
 import { IssuerList } from "components/organisms/IssuerList";
 import { MyBondsList } from "components/organisms/MyBondsList";

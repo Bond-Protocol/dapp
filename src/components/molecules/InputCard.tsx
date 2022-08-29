@@ -1,25 +1,34 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Chip } from "../atoms/Chip";
 import { Input } from "../atoms/Input";
-import { Select } from "../atoms/Select";
 import { useState } from "react";
+import { WrappedTokenLabel } from "../atoms/TokenLabel";
+import { Token } from "@bond-labs/contract-library";
 
 export type InputCardProps = {
   isConnected: boolean;
-  balance?: number;
-  quoteTokenSymbol?: string;
+  balance?: string;
   className?: string;
+  quoteToken?: Partial<Token & { logo?: string }>;
+  onChange?: (amount: string) => void;
 };
 
 export const InputCard = ({
   isConnected = false,
-  balance = 0,
-  quoteTokenSymbol = "?",
+  balance = "0",
   className = "",
+  quoteToken,
+  onChange,
 }: InputCardProps) => {
-  const [amount, setAmount] = useState<number | undefined>(undefined);
-  const setSome = (num: number) => setAmount(balance / num);
-  const setMax = () => setAmount(balance);
+  const [amount, setAmount] = useState<string | undefined>("");
+  const setSome = (num: number) =>
+    handleChange((num * parseFloat(balance)) / 100 + "");
+  const setMax = () => handleChange(parseFloat(balance) + "");
+
+  const handleChange = (amount: string) => {
+    setAmount(amount);
+    onChange && onChange(amount);
+  };
 
   if (!isConnected) {
     return (
@@ -31,24 +40,34 @@ export const InputCard = ({
 
   return (
     <>
-      <div className={`flex justify-between mb-1 ${className}`}>
-        <p>Balance: {balance + " " + quoteTokenSymbol}</p>
-        <div className="child:mr-1">
-          <Chip onClick={() => setSome(25)}>25%</Chip>
-          <Chip onClick={() => setSome(50)}>50%</Chip>
-          <Chip onClick={() => setSome(75)}>75%</Chip>
-          <Chip onClick={setMax}>MAX</Chip>
+      {quoteToken && (
+        <div className={`flex justify-between mb-1 ${className}`}>
+          <div className="text-xs font-light my-auto">
+            Balance: {balance + " " + quoteToken?.symbol}
+          </div>
+          <div className="child:mr-1 self-end">
+            <Chip onClick={() => setSome(25)}>25%</Chip>
+            <Chip onClick={() => setSome(50)}>50%</Chip>
+            <Chip onClick={() => setSome(75)}>75%</Chip>
+            <Chip onClick={setMax}>MAX</Chip>
+          </div>
         </div>
-      </div>
+      )}
       <div className="flex">
-        <div className="w-min pr-3 relative">
-          <Select />
-        </div>
+        {quoteToken && (
+          <div className="w-min pr-3 relative">
+            <WrappedTokenLabel
+              className="w-[10vw]"
+              label={quoteToken?.symbol || ""}
+              logo={quoteToken?.logo}
+            />
+          </div>
+        )}
         <Input
           value={amount}
           placeholder="Enter Amount to Bond"
           onChange={(event: React.BaseSyntheticEvent) => {
-            setAmount(event.target.value);
+            handleChange(event.target.value);
           }}
         />
       </div>

@@ -6,6 +6,7 @@ export type TooltipProps = {
   className?: string;
   iconClassname?: string;
   iconWidth?: number;
+  children?: React.ReactNode;
 };
 
 export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
@@ -14,11 +15,13 @@ export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
       content={props.content}
       className={`py-auto ml-1 bg-brand-turtle-blue ${props.className}`}
     >
-      <div className="cursor-help ">
-        <TooltipIcon
-          className={`fill-light-primary-500 pb-1.5 ${props.iconClassname}`}
-          width={iconWidth}
-        />
+      <div className="cursor-help">
+        {props.children || (
+          <TooltipIcon
+            className={`fill-light-primary-500 pb-1.5 ${props.iconClassname}`}
+            width={iconWidth}
+          />
+        )}
       </div>
     </MaterialTooltip>
   );

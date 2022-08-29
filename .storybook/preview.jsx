@@ -1,5 +1,6 @@
 import "../src/styles/index.css";
 import { ThemeProvider } from "@material-tailwind/react";
+import { EvmProvider } from "../src/context/evm-provider";
 import { colors } from "../contants.json";
 import theme from "./theme";
 
@@ -28,7 +29,9 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <ThemeProvider>
-      <Story />
+      <EvmProvider>
+        <Story />
+      </EvmProvider>
     </ThemeProvider>
   ),
 ];

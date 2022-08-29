@@ -1,9 +1,6 @@
 import * as contractLibrary from "@bond-labs/contract-library";
 import { CalculatedMarket } from "@bond-labs/contract-library";
-import { Chip, Input } from "@material-tailwind/react";
-import { DataRow } from "components/atoms/DataRow";
-import * as React from "react";
-import { BaseSyntheticEvent, FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Button } from "..";
 import {
   useAccount,
@@ -14,13 +11,12 @@ import {
 } from "wagmi";
 import { providers } from "services/owned-providers";
 import { BigNumberish, ContractTransaction } from "ethers";
-import ConfirmPurchaseDialog from "./ConfirmPurchaseDialog";
-import { ConnectButton, useConnectModal } from "@rainbow-me/rainbowkit";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useTokens } from "hooks";
 import { CHAINS, getProtocolByAddress } from "@bond-labs/bond-library";
 import { InfoLabel } from "components/atoms/InfoLabel";
-import { InputCard } from "components/molecules/InputCard";
 import { BondPurchaseCard } from "./BondPurchaseCard";
+import TestIcon from "../../assets/icons/test-icon";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -158,12 +154,18 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
   const quoteToken = getTokenDetails(props.market.quoteToken);
   const payoutToken = getTokenDetails(props.market.payoutToken);
 
+  console.log({ quoteToken, payoutToken, protocol });
   return (
     <>
-      <div className="flex justify-between w-[80vw] p-4">
-        <div>TOKEN NAME</div>
-        <Button thin variant="secondary">
-          VIEW INSIGHTS
+      <div className="flex justify-between w-[80vw] p-4 pt-1">
+        <div className="flex">
+          <TestIcon className="fill-white my-auto" />
+          <p className="font-fraktion text-[48px]">
+            {protocol?.name || payoutToken?.symbol}
+          </p>
+        </div>
+        <Button thin variant="ghost" className="text-[12px] my-auto">
+          VIEW INSIGHTS &gt;
         </Button>
       </div>
       <div className="flex w-[80vw] mt-4">
@@ -184,7 +186,7 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
               value="70%"
             />
           </div>
-          <BondPurchaseCard />
+          <BondPurchaseCard quoteToken={quoteToken} payoutToken={payoutToken} />
         </div>
       </div>
     </>

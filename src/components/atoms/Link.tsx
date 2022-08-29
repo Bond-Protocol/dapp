@@ -11,7 +11,6 @@ const styles = {
   disabled: "pointer-events-none text-grey-500 fill-grey-500 ",
   active: "active:text-brand-yella active:fill-brand-yella",
 };
-
 export type LinkProps = ButtonUnstyledProps &
   AnchorHTMLAttributes<HTMLAnchorElement>;
 

@@ -23,13 +23,20 @@ module.exports = withMT({
             500: "#40749B",
             900: "#14182D",
           },
+          secondary: "#E7AC5C",
           success: "#88F6D7",
         },
       },
       fontFamily: {
         sans: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
+        jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
         fraktion: ["FraktionSans", ...defaultTheme.fontFamily.sans],
         inter: ["Inter", ...defaultTheme.fontFamily.sans],
+        faketion: ["POEVetica", ...defaultTheme.fontFamily.mono],
+      },
+      opacity: {
+        15: ".15",
+        20: ".20",
       },
     },
   },
@@ -68,6 +75,20 @@ module.exports = withMT({
           fontFamily: "Inter",
           fontWeight: "700",
           src: "url(/fonts/Inter-Regular.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "POEVetica",
+          fontWeight: "500",
+          src: "url(/fonts/POE Vetica-Mono-Bold.woff) format('woff')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "POEVetica",
+          fontWeight: "700",
+          src: "url(/fonts/POE Vetica-Mono.woff) format('woff')",
         },
       });
     }),

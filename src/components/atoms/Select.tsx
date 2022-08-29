@@ -2,21 +2,18 @@ import { useEffect, useState } from "react";
 import SelectUnstyled, { SelectUnstyledProps } from "@mui/base/SelectUnstyled";
 import OptionUnstyled from "@mui/base/OptionUnstyled";
 import { SelectArrowDown } from "../../assets/icons/select-arrow-down";
-import TestIcon from "../../assets/icons/test-icon";
+import { TokenLabel, TokenLabelProps } from "./TokenLabel";
 
-const sampOptions = [
-  { value: 1, label: "one" },
-  { value: 2, label: "two" },
-  { value: 3, label: "three" },
-  { value: 4, label: "four" },
-];
+export type SelectOptions = TokenLabelProps & {
+  id: number | string;
+};
 
-export type SelectProps = {
-  options?: Array<{ value: string; label: string }>;
+export type SelectProps = SelectUnstyledProps<string> & {
+  options?: SelectOptions[];
 };
 
 export const Select = (props: SelectProps) => {
-  const [selected, setSelected] = useState<string | null>();
+  const [selected, setSelected] = useState<string | null>(props.value || null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -33,6 +30,7 @@ export const Select = (props: SelectProps) => {
         <SelectArrowDown />
       </div>
       <SelectUnstyled
+        {...props}
         value={selected}
         onClick={() => setOpen((prev) => !open)}
         onChange={(value) => setSelected(value)}
@@ -46,19 +44,18 @@ export const Select = (props: SelectProps) => {
           },
         }}
       >
-        {sampOptions.map((o, i) => (
+        {props.options?.map((o, i) => (
           <OptionUnstyled
             key={i}
-            value={o.value}
+            value={o.id}
             componentsProps={{
               root: {
                 className:
-                  "bg-brand-turtle-blue cursor-pointer flex my-auto w-[14vw] py-2 hover:bg-opacity-60",
+                  "bg-brand-turtle-blue font-jakarta cursor-pointer flex my-auto w-[14vw] py-2 hover:bg-opacity-90",
               },
             }}
           >
-            <TestIcon className="fill-white px-2" />
-            <p className="uppercase">{o.label}</p>
+            <TokenLabel label={o.label} logo={o.logo} className="mx-3" />
           </OptionUnstyled>
         ))}
       </SelectUnstyled>
