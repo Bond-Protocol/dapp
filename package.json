@@ -19,7 +19,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@bond-labs/bond-library": "^0.0.2",
+    "@bond-labs/bond-library": "^0.0.3",
     "@bond-labs/contract-library": "^0.0.2",
     "@material-tailwind/react": "^1.0.6",
     "@mui/base": "^5.0.0-alpha.88",
