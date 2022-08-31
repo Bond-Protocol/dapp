@@ -5,10 +5,14 @@ type FlatSelectProps = {
   options: Array<{ label: string; value: string | number }>;
   onChange: (value: string | number) => void;
   label?: string;
+  className?: string;
+  default?: string | number;
 };
 
 export const FlatSelect = (props: FlatSelectProps) => {
-  const [selected, setSelected] = useState(props.options[0].value);
+  const [selected, setSelected] = useState(
+    props.default || props.options[0].value
+  );
 
   const handleChange = (value: string | number) => {
     setSelected(value);
@@ -16,9 +20,9 @@ export const FlatSelect = (props: FlatSelectProps) => {
   };
 
   return (
-    <>
+    <div className={`w-full ${props.className}`}>
       {props.label && (
-        <p className="mb-1 text-xs font-jakarta font-light">{props.label}</p>
+        <p className="text-xs font-jakarta font-light mb-1">{props.label}</p>
       )}
       <div className="flex border rounded-lg justify-evenly p-1">
         {props.options.map((o, i) => (
@@ -33,6 +37,6 @@ export const FlatSelect = (props: FlatSelectProps) => {
           </ButtonUnstyled>
         ))}
       </div>
-    </>
+    </div>
   );
 };

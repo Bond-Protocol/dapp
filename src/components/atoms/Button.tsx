@@ -15,8 +15,8 @@ export type ButtonProps = ButtonUnstyledProps & {
 const styles = {
   height: {
     sm: "h-6 text-[12px]",
-    md: "h-8",
-    lg: "h-14",
+    md: "py-1",
+    lg: "py-2",
   },
   alignment: {
     left: "pr-16 pl-4",
@@ -68,7 +68,7 @@ export const Button = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `uppercase font-fraktion font-bold tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
+          className: `uppercase font-faketion tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
         }),
       }}
     />

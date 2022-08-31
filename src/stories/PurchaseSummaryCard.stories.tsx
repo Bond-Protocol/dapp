@@ -1,25 +1,15 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { EvmProvider } from "../context/evm-provider";
-import { PurchaseSummaryCard } from "../components/molecules/PurchaseSummaryCard";
-
-const WagmiDecor = (Story) => (
-  <EvmProvider>
-    <div className="w-[45vw]">
-      <Story />
-    </div>
-  </EvmProvider>
-);
+import { SummaryCard } from "../components/molecules/SummaryCard";
 
 export default {
-  title: "Components/Molecules/PurchaseSummaryCard",
-  component: PurchaseSummaryCard,
+  title: "Components/Molecules/SummaryCard",
+  component: SummaryCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-  decorators: [WagmiDecor],
-} as ComponentMeta<typeof PurchaseSummaryCard>;
+} as ComponentMeta<typeof SummaryCard>;
 
-const Template: ComponentStory<typeof PurchaseSummaryCard> = (args) => (
-  <PurchaseSummaryCard {...args} />
+const Template: ComponentStory<typeof SummaryCard> = (args) => (
+  <SummaryCard {...args} />
 );
 
 const fields = [

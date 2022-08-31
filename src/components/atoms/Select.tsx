@@ -13,7 +13,7 @@ export type SelectProps = SelectUnstyledProps<string> & {
 };
 
 export const Select = (props: SelectProps) => {
-  const [selected, setSelected] = useState<string | null>(props.value || null);
+  const [selected, setSelected] = useState<string>(props.defaultValue || "");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -21,26 +21,23 @@ export const Select = (props: SelectProps) => {
   }, [selected]);
 
   return (
-    <div className="relative max-h-20">
-      <div
-        className={`absolute top-4 left-[11.5vw] transition-all transform ${
-          open ? "rotate-180" : "rotate-0"
-        }`}
-      >
-        <SelectArrowDown />
-      </div>
+    <div className="relative mt-1 max-h-20 w-full">
       <SelectUnstyled
         {...props}
         value={selected}
         onClick={() => setOpen((prev) => !open)}
-        onChange={(value) => setSelected(value)}
+        onChange={(value) => setSelected(value || "")}
         componentsProps={{
           root: {
             className:
-              "h-10 bg-brand-turtle-blue max-h-24 w-[14vw] border rounded-lg color-white flex py-2",
+              "h-10 max-h-24 w-full border rounded-lg color-white flex py-2",
           },
           listbox: {
-            className: "max-h-36 overflow-scroll border-x border-b rounded",
+            className:
+              "w-full max-h-36 overflow-scroll border-x border-b rounded",
+          },
+          popper: {
+            className: "w-full backdrop-blur-xl",
           },
         }}
       >
@@ -51,7 +48,7 @@ export const Select = (props: SelectProps) => {
             componentsProps={{
               root: {
                 className:
-                  "bg-brand-turtle-blue font-jakarta cursor-pointer flex my-auto w-[14vw] py-2 hover:bg-opacity-90",
+                  "font-jakarta cursor-pointer flex my-auto w-[14vw] py-2 hover:bg-opacity-90",
               },
             }}
           >
@@ -59,6 +56,13 @@ export const Select = (props: SelectProps) => {
           </OptionUnstyled>
         ))}
       </SelectUnstyled>
+      <div
+        className={`absolute top-3.5 left-[95%] transition-all transform ${
+          open ? "rotate-180" : "rotate-0"
+        }`}
+      >
+        <SelectArrowDown />
+      </div>
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Token } from "@bond-labs/contract-library";
 import { Link } from "../atoms/Link";
 import { InputCard } from "../molecules/InputCard";
-import { PurchaseSummaryCard } from "../molecules/PurchaseSummaryCard";
+import { SummaryCard } from "../molecules/SummaryCard";
 import { Button } from "../atoms/Button";
 
 export type DisplayToken = Partial<Token> & { logo?: string };
@@ -27,7 +27,6 @@ export const BondPurchaseCard = (props: BondPurchaseCardProps) => {
   const networkFee = (_payout * 0.03).toPrecision();
   const payout = +amount / 3;
 
-  console.log({ amount });
   const summaryFields = [
     { label: "You will get", value: `${payout} ${props.payoutToken.symbol}` },
     {
@@ -60,7 +59,7 @@ export const BondPurchaseCard = (props: BondPurchaseCardProps) => {
         className="mt-4"
         onChange={(value) => setAmount(value || "")}
       />
-      <PurchaseSummaryCard fields={summaryFields} />
+      <SummaryCard fields={summaryFields} />
       <Button className="w-full mt-4">BOND</Button>
     </>
   );

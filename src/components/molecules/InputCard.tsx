@@ -1,9 +1,9 @@
+import { Token } from "@bond-labs/contract-library";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Chip } from "../atoms/Chip";
 import { Input } from "../atoms/Input";
 import { useState } from "react";
-import { WrappedTokenLabel } from "../atoms/TokenLabel";
-import { Token } from "@bond-labs/contract-library";
+import { TokenLabel } from "../atoms/TokenLabel";
 
 export type InputCardProps = {
   isConnected: boolean;
@@ -56,7 +56,8 @@ export const InputCard = ({
       <div className="flex">
         {quoteToken && (
           <div className="w-min pr-3 relative">
-            <WrappedTokenLabel
+            <TokenLabel
+              wrapped
               className="w-[10vw]"
               label={quoteToken?.symbol || ""}
               logo={quoteToken?.logo}

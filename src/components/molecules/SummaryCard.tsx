@@ -1,6 +1,6 @@
 import { Tooltip } from "../../components/atoms/Tooltip";
 
-export type PurchaseSummaryCardProps = {
+export type SummaryCardProps = {
   fields: Array<{
     label: string;
     tooltip?: string;
@@ -9,7 +9,7 @@ export type PurchaseSummaryCardProps = {
   className?: string;
 };
 
-export const PurchaseSummaryCard = (props: PurchaseSummaryCardProps) => {
+export const SummaryCard = (props: SummaryCardProps) => {
   return (
     <ol
       className={`text-[12px] child:mt-3 child:flex child:justify-between child:h-[18px] child:bg-white/[.05] ${props.className}`}

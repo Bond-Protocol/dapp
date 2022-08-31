@@ -12,7 +12,9 @@ const styles = {
   active: "active:text-brand-yella active:fill-brand-yella",
 };
 export type LinkProps = ButtonUnstyledProps &
-  AnchorHTMLAttributes<HTMLAnchorElement>;
+  AnchorHTMLAttributes<HTMLAnchorElement> & {
+    iconClassName?: string;
+  };
 
 export const Link = forwardRef(function Button(
   props: LinkProps,
@@ -29,12 +31,14 @@ export const Link = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `px-1 leading-[11px] w-min flex tracking-widest transition-all ease-in-out ${style} ${props.className}`,
+          className: `leading-[11px] flex transition-all ease-in-out ${style} ${props.className}`,
         }),
       }}
     >
       {children}
-      <LinkIcon className="my-auto mx-1" />
+      <LinkIcon
+        className={`my-auto mx-1 ml-1.5 hover:fill-inherit ${props.iconClassName}`}
+      />
     </ButtonUnstyled>
   );
 });
