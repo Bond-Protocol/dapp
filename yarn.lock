@@ -1184,15 +1184,15 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bond-labs/bond-library@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@bond-labs/bond-library/-/bond-library-0.0.3.tgz#e2bad33aef3014f6ab9528d7820f0062ea06527e"
-  integrity sha512-efmiHrog8IO6yPlGqWxvrxY1wlqZFfzjEZQI63Y1Ae7LHJf71y/iIGY5DrCJC/aFjNvfEkACNwu7C2EOANMm2Q==
+"@bond-labs/bond-library@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@bond-labs/bond-library/-/bond-library-0.0.4.tgz#e7436b56d2c630a8554897339712cd59f0b02e77"
+  integrity sha512-YSHq5+lIffP2RaTMWsJtn92tCeEok1X2412EfGwu0Oe0dzroVjkevCXsfI9+TedS+G5ynSZINAWa0jLn/Rmjqw==
   dependencies:
     axios "^0.27.2"
     ethers "^5.6.8"
 
-"@bond-labs/contract-library@^0.0.2":
+"@bond-labs/contract-library@0.0.2":
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/@bond-labs/contract-library/-/contract-library-0.0.2.tgz#1ffb6f89f4fe7c05a16fa344ada5d15f30694624"
   integrity sha512-wlR6ZwlgZAk6KFNYWq5YIGLQZ+PmKVwZPyfMF4JV6WbGIhHoxBhix0kRvWgCwFr6zjVnNzeTmppnELDFatsriw==

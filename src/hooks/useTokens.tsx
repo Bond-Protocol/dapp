@@ -50,25 +50,6 @@ export function useTokens() {
   });
 
   /*
-  Loads token price data from Nomics.
-   */
-  const nomicsQuery = useQuery("nomicsData", async () => {
-    const apiKey: string = import.meta.env.VITE_NOMICS_API_KEY;
-    const tokenIds = [...apiIds.nomics].join(",");
-    try {
-      return axios.get(
-        `https://api.nomics.com/v1/currencies/ticker?ids=${tokenIds}&key=${apiKey}`
-      ).then((response: AxiosResponse) => {
-        return response.data.reduce(function (result: Map<string, string>, item: { id: string, price: string }) {
-          return result.set(item.id, item.price);
-        }, new Map());
-      });
-    } catch (e: any) {
-      throw new Error("Nomics API error", e);
-    }
-  });
-
-  /*
   Loads custom price data. As these may be from varying sources, it is the responsibility of the customPriceFunction
   defined on the Token in the bond-library to ensure these requests return a price string on success.
    */
@@ -129,7 +110,7 @@ export function useTokens() {
   The Coingecko price will therefore be the default, Nomics the fallback.
   */
   useEffect(() => {
-    if (coingeckoQuery.data && nomicsQuery.data && customPriceQuery.data) {
+    if (coingeckoQuery.data && customPriceQuery.data) {
       const currentPricesMap = new Map<string, Price[]>();
 
       bondLibrary.TOKENS.forEach((value: bondLibrary.Token, tokenKey: string) => {
@@ -140,9 +121,6 @@ export function useTokens() {
           switch (priceSource.source) {
           case "coingecko":
             price = coingeckoQuery.data[priceSource.apiId] && coingeckoQuery.data[priceSource.apiId].usd;
-            break;
-          case "nomics":
-            price = nomicsQuery.data.get(priceSource.apiId);
             break;
           case "custom":
             price = customPriceQuery.data.get(tokenKey);
@@ -160,7 +138,7 @@ export function useTokens() {
 
       setCurrentPrices(currentPricesMap);
     }
-  }, [coingeckoQuery.data, nomicsQuery.data, customPriceQuery.data]);
+  }, [coingeckoQuery.data, customPriceQuery.data]);
 
   /*
   We get a list of all tokens being used in the app by concatenating the .tokens data from each Subgraph request.
