@@ -11,6 +11,7 @@ export type InputCardProps = {
   className?: string;
   quoteToken?: Partial<Token & { logo?: string }>;
   onChange?: (amount: string) => void;
+  value?: string;
 };
 
 export const InputCard = ({
@@ -18,15 +19,14 @@ export const InputCard = ({
   balance = "0",
   className = "",
   quoteToken,
+  value = "",
   onChange,
 }: InputCardProps) => {
-  const [amount, setAmount] = useState<string | undefined>("");
   const setSome = (num: number) =>
     handleChange((num * parseFloat(balance)) / 100 + "");
   const setMax = () => handleChange(parseFloat(balance) + "");
 
   const handleChange = (amount: string) => {
-    setAmount(amount);
     onChange && onChange(amount);
   };
 
@@ -65,7 +65,7 @@ export const InputCard = ({
           </div>
         )}
         <Input
-          value={amount}
+          value={value}
           placeholder="Enter Amount to Bond"
           onChange={(event: React.BaseSyntheticEvent) => {
             handleChange(event.target.value);

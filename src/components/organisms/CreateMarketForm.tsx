@@ -1,8 +1,6 @@
-import { Controller, useForm } from "react-hook-form";
-import { useState } from "react";
+import { Control, Controller, useForm } from "react-hook-form";
 import { Token } from "@bond-labs/bond-library";
 import { TokenInput } from "../atoms/TokenInput";
-import { Button } from "../atoms/Button";
 import { Input } from "../atoms/Input";
 import { FlatSelect } from "../atoms/FlatSelect";
 import { TokenPickerCard } from "../molecules/TokenPickerCard";
@@ -10,10 +8,6 @@ import { Accordion } from "../molecules/Accordion";
 import { SummaryCard } from "../molecules/SummaryCard";
 import { TimeTypePicker } from "../atoms/TimeTypePicker";
 import { DatePicker } from "../molecules/DatePicker";
-
-export type CreateMarketProps = {
-  quoteToken?: Partial<Token & { logo?: string }>;
-};
 
 const capacityTokenOptions = [
   { label: "PAYOUT", value: 0 },
@@ -24,10 +18,6 @@ const vestingOptions = [
   { label: "FIXED EXPIRY", value: "expiry" },
   { label: "FIXED TERM", value: "term" },
 ];
-
-const samp = {
-  token: { symbol: "OHM" },
-};
 
 const formDefaults = {
   payoutToken: "0x",
@@ -43,32 +33,47 @@ const formDefaults = {
   debtBuffer: "0",
 };
 
-export const CreateMarketForm = (props: CreateMarketProps) => {
-  const {
-    handleSubmit,
-    control,
-    watch,
-    formState: { errors },
-  } = useForm({ defaultValues: formDefaults });
+export type CreateMarketProps = {
+  quoteToken?: Partial<Token & { logo?: string }>;
+  payoutToken?: Partial<Token & { logo?: string }>;
+  control: Control<typeof formDefaults>;
 
-  const onSubmit = (state) => {
-    console.log(state);
-  };
-  const vestingType = watch("vestingType");
+  vestingType?: string;
+  exchangeRate?: string;
+  minPrice?: string;
+  bondExpiry?: string;
+  marketExpiry?: string;
+  debtBuffer?: string;
+};
+
+export const CreateMarketForm = ({
+  control,
+  vestingType,
+  ...props
+}: CreateMarketProps) => {
+  const payoutTokenSymbol = props.payoutToken?.symbol || "???";
+  const quoteTokenSymbol = props.payoutToken?.symbol || "???";
 
   const summaryFields = [
     { label: "Capacity", value: `${123} OHM` },
-    { label: "Payout & Quote Tokens", value: "OHM-DAI" },
-    { label: "Estimate bond cadence", tooltip: "soon", value: "7 ETH" },
-    { label: "Minimum exchange rate", value: "0.54 OHM-DAI" },
+    {
+      label: "Payout & Quote Tokens",
+      value: payoutTokenSymbol + "-" + quoteTokenSymbol,
+    },
+    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
+    { label: "Minimum exchange rate", value: `${props.exchangeRate} ` },
     {
       label: "Conclusion",
       tooltip: "soon",
-      value: "Market expires in 20 days",
+      value: `Market expires in ${props.marketExpiry} days`,
     },
-    { label: "Vesting", tooltip: "soon", value: "Market expires in X days" },
-    { label: "Bonds per week", tooltip: "soon", value: "7 ETH" },
-    { label: "Debt Buffer", value: "12%" },
+    {
+      label: "Vesting",
+      tooltip: "soon",
+      value: `Bond expires in ${props.bondExpiry} days`,
+    },
+    { label: "Bonds per week", tooltip: "soon", value: `${payoutTokenSymbol}` },
+    { label: "Debt Buffer", value: `${props.debtBuffer}%` },
   ];
 
   return (
@@ -86,14 +91,16 @@ export const CreateMarketForm = (props: CreateMarketProps) => {
                   label="Payout Token"
                   subText="Enter the contract address of the payout token"
                   checkboxLabel="I confirm this is the token"
-                  token={samp.token}
+                  token={props.payoutToken}
                 />
               )}
             />
             <TokenInput
               disabled
               logo=""
-              subText={`Current exchange rate for ${samp.token.symbol}-DAI is ~0.33`}
+              subText={`Current exchange rate for ${quoteTokenSymbol}-${payoutTokenSymbol} is ~${
+                props.exchangeRate || "N/A"
+              }`}
               label="Current Exchange Rate"
               className="mt-7"
             />
@@ -109,7 +116,7 @@ export const CreateMarketForm = (props: CreateMarketProps) => {
                   label="Quote Token"
                   subText="Enter the contract address of the quote token"
                   checkboxLabel="I confirm this is the token"
-                  token={samp.token}
+                  token={props.quoteToken}
                 />
               )}
             />
@@ -120,7 +127,9 @@ export const CreateMarketForm = (props: CreateMarketProps) => {
               render={({ field }) => (
                 <TokenInput
                   {...field}
-                  subText={`Current exchange rate for ${samp.token.symbol}-DAI is ~0.33`}
+                  subText={`Current exchange rate for ${quoteTokenSymbol}-${payoutTokenSymbol} is ~${
+                    props.minPrice || props.exchangeRate || "N/A"
+                  }`}
                   label="Minimum Price"
                   className="mt-7"
                 />
@@ -223,12 +232,6 @@ export const CreateMarketForm = (props: CreateMarketProps) => {
       </div>
       <p className="mt-16 font-faketion tracking-widest">3 CONFIRMATION</p>
       <SummaryCard fields={summaryFields} className="mt-8" />
-      <Button
-        onClick={handleSubmit(onSubmit)}
-        className="w-full font-fraktion mt-5"
-      >
-        CONFIRM INFORMATION
-      </Button>
     </div>
   );
 };

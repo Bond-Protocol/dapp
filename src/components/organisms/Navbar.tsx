@@ -51,16 +51,16 @@ export const Navbar: FC = () => {
   return (
     <div className="flex child:mx-1 justify-between px-[5vw] py-4" id="navbar">
       <img src={logo} className="w-[178px]" />
-      <div>
+      <div className="flex h-min gap-6">
+        <Link to="/markets">
+          <Button>Markets</Button>
+        </Link>
         <Link to="/create-market">
           <Button>Create Market</Button>
         </Link>
-
-        <div>
-          <Button onClick={toggleTestnet}>
-            {testnet ? "Testnet" : "Mainnet"}
-          </Button>
-        </div>
+        <Button variant="secondary" onClick={toggleTestnet}>
+          {testnet ? "Testnet" : "Mainnet"}
+        </Button>
       </div>
       <ConnectButton />
     </div>

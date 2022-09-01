@@ -1,16 +1,18 @@
-import { useState } from "react";
 import { Token } from "@bond-labs/contract-library";
 import { Link } from "../atoms/Link";
 import { InputCard } from "../molecules/InputCard";
 import { SummaryCard } from "../molecules/SummaryCard";
-import { Button } from "../atoms/Button";
 
 export type DisplayToken = Partial<Token> & { logo?: string };
 export type BondPurchaseCardProps = {
   quoteToken: DisplayToken;
   payoutToken: DisplayToken;
+  amount?: string;
   userBalance: string;
-  amountLeft?: string;
+  remainingCapacity?: string | number;
+  onChange?: (amount: string) => void;
+  payout?: string;
+  networkFee?: string | number;
 };
 
 //NEED:
@@ -20,23 +22,19 @@ export type BondPurchaseCardProps = {
 //bond contract?
 
 export const BondPurchaseCard = (props: BondPurchaseCardProps) => {
-  const [amount, setAmount] = useState("");
-  const [_payout, setPayout] = useState(0);
-
-  //TODO: update?
-  const networkFee = (_payout * 0.03).toPrecision();
-  const payout = +amount / 3;
-
   const summaryFields = [
-    { label: "You will get", value: `${payout} ${props.payoutToken.symbol}` },
+    {
+      label: "You will get",
+      value: `${props.payout} ${props.payoutToken.symbol}`,
+    },
     {
       label: "Available in Bond",
-      value: `${props.amountLeft || 0} ${props.payoutToken.symbol}`,
+      value: `${props.remainingCapacity || 0} ${props.payoutToken.symbol}`,
       tooltip: "Soon™",
     },
     {
       label: "Network Fee",
-      value: `${networkFee} ${props.quoteToken.symbol}`,
+      value: `${props?.networkFee} ${props.quoteToken.symbol}`,
       tooltip: "Soon™",
     },
     {
@@ -54,13 +52,13 @@ export const BondPurchaseCard = (props: BondPurchaseCardProps) => {
     <>
       <InputCard
         isConnected={true}
+        value={props.amount}
         quoteToken={props.quoteToken}
         balance={props.userBalance}
         className="mt-4"
-        onChange={(value) => setAmount(value || "")}
+        onChange={props.onChange}
       />
       <SummaryCard fields={summaryFields} />
-      <Button className="w-full mt-4">BOND</Button>
     </>
   );
 };

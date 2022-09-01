@@ -41,7 +41,8 @@ const styles = {
     },
     ghost: {
       base: "border text-white",
-      hover: "hover:text-brand-yella",
+      hover:
+        "hover:text-brand-yella hover:border-brand-yella hover:fill-brand-yella",
       disabled: "disabled:text-grey-500 disabled:cursor-not-allowed",
       active: "active:text-brand-yella",
     },

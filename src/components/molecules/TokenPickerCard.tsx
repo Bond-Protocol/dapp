@@ -5,7 +5,7 @@ import { TokenPriceCard } from "../atoms/TokenPriceCard";
 import { Input } from "../atoms/Input";
 
 export type TokenPickerCardProps = {
-  token: Partial<Token & { logo: string }>;
+  token?: Partial<Token & { logo?: string }>;
   className?: string;
   checkboxLabel?: string;
   label?: string;

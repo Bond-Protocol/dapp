@@ -6,10 +6,13 @@ import { FC, useEffect, useRef, useState } from "react";
 import { CloseMarketCard } from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
 import { useCalculatedMarkets, useTokens } from "hooks";
-import { Input } from "@material-tailwind/react";
-import { alphabeticSort, numericSort } from "services/sort";
+import { TableHeading } from "components/atoms/TableHeading";
+import { TableCell } from "components/atoms/TableCell";
+import { TablePagination } from "components/molecules/TablePagination";
+import { CellLabel } from "components/atoms/CellLabel";
+import { BondListCardV2 } from "./BondListCardV2";
 
-export type MarketListProps = {
+type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
   allowManagement: boolean;
 };
@@ -27,25 +30,29 @@ export const MarketList: FC<MarketListProps> = ({
   );
 
   const marketsRef = useRef(markets);
-  const searchRef = useRef("");
   const timerRef = useRef<NodeJS.Timeout>();
+
+  const numericSort = function (
+    value1: number,
+    value2: number,
+    ascending: boolean
+  ) {
+    return ascending ? value1 - value2 : value2 - value1;
+  };
+
+  const alphabeticSort = function (
+    value1: string,
+    value2: string,
+    ascending: boolean
+  ) {
+    return ascending ? (value1 > value2 ? 1 : -1) : value2 > value1 ? 1 : -1;
+  };
 
   const sortMarkets = function (
     compareFunction: (m1: CalculatedMarket, m2: CalculatedMarket) => number
   ) {
     const arr: CalculatedMarket[] = [];
-    marketsRef.current.forEach((value) => {
-      if (
-        value.quoteToken.symbol.toLowerCase().indexOf(searchRef.current) !=
-          -1 ||
-        value.quoteToken.name.toLowerCase().indexOf(searchRef.current) != -1 ||
-        value.payoutToken.symbol.toLowerCase().indexOf(searchRef.current) !=
-          -1 ||
-        value.payoutToken.name.toLowerCase().indexOf(searchRef.current) != -1
-      ) {
-        arr.push(value);
-      }
-    });
+    marketsRef.current.forEach((value) => arr.push(value));
     setSortedMarkets(arr.sort(compareFunction));
   };
 
@@ -176,17 +183,8 @@ export const MarketList: FC<MarketListProps> = ({
     currentSort.sortBy();
   }, [markets]);
 
-  const updateSearch = () => {
-    // @ts-ignore
-    searchRef.current = event.target.value;
-    currentSort.sortBy();
-  };
-
   return (
-    <>
-      <p className="flex justify-start">
-        <Input onChange={updateSearch} />
-      </p>
+    <div className="mb-16">
       <p className="flex justify-end p-2">
         {allowManagement ? (
           <Button onClick={refetchMyMarkets}>Refresh</Button>
@@ -194,16 +192,18 @@ export const MarketList: FC<MarketListProps> = ({
           <Button onClick={refetchAllMarkets}>Refresh</Button>
         )}
       </p>
-      <table className="w-full text-left table-fixed">
+      <table className="w-full table-fixed">
         <thead>
           <tr>
-            <th onClick={sortByQuote}>Bond</th>
-            <th onClick={sortByPrice}>Price</th>
-            <th onClick={sortByDiscount}>Discount</th>
-            <th onClick={sortByTbv}>TBV</th>
-            <th>30D Perf.</th>
-            <th onClick={sortByExpiry}>Expiry</th>
-            {allowManagement && <th onClick={sortByStatus}>Status</th>}
+            <TableHeading onClick={sortByQuote}>BOND</TableHeading>
+            <TableHeading onClick={sortByPrice}>PRICE</TableHeading>
+            <TableHeading onClick={sortByDiscount}>DISCOUNT</TableHeading>
+            <TableHeading>30D Perf.</TableHeading>
+            <TableHeading onClick={sortByExpiry}>EXPIRY</TableHeading>
+            {allowManagement && (
+              <TableHeading onClick={sortByStatus}>STATUS</TableHeading>
+            )}
+            <TableHeading onClick={sortByTbv}>TBV</TableHeading>
           </tr>
         </thead>
 
@@ -224,7 +224,7 @@ export const MarketList: FC<MarketListProps> = ({
                     allowManagement ? (
                       <CloseMarketCard market={market} />
                     ) : (
-                      <BondListCard market={market} />
+                      <BondListCardV2 market={market} />
                     )
                   ) : (
                     <div>Loading...</div>
@@ -232,47 +232,47 @@ export const MarketList: FC<MarketListProps> = ({
                 }
                 className="gap-x-2"
               >
-                <td>
-                  <div className="flex flex-row">
-                    <div>{quoteLogo(market)}</div>
-                    <div>{quoteToken.symbol}</div>
-                  </div>
-                </td>
-                <td>
-                  <div className="flex flex-row">
-                    <div>
-                      <img
-                        className="h-[32px] w-[32px]"
-                        src={singleLogo(market?.payoutToken, market?.network)}
-                      />
-                    </div>
-                    <div>
-                      <p>{market?.formattedDiscountedPrice}</p>
-                      <p className="text-xs">
-                        (Market: {market?.formattedFullPrice})
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td>{market?.discount}%</td>
-                <td>
-                  <p>
-                    {Math.trunc(market.totalBondedAmount) +
-                      " " +
-                      quoteToken.symbol}
-                  </p>
-                  <p className="text-xs">({market.formattedTbvUsd})</p>
-                </td>
-                <td>{0}%</td>
-                <td>{market?.formattedLongVesting}</td>
+                <TableCell>{quoteLogo(market)}</TableCell>
+                <TableCell className="flex flex-row py-6">
+                  <CellLabel
+                    logo={singleLogo(market?.payoutToken, market?.network)}
+                    subContent={`(Market: ${market?.formattedFullPrice})`}
+                  >
+                    {market?.formattedDiscountedPrice}
+                  </CellLabel>
+                </TableCell>
+                <TableCell
+                  className={`${
+                    market?.discount > 0 ? "text-light-success" : "text-red-300"
+                  }`}
+                >
+                  {market?.discount}%
+                </TableCell>
+                <TableCell>{0}%</TableCell>
+                <TableCell>{market?.formattedLongVesting}</TableCell>
+                <TableCell>
+                  <CellLabel subContent={market.formattedTbvUsd}>
+                    <p>
+                      {Math.trunc(market.totalBondedAmount) +
+                        " " +
+                        quoteToken.symbol}
+                    </p>
+                  </CellLabel>
+                </TableCell>
+
                 {allowManagement && (
-                  <td>{market && market.isLive ? "Live" : "Closed"}</td>
+                  <TableCell>
+                    {market && market.isLive ? "Live" : "Closed"}
+                  </TableCell>
                 )}
               </ExpandableRow>
             );
           })}
         </tbody>
       </table>
-    </>
+      <tfoot>
+        <tr>{/* <TablePagination length={sortedMarkets.length} /> */}</tr>
+      </tfoot>
+    </div>
   );
 };
