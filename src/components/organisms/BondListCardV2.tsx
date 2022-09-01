@@ -23,7 +23,7 @@ export type BondListCardProps = {
   market: CalculatedMarket;
 };
 
-const getRemainingCapacity = (remaining, payout) => {
+const getRemainingCapacity = (remaining: number, payout: number) => {
   const total = remaining + payout;
   return (remaining / total) * 100;
 };

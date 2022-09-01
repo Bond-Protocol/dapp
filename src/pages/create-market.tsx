@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";

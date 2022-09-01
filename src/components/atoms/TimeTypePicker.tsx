@@ -20,7 +20,7 @@ const options = [
 export const TimeTypePicker = (props: TimeTypePickerProps) => {
   const [state, setState] = useState({ amount: "", id: "d" });
 
-  const handleAmount = (e) => {
+  const handleAmount = (e: React.BaseSyntheticEvent) => {
     setState((prev) => {
       const newState = { ...prev, amount: e.target.value };
       props.onChange && props.onChange(newState);

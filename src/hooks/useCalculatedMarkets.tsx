@@ -1,21 +1,22 @@
-import {useTokens} from "hooks/useTokens";
-import {useQueries} from "react-query";
-import {useState} from "react";
+//@ts-nocheck
+import { useTokens } from "hooks/useTokens";
+import { useQueries } from "react-query";
+import { useState } from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
 import * as contractLibrary from "@bond-labs/contract-library";
-import {CalculatedMarket} from "@bond-labs/contract-library";
-import {useProvider} from "wagmi";
-import {providers} from "services/owned-providers";
-import {Market} from "src/generated/graphql";
+import { CalculatedMarket } from "@bond-labs/contract-library";
+import { useProvider } from "wagmi";
+import { providers } from "services/owned-providers";
+import { Market } from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import {useMarkets} from "hooks/useMarkets";
-import {useMyMarkets} from "hooks/useMyMarkets";
-import {getProtocolByAddress} from "@bond-labs/bond-library";
+import { useMarkets } from "hooks/useMarkets";
+import { useMyMarkets } from "hooks/useMyMarkets";
+import { getProtocolByAddress } from "@bond-labs/bond-library";
 
 export function useCalculatedMarkets() {
-  const {markets: markets} = useMarkets();
-  const {markets: myMarkets} = useMyMarkets();
-  const {currentPrices, getPrice} = useTokens();
+  const { markets: markets } = useMarkets();
+  const { markets: myMarkets } = useMyMarkets();
+  const { currentPrices, getPrice } = useTokens();
   const provider = useProvider();
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
@@ -30,61 +31,65 @@ export function useCalculatedMarkets() {
       lpPair.token0.price = getPrice(lpPair.token0.id);
       lpPair.token1.price = getPrice(lpPair.token1.id);
     }
-    return contractLibrary.calcMarket(
-      requestProvider,
-      import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
-      {
-        id: market.id,
-        network: market.network,
-        auctioneer: market.auctioneer,
-        teller: market.teller,
-        owner: market.owner,
-        vesting: market.vesting,
-        vestingType: market.vestingType,
-        isLive: market.isLive,
-        isInstantSwap: market.isInstantSwap,
-        totalBondedAmount: market.totalBondedAmount,
-        totalPayoutAmount: market.totalPayoutAmount,
-        payoutToken: {
-          id: market.payoutToken.id,
-          address: market.payoutToken.address,
-          decimals: market.payoutToken.decimals,
-          name: market.payoutToken.name,
-          symbol: market.payoutToken.symbol,
-          price: getPrice(market.payoutToken.id),
+    return contractLibrary
+      .calcMarket(
+        requestProvider,
+        import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
+        {
+          id: market.id,
+          network: market.network,
+          auctioneer: market.auctioneer,
+          teller: market.teller,
+          owner: market.owner,
+          vesting: market.vesting,
+          vestingType: market.vestingType,
+          isLive: market.isLive,
+          isInstantSwap: market.isInstantSwap,
+          totalBondedAmount: market.totalBondedAmount,
+          totalPayoutAmount: market.totalPayoutAmount,
+          payoutToken: {
+            id: market.payoutToken.id,
+            address: market.payoutToken.address,
+            decimals: market.payoutToken.decimals,
+            name: market.payoutToken.name,
+            symbol: market.payoutToken.symbol,
+            price: getPrice(market.payoutToken.id),
+          },
+          quoteToken: {
+            id: market.quoteToken.id,
+            address: market.quoteToken.address,
+            decimals: market.quoteToken.decimals,
+            name: market.quoteToken.name,
+            symbol: market.quoteToken.symbol,
+            price: getPrice(market.quoteToken.id),
+            lpPair: market.quoteToken.lpPair,
+          },
         },
-        quoteToken: {
-          id: market.quoteToken.id,
-          address: market.quoteToken.address,
-          decimals: market.quoteToken.decimals,
-          name: market.quoteToken.name,
-          symbol: market.quoteToken.symbol,
-          price: getPrice(market.quoteToken.id),
-          lpPair: market.quoteToken.lpPair,
-        }
-      },
-      bondLibrary.TOKENS.get(market.quoteToken.id) ?
-        bondLibrary.LP_TYPES.get(bondLibrary.TOKENS.get(market.quoteToken.id)?.lpType) :
-        null,
-    ).then((result: CalculatedMarket) => result);
+        bondLibrary.TOKENS.get(market.quoteToken.id)
+          ? bondLibrary.LP_TYPES.get(
+              bondLibrary.TOKENS.get(market.quoteToken.id)?.lpType
+            )
+          : null
+      )
+      .then((result: CalculatedMarket) => result);
   };
 
   const calculateAllMarkets = useQueries(
-    markets.map(market => {
+    markets.map((market) => {
       return {
         queryKey: market.id,
         queryFn: () => calculateMarket(market),
-        enabled: markets && currentPrices && currentPrices.size > 0
+        enabled: markets && currentPrices && currentPrices.size > 0,
       };
     })
   );
 
   const calculateMyMarkets = useQueries(
-    myMarkets.map(market => {
+    myMarkets.map((market) => {
       return {
         queryKey: market.id,
         queryFn: () => calculateMarket(market),
-        enabled: myMarkets && currentPrices && currentPrices.size > 0
+        enabled: myMarkets && currentPrices && currentPrices.size > 0,
       };
     })
   );
@@ -111,7 +116,10 @@ export function useCalculatedMarkets() {
       if (result && result.data) {
         calculatedPricesMap.set(result.data.id, result.data);
 
-        const protocol = getProtocolByAddress(result.data.owner, result.data.network);
+        const protocol = getProtocolByAddress(
+          result.data.owner,
+          result.data.network
+        );
         const id = protocol?.id;
         const value = issuerMarkets.get(protocol?.id) || [];
         value.push(result.data);
