@@ -48,11 +48,11 @@ const VariantsTemplate: ComponentStory<any> = (args) => {
 
 const sample = {
   text: "LABEL",
-  icon: <TestIcon />,
+  icon: <TestIcon className="fill-brand-covenant" />,
   Element: (props: any) => <p {...props}>LABEL</p>,
   Complex: () => (
     <div className="flex text-center items-center">
-      <TestIcon className="mx-2" />
+      <TestIcon className="mx-2 fill-brand-covenant" />
       <p>LABEL</p>
     </div>
   ),
@@ -84,7 +84,7 @@ WithIcon.args = {
 
 export const IconOnly = Template.bind({});
 IconOnly.args = {
-  children: <TestIcon />,
+  children: <TestIcon className="fill-brand-covenant" />,
   icon: true,
 };
 

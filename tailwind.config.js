@@ -16,10 +16,26 @@ module.exports = withMT({
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
-      colors: brandColors,
+      colors: {
+        ...brandColors,
+        light: {
+          primary: {
+            500: "#40749B",
+            900: "#14182D",
+          },
+          secondary: "#E7AC5C",
+          success: "#88F6D7",
+          neutral: "#A8A8A8",
+          grey: "#737373",
+        },
+      },
       fontFamily: {
-        sans: ["PPFraktionSans", ...defaultTheme.fontFamily.sans],
         jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
+        faketion: ["POEVetica", ...defaultTheme.fontFamily.mono],
+      },
+      opacity: {
+        15: ".15",
+        20: ".20",
       },
     },
   },
@@ -27,18 +43,58 @@ module.exports = withMT({
     plugin(function ({ addBase }) {
       addBase({
         "@font-face": {
-          fontFamily: "PPFraktionSans",
-          fontWeight: "700",
+          fontFamily: "FraktionSans",
+          fontWeight: "500",
           src: "url(/fonts/PPFraktionSans-Bold.woff2) format('woff2')",
         },
       });
-    }),
-    plugin(function ({ addBase }) {
       addBase({
         "@font-face": {
           fontFamily: "PlusJakartaSans",
           fontWeight: "800",
           src: "url(/fonts/PlusJakartaSans-Medium.woff) format('woff')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "400",
+          src: "url(/fonts/PlusJakartaSans-Light.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "200",
+          src: "url(/fonts/PlusJakartaSans-ExtraLight.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "Inter",
+          fontWeight: "500",
+          src: "url(/fonts/Inter-Regular.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "Inter",
+          fontWeight: "700",
+          src: "url(/fonts/Inter-Bold.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "POEVetica",
+          fontWeight: "500",
+          src: "url(/fonts/POE-Vetica-Mono-Bold.woff) format('woff')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "POEVetica",
+          fontWeight: "700",
+          src: "url(/fonts/POE-Vetica-Mono.woff) format('woff')",
         },
       });
     }),

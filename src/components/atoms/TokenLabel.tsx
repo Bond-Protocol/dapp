@@ -1,0 +1,37 @@
+export type TokenLabelProps = {
+  label: string;
+  logo?: string;
+  secondary?: string | React.ReactNode;
+  wrapped?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+};
+
+const TokenLabelBase = (props: TokenLabelProps) => {
+  return (
+    <div className={`flex child:my-auto ${props.className}`}>
+      {props.logo && <img src={props.logo} width={24} />}
+      {props.children}
+      <div className="flex-col mx-1">
+        <p className={props.secondary ? "leading-none text-[14px]" : ""}>
+          {props.label}
+        </p>
+        {props.secondary && (
+          <p className="text-[12px] leading-none opacity-50">
+            {props.secondary}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const TokenLabel = (props: TokenLabelProps) => {
+  if (!props.wrapped) return <TokenLabelBase {...props} />;
+
+  return (
+    <div className={`px-4 py-2 border rounded-lg ${props.className}`}>
+      <TokenLabelBase {...props} />
+    </div>
+  );
+};

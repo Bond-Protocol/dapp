@@ -15,6 +15,9 @@ Primary.args = {
   children: "LABEL",
 };
 
+export const Icon = Template.bind({});
+Icon.args = {};
+
 export const States: ComponentStory<typeof Link> = (args) => (
   <div className="grid gap-4">
     <Link {...args}>REGULAR</Link>
@@ -29,6 +32,7 @@ export const States: ComponentStory<typeof Link> = (args) => (
     </Link>
   </div>
 );
+
 States.parameters = {
   pseudo: {
     hover: ["#hover"],
