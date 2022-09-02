@@ -1,15 +1,15 @@
-import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Tooltip } from "@material-tailwind/react";
+import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
+import * as React from "react";
+import {useEffect, useState} from "react";
+import {useForm} from "react-hook-form";
+import {Tooltip} from "@material-tailwind/react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
-import { providers } from "services/owned-providers";
-import { ethers } from "ethers";
-import { Button } from "components";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import * as React from "react";
-import { CreateMarketForm } from "components/organisms/CreateMarketForm";
+import {providers} from "services/owned-providers";
+import {ethers} from "ethers";
+import {Button} from "components";
+import {CreateMarketForm} from "components/organisms/CreateMarketForm";
+import {useTokens} from "hooks";
 
 const formDefaults = {
   payoutToken: "0x",
@@ -23,13 +23,14 @@ const formDefaults = {
   expiryDate: "",
   bondsPerWeek: "",
   debtBuffer: "0",
-  chain: "1",
+  chain: "rinkeby",
 };
 
 export const CreateMarketView = () => {
   const { address, isConnected } = useAccount();
   const { data: signer } = useSigner();
   const network = useNetwork();
+  const { getPrice } = useTokens();
   const { switchNetwork } = useSwitchNetwork();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
@@ -84,19 +85,34 @@ export const CreateMarketView = () => {
   }, [watch("chain")]);
 
   const getTokenInfo = async (address: string, isPayout: boolean) => {
-    console.log("okokasd", address);
     const contract = contractLibrary.IERC20__factory.connect(
       address,
       providers[selectedChain]
     );
     try {
-      const [name, symbol] = await Promise.all([
+      const [name, symbol, decimals] = await Promise.all([
         contract.name(),
         contract.symbol(),
+        contract.decimals(),
       ]);
+      let price = getPrice(selectedChain + "_" + address) || "Unable to find price";
 
-      console.log(name, symbol, "stuff happened");
-      const result = { name, symbol };
+      if (price != "Unable to find price") {
+        const digits = price > 1 ? 2 : price > 0.001 ? 4 : 6;
+        price = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: digits,
+          minimumFractionDigits: digits,
+        }).format(price);
+      }
+
+      const blockExplorerName: string = bondLibrary.CHAINS.get(selectedChain).blockExplorerName;
+      let link: string = bondLibrary.CHAINS.get(selectedChain).blockExplorerUrls[0];
+      link = link.replace("#", "address");
+      link = link.concat(address);
+
+      const result = { name, symbol, decimals, link, blockExplorerName, price };
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
     } catch (e: any) {
       console.log(e.message);
@@ -108,10 +124,8 @@ export const CreateMarketView = () => {
 
   useEffect(() => {
     const address = watch("payoutToken");
-    console.log("here");
     if (ethers.utils.isAddress(address)) {
       void getTokenInfo(address, true);
-      console.log("adn here");
     } else {
       setPayoutTokenInfo("");
     }
@@ -180,6 +194,17 @@ export const CreateMarketView = () => {
         Create Market
       </h1>
       <div className="mx-[15vw]">
+        {renderInputBlock({
+                 label: "Chain",
+                 fieldName: "chain",
+                 type: "select",
+                 selectValues: bondLibrary.SUPPORTED_CHAINS.map(
+                   (supportedChain) => ({
+                     value: supportedChain.chainName,
+                     displayName: supportedChain.displayName,
+                   })
+                 ),
+               })}
         <CreateMarketForm
           quoteToken={quoteTokenInfo}
           payoutToken={payoutTokenInfo}

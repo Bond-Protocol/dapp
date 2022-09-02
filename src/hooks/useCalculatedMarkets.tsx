@@ -84,7 +84,6 @@ export function useCalculatedMarkets() {
     })
   );
 
-  console.log({ calculateAllMarkets, markets });
   const calculateMyMarkets = useQueries(
     myMarkets.map((market) => {
       return {

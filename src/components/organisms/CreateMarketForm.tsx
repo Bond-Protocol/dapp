@@ -1,13 +1,13 @@
-import { Control, Controller, useForm } from "react-hook-form";
-import { Token } from "@bond-labs/bond-library";
-import { TokenInput } from "../atoms/TokenInput";
-import { Input } from "../atoms/Input";
-import { FlatSelect } from "../atoms/FlatSelect";
-import { TokenPickerCard } from "../molecules/TokenPickerCard";
-import { Accordion } from "../molecules/Accordion";
-import { SummaryCard } from "../molecules/SummaryCard";
-import { TimeTypePicker } from "../atoms/TimeTypePicker";
-import { DatePicker } from "../molecules/DatePicker";
+import {Control, Controller} from "react-hook-form";
+import {Token} from "@bond-labs/bond-library";
+import {TokenInput} from "../atoms/TokenInput";
+import {Input} from "../atoms/Input";
+import {FlatSelect} from "../atoms/FlatSelect";
+import {TokenPickerCard} from "../molecules/TokenPickerCard";
+import {Accordion} from "../molecules/Accordion";
+import {SummaryCard} from "../molecules/SummaryCard";
+import {TimeTypePicker} from "../atoms/TimeTypePicker";
+import {DatePicker} from "../molecules/DatePicker";
 
 const capacityTokenOptions = [
   { label: "PAYOUT", value: 0 },
@@ -52,7 +52,7 @@ export const CreateMarketForm = ({
   ...props
 }: CreateMarketProps) => {
   const payoutTokenSymbol = props.payoutToken?.symbol || "???";
-  const quoteTokenSymbol = props.payoutToken?.symbol || "???";
+  const quoteTokenSymbol = props.quoteToken?.symbol || "???";
 
   const summaryFields = [
     { label: "Capacity", value: `${123} OHM` },

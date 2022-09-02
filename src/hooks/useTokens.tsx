@@ -183,7 +183,7 @@ export const useTokens = () => {
   }, [testnet, mainnetTokens, testnetTokens]);
 
   function getPrice(id: string): number {
-    const sources = currentPrices[id];
+    const sources = currentPrices[id.toLowerCase()];
     if (!sources) return 0;
     for (const source of sources) {
       if (source == undefined || source.price == undefined) {

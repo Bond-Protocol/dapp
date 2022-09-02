@@ -1,10 +1,12 @@
-import { Link } from "../atoms/Link";
+import {Link} from "../atoms/Link";
 
 export type TokenPriceCardProps = {
   symbol?: string;
   decimals?: string | number;
   price?: string;
   className?: string;
+  link?: string;
+  blockExplorerName?: string;
 };
 
 export const TokenPriceCard = (props: TokenPriceCardProps) => {
@@ -13,16 +15,20 @@ export const TokenPriceCard = (props: TokenPriceCardProps) => {
       <div className="my-auto flex-col px-3 py-4 flex">
         {props.symbol && (
           <Link
-            href="link"
+            href={props.link}
             className="uppercase text-light-primary-500 fill-light-primary-500 w-full font-inter fill-light-primary-500"
             iconClassName="fill-light-primary-500"
+            target="_blank"
+            rel="noreferrer"
           >
-            {`${props.symbol} PRICE`}
+            {`View on ${props.blockExplorerName}`}
           </Link>
         )}
-        <p className="font-Jakarta font-light tracking-tight">
-          {props.price ? `$${props.price}` : "wen price?"}
-        </p>
+        {props.price &&
+          <p className="font-Jakarta font-light tracking-tight">
+            {props.price}
+          </p>
+        }
         {props.decimals && (
           <p className="text-xs text-light-primary-500">
             Token Decimals: {props.decimals}

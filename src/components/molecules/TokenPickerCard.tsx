@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { Token } from "@bond-labs/contract-library";
-import { Checkbox } from "../atoms/Checkbox";
-import { TokenPriceCard } from "../atoms/TokenPriceCard";
-import { Input } from "../atoms/Input";
+import {useEffect, useState} from "react";
+import {Token} from "@bond-labs/contract-library";
+import {Checkbox} from "../atoms/Checkbox";
+import {TokenPriceCard} from "../atoms/TokenPriceCard";
+import {Input} from "../atoms/Input";
+import {ethers} from "ethers";
 
 export type TokenPickerCardProps = {
-  token?: Partial<Token & { logo?: string }>;
+  token?: Partial<Token & { logo?: string; link?: string; blockExplorerName?: string; }>;
   className?: string;
   checkboxLabel?: string;
   label?: string;
@@ -20,17 +21,17 @@ export const TokenPickerCard = (
 ) => {
   const [address, setAddress] = useState("");
   const [confirmed, setConfirmed] = useState(false);
-  const [selected, setSelected] = useState<Partial<Token & { logo: string }>>();
+  const [selected, setSelected] = useState<Partial<Token & { logo: string; link?: string; blockExplorerName?: string; }>>();
 
   useEffect(() => {
-    if (address.length === 42 && selected?.address !== address) {
+      if (ethers.utils.isAddress(address) && selected?.address !== address) {
       //check if is known token and
-      //setSelected(token)
+      setSelected(props.token)
       //props.onChange && props.onChange(token);
     }
 
     onChange && onChange(address);
-  }, [address, selected, confirmed, onChange]);
+  }, [address, selected, confirmed, onChange, props.token]);
 
   return (
     <div className={`${props.className}`}>
@@ -44,6 +45,9 @@ export const TokenPickerCard = (
       <TokenPriceCard
         decimals={selected?.decimals}
         symbol={selected?.symbol}
+        price={selected?.price}
+        link={selected?.link}
+        blockExplorerName={selected?.blockExplorerName}
         className="mt-5"
       />
       <div className="flex mt-2">
