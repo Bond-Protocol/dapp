@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {FC, useEffect, useState} from "react";
 import {useCalculatedMarkets} from "hooks";
 import {Protocol, PROTOCOLS} from "@bond-labs/bond-library";
@@ -6,16 +7,18 @@ import {CalculatedMarket} from "@bond-labs/contract-library";
 
 type IssuerPageProps = {
   issuer: string;
-}
+};
 
-export const IssuerPage: FC<IssuerPageProps> = ({issuer}) => {
-  const {marketsByIssuer} = useCalculatedMarkets();
+export const IssuerPage: FC<IssuerPageProps> = ({ issuer }) => {
+  const { marketsByIssuer } = useCalculatedMarkets();
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
   const [protocol, setProtocol] = useState<Protocol>(PROTOCOLS.get(issuer));
   const [tbv, setTbv] = useState(0);
 
   const logo = () => {
-    return protocol.logo && protocol.logo != "" ? protocol.logo : "/placeholders/token-placeholder.png";
+    return protocol.logo && protocol.logo != ""
+      ? protocol.logo
+      : "/placeholders/token-placeholder.png";
   };
 
   useEffect(() => {
@@ -25,7 +28,7 @@ export const IssuerPage: FC<IssuerPageProps> = ({issuer}) => {
   useEffect(() => {
     if (markets) {
       let tbv = 0;
-      markets.forEach(market => tbv = tbv + market.tbvUsd);
+      markets.forEach((market) => (tbv = tbv + market.tbvUsd));
       setTbv(tbv);
     }
   }, [markets]);
@@ -34,7 +37,7 @@ export const IssuerPage: FC<IssuerPageProps> = ({issuer}) => {
     <>
       <div className="flex flex-col content-center">
         <div className="flex flex-row justify-center">
-          <img className="h-[64px] w-[64px]" src={logo()}/>
+          <img className="h-[64px] w-[64px]" src={logo()} />
           <p className="text-5xl">{protocol.name}</p>
         </div>
 
@@ -47,7 +50,7 @@ export const IssuerPage: FC<IssuerPageProps> = ({issuer}) => {
         </div>
       </div>
 
-      {markets && <MarketList markets={markets} allowManagement={false}/>}
+      {markets && <MarketList markets={markets} allowManagement={false} />}
     </>
   );
 };

@@ -26,10 +26,11 @@
       "services/*": ["src/services/*"],
       "services": ["src/services/index"],
       "hooks/*": ["src/hooks/*"],
-      "hooks": ["src/hooks/index"]
+      "hooks": ["src/hooks/index"],
+      "assets/*": ["src/assets/*"]
     }
   },
   "include": ["src"],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "src/stories"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

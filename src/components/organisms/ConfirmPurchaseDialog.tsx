@@ -10,15 +10,17 @@ import {useAccount, useSigner} from "wagmi";
 import {useCalculatedMarkets, useTokens} from "hooks";
 
 export type ConfirmPurchaseDialogProps = {
-  amount: string
-  market: CalculatedMarket
-}
+  amount: string;
+  market: CalculatedMarket;
+};
 
-export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps) {
-  const {data: signer} = useSigner();
-  const {address} = useAccount();
-  const {refetchOne} = useCalculatedMarkets();
-  const {getTokenDetails} = useTokens();
+export default function ConfirmPurchaseDialog(
+  props: ConfirmPurchaseDialogProps
+) {
+  const { data: signer } = useSigner();
+  const { address } = useAccount();
+  const { refetchOne } = useCalculatedMarkets();
+  const { getTokenDetails } = useTokens();
 
   const [open, setOpen] = React.useState(false);
   const [payout, setPayout] = useState<string>("0");
@@ -26,8 +28,15 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
   const [slippage, setSlippage] = useState<number>(0.5);
   const [transactionStatus, setTransactionStatus] = useState<string>("");
   const [transactionReceipt, setTransactionReceipt] = useState<any>(null);
-  const [blockExplorerUrl, setBlockExplorerUrl] = useState(bondLibrary.CHAINS.get(market.network)?.blockExplorerUrls[0].replace("#", "tx"));
-  const [blockExplorerName, setBlockExplorerName] = useState(bondLibrary.CHAINS.get(market.network)?.blockExplorerName);
+  const [blockExplorerUrl, setBlockExplorerUrl] = useState(
+    bondLibrary.CHAINS.get(market.network)?.blockExplorerUrls[0].replace(
+      "#",
+      "tx"
+    )
+  );
+  const [blockExplorerName, setBlockExplorerName] = useState(
+    bondLibrary.CHAINS.get(market.network)?.blockExplorerName
+  );
 
   const timerRef = useRef<NodeJS.Timeout>();
 
@@ -65,7 +74,7 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
   }, [timerRef]);
 
   async function bond() {
-    const minimumOut = Number(payout) - (Number(payout) * (slippage / 100));
+    const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
     const bondTx: ContractTransaction = await contractLibrary.purchase(
       // @ts-ignore
@@ -85,9 +94,12 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
     setTransactionStatus("awaiting");
     clearInterval(timerRef.current);
 
-    await signer?.provider?.waitForTransaction(bondTx.hash)
+    await signer?.provider
+      ?.waitForTransaction(bondTx.hash)
       .then((result) => {
-        result.status === 0 ? setTransactionStatus("reverted") : setTransactionStatus("success");
+        result.status === 0
+          ? setTransactionStatus("reverted")
+          : setTransactionStatus("success");
         setTransactionReceipt(result);
       })
       .catch((error) => console.log(error));
@@ -109,79 +121,91 @@ export default function ConfirmPurchaseDialog(props: ConfirmPurchaseDialogProps)
   const payoutToken = getTokenDetails(props.market.payoutToken);
   return (
     <div className="w-full">
-      <Button disabled={(Number(props.amount) <= 0)} className="w-full" onClick={handleOpen}>
+      <Button
+        disabled={Number(props.amount) <= 0}
+        className="w-full"
+        onClick={handleOpen}
+      >
         Bond
       </Button>
-      <ModalUnstyled
-        aria-labelledby="title"
-        open={open}
-        onClose={handleClose}
-      >
-        <div
-          className="bg-brand-covenant w-[35rem] h-[35rem] text-brand-texas-rose fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
+      <ModalUnstyled aria-labelledby="title" open={open} onClose={handleClose}>
+        <div className="bg-brand-covenant w-[35rem] h-[35rem] text-brand-texas-rose fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2">
           <Button onClick={handleClose}>X</Button>
-          {
-            transactionStatus === "" &&
-            (
-              <>
-                <h1 id="title">Confirm Transaction</h1>
-                <div>
-                  Slippage
-                  <Button onClick={() => setSlippage(0)}>0%</Button>
-                  <Button onClick={() => setSlippage(0.5)}>0.5%</Button>
-                  <Button onClick={() => setSlippage(1)}>1%</Button>
-                  <Button onClick={() => setSlippage(2)}>2%</Button>
-                </div>
-                <p>You will spend: {props.amount} {quoteToken.symbol}</p>
-                <p>You will get a maximum of: {payout} {payoutToken.symbol}</p>
-                <p>You will get a minimum
-                  of: {Number(payout) - (Number(payout) * (slippage / 100))} {payoutToken.symbol} ({slippage}%
-                  Slippage)</p>
-                <p>Bond
-                  Price: {props.market.formattedDiscountedPrice} per {payoutToken.symbol} (Market: {props.market.formattedFullPrice})</p>
-                <p>Discount: {market.discount}%</p>
-                <Button className="w-full" onClick={bond}>Bond</Button>
-              </>
-            )
-          }
-          {
-            transactionStatus === "awaiting" &&
-            (
-              <>
-                <h1 id="title">Transaction Submitted</h1>
-                <p>Awaiting confirmation...</p>
-              </>
-            )
-          }
-          {
-            transactionStatus === "success" &&
-            (
-              <>
-                <h1 id="title">Bond Purchased!</h1>
-                <p>You will
-                  receive {parseInt(transactionReceipt.logs[1].data) / Math.pow(10, market.payoutToken.decimals)} {payoutToken.symbol}</p>
-                <div>
-                  <a target="_blank" href={twitterLink} rel="noreferrer">Share on Twitter</a>
-                </div>
-                <p>View on <a href={blockExplorerUrl + transactionReceipt.transactionHash} target="_blank"
-                  rel="noopener noreferrer">
+          {transactionStatus === "" && (
+            <>
+              <h1 id="title">Confirm Transaction</h1>
+              <div>
+                Slippage
+                <Button onClick={() => setSlippage(0)}>0%</Button>
+                <Button onClick={() => setSlippage(0.5)}>0.5%</Button>
+                <Button onClick={() => setSlippage(1)}>1%</Button>
+                <Button onClick={() => setSlippage(2)}>2%</Button>
+              </div>
+              <p>
+                You will spend: {props.amount} {quoteToken.symbol}
+              </p>
+              <p>
+                You will get a maximum of: {payout} {payoutToken.symbol}
+              </p>
+              <p>
+                You will get a minimum of:{" "}
+                {Number(payout) - Number(payout) * (slippage / 100)}{" "}
+                {payoutToken.symbol} ({slippage}% Slippage)
+              </p>
+              <p>
+                Bond Price: {props.market.formattedDiscountedPrice} per{" "}
+                {payoutToken.symbol} (Market: {props.market.formattedFullPrice})
+              </p>
+              <p>Discount: {market.discount}%</p>
+              <Button className="w-full" onClick={bond}>
+                Bond
+              </Button>
+            </>
+          )}
+          {transactionStatus === "awaiting" && (
+            <>
+              <h1 id="title">Transaction Submitted</h1>
+              <p>Awaiting confirmation...</p>
+            </>
+          )}
+          {transactionStatus === "success" && (
+            <>
+              <h1 id="title">Bond Purchased!</h1>
+              <p>
+                You will receive{" "}
+                {parseInt(transactionReceipt.logs[1].data) /
+                  Math.pow(10, market.payoutToken.decimals)}{" "}
+                {payoutToken.symbol}
+              </p>
+              <div>
+                <a target="_blank" href={twitterLink} rel="noreferrer">
+                  Share on Twitter
+                </a>
+              </div>
+              <p>
+                View on{" "}
+                <a
+                  href={blockExplorerUrl + transactionReceipt.transactionHash}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {blockExplorerName}
                 </a>
-                </p>
-                <Button className="w-full" onClick={handleClose}>Close</Button>
-              </>
-            )
-          }
-          {
-            transactionStatus === "reverted" &&
-            (
-              <>
-                <h1 id="title">Transaction Reverted</h1>
-                <p>You fucked up bruv</p>
-                <Button className="w-full" onClick={handleClose}>Close</Button>
-              </>
-            )
-          }
+              </p>
+              <Button className="w-full" onClick={handleClose}>
+                Close
+              </Button>
+            </>
+          )}
+          {transactionStatus === "reverted" && (
+            <>
+              <h1 id="title">Transaction Reverted</h1>
+              <p>Something went wrong</p>
+              <Button className="w-full" onClick={handleClose}>
+                Close
+              </Button>
+            </>
+          )}
         </div>
       </ModalUnstyled>
     </div>
