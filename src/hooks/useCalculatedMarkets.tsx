@@ -79,17 +79,18 @@ export function useCalculatedMarkets() {
       return {
         queryKey: market.id,
         queryFn: () => calculateMarket(market),
-        enabled: markets && currentPrices && currentPrices.size > 0,
+        enabled: true,
       };
     })
   );
 
+  console.log({ calculateAllMarkets, markets });
   const calculateMyMarkets = useQueries(
     myMarkets.map((market) => {
       return {
         queryKey: market.id,
         queryFn: () => calculateMarket(market),
-        enabled: myMarkets && currentPrices && currentPrices.size > 0,
+        enabled: true,
       };
     })
   );

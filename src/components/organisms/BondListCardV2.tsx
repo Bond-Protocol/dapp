@@ -1,7 +1,3 @@
-import * as contractLibrary from "@bond-labs/contract-library";
-import { CalculatedMarket } from "@bond-labs/contract-library";
-import { FC, useEffect, useState } from "react";
-import { Button } from "..";
 import {
   useAccount,
   useBalance,
@@ -9,17 +5,20 @@ import {
   useSigner,
   useSwitchNetwork,
 } from "wagmi";
-import { providers } from "services/owned-providers";
 import { BigNumberish, ContractTransaction } from "ethers";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useTokens } from "hooks";
+import { FC, useEffect, useState } from "react";
+import * as contractLibrary from "@bond-labs/contract-library";
 import { CHAINS, getProtocolByAddress } from "@bond-labs/bond-library";
-import { InfoLabel } from "components/atoms/InfoLabel";
-import { BondPurchaseCard } from "./BondPurchaseCard";
-import TestIcon from "../../assets/icons/test-icon";
-import ArrowIcon from "../../assets/icons/arrow-icon.svg";
+import type { CalculatedMarket } from "@bond-labs/contract-library";
+import { useTokens } from "hooks";
+import { providers } from "services/owned-providers";
+import { Button, InfoLabel } from "components/atoms";
+import { BondPurchaseCard } from "components/molecules";
+import ArrowIcon from "assets/icons/arrow-icon.svg";
+import baseIcon from "assets/icons/eth-icon.svg";
 
-export type BondListCardProps = {
+export type BondListCardPropsV2 = {
   market: CalculatedMarket;
 };
 
@@ -28,7 +27,7 @@ const getRemainingCapacity = (remaining: number, payout: number) => {
   return (remaining / total) * 100;
 };
 
-export const BondListCardV2: FC<BondListCardProps> = (props) => {
+export const BondListCardV2: FC<BondListCardPropsV2> = (props) => {
   const provider = useProvider();
   const { data: signer } = useSigner();
   const { address, isConnected } = useAccount();
@@ -158,6 +157,7 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
     setPayout((Number(payout) / Math.pow(10, 18)).toString());
   }
 
+  //start
   const quoteToken = getTokenDetails(props.market.quoteToken);
   const payoutToken = getTokenDetails(props.market.payoutToken);
   const remainingCapacity = getRemainingCapacity(
@@ -177,7 +177,7 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
     <>
       <div className="flex justify-between w-[80vw] pl-4 my-5">
         <div className="flex">
-          <TestIcon className="fill-white my-auto" />
+          <img src={baseIcon} />
           <p className="font-fraktion text-[48px]">
             {protocol?.name || payoutToken?.symbol}
           </p>

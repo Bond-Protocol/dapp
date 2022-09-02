@@ -1,193 +1,170 @@
-//@ts-nocheck
 import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
-import { useEffect, useState } from "react";
+import { formatDistance as formatDateDistance, formatDistance } from "date-fns";
+import { useEffect, useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Tooltip } from "@material-tailwind/react";
+import { getUnixTime } from "date-fns";
+import { BOND_TYPE } from "@bond-labs/contract-library";
 import * as contractLibrary from "@bond-labs/contract-library";
-import * as bondLibrary from "@bond-labs/bond-library";
-import { providers } from "services/owned-providers";
 import { ethers } from "ethers";
 import { Button } from "components";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import * as React from "react";
 import { CreateMarketForm } from "components/organisms/CreateMarketForm";
+import { useTokens } from "hooks/useTokens";
+import { SummaryCard } from "../components/molecules/SummaryCard";
 
 const formDefaults = {
-  payoutToken: "0x",
-  quoteToken: "0x",
-  minPrice: "0.00",
-  capacityToken: "payout",
-  marketCapacity: "0",
-  marketExpiryDate: "",
-  vestingType: "expiry",
-  timeAmount: "",
-  expiryDate: "",
-  bondsPerWeek: "",
-  debtBuffer: "0",
+  payoutToken: "0x034618c94c99232Dc7463563D5285cDB6eDc73e0",
+  quoteToken: "0x2F7249cb599139e560f0c81c269Ab9b04799E453",
+  callbackAddr: "0x0000000000000000000000000000000000000000",
+  capacity: "0",
+  capacityInQuote: false,
+  conclusion: new Date(),
+  debtBuffer: "1000000",
+  depositInterval: "86400",
+  formattedInitialPrice: "32999999999999996234792692703918292992",
+  formattedMinimumPrice: "19999999999999996716342074969419677696",
+  scaleAdjustment: "0",
+  vesting: "604800",
   chain: "1",
+  vestingType: BOND_TYPE.FIXED_EXPIRATION,
+  bondsPerWeek: "0",
+};
+
+const dummyToken = {
+  symbol: "???",
+};
+
+const prepareTxData = (data: typeof formDefaults) => {
+  const { vestingType, bondsPerWeek, conclusion, ...rest } = data;
+  return {
+    marketConfig: {
+      ...data,
+      conclusion: getUnixTime(conclusion),
+    },
+    bondType: vestingType,
+  };
 };
 
 export const CreateMarketView = () => {
-  const { address, isConnected } = useAccount();
   const { data: signer } = useSigner();
   const network = useNetwork();
-  const { switchNetwork } = useSwitchNetwork();
+  const { getTokenDetailsFromChain } = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
-    useState<Partial<contractLibrary.Token & { error?: string }>>();
+    useState<Partial<contractLibrary.Token & { error?: string }>>(dummyToken);
   const [quoteTokenInfo, setQuoteTokenInfo] =
-    useState<Partial<contractLibrary.Token & { error?: string }>>();
+    useState<Partial<contractLibrary.Token & { error?: string }>>(dummyToken);
 
   const {
     handleSubmit,
     control,
     watch,
-    register,
     formState: { errors },
   } = useForm({ defaultValues: formDefaults });
 
-  const [selectedChain, setSelectedChain] = useState(watch("chain"));
-
   const onSubmit = async (data: any) => {
+    if (!signer || !network?.chain) throw Error("Not connected");
+
+    const { marketConfig, bondType } = prepareTxData(data);
+    console.log({ marketConfig });
     const tx = await contractLibrary.createMarket(
-      {
-        payoutToken: data.payoutToken,
-        quoteToken: data.quoteToken,
-        callbackAddr: data.callback,
-        capacity: data.capacity,
-        capacityInQuote: data.capacityInQuote,
-        formattedInitialPrice: data.formattedInitialPrice,
-        formattedMinimumPrice: data.formattedMinimumPrice,
-        debtBuffer: data.debtBuffer,
-        vesting: data.vesting,
-        conclusion: data.conclusion,
-        depositInterval: data.depositInterval,
-        scaleAdjustment: data.scaleAdjustment,
-      },
-      data.bondType,
-      data.chain,
-      // @ts-ignore
+      marketConfig,
+      bondType,
+      network.chain?.id.toString(),
       signer,
-      {
-        gasPrice: 100,
-        gasLimit: 10000000,
+      { gasLimit: 10000000 }
+    );
+  };
+
+  const chain = network?.chain?.network;
+  const marketExpiry = watch("conclusion") || Date.now() + 33333333;
+  const {
+    payoutToken,
+    quoteToken,
+    vestingType,
+    formattedMinimumPrice,
+    debtBuffer,
+    bondsPerWeek,
+    capacity,
+    capacityInQuote,
+  } = watch();
+
+  const getTokenInfo = useCallback(
+    async (address: string, isQuote?: boolean) => {
+      if (!chain) throw Error("No chain");
+
+      try {
+        const result = await getTokenDetailsFromChain(address, chain);
+        isQuote ? setQuoteTokenInfo(result) : setPayoutTokenInfo(result);
+      } catch (e: any) {
+        console.log(e.message);
       }
-    );
-  };
-
-  const switchChain = (e: Event) => {
-    e.preventDefault();
-    const newChain = Number("0x" + selectedChain);
-    switchNetwork?.(newChain);
-  };
+    },
+    [chain, getTokenDetailsFromChain]
+  );
 
   useEffect(() => {
-    setSelectedChain(watch("chain"));
-  }, [watch("chain")]);
-
-  const getTokenInfo = async (address: string, isPayout: boolean) => {
-    console.log("okokasd", address);
-    const contract = contractLibrary.IERC20__factory.connect(
-      address,
-      providers[selectedChain]
-    );
-    try {
-      const [name, symbol] = await Promise.all([
-        contract.name(),
-        contract.symbol(),
-      ]);
-
-      console.log(name, symbol, "stuff happened");
-      const result = { name, symbol };
-      isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
-    } catch (e: any) {
-      console.log(e.message);
-      const error =
-        "Not an ERC-20 token, please double check the address and chain.";
-      isPayout ? setPayoutTokenInfo({ error }) : setQuoteTokenInfo(result);
-    }
-  };
-
-  useEffect(() => {
-    const address = watch("payoutToken");
-    console.log("here");
-    if (ethers.utils.isAddress(address)) {
-      void getTokenInfo(address, true);
-      console.log("adn here");
+    if (ethers.utils.isAddress(payoutToken)) {
+      void getTokenInfo(payoutToken);
     } else {
-      setPayoutTokenInfo("");
+      setPayoutTokenInfo(dummyToken);
     }
-  }, [watch("payoutToken")]);
+  }, [payoutToken, getTokenInfo]);
 
   useEffect(() => {
-    const address = watch("quoteToken");
-    if (ethers.utils.isAddress(address)) {
-      void getTokenInfo(address, false);
+    if (ethers.utils.isAddress(quoteToken)) {
+      void getTokenInfo(quoteToken, true);
     } else {
-      setQuoteTokenInfo("");
+      setQuoteTokenInfo(dummyToken);
     }
-  }, [watch("quoteToken")]);
+  }, [quoteToken, getTokenInfo]);
 
-  interface InputParams {
-    label: string;
-    fieldName: string;
-    type: string;
-    placeholder?: string;
-    tooltip?: string;
-    selectValues?: { value: any; displayName: string }[];
-    options?: Partial<any>;
-  }
+  const summaryFields = [
+    {
+      label: "Capacity",
+      value: `${capacity} ${
+        capacityInQuote ? quoteTokenInfo?.symbol : payoutTokenInfo?.symbol
+      }`,
+    },
+    {
+      label: "Payout & Quote Tokens",
+      value: payoutTokenInfo?.symbol + "-" + quoteTokenInfo?.symbol,
+    },
+    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
+    { label: "Minimum exchange rate", value: formattedMinimumPrice },
+    {
+      label: "Conclusion",
+      tooltip: "soon",
+      value: `Market expires in ${formatDistance(Date.now(), marketExpiry)}`,
+    },
+    {
+      label: "Vesting",
+      tooltip: "soon",
+      //TODO: (aphex) UPDATE WITH CORRECT VALUE
+      value: `Bond expires in ${formatDistance(Date.now(), marketExpiry)}`,
+    },
+    {
+      label: "Bonds per week",
+      tooltip: "soon",
+      value: `${bondsPerWeek} ${payoutTokenInfo?.symbol}`,
+    },
+    { label: "Debt Buffer", value: `${debtBuffer}%` },
+  ];
 
-  function renderInputBlock(params: InputParams) {
-    return (
-      <label className="block">
-        <div className="grid grid-cols-3 gap-2">
-          <div className="justify-self-end">
-            <span className="text-gray-700">{params.label}</span>
-          </div>
-          <div>
-            {params.type !== "select" && (
-              <input
-                type={params.type}
-                placeholder={params.placeholder}
-                {...register(params.fieldName, params.options)}
-              />
-            )}
-            {params.type === "select" && params.selectValues && (
-              <select {...register(params.fieldName, params.options)}>
-                {params.selectValues.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.displayName}
-                  </option>
-                ))}
-              </select>
-            )}
-            {params.tooltip && <Tooltip content={params.tooltip}>wtf?</Tooltip>}
-          </div>
-          <div className="justify-self-start">
-            {errors[params.fieldName]?.type?.toString() === "required" &&
-              "Required"}
-            {errors[params.fieldName]?.type?.toString() === "isAddress" &&
-              "Invalid Address"}
-          </div>
-        </div>
-      </label>
-    );
-  }
-
-  const vestingType = watch("vestingType");
   return (
     <div className="my-32">
       <h1 className="text-center text-5xl font-jakarta font-extralight pb-12 tracking-widest">
         Create Market
       </h1>
-      <div className="mx-[15vw]">
+      <div className="mx-[5vw]">
+        <p className="font-faketion tracking-widest">1 SET UP MARKET</p>
         <CreateMarketForm
+          control={control}
           quoteToken={quoteTokenInfo}
           payoutToken={payoutTokenInfo}
           vestingType={vestingType}
-          //@ts-ignore
-          control={control}
         />
+
+        <p className="mt-16 font-faketion tracking-widest">3 CONFIRMATION</p>
+        <SummaryCard fields={summaryFields} className="mt-8" />
         <Button
           onClick={handleSubmit(onSubmit)}
           className="w-full font-fraktion mt-5"
@@ -195,147 +172,6 @@ export const CreateMarketView = () => {
           CONFIRM INFORMATION
         </Button>
       </div>
-      {/*
-                  // <form onSubmit={handleSubmit(onSubmit)}>
-      //   <div className="mt-8 grid grid-cols-1 gap-6 items-start">
-      //     {renderInputBlock({
-      //       label: "Bond Type",
-      //       fieldName: "bondType",
-      //       type: "select",
-      //       selectValues: Object.values(contractLibrary.BOND_TYPE).map(
-      //         (value) => ({ value: value, displayName: value })
-      //       ),
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Chain",
-      //       fieldName: "chain",
-      //       type: "select",
-      //       selectValues: bondLibrary.SUPPORTED_CHAINS.map(
-      //         (supportedChain) => ({
-      //           value: supportedChain.chainName,
-      //           displayName: supportedChain.displayName,
-      //         })
-      //       ),
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Payout Token Address",
-      //       fieldName: "payoutToken",
-      //       type: "text",
-      //       placeholder: "0x...",
-      //       tooltip: "The token to be paid out to the bond purchaser.",
-      //       options: {
-      //         required: true,
-      //         validate: {
-      //           isAddress: (value: string) => ethers.utils.isAddress(value),
-      //         },
-      //       },
-      //     })}
-      //     {payoutTokenInfo}
-      //     {renderInputBlock({
-      //       label: "Quote Token Address",
-      //       fieldName: "quoteToken",
-      //       type: "text",
-      //       placeholder: "0x...",
-      //       tooltip:
-      //         "The token to be received by the market owner. Can be a single asset or an LP Pair",
-      //       options: {
-      //         required: true,
-      //         validate: {
-      //           isAddress: (value: string) => ethers.utils.isAddress(value),
-      //         },
-      //       },
-      //     })}
-      //     {quoteTokenInfo}
-      //     {renderInputBlock({
-      //       label: "Callback Address",
-      //       fieldName: "callback",
-      //       type: "text",
-      //       placeholder: "0x...",
-      //       tooltip: "Good explanation coming soon",
-      //       options: {
-      //         required: true,
-      //         validate: {
-      //           isAddress: (value: string) => ethers.utils.isAddress(value),
-      //         },
-      //       },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Capacity",
-      //       fieldName: "capacity",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip: "Good explanation coming soon",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Capacity in Quote Token?",
-      //       fieldName: "capacityInQuote",
-      //       type: "checkbox",
-      //       tooltip: "Good explanation coming soon",
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Formatted Initial Price",
-      //       fieldName: "formattedInitialPrice",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip:
-      //         "The start price for the bond sale. Price will decrease automatically until users purchase bonds.",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Formatted Minimum Price",
-      //       fieldName: "formattedMinimumPrice",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip: "The minimum acceptable price for a bond sale.",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Debt Buffer",
-      //       fieldName: "debtBuffer",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip: "Good explanation coming soon",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Vesting Period",
-      //       fieldName: "vesting",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip: "Good explanation coming soon",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Conclusion",
-      //       fieldName: "conclusion",
-      //       type: "text",
-      //       tooltip: "Good explanation coming soon",
-      //       placeholder: "0",
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Deposit Interval",
-      //       fieldName: "depositInterval",
-      //       type: "text",
-      //       tooltip: "Good explanation coming soon",
-      //       placeholder: "0",
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Scale Adjustment",
-      //       fieldName: "scaleAdjustment",
-      //       type: "text",
-      //       tooltip: "Good explanation coming soon",
-      //       placeholder: "0",
-      //     })}
-      //     {!isConnected ? (
-      //       <ConnectButton />
-      //     ) : network.chain && network.chain.network == selectedChain ? (
-      //       <input type="submit" value="Submit" />
-      //     ) : (
-      //       // @ts-ignore
-      //       <Button onClick={switchChain}>Switch Chain</Button>
-      //     )}
-             </div> </form> */}
     </div>
   );
 };

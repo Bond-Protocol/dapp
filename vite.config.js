@@ -17,6 +17,7 @@ export default defineConfig({
       pages: path.join(__dirname, "./src/pages"),
       services: path.join(__dirname, "./src/services"),
       hooks: path.join(__dirname, "./src/hooks"),
+      assets: path.join(__dirname, "./src/assets"),
     },
   },
 });

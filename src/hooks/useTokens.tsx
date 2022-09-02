@@ -1,26 +1,38 @@
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {Token, useListTokensGoerliQuery, useListTokensRinkebyQuery} from "../generated/graphql";
-import {useEffect, useState} from "react";
+import * as contractLibrary from "@bond-labs/contract-library";
+import { providers } from "services/owned-providers";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import {
+  Token,
+  useListTokensGoerliQuery,
+  useListTokensRinkebyQuery,
+} from "../generated/graphql";
+import { useEffect, useCallback, useState } from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
-import {CustomPriceSource, SupportedPriceSource} from "@bond-labs/bond-library";
-import axios, {AxiosResponse} from "axios";
-import {useQuery} from "react-query";
-import {useAtom} from "jotai";
+import {
+  CustomPriceSource,
+  SupportedPriceSource,
+} from "@bond-labs/bond-library";
+import axios, { AxiosResponse } from "axios";
+import { useQuery } from "react-query";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
-export interface Price {
+export interface PriceDetails {
   price: string;
   source: string;
 }
 
-export function useTokens() {
-  const endpoints = getSubgraphEndpoints();
+export interface Price {
+  [key: string]: PriceDetails;
+}
 
+export const useTokens = () => {
+  const endpoints = getSubgraphEndpoints();
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
   const [mainnetTokens, setMainnetTokens] = useState<Token[]>([]);
   const [testnetTokens, setTestnetTokens] = useState<Token[]>([]);
-  const [currentPrices, setCurrentPrices] = useState(new Map<string, Price[]>);
+  const [currentPrices, setCurrentPrices] = useState<Price>({});
 
   /*
   Tokens can be present on multiple chains, and thus have differing ids in our library and subgraph.
@@ -32,8 +44,12 @@ export function useTokens() {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const {data: rinkebyData} = useListTokensRinkebyQuery({endpoint: endpoints[0]});
-  const {data: goerliData} = useListTokensGoerliQuery({endpoint: endpoints[1]});
+  const { data: rinkebyData } = useListTokensRinkebyQuery({
+    endpoint: endpoints[0],
+  });
+  const { data: goerliData } = useListTokensGoerliQuery({
+    endpoint: endpoints[1],
+  });
 
   /*
   Loads token price data from Coingecko.
@@ -41,9 +57,11 @@ export function useTokens() {
   const coingeckoQuery = useQuery("coingeckoData", async () => {
     const tokenIds = [...apiIds.coingecko].join(",");
     try {
-      return axios.get(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${tokenIds}&vs_currencies=usd`
-      ).then((response: AxiosResponse) => response.data);
+      return axios
+        .get(
+          `https://api.coingecko.com/api/v3/simple/price?ids=${tokenIds}&vs_currencies=usd`
+        )
+        .then((response: AxiosResponse) => response.data);
     } catch (e: any) {
       throw new Error("Coingecko API error" + e);
     }
@@ -68,20 +86,20 @@ export function useTokens() {
 
             First, we get an array of Token IDs which use this function, or an empty array if there are none.
            */
-            const tokenIds = functions.get(priceSource.customPriceFunction) || [];
+            const tokenIds =
+              functions.get(priceSource.customPriceFunction) || [];
 
             // If this function hasn't been added already, add it to the requests Set
             if (tokenIds.length === 0) {
               requests.add(
-                priceSource.customPriceFunction()
-                  .then((result: string) => {
-                    // When the request resolves, store the price in the pricesMap,
-                    // using the priceSource as the key and the result (price) as the value.
-                    tokenIds.forEach((priceSource: string) => {
-                      pricesMap.set(priceSource, result);
-                    });
-                    return result;
-                  })
+                priceSource.customPriceFunction().then((result: string) => {
+                  // When the request resolves, store the price in the pricesMap,
+                  // using the priceSource as the key and the result (price) as the value.
+                  tokenIds.forEach((priceSource: string) => {
+                    pricesMap.set(priceSource, result);
+                  });
+                  return result;
+                })
               );
             }
 
@@ -111,30 +129,39 @@ export function useTokens() {
   */
   useEffect(() => {
     if (coingeckoQuery.data && customPriceQuery.data) {
-      const currentPricesMap = new Map<string, Price[]>();
+      const currentPricesMap: Price = {};
 
-      bondLibrary.TOKENS.forEach((value: bondLibrary.Token, tokenKey: string) => {
-        const prices: Price[] = [];
-        value.priceSources.forEach((priceSource: SupportedPriceSource | CustomPriceSource, priority: number) => {
-          // First, we get the price from the appropriate query data, according to the PriceSource's source field.
-          let price;
-          switch (priceSource.source) {
-          case "coingecko":
-            price = coingeckoQuery.data[priceSource.apiId] && coingeckoQuery.data[priceSource.apiId].usd;
-            break;
-          case "custom":
-            price = customPriceQuery.data.get(tokenKey);
-            break;
-          }
-          // Then, we insert it into the prices array, at position [priority],
-          // where priority is the PriceSource's key in the Token.priceSources map.
-          prices[priority] = {
-            price: price,
-            source: priceSource.source
-          };
-        });
-        currentPricesMap.set(tokenKey, prices);
-      });
+      bondLibrary.TOKENS.forEach(
+        (value: bondLibrary.Token, tokenKey: string) => {
+          const prices: PriceDetails[] = [];
+          value.priceSources.forEach(
+            (
+              priceSource: SupportedPriceSource | CustomPriceSource,
+              priority: number
+            ) => {
+              // First, we get the price from the appropriate query data, according to the PriceSource's source field.
+              let price;
+              switch (priceSource.source) {
+                case "coingecko":
+                  price =
+                    coingeckoQuery.data[priceSource.apiId] &&
+                    coingeckoQuery.data[priceSource.apiId].usd;
+                  break;
+                case "custom":
+                  price = customPriceQuery.data.get(tokenKey);
+                  break;
+              }
+              // Then, we insert it into the prices array, at position [priority],
+              // where priority is the PriceSource's key in the Token.priceSources map.
+              prices[priority] = {
+                price: price,
+                source: priceSource.source,
+              };
+            }
+          );
+          currentPricesMap[tokenKey] = prices;
+        }
+      );
 
       setCurrentPrices(currentPricesMap);
     }
@@ -163,7 +190,7 @@ export function useTokens() {
   }, [testnet, mainnetTokens, testnetTokens]);
 
   function getPrice(id: string): number {
-    const sources = currentPrices.get(id);
+    const sources = currentPrices[id];
     if (!sources) return 0;
     for (const source of sources) {
       if (source == undefined || source.price == undefined) {
@@ -186,6 +213,29 @@ export function useTokens() {
     };
   }
 
+  const getTokenDetailsFromChain = useCallback(async function (
+    address: string,
+    chain: string
+  ) {
+    const contract = contractLibrary.IERC20__factory.connect(
+      address,
+      providers[chain]
+    );
+    try {
+      const [name, symbol] = await Promise.all([
+        contract.name(),
+        contract.symbol(),
+      ]);
+
+      return { name, symbol };
+    } catch (e: any) {
+      const error =
+        "Not an ERC-20 token, please double check the address and chain.";
+      throw Error(error);
+    }
+  },
+  []);
+
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
@@ -195,5 +245,6 @@ export function useTokens() {
     currentPrices: currentPrices,
     getPrice: (id: string) => getPrice(id),
     getTokenDetails: (token: any) => getTokenDetails(token),
+    getTokenDetailsFromChain,
   };
-}
+};

@@ -15,6 +15,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const Routes: FC = () => {
   const { allMarkets, myMarkets, issuers } = useCalculatedMarkets();
+  console.log({ allMarkets });
 
   return (
     <Switch>

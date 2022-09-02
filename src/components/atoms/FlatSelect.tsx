@@ -1,20 +1,23 @@
 import { useState } from "react";
 import { ButtonUnstyled } from "@mui/base";
 
-type FlatSelectProps = {
-  options: Array<{ label: string; value: string | number }>;
-  onChange: (value: string | number) => void;
+export type FlatSelectProps = {
+  options: Array<{ label: string; value: unknown }>;
+  onChange: (value: unknown) => void;
+  default?: unknown;
   label?: string;
   className?: string;
-  default?: string | number;
 };
 
+/**
+ * Horizontal value selector that displays all available options in a tablike fashion
+ **/
 export const FlatSelect = (props: FlatSelectProps) => {
   const [selected, setSelected] = useState(
     props.default || props.options[0].value
   );
 
-  const handleChange = (value: string | number) => {
+  const handleChange = (value: unknown) => {
     setSelected(value);
     props.onChange && props.onChange(value);
   };

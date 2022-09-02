@@ -1,42 +1,28 @@
-import { Control, Controller, useForm } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import { Token } from "@bond-labs/bond-library";
+import { BOND_TYPE } from "@bond-labs/contract-library";
 import { TokenInput } from "../atoms/TokenInput";
 import { Input } from "../atoms/Input";
 import { FlatSelect } from "../atoms/FlatSelect";
 import { TokenPickerCard } from "../molecules/TokenPickerCard";
 import { Accordion } from "../molecules/Accordion";
-import { SummaryCard } from "../molecules/SummaryCard";
 import { TimeTypePicker } from "../atoms/TimeTypePicker";
 import { DatePicker } from "../molecules/DatePicker";
 
 const capacityTokenOptions = [
-  { label: "PAYOUT", value: 0 },
-  { label: "QUOTE", value: 1 },
+  { label: "PAYOUT", value: false },
+  { label: "QUOTE", value: true },
 ];
 
 const vestingOptions = [
-  { label: "FIXED EXPIRY", value: "expiry" },
-  { label: "FIXED TERM", value: "term" },
+  { label: "FIXED EXPIRY", value: BOND_TYPE.FIXED_EXPIRATION },
+  { label: "FIXED TERM", value: BOND_TYPE.FIXED_TERM },
 ];
-
-const formDefaults = {
-  payoutToken: "0x",
-  quoteToken: "0x",
-  minPrice: "0.00",
-  capacityToken: "payout",
-  marketCapacity: "0",
-  marketExpiryDate: "",
-  vestingType: "expiry",
-  timeAmount: "",
-  expiryDate: "",
-  bondsPerWeek: "",
-  debtBuffer: "0",
-};
 
 export type CreateMarketProps = {
   quoteToken?: Partial<Token & { logo?: string }>;
   payoutToken?: Partial<Token & { logo?: string }>;
-  control: Control<typeof formDefaults>;
+  control: Control<any>;
 
   vestingType?: string;
   exchangeRate?: string;
@@ -78,7 +64,6 @@ export const CreateMarketForm = ({
 
   return (
     <div className="flex-col">
-      <p className="font-faketion tracking-widest">1 SET UP MARKET</p>
       <div className="pt-4">
         <div className="flex gap-6">
           <div className="flex flex-col w-full pt-5">
@@ -122,13 +107,13 @@ export const CreateMarketForm = ({
             />
 
             <Controller
-              name="minPrice"
+              name="formattedMinimumPrice"
               control={control}
               render={({ field }) => (
                 <TokenInput
                   {...field}
                   subText={`Current exchange rate for ${quoteTokenSymbol}-${payoutTokenSymbol} is ~${
-                    props.minPrice || props.exchangeRate || "N/A"
+                    props.exchangeRate || "N/A"
                   }`}
                   label="Minimum Price"
                   className="mt-7"
@@ -139,31 +124,33 @@ export const CreateMarketForm = ({
         </div>
         <div className="flex gap-6 pt-5">
           <Controller
-            name="capacityToken"
+            name="capacityInQuote"
             control={control}
             render={({ field }) => (
               <FlatSelect
                 {...field}
                 label="Capacity Token"
                 options={capacityTokenOptions}
+                default={false}
               />
             )}
           />
 
           <Controller
-            name="marketCapacity"
+            name="capacity"
             control={control}
             render={({ field }) => <Input {...field} label="Market Capacity" />}
           />
         </div>
       </div>
+
       <p className="mt-16 font-faketion tracking-widest">
         2 SET UP VESTING TERMS
       </p>
 
       <div className="mt-5">
         <Controller
-          name="marketExpiryDate"
+          name="conclusion"
           control={control}
           render={({ field }) => (
             <DatePicker
@@ -186,9 +173,9 @@ export const CreateMarketForm = ({
           )}
         />
 
-        {vestingType === "term" ? (
+        {vestingType === BOND_TYPE.FIXED_TERM ? (
           <Controller
-            name="timeAmount"
+            name="depositInterval"
             control={control}
             render={({ field }) => (
               <TimeTypePicker {...field} label="Term Duration" />
@@ -230,8 +217,6 @@ export const CreateMarketForm = ({
           <p>Advanced Setup</p>
         </Accordion>
       </div>
-      <p className="mt-16 font-faketion tracking-widest">3 CONFIRMATION</p>
-      <SummaryCard fields={summaryFields} className="mt-8" />
     </div>
   );
 };
