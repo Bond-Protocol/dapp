@@ -1,6 +1,5 @@
-import {Control, Controller} from "react-hook-form";
+import {Control, Controller, useWatch} from "react-hook-form";
 import {Token} from "@bond-labs/bond-library";
-import {TokenInput} from "../atoms/TokenInput";
 import {Input} from "../atoms/Input";
 import {FlatSelect} from "../atoms/FlatSelect";
 import {TokenPickerCard} from "../molecules/TokenPickerCard";
@@ -8,6 +7,8 @@ import {Accordion} from "../molecules/Accordion";
 import {SummaryCard} from "../molecules/SummaryCard";
 import {TimeTypePicker} from "../atoms/TimeTypePicker";
 import {DatePicker} from "../molecules/DatePicker";
+import {useEffect, useState} from "react";
+import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
 
 const capacityTokenOptions = [
   { label: "PAYOUT", value: 0 },
@@ -21,9 +22,11 @@ const vestingOptions = [
 
 const formDefaults = {
   payoutToken: "0x",
+  payoutTokenPrice: 0,
   quoteToken: "0x",
-  minPrice: "0.00",
-  capacityToken: "payout",
+  quoteTokenPrice: 0,
+  minExchangeRate: 0,
+  capacityToken: 0,
   marketCapacity: "0",
   marketExpiryDate: "",
   vestingType: "expiry",
@@ -40,7 +43,7 @@ export type CreateMarketProps = {
 
   vestingType?: string;
   exchangeRate?: string;
-  minPrice?: string;
+  minExchangeRate?: string;
   bondExpiry?: string;
   marketExpiry?: string;
   debtBuffer?: string;
@@ -54,14 +57,68 @@ export const CreateMarketForm = ({
   const payoutTokenSymbol = props.payoutToken?.symbol || "???";
   const quoteTokenSymbol = props.quoteToken?.symbol || "???";
 
+  const [exchangeRate, setExchangeRate] = useState(0);
+  const [minimumExchangeRate, setMinimumExchangeRate] = useState(0);
+
+  const marketCapacity = useWatch({
+    control,
+    name: "marketCapacity",
+  });
+
+  const capacityToken = useWatch({
+    control,
+    name: "capacityToken",
+    defaultValue: 0
+  });
+
+  const minExchangeRate = useWatch({
+    control,
+    name: "minExchangeRate",
+    defaultValue: 0,
+  });
+
+  const payoutTokenPrice = useWatch({
+    control,
+    name: "payoutTokenPrice",
+    defaultValue: props.payoutToken?.price
+  });
+
+  const quoteTokenPrice = useWatch({
+    control,
+    name: "quoteTokenPrice",
+    defaultValue: props.quoteToken?.price
+  });
+
+  useEffect(() => {
+    let rate = Number(quoteTokenPrice) / Number(payoutTokenPrice);
+    let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
+    rate = trimAsNumber(rate, digits);
+    if (rate != Infinity && !isNaN(rate)) {
+      setExchangeRate(rate);
+    } else {
+      setExchangeRate(0);
+    }
+  }, [payoutTokenPrice, quoteTokenPrice]);
+
+  useEffect(() => {
+    let rate = Number(quoteTokenPrice) / Number(minExchangeRate);
+    let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
+    rate = trimAsNumber(rate, digits);
+    if (rate != Infinity && !isNaN(rate)) {
+      setMinimumExchangeRate(rate);
+    } else {
+      setMinimumExchangeRate(0);
+    }
+  }, [minExchangeRate]);
+
   const summaryFields = [
-    { label: "Capacity", value: `${123} OHM` },
+    { label: "Capacity", value: `${marketCapacity} ${capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol}`},
     {
       label: "Payout & Quote Tokens",
       value: payoutTokenSymbol + "-" + quoteTokenSymbol,
     },
     { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
-    { label: "Minimum exchange rate", value: `${props.exchangeRate} ` },
+    { label: "Minimum exchange rate", value: `${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}` },
     {
       label: "Conclusion",
       tooltip: "soon",
@@ -95,12 +152,24 @@ export const CreateMarketForm = ({
                 />
               )}
             />
-            <TokenInput
+
+            <Controller
+                name="payoutTokenPrice"
+                control={control}
+                render={({ field }) => (
+                    <Input
+                        {...field}
+                        label="Payout Token Price"
+                        className="mb-2"
+                    />
+                )}
+            />
+
+            <Input
+              value={exchangeRate}
               disabled
-              logo=""
-              subText={`Current exchange rate for ${quoteTokenSymbol}-${payoutTokenSymbol} is ~${
-                props.exchangeRate || "N/A"
-              }`}
+              subText={`Current exchange rate is ~${exchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`
+              }
               label="Current Exchange Rate"
               className="mt-7"
             />
@@ -122,17 +191,29 @@ export const CreateMarketForm = ({
             />
 
             <Controller
-              name="minPrice"
+                name="quoteTokenPrice"
+                control={control}
+                render={({ field }) => (
+                    <Input
+                        {...field}
+                        label="Quote Token Price"
+                        className="mb-2"
+                    />
+                )}
+            />
+
+            <Controller
+              name="minExchangeRate"
               control={control}
               render={({ field }) => (
-                <TokenInput
-                  {...field}
-                  subText={`Current exchange rate for ${quoteTokenSymbol}-${payoutTokenSymbol} is ~${
-                    props.minPrice || props.exchangeRate || "N/A"
-                  }`}
-                  label="Minimum Price"
-                  className="mt-7"
-                />
+                  <Input
+                      {...field}
+                      subText={`You will get a minimum of 
+                        ~${minimumExchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`
+                      }
+                      label="Minimum Exchange Rate"
+                      className="mt-7"
+                  />
               )}
             />
           </div>

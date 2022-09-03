@@ -45,7 +45,6 @@ export const TokenPickerCard = (
       <TokenPriceCard
         decimals={selected?.decimals}
         symbol={selected?.symbol}
-        price={selected?.price}
         link={selected?.link}
         blockExplorerName={selected?.blockExplorerName}
         className="mt-5"

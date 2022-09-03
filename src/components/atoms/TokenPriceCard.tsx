@@ -11,16 +11,11 @@ export type TokenPriceCardProps = {
 
 export const TokenPriceCard = (props: TokenPriceCardProps) => {
   return (
-    <div className={`h-24 justify-center bg-white/[.05] ${props.className}`}>
+    <div className={`justify-center bg-white/[.05] ${props.className}`}>
       <div className="my-auto flex-col px-3 py-2 flex">
         {props.symbol &&
           <p className="font-Jakarta font-light tracking-tight">
             {props.symbol}
-          </p>
-        }
-        {props.price &&
-          <p className="font-Jakarta font-light tracking-tight">
-            {props.price != "-1" ? props.price : "No Price - View Docs"}
           </p>
         }
         {props.decimals && (
