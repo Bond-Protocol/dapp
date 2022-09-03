@@ -95,9 +95,9 @@ export const CreateMarketView = () => {
         contract.symbol(),
         contract.decimals(),
       ]);
-      let price = getPrice(selectedChain + "_" + address) || "Unable to find price";
+      let price = getPrice(selectedChain + "_" + address) || "-1";
 
-      if (price != "Unable to find price") {
+      if (price != "-1") {
         const digits = price > 1 ? 2 : price > 0.001 ? 4 : 6;
         price = new Intl.NumberFormat("en-US", {
           style: "currency",
