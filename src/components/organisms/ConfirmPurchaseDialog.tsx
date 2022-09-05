@@ -1,13 +1,14 @@
 import * as React from "react";
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import ModalUnstyled from "@mui/base/ModalUnstyled";
 import Button from "components/atoms/Button";
 import * as contractLibrary from "@bond-labs/contract-library";
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import { CalculatedMarket } from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
-import {BigNumberish, ContractTransaction} from "ethers";
-import {useAccount, useSigner} from "wagmi";
-import {useCalculatedMarkets, useTokens} from "hooks";
+import { BigNumberish, ContractTransaction } from "ethers";
+import { useAccount, useSigner } from "wagmi";
+import { useCalculatedMarkets, useTokens } from "hooks";
+import { createTweet } from "../../utils/createTweet";
 
 export type ConfirmPurchaseDialogProps = {
   amount: string;
@@ -40,14 +41,10 @@ export default function ConfirmPurchaseDialog(
 
   const timerRef = useRef<NodeJS.Timeout>();
 
-  const twitterLink =
-    "https://twitter.com/intent/tweet?text=I just received a " +
-    props.market.discount +
-    "%25 discount on $" +
-    props.market.payoutToken.symbol +
-    " thanks to @Bond_Protocol bonds. Don't miss out on yours! " +
-    //  (bond.socials.twitter ? bond.socials.twitter + `,` : "") +
-    " %0A%0Abondprotocol.finance";
+  const twitterLink = createTweet(
+    props.market.discount.toString(),
+    props.market.payoutToken.symbol
+  );
 
   const handleOpen = () => {
     setTransactionStatus("");
@@ -119,6 +116,7 @@ export default function ConfirmPurchaseDialog(
 
   const quoteToken = getTokenDetails(props.market.quoteToken);
   const payoutToken = getTokenDetails(props.market.payoutToken);
+
   return (
     <div className="w-full">
       <Button

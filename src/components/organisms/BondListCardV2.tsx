@@ -45,6 +45,7 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
   const [balance, setBalance] = useState<string>("0");
   const [allowance, setAllowance] = useState<string>("0");
   const [payout, setPayout] = useState<string>("0");
+
   const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
   const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
   const [correctChain, setCorrectChain] = useState<boolean>(false);
@@ -54,6 +55,7 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
       "address"
     )
   );
+
   const [blockExplorerName, setBlockExplorerName] = useState(
     CHAINS.get(props.market.network)?.blockExplorerName
   );
@@ -139,7 +141,7 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
       return;
     }
 
-    const requestProvider = providers[props.market.network] || provider;
+    const requestProvider = providers[props.market.network];
 
     const payout: BigNumberish = await contractLibrary.payoutFor(
       requestProvider,
@@ -164,7 +166,6 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
       ? props.market.formattedLongVesting
       : props.market.formattedShortVesting;
 
-  console.log({ markets: props.market, protocol, remainingCapacity });
   const networkFee = 1;
 
   return (
