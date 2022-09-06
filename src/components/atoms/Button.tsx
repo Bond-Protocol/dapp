@@ -33,7 +33,7 @@ const styles = {
     },
     secondary: {
       base: "text-white border border-brand-yella",
-      hover: "hover:border-brand-covenant hover:text-brand-yella",
+      hover: "hover:border-white hover:text-brand-yella",
       disabled:
         "disabled:bg-none disabled:border-brand-not-gold disabled:text-grey-500 disabled:cursor-not-allowed",
       active:

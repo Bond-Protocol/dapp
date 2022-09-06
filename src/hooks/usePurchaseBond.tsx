@@ -17,7 +17,7 @@ type PurchaseArgs = {
   slippage: number;
 };
 
-export const useContracts = () => {
+export const usePurchaseBond = () => {
   const provider = useProvider();
   const { data: signer } = useSigner();
 

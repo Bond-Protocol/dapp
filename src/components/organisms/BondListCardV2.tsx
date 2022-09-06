@@ -184,7 +184,7 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
             </div>
             <img
               src={ArrowIcon}
-              className="fill-inherit bmy-auto rotate-90 ml-2 p-1"
+              className="fill-inherit my-auto rotate-90 ml-2 p-1"
             />
           </div>
         </Button>

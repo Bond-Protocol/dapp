@@ -20,10 +20,11 @@ module.exports = withMT({
         ...brandColors,
         light: {
           primary: {
+            DEFAULT: "#40749B",
             500: "#40749B",
             900: "#14182D",
           },
-          secondary: "#E7AC5C",
+          secondary: { DEFAULT: "#E7AC5C", 30: "#F4DFAC" },
           success: "#88F6D7",
           neutral: "#A8A8A8",
           grey: "#737373",
