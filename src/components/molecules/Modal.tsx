@@ -3,12 +3,13 @@ import ModalUnstyled from "@mui/base/ModalUnstyled";
 import CloseIcon from "../../assets/icons/close-icon.svg";
 
 type ModalHeaderProps = {
-  onClickClose: () => void;
-  title?: string;
+  onClickClose?: () => void;
+  topLeftContent?: string | React.ReactNode;
 };
 
 export type ModalProps = ModalHeaderProps & {
   open: boolean;
+  title?: string;
   children: React.ReactNode;
 };
 
@@ -29,17 +30,19 @@ const Backdrop = forwardRef(function ModalContainer(
 const ModalHeader = (props: ModalHeaderProps) => {
   return (
     <div className="p-5 flex justify-between">
-      <p className="tracking-wider font-light">{props.title}</p>
-      <img
-        src={CloseIcon}
-        onClick={props.onClickClose}
-        className="h-[14px] w-[14px] my-auto hover:cursor-pointer"
-      />
+      <p className="tracking-wider font-light">{props?.topLeftContent}</p>
+      {props.onClickClose && (
+        <img
+          src={CloseIcon}
+          onClick={props.onClickClose}
+          className="h-[14px] w-[14px] my-auto hover:cursor-pointer"
+        />
+      )}
     </div>
   );
 };
 
-export const Modal = ({ onClickClose, title, ...props }: ModalProps) => {
+export const Modal = ({ title, ...props }: ModalProps) => {
   return (
     <ModalUnstyled
       componentsProps={{ root: { className: "fixed inset-0" } }}
@@ -47,8 +50,11 @@ export const Modal = ({ onClickClose, title, ...props }: ModalProps) => {
     >
       <Backdrop>
         <div className="w-[405px] border-transparent rounded-lg bg-brand-turtle-blue">
-          <ModalHeader title={title} onClickClose={onClickClose} />
-          <div className="p-5 pt-2 transition-all">{props.children}</div>
+          <ModalHeader
+            topLeftContent={props.topLeftContent}
+            onClickClose={props.onClickClose}
+          />
+          <div className="px-5 pb-8 transition-all">{props.children}</div>
         </div>
       </Backdrop>
     </ModalUnstyled>

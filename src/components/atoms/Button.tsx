@@ -9,6 +9,7 @@ export type ButtonProps = ButtonUnstyledProps & {
   size?: "sm" | "md" | "lg";
   align?: "left" | "center" | "right";
   thin?: boolean;
+  long?: boolean;
   icon?: boolean;
 };
 
@@ -18,6 +19,7 @@ const styles = {
     md: "py-1",
     lg: "py-2",
   },
+  long: "px-1",
   alignment: {
     left: "pr-16 pl-4",
     right: "pl-16 pr-4",
@@ -61,7 +63,8 @@ export const Button = forwardRef(function Button(
   const height = styles.height[props.size || "md"];
   const variant = styles.variant[props.variant || "primary"];
   const pseudo = props.disabled ? variant.disabled : variant.hover;
-  const style = `${variant.base} ${variant.active} ${pseudo} ${align} ${height}`;
+  const long = props.long && styles.long;
+  const style = `${variant.base} ${variant.active} ${pseudo} ${align} ${height} ${long}`;
 
   return (
     <ButtonUnstyled

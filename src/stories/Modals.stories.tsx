@@ -1,0 +1,54 @@
+import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { SummaryCard } from "../components/molecules/SummaryCard";
+import { Modal } from "../components/molecules/Modal";
+import {
+  PurchaseConfirmDialog,
+  PurchaseSuccessDialog,
+  TransactionHashDialog,
+  TermsDialog,
+} from "../components/modals";
+
+const ModalDecorator = (Story) => (
+  <div className="border h-[100vh]">
+    <Modal open={true} onClickClose={() => {}}>
+      <Story />
+    </Modal>
+  </div>
+);
+export default {
+  title: "Components/Modals",
+  component: Modal,
+  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
+  argTypes: {},
+  decorators: [ModalDecorator],
+} as ComponentMeta<typeof SummaryCard>;
+
+export const PurchaseConfirm: ComponentStory<typeof PurchaseConfirmDialog> = (
+  args
+) => <PurchaseConfirmDialog {...args} />;
+PurchaseConfirm.args = {
+  issuer: "TexProtocol",
+  amount: "33333",
+  vestingTime: "7 days",
+  contract: "0x1239841234182348912349",
+};
+
+export const PurchaseSuccess: ComponentStory<typeof PurchaseSuccessDialog> = (
+  args
+) => <PurchaseSuccessDialog {...args} />;
+PurchaseSuccess.args = {
+  issuer: "AphexProtocol",
+  goToMarkets: () => {},
+  goToBondDetails: () => {},
+};
+
+export const TransactionHash: ComponentStory<typeof TransactionHashDialog> = (
+  args
+) => <TransactionHashDialog {...args} />;
+TransactionHash.args = {
+  hash: "0xasd9sa90d901230940909123",
+};
+
+export const TermsAndConditions: ComponentStory<typeof TermsDialog> = () => (
+  <TermsDialog />
+);
