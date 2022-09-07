@@ -165,14 +165,9 @@ export const CreateMarketForm = ({
                 )}
             />
 
-            <Input
-              value={exchangeRate}
-              disabled
-              subText={`Current exchange rate is ~${exchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`
-              }
-              label="Current Exchange Rate"
-              className="mt-7"
-            />
+            <p className="mt-7">
+              {`Current exchange rate is ~${exchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`}
+            </p>
           </div>
 
           <div className="flex flex-col pt-5 w-full">
