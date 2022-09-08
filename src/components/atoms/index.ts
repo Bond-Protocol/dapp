@@ -12,7 +12,7 @@ export * from "./PageContainer";
 export * from "./Select";
 export * from "./TableCell";
 export * from "./TableHeading";
-export * from "./TimeTypePicker";
+export * from "./TermPicker";
 export * from "./TokenInput";
 export * from "./TokenLabel";
 export * from "./TokenPriceCard";

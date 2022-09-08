@@ -2,7 +2,6 @@ export * from "./BondListCard";
 export * from "./BondListCardV2";
 export * from "./CloseMarketCard";
 export * from "./ConfirmPurchaseDialog";
-export * from "./CreateMarketForm";
 export * from "./IssuerList";
 export * from "./IssuerPage";
 export * from "./MarketList";

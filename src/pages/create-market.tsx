@@ -1,28 +1,41 @@
 import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {useForm} from "react-hook-form";
+import {Controller, useForm, useWatch} from "react-hook-form";
 import {Tooltip} from "@material-tailwind/react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
 import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
-import {Button} from "components";
-import {CreateMarketForm} from "components/organisms/CreateMarketForm";
+import {Button, FlatSelect, Input, TermPicker} from "components";
 import {useTokens} from "hooks";
+import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
+import {Accordion, DatePicker, SummaryCard, TokenPickerCard} from "components/molecules";
+
+const capacityTokenOptions = [
+  { label: "PAYOUT", value: 0 },
+  { label: "QUOTE", value: 1 },
+];
+
+const vestingOptions = [
+  { label: "FIXED EXPIRY", value: 0 },
+  { label: "FIXED TERM", value: 1 },
+];
 
 const formDefaults = {
   payoutToken: "0x",
+  payoutTokenPrice: 0,
   quoteToken: "0x",
-  minPrice: "0.00",
-  capacityToken: "payout",
-  marketCapacity: "0",
+  quoteTokenPrice: 0,
+  minExchangeRate: 0,
+  capacityToken: 0,
+  marketCapacity: 0,
   marketExpiryDate: "",
-  vestingType: "expiry",
+  vestingType: 0,
   timeAmount: "",
   expiryDate: "",
-  bondsPerWeek: "",
-  debtBuffer: "0",
+  bondsPerWeek: 7,
+  debtBuffer: 10,
   chain: "rinkeby",
 };
 
@@ -37,15 +50,157 @@ export const CreateMarketView = () => {
   const [quoteTokenInfo, setQuoteTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
 
+  const payoutTokenSymbol = payoutTokenInfo?.symbol || "???";
+  const quoteTokenSymbol = quoteTokenInfo?.symbol || "???";
+
+  const [exchangeRate, setExchangeRate] = useState(0);
+  const [minimumExchangeRate, setMinimumExchangeRate] = useState(0);
+  const [daysToMarketExpiry, setDaysToMarketExpiry] = useState(0);
+  const [daysToBondExpiry, setDaysToBondExpiry] = useState(0);
+
   const {
-    handleSubmit,
     control,
+    handleSubmit,
     watch,
     register,
     formState: { errors },
   } = useForm({ defaultValues: formDefaults });
 
   const [selectedChain, setSelectedChain] = useState(watch("chain"));
+
+  const marketCapacity = useWatch({
+    control,
+    name: "marketCapacity",
+  });
+
+  const capacityToken = useWatch({
+    control,
+    name: "capacityToken",
+    defaultValue: 0
+  });
+
+  const minExchangeRate = useWatch({
+    control,
+    name: "minExchangeRate",
+    defaultValue: minimumExchangeRate,
+  });
+
+  const payoutTokenPrice = useWatch({
+    control,
+    name: "payoutTokenPrice",
+    defaultValue: payoutTokenInfo?.price
+  });
+
+  const quoteTokenPrice = useWatch({
+    control,
+    name: "quoteTokenPrice",
+    defaultValue: quoteTokenInfo?.price
+  });
+
+  const marketExpiry = useWatch({
+    control,
+    name: "marketExpiryDate",
+  });
+
+  const timeAmount = useWatch({
+    control,
+    name: "timeAmount",
+  });
+
+  const bondExpiry = useWatch({
+    control,
+    name: "expiryDate",
+  });
+
+  const bondsPerWeek = useWatch({
+    control,
+    name: "bondsPerWeek",
+    defaultValue: 7,
+  });
+
+  const debtBuffer = useWatch({
+    control,
+    name: "debtBuffer",
+    defaultValue: 10,
+  });
+
+  const vestingType = useWatch({
+    control,
+    name: "vestingType",
+    defaultValue: 0,
+  });
+
+  useEffect(() => {
+    let rate = Number(quoteTokenPrice) / Number(payoutTokenPrice);
+    let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
+    rate = trimAsNumber(rate, digits);
+    if (rate != Infinity && !isNaN(rate)) {
+      setExchangeRate(rate);
+    } else {
+      setExchangeRate(0);
+    }
+  }, [payoutTokenPrice, quoteTokenPrice]);
+
+  useEffect(() => {
+    let rate = Number(quoteTokenPrice) / Number(minExchangeRate);
+    let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
+    rate = trimAsNumber(rate, digits);
+    if (rate != Infinity && !isNaN(rate)) {
+      setMinimumExchangeRate(rate);
+    } else {
+      setMinimumExchangeRate(0);
+    }
+  }, [minExchangeRate]);
+
+  useEffect(() => {
+    let days = Number(
+        (Math.round(
+            new Date(bondExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+            .toFixed(0)
+    );
+    if (!isNaN(days)) {
+      setDaysToBondExpiry(days + 1);
+    } else {
+      setDaysToBondExpiry(0);
+    }
+  }, [bondExpiry]);
+
+  useEffect(() => {
+    let days = Number(
+        (Math.round(
+            new Date(marketExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+            .toFixed(0)
+    );
+    if (!isNaN(days)) {
+      setDaysToMarketExpiry(days + 1);
+    } else {
+      setDaysToMarketExpiry(0);
+    }
+  }, [marketExpiry]);
+
+  const summaryFields = [
+    { label: "Capacity", value: `${marketCapacity} ${capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol}`},
+    {
+      label: "Payout & Quote Tokens",
+      value: payoutTokenSymbol + "-" + quoteTokenSymbol,
+    },
+    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
+    { label: "Minimum exchange rate", value: `${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}` },
+    {
+      label: "Conclusion",
+      tooltip: "soon",
+      value: `Market expires in ${daysToMarketExpiry} days`,
+    },
+    {
+      label: "Vesting",
+      tooltip: "soon",
+      value: vestingType === 0 ?
+        `Bond vests in ${daysToBondExpiry} days` :
+        `Bond vests ${timeAmount.amount} days after purchase`,
+    },
+    { label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}` },
+    { label: "Debt Buffer", value: `${debtBuffer}%` },
+  ];
 
   const onSubmit = async (data: any) => {
     const tx = await contractLibrary.createMarket(
@@ -187,13 +342,13 @@ export const CreateMarketView = () => {
     );
   }
 
-  const vestingType = watch("vestingType");
   return (
     <div className="my-32">
       <h1 className="text-center text-5xl font-jakarta font-extralight pb-12 tracking-widest">
         Create Market
       </h1>
       <div className="mx-[15vw]">
+        <form>
         {renderInputBlock({
                  label: "Chain",
                  fieldName: "chain",
@@ -205,19 +360,189 @@ export const CreateMarketView = () => {
                    })
                  ),
                })}
-        <CreateMarketForm
-          quoteToken={quoteTokenInfo}
-          payoutToken={payoutTokenInfo}
-          vestingType={vestingType}
-          //@ts-ignore
-          control={control}
-        />
-        <Button
-          onClick={handleSubmit(onSubmit)}
-          className="w-full font-fraktion mt-5"
-        >
-          CONFIRM INFORMATION
-        </Button>
+          <div className="flex-col">
+            <p className="font-faketion tracking-widest">1 SET UP MARKET</p>
+            <div className="pt-4">
+              <div className="flex gap-6">
+                <div className="flex flex-col w-full pt-5">
+                  <Controller
+                      name="payoutToken"
+                      control={control}
+                      render={({ field }) => (
+                          <TokenPickerCard
+                              {...field}
+                              label="Payout Token"
+                              subText="Enter the contract address of the payout token"
+                              checkboxLabel="I confirm this is the token"
+                              token={payoutTokenInfo}
+                          />
+                      )}
+                  />
+
+                  <Controller
+                      name="payoutTokenPrice"
+                      control={control}
+                      render={({ field }) => (
+                          <Input
+                              {...field}
+                              label="Payout Token Price"
+                              className="mb-2"
+                          />
+                      )}
+                  />
+
+                  <p className="mt-7">
+                    {`Current exchange rate is ~${exchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`}
+                  </p>
+                </div>
+
+                <div className="flex flex-col pt-5 w-full">
+                  <Controller
+                      name="quoteToken"
+                      control={control}
+                      render={({ field }) => (
+                          <TokenPickerCard
+                              {...field}
+                              label="Quote Token"
+                              subText="Enter the contract address of the quote token"
+                              checkboxLabel="I confirm this is the token"
+                              token={quoteTokenInfo}
+                          />
+                      )}
+                  />
+
+                  <Controller
+                      name="quoteTokenPrice"
+                      control={control}
+                      render={({ field }) => (
+                          <Input
+                              {...field}
+                              label="Quote Token Price"
+                              className="mb-2"
+                          />
+                      )}
+                  />
+
+                  <Controller
+                      name="minExchangeRate"
+                      control={control}
+                      render={({ field }) => (
+                          <Input
+                              {...field}
+                              subText={`You will get a minimum of 
+                        ~${minimumExchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`
+                              }
+                              label="Minimum Exchange Rate"
+                              className="mt-7"
+                          />
+                      )}
+                  />
+                </div>
+              </div>
+              <div className="flex gap-6 pt-5">
+                <Controller
+                    name="capacityToken"
+                    control={control}
+                    render={({ field }) => (
+                        <FlatSelect
+                            {...field}
+                            label="Capacity Token"
+                            options={capacityTokenOptions}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="marketCapacity"
+                    control={control}
+                    render={({ field }) => <Input {...field} label="Market Capacity" />}
+                />
+              </div>
+            </div>
+            <p className="mt-16 font-faketion tracking-widest">
+              2 SET UP VESTING TERMS
+            </p>
+
+            <div className="mt-5">
+              <Controller
+                  name="marketExpiryDate"
+                  control={control}
+                  render={({ field }) => (
+                      <DatePicker
+                          {...field}
+                          placeholder="Select a date"
+                          label="Market Expiry Date"
+                      />
+                  )}
+              />
+              <Controller
+                  name="vestingType"
+                  control={control}
+                  render={({ field }) => (
+                      <FlatSelect
+                          {...field}
+                          label="Bond Vesting"
+                          options={vestingOptions}
+                          className="my-5"
+                      />
+                  )}
+              />
+
+              {vestingType === 1 ? (
+                  <Controller
+                      name="timeAmount"
+                      control={control}
+                      render={({ field }) => (
+                          <TermPicker {...field} label="Term Duration" />
+                      )}
+                  />
+              ) : (
+                  <Controller
+                      name="expiryDate"
+                      control={control}
+                      render={({ field }) => (
+                          <DatePicker
+                              {...field}
+                              label="Choose bond expiry"
+                              placeholder="Select expiry"
+                          />
+                      )}
+                  />
+              )}
+              <Accordion
+                  className="mt-5 border-y border-white/15"
+                  content={
+                    <div className="mt-4">
+                      <Controller
+                          name="bondsPerWeek"
+                          control={control}
+                          render={({ field }) => (
+                              <Input {...field} label="Bonds per week" className="mb-2" />
+                          )}
+                      />
+
+                      <Controller
+                          name="debtBuffer"
+                          control={control}
+                          render={({ field }) => <Input {...field} label="Debt buffer" />}
+                      />
+                    </div>
+                  }
+              >
+                <p>Advanced Setup</p>
+              </Accordion>
+            </div>
+            <p className="mt-16 font-faketion tracking-widest">3 CONFIRMATION</p>
+            <SummaryCard fields={summaryFields} className="mt-8" />
+
+            <Button
+                onClick={handleSubmit(data => console.log(data))}
+                className="w-full font-fraktion mt-5"
+            >
+              CONFIRM INFORMATION
+            </Button>
+          </div>
+        </form>
       </div>
       {/*
                   // <form onSubmit={handleSubmit(onSubmit)}>
