@@ -31,28 +31,28 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
   }, [onChange, date]);
 
   return (
-      <ClickAwayListener onClickAway={() => handleClose(date)}>
-        <>
+    <ClickAwayListener onClickAway={() => handleClose(date)}>
+      <div>
+        <div
+            className={props.className}
+            onClick={() => setOpen((prev) => !prev)}
+        >
+          {props.label && <p>{props.label}</p>}
           <div
-              className={props.className}
-              onClick={() => setOpen((prev) => !prev)}
+              className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer ${props.dateClassName}`}
           >
-            {props.label && <p>{props.label}</p>}
-            <div
-                className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer ${props.dateClassName}`}
-            >
-              <p>{date ? formattedDate : props.placeholder}</p>
-            </div>
+            <p>{date ? formattedDate : props.placeholder}</p>
           </div>
-          {open && (
-              <DayPicker
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  className="absolute p-3 backdrop-blur-xl border rounded-lg z-10"
-              />
-          )}
-        </>
-      </ClickAwayListener>
+        </div>
+        {open && (
+          <DayPicker
+            mode="single"
+                selected={date}
+                onSelect={handleClose}
+                className="absolute p-3 backdrop-blur-xl border rounded-lg z-10"
+          />
+        )}
+      </div>
+    </ClickAwayListener>
   );
 };
