@@ -37,7 +37,7 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
             className={props.className}
             onClick={() => setOpen((prev) => !prev)}
         >
-          {props.label && <p>{props.label}</p>}
+          {props.label && <p className="text-xs font-light mb-1">{props.label}</p>}
           <div
               className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer ${props.dateClassName}`}
           >

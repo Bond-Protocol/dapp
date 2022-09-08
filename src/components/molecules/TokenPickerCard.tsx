@@ -3,7 +3,6 @@ import {Token} from "@bond-labs/contract-library";
 import {Checkbox} from "../atoms/Checkbox";
 import {TokenPriceCard} from "../atoms/TokenPriceCard";
 import {Input} from "../atoms/Input";
-import {ethers} from "ethers";
 
 export type TokenPickerCardProps = {
   token?: Partial<Token & { logo?: string; link?: string; blockExplorerName?: string; }>;
@@ -12,26 +11,19 @@ export type TokenPickerCardProps = {
   label?: string;
   subText?: string;
   placeholder?: string;
-  onChange?: (token: string) => void;
+  onChange?: (token: {address: string, confirmed: boolean}) => void;
 };
 
 export const TokenPickerCard = (
-  { onChange, ...props }: TokenPickerCardProps,
+  { ...props }: TokenPickerCardProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) => {
   const [address, setAddress] = useState("");
   const [confirmed, setConfirmed] = useState(false);
-  const [selected, setSelected] = useState<Partial<Token & { logo: string; link?: string; blockExplorerName?: string; }>>();
 
   useEffect(() => {
-      if (ethers.utils.isAddress(address) && selected?.address !== address) {
-      //check if is known token and
-      setSelected(props.token)
-      //props.onChange && props.onChange(token);
-    }
-
-    onChange && onChange(address);
-  }, [address, selected, confirmed, onChange, props.token]);
+    props.onChange && props.onChange({address, confirmed});
+  }, [address, confirmed])
 
   return (
     <div className={`${props.className}`}>
@@ -43,10 +35,11 @@ export const TokenPickerCard = (
         onChange={(e) => setAddress(e.target.value)}
       />
       <TokenPriceCard
-        decimals={selected?.decimals}
-        symbol={selected?.symbol}
-        link={selected?.link}
-        blockExplorerName={selected?.blockExplorerName}
+        address={address}
+        decimals={props.token?.decimals}
+        symbol={props.token?.symbol}
+        link={props.token?.link}
+        blockExplorerName={props.token?.blockExplorerName}
         className="mt-5"
       />
       <div className="flex mt-2">

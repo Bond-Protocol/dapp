@@ -17,8 +17,8 @@ export const Select = (props: SelectProps) => {
   const [open, setOpen] = useState(false);
 
   const onChange = (value: any) => {
-      setSelected(value);
-      props.onChange && props.onChange(value);
+    setSelected(value);
+    props.onChange && props.onChange(value);
   }
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export const Select = (props: SelectProps) => {
             componentsProps={{
               root: {
                 className:
-                  "font-jakarta cursor-pointer flex my-auto w-[14vw] py-2 hover:bg-opacity-90",
+                  "font-jakarta cursor-pointer flex my-auto py-2 hover:bg-opacity-90",
               },
             }}
           >
@@ -62,7 +62,7 @@ export const Select = (props: SelectProps) => {
         ))}
       </SelectUnstyled>
       <div
-        className={`absolute top-3.5 left-[85%] transition-all transform ${
+        className={`absolute top-3.5 right-[10px] transition-all transform ${
           open ? "rotate-180" : "rotate-0"
         }`}
       >

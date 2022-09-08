@@ -2,37 +2,36 @@ import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {Controller, useForm, useWatch} from "react-hook-form";
-import {Tooltip} from "@material-tailwind/react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
 import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
-import {Button, FlatSelect, Input, TermPicker} from "components";
+import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
 import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard} from "components/molecules";
 
 const capacityTokenOptions = [
-  { label: "PAYOUT", value: 0 },
-  { label: "QUOTE", value: 1 },
+  {label: "PAYOUT", value: 0},
+  {label: "QUOTE", value: 1},
 ];
 
 const vestingOptions = [
-  { label: "FIXED EXPIRY", value: 0 },
-  { label: "FIXED TERM", value: 1 },
+  {label: "FIXED EXPIRY", value: 0},
+  {label: "FIXED TERM", value: 1},
 ];
 
 const formDefaults = {
-  payoutToken: "0x",
+  payoutToken: {address: "", confirmed: false},
   payoutTokenPrice: 0,
-  quoteToken: "0x",
+  quoteToken: {address: "", confirmed: false},
   quoteTokenPrice: 0,
   minExchangeRate: 0,
   capacityToken: 0,
   marketCapacity: 0,
   marketExpiryDate: "",
   vestingType: 0,
-  timeAmount: "",
+  timeAmount: { amount: 0, id: 0 },
   expiryDate: "",
   bondsPerWeek: 7,
   debtBuffer: 10,
@@ -40,15 +39,21 @@ const formDefaults = {
 };
 
 export const CreateMarketView = () => {
-  const { address, isConnected } = useAccount();
-  const { data: signer } = useSigner();
+  const {address, isConnected} = useAccount();
+  const {data: signer} = useSigner();
   const network = useNetwork();
-  const { getPrice } = useTokens();
-  const { switchNetwork } = useSwitchNetwork();
+  const {getPrice} = useTokens();
+  const {switchNetwork} = useSwitchNetwork();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
   const [quoteTokenInfo, setQuoteTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
+
+  const chainOptions = bondLibrary.SUPPORTED_CHAINS.map(
+    (supportedChain) => ({
+      id: supportedChain.chainName,
+      label: supportedChain.displayName,
+    }));
 
   const payoutTokenSymbol = payoutTokenInfo?.symbol || "???";
   const quoteTokenSymbol = quoteTokenInfo?.symbol || "???";
@@ -63,10 +68,24 @@ export const CreateMarketView = () => {
     handleSubmit,
     watch,
     register,
-    formState: { errors },
-  } = useForm({ defaultValues: formDefaults });
+    formState: {errors},
+  } = useForm({defaultValues: formDefaults});
 
-  const [selectedChain, setSelectedChain] = useState(watch("chain"));
+  const selectedChain = useWatch({
+    control,
+    name: "chain",
+  });
+
+  const payoutTokenAddress = useWatch({
+    control,
+    name: "payoutToken",
+    defaultValue: {address: "", confirmed: false}
+  });
+
+  const quoteTokenAddress = useWatch({
+    control,
+    name: "quoteToken",
+  });
 
   const marketCapacity = useWatch({
     control,
@@ -154,9 +173,9 @@ export const CreateMarketView = () => {
 
   useEffect(() => {
     let days = Number(
-        (Math.round(
-            new Date(bondExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
-            .toFixed(0)
+      (Math.round(
+        new Date(bondExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+        .toFixed(0)
     );
     if (!isNaN(days)) {
       setDaysToBondExpiry(days + 1);
@@ -167,9 +186,9 @@ export const CreateMarketView = () => {
 
   useEffect(() => {
     let days = Number(
-        (Math.round(
-            new Date(marketExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
-            .toFixed(0)
+      (Math.round(
+        new Date(marketExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+        .toFixed(0)
     );
     if (!isNaN(days)) {
       setDaysToMarketExpiry(days + 1);
@@ -179,13 +198,13 @@ export const CreateMarketView = () => {
   }, [marketExpiry]);
 
   const summaryFields = [
-    { label: "Capacity", value: `${marketCapacity} ${capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol}`},
+    {label: "Capacity", value: `${marketCapacity} ${capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol}`},
     {
       label: "Payout & Quote Tokens",
       value: payoutTokenSymbol + "-" + quoteTokenSymbol,
     },
-    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
-    { label: "Minimum exchange rate", value: `${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}` },
+    {label: "Estimate bond cadence", tooltip: "soon", value: "n/a"},
+    {label: "Minimum exchange rate", value: `${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}`},
     {
       label: "Conclusion",
       tooltip: "soon",
@@ -198,8 +217,8 @@ export const CreateMarketView = () => {
         `Bond vests in ${daysToBondExpiry} days` :
         `Bond vests ${timeAmount.amount} days after purchase`,
     },
-    { label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}` },
-    { label: "Debt Buffer", value: `${debtBuffer}%` },
+    {label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}`},
+    {label: "Debt Buffer", value: `${debtBuffer}%`},
   ];
 
   const onSubmit = async (data: any) => {
@@ -235,10 +254,6 @@ export const CreateMarketView = () => {
     switchNetwork?.(newChain);
   };
 
-  useEffect(() => {
-    setSelectedChain(watch("chain"));
-  }, [watch("chain")]);
-
   const getTokenInfo = async (address: string, isPayout: boolean) => {
     const contract = contractLibrary.IERC20__factory.connect(
       address,
@@ -267,81 +282,70 @@ export const CreateMarketView = () => {
       link = link.replace("#", "address");
       link = link.concat(address);
 
-      const result = { name, symbol, decimals, link, blockExplorerName, price };
+      const result = {name, symbol, decimals, link, blockExplorerName, price};
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
     } catch (e: any) {
       console.log(e.message);
-      const error =
-        "Not an ERC-20 token, please double check the address and chain.";
-      isPayout ? setPayoutTokenInfo({ error }) : setQuoteTokenInfo(result);
+      isPayout ?
+        setPayoutTokenInfo({address: "invalid"}) :
+        setQuoteTokenInfo({address: "invalid"});
     }
   };
 
   useEffect(() => {
-    const address = watch("payoutToken");
-    if (ethers.utils.isAddress(address)) {
-      void getTokenInfo(address, true);
+    if (ethers.utils.isAddress(payoutTokenAddress.address)) {
+      void getTokenInfo(payoutTokenAddress.address, true);
     } else {
-      setPayoutTokenInfo("");
+      setPayoutTokenInfo({address: "invalid"});
     }
-  }, [watch("payoutToken")]);
+  }, [payoutTokenAddress, selectedChain]);
 
   useEffect(() => {
-    const address = watch("quoteToken");
-    if (ethers.utils.isAddress(address)) {
-      void getTokenInfo(address, false);
+    if (ethers.utils.isAddress(quoteTokenAddress.address)) {
+      void getTokenInfo(quoteTokenAddress.address, false);
     } else {
-      setQuoteTokenInfo("");
+      setQuoteTokenInfo({address: "invalid"});
     }
-  }, [watch("quoteToken")]);
+  }, [quoteTokenAddress, selectedChain]);
 
-  interface InputParams {
-    label: string;
-    fieldName: string;
-    type: string;
-    placeholder?: string;
-    tooltip?: string;
-    selectValues?: { value: any; displayName: string }[];
-    options?: Partial<any>;
-  }
-
-  function renderInputBlock(params: InputParams) {
-    return (
-      <label className="block">
-        <div className="grid grid-cols-3 gap-2">
-          <div className="justify-self-end">
-            <span className="text-gray-700">{params.label}</span>
+  /*
+    function renderInputBlock(params: InputParams) {
+      return (
+        <label className="block">
+          <div className="grid grid-cols-3 gap-2">
+            <div className="justify-self-end">
+              <span className="text-gray-700">{params.label}</span>
+            </div>
+            <div>
+              {params.type !== "select" && (
+                <input
+                  type={params.type}
+                  placeholder={params.placeholder}
+                  {...register(params.fieldName, params.options)}
+                />
+              )}
+              {params.type === "select" && params.selectValues && (
+                <select {...register(params.fieldName, params.options)}>
+                  {params.selectValues.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.displayName}
+                    </option>
+                  ))}
+                </select>
+              )}
+              {params.tooltip && <Tooltip content={params.tooltip}>wtf?</Tooltip>}
+            </div>
+            <div className="justify-self-start">
+              {errors[params.fieldName]?.type?.toString() === "required" &&
+                "Required"}
+              {errors[params.fieldName]?.type?.toString() === "isAddress" &&
+                "Invalid Address"}
+            </div>
           </div>
-          <div>
-            {params.type !== "select" && (
-              <input
-                type={params.type}
-                placeholder={params.placeholder}
-                {...register(params.fieldName, params.options)}
-              />
-            )}
-            {params.type === "select" && params.selectValues && (
-              <select {...register(params.fieldName, params.options)}>
-                {params.selectValues.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.displayName}
-                  </option>
-                ))}
-              </select>
-            )}
-            {params.tooltip && <Tooltip content={params.tooltip}>wtf?</Tooltip>}
-          </div>
-          <div className="justify-self-start">
-            {errors[params.fieldName]?.type?.toString() === "required" &&
-              "Required"}
-            {errors[params.fieldName]?.type?.toString() === "isAddress" &&
-              "Invalid Address"}
-          </div>
-        </div>
-      </label>
-    );
-  }
-
+        </label>
+      );
+    }
+  */
   return (
     <div className="my-32">
       <h1 className="text-center text-5xl font-jakarta font-extralight pb-12 tracking-widest">
@@ -349,113 +353,131 @@ export const CreateMarketView = () => {
       </h1>
       <div className="mx-[15vw]">
         <form>
-        {renderInputBlock({
-                 label: "Chain",
-                 fieldName: "chain",
-                 type: "select",
-                 selectValues: bondLibrary.SUPPORTED_CHAINS.map(
-                   (supportedChain) => ({
-                     value: supportedChain.chainName,
-                     displayName: supportedChain.displayName,
-                   })
-                 ),
-               })}
           <div className="flex-col">
             <p className="font-faketion tracking-widest">1 SET UP MARKET</p>
             <div className="pt-4">
+              <div className="flex gap-6 pt-5">
+                <Controller
+                  name="chain"
+                  control={control}
+                  render={({field}) => (
+                    <div className="w-full">
+                      <div>
+                        <p className="text-xs font-light mb-1">Chain</p>
+                      </div>
+                      <Select
+                        {...field}
+                        defaultValue={chainOptions[1].id}
+                        options={chainOptions}
+                      />
+                    </div>
+                  )}
+                />
+              </div>
+
               <div className="flex gap-6">
                 <div className="flex flex-col w-full pt-5">
                   <Controller
-                      name="payoutToken"
-                      control={control}
-                      render={({ field }) => (
-                          <TokenPickerCard
-                              {...field}
-                              label="Payout Token"
-                              subText="Enter the contract address of the payout token"
-                              checkboxLabel="I confirm this is the token"
-                              token={payoutTokenInfo}
-                          />
-                      )}
+                    name="payoutToken"
+                    control={control}
+                    render={({field}) => (
+                      <TokenPickerCard
+                        {...field}
+                        label="Payout Token"
+                        subText="Enter the contract address of the payout token"
+                        checkboxLabel="I confirm this is the token"
+                        token={payoutTokenInfo}
+                      />
+                    )}
                   />
 
-                  <Controller
+                  <div className="pt-5">
+                    <Controller
                       name="payoutTokenPrice"
                       control={control}
-                      render={({ field }) => (
-                          <Input
-                              {...field}
-                              label="Payout Token Price"
-                              className="mb-2"
-                          />
+                      render={({field}) => (
+                        <Input
+                          {...field}
+                          label="Payout Token Price"
+                          className="mb-2"
+                        />
                       )}
-                  />
+                    />
+                  </div>
 
-                  <p className="mt-7">
-                    {`Current exchange rate is ~${exchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`}
-                  </p>
+                  <div className="pt-5">
+                    <p className="text-xs font-light mb-1">Current Exchange Rate</p>
+                    <p className="mt-3">
+                      ~{exchangeRate} {quoteTokenSymbol} per {payoutTokenSymbol}
+                    </p>
+                  </div>
                 </div>
 
                 <div className="flex flex-col pt-5 w-full">
                   <Controller
-                      name="quoteToken"
-                      control={control}
-                      render={({ field }) => (
-                          <TokenPickerCard
-                              {...field}
-                              label="Quote Token"
-                              subText="Enter the contract address of the quote token"
-                              checkboxLabel="I confirm this is the token"
-                              token={quoteTokenInfo}
-                          />
-                      )}
+                    name="quoteToken"
+                    control={control}
+                    render={({field}) => (
+                      <TokenPickerCard
+                        {...field}
+                        label="Quote Token"
+                        subText="Enter the contract address of the quote token"
+                        checkboxLabel="I confirm this is the token"
+                        token={quoteTokenInfo}
+                      />
+                    )}
                   />
 
-                  <Controller
+                  <div className="pt-5">
+                    <Controller
                       name="quoteTokenPrice"
                       control={control}
-                      render={({ field }) => (
-                          <Input
-                              {...field}
-                              label="Quote Token Price"
-                              className="mb-2"
-                          />
+                      render={({field}) => (
+                        <Input
+                          {...field}
+                          label="Quote Token Price"
+                          className="mb-2"
+                        />
                       )}
-                  />
+                    />
+                  </div>
 
-                  <Controller
+                  <div className="flex gap-6 pt-5">
+                    <Controller
                       name="minExchangeRate"
                       control={control}
-                      render={({ field }) => (
-                          <Input
-                              {...field}
-                              subText={`You will get a minimum of 
+                      render={({field}) => (
+                        <Input
+                          {...field}
+                          subText={`You will get a minimum of 
                         ~${minimumExchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`
-                              }
-                              label="Minimum Exchange Rate"
-                              className="mt-7"
-                          />
+                          }
+                          label="Minimum Exchange Rate"
+                          className="mb-2"
+                        />
                       )}
-                  />
+                    />
+                  </div>
                 </div>
               </div>
+
               <div className="flex gap-6 pt-5">
                 <Controller
-                    name="capacityToken"
-                    control={control}
-                    render={({ field }) => (
-                        <FlatSelect
-                            {...field}
-                            label="Capacity Token"
-                            options={capacityTokenOptions}
-                        />
-                    )}
+                  name="capacityToken"
+                  control={control}
+                  render={({field}) => (
+                    <FlatSelect
+                      {...field}
+                      label="Capacity Token"
+                      options={capacityTokenOptions}
+                    />
+                  )}
                 />
 
                 <Controller
-                    name="marketCapacity"
-                    control={control}
-                    render={({ field }) => <Input {...field} label="Market Capacity" />}
+                  name="marketCapacity"
+                  control={control}
+                  render={({field}) => <Input {...field} label="Market Capacity"/>}
                 />
               </div>
             </div>
@@ -465,79 +487,79 @@ export const CreateMarketView = () => {
 
             <div className="mt-5">
               <Controller
-                  name="marketExpiryDate"
-                  control={control}
-                  render={({ field }) => (
-                      <DatePicker
-                          {...field}
-                          placeholder="Select a date"
-                          label="Market Expiry Date"
-                      />
-                  )}
+                name="marketExpiryDate"
+                control={control}
+                render={({field}) => (
+                  <DatePicker
+                    {...field}
+                    placeholder="Select a date"
+                    label="Market Expiry Date"
+                  />
+                )}
               />
               <Controller
-                  name="vestingType"
-                  control={control}
-                  render={({ field }) => (
-                      <FlatSelect
-                          {...field}
-                          label="Bond Vesting"
-                          options={vestingOptions}
-                          className="my-5"
-                      />
-                  )}
+                name="vestingType"
+                control={control}
+                render={({field}) => (
+                  <FlatSelect
+                    {...field}
+                    label="Bond Vesting"
+                    options={vestingOptions}
+                    className="my-5"
+                  />
+                )}
               />
 
               {vestingType === 1 ? (
-                  <Controller
-                      name="timeAmount"
-                      control={control}
-                      render={({ field }) => (
-                          <TermPicker {...field} label="Term Duration" />
-                      )}
-                  />
+                <Controller
+                  name="timeAmount"
+                  control={control}
+                  render={({field}) => (
+                    <TermPicker {...field} label="Term Duration"/>
+                  )}
+                />
               ) : (
-                  <Controller
-                      name="expiryDate"
-                      control={control}
-                      render={({ field }) => (
-                          <DatePicker
-                              {...field}
-                              label="Choose bond expiry"
-                              placeholder="Select expiry"
-                          />
-                      )}
-                  />
+                <Controller
+                  name="expiryDate"
+                  control={control}
+                  render={({field}) => (
+                    <DatePicker
+                      {...field}
+                      label="Choose bond expiry"
+                      placeholder="Select expiry"
+                    />
+                  )}
+                />
               )}
               <Accordion
-                  className="mt-5 border-y border-white/15"
-                  content={
-                    <div className="mt-4">
-                      <Controller
-                          name="bondsPerWeek"
-                          control={control}
-                          render={({ field }) => (
-                              <Input {...field} label="Bonds per week" className="mb-2" />
-                          )}
-                      />
+                className="mt-5 border-y border-white/15"
+                content={
+                  <div className="mt-4">
+                    <Controller
+                      name="bondsPerWeek"
+                      control={control}
+                      render={({field}) => (
+                        <Input {...field} label="Bonds per week" className="mb-2"/>
+                      )}
+                    />
 
-                      <Controller
-                          name="debtBuffer"
-                          control={control}
-                          render={({ field }) => <Input {...field} label="Debt buffer" />}
-                      />
-                    </div>
-                  }
+                    <Controller
+                      name="debtBuffer"
+                      control={control}
+                      render={({field}) => <Input {...field} label="Debt buffer"/>}
+                    />
+                  </div>
+                }
               >
                 <p>Advanced Setup</p>
               </Accordion>
             </div>
             <p className="mt-16 font-faketion tracking-widest">3 CONFIRMATION</p>
-            <SummaryCard fields={summaryFields} className="mt-8" />
+            <SummaryCard fields={summaryFields} className="mt-8"/>
 
             <Button
-                onClick={handleSubmit(data => console.log(data))}
-                className="w-full font-fraktion mt-5"
+              onClick={handleSubmit(data => console.log(data))}
+              className="w-full font-fraktion mt-5"
             >
               CONFIRM INFORMATION
             </Button>
