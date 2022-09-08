@@ -13,12 +13,15 @@ export type DatePickerProps = {
   placeholder?: string;
 };
 
-export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
+export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
 
   const locale = getUserLocale() || "en-US";
   const formattedDate = new Intl.DateTimeFormat(locale).format(date);
+
+  const fromDate = new Date();
+  const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
 
   const handleClose = (date: unknown) => {
     setDate(date as Date);
@@ -34,12 +37,12 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
     <ClickAwayListener onClickAway={() => handleClose(date)}>
       <div>
         <div
-            className={props.className}
-            onClick={() => setOpen((prev) => !prev)}
+          className={props.className}
+          onClick={() => setOpen((prev) => !prev)}
         >
           {props.label && <p className="text-xs font-light mb-1">{props.label}</p>}
           <div
-              className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer ${props.dateClassName}`}
+            className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer ${props.dateClassName}`}
           >
             <p>{date ? formattedDate : props.placeholder}</p>
           </div>
@@ -47,9 +50,11 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
         {open && (
           <DayPicker
             mode="single"
-                selected={date}
-                onSelect={handleClose}
-                className="absolute p-3 backdrop-blur-xl border rounded-lg z-10"
+            selected={date}
+            onSelect={handleClose}
+            fromDate={fromDate}
+            toDate={toDate}
+            className="absolute text-xs p-3 backdrop-blur-xl border rounded-lg z-10"
           />
         )}
       </div>
