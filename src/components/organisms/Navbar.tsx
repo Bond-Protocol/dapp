@@ -1,17 +1,17 @@
-import type { FC } from "react";
-import { Link, Route, Routes as Switch } from "react-router-dom";
-import { CreateMarketView } from "../../pages";
-import { Button } from "..";
-import { useAtom } from "jotai";
+import type {FC} from "react";
+import {Link, Route, Routes as Switch} from "react-router-dom";
+import {Button} from "..";
+import {useAtom} from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
-import { useCalculatedMarkets } from "../../hooks";
-import { MarketList } from "components/organisms/MarketList";
-import { IssuerList } from "components/organisms/IssuerList";
-import { MyBondsList } from "components/organisms/MyBondsList";
-import { IssuerPage } from "./IssuerPage";
-import { MyMarkets } from "components/organisms/MyMarkets";
+import {useCalculatedMarkets} from "../../hooks";
+import {MarketList} from "components/organisms/MarketList";
+import {IssuerList} from "components/organisms/IssuerList";
+import {MyBondsList} from "components/organisms/MyBondsList";
+import {IssuerPage} from "./IssuerPage";
+import {MyMarkets} from "components/organisms/MyMarkets";
 import logo from "../../assets/logo.svg";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
+import {CreateMarketPage} from "components/organisms/CreateMarketPage";
 
 export const Routes: FC = () => {
   const { allMarkets, myMarkets, issuers } = useCalculatedMarkets();
@@ -29,7 +29,7 @@ export const Routes: FC = () => {
       <Route path="/my-markets" element={<MyMarkets />} />
       <Route path="/issuers" element={<IssuerList />} />
       <Route path="/my-bonds" element={<MyBondsList />} />
-      <Route path="/create-market" element={<CreateMarketView />} />
+      <Route path="/create-market" element={<CreateMarketPage />} />
       {issuers.map((issuer) => (
         <Route
           key={issuer}

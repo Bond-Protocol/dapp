@@ -1,23 +1,18 @@
 //@ts-nocheck
-import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import {useEffect, useState} from "react";
+import {Controller, useForm, useWatch} from "react-hook-form";
 import * as contractLibrary from "@bond-labs/contract-library";
-import { BOND_TYPE } from "@bond-labs/contract-library";
+import {BOND_TYPE} from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
-import { providers } from "services/owned-providers";
-import { ethers } from "ethers";
-import { Button, FlatSelect, Input, Select, TermPicker } from "components";
-import { useTokens } from "hooks";
-import { trimAsNumber } from "@bond-labs/contract-library/dist/core/utils";
-import {
-  Accordion,
-  DatePicker,
-  SummaryCard,
-  TokenPickerCard,
-} from "components/molecules";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import {providers} from "services/owned-providers";
+import {ethers} from "ethers";
+import {Button, FlatSelect, Input, Select, TermPicker} from "components";
+import {useTokens} from "hooks";
+import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
+import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 const capacityTokenOptions = [
   { label: "PAYOUT", value: 0 },
@@ -46,7 +41,7 @@ const formDefaults = {
   chain: "rinkeby",
 };
 
-export const CreateMarketView = () => {
+export const CreateMarketPage = () => {
   const { address, isConnected } = useAccount();
   const { data: signer } = useSigner();
   const network = useNetwork();
@@ -324,6 +319,27 @@ export const CreateMarketView = () => {
       scaleAdjustment: scaleAdjustment,
     });
 
+    const params = {
+      marketParams: {
+        payoutToken: data.payoutToken.address,
+        quoteToken: data.quoteToken.address,
+        callbackAddr: "0x0000000000000000000000000000000000000000",
+        capacity: ethers.utils
+          .parseEther(data.marketCapacity.toString())
+          .toString(),
+        capacityInQuote: data.capacityToken !== 0,
+        formattedInitialPrice: formattedInitialPrice.toString(),
+        formattedMinimumPrice: formattedMinimumPrice.toString(),
+        debtBuffer: data.debtBuffer,
+        vesting: vesting,
+        conclusion: data.marketExpiryDate,
+        depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
+        scaleAdjustment: scaleAdjustment,
+      },
+      bondType: data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
+      chain: data.chain,
+    }
+/*
     const tx = await contractLibrary.createMarket(
       {
         payoutToken: data.payoutToken.address,
@@ -350,6 +366,8 @@ export const CreateMarketView = () => {
         gasLimit: 10000000,
       }
     );
+
+ */
   };
 
   const switchChain = (e: Event) => {

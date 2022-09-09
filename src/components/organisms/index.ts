@@ -8,3 +8,4 @@ export * from "./MarketList";
 export * from "./MyBondsList";
 export * from "./MyMarkets";
 export * from "./Navbar";
+export * from "./CreateMarketPage";
