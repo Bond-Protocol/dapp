@@ -49,6 +49,7 @@ export const listMarketsRinkeby = gql`
             isLive
             totalBondedAmount
             totalPayoutAmount
+            creationBlockTimestamp
         }
     }
 `;
@@ -102,6 +103,7 @@ export const listMarketsGoerli = gql`
             isLive
             totalBondedAmount
             totalPayoutAmount
+            creationBlockTimestamp
         }
     }
 `;
@@ -253,6 +255,7 @@ export const listOwnedMarketsRinkeby = gql`
             isLive
             totalBondedAmount
             totalPayoutAmount
+            creationBlockTimestamp
         }
     }
 `;
@@ -306,6 +309,7 @@ export const listOwnedMarketsGoerli = gql`
             isLive
             totalBondedAmount
             totalPayoutAmount
+            creationBlockTimestamp
         }
     }
 `;

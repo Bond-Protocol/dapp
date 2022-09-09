@@ -1192,10 +1192,10 @@
     axios "^0.27.2"
     ethers "^5.6.8"
 
-"@bond-labs/contract-library@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@bond-labs/contract-library/-/contract-library-0.0.5.tgz#8015151c44576ad5fa2bf6166bf4e3c1c531a421"
-  integrity sha512-C8aLDr3zCfl7UnZfQPOO14KLXhim7B7w0uZ1KM8U+tM/83Sv4XEdHqvLv9wE6m5sFtjTwVGOp18UZlRLtxYsVA==
+"@bond-labs/contract-library@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@bond-labs/contract-library/-/contract-library-0.0.6.tgz#6e53c661c06055740f0548e23b08e4fea0a99567"
+  integrity sha512-U0b1hfRjGqgkqhOl0/dIVFX5Ojkl2/lT4CY1YZ3xsGZ4d2jO9Yo+2m4TTyve9uOJrxEE85+Z4IGZFGO9/gr2gg==
   dependencies:
     "@ethersproject/providers" "^5.6.6"
     "@ethersproject/transactions" "^5.6.0"
