@@ -462,7 +462,9 @@ export const CreateMarketView = () => {
       <div className="mx-[15vw]">
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-col">
-            <p className="font-faketion tracking-widest">1 SET UP MARKET</p>
+            <p className="font-faketion font-bold tracking-widest">
+              1 SET UP MARKET
+            </p>
             <div className="pt-4">
               <div className="flex gap-6 pt-5">
                 <Controller
@@ -592,7 +594,7 @@ export const CreateMarketView = () => {
                 />
               </div>
             </div>
-            <p className="mt-16 font-faketion tracking-widest">
+            <p className="mt-16 font-faketion font-bold tracking-widest">
               2 SET UP VESTING TERMS
             </p>
 
@@ -671,7 +673,7 @@ export const CreateMarketView = () => {
                 <p>Advanced Setup</p>
               </Accordion>
             </div>
-            <p className="mt-16 font-faketion tracking-widest">
+            <p className="mt-16 font-faketion font-bold tracking-widest">
               3 CONFIRMATION
             </p>
             <SummaryCard fields={summaryFields} className="mt-8" />

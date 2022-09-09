@@ -88,14 +88,14 @@ module.exports = withMT({
         "@font-face": {
           fontFamily: "POEVetica",
           fontWeight: "500",
-          src: "url(/fonts/POE-Vetica-Mono-Bold.woff) format('woff')",
+          src: "url(/fonts/POE-Vetica-Mono.woff) format('woff')",
         },
       });
       addBase({
         "@font-face": {
           fontFamily: "POEVetica",
           fontWeight: "700",
-          src: "url(/fonts/POE-Vetica-Mono.woff) format('woff')",
+          src: "url(/fonts/POE-Vetica-Mono-Bold.woff) format('woff')",
         },
       });
     }),
