@@ -1,6 +1,7 @@
-import {Select} from "./Select";
-import {Input} from "./Input";
-import {useEffect, useState} from "react";
+//@ts-nocheck
+import { Select } from "./Select";
+import { Input } from "./Input";
+import { useEffect, useState } from "react";
 
 export type TermPickerProps = {
   className?: string;
@@ -19,18 +20,18 @@ export const TermPicker = (props: TermPickerProps) => {
   const [amount, setAmount] = useState(options[0].id);
 
   useEffect(() => {
-    props.onChange && props.onChange({id, amount});
+    props.onChange && props.onChange({ id, amount });
   }, []);
 
   const handleChangeSelect = (id: number) => {
     setId(id);
     setAmount(id);
-    props.onChange && props.onChange({id, amount: id});
+    props.onChange && props.onChange({ id, amount: id });
   };
 
   const handleChangeInput = (input: number) => {
     setAmount(input);
-    props.onChange && props.onChange({id, amount: input});
+    props.onChange && props.onChange({ id, amount: input });
   };
 
   return (
@@ -39,16 +40,22 @@ export const TermPicker = (props: TermPickerProps) => {
       <div className="flex gap-1">
         <div className="w-1/4">
           <Select
-              value={id}
-              defaultValue={options[0].id}
-              options={options}
-              onChange={handleChangeSelect}
+            value={id}
+            defaultValue={options[0].id}
+            options={options}
+            onChange={handleChangeSelect}
           />
         </div>
-        {id === 0 && <div className="w-3/4 mt-1">
-          <Input value={amount} onChange={() => handleChangeInput(Number(event.target.value))}/>
-        </div>
-        }
+        {id === 0 && (
+          <div className="w-3/4 mt-1">
+            <Input
+              value={amount}
+              onChange={(event) =>
+                handleChangeInput(Number(event.target.value))
+              }
+            />
+          </div>
+        )}
       </div>
     </div>
   );

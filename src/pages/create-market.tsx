@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import * as React from "react";
 import { useEffect, useState } from "react";

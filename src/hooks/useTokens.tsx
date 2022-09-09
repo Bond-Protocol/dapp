@@ -1,13 +1,21 @@
+//@ts-nocheck
 import * as contractLibrary from "@bond-labs/contract-library";
-import {providers} from "services/owned-providers";
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {Token, useListTokensGoerliQuery, useListTokensRinkebyQuery,} from "../generated/graphql";
-import {useCallback, useEffect, useState} from "react";
+import { providers } from "services/owned-providers";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import {
+  Token,
+  useListTokensGoerliQuery,
+  useListTokensRinkebyQuery,
+} from "../generated/graphql";
+import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
-import {CustomPriceSource, SupportedPriceSource} from "@bond-labs/bond-library";
-import axios, {AxiosResponse} from "axios";
-import {useQuery} from "react-query";
-import {useAtom} from "jotai";
+import {
+  CustomPriceSource,
+  SupportedPriceSource,
+} from "@bond-labs/bond-library";
+import axios, { AxiosResponse } from "axios";
+import { useQuery } from "react-query";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export interface PriceDetails {
