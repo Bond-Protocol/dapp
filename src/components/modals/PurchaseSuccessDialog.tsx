@@ -18,11 +18,11 @@ export const PurchaseSuccessDialog = (props: PurchaseSuccessDialogProps) => {
           onClick={props.goToMarkets}
           variant="secondary"
           long
-          className="w-1/2"
+          className="w-1/2 px-0"
         >
           Go to Markets
         </Button>
-        <Button onClick={props.goToBondDetails} long className="w-1/2">
+        <Button onClick={props.goToBondDetails} long className="w-1/2 px-0">
           View My Bond
         </Button>
       </div>

@@ -1,11 +1,12 @@
-import { useCallback } from "react";
+import { useState, useCallback } from "react";
 import * as contractLibrary from "@bond-labs/contract-library";
 import { BigNumberish, ContractTransaction, Signer } from "ethers";
 import { useProvider, useSigner } from "wagmi";
+import { providers } from "services/owned-providers";
 
 const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
-type PurchaseArgs = {
+export type PurchaseArgs = {
   address: string;
   marketId: number;
   amount: number;
@@ -20,6 +21,40 @@ type PurchaseArgs = {
 export const usePurchaseBond = () => {
   const provider = useProvider();
   const { data: signer } = useSigner();
+  const [txStatus, setTxStatus] = useState();
+
+  const approveSpending = async (
+    tokenAddress: string,
+    auctioneer: string
+  ): Promise<ContractTransaction> => {
+    if (!signer) throw Error("Not connected");
+    return contractLibrary.changeApproval(
+      tokenAddress,
+      auctioneer,
+      "1000000000",
+      signer
+    );
+  };
+
+  const getAllowance = async (
+    tokenAddress: string,
+    address: string,
+    auctioneer: string,
+    network: string
+  ) => {
+    const requestProvider = providers[network];
+    const allowance: BigNumberish = await contractLibrary.getAllowance(
+      tokenAddress,
+      address,
+      auctioneer,
+      requestProvider
+    );
+    return Number(allowance) / Math.pow(10, 18);
+  };
+
+  const getMaxBondableAmount = (balance: string, maxAmountAccepted: number) => {
+    return Math.min(Number(balance), maxAmountAccepted);
+  };
 
   const getPayoutFor = useCallback(
     async (
@@ -40,7 +75,15 @@ export const usePurchaseBond = () => {
   );
 
   const bond = useCallback(
-    async (args: PurchaseArgs): Promise<ContractTransaction> => {
+    async (args: {
+      address: string;
+      marketId: number;
+      amount: string;
+      teller: string;
+      referralAddress?: string;
+      payout: string;
+      slippage: number;
+    }): Promise<ContractTransaction> => {
       if (!signer) throw Error("Not connected");
 
       const { payout, slippage, ...rest } = args;
@@ -63,5 +106,11 @@ export const usePurchaseBond = () => {
     [signer]
   );
 
-  return { getPayoutFor, bond };
+  return {
+    approveSpending,
+    getMaxBondableAmount,
+    getPayoutFor,
+    getAllowance,
+    bond,
+  };
 };

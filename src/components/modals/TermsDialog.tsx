@@ -16,17 +16,17 @@ const tcTop = (
 
 const tcBottom = (
   <p className="mt-5">
-    By clicking "Accept" you agree to our {tcLink} and confirm you do not live
-    in one of the restricted countries Bond Protocol does not serve.
+    By clicking &quot;Accept&quot; you agree to our {tcLink} and confirm you do
+    not live in one of the restricted countries Bond Protocol does not serve.
   </p>
 );
 
-export const TermsDialog = () => {
-  const { getItem, setItem, removeItem } = useBrowserStorage();
-  const tc = getItem("tc");
+export const TermsDialog = (props: { onAccept: () => void }) => {
+  const { setItem, removeItem } = useBrowserStorage();
 
   const acceptTC = () => {
     setItem("tc", JSON.stringify({ accepted: true }));
+    props.onAccept && props.onAccept();
   };
 
   const rejectTC = () => {

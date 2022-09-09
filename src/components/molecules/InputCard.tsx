@@ -1,12 +1,9 @@
 import { Token } from "@bond-labs/contract-library";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Chip } from "../atoms/Chip";
 import { Input } from "../atoms/Input";
-import { useState } from "react";
 import { TokenLabel } from "../atoms/TokenLabel";
 
 export type InputCardProps = {
-  isConnected: boolean;
   balance?: string;
   className?: string;
   quoteToken?: Partial<Token & { logo?: string }>;
@@ -15,7 +12,6 @@ export type InputCardProps = {
 };
 
 export const InputCard = ({
-  isConnected = false,
   balance = "0",
   className = "",
   quoteToken,
@@ -29,14 +25,6 @@ export const InputCard = ({
   const handleChange = (amount: string) => {
     onChange && onChange(amount);
   };
-
-  if (!isConnected) {
-    return (
-      <div className="mx-auto py-4">
-        <ConnectButton />
-      </div>
-    );
-  }
 
   return (
     <>

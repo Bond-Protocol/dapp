@@ -4,15 +4,21 @@ import { Link } from "../atoms/Link";
 export type PurchaseConfirmDialogProps = {
   issuer?: string;
   amount?: string;
+  payout?: string;
   vestingTime?: string;
   contract?: string;
+  onSubmit: () => void;
+  onCancel: () => void;
 };
 
 export const PurchaseConfirmDialog = ({
   issuer,
   vestingTime = "?",
   amount = "0",
+  payout = "0",
   contract,
+  onCancel,
+  onSubmit,
 }: PurchaseConfirmDialogProps) => {
   return (
     <div className="text-center">
@@ -27,9 +33,9 @@ export const PurchaseConfirmDialog = ({
             <p>{"You are receiving"}</p>
             <p>{"The vesting period lasts"}</p>
           </div>
-          <div className="mx-auto">
+          <div className="mx-auto h-full">
             <p>{amount}</p>
-            <p>{amount}</p>
+            <p>{payout}</p>
             <p>{vestingTime}</p>
           </div>
         </div>
@@ -38,10 +44,10 @@ export const PurchaseConfirmDialog = ({
         </p>
       </div>
       <div className="flex justify-between mt-10 gap-2 h-[40px]">
-        <Button variant="secondary" className="w-1/2">
+        <Button variant="secondary" className="w-1/2" onClick={onCancel}>
           {"Cancel"}
         </Button>
-        <Button thin className="w-1/2">
+        <Button thin className="w-1/2" onClick={onSubmit}>
           {"Confirm Bond"}
         </Button>
       </div>

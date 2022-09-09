@@ -224,7 +224,11 @@ export const MarketList: FC<MarketListProps> = ({
                     allowManagement ? (
                       <CloseMarketCard market={market} />
                     ) : (
-                      <BondListCardV2 market={market} />
+                      <BondListCardV2
+                        market={market}
+                        topRightLabel={"VIEW INSIGHTS"}
+                        onClickTopRight={() => {}}
+                      />
                     )
                   ) : (
                     <div>Loading...</div>

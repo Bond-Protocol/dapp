@@ -13,14 +13,14 @@ export type ModalProps = ModalHeaderProps & {
   children: React.ReactNode;
 };
 
-const Backdrop = forwardRef(function ModalContainer(
+const ModalBackdrop = forwardRef(function ModalContainer(
   props: { children: React.ReactNode },
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
   return (
     <div
       ref={ref}
-      className="fixed inset-0 backdrop-blur-xl flex justify-center items-center"
+      className="fixed inset-0 backdrop-blur-lg flex justify-center items-center outline-0"
     >
       {props.children}
     </div>
@@ -32,11 +32,12 @@ const ModalHeader = (props: ModalHeaderProps) => {
     <div className="p-5 flex justify-between">
       <p className="tracking-wider font-light">{props?.topLeftContent}</p>
       {props.onClickClose && (
-        <img
-          src={CloseIcon}
-          onClick={props.onClickClose}
-          className="h-[14px] w-[14px] my-auto hover:cursor-pointer"
-        />
+        <div onClick={props.onClickClose}>
+          <img
+            src={CloseIcon}
+            className="h-[14px] w-[14px] my-auto hover:cursor-pointer"
+          />
+        </div>
       )}
     </div>
   );
@@ -45,10 +46,13 @@ const ModalHeader = (props: ModalHeaderProps) => {
 export const Modal = ({ title, ...props }: ModalProps) => {
   return (
     <ModalUnstyled
-      componentsProps={{ root: { className: "fixed inset-0" } }}
+      componentsProps={{
+        root: { className: "fixed inset-0" },
+        backdrop: { className: "outline-0" },
+      }}
       open={props.open}
     >
-      <Backdrop>
+      <ModalBackdrop>
         <div className="w-[405px] border-transparent rounded-lg bg-brand-turtle-blue">
           <ModalHeader
             topLeftContent={props.topLeftContent}
@@ -56,7 +60,7 @@ export const Modal = ({ title, ...props }: ModalProps) => {
           />
           <div className="px-5 pb-8 transition-all">{props.children}</div>
         </div>
-      </Backdrop>
+      </ModalBackdrop>
     </ModalUnstyled>
   );
 };

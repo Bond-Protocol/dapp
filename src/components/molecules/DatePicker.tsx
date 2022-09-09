@@ -1,7 +1,7 @@
 import "react-day-picker/dist/style.css";
-import {DayPicker} from "react-day-picker";
-import {useEffect, useState} from "react";
-import {ClickAwayListener} from "@mui/base";
+import { DayPicker } from "react-day-picker";
+import { useEffect, useState } from "react";
+import { ClickAwayListener } from "@mui/base";
 
 export type DatePickerProps = {
   onChange?: (date?: number) => void;
@@ -12,7 +12,7 @@ export type DatePickerProps = {
   placeholder?: string;
 };
 
-export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
+export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
 
@@ -25,7 +25,9 @@ export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
     onChange && onChange((date as Date)?.getTime() / 1000);
   };
 
-  const formattedDate = date?.toISOString().substring(0, date?.toISOString().indexOf("T"));
+  const formattedDate = date
+    ?.toISOString()
+    .substring(0, date?.toISOString().indexOf("T"));
 
   useEffect(() => {
     onChange && onChange((date as Date)?.getTime() / 1000);
@@ -38,7 +40,9 @@ export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
           className={props.className}
           onClick={() => setOpen((prev) => !prev)}
         >
-          {props.label && <p className="text-xs font-light mb-1">{props.label}</p>}
+          {props.label && (
+            <p className="text-xs font-light mb-1">{props.label}</p>
+          )}
           <div
             className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer ${props.dateClassName}`}
           >

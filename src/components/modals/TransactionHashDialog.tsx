@@ -3,6 +3,8 @@ import { ModalTitle } from "../atoms/ModalTitle";
 
 export type TransactionHashDialogProps = {
   hash: string;
+  blockExplorerName?: string;
+  blockExplorerUrl?: string;
 };
 
 export const TransactionHashDialog = (props: TransactionHashDialogProps) => {
@@ -12,10 +14,10 @@ export const TransactionHashDialog = (props: TransactionHashDialogProps) => {
       <p className="my-5">{"Waiting for confirmation..."}</p>
       <div className="flex justify-center ">
         <Link
-          href={`https://etherscan.io/${props.hash}`}
+          href={`${props.blockExplorerUrl}${props.hash}`}
           className="fill-light-secondary uppercase font-faketion text-xs text-light-secondary hover:fill-white hover:text-white"
         >
-          {"View Transaction on Etherscan"}
+          {`View Transaction on ${props.blockExplorerName}`}
         </Link>
       </div>
     </div>

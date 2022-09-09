@@ -1,172 +1,135 @@
-import * as contractLibrary from "@bond-labs/contract-library";
-import {BOND_TYPE, CalculatedMarket} from "@bond-labs/contract-library";
-import {FC, useEffect, useState} from "react";
-import {Button} from "..";
-import {useAccount, useBalance, useProvider, useSigner, useSwitchNetwork,} from "wagmi";
-import {providers} from "services/owned-providers";
-import {BigNumberish, ContractTransaction} from "ethers";
-import {useConnectModal} from "@rainbow-me/rainbowkit";
-import {useTokens} from "hooks";
-import {CHAINS, getProtocolByAddress} from "@bond-labs/bond-library";
-import {InfoLabel} from "components/atoms/InfoLabel";
-import {BondPurchaseCard} from "./BondPurchaseCard";
+import { FC, useEffect, useState } from "react";
+import { useAccount, useSwitchNetwork, useNetwork } from "wagmi";
+import { CalculatedMarket } from "@bond-labs/contract-library";
+import { getProtocolByAddress } from "@bond-labs/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
 import ArrowIcon from "../../assets/icons/arrow-icon.svg";
+import { getBlockExplorer, formatLongNumber } from "../../utils";
+import { providers } from "services/owned-providers";
+import { useTokens, usePurchaseBond, useTokenAllowance } from "hooks";
+import { Button, Link, InfoLabel } from "components/atoms";
+import { BondButton, SummaryCard, InputCard } from "components/molecules";
+import { BondPurchaseModal } from "./BondPurchaseModal";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
+  topRightLabel?: string;
+  onClickTopRight: () => void;
 };
 
-const getRemainingCapacity = (remaining, payout) => {
+const getRemainingCapacity = (remaining: number, payout: number) => {
   const total = remaining + payout;
   return (remaining / total) * 100;
 };
 
-export const BondListCardV2: FC<BondListCardProps> = (props) => {
-  const provider = useProvider();
-  const { data: signer } = useSigner();
+export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
+  const [correctChain, setCorrectChain] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState(false);
+  const [amount, setAmount] = useState<string>("0");
+  const [payout, setPayout] = useState<string>("0");
   const { address, isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
-  const { openConnectModal } = useConnectModal();
   const { getTokenDetails } = useTokens();
-
-  const { data } = useBalance({
-    token: props.market.quoteToken.address,
-    addressOrName: address,
-    chainId: providers[props.market.network].network.chainId,
-  });
-
-  const protocol = getProtocolByAddress(
-    props.market.owner,
-    props.market.network
-  );
-
-  const [amount, setAmount] = useState<string>("0");
-  const [balance, setBalance] = useState<string>("0");
-  const [allowance, setAllowance] = useState<string>("0");
-  const [payout, setPayout] = useState<string>("0");
-
-  const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
-  const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
-  const [correctChain, setCorrectChain] = useState<boolean>(false);
-  const [blockExplorerUrl, setBlockExplorerUrl] = useState(
-    CHAINS.get(props.market.network)?.blockExplorerUrls[0].replace(
-      "#",
-      "address"
-    )
-  );
-
-  const [blockExplorerName, setBlockExplorerName] = useState(
-    CHAINS.get(props.market.network)?.blockExplorerName
-  );
-
-  useEffect(() => {
-    setHasSufficientAllowance(
-      Number(allowance) > 0 && Number(allowance) >= Number(amount)
+  const { bond, getPayoutFor } = usePurchaseBond();
+  const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
+    useTokenAllowance(
+      market.quoteToken.address,
+      market.network,
+      market.auctioneer,
+      amount
     );
-  }, [allowance, amount]);
+  const network = useNetwork();
+  const protocol = getProtocolByAddress(market.owner, market.network);
+  const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
+    market.network,
+    "address"
+  );
+
+  const networkFee = 1;
+  const quoteToken = getTokenDetails(market.quoteToken);
+  const payoutToken = getTokenDetails(market.payoutToken);
+  const remainingCapacity = getRemainingCapacity(
+    market.currentCapacity,
+    //@ts-ignore TODO: Fix type mismatch with contract lib
+    parseFloat(market.totalPayoutAmount)
+  );
+  const vestingLabel =
+    market.vestingType === "fixed-term"
+      ? market.formattedLongVesting
+      : market.formattedShortVesting;
 
   useEffect(() => {
-    setHasSufficientBalance(
-      Number(balance) > 0 && Number(balance) >= Number(amount)
-    );
-  }, [balance, amount]);
+    if (market.network === network?.chain?.network) {
+      setCorrectChain(true);
+    }
+  }, [network, market.network]);
 
   useEffect(() => {
-    void getPayoutFor(amount);
-  }, [amount]);
+    const updatePayout = async () => {
+      const payout = await getPayoutFor(
+        amount,
+        market.marketId,
+        market.auctioneer
+      );
 
-  useEffect(() => {
-    const balance: string = data?.formatted || "0";
-    setBalance(balance);
-  }, [data]);
+      setPayout(formatLongNumber(payout).toString());
+    };
 
-  useEffect(() => {
-    void getAllowance();
-    void checkChain();
-  }, [isConnected, signer]);
+    void updatePayout();
+  }, [amount, getPayoutFor, market.marketId, market.auctioneer]);
 
-  function setMax() {
-    const max = Math.min(Number(balance), props.market.maxAmountAccepted);
-    setAmount(max.toString());
-  }
-
-  const switchChain = (e: Event) => {
-    e.preventDefault();
+  const switchChain = () => {
     const newChain = Number(
-      "0x" + providers[props.market.network].network.chainId.toString()
+      "0x" + providers[market.network].network.chainId.toString()
     );
     switchNetwork?.(newChain);
   };
 
-  async function checkChain() {
-    const network = await signer?.provider?.getNetwork();
-    setCorrectChain(
-      (network && network.name === props.market.network) || false
-    );
-  }
+  const approveSpending = () =>
+    approve(market.quoteToken.address, market.auctioneer);
 
-  async function getAllowance() {
-    if (!address) return 0;
-    const requestProvider = providers[props.market.network] || provider;
+  const onClickBond = !hasSufficientAllowance
+    ? approveSpending
+    : () => setShowModal(true);
 
-    let allowance: BigNumberish = await contractLibrary.getAllowance(
-      props.market.quoteToken.address,
+  const summaryFields = [
+    {
+      label: "You will get",
+      value: `${payout} ${payoutToken.symbol}`,
+    },
+    {
+      label: "Available in Bond",
+      value: `${remainingCapacity || 0} ${payoutToken.symbol}`,
+      tooltip: "Soon™",
+    },
+    {
+      label: "Network Fee",
+      value: `${networkFee} ${quoteToken.symbol}`,
+      tooltip: "Soon™",
+    },
+    {
+      label: "Bond Contract",
+      value: (
+        <Link href={blockExplorerUrl} className="w-fit">
+          View on {blockExplorerName}
+        </Link>
+      ),
+      tooltip: "Soon™",
+    },
+  ];
+
+  const submitTx = () => {
+    if (!address) throw new Error("Not Connected");
+
+    return bond({
       address,
-      props.market.auctioneer,
-      requestProvider
-    );
-    allowance = Number(allowance) / Math.pow(10, 18);
-    setAllowance(allowance.toString());
-  }
-
-  async function approve() {
-    if (!address || !signer) openConnectModal && openConnectModal();
-    const approval: ContractTransaction = await contractLibrary.changeApproval(
-      props.market.quoteToken.address,
-      props.market.auctioneer,
-      "1000000000",
-      // @ts-ignore
-      signer
-    );
-
-    await signer?.provider
-      ?.waitForTransaction(approval.hash)
-      .then(() => void getAllowance());
-  }
-
-  async function getPayoutFor(amount: string) {
-    if (!amount) {
-      setPayout("0");
-      return;
-    }
-
-    const requestProvider = providers[props.market.network];
-
-    const payout: BigNumberish = await contractLibrary.payoutFor(
-      requestProvider,
       amount,
-      props.market.marketId,
-      props.market.auctioneer,
-      import.meta.env.VITE_MARKET_REFERRAL_ADDRESS
-    );
-    const res = (Number(payout) / Math.pow(10, 18)).toString();
-    setPayout((Number(payout) / Math.pow(10, 18)).toString());
-  }
-
-  const quoteToken = getTokenDetails(props.market.quoteToken);
-  const payoutToken = getTokenDetails(props.market.payoutToken);
-  const remainingCapacity = getRemainingCapacity(
-    props.market.currentCapacity,
-    //@ts-ignore TODO: Fix type mismatch with contract lib
-    parseFloat(props.market.totalPayoutAmount)
-  );
-  const vestingLabel =
-    props.market.vestingType === BOND_TYPE.FIXED_TERM
-      ? props.market.formattedLongVesting
-      : props.market.formattedShortVesting;
-
-  const networkFee = 1;
+      payout,
+      slippage: 0.05,
+      marketId: market.marketId,
+      teller: market.teller,
+    });
+  };
 
   return (
     <>
@@ -177,10 +140,15 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
             {protocol?.name || payoutToken?.symbol}
           </p>
         </div>
-        <Button thin variant="ghost" className="text-[12px] my-auto">
+        <Button
+          onClick={props.onClickTopRight}
+          thin
+          variant="ghost"
+          className="text-[12px] my-auto"
+        >
           <div className="flex pl-2 fill-inherit">
             <div className="font-faketion pt-[2px] font-bold">
-              VIEW INSIGHTS
+              {props.topRightLabel}
             </div>
             <img
               src={ArrowIcon}
@@ -211,19 +179,38 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
               }%`}
             />
           </div>
-          <BondPurchaseCard
+          <InputCard
             onChange={setAmount}
-            remainingCapacity={props.market.currentCapacity}
-            amount={amount}
-            userBalance={balance}
-            payout={payout}
-            networkFee={1}
+            value={amount}
+            balance={balance}
             quoteToken={quoteToken}
-            payoutToken={payoutToken}
+            className="mt-5"
           />
-          <Button className="w-full mt-4">BOND</Button>
+          <SummaryCard fields={summaryFields} />
+          <BondButton
+            showConnect={!isConnected}
+            showSwitcher={!correctChain}
+            showPurchaseLink={!hasSufficientBalance}
+            onSwitchChain={switchChain}
+            network={market.network}
+            quoteTokenSymbol={market.quoteToken.symbol}
+          >
+            <Button className="w-full mt-4" onClick={onClickBond}>
+              {!hasSufficientAllowance ? "APPROVE" : "BOND"}
+            </Button>
+          </BondButton>
         </div>
       </div>
+      <BondPurchaseModal
+        onSubmit={submitTx}
+        network={market.network}
+        open={showModal}
+        closeModal={() => setShowModal(false)}
+        amount={`${amount} ${quoteToken.symbol}`}
+        payout={`${Number(payout).toFixed(4)} ${payoutToken.symbol}`}
+        issuer={protocol?.name}
+        vestingTime={vestingLabel}
+      />
     </>
   );
 };

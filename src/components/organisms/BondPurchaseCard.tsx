@@ -22,44 +22,15 @@ export type BondPurchaseCardProps = {
 //bond contract?
 
 export const BondPurchaseCard = (props: BondPurchaseCardProps) => {
-  const summaryFields = [
-    {
-      label: "You will get",
-      value: `${props.payout} ${props.payoutToken.symbol}`,
-    },
-    {
-      label: "Available in Bond",
-      value: `${props.remainingCapacity || 0} ${props.payoutToken.symbol}`,
-      tooltip: "Soon™",
-    },
-    {
-      label: "Network Fee",
-      value: `${props?.networkFee} ${props.quoteToken.symbol}`,
-      tooltip: "Soon™",
-    },
-    {
-      label: "Bond Contract",
-      value: (
-        <Link href="https://etherscan.io" className="w-fit">
-          View on Etherscan
-        </Link>
-      ),
-      tooltip: "Soon™",
-    },
-  ];
-
   return (
-    <>
-      <InputCard
-        isConnected={true}
-        value={props.amount}
-        quoteToken={props.quoteToken}
-        balance={props.userBalance}
-        className="mt-4"
-        onChange={props.onChange}
-      />
-      <SummaryCard fields={summaryFields} />
-    </>
+    <InputCard
+      isConnected={true}
+      value={props.amount}
+      quoteToken={props.quoteToken}
+      balance={props.userBalance}
+      className="mt-4"
+      onChange={props.onChange}
+    />
   );
 };
 

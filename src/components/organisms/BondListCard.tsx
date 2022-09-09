@@ -18,6 +18,7 @@ import ConfirmPurchaseDialog from "./ConfirmPurchaseDialog";
 import { ConnectButton, useConnectModal } from "@rainbow-me/rainbowkit";
 import { useTokens } from "hooks";
 import { CHAINS, getProtocolByAddress } from "@bond-labs/bond-library";
+import { formatLongNumber } from "../../utils/format";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -149,7 +150,8 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
       props.market.auctioneer,
       import.meta.env.VITE_MARKET_REFERRAL_ADDRESS
     );
-    setPayout((Number(payout) / Math.pow(10, 18)).toString());
+
+    setPayout(formatLongNumber(payout).toString());
   }
 
   const quoteToken = getTokenDetails(props.market.quoteToken);
