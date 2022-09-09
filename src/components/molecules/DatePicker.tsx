@@ -1,11 +1,10 @@
 import "react-day-picker/dist/style.css";
 import {DayPicker} from "react-day-picker";
 import {useEffect, useState} from "react";
-import {getUserLocale} from "../../utils/getLocale";
 import {ClickAwayListener} from "@mui/base";
 
 export type DatePickerProps = {
-  onChange?: (date?: Date) => void;
+  onChange?: (date?: number) => void;
   className?: string;
   dateClassName?: string;
   label?: string;
@@ -17,20 +16,19 @@ export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
 
-  const locale = getUserLocale() || "en-US";
-  const formattedDate = new Intl.DateTimeFormat(locale).format(date);
-
   const fromDate = new Date();
   const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
 
   const handleClose = (date: unknown) => {
     setDate(date as Date);
     setOpen(false);
-    onChange && onChange(date as Date);
+    onChange && onChange((date as Date)?.getTime() / 1000);
   };
 
+  const formattedDate = date?.toISOString().substring(0, date?.toISOString().indexOf("T"));
+
   useEffect(() => {
-    onChange && onChange(date);
+    onChange && onChange((date as Date)?.getTime() / 1000);
   }, [onChange, date]);
 
   return (

@@ -1,21 +1,15 @@
 import * as contractLibrary from "@bond-labs/contract-library";
-import { CalculatedMarket } from "@bond-labs/contract-library";
-import { FC, useEffect, useState } from "react";
-import { Button } from "..";
-import {
-  useAccount,
-  useBalance,
-  useProvider,
-  useSigner,
-  useSwitchNetwork,
-} from "wagmi";
-import { providers } from "services/owned-providers";
-import { BigNumberish, ContractTransaction } from "ethers";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useTokens } from "hooks";
-import { CHAINS, getProtocolByAddress } from "@bond-labs/bond-library";
-import { InfoLabel } from "components/atoms/InfoLabel";
-import { BondPurchaseCard } from "./BondPurchaseCard";
+import {BOND_TYPE, CalculatedMarket} from "@bond-labs/contract-library";
+import {FC, useEffect, useState} from "react";
+import {Button} from "..";
+import {useAccount, useBalance, useProvider, useSigner, useSwitchNetwork,} from "wagmi";
+import {providers} from "services/owned-providers";
+import {BigNumberish, ContractTransaction} from "ethers";
+import {useConnectModal} from "@rainbow-me/rainbowkit";
+import {useTokens} from "hooks";
+import {CHAINS, getProtocolByAddress} from "@bond-labs/bond-library";
+import {InfoLabel} from "components/atoms/InfoLabel";
+import {BondPurchaseCard} from "./BondPurchaseCard";
 import TestIcon from "../../assets/icons/test-icon";
 import ArrowIcon from "../../assets/icons/arrow-icon.svg";
 
@@ -166,7 +160,7 @@ export const BondListCardV2: FC<BondListCardProps> = (props) => {
     parseFloat(props.market.totalPayoutAmount)
   );
   const vestingLabel =
-    props.market.vestingType === "fixed-term"
+    props.market.vestingType === BOND_TYPE.FIXED_TERM
       ? props.market.formattedLongVesting
       : props.market.formattedShortVesting;
 

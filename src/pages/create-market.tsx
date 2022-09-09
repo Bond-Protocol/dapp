@@ -3,6 +3,7 @@ import * as React from "react";
 import {useEffect, useState} from "react";
 import {Controller, useForm, useWatch} from "react-hook-form";
 import * as contractLibrary from "@bond-labs/contract-library";
+import {BOND_TYPE} from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
 import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
@@ -10,6 +11,7 @@ import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
 import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard} from "components/molecules";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 const capacityTokenOptions = [
   {label: "PAYOUT", value: 0},
@@ -23,16 +25,16 @@ const vestingOptions = [
 
 const formDefaults = {
   payoutToken: {address: "", confirmed: false},
-  payoutTokenPrice: 0,
+  payoutTokenPrice: "0",
   quoteToken: {address: "", confirmed: false},
-  quoteTokenPrice: 0,
+  quoteTokenPrice: "0",
   minExchangeRate: 0,
   capacityToken: 0,
   marketCapacity: 0,
-  marketExpiryDate: "",
+  marketExpiryDate: 0,
   vestingType: 0,
-  timeAmount: { amount: 0, id: 0 },
-  expiryDate: "",
+  timeAmount: {amount: 0, id: 0},
+  expiryDate: 0,
   bondsPerWeek: 7,
   debtBuffer: 10,
   chain: "rinkeby",
@@ -66,7 +68,6 @@ export const CreateMarketView = () => {
   const {
     control,
     handleSubmit,
-    watch,
     register,
     formState: {errors},
   } = useForm({defaultValues: formDefaults});
@@ -169,12 +170,11 @@ export const CreateMarketView = () => {
     } else {
       setMinimumExchangeRate(0);
     }
-  }, [minExchangeRate]);
+  }, [minExchangeRate, quoteTokenPrice]);
 
   useEffect(() => {
     let days = Number(
-      (Math.round(
-        new Date(bondExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+      (Math.round(bondExpiry - new Date().getTime() / 1000) / (60 * 60 * 24))
         .toFixed(0)
     );
     if (!isNaN(days)) {
@@ -186,8 +186,7 @@ export const CreateMarketView = () => {
 
   useEffect(() => {
     let days = Number(
-      (Math.round(
-        new Date(marketExpiry).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+      (Math.round(marketExpiry - new Date().getTime() / 1000) / (60 * 60 * 24))
         .toFixed(0)
     );
     if (!isNaN(days)) {
@@ -222,22 +221,92 @@ export const CreateMarketView = () => {
   ];
 
   const onSubmit = async (data: any) => {
+    let vesting;
+    if (data.vestingType === 0) {
+      vesting = data.expiryDate;
+    } else if (data.vestingType === 1) {
+      vesting = data.timeAmount.amount * 24 * 60 * 60;
+    }
+
+    const ptp = Number(payoutTokenPrice).toExponential();
+    const qtp = Number(quoteTokenPrice).toExponential();
+    const min = Number(minimumExchangeRate).toExponential();
+
+    const ptpSymbolIndex = (ptp.indexOf("e") + 1);
+    const qtpSymbolIndex = (qtp.indexOf("e") + 1);
+    const minSymbolIndex = (min.indexOf("e") + 1);
+
+    const payoutPriceCoefficient = Number(ptp.substring(0, ptpSymbolIndex - 1));
+    const quotePriceCoefficient = Number(qtp.substring(0, qtpSymbolIndex - 1));
+    const minPriceCoefficient = Number(min.substring(0, minSymbolIndex - 1));
+
+    const payoutPriceDecimals = Number(ptp.substring(ptpSymbolIndex));
+    const quotePriceDecimals = Number(qtp.substring(qtpSymbolIndex));
+    const minPriceDecimals = Number(min.substring(minSymbolIndex));
+
+    const tokenDecimalOffset = payoutTokenInfo?.decimals - quoteTokenInfo?.decimals;
+    let priceDecimalOffset = (payoutPriceDecimals - quotePriceDecimals) / 2;
+    let minPriceDecimalOffset = (minPriceDecimals - quotePriceDecimals) / 2;
+
+    priceDecimalOffset > 0 ?
+      priceDecimalOffset = Math.floor(priceDecimalOffset) :
+      priceDecimalOffset = Math.ceil(priceDecimalOffset);
+
+    minPriceDecimalOffset > 0 ?
+      minPriceDecimalOffset = Math.floor(minPriceDecimalOffset) :
+      minPriceDecimalOffset = Math.ceil(minPriceDecimalOffset);
+
+    const scaleAdjustment = tokenDecimalOffset - priceDecimalOffset;
+    const minScaleAdjustment = tokenDecimalOffset - minPriceDecimalOffset;
+
+    const coefficients = (payoutPriceCoefficient / quotePriceCoefficient);
+    const minPriceCoefficients = (minPriceCoefficient / quotePriceCoefficient);
+
+    const exp = (36 + scaleAdjustment + quoteTokenInfo?.decimals - payoutTokenInfo?.decimals + payoutPriceDecimals - quotePriceDecimals);
+    const minExp = (36 + minScaleAdjustment + quoteTokenInfo?.decimals - payoutTokenInfo?.decimals + minPriceDecimals - quotePriceDecimals);
+
+    const res = Math.pow(10, exp);
+    const minRes = Math.pow(10, minExp);
+
+    const formattedInitialPrice = (coefficients * res)
+      .toLocaleString()
+      .replaceAll(",", "");
+
+    const formattedMinimumPrice = (minPriceCoefficients * minRes)
+      .toLocaleString()
+      .replaceAll(",", "");
+
+    console.log({
+        payoutToken: data.payoutToken.address,
+        quoteToken: data.quoteToken.address,
+        callbackAddr: "0x0000000000000000000000000000000000000000",
+        capacity: ethers.utils.parseEther(data.marketCapacity.toString()).toString(),
+        capacityInQuote: data.capacityToken !== 0,
+        formattedInitialPrice: formattedInitialPrice.toString(),
+        formattedMinimumPrice: formattedMinimumPrice.toString(),
+        debtBuffer: data.debtBuffer,
+        vesting: vesting,
+        conclusion: data.marketExpiryDate,
+        depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
+        scaleAdjustment: scaleAdjustment,
+      })
+
     const tx = await contractLibrary.createMarket(
       {
-        payoutToken: data.payoutToken,
-        quoteToken: data.quoteToken,
-        callbackAddr: data.callback,
-        capacity: data.capacity,
-        capacityInQuote: data.capacityInQuote,
-        formattedInitialPrice: data.formattedInitialPrice,
-        formattedMinimumPrice: data.formattedMinimumPrice,
+        payoutToken: data.payoutToken.address,
+        quoteToken: data.quoteToken.address,
+        callbackAddr: "0x0000000000000000000000000000000000000000",
+        capacity: ethers.utils.parseEther(data.marketCapacity.toString()).toString(),
+        capacityInQuote: data.capacityToken !== 0,
+        formattedInitialPrice: formattedInitialPrice.toString(),
+        formattedMinimumPrice: formattedMinimumPrice.toString(),
         debtBuffer: data.debtBuffer,
-        vesting: data.vesting,
-        conclusion: data.conclusion,
-        depositInterval: data.depositInterval,
-        scaleAdjustment: data.scaleAdjustment,
+        vesting: vesting,
+        conclusion: data.marketExpiryDate,
+        depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
+        scaleAdjustment: scaleAdjustment,
       },
-      data.bondType,
+      data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
       data.chain,
       // @ts-ignore
       signer,
@@ -250,7 +319,9 @@ export const CreateMarketView = () => {
 
   const switchChain = (e: Event) => {
     e.preventDefault();
-    const newChain = Number("0x" + selectedChain);
+    const newChain = Number(
+      "0x" + providers[selectedChain].network.chainId.toString()
+    );
     switchNetwork?.(newChain);
   };
 
@@ -352,7 +423,7 @@ export const CreateMarketView = () => {
         Create Market
       </h1>
       <div className="mx-[15vw]">
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-col">
             <p className="font-faketion tracking-widest">1 SET UP MARKET</p>
             <div className="pt-4">
@@ -408,7 +479,7 @@ export const CreateMarketView = () => {
                   <div className="pt-5">
                     <p className="text-xs font-light mb-1">Current Exchange Rate</p>
                     <p className="mt-3">
-                      ~{exchangeRate} {quoteTokenSymbol} per {payoutTokenSymbol}
+                      ~{exchangeRate} {payoutTokenSymbol} per {quoteTokenSymbol}
                     </p>
                   </div>
                 </div>
@@ -557,12 +628,25 @@ export const CreateMarketView = () => {
             <p className="mt-16 font-faketion tracking-widest">3 CONFIRMATION</p>
             <SummaryCard fields={summaryFields} className="mt-8"/>
 
-            <Button
-              onClick={handleSubmit(data => console.log(data))}
-              className="w-full font-fraktion mt-5"
-            >
-              CONFIRM INFORMATION
-            </Button>
+
+            {!isConnected ? (
+              <ConnectButton/>
+            ) : network.chain && network.chain.network == selectedChain ? (
+              <Button
+                type="submit"
+                className="w-full font-fraktion mt-5"
+              >
+                CONFIRM INFORMATION
+              </Button>
+            ) : (
+              // @ts-ignore
+              <Button
+                onClick={switchChain}
+                className="w-full font-fraktion mt-5"
+              >
+                Switch Chain
+              </Button>
+            )}
           </div>
         </form>
       </div>
