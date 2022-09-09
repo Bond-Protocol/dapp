@@ -1,9 +1,9 @@
 //@ts-nocheck
-import { FC, useEffect, useState } from "react";
-import { useCalculatedMarkets } from "hooks";
-import { Protocol, PROTOCOLS } from "@bond-labs/bond-library";
-import { MarketList } from "components/organisms/MarketList";
-import { CalculatedMarket } from "@bond-labs/contract-library";
+import {FC, useEffect, useState} from "react";
+import {useCalculatedMarkets} from "hooks";
+import {Protocol, PROTOCOLS} from "@bond-labs/bond-library";
+import {MarketList} from "components/organisms/MarketList";
+import {CalculatedMarket} from "@bond-labs/contract-library";
 
 type IssuerPageProps = {
   issuer: string;

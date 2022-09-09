@@ -35,7 +35,7 @@ export const Link = forwardRef(function Button(
         }),
       }}
     >
-      {children}
+      <p className="pt-[2px]">{children}</p>
       <LinkIcon
         className={`my-auto mx-1 ml-1.5 hover:fill-inherit ${props.iconClassName}`}
       />

@@ -8,7 +8,6 @@ import { useCalculatedMarkets } from "hooks";
 export const MarketsView = () => {
   const allMarkets = useCalculatedMarkets().allMarkets;
   const myMarkets = useCalculatedMarkets().myMarkets;
-  console.log({ allMarkets });
 
   return (
     <PageContainer className="">

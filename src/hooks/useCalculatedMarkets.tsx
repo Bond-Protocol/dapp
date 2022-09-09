@@ -3,6 +3,7 @@ import { useTokens } from "hooks/useTokens";
 import { useQueries } from "react-query";
 import { useState } from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
+import { getProtocolByAddress } from "@bond-labs/bond-library";
 import * as contractLibrary from "@bond-labs/contract-library";
 import { CalculatedMarket } from "@bond-labs/contract-library";
 import { useProvider } from "wagmi";
@@ -11,7 +12,6 @@ import { Market } from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { useMarkets } from "hooks/useMarkets";
 import { useMyMarkets } from "hooks/useMyMarkets";
-import { getProtocolByAddress } from "@bond-labs/bond-library";
 
 export function useCalculatedMarkets() {
   const { markets: markets } = useMarkets();
@@ -84,7 +84,6 @@ export function useCalculatedMarkets() {
     })
   );
 
-  console.log({ calculateAllMarkets, markets });
   const calculateMyMarkets = useQueries(
     myMarkets.map((market) => {
       return {
@@ -99,6 +98,9 @@ export function useCalculatedMarkets() {
     calculateAllMarkets.forEach((result) => {
       if (result.data && result.data.id === id) void result.refetch();
     });
+
+    const market = calculateAllMarkets.find((m) => m?.data?.id === id);
+    void market?.refetch();
   };
 
   const refetchAllMarkets = () => {

@@ -9,6 +9,7 @@ export type ButtonProps = ButtonUnstyledProps & {
   size?: "sm" | "md" | "lg";
   align?: "left" | "center" | "right";
   thin?: boolean;
+  long?: boolean;
   icon?: boolean;
 };
 
@@ -18,6 +19,7 @@ const styles = {
     md: "py-1",
     lg: "py-2",
   },
+  long: "px-1",
   alignment: {
     left: "pr-16 pl-4",
     right: "pl-16 pr-4",
@@ -33,7 +35,7 @@ const styles = {
     },
     secondary: {
       base: "text-white border border-brand-yella",
-      hover: "hover:border-brand-covenant hover:text-brand-yella",
+      hover: "hover:border-white hover:text-brand-yella",
       disabled:
         "disabled:bg-none disabled:border-brand-not-gold disabled:text-grey-500 disabled:cursor-not-allowed",
       active:
@@ -61,7 +63,8 @@ export const Button = forwardRef(function Button(
   const height = styles.height[props.size || "md"];
   const variant = styles.variant[props.variant || "primary"];
   const pseudo = props.disabled ? variant.disabled : variant.hover;
-  const style = `${variant.base} ${variant.active} ${pseudo} ${align} ${height}`;
+  const long = props.long && styles.long;
+  const style = `${variant.base} ${variant.active} ${pseudo} ${align} ${height} ${long}`;
 
   return (
     <ButtonUnstyled
@@ -69,7 +72,7 @@ export const Button = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `uppercase font-faketion tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
+          className: `uppercase font-faketion font-bold tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
         }),
       }}
     />

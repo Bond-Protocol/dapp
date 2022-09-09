@@ -1,3 +1,4 @@
+//@ts-nocheck
 import * as contractLibrary from "@bond-labs/contract-library";
 import { providers } from "services/owned-providers";
 import { getSubgraphEndpoints } from "services/subgraph-endpoints";
@@ -6,7 +7,7 @@ import {
   useListTokensGoerliQuery,
   useListTokensRinkebyQuery,
 } from "../generated/graphql";
-import { useEffect, useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
 import {
   CustomPriceSource,
@@ -190,7 +191,7 @@ export const useTokens = () => {
   }, [testnet, mainnetTokens, testnetTokens]);
 
   function getPrice(id: string): number {
-    const sources = currentPrices[id];
+    const sources = currentPrices[id.toLowerCase()];
     if (!sources) return 0;
     for (const source of sources) {
       if (source == undefined || source.price == undefined) {

@@ -2,14 +2,12 @@
 import { ExpandableRow } from "components/molecules/ExpandableRow";
 import { CalculatedMarket, Token } from "@bond-labs/contract-library";
 import { getToken } from "@bond-labs/bond-library";
-import { BondListCard } from "components/organisms/BondListCard";
 import { FC, useEffect, useRef, useState } from "react";
 import { CloseMarketCard } from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
 import { useCalculatedMarkets, useTokens } from "hooks";
 import { TableHeading } from "components/atoms/TableHeading";
 import { TableCell } from "components/atoms/TableCell";
-import { TablePagination } from "components/molecules/TablePagination";
 import { CellLabel } from "components/atoms/CellLabel";
 import { BondListCardV2 } from "./BondListCardV2";
 
@@ -225,7 +223,11 @@ export const MarketList: FC<MarketListProps> = ({
                     allowManagement ? (
                       <CloseMarketCard market={market} />
                     ) : (
-                      <BondListCardV2 market={market} />
+                      <BondListCardV2
+                        market={market}
+                        topRightLabel={"VIEW INSIGHTS"}
+                        onClickTopRight={() => {}}
+                      />
                     )
                   ) : (
                     <div>Loading...</div>

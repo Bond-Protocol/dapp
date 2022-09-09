@@ -13,7 +13,7 @@ export const Tabs: FC<TabProps> = ({ tabs }) => {
   return (
     <TabsUnstyled
       defaultValue={0}
-      className="bg-white/10 pt-8 border-transparent rounded-t-lg overflow-hidden"
+      className="bg-white/10 mt-4 pt-8 border-transparent rounded-t-lg overflow-hidden"
     >
       <TabsListUnstyled
         componentsProps={{
@@ -33,7 +33,7 @@ export const Tabs: FC<TabProps> = ({ tabs }) => {
               root: {
                 className: `${
                   selected === i ? "bg-light-primary-900" : "bg-transparent"
-                } border-transparent rounded-t-lg px-6 py-4`,
+                } border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4`,
               },
             }}
           >

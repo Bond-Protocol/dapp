@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import SelectUnstyled, { SelectUnstyledProps } from "@mui/base/SelectUnstyled";
+import {useEffect, useState} from "react";
+import SelectUnstyled, {SelectUnstyledProps} from "@mui/base/SelectUnstyled";
 import OptionUnstyled from "@mui/base/OptionUnstyled";
-import { SelectArrowDown } from "../../assets/icons/select-arrow-down";
-import { TokenLabel, TokenLabelProps } from "./TokenLabel";
+import {SelectArrowDown} from "../../assets/icons/select-arrow-down";
+import {TokenLabelProps} from "./TokenLabel";
 
 export type SelectOptions = TokenLabelProps & {
   id: number | string;
@@ -16,6 +16,11 @@ export const Select = (props: SelectProps) => {
   const [selected, setSelected] = useState<string>(props.defaultValue || "");
   const [open, setOpen] = useState(false);
 
+  const onChange = (value: any) => {
+    setSelected(value);
+    props.onChange && props.onChange(value);
+  }
+
   useEffect(() => {
     setOpen(false);
   }, [selected]);
@@ -26,7 +31,7 @@ export const Select = (props: SelectProps) => {
         {...props}
         value={selected}
         onClick={() => setOpen((prev) => !open)}
-        onChange={(value) => setSelected(value || "")}
+        onChange={onChange}
         componentsProps={{
           root: {
             className:
@@ -48,20 +53,20 @@ export const Select = (props: SelectProps) => {
             componentsProps={{
               root: {
                 className:
-                  "font-jakarta cursor-pointer flex my-auto w-[14vw] py-2 hover:bg-opacity-90",
+                  "font-jakarta cursor-pointer flex my-auto py-2 hover:bg-opacity-90",
               },
             }}
           >
-            <TokenLabel label={o.label} logo={o.logo} className="mx-3" />
+              <div className="mx-3">{o.label}</div>
           </OptionUnstyled>
         ))}
       </SelectUnstyled>
       <div
-        className={`absolute top-3.5 left-[95%] transition-all transform ${
+        className={`absolute top-3.5 right-[10px] transition-all transform ${
           open ? "rotate-180" : "rotate-0"
         }`}
       >
-        <SelectArrowDown />
+          <SelectArrowDown />
       </div>
     </div>
   );

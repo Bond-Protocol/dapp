@@ -1,11 +1,11 @@
 //@ts-nocheck
-import { FC, useEffect, useRef, useState } from "react";
-import { useCalculatedMarkets } from "hooks";
-import { PROTOCOLS } from "@bond-labs/bond-library";
-import { IssuerCard } from "components/molecules/IssuerCard";
-import { Input } from "@material-tailwind/react";
-import { alphabeticSort, numericSort } from "services/sort";
-import { Button } from "components";
+import {FC, useEffect, useRef, useState} from "react";
+import {useCalculatedMarkets} from "hooks";
+import {PROTOCOLS} from "@bond-labs/bond-library";
+import {IssuerCard} from "components/molecules/IssuerCard";
+import {Input} from "@material-tailwind/react";
+import {alphabeticSort, numericSort} from "services/sort";
+import {Button} from "components";
 
 export const IssuerList: FC<any> = () => {
   const { marketsByIssuer, issuers } = useCalculatedMarkets();

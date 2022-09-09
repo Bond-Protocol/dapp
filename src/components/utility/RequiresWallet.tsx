@@ -1,4 +1,4 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 export type RequireWalletProps = {
   isConnected: boolean;

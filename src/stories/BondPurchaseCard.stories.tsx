@@ -1,9 +1,9 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { BondPurchaseCard } from "../components/molecules/BondPurchaseCard";
+import { BondPurchaseCard } from "../components/organisms/BondPurchaseCard";
 import logo from "../assets/icons/eth-icon.svg";
 
 export default {
-  title: "Components/molecules/BondPurchaseCard",
+  title: "Components/Organisms/BondPurchaseCard",
   component: BondPurchaseCard,
 } as ComponentMeta<typeof BondPurchaseCard>;
 
