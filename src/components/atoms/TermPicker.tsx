@@ -1,7 +1,7 @@
 //@ts-nocheck
-import { Select } from "./Select";
-import { Input } from "./Input";
-import { useEffect, useState } from "react";
+import {Select} from "./Select";
+import {Input} from "./Input";
+import {useEffect, useState} from "react";
 
 export type TermPickerProps = {
   className?: string;
@@ -36,7 +36,7 @@ export const TermPicker = (props: TermPickerProps) => {
 
   return (
     <div>
-      {props.label && <p className="">{props.label}</p>}
+      {props.label && <p className="text-xs font-light mb-1">{props.label}</p>}
       <div className="flex gap-1">
         <div className="w-1/4">
           <Select

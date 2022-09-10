@@ -1,5 +1,4 @@
 //@ts-nocheck
-import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {Controller, useForm, useWatch} from "react-hook-form";
@@ -12,41 +11,40 @@ import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
 import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
-import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 const capacityTokenOptions = [
-  { label: "PAYOUT", value: 0 },
-  { label: "QUOTE", value: 1 },
+  {label: "PAYOUT", value: 0},
+  {label: "QUOTE", value: 1},
 ];
 
 const vestingOptions = [
-  { label: "FIXED EXPIRY", value: 0 },
-  { label: "FIXED TERM", value: 1 },
+  {label: "FIXED EXPIRY", value: 0},
+  {label: "FIXED TERM", value: 1},
 ];
 
 const formDefaults = {
-  payoutToken: { address: "", confirmed: false },
+  payoutToken: {address: "", confirmed: false},
   payoutTokenPrice: "0",
-  quoteToken: { address: "", confirmed: false },
+  quoteToken: {address: "", confirmed: false},
   quoteTokenPrice: "0",
   minExchangeRate: 0,
   capacityToken: 0,
   marketCapacity: 0,
   marketExpiryDate: 0,
   vestingType: 0,
-  timeAmount: { amount: 0, id: 0 },
+  timeAmount: {amount: 0, id: 0},
   expiryDate: 0,
   bondsPerWeek: 7,
   debtBuffer: 10,
   chain: "rinkeby",
 };
 
-export const CreateMarketPage = () => {
-  const { address, isConnected } = useAccount();
-  const { data: signer } = useSigner();
-  const network = useNetwork();
-  const { getPrice } = useTokens();
-  const { switchNetwork } = useSwitchNetwork();
+export type CreateMarketPageProps = {
+  onConfirm: (marketData: any) => void;
+}
+
+export const CreateMarketPage = (props) => {
+  const {getPrice} = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
   const [quoteTokenInfo, setQuoteTokenInfo] =
@@ -57,20 +55,22 @@ export const CreateMarketPage = () => {
     label: supportedChain.displayName,
   }));
 
-  const payoutTokenSymbol = payoutTokenInfo?.symbol || "???";
-  const quoteTokenSymbol = quoteTokenInfo?.symbol || "???";
+  const payoutTokenSymbol = payoutTokenInfo?.symbol || "";
+  const quoteTokenSymbol = quoteTokenInfo?.symbol || "";
 
   const [exchangeRate, setExchangeRate] = useState(0);
   const [minimumExchangeRate, setMinimumExchangeRate] = useState(0);
-  const [daysToMarketExpiry, setDaysToMarketExpiry] = useState(0);
-  const [daysToBondExpiry, setDaysToBondExpiry] = useState(0);
+  const [vestingString, setVestingString] = useState("");
+  const [marketExpiryString, setMarketExpiryString] = useState("");
+  const [capacityString, setCapacityString] = useState("");
+  const [minExchangeRateString, setMinExchangeRateString] = useState("");
 
   const {
     control,
     handleSubmit,
     register,
-    formState: { errors },
-  } = useForm({ defaultValues: formDefaults });
+    formState: {errors},
+  } = useForm({defaultValues: formDefaults});
 
   const selectedChain = useWatch({
     control,
@@ -80,7 +80,7 @@ export const CreateMarketPage = () => {
   const payoutTokenAddress = useWatch({
     control,
     name: "payoutToken",
-    defaultValue: { address: "", confirmed: false },
+    defaultValue: {address: "", confirmed: false},
   });
 
   const quoteTokenAddress = useWatch({
@@ -151,6 +151,10 @@ export const CreateMarketPage = () => {
   });
 
   useEffect(() => {
+    setCapacityString(`${marketCapacity} ${capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol}`);
+  }, [marketCapacity, capacityToken]);
+
+  useEffect(() => {
     let rate = Number(quoteTokenPrice) / Number(payoutTokenPrice);
     let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
     rate = trimAsNumber(rate, digits);
@@ -173,18 +177,40 @@ export const CreateMarketPage = () => {
   }, [minExchangeRate, quoteTokenPrice]);
 
   useEffect(() => {
+    if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
+      setMinExchangeRateString(`${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}`);
+    }
+  }, [minExchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
+
+  useEffect(() => {
     let days = Number(
       (
         Math.round(bondExpiry - new Date().getTime() / 1000) /
         (60 * 60 * 24)
       ).toFixed(0)
-    );
-    if (!isNaN(days)) {
-      setDaysToBondExpiry(days + 1);
-    } else {
-      setDaysToBondExpiry(0);
+    ) + 1;
+
+    let string;
+    if (vestingType === 0 && days >= 0) {
+      if (isNaN(days)) {
+        string = "";
+      } else if (days === 0) {
+        string = "Bonds vest today";
+      } else {
+        string = `Bonds vest in ${days} day`;
+        if (days !== 1) string = string.concat("s");
+      }
+    } else if (vestingType === 1) {
+      if (timeAmount.amount === 0) {
+        string = "Bonds immediately on purchase";
+      } else {
+        string = `Bonds vest ${timeAmount.amount} day`;
+        if (timeAmount.amount !== 1) string = string.concat("s");
+        string = string.concat(" after purchase");
+      }
     }
-  }, [bondExpiry]);
+    setVestingString(string);
+  }, [bondExpiry, timeAmount.amount, vestingType]);
 
   useEffect(() => {
     let days = Number(
@@ -192,45 +218,32 @@ export const CreateMarketPage = () => {
         Math.round(marketExpiry - new Date().getTime() / 1000) /
         (60 * 60 * 24)
       ).toFixed(0)
-    );
-    if (!isNaN(days)) {
-      setDaysToMarketExpiry(days + 1);
+    ) + 1;
+
+    if (!isNaN(days) && days >= 0) {
+      let string;
+      if (days === 0) {
+        string = "Market expires today";
+      } else {
+        string = `Market expires in ${days} day`;
+        if (days !== 1) string = string.concat("s");
+      }
+      setMarketExpiryString(string);
     } else {
-      setDaysToMarketExpiry(0);
+      setMarketExpiryString("");
     }
   }, [marketExpiry]);
 
   const summaryFields = [
-    {
-      label: "Capacity",
-      value: `${marketCapacity} ${
-        capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
-      }`,
-    },
-    {
-      label: "Payout & Quote Tokens",
-      value: payoutTokenSymbol + "-" + quoteTokenSymbol,
-    },
-    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
-    {
-      label: "Minimum exchange rate",
-      value: `${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}`,
-    },
-    {
-      label: "Conclusion",
-      tooltip: "soon",
-      value: `Market expires in ${daysToMarketExpiry} days`,
-    },
-    {
-      label: "Vesting",
-      tooltip: "soon",
-      value:
-        vestingType === 0
-          ? `Bond vests in ${daysToBondExpiry} days`
-          : `Bond vests ${timeAmount.amount} days after purchase`,
-    },
-    { label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}` },
-    { label: "Debt Buffer", value: `${debtBuffer}%` },
+    {label: "Capacity", value: capacityString},
+    {label: "Payout Token", value: payoutTokenSymbol},
+    {label: "Quote Token", value: quoteTokenSymbol},
+    {label: "Estimate bond cadence", tooltip: "soon", value: "n/a"},
+    {label: "Minimum exchange rate", value: minExchangeRateString},
+    {label: "Conclusion", tooltip: "soon", value: marketExpiryString},
+    {label: "Vesting", tooltip: "soon", value: vestingString},
+    {label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}`},
+    {label: "Debt Buffer", value: `${debtBuffer}%`},
   ];
 
   const onSubmit = async (data: any) => {
@@ -283,6 +296,7 @@ export const CreateMarketPage = () => {
       payoutTokenInfo?.decimals +
       payoutPriceDecimals -
       quotePriceDecimals;
+
     const minExp =
       36 +
       minScaleAdjustment +
@@ -302,24 +316,19 @@ export const CreateMarketPage = () => {
       .toLocaleString()
       .replaceAll(",", "");
 
-    console.log({
-      payoutToken: data.payoutToken.address,
-      quoteToken: data.quoteToken.address,
-      callbackAddr: "0x0000000000000000000000000000000000000000",
-      capacity: ethers.utils
-        .parseEther(data.marketCapacity.toString())
-        .toString(),
-      capacityInQuote: data.capacityToken !== 0,
-      formattedInitialPrice: formattedInitialPrice.toString(),
-      formattedMinimumPrice: formattedMinimumPrice.toString(),
-      debtBuffer: data.debtBuffer,
-      vesting: vesting,
-      conclusion: data.marketExpiryDate,
-      depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
-      scaleAdjustment: scaleAdjustment,
-    });
-
     const params = {
+      summaryData: {
+        capacity: capacityString,
+        payoutToken: payoutTokenSymbol,
+        quoteToken: quoteTokenSymbol,
+        maximumBondSize: "???",
+        estimatedBondCadence: "???",
+        minimumExchangeRate: minExchangeRateString,
+        conclusion: marketExpiryString,
+        vesting: vestingString,
+        bondsPerWeek: data.bondsPerWeek,
+        debtBuffer: data.debtBuffer,
+      },
       marketParams: {
         payoutToken: data.payoutToken.address,
         quoteToken: data.quoteToken.address,
@@ -337,45 +346,10 @@ export const CreateMarketPage = () => {
         scaleAdjustment: scaleAdjustment,
       },
       bondType: data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
-      chain: data.chain,
+      chain: selectedChain,
     }
-/*
-    const tx = await contractLibrary.createMarket(
-      {
-        payoutToken: data.payoutToken.address,
-        quoteToken: data.quoteToken.address,
-        callbackAddr: "0x0000000000000000000000000000000000000000",
-        capacity: ethers.utils
-          .parseEther(data.marketCapacity.toString())
-          .toString(),
-        capacityInQuote: data.capacityToken !== 0,
-        formattedInitialPrice: formattedInitialPrice.toString(),
-        formattedMinimumPrice: formattedMinimumPrice.toString(),
-        debtBuffer: data.debtBuffer,
-        vesting: vesting,
-        conclusion: data.marketExpiryDate,
-        depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
-        scaleAdjustment: scaleAdjustment,
-      },
-      data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
-      data.chain,
-      // @ts-ignore
-      signer,
-      {
-        gasPrice: 100,
-        gasLimit: 10000000,
-      }
-    );
 
- */
-  };
-
-  const switchChain = (e: Event) => {
-    e.preventDefault();
-    const newChain = Number(
-      "0x" + providers[selectedChain].network.chainId.toString()
-    );
-    switchNetwork?.(newChain);
+    props.onConfirm(params);
   };
 
   const getTokenInfo = async (address: string, isPayout: boolean) => {
@@ -408,13 +382,13 @@ export const CreateMarketPage = () => {
       link = link.replace("#", "address");
       link = link.concat(address);
 
-      const result = { name, symbol, decimals, link, blockExplorerName, price };
+      const result = {name, symbol, decimals, link, blockExplorerName, price};
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
     } catch (e: any) {
       console.log(e.message);
       isPayout
-        ? setPayoutTokenInfo({ address: "invalid" })
-        : setQuoteTokenInfo({ address: "invalid" });
+        ? setPayoutTokenInfo({address: "invalid"})
+        : setQuoteTokenInfo({address: "invalid"});
     }
   };
 
@@ -422,7 +396,7 @@ export const CreateMarketPage = () => {
     if (ethers.utils.isAddress(payoutTokenAddress.address)) {
       void getTokenInfo(payoutTokenAddress.address, true);
     } else {
-      setPayoutTokenInfo({ address: "invalid" });
+      setPayoutTokenInfo({address: "invalid"});
     }
   }, [payoutTokenAddress, selectedChain]);
 
@@ -430,7 +404,7 @@ export const CreateMarketPage = () => {
     if (ethers.utils.isAddress(quoteTokenAddress.address)) {
       void getTokenInfo(quoteTokenAddress.address, false);
     } else {
-      setQuoteTokenInfo({ address: "invalid" });
+      setQuoteTokenInfo({address: "invalid"});
     }
   }, [quoteTokenAddress, selectedChain]);
 
@@ -488,7 +462,7 @@ export const CreateMarketPage = () => {
                 <Controller
                   name="chain"
                   control={control}
-                  render={({ field }) => (
+                  render={({field}) => (
                     <div className="w-full">
                       <div>
                         <p className="text-xs font-light mb-1">Chain</p>
@@ -508,7 +482,7 @@ export const CreateMarketPage = () => {
                   <Controller
                     name="payoutToken"
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                       <TokenPickerCard
                         {...field}
                         label="Payout Token"
@@ -523,7 +497,7 @@ export const CreateMarketPage = () => {
                     <Controller
                       name="payoutTokenPrice"
                       control={control}
-                      render={({ field }) => (
+                      render={({field}) => (
                         <Input
                           {...field}
                           label="Payout Token Price"
@@ -547,7 +521,7 @@ export const CreateMarketPage = () => {
                   <Controller
                     name="quoteToken"
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                       <TokenPickerCard
                         {...field}
                         label="Quote Token"
@@ -562,7 +536,7 @@ export const CreateMarketPage = () => {
                     <Controller
                       name="quoteTokenPrice"
                       control={control}
-                      render={({ field }) => (
+                      render={({field}) => (
                         <Input
                           {...field}
                           label="Quote Token Price"
@@ -576,7 +550,7 @@ export const CreateMarketPage = () => {
                     <Controller
                       name="minExchangeRate"
                       control={control}
-                      render={({ field }) => (
+                      render={({field}) => (
                         <Input
                           {...field}
                           subText={`You will get a minimum of 
@@ -594,7 +568,7 @@ export const CreateMarketPage = () => {
                 <Controller
                   name="capacityToken"
                   control={control}
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FlatSelect
                       {...field}
                       label="Capacity Token"
@@ -606,8 +580,8 @@ export const CreateMarketPage = () => {
                 <Controller
                   name="marketCapacity"
                   control={control}
-                  render={({ field }) => (
-                    <Input {...field} label="Market Capacity" />
+                  render={({field}) => (
+                    <Input {...field} label="Market Capacity"/>
                   )}
                 />
               </div>
@@ -620,7 +594,7 @@ export const CreateMarketPage = () => {
               <Controller
                 name="marketExpiryDate"
                 control={control}
-                render={({ field }) => (
+                render={({field}) => (
                   <DatePicker
                     {...field}
                     placeholder="Select a date"
@@ -631,7 +605,7 @@ export const CreateMarketPage = () => {
               <Controller
                 name="vestingType"
                 control={control}
-                render={({ field }) => (
+                render={({field}) => (
                   <FlatSelect
                     {...field}
                     label="Bond Vesting"
@@ -645,15 +619,15 @@ export const CreateMarketPage = () => {
                 <Controller
                   name="timeAmount"
                   control={control}
-                  render={({ field }) => (
-                    <TermPicker {...field} label="Term Duration" />
+                  render={({field}) => (
+                    <TermPicker {...field} label="Term Duration"/>
                   )}
                 />
               ) : (
                 <Controller
                   name="expiryDate"
                   control={control}
-                  render={({ field }) => (
+                  render={({field}) => (
                     <DatePicker
                       {...field}
                       label="Choose bond expiry"
@@ -669,7 +643,7 @@ export const CreateMarketPage = () => {
                     <Controller
                       name="bondsPerWeek"
                       control={control}
-                      render={({ field }) => (
+                      render={({field}) => (
                         <Input
                           {...field}
                           label="Bonds per week"
@@ -681,8 +655,8 @@ export const CreateMarketPage = () => {
                     <Controller
                       name="debtBuffer"
                       control={control}
-                      render={({ field }) => (
-                        <Input {...field} label="Debt buffer" />
+                      render={({field}) => (
+                        <Input {...field} label="Debt buffer"/>
                       )}
                     />
                   </div>
@@ -694,23 +668,11 @@ export const CreateMarketPage = () => {
             <p className="mt-16 font-faketion font-bold tracking-widest">
               3 CONFIRMATION
             </p>
-            <SummaryCard fields={summaryFields} className="mt-8" />
+            <SummaryCard fields={summaryFields} className="mt-8"/>
 
-            {!isConnected ? (
-              <ConnectButton />
-            ) : network.chain && network.chain.network == selectedChain ? (
-              <Button type="submit" className="w-full font-fraktion mt-5">
-                CONFIRM INFORMATION
-              </Button>
-            ) : (
-              // @ts-ignore
-              <Button
-                onClick={switchChain}
-                className="w-full font-fraktion mt-5"
-              >
-                Switch Chain
-              </Button>
-            )}
+            <Button type="submit" className="w-full font-fraktion mt-5">
+              CONFIRM INFORMATION
+            </Button>
           </div>
         </form>
       </div>
