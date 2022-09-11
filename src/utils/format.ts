@@ -1,3 +1,4 @@
+import { CalculatedMarket } from "@bond-labs/contract-library";
 import { BigNumberish } from "ethers";
 
 export const formatLongNumber = (
@@ -6,3 +7,11 @@ export const formatLongNumber = (
 ) => {
   return Number(num) / Math.pow(10, currentDecimals);
 };
+
+export const formatVestingTerm = (market: CalculatedMarket) => {
+  return market.vestingType === "fixed-term"
+    ? market.formattedLongVesting
+    : market.formattedShortVesting;
+};
+
+export default { formatLongNumber, formatVestingTerm };
