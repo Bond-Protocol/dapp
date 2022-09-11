@@ -1,7 +1,7 @@
 import "react-day-picker/dist/style.css";
-import { DayPicker } from "react-day-picker";
-import { useEffect, useState } from "react";
-import { ClickAwayListener } from "@mui/base";
+import {DayPicker} from "react-day-picker";
+import {useEffect, useState} from "react";
+import {ClickAwayListener} from "@mui/base";
 
 export type DatePickerProps = {
   onChange?: (date?: number) => void;
@@ -10,27 +10,35 @@ export type DatePickerProps = {
   label?: string;
   string?: string;
   placeholder?: string;
+  defaultValue?: Date;
 };
 
-export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
+export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
 
   const fromDate = new Date();
   const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
 
-  const handleClose = (date: unknown) => {
-    setDate(date as Date);
-    setOpen(false);
-    onChange && onChange((date as Date)?.getTime() / 1000);
-  };
-
-  const formattedDate = date
-    ?.toISOString()
+  const formattedDate = date?.toISOString()
     .substring(0, date?.toISOString().indexOf("T"));
 
+  const handleClose = (date: unknown) => {
+    if (date instanceof Date && !isNaN(date.valueOf())) {
+      setDate(date as Date);
+      setOpen(false);
+      onChange && onChange((date as Date)?.getTime() / 1000);
+    }
+  };
+
   useEffect(() => {
-    onChange && onChange((date as Date)?.getTime() / 1000);
+    if (props.defaultValue instanceof Date && !isNaN(props.defaultValue.valueOf())) {
+      setDate(props.defaultValue);
+    }
+  }, [props.defaultValue]);
+
+  useEffect(() => {
+      onChange && onChange((date as Date)?.getTime() / 1000);
   }, [onChange, date]);
 
   return (

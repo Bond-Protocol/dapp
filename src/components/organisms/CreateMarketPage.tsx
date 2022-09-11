@@ -1,57 +1,50 @@
 //@ts-nocheck
-import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import {useEffect, useState} from "react";
+import {Controller, useForm, useWatch} from "react-hook-form";
 import * as contractLibrary from "@bond-labs/contract-library";
-import { BOND_TYPE } from "@bond-labs/contract-library";
+import {BOND_TYPE} from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
-import { providers } from "services/owned-providers";
-import { ethers } from "ethers";
-import { Button, FlatSelect, Input, Select, TermPicker } from "components";
-import { useTokens } from "hooks";
-import { trimAsNumber } from "@bond-labs/contract-library/dist/core/utils";
-import {
-  Accordion,
-  DatePicker,
-  SummaryCard,
-  TokenPickerCard,
-} from "components/molecules";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import {providers} from "services/owned-providers";
+import {ethers} from "ethers";
+import {Button, FlatSelect, Input, Select, TermPicker} from "components";
+import {useTokens} from "hooks";
+import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
+import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
 
 const capacityTokenOptions = [
-  { label: "PAYOUT", value: 0 },
-  { label: "QUOTE", value: 1 },
+  {label: "PAYOUT", value: 0},
+  {label: "QUOTE", value: 1},
 ];
 
 const vestingOptions = [
-  { label: "FIXED EXPIRY", value: 0 },
-  { label: "FIXED TERM", value: 1 },
+  {label: "FIXED EXPIRY", value: 0},
+  {label: "FIXED TERM", value: 1},
 ];
 
 const formDefaults = {
-  payoutToken: { address: "", confirmed: false },
+  payoutToken: {address: "", confirmed: false},
   payoutTokenPrice: "0",
-  quoteToken: { address: "", confirmed: false },
+  quoteToken: {address: "", confirmed: false},
   quoteTokenPrice: "0",
   minExchangeRate: 0,
-  capacityToken: 0,
   marketCapacity: 0,
   marketExpiryDate: 0,
   vestingType: 0,
-  timeAmount: { amount: 0, id: 0 },
+  timeAmount: {amount: 0, id: 0},
   expiryDate: 0,
   bondsPerWeek: 7,
   debtBuffer: 10,
   chain: "rinkeby",
 };
 
-export const CreateMarketView = () => {
-  const { address, isConnected } = useAccount();
-  const { data: signer } = useSigner();
-  const network = useNetwork();
-  const { getPrice } = useTokens();
-  const { switchNetwork } = useSwitchNetwork();
+export type CreateMarketPageProps = {
+  onConfirm: (marketData: any) => void;
+  initialValues?: any;
+}
+
+export const CreateMarketPage = (props: CreateMarketPageProps) => {
+  const {getPrice} = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
   const [quoteTokenInfo, setQuoteTokenInfo] =
@@ -62,20 +55,23 @@ export const CreateMarketView = () => {
     label: supportedChain.displayName,
   }));
 
-  const payoutTokenSymbol = payoutTokenInfo?.symbol || "???";
-  const quoteTokenSymbol = quoteTokenInfo?.symbol || "???";
+  const payoutTokenSymbol = payoutTokenInfo?.symbol || "";
+  const quoteTokenSymbol = quoteTokenInfo?.symbol || "";
 
   const [exchangeRate, setExchangeRate] = useState(0);
   const [minimumExchangeRate, setMinimumExchangeRate] = useState(0);
-  const [daysToMarketExpiry, setDaysToMarketExpiry] = useState(0);
-  const [daysToBondExpiry, setDaysToBondExpiry] = useState(0);
+  const [vestingString, setVestingString] = useState("");
+  const [marketExpiryString, setMarketExpiryString] = useState("");
+  const [capacityString, setCapacityString] = useState("");
+  const [minExchangeRateString, setMinExchangeRateString] = useState("");
 
   const {
     control,
     handleSubmit,
+    getValues,
     register,
-    formState: { errors },
-  } = useForm({ defaultValues: formDefaults });
+    formState: {errors},
+  } = useForm({defaultValues: props.initialValues ? props.initialValues : formDefaults});
 
   const selectedChain = useWatch({
     control,
@@ -85,12 +81,13 @@ export const CreateMarketView = () => {
   const payoutTokenAddress = useWatch({
     control,
     name: "payoutToken",
-    defaultValue: { address: "", confirmed: false },
+    defaultValue: props.initialValues?.payoutToken || {address: "", confirmed: false},
   });
 
   const quoteTokenAddress = useWatch({
     control,
     name: "quoteToken",
+    defaultValue: props.initialValues?.quoteToken || {address: "", confirmed: false},
   });
 
   const marketCapacity = useWatch({
@@ -101,7 +98,6 @@ export const CreateMarketView = () => {
   const capacityToken = useWatch({
     control,
     name: "capacityToken",
-    defaultValue: 0,
   });
 
   const minExchangeRate = useWatch({
@@ -152,8 +148,12 @@ export const CreateMarketView = () => {
   const vestingType = useWatch({
     control,
     name: "vestingType",
-    defaultValue: 0,
+    defaultValue: props.initialValues?.vestingType || 0,
   });
+
+  useEffect(() => {
+    setCapacityString(`${marketCapacity} ${capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol}`);
+  }, [marketCapacity, capacityToken]);
 
   useEffect(() => {
     let rate = Number(quoteTokenPrice) / Number(payoutTokenPrice);
@@ -178,18 +178,40 @@ export const CreateMarketView = () => {
   }, [minExchangeRate, quoteTokenPrice]);
 
   useEffect(() => {
+    if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
+      setMinExchangeRateString(`${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}`);
+    }
+  }, [minExchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
+
+  useEffect(() => {
     let days = Number(
       (
         Math.round(bondExpiry - new Date().getTime() / 1000) /
         (60 * 60 * 24)
       ).toFixed(0)
-    );
-    if (!isNaN(days)) {
-      setDaysToBondExpiry(days + 1);
-    } else {
-      setDaysToBondExpiry(0);
+    ) + 1;
+
+    let string;
+    if (vestingType === 0 && days >= 0) {
+      if (isNaN(days)) {
+        string = "";
+      } else if (days === 0) {
+        string = "Bonds vest today";
+      } else {
+        string = `Bonds vest in ${days} day`;
+        if (days !== 1) string = string.concat("s");
+      }
+    } else if (vestingType === 1) {
+      if (timeAmount.amount === 0) {
+        string = "Bonds immediately on purchase";
+      } else {
+        string = `Bonds vest ${timeAmount.amount} day`;
+        if (timeAmount.amount !== 1) string = string.concat("s");
+        string = string.concat(" after purchase");
+      }
     }
-  }, [bondExpiry]);
+    setVestingString(string);
+  }, [bondExpiry, timeAmount.amount, vestingType]);
 
   useEffect(() => {
     let days = Number(
@@ -197,45 +219,32 @@ export const CreateMarketView = () => {
         Math.round(marketExpiry - new Date().getTime() / 1000) /
         (60 * 60 * 24)
       ).toFixed(0)
-    );
-    if (!isNaN(days)) {
-      setDaysToMarketExpiry(days + 1);
+    ) + 1;
+
+    if (!isNaN(days) && days >= 0) {
+      let string;
+      if (days === 0) {
+        string = "Market expires today";
+      } else {
+        string = `Market expires in ${days} day`;
+        if (days !== 1) string = string.concat("s");
+      }
+      setMarketExpiryString(string);
     } else {
-      setDaysToMarketExpiry(0);
+      setMarketExpiryString("");
     }
   }, [marketExpiry]);
 
   const summaryFields = [
-    {
-      label: "Capacity",
-      value: `${marketCapacity} ${
-        capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
-      }`,
-    },
-    {
-      label: "Payout & Quote Tokens",
-      value: payoutTokenSymbol + "-" + quoteTokenSymbol,
-    },
-    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
-    {
-      label: "Minimum exchange rate",
-      value: `${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}`,
-    },
-    {
-      label: "Conclusion",
-      tooltip: "soon",
-      value: `Market expires in ${daysToMarketExpiry} days`,
-    },
-    {
-      label: "Vesting",
-      tooltip: "soon",
-      value:
-        vestingType === 0
-          ? `Bond vests in ${daysToBondExpiry} days`
-          : `Bond vests ${timeAmount.amount} days after purchase`,
-    },
-    { label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}` },
-    { label: "Debt Buffer", value: `${debtBuffer}%` },
+    {label: "Capacity", value: capacityString},
+    {label: "Payout Token", value: payoutTokenSymbol},
+    {label: "Quote Token", value: quoteTokenSymbol},
+    {label: "Estimate bond cadence", tooltip: "soon", value: "n/a"},
+    {label: "Minimum exchange rate", value: minExchangeRateString},
+    {label: "Conclusion", tooltip: "soon", value: marketExpiryString},
+    {label: "Vesting", tooltip: "soon", value: vestingString},
+    {label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}`},
+    {label: "Debt Buffer", value: `${debtBuffer}%`},
   ];
 
   const onSubmit = async (data: any) => {
@@ -288,6 +297,7 @@ export const CreateMarketView = () => {
       payoutTokenInfo?.decimals +
       payoutPriceDecimals -
       quotePriceDecimals;
+
     const minExp =
       36 +
       minScaleAdjustment +
@@ -307,25 +317,20 @@ export const CreateMarketView = () => {
       .toLocaleString()
       .replaceAll(",", "");
 
-    console.log({
-      payoutToken: data.payoutToken.address,
-      quoteToken: data.quoteToken.address,
-      callbackAddr: "0x0000000000000000000000000000000000000000",
-      capacity: ethers.utils
-        .parseEther(data.marketCapacity.toString())
-        .toString(),
-      capacityInQuote: data.capacityToken !== 0,
-      formattedInitialPrice: formattedInitialPrice.toString(),
-      formattedMinimumPrice: formattedMinimumPrice.toString(),
-      debtBuffer: data.debtBuffer,
-      vesting: vesting,
-      conclusion: data.marketExpiryDate,
-      depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
-      scaleAdjustment: scaleAdjustment,
-    });
-
-    const tx = await contractLibrary.createMarket(
-      {
+    const params = {
+      summaryData: {
+        capacity: capacityString,
+        payoutToken: payoutTokenSymbol,
+        quoteToken: quoteTokenSymbol,
+        maximumBondSize: "???",
+        estimatedBondCadence: "???",
+        minimumExchangeRate: minExchangeRateString,
+        conclusion: marketExpiryString,
+        vesting: vestingString,
+        bondsPerWeek: data.bondsPerWeek,
+        debtBuffer: data.debtBuffer,
+      },
+      marketParams: {
         payoutToken: data.payoutToken.address,
         quoteToken: data.quoteToken.address,
         callbackAddr: "0x0000000000000000000000000000000000000000",
@@ -341,23 +346,12 @@ export const CreateMarketView = () => {
         depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
         scaleAdjustment: scaleAdjustment,
       },
-      data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
-      data.chain,
-      // @ts-ignore
-      signer,
-      {
-        gasPrice: 100,
-        gasLimit: 10000000,
-      }
-    );
-  };
+      bondType: data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
+      chain: selectedChain,
+      formValues: getValues(),
+    }
 
-  const switchChain = (e: Event) => {
-    e.preventDefault();
-    const newChain = Number(
-      "0x" + providers[selectedChain].network.chainId.toString()
-    );
-    switchNetwork?.(newChain);
+    props.onConfirm(params);
   };
 
   const getTokenInfo = async (address: string, isPayout: boolean) => {
@@ -390,13 +384,13 @@ export const CreateMarketView = () => {
       link = link.replace("#", "address");
       link = link.concat(address);
 
-      const result = { name, symbol, decimals, link, blockExplorerName, price };
+      const result = {name, symbol, decimals, link, blockExplorerName, price};
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
     } catch (e: any) {
       console.log(e.message);
       isPayout
-        ? setPayoutTokenInfo({ address: "invalid" })
-        : setQuoteTokenInfo({ address: "invalid" });
+        ? setPayoutTokenInfo({address: "invalid"})
+        : setQuoteTokenInfo({address: "invalid"});
     }
   };
 
@@ -404,7 +398,7 @@ export const CreateMarketView = () => {
     if (ethers.utils.isAddress(payoutTokenAddress.address)) {
       void getTokenInfo(payoutTokenAddress.address, true);
     } else {
-      setPayoutTokenInfo({ address: "invalid" });
+      setPayoutTokenInfo({address: "invalid"});
     }
   }, [payoutTokenAddress, selectedChain]);
 
@@ -412,7 +406,7 @@ export const CreateMarketView = () => {
     if (ethers.utils.isAddress(quoteTokenAddress.address)) {
       void getTokenInfo(quoteTokenAddress.address, false);
     } else {
-      setQuoteTokenInfo({ address: "invalid" });
+      setQuoteTokenInfo({address: "invalid"});
     }
   }, [quoteTokenAddress, selectedChain]);
 
@@ -470,14 +464,14 @@ export const CreateMarketView = () => {
                 <Controller
                   name="chain"
                   control={control}
-                  render={({ field }) => (
+                  render={({field}) => (
                     <div className="w-full">
                       <div>
                         <p className="text-xs font-light mb-1">Chain</p>
                       </div>
                       <Select
                         {...field}
-                        defaultValue={chainOptions[1].id}
+                        defaultValue={props.initialValues?.chain ? props.initialValues.chain : chainOptions[1].id}
                         options={chainOptions}
                       />
                     </div>
@@ -490,13 +484,14 @@ export const CreateMarketView = () => {
                   <Controller
                     name="payoutToken"
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                       <TokenPickerCard
                         {...field}
                         label="Payout Token"
                         subText="Enter the contract address of the payout token"
                         checkboxLabel="I confirm this is the token"
                         token={payoutTokenInfo}
+                        defaultValue={props.initialValues?.payoutToken}
                       />
                     )}
                   />
@@ -505,7 +500,7 @@ export const CreateMarketView = () => {
                     <Controller
                       name="payoutTokenPrice"
                       control={control}
-                      render={({ field }) => (
+                      render={({field}) => (
                         <Input
                           {...field}
                           label="Payout Token Price"
@@ -529,13 +524,14 @@ export const CreateMarketView = () => {
                   <Controller
                     name="quoteToken"
                     control={control}
-                    render={({ field }) => (
+                    render={({field}) => (
                       <TokenPickerCard
                         {...field}
                         label="Quote Token"
                         subText="Enter the contract address of the quote token"
                         checkboxLabel="I confirm this is the token"
                         token={quoteTokenInfo}
+                        defaultValue={props.initialValues?.quoteToken}
                       />
                     )}
                   />
@@ -544,7 +540,7 @@ export const CreateMarketView = () => {
                     <Controller
                       name="quoteTokenPrice"
                       control={control}
-                      render={({ field }) => (
+                      render={({field}) => (
                         <Input
                           {...field}
                           label="Quote Token Price"
@@ -558,7 +554,7 @@ export const CreateMarketView = () => {
                     <Controller
                       name="minExchangeRate"
                       control={control}
-                      render={({ field }) => (
+                      render={({field}) => (
                         <Input
                           {...field}
                           subText={`You will get a minimum of 
@@ -576,11 +572,12 @@ export const CreateMarketView = () => {
                 <Controller
                   name="capacityToken"
                   control={control}
-                  render={({ field }) => (
+                  render={({field}) => (
                     <FlatSelect
                       {...field}
                       label="Capacity Token"
                       options={capacityTokenOptions}
+                      default={props.initialValues?.capacityToken}
                     />
                   )}
                 />
@@ -588,8 +585,8 @@ export const CreateMarketView = () => {
                 <Controller
                   name="marketCapacity"
                   control={control}
-                  render={({ field }) => (
-                    <Input {...field} label="Market Capacity" />
+                  render={({field}) => (
+                    <Input {...field} label="Market Capacity"/>
                   )}
                 />
               </div>
@@ -602,22 +599,24 @@ export const CreateMarketView = () => {
               <Controller
                 name="marketExpiryDate"
                 control={control}
-                render={({ field }) => (
+                render={({field}) => (
                   <DatePicker
                     {...field}
                     placeholder="Select a date"
                     label="Market Expiry Date"
+                    defaultValue={new Date(props.initialValues?.marketExpiryDate * 1000)}
                   />
                 )}
               />
               <Controller
                 name="vestingType"
                 control={control}
-                render={({ field }) => (
+                render={({field}) => (
                   <FlatSelect
                     {...field}
                     label="Bond Vesting"
                     options={vestingOptions}
+                    default={props.initialValues?.vestingType}
                     className="my-5"
                   />
                 )}
@@ -627,19 +626,23 @@ export const CreateMarketView = () => {
                 <Controller
                   name="timeAmount"
                   control={control}
-                  render={({ field }) => (
-                    <TermPicker {...field} label="Term Duration" />
+                  render={({field}) => (
+                    <TermPicker {...field}
+                                label="Term Duration"
+                                defaultValue={props.initialValues?.timeAmount}
+                    />
                   )}
                 />
               ) : (
                 <Controller
                   name="expiryDate"
                   control={control}
-                  render={({ field }) => (
+                  render={({field}) => (
                     <DatePicker
                       {...field}
                       label="Choose bond expiry"
                       placeholder="Select expiry"
+                      defaultValue={new Date(props.initialValues?.expiryDate * 1000)}
                     />
                   )}
                 />
@@ -651,7 +654,7 @@ export const CreateMarketView = () => {
                     <Controller
                       name="bondsPerWeek"
                       control={control}
-                      render={({ field }) => (
+                      render={({field}) => (
                         <Input
                           {...field}
                           label="Bonds per week"
@@ -663,8 +666,8 @@ export const CreateMarketView = () => {
                     <Controller
                       name="debtBuffer"
                       control={control}
-                      render={({ field }) => (
-                        <Input {...field} label="Debt buffer" />
+                      render={({field}) => (
+                        <Input {...field} label="Debt buffer"/>
                       )}
                     />
                   </div>
@@ -676,23 +679,11 @@ export const CreateMarketView = () => {
             <p className="mt-16 font-faketion font-bold tracking-widest">
               3 CONFIRMATION
             </p>
-            <SummaryCard fields={summaryFields} className="mt-8" />
+            <SummaryCard fields={summaryFields} className="mt-8"/>
 
-            {!isConnected ? (
-              <ConnectButton />
-            ) : network.chain && network.chain.network == selectedChain ? (
-              <Button type="submit" className="w-full font-fraktion mt-5">
-                CONFIRM INFORMATION
-              </Button>
-            ) : (
-              // @ts-ignore
-              <Button
-                onClick={switchChain}
-                className="w-full font-fraktion mt-5"
-              >
-                Switch Chain
-              </Button>
-            )}
+            <Button type="submit" className="w-full font-fraktion mt-5">
+              CONFIRM INFORMATION
+            </Button>
           </div>
         </form>
       </div>

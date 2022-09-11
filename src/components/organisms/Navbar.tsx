@@ -1,40 +1,64 @@
-import type { FC } from "react";
-import { Link, Route, Routes as Switch } from "react-router-dom";
-import { CreateMarketView } from "../../pages";
-import { Button } from "..";
-import { useAtom } from "jotai";
+import type {FC} from "react";
+import {useState} from "react";
+import {Link, Route, Routes as Switch, useNavigate} from "react-router-dom";
+import {Button} from "..";
+import {useAtom} from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
-import { useCalculatedMarkets } from "../../hooks";
-import { MarketList } from "components/organisms/MarketList";
-import { IssuerList } from "components/organisms/IssuerList";
-import { MyBondsList } from "components/organisms/MyBondsList";
-import { IssuerPage } from "./IssuerPage";
-import { MyMarkets } from "components/organisms/MyMarkets";
+import {useCalculatedMarkets} from "../../hooks";
+import {MarketList} from "components/organisms/MarketList";
+import {IssuerList} from "components/organisms/IssuerList";
+import {MyBondsList} from "components/organisms/MyBondsList";
+import {IssuerPage} from "./IssuerPage";
+import {MyMarkets} from "components/organisms/MyMarkets";
 import logo from "../../assets/logo.svg";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
+import {CreateMarketPage} from "components/organisms/CreateMarketPage";
+import {IssueMarketPage} from "components/organisms/IssueMarketPage";
 
 export const Routes: FC = () => {
-  const { allMarkets, myMarkets, issuers } = useCalculatedMarkets();
+  const navigate = useNavigate();
+  const {allMarkets, myMarkets, issuers} = useCalculatedMarkets();
+  const [marketData, setMarketData] = useState(null);
+  const [initialValues, setInitialValues] = useState(null);
 
   return (
     <Switch>
       <Route
         index
-        element={<MarketList markets={allMarkets} allowManagement={false} />}
+        element={<MarketList markets={allMarkets} allowManagement={false}/>}
       />
       <Route
         path="/markets"
-        element={<MarketList markets={allMarkets} allowManagement={false} />}
+        element={<MarketList markets={allMarkets} allowManagement={false}/>}
       />
-      <Route path="/my-markets" element={<MyMarkets />} />
-      <Route path="/issuers" element={<IssuerList />} />
-      <Route path="/my-bonds" element={<MyBondsList />} />
-      <Route path="/create-market" element={<CreateMarketView />} />
+      <Route path="/my-markets" element={<MyMarkets/>}/>
+      <Route path="/issuers" element={<IssuerList/>}/>
+      <Route path="/my-bonds" element={<MyBondsList/>}/>
+      <Route path="/create/setup-market"
+             element={
+               <CreateMarketPage initialValues={initialValues}
+                                 onConfirm={(marketData: any) => {
+                                   setMarketData(marketData);
+                                   setInitialValues(marketData.formValues);
+                                   navigate("/create/issue-market");
+                                 }}
+               />
+             }
+      />
+      <Route path="/create/issue-market"
+             element={<IssueMarketPage data={marketData}
+                                       onExecute={(txn) => console.log(txn)}
+                                       onEdit={() => {
+                                         console.log(initialValues)
+                                         navigate("/create/setup-market")
+                                       }}
+             />}
+      />
       {issuers.map((issuer) => (
         <Route
           key={issuer}
           path={"/issuers/" + issuer}
-          element={<IssuerPage issuer={issuer} />}
+          element={<IssuerPage issuer={issuer}/>}
         />
       ))}
     </Switch>
@@ -50,19 +74,19 @@ export const Navbar: FC = () => {
 
   return (
     <div className="flex child:mx-1 justify-between px-[5vw] py-4" id="navbar">
-      <img src={logo} className="w-[178px]" />
+      <img src={logo} className="w-[178px]"/>
       <div className="flex h-min gap-6">
         <Link to="/markets">
           <Button>Markets</Button>
         </Link>
-        <Link to="/create-market">
+        <Link to="/create/setup-market">
           <Button>Create Market</Button>
         </Link>
         <Button variant="secondary" onClick={toggleTestnet}>
           {testnet ? "Testnet" : "Mainnet"}
         </Button>
       </div>
-      <ConnectButton />
+      <ConnectButton/>
     </div>
   );
 };
