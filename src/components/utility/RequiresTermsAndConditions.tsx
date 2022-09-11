@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useBrowserStorage from "../../hooks/useBrowserStorage";
 import { Modal } from "../molecules/Modal";
-import { TermsDialog } from "../modals/TermsDialog";
+import { GeneralTermsDialog } from "../modals/GeneralTermsDialog";
 
 /**
  * Renders the T&C modal if the user hasn't them accepted yet (see TermsDialog component)
