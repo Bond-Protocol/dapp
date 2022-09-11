@@ -61,7 +61,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     control,
     handleSubmit,
     getValues,
-    register,
     formState: {errors},
   } = useForm({defaultValues: props.initialValues ? props.initialValues : formDefaults});
 
@@ -456,7 +455,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="chain"
                   control={control}
-                  rules={{required: true}}
+                  rules={{required: "Required"}}
                   render={({field}) => (
                     <div className="w-full">
                       <div>
@@ -478,7 +477,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     name="payoutToken"
                     control={control}
                     rules={{
-                      required: true,
+                      required: "Required",
                       validate: {
                         isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
                         isAddress: (value: string) => ethers.utils.isAddress(value),
@@ -492,6 +491,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         checkboxLabel="I confirm this is the token"
                         token={payoutTokenInfo}
                         defaultValue={props.initialValues?.payoutToken}
+                        errorMessage={errors.payoutToken}
                       />
                     )}
                   />
@@ -501,17 +501,25 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       name="payoutTokenPrice"
                       control={control}
                       rules={{
-                        required: true,
+                        required: "Required",
                         validate: {
                           isNumber: (value: string) => !isNaN(Number(value)),
                         }
                       }}
                       render={({field}) => (
-                        <Input
-                          {...field}
-                          label="Payout Token Price"
-                          className="mb-2"
-                        />
+                        <>
+                          <Input
+                            {...field}
+                            label="Payout Token Price"
+                            className="mb-2"
+                          />
+
+                          {errors.payoutTokenPrice?.type === "required" &&
+                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                              {errors.payoutTokenPrice?.message}
+                            </div>
+                          }
+                        </>
                       )}
                     />
                   </div>
@@ -531,7 +539,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     name="quoteToken"
                     control={control}
                     rules={{
-                      required: true,
+                      required: "Required",
                       validate: {
                         isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
                         isAddress: (value: string) => ethers.utils.isAddress(value),
@@ -545,6 +553,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         checkboxLabel="I confirm this is the token"
                         token={quoteTokenInfo}
                         defaultValue={props.initialValues?.quoteToken}
+                        errorMessage={errors.quoteToken}
                       />
                     )}
                   />
@@ -554,17 +563,25 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       name="quoteTokenPrice"
                       control={control}
                       rules={{
-                        required: true,
+                        required: "Required",
                         validate: {
                           isNumber: (value: string) => !isNaN(Number(value)),
                         }
                       }}
                       render={({field}) => (
-                        <Input
-                          {...field}
-                          label="Quote Token Price"
-                          className="mb-2"
-                        />
+                        <>
+                          <Input
+                            {...field}
+                            label="Quote Token Price"
+                            className="mb-2"
+                          />
+
+                          {errors.quoteTokenPrice?.type === "required" &&
+                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                              {errors.quoteTokenPrice?.message}
+                            </div>
+                          }
+                        </>
                       )}
                     />
                   </div>
@@ -575,7 +592,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       control={control}
                       defaultValue={0}
                       rules={{
-                        required: true,
+                        required: "Required",
                         validate: {
                           isNumber: (value: string) => !isNaN(Number(value)),
                         }
@@ -594,12 +611,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 </div>
               </div>
 
-              <div className="flex gap-6 pt-5">
+              <div className="flex flex-col pt-5 w-full">
                 <Controller
                   name="capacityToken"
                   control={control}
                   rules={{
-                    required: true,
+                    required: "Required",
                     validate: {
                       isNumber: (value: string) => !isNaN(Number(value)),
                     }
@@ -613,17 +630,27 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     />
                   )}
                 />
+              </div>
 
-                <Controller
+              <div className="flex flex-col pt-5 w-full"><Controller
                   name="marketCapacity"
                   control={control}
-                  rules={{required: true}}
+                  rules={{required: "Required"}}
                   render={({field}) => (
-                    <Input {...field} label="Market Capacity"/>
+                    <>
+                      <Input {...field} label="Market Capacity" className={"mb-2"}/>
+
+                      {errors.marketCapacity?.type === "required" &&
+                        <div className="text-xs font-light my-1 text-red-500">
+                          {errors.marketCapacity?.message}
+                        </div>
+                      }
+                    </>
                   )}
                 />
               </div>
             </div>
+
             <p className="mt-16 font-faketion font-bold tracking-widest">
               2 SET UP VESTING TERMS
             </p>
@@ -633,7 +660,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 name="marketExpiryDate"
                 control={control}
                 rules={{
-                  required: true,
+                  required: "Required",
                   validate: {
                     isSet: (value: number) => !isNaN(value),
                   }
@@ -650,7 +677,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               <Controller
                 name="vestingType"
                 control={control}
-                rules={{required: true}}
+                rules={{required: "Required"}}
                 render={({field}) => (
                   <FlatSelect
                     {...field}
@@ -666,7 +693,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="timeAmount"
                   control={control}
-                  rules={{required: true}}
+                  rules={{required: "Required"}}
                   render={({field}) => (
                     <TermPicker {...field}
                                 label="Term Duration"
@@ -701,17 +728,25 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       name="bondsPerWeek"
                       control={control}
                       rules={{
-                        required: true,
+                        required: "Required",
                         validate: {
                           isNumber: (value: string) => !isNaN(Number(value)),
                         }
                       }}
                       render={({field}) => (
-                        <Input
-                          {...field}
-                          label="Bonds per week"
-                          className="mb-2"
-                        />
+                        <>
+                          <Input
+                            {...field}
+                            label="Bonds per week"
+                            className="mb-2"
+                          />
+
+                          {errors.bondsPerWeek?.type === "required" &&
+                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                              {errors.bondsPerWeek?.message}
+                            </div>
+                          }
+                        </>
                       )}
                     />
 
@@ -719,13 +754,21 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       name="debtBuffer"
                       control={control}
                       rules={{
-                        required: true,
+                        required: "Required",
                         validate: {
                           isNumber: (value: string) => !isNaN(Number(value)),
                         }
                       }}
                       render={({field}) => (
-                        <Input {...field} label="Debt buffer"/>
+                        <>
+                          <Input {...field} label="Debt buffer"/>
+
+                          {errors.debtBuffer?.type === "required" &&
+                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                              {errors.debtBuffer?.message}
+                            </div>
+                          }
+                        </>
                       )}
                     />
                   </div>
@@ -745,147 +788,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
           </div>
         </form>
       </div>
-      {/*
-                  // <form onSubmit={handleSubmit(onSubmit)}>
-      //   <div className="mt-8 grid grid-cols-1 gap-6 items-start">
-      //     {renderInputBlock({
-      //       label: "Bond Type",
-      //       fieldName: "bondType",
-      //       type: "select",
-      //       selectValues: Object.values(contractLibrary.BOND_TYPE).map(
-      //         (value) => ({ value: value, displayName: value })
-      //       ),
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Chain",
-      //       fieldName: "chain",
-      //       type: "select",
-      //       selectValues: bondLibrary.SUPPORTED_CHAINS.map(
-      //         (supportedChain) => ({
-      //           value: supportedChain.chainName,
-      //           displayName: supportedChain.displayName,
-      //         })
-      //       ),
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Payout Token Address",
-      //       fieldName: "payoutToken",
-      //       type: "text",
-      //       placeholder: "0x...",
-      //       tooltip: "The token to be paid out to the bond purchaser.",
-      //       options: {
-      //         required: true,
-      //         validate: {
-      //           isAddress: (value: string) => ethers.utils.isAddress(value),
-      //         },
-      //       },
-      //     })}
-      //     {payoutTokenInfo}
-      //     {renderInputBlock({
-      //       label: "Quote Token Address",
-      //       fieldName: "quoteToken",
-      //       type: "text",
-      //       placeholder: "0x...",
-      //       tooltip:
-      //         "The token to be received by the market owner. Can be a single asset or an LP Pair",
-      //       options: {
-      //         required: true,
-      //         validate: {
-      //           isAddress: (value: string) => ethers.utils.isAddress(value),
-      //         },
-      //       },
-      //     })}
-      //     {quoteTokenInfo}
-      //     {renderInputBlock({
-      //       label: "Callback Address",
-      //       fieldName: "callback",
-      //       type: "text",
-      //       placeholder: "0x...",
-      //       tooltip: "Good explanation coming soon",
-      //       options: {
-      //         required: true,
-      //         validate: {
-      //           isAddress: (value: string) => ethers.utils.isAddress(value),
-      //         },
-      //       },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Capacity",
-      //       fieldName: "capacity",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip: "Good explanation coming soon",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Capacity in Quote Token?",
-      //       fieldName: "capacityInQuote",
-      //       type: "checkbox",
-      //       tooltip: "Good explanation coming soon",
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Formatted Initial Price",
-      //       fieldName: "formattedInitialPrice",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip:
-      //         "The start price for the bond sale. Price will decrease automatically until users purchase bonds.",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Formatted Minimum Price",
-      //       fieldName: "formattedMinimumPrice",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip: "The minimum acceptable price for a bond sale.",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Debt Buffer",
-      //       fieldName: "debtBuffer",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip: "Good explanation coming soon",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Vesting Period",
-      //       fieldName: "vesting",
-      //       type: "text",
-      //       placeholder: "0",
-      //       tooltip: "Good explanation coming soon",
-      //       options: { required: true },
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Conclusion",
-      //       fieldName: "conclusion",
-      //       type: "text",
-      //       tooltip: "Good explanation coming soon",
-      //       placeholder: "0",
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Deposit Interval",
-      //       fieldName: "depositInterval",
-      //       type: "text",
-      //       tooltip: "Good explanation coming soon",
-      //       placeholder: "0",
-      //     })}
-      //     {renderInputBlock({
-      //       label: "Scale Adjustment",
-      //       fieldName: "scaleAdjustment",
-      //       type: "text",
-      //       tooltip: "Good explanation coming soon",
-      //       placeholder: "0",
-      //     })}
-      //     {!isConnected ? (
-      //       <ConnectButton />
-      //     ) : network.chain && network.chain.network == selectedChain ? (
-      //       <input type="submit" value="Submit" />
-      //     ) : (
-      //       // @ts-ignore
-      //       <Button onClick={switchChain}>Switch Chain</Button>
-      //     )}
-             </div> </form> */}
     </div>
   );
 };
