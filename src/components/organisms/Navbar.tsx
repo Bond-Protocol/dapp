@@ -19,6 +19,7 @@ export const Routes: FC = () => {
   const navigate = useNavigate();
   const {allMarkets, myMarkets, issuers} = useCalculatedMarkets();
   const [marketData, setMarketData] = useState(null);
+  const [initialValues, setInitialValues] = useState(null);
 
   return (
     <Switch>
@@ -33,14 +34,26 @@ export const Routes: FC = () => {
       <Route path="/my-markets" element={<MyMarkets/>}/>
       <Route path="/issuers" element={<IssuerList/>}/>
       <Route path="/my-bonds" element={<MyBondsList/>}/>
-      <Route path="/create/setup-market" element={<CreateMarketPage
-        onConfirm={(marketData: any) => {
-          setMarketData(marketData);
-          navigate("/create/issue-market");
-        }}/>}
+      <Route path="/create/setup-market"
+             element={
+               <CreateMarketPage initialValues={initialValues}
+                                 onConfirm={(marketData: any) => {
+                                   setMarketData(marketData);
+                                   setInitialValues(marketData.formValues);
+                                   navigate("/create/issue-market");
+                                 }}
+               />
+             }
       />
       <Route path="/create/issue-market"
-             element={<IssueMarketPage data={marketData} onExecute={(txn) => console.log(txn)}/>}/>
+             element={<IssueMarketPage data={marketData}
+                                       onExecute={(txn) => console.log(txn)}
+                                       onEdit={() => {
+                                         console.log(initialValues)
+                                         navigate("/create/setup-market")
+                                       }}
+             />}
+      />
       {issuers.map((issuer) => (
         <Route
           key={issuer}

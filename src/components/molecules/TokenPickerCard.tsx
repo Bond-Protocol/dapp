@@ -11,6 +11,7 @@ export type TokenPickerCardProps = {
   label?: string;
   subText?: string;
   placeholder?: string;
+  defaultValue?: { address: string, confirmed: boolean };
   onChange?: (token: {address: string, confirmed: boolean}) => void;
 };
 
@@ -18,12 +19,12 @@ export const TokenPickerCard = (
   { ...props }: TokenPickerCardProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) => {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(props.defaultValue?.address || "");
   const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
     props.onChange && props.onChange({address, confirmed});
-  }, [address, confirmed])
+  }, [address, confirmed]);
 
   return (
     <div className={`${props.className}`}>
@@ -43,7 +44,7 @@ export const TokenPickerCard = (
         className="mt-5"
       />
       <div className="flex mt-2">
-        <Checkbox onChange={setConfirmed} />
+        <Checkbox onChange={setConfirmed} startChecked={props.defaultValue?.confirmed} />
         <p className="ml-1 font-light text-xs my-auto">
           I confirm this is the correct token
         </p>

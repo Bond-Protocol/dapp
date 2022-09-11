@@ -28,7 +28,6 @@ const formDefaults = {
   quoteToken: {address: "", confirmed: false},
   quoteTokenPrice: "0",
   minExchangeRate: 0,
-  capacityToken: 0,
   marketCapacity: 0,
   marketExpiryDate: 0,
   vestingType: 0,
@@ -41,9 +40,10 @@ const formDefaults = {
 
 export type CreateMarketPageProps = {
   onConfirm: (marketData: any) => void;
+  initialValues?: any;
 }
 
-export const CreateMarketPage = (props) => {
+export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const {getPrice} = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
@@ -68,9 +68,10 @@ export const CreateMarketPage = (props) => {
   const {
     control,
     handleSubmit,
+    getValues,
     register,
     formState: {errors},
-  } = useForm({defaultValues: formDefaults});
+  } = useForm({defaultValues: props.initialValues ? props.initialValues : formDefaults});
 
   const selectedChain = useWatch({
     control,
@@ -80,12 +81,13 @@ export const CreateMarketPage = (props) => {
   const payoutTokenAddress = useWatch({
     control,
     name: "payoutToken",
-    defaultValue: {address: "", confirmed: false},
+    defaultValue: props.initialValues?.payoutToken || {address: "", confirmed: false},
   });
 
   const quoteTokenAddress = useWatch({
     control,
     name: "quoteToken",
+    defaultValue: props.initialValues?.quoteToken || {address: "", confirmed: false},
   });
 
   const marketCapacity = useWatch({
@@ -96,7 +98,6 @@ export const CreateMarketPage = (props) => {
   const capacityToken = useWatch({
     control,
     name: "capacityToken",
-    defaultValue: 0,
   });
 
   const minExchangeRate = useWatch({
@@ -147,7 +148,7 @@ export const CreateMarketPage = (props) => {
   const vestingType = useWatch({
     control,
     name: "vestingType",
-    defaultValue: 0,
+    defaultValue: props.initialValues?.vestingType || 0,
   });
 
   useEffect(() => {
@@ -347,6 +348,7 @@ export const CreateMarketPage = (props) => {
       },
       bondType: data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
       chain: selectedChain,
+      formValues: getValues(),
     }
 
     props.onConfirm(params);
@@ -469,7 +471,7 @@ export const CreateMarketPage = (props) => {
                       </div>
                       <Select
                         {...field}
-                        defaultValue={chainOptions[1].id}
+                        defaultValue={props.initialValues?.chain ? props.initialValues.chain : chainOptions[1].id}
                         options={chainOptions}
                       />
                     </div>
@@ -489,6 +491,7 @@ export const CreateMarketPage = (props) => {
                         subText="Enter the contract address of the payout token"
                         checkboxLabel="I confirm this is the token"
                         token={payoutTokenInfo}
+                        defaultValue={props.initialValues?.payoutToken}
                       />
                     )}
                   />
@@ -528,6 +531,7 @@ export const CreateMarketPage = (props) => {
                         subText="Enter the contract address of the quote token"
                         checkboxLabel="I confirm this is the token"
                         token={quoteTokenInfo}
+                        defaultValue={props.initialValues?.quoteToken}
                       />
                     )}
                   />
@@ -573,6 +577,7 @@ export const CreateMarketPage = (props) => {
                       {...field}
                       label="Capacity Token"
                       options={capacityTokenOptions}
+                      default={props.initialValues?.capacityToken}
                     />
                   )}
                 />
@@ -599,6 +604,7 @@ export const CreateMarketPage = (props) => {
                     {...field}
                     placeholder="Select a date"
                     label="Market Expiry Date"
+                    defaultValue={new Date(props.initialValues?.marketExpiryDate * 1000)}
                   />
                 )}
               />
@@ -610,6 +616,7 @@ export const CreateMarketPage = (props) => {
                     {...field}
                     label="Bond Vesting"
                     options={vestingOptions}
+                    default={props.initialValues?.vestingType}
                     className="my-5"
                   />
                 )}
@@ -620,7 +627,10 @@ export const CreateMarketPage = (props) => {
                   name="timeAmount"
                   control={control}
                   render={({field}) => (
-                    <TermPicker {...field} label="Term Duration"/>
+                    <TermPicker {...field}
+                                label="Term Duration"
+                                defaultValue={props.initialValues?.timeAmount}
+                    />
                   )}
                 />
               ) : (
@@ -632,6 +642,7 @@ export const CreateMarketPage = (props) => {
                       {...field}
                       label="Choose bond expiry"
                       placeholder="Select expiry"
+                      defaultValue={new Date(props.initialValues?.expiryDate * 1000)}
                     />
                   )}
                 />

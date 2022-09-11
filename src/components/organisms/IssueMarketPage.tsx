@@ -5,12 +5,13 @@ import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import {providers} from "services/owned-providers";
 import * as contractLibrary from "@bond-labs/contract-library";
 
-export type CreateMarketPageProps = {
-  data: any;
+export type IssueMarketPageProps = {
   onExecute: (transaction: string) => void;
+  onEdit: () => void;
+  data: any;
 }
 
-export const IssueMarketPage = (props: CreateMarketPageProps) => {
+export const IssueMarketPage = (props: IssueMarketPageProps) => {
   const {isConnected} = useAccount();
   const {data: signer} = useSigner();
   const network = useNetwork();
@@ -85,7 +86,7 @@ export const IssueMarketPage = (props: CreateMarketPageProps) => {
         CONFIGURE FOR MULTI-SIG
       </Button>
 
-      <Button type="submit" className="w-full font-fraktion mt-5">
+      <Button onClick={props.onEdit} className="w-full font-fraktion mt-5">
         EDIT
       </Button>
     </div>
