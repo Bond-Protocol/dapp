@@ -1,6 +1,6 @@
 import {Button, SummaryCard} from "components";
 import * as React from "react";
-import {ConnectButton} from "@rainbow-me/rainbowkit";
+import {useConnectModal} from "@rainbow-me/rainbowkit";
 import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import {providers} from "services/owned-providers";
 import * as contractLibrary from "@bond-labs/contract-library";
@@ -12,6 +12,7 @@ export type IssueMarketPageProps = {
 }
 
 export const IssueMarketPage = (props: IssueMarketPageProps) => {
+  const {openConnectModal} = useConnectModal();
   const {isConnected} = useAccount();
   const {data: signer} = useSigner();
   const network = useNetwork();
@@ -61,16 +62,18 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         MARKET
       </p>
 
-      <SummaryCard fields={marketSummaryFields} className="my-8" />
+      <SummaryCard fields={marketSummaryFields} className="my-8"/>
 
       <p className="font-faketion font-bold tracking-widest">
         VESTING TERMS
       </p>
 
-      <SummaryCard fields={vestingSummaryFields} className="my-8" />
+      <SummaryCard fields={vestingSummaryFields} className="my-8"/>
 
       {!isConnected ? (
-        <ConnectButton/>
+        <Button onClick={openConnectModal} className="w-full font-fraktion mt-5">
+          CONNECT WALLET
+        </Button>
       ) : network.chain && network.chain.network == props.data.chain ? (
         <Button onClick={onConfirm} className="w-full font-fraktion mt-5">
           DEPLOY BOND USING WALLET
