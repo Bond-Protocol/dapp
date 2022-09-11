@@ -481,6 +481,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       required: true,
                       validate: {
                         isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
+                        isAddress: (value: string) => ethers.utils.isAddress(value),
                       }
                     }}
                     render={({field}) => (
@@ -499,7 +500,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="payoutTokenPrice"
                       control={control}
-                      rules={{required: true}}
+                      rules={{
+                        required: true,
+                        validate: {
+                          isNumber: (value: string) => !isNaN(Number(value)),
+                        }
+                      }}
                       render={({field}) => (
                         <Input
                           {...field}
@@ -528,6 +534,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       required: true,
                       validate: {
                         isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
+                        isAddress: (value: string) => ethers.utils.isAddress(value),
                       }
                     }}
                     render={({field}) => (
@@ -546,7 +553,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="quoteTokenPrice"
                       control={control}
-                      rules={{required: true}}
+                      rules={{
+                        required: true,
+                        validate: {
+                          isNumber: (value: string) => !isNaN(Number(value)),
+                        }
+                      }}
                       render={({field}) => (
                         <Input
                           {...field}
@@ -561,6 +573,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="minExchangeRate"
                       control={control}
+                      defaultValue={0}
+                      rules={{
+                        required: true,
+                        validate: {
+                          isNumber: (value: string) => !isNaN(Number(value)),
+                        }
+                      }}
                       render={({field}) => (
                         <Input
                           {...field}
@@ -579,7 +598,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="capacityToken"
                   control={control}
-                  rules={{required: true}}
+                  rules={{
+                    required: true,
+                    validate: {
+                      isNumber: (value: string) => !isNaN(Number(value)),
+                    }
+                  }}
                   render={({field}) => (
                     <FlatSelect
                       {...field}
@@ -676,7 +700,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="bondsPerWeek"
                       control={control}
-                      rules={{required: true}}
+                      rules={{
+                        required: true,
+                        validate: {
+                          isNumber: (value: string) => !isNaN(Number(value)),
+                        }
+                      }}
                       render={({field}) => (
                         <Input
                           {...field}
@@ -689,7 +718,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="debtBuffer"
                       control={control}
-                      rules={{required: true}}
+                      rules={{
+                        required: true,
+                        validate: {
+                          isNumber: (value: string) => !isNaN(Number(value)),
+                        }
+                      }}
                       render={({field}) => (
                         <Input {...field} label="Debt buffer"/>
                       )}
