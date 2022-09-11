@@ -1,5 +1,5 @@
-import { atom } from "jotai";
+import {atom} from "jotai";
 
-const createMarketMode = atom(true);
+const createMarketMode = atom(false);
 
 export default createMarketMode;
