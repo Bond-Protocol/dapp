@@ -14,6 +14,7 @@ import logo from "../../assets/logo.svg";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 import {CreateMarketPage} from "components/organisms/CreateMarketPage";
 import {IssueMarketPage} from "components/organisms/IssueMarketPage";
+import createMarketMode from "../../atoms/createMarketMode.atom";
 
 export const Routes: FC = () => {
   const navigate = useNavigate();
@@ -27,13 +28,18 @@ export const Routes: FC = () => {
         index
         element={<MarketList markets={allMarkets} allowManagement={false}/>}
       />
+
       <Route
         path="/markets"
         element={<MarketList markets={allMarkets} allowManagement={false}/>}
       />
+
       <Route path="/my-markets" element={<MyMarkets/>}/>
+
       <Route path="/issuers" element={<IssuerList/>}/>
+
       <Route path="/my-bonds" element={<MyBondsList/>}/>
+
       <Route path="/create/setup-market"
              element={
                <CreateMarketPage initialValues={initialValues}
@@ -45,15 +51,16 @@ export const Routes: FC = () => {
                />
              }
       />
+
       <Route path="/create/issue-market"
              element={<IssueMarketPage data={marketData}
                                        onExecute={(txn) => console.log(txn)}
                                        onEdit={() => {
-                                         console.log(initialValues)
                                          navigate("/create/setup-market")
                                        }}
              />}
       />
+
       {issuers.map((issuer) => (
         <Route
           key={issuer}
@@ -67,6 +74,7 @@ export const Routes: FC = () => {
 
 export const Navbar: FC = () => {
   const [testnet, setTestnet] = useAtom(testnetMode);
+  const [createMarket, setCreateMarket] = useAtom(createMarketMode);
 
   function toggleTestnet() {
     setTestnet(!testnet);
@@ -77,10 +85,10 @@ export const Navbar: FC = () => {
       <img src={logo} className="w-[178px]"/>
       <div className="flex h-min gap-6">
         <Link to="/markets">
-          <Button>Markets</Button>
+          <Button onClick={() => setCreateMarket(false)}>Markets</Button>
         </Link>
         <Link to="/create/setup-market">
-          <Button>Create Market</Button>
+          <Button onClick={() => setCreateMarket(true)}>Create Market</Button>
         </Link>
         <Button variant="secondary" onClick={toggleTestnet}>
           {testnet ? "Testnet" : "Mainnet"}
