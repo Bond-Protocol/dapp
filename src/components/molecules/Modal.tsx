@@ -11,6 +11,7 @@ export type ModalProps = ModalHeaderProps & {
   open: boolean;
   title?: string;
   children: React.ReactNode;
+  large?: boolean;
 };
 
 const ModalBackdrop = forwardRef(function ModalContainer(
@@ -53,7 +54,11 @@ export const Modal = ({ title, ...props }: ModalProps) => {
       open={props.open}
     >
       <ModalBackdrop>
-        <div className="w-[405px] border-transparent rounded-lg bg-brand-turtle-blue">
+        <div
+          className={`${
+            props.large ? "w-[576px] pb-20" : "w-[405px]"
+          } border-transparent rounded-lg bg-brand-turtle-blue`}
+        >
           <ModalHeader
             topLeftContent={props.topLeftContent}
             onClickClose={props.onClickClose}

@@ -21,7 +21,7 @@ const tcBottom = (
   </p>
 );
 
-export const TermsDialog = (props: { onAccept: () => void }) => {
+export const GeneralTermsDialog = (props: { onAccept: () => void }) => {
   const { setItem, removeItem } = useBrowserStorage();
 
   const acceptTC = () => {
