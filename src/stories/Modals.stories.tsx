@@ -1,11 +1,12 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { SummaryCard } from "../components/molecules/SummaryCard";
-import { Modal } from "../components/molecules/Modal";
+import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {SummaryCard} from "../components/molecules/SummaryCard";
+import {Modal} from "../components/molecules/Modal";
 import {
+  CreateMarketTermsDialog,
+  GeneralTermsDialog,
   PurchaseConfirmDialog,
   PurchaseSuccessDialog,
   TransactionHashDialog,
-  TermsDialog,
 } from "../components/modals";
 
 const ModalDecorator = (Story) => (
@@ -15,12 +16,20 @@ const ModalDecorator = (Story) => (
     </Modal>
   </div>
 );
+
+const LargeModalDecorator = (Story) => (
+  <div className="border h-[100vh]">
+    <Modal large open={true} onClickClose={() => {}}>
+      <Story />
+    </Modal>
+  </div>
+);
+
 export default {
   title: "Components/Modals",
   component: Modal,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-  decorators: [ModalDecorator],
 } as ComponentMeta<typeof SummaryCard>;
 
 export const PurchaseConfirm: ComponentStory<typeof PurchaseConfirmDialog> = (
@@ -32,6 +41,7 @@ PurchaseConfirm.args = {
   vestingTime: "7 days",
   contract: "0x1239841234182348912349",
 };
+PurchaseConfirm.decorators = [ModalDecorator];
 
 export const PurchaseSuccess: ComponentStory<typeof PurchaseSuccessDialog> = (
   args
@@ -42,6 +52,8 @@ PurchaseSuccess.args = {
   goToBondDetails: () => {},
 };
 
+PurchaseSuccess.decorators = [ModalDecorator];
+
 export const TransactionHash: ComponentStory<typeof TransactionHashDialog> = (
   args
 ) => <TransactionHashDialog {...args} />;
@@ -49,6 +61,15 @@ TransactionHash.args = {
   hash: "0xasd9sa90d901230940909123",
 };
 
-export const TermsAndConditions: ComponentStory<typeof TermsDialog> = () => (
-  <TermsDialog />
-);
+TransactionHash.decorators = [ModalDecorator];
+
+export const TermsAndConditions: ComponentStory<typeof GeneralTermsDialog> = (
+  args
+) => <GeneralTermsDialog {...args} />;
+TermsAndConditions.decorators = [ModalDecorator];
+
+export const CreateMarketTermsAndConditions: ComponentStory<
+  typeof CreateMarketTermsDialog
+> = (args) => <CreateMarketTermsDialog {...args} />;
+
+CreateMarketTermsAndConditions.decorators = [LargeModalDecorator];

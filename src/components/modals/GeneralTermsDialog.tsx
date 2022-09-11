@@ -1,5 +1,5 @@
-import { Button } from "../atoms/Button";
-import { ModalTitle } from "../atoms/ModalTitle";
+import {Button} from "../atoms/Button";
+import {ModalTitle} from "../atoms/ModalTitle";
 import useBrowserStorage from "../../hooks/useBrowserStorage";
 
 const tcLink = (
@@ -21,7 +21,7 @@ const tcBottom = (
   </p>
 );
 
-export const TermsDialog = (props: { onAccept: () => void }) => {
+export const GeneralTermsDialog = (props: { onAccept: () => void }) => {
   const { setItem, removeItem } = useBrowserStorage();
 
   const acceptTC = () => {

@@ -1,15 +1,16 @@
 //@ts-nocheck
-import { ExpandableRow } from "components/molecules/ExpandableRow";
-import { CalculatedMarket, Token } from "@bond-labs/contract-library";
-import { getToken } from "@bond-labs/bond-library";
-import { FC, useEffect, useRef, useState } from "react";
-import { CloseMarketCard } from "components/organisms/CloseMarketCard";
+import {ExpandableRow} from "components/molecules/ExpandableRow";
+import {CalculatedMarket, Token} from "@bond-labs/contract-library";
+import {getToken} from "@bond-labs/bond-library";
+import {FC, useEffect, useRef, useState} from "react";
+import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
-import { useCalculatedMarkets, useTokens } from "hooks";
-import { TableHeading } from "components/atoms/TableHeading";
-import { TableCell } from "components/atoms/TableCell";
-import { CellLabel } from "components/atoms/CellLabel";
-import { BondListCardV2 } from "./BondListCardV2";
+import {useCalculatedMarkets, useTokens} from "hooks";
+import {TableHeading} from "components/atoms/TableHeading";
+import {TableCell} from "components/atoms/TableCell";
+import {CellLabel} from "components/atoms/CellLabel";
+import {BondListCardV2} from "./BondListCardV2";
+import {useNavigate} from "react-router-dom";
 
 type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
@@ -23,6 +24,7 @@ export const MarketList: FC<MarketListProps> = ({
   const { refetchAllMarkets, refetchMyMarkets, refetchOne } =
     useCalculatedMarkets();
   const { getTokenDetails } = useTokens();
+  const navigate = useNavigate();
 
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(
     Array.from(markets.values())
@@ -224,9 +226,12 @@ export const MarketList: FC<MarketListProps> = ({
                       <CloseMarketCard market={market} />
                     ) : (
                       <BondListCardV2
+                        infoLabel
                         market={market}
                         topRightLabel={"VIEW INSIGHTS"}
-                        onClickTopRight={() => {}}
+                        onClickTopRight={() => {
+                          navigate("/market/" + market.marketId);
+                        }}
                       />
                     )
                   ) : (

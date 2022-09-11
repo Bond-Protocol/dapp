@@ -1,6 +1,6 @@
-import { Button } from "../atoms/Button";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Link } from "..";
+import {Button} from "../atoms/Button";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
+import {Link} from "..";
 
 export type BondButtonProps = {
   showConnect: boolean;
@@ -13,7 +13,12 @@ export type BondButtonProps = {
 };
 
 export const BondButton = (props: BondButtonProps) => {
-  if (props.showConnect) return <ConnectButton />;
+  if (props.showConnect)
+    return (
+      <div className="w-full flex justify-center py-4">
+        <ConnectButton />
+      </div>
+    );
 
   if (props.showSwitcher) {
     return (

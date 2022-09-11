@@ -1,11 +1,11 @@
-import { FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Navbar, Routes } from "components/organisms";
-import { useCalculatedMarkets, useMarkets, useTokens } from "./hooks";
-import { useMyMarkets } from "hooks/useMyMarkets";
-import { PageContainer } from "components/atoms/PageContainer";
-import { Tabs } from "components/molecules/Tabs";
-import { useAtom } from "jotai";
+import {FC, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {Navbar, Routes} from "components/organisms";
+import {useCalculatedMarkets, useMarkets, useTokens} from "./hooks";
+import {useMyMarkets} from "hooks/useMyMarkets";
+import {PageContainer} from "components/atoms/PageContainer";
+import {Tabs} from "components/molecules/Tabs";
+import {useAtom} from "jotai";
 import createMarketMode from "./atoms/createMarketMode.atom";
 
 export const App: FC = () => {
@@ -17,6 +17,8 @@ export const App: FC = () => {
   const navigate = useNavigate();
 
   const [createMarket, setCreateMarket] = useAtom(createMarketMode);
+
+  console.log({ allMarkets });
 
   const [tabsConfig, setTabsConfig] = useState([
     { label: "All Markets", handleClick: () => navigate("/markets") },

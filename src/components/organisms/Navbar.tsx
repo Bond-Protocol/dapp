@@ -15,10 +15,11 @@ import {ConnectButton} from "@rainbow-me/rainbowkit";
 import {CreateMarketPage} from "components/organisms/CreateMarketPage";
 import {IssueMarketPage} from "components/organisms/IssueMarketPage";
 import createMarketMode from "../../atoms/createMarketMode.atom";
+import {MarketInsightsPage} from "./MarketInsightsPage";
 
 export const Routes: FC = () => {
   const navigate = useNavigate();
-  const {allMarkets, myMarkets, issuers} = useCalculatedMarkets();
+  const { allMarkets, myMarkets, issuers } = useCalculatedMarkets();
   const [marketData, setMarketData] = useState(null);
   const [initialValues, setInitialValues] = useState(null);
 
@@ -26,46 +27,58 @@ export const Routes: FC = () => {
     <Switch>
       <Route
         index
-        element={<MarketList markets={allMarkets} allowManagement={false}/>}
+        element={<MarketList markets={allMarkets} allowManagement={false} />}
       />
 
       <Route
         path="/markets"
-        element={<MarketList markets={allMarkets} allowManagement={false}/>}
+        element={<MarketList markets={allMarkets} allowManagement={false} />}
       />
 
-      <Route path="/my-markets" element={<MyMarkets/>}/>
+      <Route path="/my-markets" element={<MyMarkets />} />
 
-      <Route path="/issuers" element={<IssuerList/>}/>
+      <Route path="/issuers" element={<IssuerList />} />
 
-      <Route path="/my-bonds" element={<MyBondsList/>}/>
+      <Route path="/my-bonds" element={<MyBondsList />} />
 
-      <Route path="/create/setup-market"
-             element={
-               <CreateMarketPage initialValues={initialValues}
-                                 onConfirm={(marketData: any) => {
-                                   setMarketData(marketData);
-                                   setInitialValues(marketData.formValues);
-                                   navigate("/create/issue-market");
-                                 }}
-               />
-             }
+      <Route
+        path="/create/setup-market"
+        element={
+          <CreateMarketPage
+            initialValues={initialValues}
+            onConfirm={(marketData: any) => {
+              setMarketData(marketData);
+              setInitialValues(marketData.formValues);
+              navigate("/create/issue-market");
+            }}
+          />
+        }
       />
 
-      <Route path="/create/issue-market"
-             element={<IssueMarketPage data={marketData}
-                                       onExecute={(txn) => console.log(txn)}
-                                       onEdit={() => {
-                                         navigate("/create/setup-market")
-                                       }}
-             />}
+      <Route
+        path="/create/issue-market"
+        element={
+          <IssueMarketPage
+            data={marketData}
+            onExecute={(txn) => console.log(txn)}
+            onEdit={() => {
+              navigate("/create/setup-market");
+            }}
+          />
+        }
+      />
+      <Route
+        path="/market/:id"
+        element={
+          <MarketInsightsPage markets={Array.from(allMarkets.values())} />
+        }
       />
 
       {issuers.map((issuer) => (
         <Route
           key={issuer}
           path={"/issuers/" + issuer}
-          element={<IssuerPage issuer={issuer}/>}
+          element={<IssuerPage issuer={issuer} />}
         />
       ))}
     </Switch>
@@ -82,7 +95,7 @@ export const Navbar: FC = () => {
 
   return (
     <div className="flex child:mx-1 justify-between px-[5vw] py-4" id="navbar">
-      <img src={logo} className="w-[178px]"/>
+      <img src={logo} className="w-[178px]" />
       <div className="flex h-min gap-6">
         <Link to="/markets">
           <Button onClick={() => setCreateMarket(false)}>Markets</Button>
@@ -94,7 +107,7 @@ export const Navbar: FC = () => {
           {testnet ? "Testnet" : "Mainnet"}
         </Button>
       </div>
-      <ConnectButton/>
+      <ConnectButton />
     </div>
   );
 };

@@ -1,20 +1,22 @@
-import { FC, useEffect, useState } from "react";
-import { useAccount, useSwitchNetwork, useNetwork } from "wagmi";
-import { CalculatedMarket } from "@bond-labs/contract-library";
-import { getProtocolByAddress } from "@bond-labs/bond-library";
+import {FC, useEffect, useState} from "react";
+import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
+import {CalculatedMarket} from "@bond-labs/contract-library";
+import {getProtocolByAddress} from "@bond-labs/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
 import ArrowIcon from "../../assets/icons/arrow-icon.svg";
-import { getBlockExplorer, formatLongNumber } from "../../utils";
-import { providers } from "services/owned-providers";
-import { useTokens, usePurchaseBond, useTokenAllowance } from "hooks";
-import { Button, Link, InfoLabel } from "components/atoms";
-import { BondButton, SummaryCard, InputCard } from "components/molecules";
-import { BondPurchaseModal } from "./BondPurchaseModal";
+import {formatLongNumber, getBlockExplorer} from "../../utils";
+import {providers} from "services/owned-providers";
+import {usePurchaseBond, useTokenAllowance, useTokens} from "hooks";
+import {Button, InfoLabel, Link} from "components/atoms";
+import {BondButton, InputCard, SummaryCard} from "components/molecules";
+import {BondPurchaseModal} from "./BondPurchaseModal";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
   topRightLabel?: string;
   onClickTopRight: () => void;
+  //TODO: (afx) remove this hack
+  infoLabel?: boolean;
 };
 
 const getRemainingCapacity = (remaining: number, payout: number) => {
@@ -163,22 +165,20 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
           <div className="text-center p-[12%] border">📈 up omhly</div>
         </div>
         <div className="w-1/2 flex flex-col">
-          <div className="flex justify-evenly">
-            <InfoLabel
-              label="Vesting Term"
-              tooltip="tooltip popup"
-              value={vestingLabel}
-            />
-            <InfoLabel
-              label="Remaining Capacity"
-              tooltip="tooltip popup"
-              value={`${
-                remainingCapacity === 100
-                  ? remainingCapacity
-                  : remainingCapacity.toFixed(2)
-              }%`}
-            />
-          </div>
+          {props.infoLabel && (
+            <div className="flex justify-evenly">
+              <InfoLabel label="Vesting Term" tooltip="tooltip popup">
+                {vestingLabel}
+              </InfoLabel>
+              <InfoLabel label="Remaining Capacity" tooltip="tooltip popup">
+                {`${
+                  remainingCapacity === 100
+                    ? remainingCapacity
+                    : remainingCapacity.toFixed(2)
+                }%`}
+              </InfoLabel>
+            </div>
+          )}
           <InputCard
             onChange={setAmount}
             value={amount}
