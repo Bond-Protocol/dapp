@@ -19,11 +19,13 @@ export const TokenPickerCard = (
   { ...props }: TokenPickerCardProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) => {
-  const [address, setAddress] = useState(props.defaultValue?.address || "");
+  const [address, setAddress] = useState(props.defaultValue?.address);
   const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
-    props.onChange && props.onChange({address, confirmed});
+    if (address) {
+      props.onChange && props.onChange({address, confirmed});
+    }
   }, [address, confirmed]);
 
   return (

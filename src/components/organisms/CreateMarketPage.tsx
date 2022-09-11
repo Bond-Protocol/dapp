@@ -23,16 +23,8 @@ const vestingOptions = [
 ];
 
 const formDefaults = {
-  payoutToken: {address: "", confirmed: false},
-  payoutTokenPrice: "0",
-  quoteToken: {address: "", confirmed: false},
-  quoteTokenPrice: "0",
-  minExchangeRate: 0,
-  marketCapacity: 0,
-  marketExpiryDate: 0,
+  capacityToken: 0,
   vestingType: 0,
-  timeAmount: {amount: 0, id: 0},
-  expiryDate: 0,
   bondsPerWeek: 7,
   debtBuffer: 10,
   chain: "rinkeby",
@@ -201,7 +193,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         string = `Bonds vest in ${days} day`;
         if (days !== 1) string = string.concat("s");
       }
-    } else if (vestingType === 1) {
+    } else if (timeAmount && vestingType === 1) {
       if (timeAmount.amount === 0) {
         string = "Bonds immediately on purchase";
       } else {
@@ -211,7 +203,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       }
     }
     setVestingString(string);
-  }, [bondExpiry, timeAmount.amount, vestingType]);
+  }, [bondExpiry, timeAmount && timeAmount.amount, vestingType]);
 
   useEffect(() => {
     let days = Number(
@@ -454,7 +446,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         Create Market
       </h1>
       <div className="mx-[15vw]">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} onError={console.log(errors)}>
           <div className="flex-col">
             <p className="font-faketion font-bold tracking-widest">
               1 SET UP MARKET
@@ -464,6 +456,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="chain"
                   control={control}
+                  rules={{required: true}}
                   render={({field}) => (
                     <div className="w-full">
                       <div>
@@ -484,6 +477,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   <Controller
                     name="payoutToken"
                     control={control}
+                    rules={{
+                      required: true,
+                      validate: {
+                        isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
+                      }
+                    }}
                     render={({field}) => (
                       <TokenPickerCard
                         {...field}
@@ -500,6 +499,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="payoutTokenPrice"
                       control={control}
+                      rules={{required: true}}
                       render={({field}) => (
                         <Input
                           {...field}
@@ -524,6 +524,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   <Controller
                     name="quoteToken"
                     control={control}
+                    rules={{
+                      required: true,
+                      validate: {
+                        isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
+                      }
+                    }}
                     render={({field}) => (
                       <TokenPickerCard
                         {...field}
@@ -540,6 +546,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="quoteTokenPrice"
                       control={control}
+                      rules={{required: true}}
                       render={({field}) => (
                         <Input
                           {...field}
@@ -572,6 +579,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="capacityToken"
                   control={control}
+                  rules={{required: true}}
                   render={({field}) => (
                     <FlatSelect
                       {...field}
@@ -585,6 +593,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="marketCapacity"
                   control={control}
+                  rules={{required: true}}
                   render={({field}) => (
                     <Input {...field} label="Market Capacity"/>
                   )}
@@ -599,18 +608,25 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               <Controller
                 name="marketExpiryDate"
                 control={control}
+                rules={{
+                  required: true,
+                  validate: {
+                    isSet: (value: number) => !isNaN(value),
+                  }
+                }}
                 render={({field}) => (
                   <DatePicker
                     {...field}
                     placeholder="Select a date"
                     label="Market Expiry Date"
-                    defaultValue={new Date(props.initialValues?.marketExpiryDate * 1000)}
+                    defaultValue={props.initialValues && new Date(props.initialValues?.marketExpiryDate * 1000)}
                   />
                 )}
               />
               <Controller
                 name="vestingType"
                 control={control}
+                rules={{required: true}}
                 render={({field}) => (
                   <FlatSelect
                     {...field}
@@ -626,6 +642,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="timeAmount"
                   control={control}
+                  rules={{required: true}}
                   render={({field}) => (
                     <TermPicker {...field}
                                 label="Term Duration"
@@ -637,6 +654,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="expiryDate"
                   control={control}
+                  rules={{
+                    validate: {
+                      isSet: (value: number) => vestingType !== 0 || !isNaN(value),
+                    }
+                  }}
                   render={({field}) => (
                     <DatePicker
                       {...field}
@@ -654,6 +676,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="bondsPerWeek"
                       control={control}
+                      rules={{required: true}}
                       render={({field}) => (
                         <Input
                           {...field}
@@ -666,6 +689,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <Controller
                       name="debtBuffer"
                       control={control}
+                      rules={{required: true}}
                       render={({field}) => (
                         <Input {...field} label="Debt buffer"/>
                       )}
