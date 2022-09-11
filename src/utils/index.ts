@@ -3,3 +3,4 @@ export * from "./format";
 export * from "./getBlockExplorer";
 export * from "./getLocale";
 export * from "./getTimestamp";
+export * from "./trim";

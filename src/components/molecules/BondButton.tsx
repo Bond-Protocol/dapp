@@ -13,7 +13,12 @@ export type BondButtonProps = {
 };
 
 export const BondButton = (props: BondButtonProps) => {
-  if (props.showConnect) return <ConnectButton />;
+  if (props.showConnect)
+    return (
+      <div className="w-full flex justify-center py-4">
+        <ConnectButton />
+      </div>
+    );
 
   if (props.showSwitcher) {
     return (

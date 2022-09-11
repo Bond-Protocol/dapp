@@ -18,6 +18,8 @@ export const App: FC = () => {
 
   const [createMarket, setCreateMarket] = useAtom(createMarketMode);
 
+  console.log({ allMarkets });
+
   const [tabsConfig, setTabsConfig] = useState([
     { label: "All Markets", handleClick: () => navigate("/markets") },
     { label: "Bond Issuers", handleClick: () => navigate("/issuers") },
