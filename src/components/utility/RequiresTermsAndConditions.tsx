@@ -1,6 +1,7 @@
-import {useState} from "react";
+import { GeneralTermsDialog } from "components/modals";
+import { useState } from "react";
 import useBrowserStorage from "../../hooks/useBrowserStorage";
-import {Modal} from "../molecules/Modal";
+import { Modal } from "../molecules/Modal";
 
 /**
  * Renders the T&C modal if the user hasn't them accepted yet (see TermsDialog component)
@@ -18,7 +19,7 @@ export const RequireTermsAndConditions = (props: {
 
   return (
     <Modal open={!accepted}>
-      <TermsDialog onAccept={() => setAccepted(true)} />
+      <GeneralTermsDialog onAccept={() => setAccepted(true)} />
     </Modal>
   );
 };
