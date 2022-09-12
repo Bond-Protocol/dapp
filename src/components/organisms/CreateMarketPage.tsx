@@ -480,7 +480,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       required: "Required",
                       validate: {
                         isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
-                        isAddress: (value: string) => ethers.utils.isAddress(value),
+                        isAddress: (value: { address: string, confirmed: boolean }) => ethers.utils.isAddress(value.address),
                       }
                     }}
                     render={({field}) => (
@@ -519,6 +519,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                               {errors.payoutTokenPrice?.message}
                             </div>
                           }
+
+                          {errors.payoutTokenPrice?.type === "isNumber" &&
+                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                              Must be a number
+                            </div>
+                          }
                         </>
                       )}
                     />
@@ -542,7 +548,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       required: "Required",
                       validate: {
                         isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
-                        isAddress: (value: string) => ethers.utils.isAddress(value),
+                        isAddress: (value: { address: string, confirmed: boolean }) => ethers.utils.isAddress(value.address),
                       }
                     }}
                     render={({field}) => (
@@ -581,6 +587,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                               {errors.quoteTokenPrice?.message}
                             </div>
                           }
+
+                          {errors.quoteTokenPrice?.type === "isNumber" &&
+                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                              Must be a number
+                            </div>
+                          }
                         </>
                       )}
                     />
@@ -598,16 +610,30 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         }
                       }}
                       render={({field}) => (
-                        <Input
-                          {...field}
-                          subText={`You will get a minimum of 
+                        <>
+                          <Input
+                            {...field}
+                            subText={`You will get a minimum of 
                         ~${minimumExchangeRate} ${quoteTokenSymbol} per ${payoutTokenSymbol}`}
-                          label="Minimum Exchange Rate"
-                          className="mb-2"
-                        />
+                            label="Minimum Exchange Rate"
+                            className="mb-2"
+                          />
+                        </>
                       )}
                     />
                   </div>
+
+                  {errors.minExchangeRate?.type === "required" &&
+                    <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                      {errors.minExchangeRate?.message}
+                    </div>
+                  }
+
+                  {errors.minExchangeRate?.type === "isNumber" &&
+                    <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                      Must be a number
+                    </div>
+                  }
                 </div>
               </div>
 
@@ -615,12 +641,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="capacityToken"
                   control={control}
-                  rules={{
-                    required: "Required",
-                    validate: {
-                      isNumber: (value: string) => !isNaN(Number(value)),
-                    }
-                  }}
                   render={({field}) => (
                     <FlatSelect
                       {...field}
@@ -632,7 +652,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 />
               </div>
 
-              <div className="flex flex-col pt-5 w-full"><Controller
+              <div className="flex flex-col pt-5 w-full">
+                <Controller
                   name="marketCapacity"
                   control={control}
                   rules={{required: "Required"}}
@@ -643,6 +664,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       {errors.marketCapacity?.type === "required" &&
                         <div className="text-xs font-light my-1 text-red-500">
                           {errors.marketCapacity?.message}
+                        </div>
+                      }
+
+                      {errors.marketCapacity?.type === "isNumber" &&
+                        <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          Must be a number
                         </div>
                       }
                     </>
@@ -666,12 +693,20 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   }
                 }}
                 render={({field}) => (
-                  <DatePicker
-                    {...field}
-                    placeholder="Select a date"
-                    label="Market Expiry Date"
-                    defaultValue={props.initialValues && new Date(props.initialValues?.marketExpiryDate * 1000)}
-                  />
+                  <>
+                    <DatePicker
+                      {...field}
+                      placeholder="Select a date"
+                      label="Market Expiry Date"
+                      defaultValue={props.initialValues && new Date(props.initialValues?.marketExpiryDate * 1000)}
+                    />
+
+                    {errors.marketExpiryDate?.type === "isSet" &&
+                      <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                        Date must be set
+                      </div>
+                    }
+                  </>
                 )}
               />
               <Controller
@@ -711,12 +746,20 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     }
                   }}
                   render={({field}) => (
-                    <DatePicker
-                      {...field}
-                      label="Choose bond expiry"
-                      placeholder="Select expiry"
-                      defaultValue={new Date(props.initialValues?.expiryDate * 1000)}
-                    />
+                    <>
+                      <DatePicker
+                        {...field}
+                        label="Choose bond expiry"
+                        placeholder="Select expiry"
+                        defaultValue={new Date(props.initialValues?.expiryDate * 1000)}
+                      />
+
+                      {errors.expiryDate?.type === "isSet" &&
+                        <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          Date must be set
+                        </div>
+                      }
+                    </>
                   )}
                 />
               )}
@@ -746,6 +789,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                               {errors.bondsPerWeek?.message}
                             </div>
                           }
+
+                          {errors.bondsPerWeek?.type === "isNumber" &&
+                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                              Must be a number
+                            </div>
+                          }
                         </>
                       )}
                     />
@@ -766,6 +815,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                           {errors.debtBuffer?.type === "required" &&
                             <div className="text-xs font-light my-1 text-red-500 justify-self-start">
                               {errors.debtBuffer?.message}
+                            </div>
+                          }
+
+                          {errors.debtBuffer?.type === "isNumber" &&
+                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                              Must be a number
                             </div>
                           }
                         </>
