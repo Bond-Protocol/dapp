@@ -664,7 +664,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     />
 
                     {errors.marketExpiryDate?.type === "isSet" &&
-                      <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                      <div className="text-xs font-light mt-2 text-red-500 justify-self-start">
                         Date must be set
                       </div>
                     }
@@ -717,7 +717,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       />
 
                       {errors.expiryDate?.type === "isSet" &&
-                        <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                        <div className="text-xs font-light mt-2 text-red-500 justify-self-start">
                           Date must be set
                         </div>
                       }
