@@ -10,7 +10,7 @@ import {ethers} from "ethers";
 import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
 import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
-import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
+import {Accordion, DatePicker, SummaryCard, TokenPickerCard} from "components/molecules";
 
 const capacityTokenOptions = [
   {label: "PAYOUT", value: 0},
@@ -61,7 +61,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     control,
     handleSubmit,
     getValues,
-    formState: {errors},
+    formState: {errors, isValid, isSubmitted},
   } = useForm({defaultValues: props.initialValues ? props.initialValues : formDefaults});
 
   const selectedChain = useWatch({
@@ -401,51 +401,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     }
   }, [quoteTokenAddress, selectedChain]);
 
-  /*
-    function renderInputBlock(params: InputParams) {
-      return (
-        <label className="block">
-          <div className="grid grid-cols-3 gap-2">
-            <div className="justify-self-end">
-              <span className="text-gray-700">{params.label}</span>
-            </div>
-            <div>
-              {params.type !== "select" && (
-                <input
-                  type={params.type}
-                  placeholder={params.placeholder}
-                  {...register(params.fieldName, params.options)}
-                />
-              )}
-              {params.type === "select" && params.selectValues && (
-                <select {...register(params.fieldName, params.options)}>
-                  {params.selectValues.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.displayName}
-                    </option>
-                  ))}
-                </select>
-              )}
-              {params.tooltip && <Tooltip content={params.tooltip}>wtf?</Tooltip>}
-            </div>
-            <div className="justify-self-start">
-              {errors[params.fieldName]?.type?.toString() === "required" &&
-                "Required"}
-              {errors[params.fieldName]?.type?.toString() === "isAddress" &&
-                "Invalid Address"}
-            </div>
-          </div>
-        </label>
-      );
-    }
-  */
   return (
     <div className="my-32">
       <h1 className="text-center text-5xl font-jakarta font-extralight pb-12 tracking-widest">
         Create Market
       </h1>
       <div className="mx-[15vw]">
-        <form onSubmit={handleSubmit(onSubmit)} onError={console.log(errors)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-col">
             <p className="font-faketion font-bold tracking-widest">
               1 SET UP MARKET
@@ -836,6 +798,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               3 CONFIRMATION
             </p>
             <SummaryCard fields={summaryFields} className="mt-8"/>
+
+            {(!isValid && isSubmitted) &&
+              <div className="text-xs font-light mt-4 text-red-500">
+                Form has errors, please check all fields are filled out correctly.
+              </div>
+            }
 
             <Button type="submit" className="w-full font-fraktion mt-5">
               CONFIRM INFORMATION
