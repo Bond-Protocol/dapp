@@ -1,11 +1,11 @@
 //@ts-nocheck
-import {FC, useEffect, useRef, useState} from "react";
-import {useCalculatedMarkets} from "hooks";
-import {PROTOCOLS} from "@bond-labs/bond-library";
-import {IssuerCard} from "components/molecules/IssuerCard";
-import {Input} from "@material-tailwind/react";
-import {alphabeticSort, numericSort} from "services/sort";
-import {Button} from "components";
+import { FC, useEffect, useRef, useState } from "react";
+import { useCalculatedMarkets } from "hooks";
+import { PROTOCOLS } from "@bond-labs/bond-library";
+import { IssuerCard } from "components/molecules/IssuerCard";
+import { Input } from "@material-tailwind/react";
+import { alphabeticSort, numericSort } from "services/sort";
+import { Button } from "components";
 
 export const IssuerList: FC<any> = () => {
   const { marketsByIssuer, issuers } = useCalculatedMarkets();
@@ -84,17 +84,47 @@ export const IssuerList: FC<any> = () => {
         <Button onClick={sortByName}>Sort by Name</Button>
         <Button onClick={sortByTbv}>Sort by TBV</Button>
       </p>
-      {sortedIssuers.map((issuer) => {
-        const protocol = PROTOCOLS.get(issuer);
-        if (protocol.name.toLowerCase().indexOf(search) != -1)
-          return (
-            <IssuerCard
-              key={issuer}
-              issuer={protocol}
-              markets={marketsByIssuer.get(issuer)}
-            />
-          );
-      })}
+      <div className="mt-8 grid grid-cols-7 gap-8 justify-items-center">
+        {sortedIssuers.map((issuer) => {
+          const protocol = PROTOCOLS.get(issuer);
+          if (protocol.name.toLowerCase().indexOf(search) != -1)
+            return (
+              <>
+                <IssuerCard
+                  key={issuer}
+                  issuer={protocol}
+                  markets={marketsByIssuer.get(issuer)}
+                />
+                <IssuerCard
+                  key={issuer}
+                  issuer={protocol}
+                  markets={marketsByIssuer.get(issuer)}
+                />
+                <IssuerCard
+                  key={issuer}
+                  issuer={protocol}
+                  markets={marketsByIssuer.get(issuer)}
+                />
+
+                <IssuerCard
+                  key={issuer}
+                  issuer={protocol}
+                  markets={marketsByIssuer.get(issuer)}
+                />
+                <IssuerCard
+                  key={issuer}
+                  issuer={protocol}
+                  markets={marketsByIssuer.get(issuer)}
+                />
+                <IssuerCard
+                  key={issuer}
+                  issuer={protocol}
+                  markets={marketsByIssuer.get(issuer)}
+                />
+              </>
+            );
+        })}
+      </div>
     </>
   );
 };

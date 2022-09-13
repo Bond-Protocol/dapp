@@ -21,6 +21,8 @@ module.exports = withMT({
         light: {
           primary: {
             DEFAULT: "#40749B",
+            50: "#9DBBC4",
+            300: "#6589A7",
             500: "#40749B",
             900: "#14182D",
           },
