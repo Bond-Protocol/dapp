@@ -1,16 +1,16 @@
-import {FC, useEffect, useState} from "react";
-import {Protocol} from "@bond-labs/bond-library";
-import {ethers} from "ethers";
+import { FC, useEffect, useState } from "react";
+import { Protocol } from "@bond-labs/bond-library";
+import { ethers } from "ethers";
 import { Market } from "src/generated/graphql";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-labs/contract-library";
 
 type IssuerCardProps = {
   issuer: Protocol;
   markets: CalculatedMarket[];
-}
+};
 
-export const IssuerCard: FC<IssuerCardProps> = ({issuer, markets}) => {
+export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
   const navigate = useNavigate();
 
   const [tbv, setTbv] = useState(0);
@@ -18,13 +18,15 @@ export const IssuerCard: FC<IssuerCardProps> = ({issuer, markets}) => {
   useEffect(() => {
     if (markets) {
       let tbv = 0;
-      markets.forEach(market => tbv = tbv + market.tbvUsd);
+      markets.forEach((market) => (tbv = tbv + market.tbvUsd));
       setTbv(tbv);
     }
   }, [markets]);
 
   const logo = () => {
-    return issuer.logo && issuer.logo != "" ? issuer.logo : "/placeholders/token-placeholder.png";
+    return issuer.logo && issuer.logo != ""
+      ? issuer.logo
+      : "/placeholders/token-placeholder.png";
   };
 
   const handleClick = (event: any, name: string) => {
@@ -33,11 +35,16 @@ export const IssuerCard: FC<IssuerCardProps> = ({issuer, markets}) => {
   };
 
   return (
-    <div onClick={() => handleClick(event, issuer.id)}>
+    <div
+      className="border rounded-lg border-transparent bg-white/[.05] w-min max-w-[137px] p-5 flex flex-col items-center overflow-hidden"
+      onClick={() => handleClick(event, issuer.id)}
+    >
       <img className="h-[64px] w-[64px]" src={logo()} />
-      <p>{issuer.name}</p>
-      <p>{markets.length} Markets</p>
-      <p>TBV ${Math.floor(tbv)}</p>
+      <p className="my-2 font-bold tracking-wide">{issuer.name}</p>
+      <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
+      <p className="text-[10px] text-light-primary-300">
+        TBV ${Math.floor(tbv)}
+      </p>
     </div>
   );
 };

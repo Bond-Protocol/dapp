@@ -1,55 +1,81 @@
-//@ts-nocheck
-import {FC, useEffect, useState} from "react";
-import {useCalculatedMarkets} from "hooks";
-import {Protocol, PROTOCOLS} from "@bond-labs/bond-library";
-import {MarketList} from "components/organisms/MarketList";
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import { FC, useEffect, useState } from "react";
+import { useCalculatedMarkets } from "hooks";
+import { Protocol, PROTOCOLS, PROTOCOL_NAMES } from "@bond-labs/bond-library";
+import { MarketList } from "components/organisms/MarketList";
+import { CalculatedMarket } from "@bond-labs/contract-library";
+import { InfoLabel, Link } from "components/atoms";
+import { SocialRow } from "components/atoms/SocialRow";
 
 type IssuerPageProps = {
-  issuer: string;
+  issuer: PROTOCOL_NAMES;
+};
+
+const placeholderProtocol = {
+  name: "PlaceholderDAO",
+  description: "We placehold for other protocols (P, H)",
+  links: { homepage: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
 };
 
 export const IssuerPage: FC<IssuerPageProps> = ({ issuer }) => {
   const { marketsByIssuer } = useCalculatedMarkets();
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
-  const [protocol, setProtocol] = useState<Protocol>(PROTOCOLS.get(issuer));
+  const [protocol, setProtocol] = useState<Partial<Protocol>>(
+    PROTOCOLS.get(issuer) || placeholderProtocol
+  );
   const [tbv, setTbv] = useState(0);
 
   const logo = () => {
-    return protocol.logo && protocol.logo != ""
-      ? protocol.logo
+    return protocol?.logo != ""
+      ? protocol?.logo
       : "/placeholders/token-placeholder.png";
   };
 
   useEffect(() => {
     setMarkets(marketsByIssuer && marketsByIssuer.get(issuer));
-  }, [marketsByIssuer]);
+  }, [issuer, marketsByIssuer]);
 
   useEffect(() => {
     if (markets) {
-      let tbv = 0;
-      markets.forEach((market) => (tbv = tbv + market.tbvUsd));
+      const tbv = markets.reduce((tbv, market) => tbv + market.tbvUsd, 0);
       setTbv(tbv);
     }
   }, [markets]);
 
   return (
     <>
-      <div className="flex flex-col content-center">
-        <div className="flex flex-row justify-center">
-          <img className="h-[64px] w-[64px]" src={logo()} />
+      <div className="flex flex-col content-center mt-10">
+        <div className="flex flex-row justify-center items-center">
+          <img className="h-[64px] w-[64px] mr-4" src={logo()} />
           <p className="text-5xl">{protocol.name}</p>
         </div>
 
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row justify-center mt-3">
           <p>{protocol.description}</p>
         </div>
 
-        <div className="flex flex-row justify-center">
-          TBV: ${Math.floor(tbv)}
-        </div>
+        <SocialRow {...protocol.links} className="my-5" />
+        {protocol.links?.homepage && (
+          <div className="flex flex-row justify-center">
+            <Link href={protocol.links.homepage}>
+              {protocol.links.homepage}
+            </Link>
+          </div>
+        )}
       </div>
 
+      <div className="my-16 flex justify-between gap-16 child:w-full">
+        <InfoLabel label="Total Value Bonded" tooltip="tooltip">
+          ${tbv}
+        </InfoLabel>
+        <InfoLabel label="Unique Bonders" tooltip="tooltip">
+          Soon™
+        </InfoLabel>
+        <InfoLabel label="Average Discount Rate" tooltip="tooltip">
+          ?
+        </InfoLabel>
+      </div>
+
+      {/*@ts-ignore for now pls*/}
       {markets && <MarketList markets={markets} allowManagement={false} />}
     </>
   );
