@@ -7,7 +7,7 @@ import { InfoLabel, Link } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
 
 type IssuerPageProps = {
-  issuer: PROTOCOL_NAMES;
+  issuer: string;
 };
 
 const placeholderProtocol = {
@@ -20,7 +20,7 @@ export const IssuerPage: FC<IssuerPageProps> = ({ issuer }) => {
   const { marketsByIssuer } = useCalculatedMarkets();
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
   const [protocol, setProtocol] = useState<Partial<Protocol>>(
-    PROTOCOLS.get(issuer) || placeholderProtocol
+    PROTOCOLS.get(issuer as PROTOCOL_NAMES) || placeholderProtocol
   );
   const [tbv, setTbv] = useState(0);
 
