@@ -89,39 +89,11 @@ export const IssuerList: FC<any> = () => {
           const protocol = PROTOCOLS.get(issuer);
           if (protocol.name.toLowerCase().indexOf(search) != -1)
             return (
-              <>
-                <IssuerCard
-                  key={issuer}
-                  issuer={protocol}
-                  markets={marketsByIssuer.get(issuer)}
-                />
-                <IssuerCard
-                  key={issuer}
-                  issuer={protocol}
-                  markets={marketsByIssuer.get(issuer)}
-                />
-                <IssuerCard
-                  key={issuer}
-                  issuer={protocol}
-                  markets={marketsByIssuer.get(issuer)}
-                />
-
-                <IssuerCard
-                  key={issuer}
-                  issuer={protocol}
-                  markets={marketsByIssuer.get(issuer)}
-                />
-                <IssuerCard
-                  key={issuer}
-                  issuer={protocol}
-                  markets={marketsByIssuer.get(issuer)}
-                />
-                <IssuerCard
-                  key={issuer}
-                  issuer={protocol}
-                  markets={marketsByIssuer.get(issuer)}
-                />
-              </>
+              <IssuerCard
+                key={issuer}
+                issuer={protocol}
+                markets={marketsByIssuer.get(issuer)}
+              />
             );
         })}
       </div>
