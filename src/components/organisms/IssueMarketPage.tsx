@@ -23,7 +23,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
   const switchChain = (e: Event) => {
     e.preventDefault();
     const newChain = Number(
-      "0x" + providers[props.data.selectedChain].network.chainId.toString()
+      "0x" + providers[props.data.chain].network.chainId.toString()
     );
     switchNetwork?.(newChain);
   };
