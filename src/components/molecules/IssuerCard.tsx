@@ -10,6 +10,15 @@ type IssuerCardProps = {
   markets: CalculatedMarket[];
 };
 
+const formatName = (name: string) => {
+  return name
+    .split("")
+    .reduce((str, char) =>
+      char === char.toUpperCase() ? str + " " + char : str + char
+    )
+    .concat();
+};
+
 export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
   const navigate = useNavigate();
 
@@ -36,11 +45,13 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
 
   return (
     <div
-      className="border rounded-lg border-transparent bg-white/[.05] w-min max-w-[137px] p-5 flex flex-col items-center overflow-hidden"
+      className="border rounded-lg border-transparent bg-white/[.05] w-min w-[137px] max-w-[137px] p-5 flex flex-col items-center overflow-hidden hover:cursor-pointer"
       onClick={() => handleClick(event, issuer.id)}
     >
       <img className="h-[64px] w-[64px]" src={logo()} />
-      <p className="my-2 font-bold tracking-wide">{issuer.name}</p>
+      <p className="my-2 font-bold tracking-wide text-center">
+        {issuer.name.length > 12 ? formatName(issuer.name) : issuer.name}
+      </p>
       <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
       <p className="text-[10px] text-light-primary-300">
         TBV ${Math.floor(tbv)}
