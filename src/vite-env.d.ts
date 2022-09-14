@@ -3,7 +3,6 @@
 interface ImportMetaEnv {
   readonly VITE_ALCHEMY_MAINNET_KEY: string;
   readonly VITE_ALCHEMY_GOERLI_KEY: string;
-  readonly VITE_ALCHEMY_RINKEBY_KEY: string;
   // more env variables...
 }
 

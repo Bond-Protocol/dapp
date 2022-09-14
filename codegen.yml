@@ -1,5 +1,5 @@
 overwrite: true
-schema: "https://api.thegraph.com/subgraphs/name/bond-labs/bond-labs-rinkeby"
+schema: "https://api.thegraph.com/subgraphs/name/bond-labs/bond-labs-goerli"
 documents: 'src/graphql/queries.ts'
 generates:
   src/generated/graphql.ts:

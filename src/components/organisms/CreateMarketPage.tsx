@@ -27,7 +27,7 @@ const formDefaults = {
   vestingType: 0,
   bondsPerWeek: 7,
   debtBuffer: 10,
-  chain: "rinkeby",
+  chain: "goerli",
 };
 
 export type CreateMarketPageProps = {

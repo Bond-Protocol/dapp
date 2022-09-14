@@ -1,21 +1,14 @@
 //@ts-nocheck
 import * as contractLibrary from "@bond-labs/contract-library";
-import { providers } from "services/owned-providers";
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import {
-  Token,
-  useListTokensGoerliQuery,
-  useListTokensRinkebyQuery,
-} from "../generated/graphql";
-import { useCallback, useEffect, useState } from "react";
+import {providers} from "services/owned-providers";
+import {getSubgraphEndpoints} from "services/subgraph-endpoints";
+import {Token, useListTokensGoerliQuery} from "../generated/graphql";
+import {useCallback, useEffect, useState} from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
-import {
-  CustomPriceSource,
-  SupportedPriceSource,
-} from "@bond-labs/bond-library";
-import axios, { AxiosResponse } from "axios";
-import { useQuery } from "react-query";
-import { useAtom } from "jotai";
+import {CustomPriceSource, SupportedPriceSource} from "@bond-labs/bond-library";
+import axios, {AxiosResponse} from "axios";
+import {useQuery} from "react-query";
+import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export interface PriceDetails {
@@ -45,11 +38,8 @@ export const useTokens = () => {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const { data: rinkebyData } = useListTokensRinkebyQuery({
-    endpoint: endpoints[0],
-  });
   const { data: goerliData } = useListTokensGoerliQuery({
-    endpoint: endpoints[1],
+    endpoint: endpoints[0],
   });
 
   /*
@@ -172,12 +162,12 @@ export const useTokens = () => {
   We get a list of all tokens being used in the app by concatenating the .tokens data from each Subgraph request.
    */
   useEffect(() => {
-    if (rinkebyData && rinkebyData.tokens && goerliData && goerliData.tokens) {
-      const allTokens = rinkebyData.tokens.concat(goerliData.tokens);
+    if (goerliData && goerliData.tokens) {
+      const allTokens = goerliData.tokens;
       // @ts-ignore
       setTestnetTokens(allTokens);
     }
-  }, [rinkebyData, goerliData]);
+  }, [goerliData]);
 
   /*
   If the user switches between mainnet/testnet mode, update selectedTokens.

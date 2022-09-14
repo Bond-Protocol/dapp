@@ -1,5 +1,5 @@
 import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {Market, useListOwnedMarketsGoerliQuery, useListOwnedMarketsRinkebyQuery} from "../generated/graphql";
+import {Market, useListOwnedMarketsGoerliQuery} from "../generated/graphql";
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
@@ -14,27 +14,21 @@ export function useMyMarkets() {
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
-  const {data: rinkebyData} = useListOwnedMarketsRinkebyQuery(
-    {endpoint: endpoints[0]},
-    {owner: address || "0x0000000000000000"}
-  );
   const {data: goerliData} = useListOwnedMarketsGoerliQuery(
-    {endpoint: endpoints[1]},
+    {endpoint: endpoints[0]},
     {owner: address || "0x0000000000000000"}
   );
 
   useEffect(() => {
     if (
-      rinkebyData &&
-      rinkebyData.markets &&
       goerliData &&
       goerliData.markets
     ) {
-      const allMarkets = rinkebyData.markets.concat(goerliData.markets);
+      const allMarkets = goerliData.markets;
       // @ts-ignore
       setTestnetMarkets(allMarkets);
     }
-  }, [rinkebyData, goerliData]);
+  }, [goerliData]);
 
   useEffect(() => {
     if (testnet) {

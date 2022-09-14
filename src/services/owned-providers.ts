@@ -43,32 +43,6 @@ const providerConfiguration: ProviderOptions[] = [
       },
     ],
   },
-  {
-    name: "rinkeby",
-    chainId: "4",
-    rpcs: [
-      {
-        url: `https://rinkeby.infura.io/v3/${import.meta.env.VITE_INFURA_PUBLIC_KEY}`,
-        weight: 1,
-        priority: 1,
-      },
-      {
-        url: `https://eth-rinkeby.alchemyapi.io/v2/${import.meta.env.VITE_ALCHEMY_RINKEBY_KEY}`,
-        weight: 1,
-        priority: 1,
-      },
-      {
-        url: "https://rpc.ankr.com/eth_rinkeby",
-        weight: 1,
-        priority: 1,
-      },
-      {
-        url: "https://eth-rinkeby.gateway.pokt.network",
-        weight: 1,
-        priority: 1,
-      },
-    ],
-  },
 ];
 
 export const providers: { [key: string]: Provider } =

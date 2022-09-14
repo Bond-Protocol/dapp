@@ -4,12 +4,10 @@ import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import {useEffect, useState} from "react";
 import {
-    BondToken,
-    OwnerBalance,
-    useGetOwnerBalancesByOwnerGoerliQuery,
-    useGetOwnerBalancesByOwnerRinkebyQuery,
-    useListErc20BondTokensGoerliQuery,
-    useListErc20BondTokensRinkebyQuery,
+  BondToken,
+  OwnerBalance,
+  useGetOwnerBalancesByOwnerGoerliQuery,
+  useListErc20BondTokensGoerliQuery,
 } from "../generated/graphql";
 import {useAccount} from "wagmi";
 import * as contractLibrary from "@bond-labs/contract-library";
@@ -35,27 +33,17 @@ export function useMyBonds() {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const { data: rinkebyData, refetch: rinkebyRefetch } =
-    useGetOwnerBalancesByOwnerRinkebyQuery(
+  const { data: goerliData, refetch: goerliRefetch } =
+    useGetOwnerBalancesByOwnerGoerliQuery(
       { endpoint: endpoints[0] },
       { owner: address }
     );
-  const { data: goerliData, refetch: goerliRefetch } =
-    useGetOwnerBalancesByOwnerGoerliQuery(
-      { endpoint: endpoints[1] },
-      { owner: address }
-    );
-  const { data: rinkebyErc20Data, refetch: rinkebyErc20Refetch } =
-    useListErc20BondTokensRinkebyQuery({ endpoint: endpoints[0] });
+
   const { data: goerliErc20Data, refetch: goerliErc20Refetch } =
-    useListErc20BondTokensGoerliQuery({ endpoint: endpoints[1] });
+    useListErc20BondTokensGoerliQuery({ endpoint: endpoints[0] });
 
   const refetchQueries = () => {
-    void rinkebyRefetch().then(() => setRefetchRequest(refetchRequest + 1));
     void goerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
-    void rinkebyErc20Refetch().then(() =>
-      setRefetchRequest(refetchRequest + 1)
-    );
     void goerliErc20Refetch().then(() => setRefetchRequest(refetchRequest + 1));
   };
 
@@ -96,18 +84,14 @@ export function useMyBonds() {
    */
   useEffect(() => {
     if (
-      rinkebyData &&
-      rinkebyData.ownerBalances &&
       goerliData &&
       goerliData.ownerBalances
     ) {
-      const allTokens = rinkebyData.ownerBalances.concat(
-        goerliData.ownerBalances
-      );
+      const allTokens = goerliData.ownerBalances;
       // @ts-ignore
       setTestnetBonds(allTokens);
     }
-  }, [rinkebyData, goerliData, refetchRequest]);
+  }, [goerliData, refetchRequest]);
 
   /*
   If the user switches between mainnet/testnet mode, update myBonds.
@@ -138,14 +122,12 @@ export function useMyBonds() {
   from the subgraph and need to check them manually.
    */
   useEffect(() => {
-    if (rinkebyErc20Data && goerliErc20Data) {
-      const bondTokens = rinkebyErc20Data.bondTokens.concat(
-        goerliErc20Data.bondTokens
-      );
+    if (goerliErc20Data) {
+      const bondTokens = goerliErc20Data.bondTokens;
       // @ts-ignore
       getBalances(bondTokens);
     }
-  }, [address, rinkebyErc20Data, goerliErc20Data]);
+  }, [address, goerliErc20Data]);
 
   /*
   myBonds: An array of bonds owned by the currently connected wallet
