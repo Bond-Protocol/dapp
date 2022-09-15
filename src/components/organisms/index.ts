@@ -10,3 +10,4 @@ export * from "./MyBondsList";
 export * from "./MyMarkets";
 export * from "./Navbar";
 export * from "./CreateMarketPage";
+export * from "./Footer";

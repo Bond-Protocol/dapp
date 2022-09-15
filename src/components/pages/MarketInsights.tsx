@@ -11,7 +11,7 @@ export type MarketInsightsPageProps = {
   markets: CalculatedMarket[];
 };
 
-export const MarketInsightsPage = (props: MarketInsightsPageProps) => {
+export const MarketInsights = (props: MarketInsightsPageProps) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const market = props.markets.find(({ marketId }) => marketId === Number(id));

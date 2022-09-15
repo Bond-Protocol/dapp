@@ -22,10 +22,8 @@ export const CreateMarket = (props: CreateMarketPageProps) => {
     },
   ];
 
-  const children = [];
-
   return (
-    <Tabs value={selected} tabs={createMarketTabs}>
+    <Tabs largeTab value={selected} tabs={createMarketTabs}>
       <CreateMarketPage initialValues={initialValues} onConfirm={onPreview} />,
       <IssueMarketPage
         data={marketData}
@@ -34,7 +32,6 @@ export const CreateMarket = (props: CreateMarketPageProps) => {
         }}
         onEdit={() => setSelected(0)}
       />
-      ,
     </Tabs>
   );
 };

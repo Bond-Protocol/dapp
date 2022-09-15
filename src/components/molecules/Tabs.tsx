@@ -6,15 +6,16 @@ import TabUnstyled from "@mui/base/TabUnstyled";
 import { TabPanelUnstyled } from "@mui/base";
 
 type TabProps = {
-  value?: number;
   children: React.ReactNode;
+  value?: number;
+  largeTab?: boolean;
   tabs: Array<{
     label: string;
     handleClick?: (i?: number) => void;
   }>;
 };
 
-export const Tabs: FC<TabProps> = ({ tabs, value, children }) => {
+export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
   const [selected, setSelected] = useState(0);
 
   return (
@@ -38,9 +39,10 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children }) => {
             }}
             componentsProps={{
               root: {
-                className: `${
-                  selected === i ? "bg-light-primary-900" : "bg-transparent"
-                } border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4`,
+                className: `
+                 border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4
+                 ${selected === i ? "bg-light-primary-900" : "bg-transparent"} 
+                 ${props.largeTab ? "px-36" : ""}`,
               },
             }}
           >

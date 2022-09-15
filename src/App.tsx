@@ -1,14 +1,16 @@
 import { FC } from "react";
-import { Navbar, Routes } from "components/organisms";
-import { PageContainer } from "components/atoms/PageContainer";
+import { Navbar, Footer } from "components/organisms";
+import { PageContainer } from "components/atoms";
+import { RouteMap } from "./RouteMap";
 
 export const App: FC = () => {
   return (
-    <>
+    <div className="relative min-h-[100vh]">
       <Navbar />
       <PageContainer>
-        <Routes />
+        <RouteMap />
       </PageContainer>
-    </>
+      <Footer />
+    </div>
   );
 };
