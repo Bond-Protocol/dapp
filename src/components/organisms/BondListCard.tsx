@@ -1,24 +1,18 @@
 import * as contractLibrary from "@bond-labs/contract-library";
-import { CalculatedMarket } from "@bond-labs/contract-library";
-import { Chip, Input } from "@material-tailwind/react";
-import { DataRow } from "components/atoms/DataRow";
+import {CalculatedMarket} from "@bond-labs/contract-library";
+import {Chip, Input} from "@material-tailwind/react";
+import {DataRow} from "components/atoms/DataRow";
 import * as React from "react";
-import { BaseSyntheticEvent, FC, useEffect, useState } from "react";
-import { Button } from "..";
-import {
-  useAccount,
-  useBalance,
-  useProvider,
-  useSigner,
-  useSwitchNetwork,
-} from "wagmi";
-import { providers } from "services/owned-providers";
-import { BigNumberish, ContractTransaction } from "ethers";
+import {BaseSyntheticEvent, FC, useEffect, useState} from "react";
+import {Button} from "..";
+import {useAccount, useBalance, useProvider, useSigner, useSwitchNetwork,} from "wagmi";
+import {providers} from "services/owned-providers";
+import {BigNumberish, ContractTransaction} from "ethers";
 import ConfirmPurchaseDialog from "./ConfirmPurchaseDialog";
-import { ConnectButton, useConnectModal } from "@rainbow-me/rainbowkit";
-import { useTokens } from "hooks";
-import { CHAINS, getProtocolByAddress } from "@bond-labs/bond-library";
-import { formatLongNumber } from "../../utils/format";
+import {ConnectButton, useConnectModal} from "@rainbow-me/rainbowkit";
+import {useTokens} from "hooks";
+import {CHAINS, getProtocolByAddress} from "@bond-labs/bond-library";
+import {formatLongNumber} from "../../utils/format";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -151,7 +145,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
       import.meta.env.VITE_MARKET_REFERRAL_ADDRESS
     );
 
-    setPayout(formatLongNumber(payout).toString());
+    setPayout(formatLongNumber(payout, props.market.quoteToken.decimals).toString());
   }
 
   const quoteToken = getTokenDetails(props.market.quoteToken);

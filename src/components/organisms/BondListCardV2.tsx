@@ -67,7 +67,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
         market.auctioneer
       ));
 
-      setPayout(formatLongNumber(payout).toString());
+      setPayout(formatLongNumber(payout, market.payoutToken.decimals).toString());
     };
 
     void updatePayout();
@@ -119,6 +119,8 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
       address,
       amount,
       payout,
+      payoutDecimals: market.payoutToken.decimals,
+      quoteDecimals: market.quoteToken.decimals,
       slippage: 0.05,
       marketId: market.marketId,
       teller: market.teller,
