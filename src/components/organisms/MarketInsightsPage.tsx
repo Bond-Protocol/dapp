@@ -36,7 +36,7 @@ export const MarketInsightsPage = (props: MarketInsightsPageProps) => {
         market.marketId,
         market.auctioneer
       );
-      setMaxPayout(Math.trunc(formatLongNumber(payout)).toString());
+      setMaxPayout(Math.trunc(formatLongNumber(payout, market.quoteToken.decimals)).toString());
     };
 
     loadPayoutFor().catch((e) => {
