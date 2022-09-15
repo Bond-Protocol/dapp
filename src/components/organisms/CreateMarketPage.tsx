@@ -326,7 +326,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         quoteToken: data.quoteToken.address,
         callbackAddr: "0x0000000000000000000000000000000000000000",
         capacity: ethers.utils
-          .parseEther(data.marketCapacity.toString())
+          .parseUnits(data.marketCapacity.toString(), data.capacityToken === 0 ? payoutTokenInfo?.decimals : quoteTokenInfo?.decimals)
           .toString(),
         capacityInQuote: data.capacityToken !== 0,
         formattedInitialPrice: formattedInitialPrice.toString(),
