@@ -4,6 +4,7 @@ export * from "./CloseMarketCard";
 export * from "./ConfirmPurchaseDialog";
 export * from "./IssuerList";
 export * from "./IssuerPage";
+export * from "./IssueMarketPage";
 export * from "./MarketList";
 export * from "./MyBondsList";
 export * from "./MyMarkets";

@@ -5,10 +5,7 @@ import { MarketList } from "components/organisms/MarketList";
 import { CalculatedMarket } from "@bond-labs/contract-library";
 import { InfoLabel, Link } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
-
-type IssuerPageProps = {
-  issuer: string;
-};
+import { useParams } from "react-router-dom";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -16,12 +13,15 @@ const placeholderProtocol = {
   links: { homepage: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
 };
 
-export const IssuerPage: FC<IssuerPageProps> = ({ issuer }) => {
+export const IssuerPage: FC = () => {
   const { marketsByIssuer } = useCalculatedMarkets();
+  const { name } = useParams();
+
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
-  const [protocol, setProtocol] = useState<Partial<Protocol>>(
-    PROTOCOLS.get(issuer as PROTOCOL_NAMES) || placeholderProtocol
+  const [protocol] = useState<Partial<Protocol>>(
+    PROTOCOLS.get(name as PROTOCOL_NAMES) || placeholderProtocol
   );
+
   const [tbv, setTbv] = useState(0);
 
   const logo = () => {
@@ -31,8 +31,8 @@ export const IssuerPage: FC<IssuerPageProps> = ({ issuer }) => {
   };
 
   useEffect(() => {
-    setMarkets(marketsByIssuer && marketsByIssuer.get(issuer));
-  }, [issuer, marketsByIssuer]);
+    setMarkets(marketsByIssuer && marketsByIssuer.get(name));
+  }, [name, marketsByIssuer]);
 
   useEffect(() => {
     if (markets) {

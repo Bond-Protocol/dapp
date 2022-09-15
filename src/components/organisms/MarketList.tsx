@@ -1,20 +1,20 @@
 //@ts-nocheck
-import {ExpandableRow} from "components/molecules/ExpandableRow";
-import {CalculatedMarket, Token} from "@bond-labs/contract-library";
-import {getToken} from "@bond-labs/bond-library";
-import {FC, useEffect, useRef, useState} from "react";
-import {CloseMarketCard} from "components/organisms/CloseMarketCard";
+import { ExpandableRow } from "components/molecules/ExpandableRow";
+import { CalculatedMarket, Token } from "@bond-labs/contract-library";
+import { getToken } from "@bond-labs/bond-library";
+import { FC, useEffect, useRef, useState } from "react";
+import { CloseMarketCard } from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
-import {useCalculatedMarkets, useTokens} from "hooks";
-import {TableHeading} from "components/atoms/TableHeading";
-import {TableCell} from "components/atoms/TableCell";
-import {CellLabel} from "components/atoms/CellLabel";
-import {BondListCardV2} from "./BondListCardV2";
-import {useNavigate} from "react-router-dom";
+import { useCalculatedMarkets, useTokens } from "hooks";
+import { TableHeading } from "components/atoms/TableHeading";
+import { TableCell } from "components/atoms/TableCell";
+import { CellLabel } from "components/atoms/CellLabel";
+import { BondListCardV2 } from "./BondListCardV2";
+import { useNavigate } from "react-router-dom";
 
 type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
-  allowManagement: boolean;
+  allowManagement?: boolean;
 };
 
 export const MarketList: FC<MarketListProps> = ({
