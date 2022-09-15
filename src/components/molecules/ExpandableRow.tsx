@@ -17,7 +17,10 @@ export const ExpandableRow: FC<{
   return (
     <>
       <tr
-        className={"hover:cursor-pointer justify-between" + className}
+        className={`
+            hover:cursor-pointer hover:bg-white/10 justify-between transition-all 
+              ${open ? "bg-white/5" : ""}
+              ${className} `}
         onClick={() => setOpen((prev) => !prev)}
       >
         {children}
