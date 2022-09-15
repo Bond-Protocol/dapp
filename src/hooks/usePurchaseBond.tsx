@@ -85,6 +85,8 @@ export const usePurchaseBond = () => {
       referralAddress?: string;
       payout: string;
       slippage: number;
+      payoutDecimals: number;
+      quoteDecimals: number;
     }): Promise<ContractTransaction> => {
       if (!signer) throw Error("Not connected");
 
@@ -97,6 +99,8 @@ export const usePurchaseBond = () => {
         rest.marketId,
         Number(rest.amount).toFixed(18),
         minimumOut.toFixed(18),
+        rest.payoutDecimals,
+        rest.quoteDecimals,
         rest.teller,
         signer,
         {
