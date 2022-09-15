@@ -1,7 +1,7 @@
-import { Token } from "@bond-labs/contract-library";
-import { Chip } from "../atoms/Chip";
-import { Input } from "../atoms/Input";
-import { TokenLabel } from "../atoms/TokenLabel";
+import {CalculatedMarket, Token} from "@bond-labs/contract-library";
+import {Chip} from "../atoms/Chip";
+import {Input} from "../atoms/Input";
+import {TokenLabel} from "../atoms/TokenLabel";
 
 export type InputCardProps = {
   balance?: string;
@@ -9,6 +9,7 @@ export type InputCardProps = {
   quoteToken?: Partial<Token & { logo?: string }>;
   onChange?: (amount: string) => void;
   value?: string;
+  market: CalculatedMarket;
 };
 
 export const InputCard = ({
@@ -17,10 +18,14 @@ export const InputCard = ({
   quoteToken,
   value = "",
   onChange,
+  market,
 }: InputCardProps) => {
   const setSome = (num: number) =>
     handleChange((num * parseFloat(balance)) / 100 + "");
-  const setMax = () => handleChange(parseFloat(balance) + "");
+  const setMax = () => {
+    const max = Math.min(Number(balance), market.maxAmountAccepted).toPrecision(market.quoteToken.decimals);
+    handleChange(parseFloat(max.toString()) + "");
+  }
 
   const handleChange = (amount: string) => {
     onChange && onChange(amount);

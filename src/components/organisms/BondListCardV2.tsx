@@ -19,11 +19,6 @@ export type BondListCardProps = {
   infoLabel?: boolean;
 };
 
-const getRemainingCapacity = (remaining: number, payout: number) => {
-  const total = remaining + payout;
-  return (remaining / total) * 100;
-};
-
 export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
   const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
@@ -50,11 +45,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
   const networkFee = 1;
   const quoteToken = getTokenDetails(market.quoteToken);
   const payoutToken = getTokenDetails(market.payoutToken);
-  const remainingCapacity = getRemainingCapacity(
-    market.currentCapacity,
-    //@ts-ignore TODO: Fix type mismatch with contract lib
-    parseFloat(market.totalPayoutAmount)
-  );
+
   const vestingLabel =
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
@@ -68,11 +59,13 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
 
   useEffect(() => {
     const updatePayout = async () => {
-      const payout = await getPayoutFor(
+      console.log(amount)
+      const payout = Number(await getPayoutFor(
         amount,
+        market.quoteToken.decimals,
         market.marketId,
         market.auctioneer
-      );
+      ));
 
       setPayout(formatLongNumber(payout).toString());
     };
@@ -100,8 +93,8 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
       value: `${payout} ${payoutToken.symbol}`,
     },
     {
-      label: "Available in Bond",
-      value: `${remainingCapacity || 0} ${payoutToken.symbol}`,
+      label: "Max Bondable",
+      value: `${market.maxAmountAccepted} ${quoteToken.symbol}`,
       tooltip: "Soon™",
     },
     {
@@ -122,10 +115,11 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
 
   const submitTx = () => {
     if (!address) throw new Error("Not Connected");
-
+    let decimals = market.quoteToken.decimals;
     return bond({
       address,
       amount,
+      decimals,
       payout,
       slippage: 0.05,
       marketId: market.marketId,
@@ -171,11 +165,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
                 {vestingLabel}
               </InfoLabel>
               <InfoLabel label="Remaining Capacity" tooltip="tooltip popup">
-                {`${
-                  remainingCapacity === 100
-                    ? remainingCapacity
-                    : remainingCapacity.toFixed(2)
-                }%`}
+
               </InfoLabel>
             </div>
           )}
@@ -184,6 +174,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
             value={amount}
             balance={balance}
             quoteToken={quoteToken}
+            market={market}
             className="mt-5"
           />
           <SummaryCard fields={summaryFields} />
