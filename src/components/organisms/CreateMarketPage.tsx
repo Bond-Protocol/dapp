@@ -55,6 +55,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const [vestingString, setVestingString] = useState("");
   const [marketExpiryString, setMarketExpiryString] = useState("");
   const [capacityString, setCapacityString] = useState("");
+  const [exchangeRateString, setExchangeRateString] = useState("");
   const [minExchangeRateString, setMinExchangeRateString] = useState("");
 
   const {
@@ -147,7 +148,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [marketCapacity, capacityToken]);
 
   useEffect(() => {
-    let rate = Number(quoteTokenPrice) / Number(payoutTokenPrice);
+    let rate = Number(payoutTokenPrice) / Number(quoteTokenPrice);
     let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
     rate = trimAsNumber(rate, digits);
     if (rate != Infinity && !isNaN(rate)) {
@@ -158,7 +159,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [payoutTokenPrice, quoteTokenPrice]);
 
   useEffect(() => {
-    let rate = Number(quoteTokenPrice) / Number(minExchangeRate);
+    let rate = Number(minExchangeRate);
     let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
     rate = trimAsNumber(rate, digits);
     if (rate != Infinity && !isNaN(rate)) {
@@ -166,13 +167,19 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     } else {
       setMinimumExchangeRate(0);
     }
-  }, [minExchangeRate, quoteTokenPrice]);
+  }, [minExchangeRate]);
 
   useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
-      setMinExchangeRateString(`${minExchangeRate} ${payoutTokenSymbol}/${quoteTokenSymbol}`);
+      setMinExchangeRateString(`${minExchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`);
     }
   }, [minExchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
+
+  useEffect(() => {
+    if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
+      setExchangeRateString(`${exchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`);
+    }
+  }, [exchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
 
   useEffect(() => {
     let days = Number(
@@ -231,6 +238,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     {label: "Payout Token", value: payoutTokenSymbol},
     {label: "Quote Token", value: quoteTokenSymbol},
     {label: "Estimate bond cadence", tooltip: "soon", value: "n/a"},
+    {label: "Initial exchange rate", value: exchangeRateString},
     {label: "Minimum exchange rate", value: minExchangeRateString},
     {label: "Conclusion", tooltip: "soon", value: marketExpiryString},
     {label: "Vesting", tooltip: "soon", value: vestingString},
@@ -246,65 +254,51 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       vesting = data.timeAmount.amount * 24 * 60 * 60;
     }
 
-    const ptp = Number(payoutTokenPrice).toExponential();
-    const qtp = Number(quoteTokenPrice).toExponential();
-    const min = Number(minimumExchangeRate).toExponential();
+    const price = Number(exchangeRate).toExponential();
+    const minPrice = Number(minExchangeRate).toExponential();
 
-    const ptpSymbolIndex = ptp.indexOf("e") + 1;
-    const qtpSymbolIndex = qtp.indexOf("e") + 1;
-    const minSymbolIndex = min.indexOf("e") + 1;
+    const priceSymbolIndex = price.indexOf("e") + 1;
+    const minSymbolIndex = minPrice.indexOf("e") + 1;
 
-    const payoutPriceCoefficient = Number(ptp.substring(0, ptpSymbolIndex - 1));
-    const quotePriceCoefficient = Number(qtp.substring(0, qtpSymbolIndex - 1));
-    const minPriceCoefficient = Number(min.substring(0, minSymbolIndex - 1));
-
-    const payoutPriceDecimals = Number(ptp.substring(ptpSymbolIndex));
-    const quotePriceDecimals = Number(qtp.substring(qtpSymbolIndex));
-    const minPriceDecimals = Number(min.substring(minSymbolIndex));
+    const priceCoefficient = Number(price.substring(0, priceSymbolIndex - 1));
+    const minPriceCoefficient = Number(minPrice.substring(0, minSymbolIndex - 1));
+    
+    // The exchange rates are the price of the payout token divided by the price of the quote token
+    // Therefore, the coefficient is already calculated for us.
+    // We can get the difference in the price decimals (payoutPriceDecimals - quotePriceDecimals) from the exponent of the exchange rate.
+    const priceDecimalDiff = Number(price.substring(priceSymbolIndex));
+    const minPriceDecimalDiff = Number(minPrice.substring(minSymbolIndex));
 
     const tokenDecimalOffset =
       payoutTokenInfo?.decimals - quoteTokenInfo?.decimals;
-    let priceDecimalOffset = (payoutPriceDecimals - quotePriceDecimals) / 2;
-    let minPriceDecimalOffset = (minPriceDecimals - quotePriceDecimals) / 2;
+  
+    let priceDecimalOffset = priceDecimalDiff / 2;
 
     priceDecimalOffset > 0
       ? (priceDecimalOffset = Math.floor(priceDecimalOffset))
       : (priceDecimalOffset = Math.ceil(priceDecimalOffset));
 
-    minPriceDecimalOffset > 0
-      ? (minPriceDecimalOffset = Math.floor(minPriceDecimalOffset))
-      : (minPriceDecimalOffset = Math.ceil(minPriceDecimalOffset));
-
     const scaleAdjustment = tokenDecimalOffset - priceDecimalOffset;
-    const minScaleAdjustment = tokenDecimalOffset - minPriceDecimalOffset;
-
-    const coefficients = payoutPriceCoefficient / quotePriceCoefficient;
-    const minPriceCoefficients = minPriceCoefficient / quotePriceCoefficient;
 
     const exp =
       36 +
       scaleAdjustment +
       quoteTokenInfo?.decimals -
       payoutTokenInfo?.decimals +
-      payoutPriceDecimals -
-      quotePriceDecimals;
+      priceDecimalDiff;
 
+    // Calculate the decimal difference in the initial price and minimum price to offset the exponent
+    const minPriceOffset = minPriceDecimalDiff - priceDecimalDiff;
+    
     const minExp =
-      36 +
-      minScaleAdjustment +
-      quoteTokenInfo?.decimals -
-      payoutTokenInfo?.decimals +
-      minPriceDecimals -
-      quotePriceDecimals;
-
-    const res = Math.pow(10, exp);
-    const minRes = Math.pow(10, minExp);
-
-    const formattedInitialPrice = (coefficients * res)
+      exp + minPriceOffset;
+    
+    // Compile prices into strings for market creation
+    const formattedInitialPrice = (priceCoefficient * Math.pow(10, exp))
       .toLocaleString()
       .replaceAll(",", "");
 
-    const formattedMinimumPrice = (minPriceCoefficients * minRes)
+    const formattedMinimumPrice = (minPriceCoefficient * Math.pow(10, minExp))
       .toLocaleString()
       .replaceAll(",", "");
 
@@ -315,6 +309,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         quoteToken: quoteTokenSymbol,
         maximumBondSize: "???",
         estimatedBondCadence: "???",
+        exchangeRate: exchangeRateString,
         minimumExchangeRate: minExchangeRateString,
         conclusion: marketExpiryString,
         vesting: vestingString,
@@ -326,7 +321,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         quoteToken: data.quoteToken.address,
         callbackAddr: "0x0000000000000000000000000000000000000000",
         capacity: ethers.utils
-          .parseEther(data.marketCapacity.toString())
+          .parseUnits(data.marketCapacity.toString(), data.capacityToken === 0 ? payoutTokenInfo?.decimals : quoteTokenInfo?.decimals)
           .toString(),
         capacityInQuote: data.capacityToken !== 0,
         formattedInitialPrice: formattedInitialPrice.toString(),
@@ -497,7 +492,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       Current Exchange Rate
                     </p>
                     <p className="mt-3">
-                      ~{exchangeRate} {payoutTokenSymbol} per {quoteTokenSymbol}
+                      ~{exchangeRate} {quoteTokenSymbol} per {payoutTokenSymbol}
                     </p>
                   </div>
                 </div>
