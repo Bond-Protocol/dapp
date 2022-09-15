@@ -32,6 +32,7 @@ export const MarketInsightsPage = (props: MarketInsightsPageProps) => {
 
       const payout = await getPayoutFor(
         market.maxAmountAccepted.toString(),
+        market.quoteToken.decimals,
         market.marketId,
         market.auctioneer
       );

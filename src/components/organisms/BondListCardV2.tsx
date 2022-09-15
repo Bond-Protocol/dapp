@@ -115,11 +115,9 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
 
   const submitTx = () => {
     if (!address) throw new Error("Not Connected");
-    let decimals = market.quoteToken.decimals;
     return bond({
       address,
       amount,
-      decimals,
       payout,
       slippage: 0.05,
       marketId: market.marketId,
