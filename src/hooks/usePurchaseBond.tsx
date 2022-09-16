@@ -1,8 +1,9 @@
-import {useCallback, useState} from "react";
+//@ts-nocheck
+import { useCallback, useState } from "react";
 import * as contractLibrary from "@bond-labs/contract-library";
-import {BigNumberish, ContractTransaction, Signer} from "ethers";
-import {useProvider, useSigner} from "wagmi";
-import {providers} from "services/owned-providers";
+import { BigNumberish, ContractTransaction, Signer } from "ethers";
+import { useProvider, useSigner } from "wagmi";
+import { providers } from "services/owned-providers";
 
 const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
@@ -64,7 +65,7 @@ export const usePurchaseBond = () => {
       auctioneer: string,
       requestProvider?: typeof provider
     ): Promise<BigNumberish> => {
-      const amt = (Number(amount) * Math.pow(10, decimals));
+      const amt = Number(amount) * Math.pow(10, decimals);
       return contractLibrary.payoutFor(
         requestProvider || provider,
         amt.toString(),
