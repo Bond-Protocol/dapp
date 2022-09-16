@@ -1,24 +1,32 @@
+import { Children } from "react";
 import { FC, useState } from "react";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import TabsListUnstyled from "@mui/base/TabsListUnstyled";
 import TabUnstyled from "@mui/base/TabUnstyled";
+import { TabPanelUnstyled } from "@mui/base";
 
 type TabProps = {
-  tabs: Array<{ label: string; handleClick: () => void }>;
+  children: React.ReactNode;
+  value?: number;
+  largeTab?: boolean;
+  tabs: Array<{
+    label: string;
+    handleClick?: (i?: number) => void;
+  }>;
 };
 
-export const Tabs: FC<TabProps> = ({ tabs }) => {
+export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
   const [selected, setSelected] = useState(0);
 
   return (
     <TabsUnstyled
       defaultValue={0}
-      className="bg-white/10 mt-4 pt-8 border-transparent rounded-t-lg overflow-hidden"
+      className=" mt-4 border-transparent rounded-t-lg overflow-hidden"
     >
       <TabsListUnstyled
         componentsProps={{
           root: {
-            className: "mt-2 flex justify-center",
+            className: "bg-white/10 pt-8 mt-2 flex justify-center",
           },
         }}
       >
@@ -26,14 +34,15 @@ export const Tabs: FC<TabProps> = ({ tabs }) => {
           <TabUnstyled
             key={i}
             onClick={() => {
-              setSelected(i);
-              handleClick();
+              setSelected(value || i);
+              handleClick && handleClick(value || i);
             }}
             componentsProps={{
               root: {
-                className: `${
-                  selected === i ? "bg-light-primary-900" : "bg-transparent"
-                } border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4`,
+                className: `
+                 border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4
+                 ${selected === i ? "bg-light-primary-900" : "bg-transparent"} 
+                 ${props.largeTab ? "px-36" : ""}`,
               },
             }}
           >
@@ -41,6 +50,13 @@ export const Tabs: FC<TabProps> = ({ tabs }) => {
           </TabUnstyled>
         ))}
       </TabsListUnstyled>
+      {Children.map(children, (component, i) => {
+        return (
+          <TabPanelUnstyled value={i} key={i}>
+            {component}
+          </TabPanelUnstyled>
+        );
+      })}
     </TabsUnstyled>
   );
 };

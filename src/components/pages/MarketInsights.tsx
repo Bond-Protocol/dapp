@@ -1,22 +1,23 @@
-import {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
-import {CalculatedMarket} from "@bond-labs/contract-library";
-import {BondListCardV2} from "..";
-import {usePurchaseBond} from "hooks/usePurchaseBond";
-import {formatLongNumber, getBlockExplorer, trimAddress} from "../../utils";
-import {InfoLabel, Link, TableCell, TableHeading,} from "components/atoms";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { CalculatedMarket } from "@bond-labs/contract-library";
+import { BondListCardV2 } from "..";
+import { usePurchaseBond } from "hooks/usePurchaseBond";
+import { formatLongNumber, getBlockExplorer, trimAddress } from "../../utils";
+import { InfoLabel, Link, TableCell, TableHeading } from "components/atoms";
 import receiptIcon from "../../assets/icons/receipt-icon.svg";
 
 export type MarketInsightsPageProps = {
   markets: CalculatedMarket[];
 };
 
-export const MarketInsightsPage = (props: MarketInsightsPageProps) => {
+export const MarketInsights = (props: MarketInsightsPageProps) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const market = props.markets.find(({ marketId }) => marketId === Number(id));
   const { getPayoutFor } = usePurchaseBond();
   const [maxPayout, setMaxPayout] = useState("0");
+
   const { blockExplorerUrl: blockExplorerAddressUrl } = getBlockExplorer(
     market?.network || "",
     "address"
@@ -119,10 +120,6 @@ export const MarketInsightsPage = (props: MarketInsightsPageProps) => {
           </thead>
           <tbody>
             {/*tx.map(() => { })*/}
-            {sampcell}
-            {sampcell}
-            {sampcell}
-            {sampcell}
             {sampcell}
           </tbody>
         </table>

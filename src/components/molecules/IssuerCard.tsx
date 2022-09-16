@@ -1,7 +1,5 @@
 import { FC, useEffect, useState } from "react";
 import { Protocol } from "@bond-labs/bond-library";
-import { ethers } from "ethers";
-import { Market } from "src/generated/graphql";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-labs/contract-library";
 
@@ -10,7 +8,7 @@ type IssuerCardProps = {
   markets: CalculatedMarket[];
 };
 
-const formatName = (name: string) => {
+const splitCamelCaseText = (name: string) => {
   return name
     .split("")
     .reduce((str, char) =>
@@ -40,7 +38,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
 
   const handleClick = (event: any, name: string) => {
     event.preventDefault();
-    navigate("/issuers/" + name.toLowerCase());
+    navigate("/issuers/" + name);
   };
 
   return (
@@ -50,7 +48,9 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
     >
       <img className="h-[64px] w-[64px]" src={logo()} />
       <p className="my-2 font-bold tracking-wide text-center">
-        {issuer.name.length > 12 ? formatName(issuer.name) : issuer.name}
+        {issuer.name.length > 12
+          ? splitCamelCaseText(issuer.name)
+          : issuer.name}
       </p>
       <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
       <p className="text-[10px] text-light-primary-300">

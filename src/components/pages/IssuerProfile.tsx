@@ -13,7 +13,7 @@ const placeholderProtocol = {
   links: { homepage: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
 };
 
-export const IssuerPage: FC = () => {
+export const IssuerProfile: FC = () => {
   const { marketsByIssuer } = useCalculatedMarkets();
   const { name } = useParams();
 

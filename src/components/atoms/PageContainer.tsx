@@ -6,5 +6,7 @@ export const PageContainer: TailwindComponent = ({
   children,
   className = "",
 }) => {
-  return <div className={`mx-[10vw] ${className}`}>{children}</div>;
+  return (
+    <div className={`mx-[10vw] min-h-[80vh] ${className}`}>{children}</div>
+  );
 };
