@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from "react";
-import arrowIcon from "../../assets/icons/arrow-icon.svg";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
 
 export const Accordion: FC<{
   children: React.ReactNode;
-  content: React.ReactNode;
+  label: React.ReactNode;
   className?: string;
   onOpen?: () => any;
   onClose?: () => any;
-}> = ({ children, content, className, onOpen, onClose }) => {
+}> = ({ children, label, className, onOpen, onClose }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -18,24 +18,28 @@ export const Accordion: FC<{
   return (
     <>
       <div
-        className={"px-3 py-7 flex hover:cursor-pointer " + className}
+        className={
+          "px-3 py-11 flex hover:cursor-pointer z-20 overflow-hidden " +
+          className
+        }
         onClick={() => setOpen((prev) => !prev)}
       >
-        <div className="w-full hover:cursor-pointer">{children}</div>
-        <img
-          src={arrowIcon}
+        <div className="w-full hover:cursor-pointer font-bold uppercase select-none">
+          {label}
+        </div>
+        <ArrowIcon
           className={`${
             open ? "" : "-rotate-180"
-          } hover:cursor-pointer transition-all`}
+          } fill-black my-auto hover:cursor-pointer transition-all`}
         />
       </div>
 
       <div
         className={`${
-          open ? "opacity-100 pb-6" : "opacity-0 h-0"
-        } transition-all duration-200`}
+          open ? "opacity-100 pb-6" : "opacity-0 h-0 hidden"
+        } text-black transition-all duration-200 max-h-96 overflow-auto overflow-x-disable`}
       >
-        {content}
+        {children}
       </div>
     </>
   );

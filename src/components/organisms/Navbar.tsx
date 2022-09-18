@@ -1,25 +1,28 @@
-import type { FC } from "react";
+import { useNavigate } from "react-router-dom";
 import { ConnectButton } from "../organisms/ConnectButton";
-import { Link } from "react-router-dom";
-import { Button } from "..";
 import logo from "../../assets/logo.svg";
+import { ReactComponent as HamburgerIcon } from "../../assets/icons/hamburger-icon.svg";
 
-export const Navbar: FC = () => {
+export const Navbar = (props: { onHamburgerClick: () => void }) => {
+  const navigate = useNavigate();
+
   return (
     <div
-      className="flex justify-between items-center px-[5vw] py-4"
+      className="flex justify-between items-center px-[5vw] h-[88px]"
       id="navbar"
     >
-      <img src={logo} className="w-[178px]" />
-      <div className="flex h-min gap-6">
-        <Link to="/markets">
-          <Button>Markets</Button>
-        </Link>
-        <Link to="/create">
-          <Button>Create Market</Button>
-        </Link>
+      <img
+        src={logo}
+        className="hover:cursor-pointer py-6"
+        onClick={() => navigate("/markets")}
+      />
+      <div className="flex">
+        <ConnectButton />
+        <HamburgerIcon
+          onClick={props.onHamburgerClick}
+          className="hover:cursor-pointer my-auto ml-4"
+        />
       </div>
-      <ConnectButton />
     </div>
   );
 };

@@ -1,25 +1,30 @@
 //@ts-nocheck
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {Controller, useForm, useWatch} from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import * as contractLibrary from "@bond-labs/contract-library";
-import {BOND_TYPE} from "@bond-labs/contract-library";
+import { BOND_TYPE } from "@bond-labs/contract-library";
 import * as bondLibrary from "@bond-labs/bond-library";
-import {providers} from "services/owned-providers";
-import {ethers} from "ethers";
-import {Button, FlatSelect, Input, Select, TermPicker} from "components";
-import {useTokens} from "hooks";
-import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
-import {Accordion, DatePicker, SummaryCard, TokenPickerCard} from "components/molecules";
+import { providers } from "services/owned-providers";
+import { ethers } from "ethers";
+import { Button, FlatSelect, Input, Select, TermPicker } from "components";
+import { useTokens } from "hooks";
+import { trimAsNumber } from "@bond-labs/contract-library/dist/core/utils";
+import {
+  Accordion,
+  DatePicker,
+  SummaryCard,
+  TokenPickerCard,
+} from "components/molecules";
 
 const capacityTokenOptions = [
-  {label: "PAYOUT", value: 0},
-  {label: "QUOTE", value: 1},
+  { label: "PAYOUT", value: 0 },
+  { label: "QUOTE", value: 1 },
 ];
 
 const vestingOptions = [
-  {label: "FIXED EXPIRY", value: 0},
-  {label: "FIXED TERM", value: 1},
+  { label: "FIXED EXPIRY", value: 0 },
+  { label: "FIXED TERM", value: 1 },
 ];
 
 const formDefaults = {
@@ -33,10 +38,10 @@ const formDefaults = {
 export type CreateMarketPageProps = {
   onConfirm: (marketData: any) => void;
   initialValues?: any;
-}
+};
 
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
-  const {getPrice} = useTokens();
+  const { getPrice } = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
   const [quoteTokenInfo, setQuoteTokenInfo] =
@@ -62,8 +67,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     control,
     handleSubmit,
     getValues,
-    formState: {errors, isValid, isSubmitted},
-  } = useForm({defaultValues: props.initialValues ? props.initialValues : formDefaults});
+    formState: { errors, isValid, isSubmitted },
+  } = useForm({
+    defaultValues: props.initialValues ? props.initialValues : formDefaults,
+  });
 
   const selectedChain = useWatch({
     control,
@@ -73,13 +80,19 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const payoutTokenAddress = useWatch({
     control,
     name: "payoutToken",
-    defaultValue: props.initialValues?.payoutToken || {address: "", confirmed: false},
+    defaultValue: props.initialValues?.payoutToken || {
+      address: "",
+      confirmed: false,
+    },
   });
 
   const quoteTokenAddress = useWatch({
     control,
     name: "quoteToken",
-    defaultValue: props.initialValues?.quoteToken || {address: "", confirmed: false},
+    defaultValue: props.initialValues?.quoteToken || {
+      address: "",
+      confirmed: false,
+    },
   });
 
   const marketCapacity = useWatch({
@@ -144,7 +157,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   });
 
   useEffect(() => {
-    setCapacityString(`${marketCapacity} ${capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol}`);
+    setCapacityString(
+      `${marketCapacity} ${
+        capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
+      }`
+    );
   }, [marketCapacity, capacityToken]);
 
   useEffect(() => {
@@ -171,23 +188,28 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
-      setMinExchangeRateString(`${minExchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`);
+      setMinExchangeRateString(
+        `${minExchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`
+      );
     }
   }, [minExchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
 
   useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
-      setExchangeRateString(`${exchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`);
+      setExchangeRateString(
+        `${exchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`
+      );
     }
   }, [exchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
 
   useEffect(() => {
-    let days = Number(
-      (
-        Math.round(bondExpiry - new Date().getTime() / 1000) /
-        (60 * 60 * 24)
-      ).toFixed(0)
-    ) + 1;
+    let days =
+      Number(
+        (
+          Math.round(bondExpiry - new Date().getTime() / 1000) /
+          (60 * 60 * 24)
+        ).toFixed(0)
+      ) + 1;
 
     let string;
     if (vestingType === 0 && days >= 0) {
@@ -212,12 +234,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [bondExpiry, timeAmount && timeAmount.amount, vestingType]);
 
   useEffect(() => {
-    let days = Number(
-      (
-        Math.round(marketExpiry - new Date().getTime() / 1000) /
-        (60 * 60 * 24)
-      ).toFixed(0)
-    ) + 1;
+    let days =
+      Number(
+        (
+          Math.round(marketExpiry - new Date().getTime() / 1000) /
+          (60 * 60 * 24)
+        ).toFixed(0)
+      ) + 1;
 
     if (!isNaN(days) && days >= 0) {
       let string;
@@ -234,16 +257,16 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [marketExpiry]);
 
   const summaryFields = [
-    {label: "Capacity", value: capacityString},
-    {label: "Payout Token", value: payoutTokenSymbol},
-    {label: "Quote Token", value: quoteTokenSymbol},
-    {label: "Estimate bond cadence", tooltip: "soon", value: "n/a"},
-    {label: "Initial exchange rate", value: exchangeRateString},
-    {label: "Minimum exchange rate", value: minExchangeRateString},
-    {label: "Conclusion", tooltip: "soon", value: marketExpiryString},
-    {label: "Vesting", tooltip: "soon", value: vestingString},
-    {label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}`},
-    {label: "Debt Buffer", value: `${debtBuffer}%`},
+    { label: "Capacity", value: capacityString },
+    { label: "Payout Token", value: payoutTokenSymbol },
+    { label: "Quote Token", value: quoteTokenSymbol },
+    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
+    { label: "Initial exchange rate", value: exchangeRateString },
+    { label: "Minimum exchange rate", value: minExchangeRateString },
+    { label: "Conclusion", tooltip: "soon", value: marketExpiryString },
+    { label: "Vesting", tooltip: "soon", value: vestingString },
+    { label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}` },
+    { label: "Debt Buffer", value: `${debtBuffer}%` },
   ];
 
   const onSubmit = async (data: any) => {
@@ -261,8 +284,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const minSymbolIndex = minPrice.indexOf("e") + 1;
 
     const priceCoefficient = Number(price.substring(0, priceSymbolIndex - 1));
-    const minPriceCoefficient = Number(minPrice.substring(0, minSymbolIndex - 1));
-    
+    const minPriceCoefficient = Number(
+      minPrice.substring(0, minSymbolIndex - 1)
+    );
+
     // The exchange rates are the price of the payout token divided by the price of the quote token
     // Therefore, the coefficient is already calculated for us.
     // We can get the difference in the price decimals (payoutPriceDecimals - quotePriceDecimals) from the exponent of the exchange rate.
@@ -271,7 +296,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
     const tokenDecimalOffset =
       payoutTokenInfo?.decimals - quoteTokenInfo?.decimals;
-  
+
     let priceDecimalOffset = priceDecimalDiff / 2;
 
     priceDecimalOffset > 0
@@ -289,10 +314,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
     // Calculate the decimal difference in the initial price and minimum price to offset the exponent
     const minPriceOffset = minPriceDecimalDiff - priceDecimalDiff;
-    
-    const minExp =
-      exp + minPriceOffset;
-    
+
+    const minExp = exp + minPriceOffset;
+
     // Compile prices into strings for market creation
     const formattedInitialPrice = (priceCoefficient * Math.pow(10, exp))
       .toLocaleString()
@@ -321,7 +345,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         quoteToken: data.quoteToken.address,
         callbackAddr: "0x0000000000000000000000000000000000000000",
         capacity: ethers.utils
-          .parseUnits(data.marketCapacity.toString(), data.capacityToken === 0 ? payoutTokenInfo?.decimals : quoteTokenInfo?.decimals)
+          .parseUnits(
+            data.marketCapacity.toString(),
+            data.capacityToken === 0
+              ? payoutTokenInfo?.decimals
+              : quoteTokenInfo?.decimals
+          )
           .toString(),
         capacityInQuote: data.capacityToken !== 0,
         formattedInitialPrice: formattedInitialPrice.toString(),
@@ -332,10 +361,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
         scaleAdjustment: scaleAdjustment,
       },
-      bondType: data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
+      bondType:
+        data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
       chain: selectedChain,
       formValues: getValues(),
-    }
+    };
 
     props.onConfirm(params);
   };
@@ -370,13 +400,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       link = link.replace("#", "address");
       link = link.concat(address);
 
-      const result = {name, symbol, decimals, link, blockExplorerName, price};
+      const result = { name, symbol, decimals, link, blockExplorerName, price };
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
     } catch (e: any) {
       console.log(e.message);
       isPayout
-        ? setPayoutTokenInfo({address: "invalid"})
-        : setQuoteTokenInfo({address: "invalid"});
+        ? setPayoutTokenInfo({ address: "invalid" })
+        : setQuoteTokenInfo({ address: "invalid" });
     }
   };
 
@@ -384,7 +414,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     if (ethers.utils.isAddress(payoutTokenAddress.address)) {
       void getTokenInfo(payoutTokenAddress.address, true);
     } else {
-      setPayoutTokenInfo({address: "invalid"});
+      setPayoutTokenInfo({ address: "invalid" });
     }
   }, [payoutTokenAddress, selectedChain]);
 
@@ -392,7 +422,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     if (ethers.utils.isAddress(quoteTokenAddress.address)) {
       void getTokenInfo(quoteTokenAddress.address, false);
     } else {
-      setQuoteTokenInfo({address: "invalid"});
+      setQuoteTokenInfo({ address: "invalid" });
     }
   }, [quoteTokenAddress, selectedChain]);
 
@@ -412,15 +442,19 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="chain"
                   control={control}
-                  rules={{required: "Required"}}
-                  render={({field}) => (
+                  rules={{ required: "Required" }}
+                  render={({ field }) => (
                     <div className="w-full">
                       <div>
                         <p className="text-xs font-light mb-1">Chain</p>
                       </div>
                       <Select
                         {...field}
-                        defaultValue={props.initialValues?.chain ? props.initialValues.chain : chainOptions[1].id}
+                        defaultValue={
+                          props.initialValues?.chain
+                            ? props.initialValues.chain
+                            : chainOptions[1].id
+                        }
                         options={chainOptions}
                       />
                     </div>
@@ -436,11 +470,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     rules={{
                       required: "Required",
                       validate: {
-                        isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
-                        isAddress: (value: { address: string, confirmed: boolean }) => ethers.utils.isAddress(value.address),
-                      }
+                        isConfirmed: (value: {
+                          address: string;
+                          confirmed: boolean;
+                        }) => value.confirmed === true,
+                        isAddress: (value: {
+                          address: string;
+                          confirmed: boolean;
+                        }) => ethers.utils.isAddress(value.address),
+                      },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <TokenPickerCard
                         {...field}
                         label="Payout Token"
@@ -461,9 +501,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         required: "Required",
                         validate: {
                           isNumber: (value: string) => !isNaN(Number(value)),
-                        }
+                        },
                       }}
-                      render={({field}) => (
+                      render={({ field }) => (
                         <>
                           <Input
                             {...field}
@@ -471,17 +511,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                             className="mb-2"
                           />
 
-                          {errors.payoutTokenPrice?.type === "required" &&
+                          {errors.payoutTokenPrice?.type === "required" && (
                             <div className="text-xs font-light my-1 text-red-500 justify-self-start">
                               {errors.payoutTokenPrice?.message}
                             </div>
-                          }
+                          )}
 
-                          {errors.payoutTokenPrice?.type === "isNumber" &&
+                          {errors.payoutTokenPrice?.type === "isNumber" && (
                             <div className="text-xs font-light my-1 text-red-500 justify-self-start">
                               Must be a number
                             </div>
-                          }
+                          )}
                         </>
                       )}
                     />
@@ -504,11 +544,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     rules={{
                       required: "Required",
                       validate: {
-                        isConfirmed: (value: { address: string, confirmed: boolean }) => value.confirmed === true,
-                        isAddress: (value: { address: string, confirmed: boolean }) => ethers.utils.isAddress(value.address),
-                      }
+                        isConfirmed: (value: {
+                          address: string;
+                          confirmed: boolean;
+                        }) => value.confirmed === true,
+                        isAddress: (value: {
+                          address: string;
+                          confirmed: boolean;
+                        }) => ethers.utils.isAddress(value.address),
+                      },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <TokenPickerCard
                         {...field}
                         label="Quote Token"
@@ -529,9 +575,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         required: "Required",
                         validate: {
                           isNumber: (value: string) => !isNaN(Number(value)),
-                        }
+                        },
                       }}
-                      render={({field}) => (
+                      render={({ field }) => (
                         <>
                           <Input
                             {...field}
@@ -539,17 +585,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                             className="mb-2"
                           />
 
-                          {errors.quoteTokenPrice?.type === "required" &&
+                          {errors.quoteTokenPrice?.type === "required" && (
                             <div className="text-xs font-light my-1 text-red-500 justify-self-start">
                               {errors.quoteTokenPrice?.message}
                             </div>
-                          }
+                          )}
 
-                          {errors.quoteTokenPrice?.type === "isNumber" &&
+                          {errors.quoteTokenPrice?.type === "isNumber" && (
                             <div className="text-xs font-light my-1 text-red-500 justify-self-start">
                               Must be a number
                             </div>
-                          }
+                          )}
                         </>
                       )}
                     />
@@ -564,9 +610,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         required: "Required",
                         validate: {
                           isNumber: (value: string) => !isNaN(Number(value)),
-                        }
+                        },
                       }}
-                      render={({field}) => (
+                      render={({ field }) => (
                         <>
                           <Input
                             {...field}
@@ -580,17 +626,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     />
                   </div>
 
-                  {errors.minExchangeRate?.type === "required" &&
+                  {errors.minExchangeRate?.type === "required" && (
                     <div className="text-xs font-light my-1 text-red-500 justify-self-start">
                       {errors.minExchangeRate?.message}
                     </div>
-                  }
+                  )}
 
-                  {errors.minExchangeRate?.type === "isNumber" &&
+                  {errors.minExchangeRate?.type === "isNumber" && (
                     <div className="text-xs font-light my-1 text-red-500 justify-self-start">
                       Must be a number
                     </div>
-                  }
+                  )}
                 </div>
               </div>
 
@@ -598,7 +644,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="capacityToken"
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FlatSelect
                       {...field}
                       label="Capacity Token"
@@ -613,22 +659,26 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="marketCapacity"
                   control={control}
-                  rules={{required: "Required"}}
-                  render={({field}) => (
+                  rules={{ required: "Required" }}
+                  render={({ field }) => (
                     <>
-                      <Input {...field} label="Market Capacity" className={"mb-2"}/>
+                      <Input
+                        {...field}
+                        label="Market Capacity"
+                        className={"mb-2"}
+                      />
 
-                      {errors.marketCapacity?.type === "required" &&
+                      {errors.marketCapacity?.type === "required" && (
                         <div className="text-xs font-light my-1 text-red-500">
                           {errors.marketCapacity?.message}
                         </div>
-                      }
+                      )}
 
-                      {errors.marketCapacity?.type === "isNumber" &&
+                      {errors.marketCapacity?.type === "isNumber" && (
                         <div className="text-xs font-light my-1 text-red-500 justify-self-start">
                           Must be a number
                         </div>
-                      }
+                      )}
                     </>
                   )}
                 />
@@ -647,30 +697,33 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   required: "Required",
                   validate: {
                     isSet: (value: number) => !isNaN(value),
-                  }
+                  },
                 }}
-                render={({field}) => (
+                render={({ field }) => (
                   <>
                     <DatePicker
                       {...field}
                       placeholder="Select a date"
                       label="Market Expiry Date"
-                      defaultValue={props.initialValues && new Date(props.initialValues?.marketExpiryDate * 1000)}
+                      defaultValue={
+                        props.initialValues &&
+                        new Date(props.initialValues?.marketExpiryDate * 1000)
+                      }
                     />
 
-                    {errors.marketExpiryDate?.type === "isSet" &&
+                    {errors.marketExpiryDate?.type === "isSet" && (
                       <div className="text-xs font-light mt-2 text-red-500 justify-self-start">
                         Date must be set
                       </div>
-                    }
+                    )}
                   </>
                 )}
               />
               <Controller
                 name="vestingType"
                 control={control}
-                rules={{required: "Required"}}
-                render={({field}) => (
+                rules={{ required: "Required" }}
+                render={({ field }) => (
                   <FlatSelect
                     {...field}
                     label="Bond Vesting"
@@ -685,11 +738,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="timeAmount"
                   control={control}
-                  rules={{required: "Required"}}
-                  render={({field}) => (
-                    <TermPicker {...field}
-                                label="Term Duration"
-                                defaultValue={props.initialValues?.timeAmount}
+                  rules={{ required: "Required" }}
+                  render={({ field }) => (
+                    <TermPicker
+                      {...field}
+                      label="Term Duration"
+                      defaultValue={props.initialValues?.timeAmount}
                     />
                   )}
                 />
@@ -699,106 +753,108 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   control={control}
                   rules={{
                     validate: {
-                      isSet: (value: number) => vestingType !== 0 || !isNaN(value),
-                    }
+                      isSet: (value: number) =>
+                        vestingType !== 0 || !isNaN(value),
+                    },
                   }}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <>
                       <DatePicker
                         {...field}
                         label="Choose bond expiry"
                         placeholder="Select expiry"
-                        defaultValue={new Date(props.initialValues?.expiryDate * 1000)}
+                        defaultValue={
+                          new Date(props.initialValues?.expiryDate * 1000)
+                        }
                       />
 
-                      {errors.expiryDate?.type === "isSet" &&
+                      {errors.expiryDate?.type === "isSet" && (
                         <div className="text-xs font-light mt-2 text-red-500 justify-self-start">
                           Date must be set
                         </div>
-                      }
+                      )}
                     </>
                   )}
                 />
               )}
               <Accordion
                 className="mt-5 border-y border-white/15"
-                content={
-                  <div className="mt-4">
-                    <Controller
-                      name="bondsPerWeek"
-                      control={control}
-                      rules={{
-                        required: "Required",
-                        validate: {
-                          isNumber: (value: string) => !isNaN(Number(value)),
-                        }
-                      }}
-                      render={({field}) => (
-                        <>
-                          <Input
-                            {...field}
-                            label="Bonds per week"
-                            className="mb-2"
-                          />
-
-                          {errors.bondsPerWeek?.type === "required" &&
-                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
-                              {errors.bondsPerWeek?.message}
-                            </div>
-                          }
-
-                          {errors.bondsPerWeek?.type === "isNumber" &&
-                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
-                              Must be a number
-                            </div>
-                          }
-                        </>
-                      )}
-                    />
-
-                    <Controller
-                      name="debtBuffer"
-                      control={control}
-                      rules={{
-                        required: "Required",
-                        validate: {
-                          isNumber: (value: string) => !isNaN(Number(value)),
-                        }
-                      }}
-                      render={({field}) => (
-                        <>
-                          <Input {...field} label="Debt buffer"/>
-
-                          {errors.debtBuffer?.type === "required" &&
-                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
-                              {errors.debtBuffer?.message}
-                            </div>
-                          }
-
-                          {errors.debtBuffer?.type === "isNumber" &&
-                            <div className="text-xs font-light my-1 text-red-500 justify-self-start">
-                              Must be a number
-                            </div>
-                          }
-                        </>
-                      )}
-                    />
-                  </div>
-                }
+                label="Advanced Setup"
               >
-                <p>Advanced Setup</p>
+                <div className="mt-4">
+                  <Controller
+                    name="bondsPerWeek"
+                    control={control}
+                    rules={{
+                      required: "Required",
+                      validate: {
+                        isNumber: (value: string) => !isNaN(Number(value)),
+                      },
+                    }}
+                    render={({ field }) => (
+                      <>
+                        <Input
+                          {...field}
+                          label="Bonds per week"
+                          className="mb-2"
+                        />
+
+                        {errors.bondsPerWeek?.type === "required" && (
+                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                            {errors.bondsPerWeek?.message}
+                          </div>
+                        )}
+
+                        {errors.bondsPerWeek?.type === "isNumber" && (
+                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                            Must be a number
+                          </div>
+                        )}
+                      </>
+                    )}
+                  />
+
+                  <Controller
+                    name="debtBuffer"
+                    control={control}
+                    rules={{
+                      required: "Required",
+                      validate: {
+                        isNumber: (value: string) => !isNaN(Number(value)),
+                      },
+                    }}
+                    render={({ field }) => (
+                      <>
+                        <Input {...field} label="Debt buffer" />
+
+                        {errors.debtBuffer?.type === "required" && (
+                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                            {errors.debtBuffer?.message}
+                          </div>
+                        )}
+
+                        {errors.debtBuffer?.type === "isNumber" && (
+                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                            Must be a number
+                          </div>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
               </Accordion>
             </div>
             <p className="mt-16 font-faketion font-bold tracking-widest">
               3 CONFIRMATION
             </p>
-            <SummaryCard fields={summaryFields} className="mt-8"/>
+            <SummaryCard fields={summaryFields} className="mt-8" />
 
-            {(!isValid && isSubmitted) &&
+            {!isValid && isSubmitted && (
               <div className="text-xs font-light mt-4 text-red-500">
-                Form has errors, please check all fields are filled out correctly.
+                Form has errors, please check all fields are filled out
+                correctly.
               </div>
-            }
+            )}
 
             <Button type="submit" className="w-full font-fraktion mt-5">
               CONFIRM INFORMATION

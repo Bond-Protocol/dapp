@@ -140,7 +140,7 @@ export const MarketList: FC<MarketListProps> = ({
   });
 
   const singleLogo = (token: Token, network: string) => {
-    const tokenDetails = getToken(network + "_" + token.address);
+    const tokenDetails = getToken(network + "_" + token?.address);
     return tokenDetails?.logoUrl && tokenDetails.logoUrl != ""
       ? tokenDetails.logoUrl
       : "/placeholders/token-placeholder.png";
@@ -185,7 +185,7 @@ export const MarketList: FC<MarketListProps> = ({
   }, [markets]);
 
   return (
-    <div className="mb-16">
+    <div>
       <p className="flex justify-end p-2">
         {allowManagement ? (
           <Button onClick={refetchMyMarkets}>Refresh</Button>
@@ -278,9 +278,6 @@ export const MarketList: FC<MarketListProps> = ({
           })}
         </tbody>
       </table>
-      <tfoot>
-        <tr>{/* <TablePagination length={sortedMarkets.length} /> */}</tr>
-      </tfoot>
     </div>
   );
 };
