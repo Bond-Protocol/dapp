@@ -7,6 +7,7 @@ import {
 } from "components/organisms";
 import { Tabs } from "components/molecules";
 import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
+import { Routes, Route } from "react-router-dom";
 
 type MarketProps = {
   markets: Map<string, CalculatedMarket>;

@@ -16,11 +16,11 @@ type TabProps = {
 };
 
 export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(value || 0);
 
   return (
     <TabsUnstyled
-      defaultValue={0}
+      defaultValue={selected}
       className=" mt-4 border-transparent rounded-t-lg overflow-hidden"
     >
       <TabsListUnstyled
@@ -34,8 +34,8 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
           <TabUnstyled
             key={i}
             onClick={() => {
-              setSelected(value || i);
-              handleClick && handleClick(value || i);
+              setSelected(i);
+              handleClick && handleClick(i);
             }}
             componentsProps={{
               root: {
