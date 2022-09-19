@@ -6,10 +6,14 @@ import { IssuerCard } from "components/molecules/IssuerCard";
 import { Input } from "@material-tailwind/react";
 import { alphabeticSort, numericSort } from "services/sort";
 import { Button } from "components";
+import { CalculatedMarket } from "@bond-labs/contract-library";
 
-export const IssuerList: FC<any> = () => {
-  const { marketsByIssuer, issuers } = useCalculatedMarkets();
+type IssuerListProps = {
+  issuers: string[];
+  marketsByIssuer: Map<string, CalculatedMarket>;
+};
 
+export const IssuerList = ({ marketsByIssuer, issuers }: IssuerListProps) => {
   const [search, setSearch] = useState("");
   const [sortedIssuers, setSortedIssuers] = useState(issuers);
   const [currentSort, setCurrentSort] = useState({

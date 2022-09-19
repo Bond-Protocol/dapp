@@ -1,22 +1,21 @@
-import type { FC } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Link } from "react-router-dom";
-import { Button } from "..";
-import logo from "../../assets/logo.svg";
+import { ConnectButton } from "../organisms/ConnectButton";
+import { ProtocolLogo } from "components/atoms/ProtocolLogo";
+import { ReactComponent as HamburgerIcon } from "../../assets/icons/hamburger-icon.svg";
 
-export const Navbar: FC = () => {
+export const Navbar = (props: { onHamburgerClick: () => void }) => {
   return (
-    <div className="flex justify-between px-[5vw] py-4" id="navbar">
-      <img src={logo} className="w-[178px]" />
-      <div className="flex h-min my-auto gap-6">
-        <Link to="/markets">
-          <Button>Markets</Button>
-        </Link>
-        <Link to="/create">
-          <Button>Create Market</Button>
-        </Link>
+    <div
+      className="flex justify-between items-center px-[5vw] h-[88px]"
+      id="navbar"
+    >
+      <ProtocolLogo className="py-6" />
+      <div className="flex">
+        <ConnectButton />
+        <HamburgerIcon
+          onClick={props.onHamburgerClick}
+          className="hover:cursor-pointer my-auto ml-4"
+        />
       </div>
-      <ConnectButton />
     </div>
   );
 };

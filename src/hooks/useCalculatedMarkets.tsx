@@ -1,23 +1,24 @@
 //@ts-nocheck
-import {useTokens} from "hooks/useTokens";
-import {useQueries} from "react-query";
-import {useState} from "react";
+import { useTokens } from "hooks/useTokens";
+import { useQueries } from "react-query";
+import { useState } from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
-import {getProtocolByAddress} from "@bond-labs/bond-library";
+import { getProtocolByAddress } from "@bond-labs/bond-library";
 import * as contractLibrary from "@bond-labs/contract-library";
-import {CalculatedMarket} from "@bond-labs/contract-library";
-import {useProvider} from "wagmi";
-import {providers} from "services/owned-providers";
-import {Market} from "src/generated/graphql";
+import { CalculatedMarket } from "@bond-labs/contract-library";
+import { useProvider } from "wagmi";
+import { providers } from "services/owned-providers";
+import { Market } from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import {useMarkets} from "hooks/useMarkets";
-import {useMyMarkets} from "hooks/useMyMarkets";
+import { useMarkets } from "hooks/useMarkets";
+import { useMyMarkets } from "hooks/useMyMarkets";
 
 export function useCalculatedMarkets() {
   const { markets: markets } = useMarkets();
   const { markets: myMarkets } = useMyMarkets();
   const { currentPrices, getPrice } = useTokens();
   const provider = useProvider();
+  console.log({ markets });
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [myCalculatedMarkets, setMyCalculatedMarkets] = useState(new Map());
@@ -150,6 +151,7 @@ export function useCalculatedMarkets() {
     myMarkets: myCalculatedMarkets,
     issuers: issuers,
     marketsByIssuer: marketsByIssuer,
+    isMarketOwner: !!myCalculatedMarkets.length,
     refetchAllMarkets: () => refetchAllMarkets(),
     refetchMyMarkets: () => refetchMyMarkets(),
     refetchOne: (id: string) => refetchOne(id),

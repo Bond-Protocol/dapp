@@ -11,6 +11,7 @@ export const RouteMap: FC = () => {
 
   return (
     <Switch>
+      <Route path="/" element={<Markets markets={allMarkets} />} />
       <Route path="/markets" element={<Markets markets={allMarkets} />} />
       <Route path="/create" element={<CreateMarket />} />
       <Route path="/issuers/:name" element={<IssuerPage />} />
