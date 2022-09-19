@@ -195,7 +195,7 @@ export const MarketList: FC<MarketListProps> = ({
       </p>
       <table className="w-full table-fixed">
         <thead>
-          <tr>
+          <tr className="border-b border-white/60">
             <TableHeading onClick={sortByQuote}>BOND</TableHeading>
             <TableHeading onClick={sortByPrice}>PRICE</TableHeading>
             <TableHeading onClick={sortByDiscount}>DISCOUNT</TableHeading>
@@ -214,6 +214,7 @@ export const MarketList: FC<MarketListProps> = ({
             return (
               <ExpandableRow
                 key={market.id}
+                className="gap-x-2 border-y border-white/15"
                 onOpen={() => {
                   timerRef.current = setInterval(() => {
                     refetchOne(market.id);
@@ -238,7 +239,6 @@ export const MarketList: FC<MarketListProps> = ({
                     <div>Loading...</div>
                   )
                 }
-                className="gap-x-2"
               >
                 <TableCell>{quoteLogo(market)}</TableCell>
                 <TableCell className="flex flex-row py-6">
