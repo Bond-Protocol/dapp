@@ -1,6 +1,6 @@
-import {useState} from "react";
-import {Tooltip} from "@material-tailwind/react";
-import {TableCell, TableCellProps} from "./TableCell";
+import { useState } from "react";
+import { Tooltip } from "@material-tailwind/react";
+import { TableCell, TableCellProps } from "./TableCell";
 import TooltipIcon from "../../assets/icons/tooltip-icon";
 import ArrowDownIcon from "../../assets/icons/arrow-down-icon";
 
@@ -31,7 +31,7 @@ export const TableHeading = (props: TableHeadingProps) => {
     >
       <div
         className={`flex font-fraktion tracking-widest ${
-          props.alignEnd ? "justify-end" : "justify-between"
+          props.alignEnd ? "justify-end" : "justify-start"
         }`}
       >
         {sorting && (
