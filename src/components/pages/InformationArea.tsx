@@ -61,7 +61,7 @@ export const InformationArea = (props: InformationAreaProps) => {
               className="text-black py-10 hover:bg-black/5 transition-all"
               key={i}
             >
-              <p className="p-8">{content}</p>
+              <p className="p-8 text-black">{content}</p>
             </Accordion>
           ))}
         </div>
