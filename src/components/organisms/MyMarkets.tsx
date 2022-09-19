@@ -1,13 +1,15 @@
 import { MarketList } from "components/organisms/MarketList";
-import { useCalculatedMarkets } from "hooks";
 import { RequiresWallet } from "components/utility/RequiresWallet";
+import { CalculatedMarket } from "@bond-labs/contract-library";
 
-export const MyMarkets = () => {
-  const { myMarkets } = useCalculatedMarkets();
+type MyMarketProps = {
+  markets: Map<string, CalculatedMarket>;
+};
 
+export const MyMarkets = ({ markets }: MyMarketProps) => {
   return (
     <RequiresWallet className="mt-20">
-      <MarketList markets={myMarkets} allowManagement={true} />
+      <MarketList markets={markets} allowManagement={true} />
     </RequiresWallet>
   );
 };
