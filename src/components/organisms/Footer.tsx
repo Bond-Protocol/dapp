@@ -1,3 +1,4 @@
+import { ProtocolLogo } from "components/atoms/ProtocolLogo";
 import { SocialRow } from "components/atoms/SocialRow";
 import logo from "../../assets/logo.svg";
 
@@ -14,7 +15,7 @@ export const Footer = ({ className = "" }: { className?: string }) => {
       className={`bg-brand-turtle-blue h-28 mt-4 relative overflow-hidden ${className}`}
     >
       <div className="h-full w-full px-[5vw] py-5 h-28">
-        <img src={logo} className="absolute w-[178px] my-6" />
+        <ProtocolLogo className="absolute my-6" />
         <div className="h-full flex flex-col justify-evenly my-auto">
           <SocialRow {...socials} />
           <a

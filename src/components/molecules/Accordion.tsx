@@ -36,7 +36,7 @@ export const Accordion: FC<{
 
       <div
         className={`${
-          open ? "opacity-100 pb-6" : "opacity-0 h-0 hidden"
+          open ? "opacity-100" : "opacity-0 h-0 hidden"
         } text-black transition-all duration-200 max-h-96 overflow-auto overflow-x-disable`}
       >
         {children}

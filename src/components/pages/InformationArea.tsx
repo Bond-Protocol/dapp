@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Footer } from "..";
 import { Accordion } from "..";
-import logo from "../../assets/logo-black.svg";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
+import { loremIpsum } from "../../utils";
+import { ProtocolLogo } from "components/atoms/ProtocolLogo";
 
 export type InformationAreaProps = {
   onClose: () => void;
@@ -10,10 +11,10 @@ export type InformationAreaProps = {
 };
 
 const content = [
-  { label: "How to issue a bond", content: "Coming Soon" },
-  { label: "How to get verified", content: "Coming Soon" },
-  { label: "How to close an issued bond", content: "Coming Soon" },
-  { label: "How to bond", content: "Coming Soon" },
+  { label: "How to issue a bond", content: loremIpsum },
+  { label: "How to get verified", content: loremIpsum },
+  { label: "How to close an issued bond", content: loremIpsum },
+  { label: "How to bond", content: loremIpsum },
   { label: "Who are we", content: "Coming Soon" },
 ];
 
@@ -33,7 +34,13 @@ export const InformationArea = (props: InformationAreaProps) => {
     >
       <div className="bg-white">
         <div className="mx-[5vw] h-[88px] flex justify-between items-center ">
-          <img src={logo} />
+          <ProtocolLogo
+            black
+            onClick={() => {
+              props.onClose();
+              console.log("haiii");
+            }}
+          />
           <CloseIcon
             className="fill-black hover:cursor-pointer w-[14px] h-[14px] mr-0.5"
             onClick={props.onClose}

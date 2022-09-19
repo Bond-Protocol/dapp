@@ -6,6 +6,7 @@ import {
   MyMarkets,
 } from "components/organisms";
 import { Tabs } from "components/molecules";
+
 type MarketProps = {
   markets: Map<string, CalculatedMarket>;
   allowManagement?: boolean;

@@ -7,7 +7,7 @@ export const MyMarkets = () => {
 
   return (
     <RequiresWallet className="mt-20">
-      <MarketList markets={myMarkets} allowManagement={true} /> :
+      <MarketList markets={myMarkets} allowManagement={true} />
     </RequiresWallet>
   );
 };
