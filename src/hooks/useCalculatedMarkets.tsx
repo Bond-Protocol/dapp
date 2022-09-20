@@ -143,7 +143,6 @@ export function useCalculatedMarkets() {
     });
 
     setMyCalculatedMarkets(calculatedPricesMap);
-    console.log(myCalculatedMarkets)
   }, [calculateMyMarkets]);
 
   return {
