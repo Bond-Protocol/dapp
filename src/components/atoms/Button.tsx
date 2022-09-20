@@ -1,8 +1,5 @@
-import { forwardRef } from "react";
-import ButtonUnstyled, {
-  ButtonUnstyledOwnerState,
-  ButtonUnstyledProps,
-} from "@mui/base/ButtonUnstyled";
+import {forwardRef} from "react";
+import ButtonUnstyled, {ButtonUnstyledOwnerState, ButtonUnstyledProps,} from "@mui/base/ButtonUnstyled";
 
 export type ButtonProps = ButtonUnstyledProps & {
   variant?: "primary" | "secondary" | "ghost";
@@ -72,7 +69,7 @@ export const Button = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `uppercase font-faketion font-bold tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
+          className: `select-none uppercase outline-none font-faketion font-bold tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
         }),
       }}
     />

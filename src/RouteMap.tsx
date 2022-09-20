@@ -1,9 +1,9 @@
-import type { FC } from "react";
-import type { CalculatedMarket } from "@bond-labs/contract-library";
-import { Route, Routes as Switch, useNavigate } from "react-router-dom";
-import { useCalculatedMarkets } from "hooks";
-import { Markets, MarketInsights, CreateMarket } from "components/pages";
-import { IssuerPage } from "components/organisms";
+import type {FC} from "react";
+import type {CalculatedMarket} from "@bond-labs/contract-library";
+import {Route, Routes as Switch} from "react-router-dom";
+import {useCalculatedMarkets} from "hooks";
+import {CreateMarket, MarketInsights, Markets} from "components/pages";
+import {IssuerPage} from "components/organisms";
 
 export const RouteMap: FC = () => {
   const { allMarkets } = useCalculatedMarkets();
@@ -11,6 +11,7 @@ export const RouteMap: FC = () => {
 
   return (
     <Switch>
+      <Route path="/" element={<Markets markets={allMarkets} />} />
       <Route path="/markets" element={<Markets markets={allMarkets} />} />
       <Route path="/create" element={<CreateMarket />} />
       <Route path="/issuers/:name" element={<IssuerPage />} />

@@ -1,21 +1,13 @@
-import { useState } from "react";
-import { Modal } from "../molecules/Modal";
-import {
-  TransactionHashDialog,
-  TransactionHashDialogProps,
-} from "../modals/TransactionHashDialog";
-import {
-  PurchaseSuccessDialog,
-  PurchaseSuccessDialogProps,
-} from "../modals/PurchaseSuccessDialog";
-import {
-  PurchaseConfirmDialog,
-  PurchaseConfirmDialogProps,
-} from "components/modals";
-import { ContractTransaction } from "ethers";
-import { useProvider } from "wagmi";
-import { getBlockExplorer } from "../../utils/getBlockExplorer";
-import { TransactionErrorDialog } from "components/modals/TransactionErrorDialog";
+import {useState} from "react";
+import {Modal} from "../molecules/Modal";
+import {TransactionHashDialog, TransactionHashDialogProps,} from "../modals/TransactionHashDialog";
+import {PurchaseSuccessDialog, PurchaseSuccessDialogProps,} from "../modals/PurchaseSuccessDialog";
+import {PurchaseConfirmDialog, PurchaseConfirmDialogProps,} from "components/modals";
+import {ContractTransaction} from "ethers";
+import {useProvider} from "wagmi";
+import {getBlockExplorer} from "../../utils/getBlockExplorer";
+import {TransactionErrorDialog} from "components/modals/TransactionErrorDialog";
+import {useNavigate} from "react-router-dom";
 
 export type PurchaseBondModalProps = {
   open: boolean;
@@ -39,6 +31,7 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
     "tx"
   );
   const provider = useProvider();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -53,8 +46,14 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
     }
   };
 
-  const goToMarkets = () => {};
-  const goToBondDetails = () => {};
+  const goToMarkets = () => {
+    navigate("/markets");
+    props.closeModal();
+  };
+  const goToBondDetails = () => {
+    navigate("/mybonds");
+    props.closeModal();
+  };
 
   const dialogs = [
     <PurchaseConfirmDialog

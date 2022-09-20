@@ -1,30 +1,33 @@
-import { CalculatedMarket } from "@bond-labs/contract-library";
-import {
-  MarketList,
-  IssuerList,
-  MyBondsList,
-  MyMarkets,
-} from "components/organisms";
-import { Tabs } from "components/molecules";
+import {CalculatedMarket} from "@bond-labs/contract-library";
+import {IssuerList, MarketList, MyBondsList, MyMarkets,} from "components/organisms";
+import {Tabs} from "components/molecules";
+import {useCalculatedMarkets} from "hooks/useCalculatedMarkets";
+
 type MarketProps = {
   markets: Map<string, CalculatedMarket>;
   allowManagement?: boolean;
 };
 
 export const Markets = (props: MarketProps) => {
-  const marketTabs = [
+  const { isMarketOwner, marketsByIssuer, issuers, allMarkets, myMarkets } =
+    useCalculatedMarkets();
+
+  const tabs = [
     { label: "All Markets" },
     { label: "Bond Issuers" },
     { label: "My Bonds" },
-    { label: "My Markets" },
   ];
+
+  const marketOwnerTab = { label: "My Markets" };
+
+  const marketTabs = isMarketOwner ? [...tabs, marketOwnerTab] : tabs;
 
   return (
     <Tabs tabs={marketTabs}>
-      <MarketList markets={props.markets} />
-      <IssuerList />
+      <MarketList markets={allMarkets} />
+      <IssuerList marketsByIssuer={marketsByIssuer} issuers={issuers} />
       <MyBondsList />
-      <MyMarkets />
+      {isMarketOwner && <MyMarkets markets={myMarkets} />}
     </Tabs>
   );
 };

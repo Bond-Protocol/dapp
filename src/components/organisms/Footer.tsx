@@ -1,5 +1,5 @@
-import { SocialRow } from "components/atoms/SocialRow";
-import logo from "../../assets/logo.svg";
+import {ProtocolLogo} from "components/atoms/ProtocolLogo";
+import {SocialRow} from "components/atoms/SocialRow";
 
 const socials = {
   medium: "https://medium.com/@Bond_Protocol",
@@ -8,11 +8,13 @@ const socials = {
   gitbook: "https://gitbook.org/bondprotocol",
 };
 
-export const Footer = () => {
+export const Footer = ({ className = "" }: { className?: string }) => {
   return (
-    <div className="h-28 relative">
-      <div className="absolute bottom-0 h-full w-full px-[5vw]">
-        <img src={logo} className="absolute w-[178px] pt-6" />
+    <div
+      className={`bg-brand-turtle-blue h-28 mt-4 relative overflow-hidden ${className}`}
+    >
+      <div className="h-full w-full px-[5vw] py-5 h-28">
+        <ProtocolLogo className="absolute my-6" />
         <div className="h-full flex flex-col justify-evenly my-auto">
           <SocialRow {...socials} />
           <a

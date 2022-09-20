@@ -1,5 +1,5 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { FlatSelect } from "../components/atoms/FlatSelect";
+import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {FlatSelect} from "../components/atoms/FlatSelect";
 
 export default {
   title: "Components/Atoms/FlatSelect",

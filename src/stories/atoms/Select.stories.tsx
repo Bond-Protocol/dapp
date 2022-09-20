@@ -1,5 +1,5 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Select } from "../components/atoms/Select";
+import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {Select} from "../components/atoms/Select";
 import baseLogo from "../assets/icons/eth-icon.svg";
 
 export default {

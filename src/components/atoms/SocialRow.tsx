@@ -4,7 +4,7 @@ import mediumIcon from "../../assets/icons/socials/medium.svg";
 import twitterIcon from "../../assets/icons/socials/twitter.svg";
 import discordIcon from "../../assets/icons/socials/discord.svg";
 import telegramIcon from "../../assets/icons/socials/telegram.svg";
-import { LinkIcon } from "../../components/atoms/LinkIcon";
+import {LinkIcon} from "../../components/atoms/LinkIcon";
 
 export type SocialRowProps = {
   gitbook?: string;
@@ -19,7 +19,7 @@ export type SocialRowProps = {
 export const SocialRow = (props: SocialRowProps) => {
   return (
     <div
-      className={`flex justify-center gap-9 child:my-auto ${props.className}`}
+      className={`flex justify-center gap-9 my-auto child:my-auto ${props.className}`}
     >
       {props.gitbook && <LinkIcon src={gitbookIcon} href={props.gitbook} />}
       {props.github && <LinkIcon src={githubIcon} href={props.github} />}

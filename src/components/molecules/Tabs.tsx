@@ -1,9 +1,8 @@
-import { Children } from "react";
-import { FC, useState } from "react";
+import {Children, FC, useState} from "react";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import TabsListUnstyled from "@mui/base/TabsListUnstyled";
 import TabUnstyled from "@mui/base/TabUnstyled";
-import { TabPanelUnstyled } from "@mui/base";
+import {TabPanelUnstyled} from "@mui/base";
 
 type TabProps = {
   children: React.ReactNode;
@@ -16,11 +15,11 @@ type TabProps = {
 };
 
 export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(value || 0);
 
   return (
     <TabsUnstyled
-      defaultValue={0}
+      defaultValue={selected}
       className=" mt-4 border-transparent rounded-t-lg overflow-hidden"
     >
       <TabsListUnstyled
@@ -34,14 +33,18 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
           <TabUnstyled
             key={i}
             onClick={() => {
-              setSelected(value || i);
-              handleClick && handleClick(value || i);
+              setSelected(i);
+              handleClick && handleClick(i);
             }}
             componentsProps={{
               root: {
                 className: `
-                 border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4
-                 ${selected === i ? "bg-light-primary-900" : "bg-transparent"} 
+                 border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4 select-none
+                 ${
+                   selected === i
+                     ? "bg-light-primary-900"
+                     : "bg-transparent hover:bg-light-primary-900/50"
+                 } 
                  ${props.largeTab ? "px-36" : ""}`,
               },
             }}

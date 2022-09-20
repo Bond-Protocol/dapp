@@ -1,5 +1,5 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { InputCard } from "../components/molecules/InputCard";
+import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {InputCard} from "../components/molecules/InputCard";
 
 export default {
   title: "Components/Molecules/InputCard",

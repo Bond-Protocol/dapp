@@ -18,6 +18,7 @@ export function useCalculatedMarkets() {
   const { markets: myMarkets } = useMyMarkets();
   const { currentPrices, getPrice } = useTokens();
   const provider = useProvider();
+  console.log({ markets });
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [myCalculatedMarkets, setMyCalculatedMarkets] = useState(new Map());
@@ -150,6 +151,7 @@ export function useCalculatedMarkets() {
     myMarkets: myCalculatedMarkets,
     issuers: issuers,
     marketsByIssuer: marketsByIssuer,
+    isMarketOwner: !!myCalculatedMarkets.length,
     refetchAllMarkets: () => refetchAllMarkets(),
     refetchMyMarkets: () => refetchMyMarkets(),
     refetchOne: (id: string) => refetchOne(id),

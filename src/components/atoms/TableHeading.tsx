@@ -31,7 +31,7 @@ export const TableHeading = (props: TableHeadingProps) => {
     >
       <div
         className={`flex font-fraktion tracking-widest ${
-          props.alignEnd ? "justify-end" : "justify-between"
+          props.alignEnd ? "justify-end" : "justify-start"
         }`}
       >
         {sorting && (

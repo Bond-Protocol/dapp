@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import {forwardRef} from "react";
 
 export type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {
   heading?: boolean;
@@ -15,7 +15,7 @@ export const TableCell = forwardRef(function TableCell(
     <CellType
       {...props}
       ref={ref}
-      className={`py-4 border-b font-extralight ${border} ${props.className}`}
+      className={`py-4 font-extralight ${border} ${props.className}`}
     >
       {props.children}
     </CellType>

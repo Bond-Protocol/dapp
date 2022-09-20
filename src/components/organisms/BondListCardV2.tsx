@@ -3,7 +3,7 @@ import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
 import {CalculatedMarket} from "@bond-labs/contract-library";
 import {getProtocolByAddress} from "@bond-labs/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
-import ArrowIcon from "../../assets/icons/arrow-icon.svg";
+import {ReactComponent as ArrowIcon} from "../../assets/icons/arrow-icon.svg";
 import {formatLongNumber, getBlockExplorer} from "../../utils";
 import {providers} from "services/owned-providers";
 import {usePurchaseBond, useTokenAllowance, useTokens} from "hooks";
@@ -59,15 +59,19 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
 
   useEffect(() => {
     const updatePayout = async () => {
-      console.log(amount)
-      const payout = Number(await getPayoutFor(
-        amount,
-        market.quoteToken.decimals,
-        market.marketId,
-        market.auctioneer
-      ));
+      console.log(amount);
+      const payout = Number(
+        await getPayoutFor(
+          amount,
+          market.quoteToken.decimals,
+          market.marketId,
+          market.auctioneer
+        )
+      );
 
-      setPayout(formatLongNumber(payout, market.payoutToken.decimals).toString());
+      setPayout(
+        formatLongNumber(payout, market.payoutToken.decimals).toString()
+      );
     };
 
     void updatePayout();
@@ -87,6 +91,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
     ? approveSpending
     : () => setShowModal(true);
 
+  console.log({ market });
   const summaryFields = [
     {
       label: "You will get",
@@ -146,10 +151,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
             <div className="font-faketion pt-[2px] font-bold">
               {props.topRightLabel}
             </div>
-            <img
-              src={ArrowIcon}
-              className="fill-inherit my-auto rotate-90 ml-2 p-1"
-            />
+            <ArrowIcon className="fill-white color-white my-auto rotate-90 ml-2 p-1" />
           </div>
         </Button>
       </div>
@@ -165,7 +167,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
                 {vestingLabel}
               </InfoLabel>
               <InfoLabel label="Remaining Capacity" tooltip="tooltip popup">
-
+                {market.currentCapacity} {market.payoutToken.symbol}
               </InfoLabel>
             </div>
           )}

@@ -1,6 +1,6 @@
 import {forwardRef} from "react";
 import ModalUnstyled from "@mui/base/ModalUnstyled";
-import CloseIcon from "../../assets/icons/close-icon.svg";
+import {ReactComponent as CloseIcon} from "../../assets/icons/close-icon.svg";
 
 type ModalHeaderProps = {
   onClickClose?: () => void;
@@ -34,10 +34,7 @@ const ModalHeader = (props: ModalHeaderProps) => {
       <p className="tracking-wider font-light">{props?.topLeftContent}</p>
       {props.onClickClose && (
         <div onClick={props.onClickClose}>
-          <img
-            src={CloseIcon}
-            className="h-[14px] w-[14px] my-auto hover:cursor-pointer"
-          />
+          <CloseIcon className="h-[14px] fill-white w-[14px] my-auto hover:cursor-pointer" />
         </div>
       )}
     </div>

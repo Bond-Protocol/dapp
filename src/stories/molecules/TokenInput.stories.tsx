@@ -1,5 +1,5 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { TokenInput } from "../components/atoms/TokenInput";
+import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {TokenInput} from "../components/atoms/TokenInput";
 import baseIcon from "../assets/icons/eth-icon.svg";
 
 export default {

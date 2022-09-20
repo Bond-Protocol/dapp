@@ -1,10 +1,9 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { TableHeading } from "../components/atoms/TableHeading";
-import { TableCell } from "../components/atoms/TableCell";
+import {ComponentMeta, ComponentStory} from "@storybook/react";
+import {TableHeading} from "../components/atoms/TableHeading";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Atoms/TableHeader",
+  title: "Components/Atoms/TableHeading",
   component: TableHeading,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
@@ -22,22 +21,12 @@ const Template: ComponentStory<typeof TableHeading> = (args) => (
 
 const Multiple: ComponentStory<typeof TableHeading> = (args) => (
   <table>
-    <thead>
-      <tr>
-        <TableHeading {...args} />
-        <TableHeading {...args} />
-        <TableHeading {...args} />
-        <TableHeading {...args} />
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <TableCell className="text-right">ok</TableCell>
-        <TableCell>ok</TableCell>
-        <TableCell>ok</TableCell>
-        <TableCell>ok</TableCell>
-      </tr>
-    </tbody>
+    <tr>
+      <TableHeading {...args} />
+      <TableHeading {...args} />
+      <TableHeading {...args} />
+      <TableHeading {...args} />
+    </tr>
   </table>
 );
 

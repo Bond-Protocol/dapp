@@ -1,8 +1,9 @@
 //@ts-nocheck
-import {ExpandableRow} from "components/molecules/ExpandableRow";
+import {FC, useEffect, useRef, useState} from "react";
+import {useNavigate} from "react-router-dom";
 import {CalculatedMarket, Token} from "@bond-labs/contract-library";
 import {getToken} from "@bond-labs/bond-library";
-import {FC, useEffect, useRef, useState} from "react";
+import {ExpandableRow} from "components/molecules/ExpandableRow";
 import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
 import {useCalculatedMarkets, useTokens} from "hooks";
@@ -10,7 +11,6 @@ import {TableHeading} from "components/atoms/TableHeading";
 import {TableCell} from "components/atoms/TableCell";
 import {CellLabel} from "components/atoms/CellLabel";
 import {BondListCardV2} from "./BondListCardV2";
-import {useNavigate} from "react-router-dom";
 
 type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
@@ -186,7 +186,7 @@ export const MarketList: FC<MarketListProps> = ({
   }, [markets]);
 
   return (
-    <div className="mb-16">
+    <div>
       <p className="flex justify-end p-2">
         {allowManagement ? (
           <Button onClick={refetchMyMarkets}>Refresh</Button>
@@ -196,7 +196,7 @@ export const MarketList: FC<MarketListProps> = ({
       </p>
       <table className="w-full table-fixed">
         <thead>
-          <tr>
+          <tr className="border-b border-white/60">
             <TableHeading onClick={sortByQuote}>BOND</TableHeading>
             <TableHeading onClick={sortByPrice}>PRICE</TableHeading>
             <TableHeading onClick={sortByDiscount}>DISCOUNT</TableHeading>
@@ -215,6 +215,7 @@ export const MarketList: FC<MarketListProps> = ({
             return (
               <ExpandableRow
                 key={market.id}
+                className="gap-x-2 border-y border-white/15"
                 onOpen={() => {
                   timerRef.current = setInterval(() => {
                     refetchOne(market.id);
@@ -239,7 +240,6 @@ export const MarketList: FC<MarketListProps> = ({
                     <div>Loading...</div>
                   )
                 }
-                className="gap-x-2"
               >
                 <TableCell>{quoteLogo(market)}</TableCell>
                 <TableCell className="flex flex-row py-6">
@@ -279,9 +279,6 @@ export const MarketList: FC<MarketListProps> = ({
           })}
         </tbody>
       </table>
-      <tfoot>
-        <tr>{/* <TablePagination length={sortedMarkets.length} /> */}</tr>
-      </tfoot>
     </div>
   );
 };

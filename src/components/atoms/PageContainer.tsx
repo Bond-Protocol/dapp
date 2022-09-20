@@ -1,5 +1,5 @@
 // @ts-ignore
-import { TailwindComponent } from "src/types/TailwindComponent";
+import {TailwindComponent} from "src/types/TailwindComponent";
 
 export const PageContainer: TailwindComponent = ({
   // @ts-ignore
@@ -7,6 +7,6 @@ export const PageContainer: TailwindComponent = ({
   className = "",
 }) => {
   return (
-    <div className={`mx-[10vw] min-h-[80vh] ${className}`}>{children}</div>
+    <div className={`mx-[10vw] min-h-[78vh] ${className}`}>{children}</div>
   );
 };
