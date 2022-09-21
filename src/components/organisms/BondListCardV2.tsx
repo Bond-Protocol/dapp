@@ -91,7 +91,6 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
     ? approveSpending
     : () => setShowModal(true);
 
-  console.log({ market });
   const summaryFields = [
     {
       label: "You will get",
@@ -187,6 +186,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
             onSwitchChain={switchChain}
             network={market.network}
             quoteTokenSymbol={market.quoteToken.symbol}
+            purchaseLink={market.quoteToken.purchaseLink ? market.quoteToken.purchaseLink : "https://app.sushi.com/swap"}
           >
             <Button className="w-full mt-4" onClick={onClickBond}>
               {!hasSufficientAllowance ? "APPROVE" : "BOND"}

@@ -7,6 +7,7 @@ export type BondButtonProps = {
   showSwitcher: boolean;
   showPurchaseLink: boolean;
   quoteTokenSymbol: string;
+  purchaseLink: string;
   network: string;
   onSwitchChain: () => void;
   children: React.ReactNode;
@@ -32,7 +33,7 @@ export const BondButton = (props: BondButtonProps) => {
     return (
       <Link
         className="mx-auto mt-4 border rounded-lg px-5 py-3 w-full flex justify-center border-brand-yella"
-        href="https://app.sushi.com/swap"
+        href={props.purchaseLink}
         target="_blank"
         rel="noopener noreferrer"
       >

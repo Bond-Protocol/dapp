@@ -3,7 +3,7 @@ import {useTokens} from "hooks/useTokens";
 import {useQueries} from "react-query";
 import {useState} from "react";
 import * as bondLibrary from "@bond-labs/bond-library";
-import {getProtocolByAddress} from "@bond-labs/bond-library";
+import {getProtocolByAddress, TOKENS} from "@bond-labs/bond-library";
 import * as contractLibrary from "@bond-labs/contract-library";
 import {CalculatedMarket} from "@bond-labs/contract-library";
 import {useProvider} from "wagmi";
@@ -31,6 +31,10 @@ export function useCalculatedMarkets() {
       lpPair.token0.price = getPrice(lpPair.token0.id);
       lpPair.token1.price = getPrice(lpPair.token1.id);
     }
+    const purchaseLink = bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(market.network) ?
+      bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(market.network) :
+      "https://app.sushi.com/swap";
+
     return contractLibrary
       .calcMarket(
         requestProvider,
@@ -64,6 +68,7 @@ export function useCalculatedMarkets() {
             symbol: market.quoteToken.symbol,
             price: getPrice(market.quoteToken.id),
             lpPair: market.quoteToken.lpPair,
+            purchaseLink: purchaseLink,
           },
         },
         bondLibrary.TOKENS.get(market.quoteToken.id)
