@@ -19,3 +19,31 @@ body {
     );
   backdrop-filter: blur(900px);
 }
+
+#bg {
+  z-index: -100;
+}
+
+#grad-1 {
+  background: radial-gradient(
+    circle at -50% 0%,
+    rgb(101, 137, 167, 1) 0%,
+    rgba(255, 255, 255, 0) 50%
+  );
+}
+
+#grad-2 {
+  background: radial-gradient(
+    circle at 150% 230%,
+    rgb(101, 137, 167, 1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+}
+
+#grad-3 {
+  background: radial-gradient(
+    circle at -30% 95%,
+    rgb(101, 137, 167, 1) 0%,
+    rgba(255, 255, 255, 0) 30%
+  );
+}
