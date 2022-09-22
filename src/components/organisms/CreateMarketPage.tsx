@@ -54,9 +54,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const [minimumExchangeRate, setMinimumExchangeRate] = useState(0);
   const [vestingString, setVestingString] = useState("");
   const [marketExpiryString, setMarketExpiryString] = useState("");
+  const [marketExpiryDays, setMarketExpiryDays] = useState(0);
   const [capacityString, setCapacityString] = useState("");
   const [exchangeRateString, setExchangeRateString] = useState("");
   const [minExchangeRateString, setMinExchangeRateString] = useState("");
+  const [estimatedBondCadence, setEstimatedBondCadence] = useState("");
 
   const {
     control,
@@ -152,11 +154,15 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   });
 
   useEffect(() => {
-    setCapacityString(
-      `${marketCapacity} ${
-        capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
-      }`
-    );
+    if (marketCapacity === undefined) {
+      setCapacityString("");
+    } else {
+      setCapacityString(
+        `${marketCapacity} ${
+          capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
+        }`
+      );
+    }
   }, [marketCapacity, capacityToken]);
 
   useEffect(() => {
@@ -178,6 +184,23 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       setMinimumExchangeRate(0);
     }
   }, [minExchangeRate]);
+
+  useEffect(() => {
+    if (bondsPerWeek && marketExpiryDays && marketCapacity && payoutTokenSymbol && quoteTokenSymbol) {
+      const depositInterval = (bondsPerWeek / 7);
+      const intervals = marketExpiryDays / depositInterval;
+      const cadence = marketCapacity / intervals;
+
+      const token = capacityToken === 0
+        ? payoutTokenSymbol
+        : quoteTokenSymbol
+
+      const string = cadence.toString().concat(" ").concat(token).concat("/Day");
+      setEstimatedBondCadence(string);
+    } else {
+      setEstimatedBondCadence("");
+    }
+  }, [bondsPerWeek, marketExpiryDays, marketCapacity, capacityToken, payoutTokenSymbol, quoteTokenSymbol]);
 
   useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
@@ -244,8 +267,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         if (days !== 1) string = string.concat("s");
       }
       setMarketExpiryString(string);
+      setMarketExpiryDays(days);
     } else {
       setMarketExpiryString("");
+      setMarketExpiryDays(0);
     }
   }, [marketExpiry]);
 
@@ -253,7 +278,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     { label: "Capacity", value: capacityString },
     { label: "Payout Token", value: payoutTokenSymbol },
     { label: "Quote Token", value: quoteTokenSymbol },
-    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
+    { label: "Estimated bond cadence", tooltip: "soon", value: estimatedBondCadence },
     { label: "Initial exchange rate", value: exchangeRateString },
     { label: "Minimum exchange rate", value: minExchangeRateString },
     { label: "Conclusion", tooltip: "soon", value: marketExpiryString },
@@ -697,7 +722,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <DatePicker
                       {...field}
                       placeholder="Select a date"
-                      label="Market Expiry Date"
+                      label="Market End Date"
                       defaultValue={
                         props.initialValues &&
                         new Date(props.initialValues?.marketExpiryDate * 1000)
@@ -719,7 +744,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 render={({ field }) => (
                   <FlatSelect
                     {...field}
-                    label="Bond Vesting"
+                    label="Vesting Type"
                     options={vestingOptions}
                     default={props.initialValues?.vestingType}
                     className="my-5"
@@ -735,7 +760,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   render={({ field }) => (
                     <TermPicker
                       {...field}
-                      label="Term Duration"
+                      label="Bond Vesting Period"
                       defaultValue={props.initialValues?.timeAmount}
                     />
                   )}
@@ -754,8 +779,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <>
                       <DatePicker
                         {...field}
-                        label="Choose bond expiry"
-                        placeholder="Select expiry"
+                        label="Bond Vesting Date"
+                        placeholder="Select a date"
                         defaultValue={
                           new Date(props.initialValues?.expiryDate * 1000)
                         }
