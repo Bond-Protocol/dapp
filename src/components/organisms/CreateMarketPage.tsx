@@ -722,7 +722,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <DatePicker
                       {...field}
                       placeholder="Select a date"
-                      label="Market Expiry Date"
+                      label="Market End Date"
                       defaultValue={
                         props.initialValues &&
                         new Date(props.initialValues?.marketExpiryDate * 1000)
@@ -744,7 +744,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 render={({ field }) => (
                   <FlatSelect
                     {...field}
-                    label="Bond Vesting"
+                    label="Vesting Type"
                     options={vestingOptions}
                     default={props.initialValues?.vestingType}
                     className="my-5"
@@ -760,7 +760,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   render={({ field }) => (
                     <TermPicker
                       {...field}
-                      label="Term Duration"
+                      label="Bond Vesting Period"
                       defaultValue={props.initialValues?.timeAmount}
                     />
                   )}
@@ -779,8 +779,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <>
                       <DatePicker
                         {...field}
-                        label="Choose bond expiry"
-                        placeholder="Select expiry"
+                        label="Bond Vesting Date"
+                        placeholder="Select a date"
                         defaultValue={
                           new Date(props.initialValues?.expiryDate * 1000)
                         }
