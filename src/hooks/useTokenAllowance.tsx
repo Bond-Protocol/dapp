@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAccount, useBalance } from "wagmi";
 import { providers } from "services/owned-providers";
 import { usePurchaseBond } from "./usePurchaseBond";
+import {trim, calculateTrimDigits} from "@bond-labs/contract-library/dist/core/utils";
 
 export const useTokenAllowance = (
   tokenAddress: string,
@@ -33,7 +34,6 @@ export const useTokenAllowance = (
     );
 
     setAllowance(allowance.toString());
-    console.log({ allowance }, "fetch end");
   }, [tokenAddress, address, auctioneer, networkId, getAllowance]);
 
   const approve = async (tokenAddress: string, auctioneer: string) => {
@@ -44,8 +44,8 @@ export const useTokenAllowance = (
   };
 
   useEffect(() => {
-    const balance: string = data?.formatted || "0";
-    setBalance(balance);
+    const balance: number = Number(data?.formatted || "0");
+    setBalance(trim(balance, calculateTrimDigits(balance)));
   }, [data]);
 
   useEffect(() => {
