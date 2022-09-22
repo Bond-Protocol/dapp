@@ -54,9 +54,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const [minimumExchangeRate, setMinimumExchangeRate] = useState(0);
   const [vestingString, setVestingString] = useState("");
   const [marketExpiryString, setMarketExpiryString] = useState("");
+  const [marketExpiryDays, setMarketExpiryDays] = useState(0);
   const [capacityString, setCapacityString] = useState("");
   const [exchangeRateString, setExchangeRateString] = useState("");
   const [minExchangeRateString, setMinExchangeRateString] = useState("");
+  const [estimatedBondCadence, setEstimatedBondCadence] = useState("");
 
   const {
     control,
@@ -184,6 +186,23 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [minExchangeRate]);
 
   useEffect(() => {
+    if (bondsPerWeek && marketExpiryDays && marketCapacity && payoutTokenSymbol && quoteTokenSymbol) {
+      const depositInterval = (bondsPerWeek / 7);
+      const intervals = marketExpiryDays / depositInterval;
+      const cadence = marketCapacity / intervals;
+
+      const token = capacityToken === 0
+        ? payoutTokenSymbol
+        : quoteTokenSymbol
+
+      const string = cadence.toString().concat(" ").concat(token).concat("/Day");
+      setEstimatedBondCadence(string);
+    } else {
+      setEstimatedBondCadence("");
+    }
+  }, [bondsPerWeek, marketExpiryDays, marketCapacity, capacityToken, payoutTokenSymbol, quoteTokenSymbol]);
+
+  useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
       setMinExchangeRateString(
         `${minExchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`
@@ -248,8 +267,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         if (days !== 1) string = string.concat("s");
       }
       setMarketExpiryString(string);
+      setMarketExpiryDays(days);
     } else {
       setMarketExpiryString("");
+      setMarketExpiryDays(0);
     }
   }, [marketExpiry]);
 
@@ -257,7 +278,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     { label: "Capacity", value: capacityString },
     { label: "Payout Token", value: payoutTokenSymbol },
     { label: "Quote Token", value: quoteTokenSymbol },
-    { label: "Estimate bond cadence", tooltip: "soon", value: "n/a" },
+    { label: "Estimated bond cadence", tooltip: "soon", value: estimatedBondCadence },
     { label: "Initial exchange rate", value: exchangeRateString },
     { label: "Minimum exchange rate", value: minExchangeRateString },
     { label: "Conclusion", tooltip: "soon", value: marketExpiryString },
