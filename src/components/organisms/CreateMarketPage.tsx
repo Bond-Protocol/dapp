@@ -152,11 +152,15 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   });
 
   useEffect(() => {
-    setCapacityString(
-      `${marketCapacity} ${
-        capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
-      }`
-    );
+    if (marketCapacity === undefined) {
+      setCapacityString("");
+    } else {
+      setCapacityString(
+        `${marketCapacity} ${
+          capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
+        }`
+      );
+    }
   }, [marketCapacity, capacityToken]);
 
   useEffect(() => {
