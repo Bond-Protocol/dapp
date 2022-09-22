@@ -9,7 +9,7 @@ import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
 import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
-import {trimAsNumber} from "@bond-labs/contract-library/dist/core/utils";
+import {trimAsNumber, calculateTrimDigits} from "@bond-labs/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
 
 const capacityTokenOptions = [
@@ -161,8 +161,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   useEffect(() => {
     let rate = Number(payoutTokenPrice) / Number(quoteTokenPrice);
-    let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
-    rate = trimAsNumber(rate, digits);
+    rate = trimAsNumber(rate, calculateTrimDigits(rate));
     if (rate != Infinity && !isNaN(rate)) {
       setExchangeRate(rate);
     } else {
@@ -172,8 +171,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   useEffect(() => {
     let rate = Number(minExchangeRate);
-    let digits = rate > 1 ? 2 : rate > 0.001 ? 4 : 18;
-    rate = trimAsNumber(rate, digits);
+    rate = trimAsNumber(rate, calculateTrimDigits(rate));
     if (rate != Infinity && !isNaN(rate)) {
       setMinimumExchangeRate(rate);
     } else {

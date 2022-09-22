@@ -20,8 +20,10 @@ export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
   const fromDate = new Date();
   const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
 
-  const formattedDate = date?.toISOString()
-    .substring(0, date?.toISOString().indexOf("T"));
+  const formattedDate = date &&
+    new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
+    .toISOString()
+    .split("T")[0];
 
   const handleClose = (date: unknown) => {
     if (date instanceof Date && !isNaN(date.valueOf())) {

@@ -10,6 +10,7 @@ import {usePurchaseBond, useTokenAllowance, useTokens} from "hooks";
 import {Button, InfoLabel, Link} from "components/atoms";
 import {BondButton, InputCard, SummaryCard} from "components/molecules";
 import {BondPurchaseModal} from "./BondPurchaseModal";
+import {trim, calculateTrimDigits} from "@bond-labs/contract-library/dist/core/utils";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -59,8 +60,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
 
   useEffect(() => {
     const updatePayout = async () => {
-      console.log(amount);
-      const payout = Number(
+      let payout = Number(
         await getPayoutFor(
           amount,
           market.quoteToken.decimals,
@@ -68,9 +68,9 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
           market.auctioneer
         )
       );
-
+      payout = formatLongNumber(payout, market.payoutToken.decimals);
       setPayout(
-        formatLongNumber(payout, market.payoutToken.decimals).toString()
+        trim(payout, calculateTrimDigits(payout)).toString()
       );
     };
 
