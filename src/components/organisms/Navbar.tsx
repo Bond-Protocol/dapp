@@ -1,11 +1,11 @@
-import {ConnectButton} from "../organisms/ConnectButton";
-import {ProtocolLogo} from "components/atoms/ProtocolLogo";
-import {ReactComponent as HamburgerIcon} from "../../assets/icons/hamburger-icon.svg";
+import { ConnectButton } from "../organisms/ConnectButton";
+import { ProtocolLogo } from "components/atoms/ProtocolLogo";
+import { ReactComponent as HamburgerIcon } from "../../assets/icons/hamburger-icon.svg";
 
 export const Navbar = (props: { onHamburgerClick: () => void }) => {
   return (
     <div
-      className="flex justify-between items-center px-[5vw] h-[88px]"
+      className="flex justify-between items-center px-[5vw] h-[91px]"
       id="navbar"
     >
       <ProtocolLogo className="py-6" />
