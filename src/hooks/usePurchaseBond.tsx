@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useCallback, useState } from "react";
 import * as contractLibrary from "@bond-labs/contract-library";
-import { BigNumberish, ContractTransaction, Signer } from "ethers";
+import { BigNumberish, ContractTransaction, ethers, Signer } from "ethers";
 import { useProvider, useSigner } from "wagmi";
 import { providers } from "services/owned-providers";
 
@@ -65,7 +65,7 @@ export const usePurchaseBond = () => {
       auctioneer: string,
       requestProvider?: typeof provider
     ): Promise<BigNumberish> => {
-      const amt = Number(amount) * Math.pow(10, decimals);
+      const amt = ethers.utils.parseUnits(amount, decimals);
       return contractLibrary.payoutFor(
         requestProvider || provider,
         amt.toString(),
