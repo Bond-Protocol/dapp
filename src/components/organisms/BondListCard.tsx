@@ -20,7 +20,7 @@ export type BondListCardProps = {
   infoLabel?: boolean;
 };
 
-export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
+export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
