@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CalculatedMarket } from "@bond-labs/contract-library";
-import { BondListCardV2 } from "..";
+import { BondListCard } from "..";
 import { usePurchaseBond } from "hooks/usePurchaseBond";
 import { formatLongNumber, getBlockExplorer, trimAddress } from "../../utils";
 import { InfoLabel, Link, TableCell, TableHeading } from "components/atoms";
@@ -77,7 +77,7 @@ export const MarketInsights = (props: MarketInsightsPageProps) => {
 
   return (
     <div>
-      <BondListCardV2
+      <BondListCard
         market={market}
         onClickTopRight={() => navigate("/markets")}
         topRightLabel="Go to Markets"

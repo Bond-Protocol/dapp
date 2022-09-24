@@ -18,7 +18,6 @@ export const CreateMarketTermsDialog = (props: {
 }) => {
   const [checked, setChecked] = useState(false);
   const handleClick = () => {
-    console.log("heree");
     props.onAccept();
   };
   return (

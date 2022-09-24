@@ -5,6 +5,7 @@ import {providers} from "services/owned-providers";
 import * as contractLibrary from "@bond-labs/contract-library";
 import {IssueMarketModal} from "./IssueMarketModal";
 import {useState} from "react";
+import {IssueMarketMultisigModal} from "components/organisms/IssueMarketMultisigModal";
 
 export type IssueMarketPageProps = {
   onExecute: (transaction: string) => void;
@@ -19,6 +20,8 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
   const network = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isMultisigModalOpen, setIsMultisigModalOpen] = useState(false);
+  const [txnBytecode, setTxnBytecode] = useState("");
 
   const switchChain = (e: Event) => {
     e.preventDefault();
@@ -75,6 +78,13 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         onAccept={onConfirm}
         onReject={() => setIsModalOpen(false)}
       />
+      <IssueMarketMultisigModal
+        open={isMultisigModalOpen}
+        txnBytecode={txnBytecode}
+        chain={props.data.chain}
+        address={contractLibrary.getAddressesForType(props.data.chain, props.data.bondType).auctioneer}
+        onReject={() => setIsMultisigModalOpen(false)}
+      />
       <div>
         <p className="font-faketion font-bold tracking-widest mt-8">MARKET</p>
 
@@ -105,7 +115,14 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
           </Button>
         )}
 
-        <Button type="submit" className="w-full font-fraktion mt-5">
+        <Button
+          type="submit"
+          className="w-full font-fraktion mt-5"
+          onClick={() => {
+            setTxnBytecode(contractLibrary.createMarketMultisig(props.data.marketParams));
+            setIsMultisigModalOpen(true);
+          }}
+        >
           CONFIGURE FOR MULTI-SIG
         </Button>
 

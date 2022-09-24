@@ -10,6 +10,7 @@ import axios, {AxiosResponse} from "axios";
 import {useQuery} from "react-query";
 import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import {LpPair} from "@bond-labs/contract-library";
 
 export interface PriceDetails {
   price: string;
@@ -194,6 +195,15 @@ export const useTokens = () => {
 
   function getTokenDetails(token: any) {
     const bondLibraryToken = bondLibrary.TOKENS.get(token.id);
+
+    let pair: LpPair;
+    if (token.lpPair != undefined) {
+      pair = {
+        token0: getTokenDetails(token.lpPair.token0),
+        token1: getTokenDetails(token.lpPair.token1)
+      }
+    }
+
     return {
       id: token.id,
       address: token.address,
@@ -201,6 +211,7 @@ export const useTokens = () => {
       name: bondLibraryToken ? bondLibraryToken.name : token.name,
       symbol: bondLibraryToken ? bondLibraryToken.symbol : token.symbol,
       decimals: token.decimals,
+      lpPair: pair,
     };
   }
 

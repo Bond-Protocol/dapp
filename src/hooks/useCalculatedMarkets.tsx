@@ -16,7 +16,7 @@ import {useMyMarkets} from "hooks/useMyMarkets";
 export function useCalculatedMarkets() {
   const { markets: markets } = useMarkets();
   const { markets: myMarkets } = useMyMarkets();
-  const { currentPrices, getPrice } = useTokens();
+  const { getPrice, getTokenDetails } = useTokens();
   const provider = useProvider();
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
@@ -26,14 +26,18 @@ export function useCalculatedMarkets() {
 
   const calculateMarket = (market: Market) => {
     const requestProvider = providers[market.network] || provider;
-    const lpPair = market.quoteToken.lpPair;
+    const purchaseLink = bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(market.network) ?
+      bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(market.network) :
+      "https://app.sushi.com/swap";
+
+    const quoteToken = getTokenDetails(market.quoteToken);
+    const payoutToken = getTokenDetails(market.payoutToken);
+
+    const lpPair = quoteToken.lpPair;
     if (lpPair != undefined) {
       lpPair.token0.price = getPrice(lpPair.token0.id);
       lpPair.token1.price = getPrice(lpPair.token1.id);
     }
-    const purchaseLink = bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(market.network) ?
-      bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(market.network) :
-      "https://app.sushi.com/swap";
 
     return contractLibrary
       .calcMarket(
@@ -53,21 +57,21 @@ export function useCalculatedMarkets() {
           totalPayoutAmount: market.totalPayoutAmount,
           creationBlockTimestamp: market.creationBlockTimestamp,
           payoutToken: {
-            id: market.payoutToken.id,
-            address: market.payoutToken.address,
-            decimals: market.payoutToken.decimals,
-            name: market.payoutToken.name,
-            symbol: market.payoutToken.symbol,
-            price: getPrice(market.payoutToken.id),
+            id: payoutToken.id,
+            address: payoutToken.address,
+            decimals: payoutToken.decimals,
+            name: payoutToken.name,
+            symbol: payoutToken.symbol,
+            price: getPrice(payoutToken.id),
           },
           quoteToken: {
-            id: market.quoteToken.id,
-            address: market.quoteToken.address,
-            decimals: market.quoteToken.decimals,
-            name: market.quoteToken.name,
-            symbol: market.quoteToken.symbol,
-            price: getPrice(market.quoteToken.id),
-            lpPair: market.quoteToken.lpPair,
+            id: quoteToken.id,
+            address: quoteToken.address,
+            decimals: quoteToken.decimals,
+            name: quoteToken.name,
+            symbol: quoteToken.symbol,
+            price: getPrice(quoteToken.id),
+            lpPair: quoteToken.lpPair,
             purchaseLink: purchaseLink,
           },
         },

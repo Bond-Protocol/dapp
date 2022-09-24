@@ -10,7 +10,7 @@ import {useCalculatedMarkets, useTokens} from "hooks";
 import {TableHeading} from "components/atoms/TableHeading";
 import {TableCell} from "components/atoms/TableCell";
 import {CellLabel} from "components/atoms/CellLabel";
-import {BondListCardV2} from "./BondListCardV2";
+import {BondListCard} from "./BondListCard";
 
 type MarketListProps = {
   markets: Map<string, CalculatedMarket>;
@@ -23,7 +23,6 @@ export const MarketList: FC<MarketListProps> = ({
 }) => {
   const { refetchAllMarkets, refetchMyMarkets, refetchOne } =
     useCalculatedMarkets();
-  const { getTokenDetails } = useTokens();
   const navigate = useNavigate();
 
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(
@@ -211,7 +210,6 @@ export const MarketList: FC<MarketListProps> = ({
 
         <tbody>
           {sortedMarkets.map((market: CalculatedMarket) => {
-            const quoteToken = getTokenDetails(market.quoteToken);
             return (
               <ExpandableRow
                 key={market.id}
@@ -227,7 +225,7 @@ export const MarketList: FC<MarketListProps> = ({
                     allowManagement ? (
                       <CloseMarketCard market={market} />
                     ) : (
-                      <BondListCardV2
+                      <BondListCard
                         infoLabel
                         market={market}
                         topRightLabel={"VIEW INSIGHTS"}
@@ -264,7 +262,7 @@ export const MarketList: FC<MarketListProps> = ({
                     <p>
                       {Math.trunc(market.totalBondedAmount) +
                         " " +
-                        quoteToken.symbol}
+                        market?.quoteToken.symbol}
                     </p>
                   </CellLabel>
                 </TableCell>
