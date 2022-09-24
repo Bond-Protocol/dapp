@@ -24,7 +24,6 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
   const { address, isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
   const { openConnectModal } = useConnectModal();
-  const { getTokenDetails } = useTokens();
 
   const { data } = useBalance({
     token: props.market.quoteToken.address,
@@ -148,9 +147,6 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
     setPayout(formatLongNumber(payout, props.market.quoteToken.decimals).toString());
   }
 
-  const quoteToken = getTokenDetails(props.market.quoteToken);
-  const payoutToken = getTokenDetails(props.market.payoutToken);
-
   return (
     <div className="px-2 pb-2 w-[80vw] flex">
       <div className="my-4 flex justify-between">
@@ -165,7 +161,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
       <div>
         <div className="flex justify-between mb-2">
           {isConnected ? (
-            <p>Balance: {balance + " " + quoteToken.symbol}</p>
+            <p>Balance: {balance + " " + props.market.quoteToken.symbol}</p>
           ) : (
             <p>
               Balance: <ConnectButton />
@@ -192,12 +188,12 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
       <div className="pt-2">
         <DataRow
           leftContent="You Will Get"
-          rightContent={payout + " " + payoutToken.symbol}
+          rightContent={payout + " " + props.market.payoutToken.symbol}
         />
         <DataRow
           leftContent="Max Accepted"
           rightContent={
-            props.market.maxAmountAccepted + " " + quoteToken.symbol
+            props.market.maxAmountAccepted + " " + props.market.quoteToken.symbol
           }
         />
         <DataRow
@@ -234,7 +230,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Buy {payoutToken.symbol}
+            Buy {props.market.payoutToken.symbol}
           </a>
         )}
 
@@ -243,7 +239,7 @@ export const BondListCard: FC<BondListCardProps> = (props) => {
           hasSufficientBalance &&
           !hasSufficientAllowance && (
             <Button className="w-full" onClick={approve}>
-              Approve {quoteToken.symbol}
+              Approve {props.market.quoteToken.symbol}
             </Button>
           )}
 

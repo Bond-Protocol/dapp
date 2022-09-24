@@ -23,7 +23,6 @@ export const MarketList: FC<MarketListProps> = ({
 }) => {
   const { refetchAllMarkets, refetchMyMarkets, refetchOne } =
     useCalculatedMarkets();
-  const { getTokenDetails } = useTokens();
   const navigate = useNavigate();
 
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(
@@ -211,7 +210,6 @@ export const MarketList: FC<MarketListProps> = ({
 
         <tbody>
           {sortedMarkets.map((market: CalculatedMarket) => {
-            const quoteToken = getTokenDetails(market.quoteToken);
             return (
               <ExpandableRow
                 key={market.id}
@@ -264,7 +262,7 @@ export const MarketList: FC<MarketListProps> = ({
                     <p>
                       {Math.trunc(market.totalBondedAmount) +
                         " " +
-                        quoteToken.symbol}
+                        market?.quoteToken.symbol}
                     </p>
                   </CellLabel>
                 </TableCell>

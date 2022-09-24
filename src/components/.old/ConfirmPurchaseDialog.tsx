@@ -22,7 +22,6 @@ export default function ConfirmPurchaseDialog(
   const { data: signer } = useSigner();
   const { address } = useAccount();
   const { refetchOne } = useCalculatedMarkets();
-  const { getTokenDetails } = useTokens();
 
   const [open, setOpen] = React.useState(false);
   const [payout, setPayout] = useState<string>("0");
@@ -117,9 +116,6 @@ export default function ConfirmPurchaseDialog(
     setPayout((Number(payout) / Math.pow(10, 18)).toString());
   }
 
-  const quoteToken = getTokenDetails(props.market.quoteToken);
-  const payoutToken = getTokenDetails(props.market.payoutToken);
-
   return (
     <div className="w-full">
       <Button
@@ -143,19 +139,19 @@ export default function ConfirmPurchaseDialog(
                 <Button onClick={() => setSlippage(2)}>2%</Button>
               </div>
               <p>
-                You will spend: {props.amount} {quoteToken.symbol}
+                You will spend: {props.amount} {props.market.quoteToken.symbol}
               </p>
               <p>
-                You will get a maximum of: {payout} {payoutToken.symbol}
+                You will get a maximum of: {payout} {props.market.payoutToken.symbol}
               </p>
               <p>
                 You will get a minimum of:{" "}
                 {Number(payout) - Number(payout) * (slippage / 100)}{" "}
-                {payoutToken.symbol} ({slippage}% Slippage)
+                {props.market.payoutToken.symbol} ({slippage}% Slippage)
               </p>
               <p>
                 Bond Price: {props.market.formattedDiscountedPrice} per{" "}
-                {payoutToken.symbol} (Market: {props.market.formattedFullPrice})
+                {props.market.payoutToken.symbol} (Market: {props.market.formattedFullPrice})
               </p>
               <p>Discount: {market.discount}%</p>
               <Button className="w-full" onClick={bond}>
@@ -175,8 +171,8 @@ export default function ConfirmPurchaseDialog(
               <p>
                 You will receive{" "}
                 {parseInt(transactionReceipt.logs[1].data) /
-                  Math.pow(10, market.payoutToken.decimals)}{" "}
-                {payoutToken.symbol}
+                  Math.pow(10, props.market.payoutToken.decimals)}{" "}
+                {props.market.payoutToken.symbol}
               </p>
               <div>
                 <a target="_blank" href={twitterLink} rel="noreferrer">

@@ -6,7 +6,7 @@ import TestIcon from "../../assets/icons/test-icon";
 import {ReactComponent as ArrowIcon} from "../../assets/icons/arrow-icon.svg";
 import {formatLongNumber, getBlockExplorer} from "../../utils";
 import {providers} from "services/owned-providers";
-import {usePurchaseBond, useTokenAllowance, useTokens} from "hooks";
+import {usePurchaseBond, useTokenAllowance} from "hooks";
 import {Button, InfoLabel, Link} from "components/atoms";
 import {BondButton, InputCard, SummaryCard} from "components/molecules";
 import {BondPurchaseModal} from "./BondPurchaseModal";
@@ -27,7 +27,6 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
   const [payout, setPayout] = useState<string>("0");
   const { address, isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
-  const { getTokenDetails } = useTokens();
   const { bond, getPayoutFor } = usePurchaseBond();
   const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
     useTokenAllowance(
@@ -44,8 +43,6 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
   );
 
   const networkFee = 1;
-  const quoteToken = getTokenDetails(market.quoteToken);
-  const payoutToken = getTokenDetails(market.payoutToken);
 
   const vestingLabel =
     market.vestingType === "fixed-term"
@@ -94,16 +91,16 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
   const summaryFields = [
     {
       label: "You will get",
-      value: `${payout} ${payoutToken.symbol}`,
+      value: `${payout} ${market.payoutToken.symbol}`,
     },
     {
       label: "Max Bondable",
-      value: `${market.maxAmountAccepted} ${quoteToken.symbol}`,
+      value: `${market.maxAmountAccepted} ${market.quoteToken.symbol}`,
       tooltip: "Soon™",
     },
     {
       label: "Network Fee",
-      value: `${networkFee} ${quoteToken.symbol}`,
+      value: `${networkFee} ${market.quoteToken.symbol}`,
       tooltip: "Soon™",
     },
     {
@@ -137,7 +134,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
         <div className="flex">
           <TestIcon className="fill-white my-auto" />
           <p className="font-fraktion text-[48px]">
-            {protocol?.name || payoutToken?.symbol}
+            {protocol?.name || market.payoutToken?.symbol}
           </p>
         </div>
         <Button
@@ -174,7 +171,7 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
             onChange={setAmount}
             value={amount}
             balance={balance}
-            quoteToken={quoteToken}
+            quoteToken={market.quoteToken}
             market={market}
             className="mt-5"
           />
@@ -199,8 +196,8 @@ export const BondListCardV2: FC<BondListCardProps> = ({ market, ...props }) => {
         network={market.network}
         open={showModal}
         closeModal={() => setShowModal(false)}
-        amount={`${amount} ${quoteToken.symbol}`}
-        payout={`${Number(payout).toFixed(4)} ${payoutToken.symbol}`}
+        amount={`${amount} ${market.quoteToken.symbol}`}
+        payout={`${Number(payout).toFixed(4)} ${market.payoutToken.symbol}`}
         issuer={protocol?.name}
         vestingTime={vestingLabel}
       />
