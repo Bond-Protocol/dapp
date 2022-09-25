@@ -20,8 +20,10 @@ export const InputCard = ({
   onChange,
   market,
 }: InputCardProps) => {
-  const setSome = (num: number) =>
-    handleChange((num * parseFloat(balance)) / 100 + "");
+  const setSome = (num: number) => {
+    let max = Math.min(Number(balance), Number(market.maxAmountAccepted));
+    handleChange((num * max) / 100 + "");
+  }
 
   const setMax = () => {
     let max = Math.min(Number(balance), Number(market.maxAmountAccepted)).toString();
@@ -35,6 +37,12 @@ export const InputCard = ({
   }
 
   const handleChange = (amount: string) => {
+    if (amount.indexOf("e") !== -1) {
+      const index = amount.indexOf("e") + 2;
+      const exp = Number(amount.substring(index));
+      amount = Number(amount).toFixed(exp + 3).toString();
+    }
+    
     onChange && onChange(amount);
   };
 
