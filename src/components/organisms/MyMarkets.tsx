@@ -1,6 +1,6 @@
 import {MarketList} from "components/organisms/MarketList";
 import {RequiresWallet} from "components/utility/RequiresWallet";
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
 
 type MyMarketProps = {
   markets: Map<string, CalculatedMarket>;

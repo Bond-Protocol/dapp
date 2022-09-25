@@ -2,10 +2,10 @@
 import {useTokens} from "hooks/useTokens";
 import {useQueries} from "react-query";
 import {useState} from "react";
-import * as bondLibrary from "@bond-labs/bond-library";
-import {getProtocolByAddress, TOKENS} from "@bond-labs/bond-library";
-import * as contractLibrary from "@bond-labs/contract-library";
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import * as bondLibrary from "@bond-protocol/bond-library";
+import {getProtocolByAddress, TOKENS} from "@bond-protocol/bond-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
 import {useProvider} from "wagmi";
 import {providers} from "services/owned-providers";
 import {Market} from "src/generated/graphql";

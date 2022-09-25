@@ -10,7 +10,7 @@ import {
   useListErc20BondTokensGoerliQuery,
 } from "../generated/graphql";
 import {useAccount} from "wagmi";
-import * as contractLibrary from "@bond-labs/contract-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
 import {providers} from "services/owned-providers";
 
 export function useMyBonds() {

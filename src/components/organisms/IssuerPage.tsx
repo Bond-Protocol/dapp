@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { useCalculatedMarkets } from "hooks";
-import { Protocol, PROTOCOLS, PROTOCOL_NAMES } from "@bond-labs/bond-library";
+import { Protocol, PROTOCOLS, PROTOCOL_NAMES } from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
-import { CalculatedMarket } from "@bond-labs/contract-library";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { InfoLabel, Link } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
 import { useParams } from "react-router-dom";

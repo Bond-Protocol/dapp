@@ -1,11 +1,11 @@
 //@ts-nocheck
 import {useEffect, useRef, useState} from "react";
-import {PROTOCOLS} from "@bond-labs/bond-library";
+import {PROTOCOLS} from "@bond-protocol/bond-library";
 import {IssuerCard} from "components/molecules/IssuerCard";
 import {Input} from "@material-tailwind/react";
 import {alphabeticSort, numericSort} from "services/sort";
 import {Button} from "components";
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
 
 type IssuerListProps = {
   issuers: string[];

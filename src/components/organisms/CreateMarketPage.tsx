@@ -2,14 +2,14 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {Controller, useForm, useWatch} from "react-hook-form";
-import * as contractLibrary from "@bond-labs/contract-library";
-import {BOND_TYPE} from "@bond-labs/contract-library";
-import * as bondLibrary from "@bond-labs/bond-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
+import {BOND_TYPE} from "@bond-protocol/contract-library";
+import * as bondLibrary from "@bond-protocol/bond-library";
 import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
 import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
-import {trimAsNumber, calculateTrimDigits} from "@bond-labs/contract-library/dist/core/utils";
+import {trimAsNumber, calculateTrimDigits} from "@bond-protocol/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
 
 const capacityTokenOptions = [

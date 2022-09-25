@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { useCallback, useState } from "react";
-import * as contractLibrary from "@bond-labs/contract-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
 import { BigNumberish, ContractTransaction, ethers, Signer } from "ethers";
 import { useProvider, useSigner } from "wagmi";
 import { providers } from "services/owned-providers";

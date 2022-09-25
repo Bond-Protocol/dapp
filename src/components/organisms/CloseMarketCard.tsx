@@ -1,5 +1,5 @@
-import * as contractLibrary from "@bond-labs/contract-library";
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
 import * as React from "react";
 import {FC, useEffect, useState} from "react";
 import {Button} from "..";

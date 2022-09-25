@@ -6,7 +6,7 @@
 yarn install
 
 #Assuming you've installed these libraries locally before using `yarn link` on each
-yarn link @bond-labs/bond-library @bond-labs/contract-library
+yarn link @bond-protocol/bond-library @bond-protocol/contract-library
 
 #Running
 yarn dev

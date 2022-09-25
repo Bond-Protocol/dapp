@@ -1,7 +1,7 @@
 import {useMyBonds} from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
 import {ContractTransaction} from "ethers";
-import * as contractLibrary from "@bond-labs/contract-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
 import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import {OwnerBalance} from "src/generated/graphql";
 import * as React from "react";
@@ -9,7 +9,7 @@ import {useEffect, useRef, useState} from "react";
 import {providers} from "services/owned-providers";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 import {useTokens} from "hooks";
-import {getToken} from "@bond-labs/bond-library";
+import {getToken} from "@bond-protocol/bond-library";
 
 export const MyBondsList = () => {
   const {myBonds, refetch} = useMyBonds();

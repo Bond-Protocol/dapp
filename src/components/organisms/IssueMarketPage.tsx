@@ -2,7 +2,7 @@ import {Button, SummaryCard} from "components";
 import {useConnectModal} from "@rainbow-me/rainbowkit";
 import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
 import {providers} from "services/owned-providers";
-import * as contractLibrary from "@bond-labs/contract-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
 import {IssueMarketModal} from "./IssueMarketModal";
 import {useState} from "react";
 import {IssueMarketMultisigModal} from "components/organisms/IssueMarketMultisigModal";

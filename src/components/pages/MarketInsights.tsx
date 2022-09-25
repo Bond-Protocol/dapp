@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CalculatedMarket } from "@bond-labs/contract-library";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondListCard } from "..";
 import { usePurchaseBond } from "hooks/usePurchaseBond";
 import { formatLongNumber, getBlockExplorer, trimAddress } from "../../utils";

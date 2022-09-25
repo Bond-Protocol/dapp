@@ -1,5 +1,5 @@
 import type {FC} from "react";
-import type {CalculatedMarket} from "@bond-labs/contract-library";
+import type {CalculatedMarket} from "@bond-protocol/contract-library";
 import {Route, Routes as Switch} from "react-router-dom";
 import {useCalculatedMarkets} from "hooks";
 import {CreateMarket, MarketInsights, Markets} from "components/pages";

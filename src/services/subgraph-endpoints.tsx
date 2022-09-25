@@ -1,5 +1,5 @@
 export const getSubgraphEndpoints = (): string[] => {
   return [
-    "https://api.thegraph.com/subgraphs/name/bond-labs/bond-labs-goerli",
+    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli",
   ];
 };

@@ -1,7 +1,7 @@
 import type {Provider} from "@wagmi/core";
 import {useEffect, useState} from "react";
-import * as contractLibrary from "@bond-labs/contract-library";
-import * as bondLibrary from "@bond-labs/bond-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
+import * as bondLibrary from "@bond-protocol/bond-library";
 
 import {providers} from "services/owned-providers";
 

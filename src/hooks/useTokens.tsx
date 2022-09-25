@@ -1,16 +1,16 @@
 //@ts-nocheck
-import * as contractLibrary from "@bond-labs/contract-library";
+import * as contractLibrary from "@bond-protocol/contract-library";
 import {providers} from "services/owned-providers";
 import {getSubgraphEndpoints} from "services/subgraph-endpoints";
 import {Token, useListTokensGoerliQuery} from "../generated/graphql";
 import {useCallback, useEffect, useState} from "react";
-import * as bondLibrary from "@bond-labs/bond-library";
-import {CustomPriceSource, SupportedPriceSource} from "@bond-labs/bond-library";
+import * as bondLibrary from "@bond-protocol/bond-library";
+import {CustomPriceSource, SupportedPriceSource} from "@bond-protocol/bond-library";
 import axios, {AxiosResponse} from "axios";
 import {useQuery} from "react-query";
 import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {LpPair} from "@bond-labs/contract-library";
+import {LpPair} from "@bond-protocol/contract-library";
 
 export interface PriceDetails {
   price: string;

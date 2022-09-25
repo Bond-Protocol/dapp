@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAccount, useBalance } from "wagmi";
 import { providers } from "services/owned-providers";
 import { usePurchaseBond } from "./usePurchaseBond";
-import {trim, calculateTrimDigits} from "@bond-labs/contract-library/dist/core/utils";
+import {trim, calculateTrimDigits} from "@bond-protocol/contract-library/dist/core/utils";
 
 export const useTokenAllowance = (
   tokenAddress: string,

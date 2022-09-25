@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-import {Token} from "@bond-labs/contract-library";
+import {Token} from "@bond-protocol/contract-library";
 import {Checkbox} from "../atoms/Checkbox";
 import {TokenPriceCard} from "../atoms/TokenPriceCard";
 import {Input} from "../atoms/Input";

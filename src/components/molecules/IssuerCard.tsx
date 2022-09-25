@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
-import { Protocol } from "@bond-labs/bond-library";
+import { Protocol } from "@bond-protocol/bond-library";
 import { useNavigate } from "react-router-dom";
-import { CalculatedMarket } from "@bond-labs/contract-library";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 type IssuerCardProps = {
   issuer: Protocol;

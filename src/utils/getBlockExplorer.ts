@@ -1,4 +1,4 @@
-import { CHAINS } from "@bond-labs/bond-library";
+import { CHAINS } from "@bond-protocol/bond-library";
 
 export const getBlockExplorer = (network: string, subpath = "") => {
   return {

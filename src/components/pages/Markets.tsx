@@ -1,4 +1,4 @@
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
 import {IssuerList, MarketList, MyBondsList, MyMarkets,} from "components/organisms";
 import {Tabs} from "components/molecules";
 import {useCalculatedMarkets} from "hooks/useCalculatedMarkets";

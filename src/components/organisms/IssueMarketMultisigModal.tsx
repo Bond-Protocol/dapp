@@ -1,7 +1,7 @@
 import {Button, Modal, ModalProps, ModalTitle} from "..";
 import {CreateMarketTermsDialog} from "components/modals";
 import {useState} from "react";
-import {CHAINS} from "@bond-labs/bond-library";
+import {CHAINS} from "@bond-protocol/bond-library";
 import copyIcon from "../../assets/icons/copy-icon.svg";
 
 export type IssueMarketMultisigModalProps = Partial<ModalProps> & {

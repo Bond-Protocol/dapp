@@ -1,4 +1,4 @@
-import {CalculatedMarket, Token} from "@bond-labs/contract-library";
+import {CalculatedMarket, Token} from "@bond-protocol/contract-library";
 import {Chip} from "../atoms/Chip";
 import {Input} from "../atoms/Input";
 import {TokenLabel} from "../atoms/TokenLabel";

@@ -1,4 +1,4 @@
-import {CalculatedMarket} from "@bond-labs/contract-library";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
 import {BigNumberish} from "ethers";
 
 export const formatLongNumber = (

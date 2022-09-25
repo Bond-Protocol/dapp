@@ -1,7 +1,7 @@
 import {FC, useEffect, useState} from "react";
 import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
-import {CalculatedMarket} from "@bond-labs/contract-library";
-import {getProtocolByAddress} from "@bond-labs/bond-library";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
+import {getProtocolByAddress} from "@bond-protocol/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
 import {ReactComponent as ArrowIcon} from "../../assets/icons/arrow-icon.svg";
 import {formatLongNumber, getBlockExplorer} from "../../utils";
@@ -10,7 +10,7 @@ import {usePurchaseBond, useTokenAllowance} from "hooks";
 import {Button, InfoLabel, Link} from "components/atoms";
 import {BondButton, InputCard, SummaryCard} from "components/molecules";
 import {BondPurchaseModal} from "./BondPurchaseModal";
-import {trim, calculateTrimDigits} from "@bond-labs/contract-library/dist/core/utils";
+import {trim, calculateTrimDigits} from "@bond-protocol/contract-library/dist/core/utils";
 
 export type BondListCardProps = {
   market: CalculatedMarket;

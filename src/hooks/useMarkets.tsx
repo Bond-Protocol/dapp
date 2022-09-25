@@ -4,7 +4,7 @@ import {Market, useListMarketsGoerliQuery} from "../generated/graphql";
 import {useEffect, useState} from "react";
 import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {CHAIN_ID, getAddressesByChain} from "@bond-labs/bond-library";
+import {CHAIN_ID, getAddressesByChain} from "@bond-protocol/bond-library";
 
 export function useMarkets() {
   const endpoints = getSubgraphEndpoints();
