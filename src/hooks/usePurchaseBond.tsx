@@ -53,8 +53,8 @@ export const usePurchaseBond = () => {
     return Number(allowance) / Math.pow(10, 18);
   };
 
-  const getMaxBondableAmount = (balance: string, maxAmountAccepted: number) => {
-    return Math.min(Number(balance), maxAmountAccepted);
+  const getMaxBondableAmount = (balance: string, maxAmountAccepted: string) => {
+    return Math.min(Number(balance), Number(maxAmountAccepted));
   };
 
   const getPayoutFor = useCallback(

@@ -22,9 +22,16 @@ export const InputCard = ({
 }: InputCardProps) => {
   const setSome = (num: number) =>
     handleChange((num * parseFloat(balance)) / 100 + "");
+
   const setMax = () => {
-    const max = Math.min(Number(balance), market.maxAmountAccepted).toPrecision(market.quoteToken.decimals);
-    handleChange(parseFloat(max.toString()) + "");
+    let max = Math.min(Number(balance), Number(market.maxAmountAccepted)).toString();
+
+    if (max.toString().indexOf("e") !== -1) {
+      const index = max.toString().indexOf("e") + 2;
+      const exp = Number(max.toString().substring(index));
+      max = Number(max).toFixed(exp + 3).toString();
+    }
+    handleChange(max);
   }
 
   const handleChange = (amount: string) => {
