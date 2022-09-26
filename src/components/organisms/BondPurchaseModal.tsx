@@ -48,21 +48,30 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
       setIndex(1);
       setHash(purchaseTx.hash);
       const result = await provider.waitForTransaction(purchaseTx.hash);
-      console.log({ result });
-      setIndex(2);
+      if (result.status === 0) {
+        setIndex(3);
+      } else {
+        setIndex(2);
+      }
     } catch (e) {
       setIndex(3);
       setTxError(e as Error);
     }
   };
 
-  const goToMarkets = () => {
-    navigate("/markets");
+  const closeModal = () => {
     props.closeModal();
+    setIndex(0);
   };
+
+  const goToMarkets = () => {
+    closeModal();
+    navigate("/markets");
+  };
+
   const goToBondDetails = () => {
+    closeModal();
     navigate("/mybonds");
-    props.closeModal();
   };
 
   const dialogs = [
@@ -92,7 +101,7 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
   ];
 
   return (
-    <Modal open={props.open} onClickClose={props.closeModal}>
+    <Modal open={props.open} onClickClose={closeModal}>
       {dialogs[index]}
     </Modal>
   );
