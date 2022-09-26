@@ -1185,7 +1185,15 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bond-protocol/bond-library@0.0.18", "@bond-protocol/bond-library@^0.0.18":
+"@bond-protocol/bond-library@0.0.20":
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.0.20.tgz#1b07a3d213eb71d3db1d641d0452e2e7e4210a1c"
+  integrity sha512-n6fe4GcjEn/YAwns4SOXpTJI2hLqXd8XWuY1XS/sheRSCrpIQC0WZOURi/rvAit70p9zH3vql0cbSrWHJjDHpw==
+  dependencies:
+    axios "^0.27.2"
+    ethers "^5.6.8"
+
+"@bond-protocol/bond-library@^0.0.18":
   version "0.0.18"
   resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.0.18.tgz#fc33bb74c6e994b1bace527d572a383132877bd7"
   integrity sha512-gwH+3Cyf6ZW0mJL9nBbX8qZQGhWVGsAes/IEkuYBCt3ObWiwLq+/figMOV6iikKDeH7ek3qqwn7CTLHHUTpfMw==
@@ -1193,10 +1201,10 @@
     axios "^0.27.2"
     ethers "^5.6.8"
 
-"@bond-protocol/contract-library@0.0.17":
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/@bond-protocol/contract-library/-/contract-library-0.0.17.tgz#07132d21a6b5ad3ad290f8d3d5517f972a631265"
-  integrity sha512-edAnppAtXjw3g4SjmN/eGLjGTmEdrkA4ixtkCJ0WgEYiLEgrtQb9P/26OMIIpbzsOMtRtgK/yx46W8gQtxxLZg==
+"@bond-protocol/contract-library@0.0.18":
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/@bond-protocol/contract-library/-/contract-library-0.0.18.tgz#c5da85d3a102214e02793571c576dcc7bd7722f2"
+  integrity sha512-/Wl/W9C1dZX1ub/rgebJC8sJBRRODGhvvc6aE68eDPlnpeeFsZuNOjxCgsNfimEGFbq8lNB52S/yznm59F+SkA==
   dependencies:
     "@bond-protocol/bond-library" "^0.0.18"
     "@ethersproject/providers" "^5.6.6"

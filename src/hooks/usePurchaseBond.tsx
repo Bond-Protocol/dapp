@@ -66,6 +66,7 @@ export const usePurchaseBond = () => {
       requestProvider?: typeof provider
     ): Promise<BigNumberish> => {
       const amt = ethers.utils.parseUnits(amount, decimals);
+
       return contractLibrary.payoutFor(
         requestProvider || provider,
         amt.toString(),
@@ -98,8 +99,8 @@ export const usePurchaseBond = () => {
         rest.address,
         REFERRAL_ADDRESS,
         rest.marketId,
-        Number(rest.amount).toFixed(18),
-        minimumOut.toFixed(18),
+        rest.amount,
+        minimumOut,
         rest.payoutDecimals,
         rest.quoteDecimals,
         rest.teller,
@@ -113,11 +114,53 @@ export const usePurchaseBond = () => {
     [signer]
   );
 
+  const estimateBond = useCallback(
+    async (args: {
+      address: string;
+      marketId: number;
+      amount: string;
+      teller: string;
+      referralAddress?: string;
+      payout: string;
+      slippage: number;
+      payoutDecimals: number;
+      quoteDecimals: number;
+    }): Promise<BigNumberish> => {
+      if (!signer) throw Error("Not connected");
+
+      const { payout, slippage, ...rest } = args;
+      const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
+
+      try {
+        return contractLibrary.estimatePurchaseGas(
+          rest.address,
+          REFERRAL_ADDRESS,
+          rest.marketId,
+          rest.amount,
+          minimumOut,
+          rest.payoutDecimals,
+          rest.quoteDecimals,
+          rest.teller,
+          signer,
+          {
+            gasPrice: 1000,
+            gasLimit: 1000000000000,
+          }
+        );
+      } catch (e) {
+        console.log(e);
+        throw Error(e);
+      }
+    },
+    [signer]
+  );
+
   return {
     approveSpending,
     getMaxBondableAmount,
     getPayoutFor,
     getAllowance,
     bond,
+    estimateBond,
   };
 };
