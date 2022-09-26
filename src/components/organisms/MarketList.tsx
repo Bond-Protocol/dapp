@@ -73,7 +73,7 @@ export const MarketList: FC<MarketListProps> = ({
         ? !currentSort.ascending
         : true;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
-      alphabeticSort(m1.payoutToken.symbol, m2.payoutToken.symbol, ascending)
+      alphabeticSort(m1.maxPayoutUsd, m2.maxPayoutUsd, ascending)
     );
     setCurrentSort({ sortBy: sortByPayout, ascending: ascending });
   }
@@ -118,6 +118,17 @@ export const MarketList: FC<MarketListProps> = ({
         : true;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
       numericSort(m1.vesting, m2.vesting, ascending)
+    );
+    setCurrentSort({ sortBy: sortByExpiry, ascending: ascending });
+  }
+
+  function sortByCreation() {
+    const ascending =
+      currentSort.sortBy.toString() === sortByExpiry.toString()
+        ? !currentSort.ascending
+        : true;
+    sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
+      numericSort(m1.creationBlockTimestamp, m2.creationBlockTimestamp, ascending)
     );
     setCurrentSort({ sortBy: sortByExpiry, ascending: ascending });
   }
@@ -199,12 +210,13 @@ export const MarketList: FC<MarketListProps> = ({
             <TableHeading onClick={sortByQuote}>BOND</TableHeading>
             <TableHeading onClick={sortByPrice}>PRICE</TableHeading>
             <TableHeading onClick={sortByDiscount}>DISCOUNT</TableHeading>
-            <TableHeading>30D Perf.</TableHeading>
-            <TableHeading onClick={sortByExpiry}>EXPIRY</TableHeading>
+            <TableHeading onClick={sortByPayout}>MAX PAYOUT</TableHeading>
+            <TableHeading onClick={sortByExpiry}>VESTING</TableHeading>
+            <TableHeading onClick={sortByCreation}>CREATED</TableHeading>
+            <TableHeading onClick={sortByTbv}>TBV</TableHeading>
             {allowManagement && (
               <TableHeading onClick={sortByStatus}>STATUS</TableHeading>
             )}
-            <TableHeading onClick={sortByTbv}>TBV</TableHeading>
           </tr>
         </thead>
 
@@ -239,7 +251,12 @@ export const MarketList: FC<MarketListProps> = ({
                   )
                 }
               >
-                <TableCell>{quoteLogo(market)}</TableCell>
+                <TableCell>
+                  <div className="flex flex-column">
+                    <p className="w-[48px]">{quoteLogo(market)}</p>
+                    <p className="pl-4">{market.quoteToken.symbol}</p>
+                  </div>
+                </TableCell>
                 <TableCell className="flex flex-row py-6">
                   <CellLabel
                     logo={singleLogo(market?.payoutToken, market?.network)}
@@ -255,16 +272,18 @@ export const MarketList: FC<MarketListProps> = ({
                 >
                   {market?.discount}%
                 </TableCell>
-                <TableCell>{0}%</TableCell>
+                <TableCell>
+                  <CellLabel
+                    subContent={`(${market.formattedMaxPayoutUsd})`}
+                  >
+                    {market.maxPayout} {market.payoutToken.symbol}
+                  </CellLabel></TableCell>
                 <TableCell>{market?.formattedLongVesting}</TableCell>
                 <TableCell>
-                  <CellLabel subContent={market.formattedTbvUsd}>
-                    <p>
-                      {Math.trunc(market.totalBondedAmount) +
-                        " " +
-                        market?.quoteToken.symbol}
-                    </p>
-                  </CellLabel>
+                  <p>{market.creationDate}</p>
+                </TableCell>
+                <TableCell>
+                  {market.formattedTbvUsd}
                 </TableCell>
 
                 {allowManagement && (
