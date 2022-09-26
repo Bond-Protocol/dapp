@@ -1,11 +1,11 @@
-import {Button, SummaryCard} from "components";
-import {useConnectModal} from "@rainbow-me/rainbowkit";
-import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
-import {providers} from "services/owned-providers";
+import { Button, SummaryCard } from "components";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { providers } from "services/owned-providers";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {IssueMarketModal} from "./IssueMarketModal";
-import {useState} from "react";
-import {IssueMarketMultisigModal} from "components/organisms/IssueMarketMultisigModal";
+import { IssueMarketModal } from "./IssueMarketModal";
+import { useState } from "react";
+import { IssueMarketMultisigModal } from "components/organisms/IssueMarketMultisigModal";
 
 export type IssueMarketPageProps = {
   onExecute: (transaction: string) => void;
@@ -82,10 +82,15 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         open={isMultisigModalOpen}
         txnBytecode={txnBytecode}
         chain={props.data.chain}
-        address={contractLibrary.getAddressesForType(props.data.chain, props.data.bondType).auctioneer}
+        address={
+          contractLibrary.getAddressesForType(
+            props.data.chain,
+            props.data.bondType
+          ).auctioneer
+        }
         onReject={() => setIsMultisigModalOpen(false)}
       />
-      <div>
+      <div className="mx-[15vw]">
         <p className="font-faketion font-bold tracking-widest mt-8">MARKET</p>
 
         <SummaryCard fields={marketSummaryFields} className="my-8" />
@@ -119,7 +124,9 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
           type="submit"
           className="w-full font-fraktion mt-5"
           onClick={() => {
-            setTxnBytecode(contractLibrary.createMarketMultisig(props.data.marketParams));
+            setTxnBytecode(
+              contractLibrary.createMarketMultisig(props.data.marketParams)
+            );
             setIsMultisigModalOpen(true);
           }}
         >
