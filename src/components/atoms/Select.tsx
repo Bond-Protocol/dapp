@@ -1,8 +1,8 @@
-import {useEffect, useState} from "react";
-import SelectUnstyled, {SelectUnstyledProps} from "@mui/base/SelectUnstyled";
+import { useEffect, useState } from "react";
+import SelectUnstyled, { SelectUnstyledProps } from "@mui/base/SelectUnstyled";
 import OptionUnstyled from "@mui/base/OptionUnstyled";
-import {SelectArrowDown} from "../../assets/icons/select-arrow-down";
-import {TokenLabelProps} from "./TokenLabel";
+import { SelectArrowDown } from "../../assets/icons/select-arrow-down";
+import { TokenLabelProps } from "./TokenLabel";
 
 export type SelectOptions = TokenLabelProps & {
   id: number | string;
@@ -18,8 +18,9 @@ export const Select = (props: SelectProps) => {
 
   const onChange = (value: any) => {
     setSelected(value);
+    //@ts-ignore
     props.onChange && props.onChange(value);
-  }
+  };
 
   useEffect(() => {
     setOpen(false);
@@ -57,7 +58,7 @@ export const Select = (props: SelectProps) => {
               },
             }}
           >
-              <div className="mx-3">{o.label}</div>
+            <div className="mx-3">{o.label}</div>
           </OptionUnstyled>
         ))}
       </SelectUnstyled>
@@ -66,7 +67,7 @@ export const Select = (props: SelectProps) => {
           open ? "rotate-180" : "rotate-0"
         }`}
       >
-          <SelectArrowDown />
+        <SelectArrowDown />
       </div>
     </div>
   );
