@@ -10,8 +10,8 @@ export type TableHeadingProps = TableCellProps & {
   tooltip?: string;
   onClickIcon?: () => void;
   alignEnd?: boolean;
-  sortName: string;
-  ascending: boolean;
+  sortName?: string;
+  ascending?: boolean;
 };
 
 export const TableHeading = (props: TableHeadingProps) => {
@@ -29,7 +29,7 @@ export const TableHeading = (props: TableHeadingProps) => {
         if (!props.onClick) return;
 
         setSorting(true);
-        setMarketSort(props.sortName);
+        setMarketSort(props.sortName ? props.sortName : "");
         props.onClick(e);
       }}
     >
@@ -38,7 +38,7 @@ export const TableHeading = (props: TableHeadingProps) => {
           props.alignEnd ? "justify-end" : "justify-start"
         }`}
       >
-        {sorting && marketSort && marketSort.localeCompare(props.sortName) === 0 && (
+        {sorting && marketSort && props.sortName && marketSort.localeCompare(props.sortName) === 0 && (
           <div
             className="mr-1 my-auto cursor-pointer"
             onClick={props.onClickIcon}
