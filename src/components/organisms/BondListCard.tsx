@@ -213,7 +213,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
       <div className="flex w-[80vw] mt-12 gap-4 mb-6">
         <div className="w-1/2">
           {protocol?.description && <p>{protocol.description}</p>}
-          <div className="text-center p-[12%] border">📈 up omhly</div>
+          <div className="text-center p-[12%] border">📈</div>
         </div>
         <div className="w-1/2 flex flex-col">
           {props.infoLabel && (
@@ -222,7 +222,11 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
                 {vestingLabel}
               </InfoLabel>
               <InfoLabel label="Remaining Capacity" tooltip="tooltip popup">
-                <div className="flex justify-center items-end">
+                <div
+                  className={`flex justify-center items-end ${
+                    market.currentCapacity > 1000000 ? "text-lg" : ""
+                  }`}
+                >
                   {formatDecimalsForDisplay(market.currentCapacity)}
                   <p className="text-xs pb-1 ml-1">
                     {market.payoutToken.symbol}

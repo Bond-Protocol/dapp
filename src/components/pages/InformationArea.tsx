@@ -66,7 +66,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           ))}
         </div>
       </div>
-      <Footer />
+      <Footer className="pt-4" />
     </div>
   );
 };
