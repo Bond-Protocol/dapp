@@ -1,4 +1,4 @@
-import {Tooltip} from "@material-tailwind/react";
+import { Tooltip } from "@material-tailwind/react";
 import TooltipIcon from "../../assets/icons/tooltip-icon";
 
 export type InfoLabelProps = {
@@ -18,7 +18,9 @@ export const InfoLabel = (props: InfoLabelProps) => {
           </div>
         </Tooltip>
       </div>
-      <h2 className="text-5xl pb-4 font-fraktion">{props.children}</h2>
+      <h2 className="pb-4 font-fraktion text-2xl 2xl:text-4xl">
+        {props.children}
+      </h2>
     </div>
   );
 };

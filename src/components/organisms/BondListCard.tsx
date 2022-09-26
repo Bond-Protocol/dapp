@@ -4,7 +4,11 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
-import { formatLongNumber, getBlockExplorer } from "../../utils";
+import {
+  formatDecimalsForDisplay,
+  formatLongNumber,
+  getBlockExplorer,
+} from "../../utils";
 import { providers } from "services/owned-providers";
 import { usePurchaseBond, useTokenAllowance } from "hooks";
 import { Button, InfoLabel, Link } from "components/atoms";
@@ -216,8 +220,10 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
               </InfoLabel>
               <InfoLabel label="Remaining Capacity" tooltip="tooltip popup">
                 <div className="flex justify-center items-end">
-                  {market.currentCapacity.toFixed(2)}
-                  <p className="text-xs pb-1">{market.payoutToken.symbol}</p>
+                  {formatDecimalsForDisplay(market.currentCapacity)}
+                  <p className="text-xs pb-1 ml-1">
+                    {market.payoutToken.symbol}
+                  </p>
                 </div>
               </InfoLabel>
             </div>

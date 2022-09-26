@@ -1,5 +1,5 @@
-import {ConnectButton} from "components/organisms/ConnectButton";
-import {useAccount} from "wagmi";
+import { ConnectButton } from "components/organisms/ConnectButton";
+import { useAccount } from "wagmi";
 
 export type RequireWalletProps = {
   children: React.ReactNode;
