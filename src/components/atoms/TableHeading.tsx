@@ -3,16 +3,20 @@ import {Tooltip} from "@material-tailwind/react";
 import {TableCell, TableCellProps} from "./TableCell";
 import TooltipIcon from "../../assets/icons/tooltip-icon";
 import ArrowDownIcon from "../../assets/icons/arrow-down-icon";
+import {useAtom} from "jotai";
+import marketListSort from "../../atoms/marketListSort.atom";
 
 export type TableHeadingProps = TableCellProps & {
   tooltip?: string;
   onClickIcon?: () => void;
   alignEnd?: boolean;
+  sortName: string;
+  ascending: boolean;
 };
 
 export const TableHeading = (props: TableHeadingProps) => {
   const [sorting, setSorting] = useState(false);
-  const [ascending, setAscending] = useState(false);
+  const [marketSort, setMarketSort] = useAtom(marketListSort);
 
   return (
     <TableCell
@@ -23,9 +27,9 @@ export const TableHeading = (props: TableHeadingProps) => {
       }`}
       onClick={(e) => {
         if (!props.onClick) return;
-        if (sorting) setAscending((a) => !a);
 
         setSorting(true);
+        setMarketSort(props.sortName);
         props.onClick(e);
       }}
     >
@@ -34,14 +38,14 @@ export const TableHeading = (props: TableHeadingProps) => {
           props.alignEnd ? "justify-end" : "justify-start"
         }`}
       >
-        {sorting && (
+        {sorting && marketSort && marketSort.localeCompare(props.sortName) === 0 && (
           <div
             className="mr-1 my-auto cursor-pointer"
             onClick={props.onClickIcon}
           >
             <ArrowDownIcon
               width="16"
-              className={`${ascending ? "rotate-180" : ""} ${
+              className={`${props.ascending ? "rotate-180" : ""} ${
                 sorting ? "opacity-100" : "opacity-0"
               } mt-[1px] fill-white`}
             />
