@@ -1,8 +1,8 @@
-import {useNavigate} from "react-router-dom";
-import {Accordion, Button, Footer} from "..";
-import {ReactComponent as CloseIcon} from "../../assets/icons/close-icon.svg";
-import {loremIpsum} from "../../utils";
-import {ProtocolLogo} from "components/atoms/ProtocolLogo";
+import { useNavigate } from "react-router-dom";
+import { Accordion, Button, Footer } from "..";
+import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
+import { loremIpsum } from "../../utils";
+import { ProtocolLogo } from "components/atoms/ProtocolLogo";
 
 export type InformationAreaProps = {
   onClose: () => void;
@@ -58,6 +58,7 @@ export const InformationArea = (props: InformationAreaProps) => {
             <Accordion
               label={label}
               className="text-black py-10 hover:bg-black/5 transition-all"
+              iconClassname="fill-black"
               key={i}
             >
               <p className="p-8 text-black">{content}</p>

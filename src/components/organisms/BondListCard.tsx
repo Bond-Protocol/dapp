@@ -1,9 +1,9 @@
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
-import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
+import ArrowIcon from "../../assets/icons/arrow-icon.svg";
 import {
   formatDecimalsForDisplay,
   formatLongNumber,
@@ -203,7 +203,10 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
             <div className="font-faketion pt-[2px] font-bold">
               {props.topRightLabel}
             </div>
-            <ArrowIcon className="fill-white color-white my-auto rotate-90 ml-2 p-1" />
+            <img
+              src={ArrowIcon}
+              className="fill-white color-white my-auto rotate-90 ml-2 p-1"
+            />
           </div>
         </Button>
       </div>
