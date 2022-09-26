@@ -1,4 +1,4 @@
-import {FC, useEffect, useState} from "react";
+import {FC, useEffect, useRef, useState} from "react";
 import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
 import {CalculatedMarket} from "@bond-protocol/contract-library";
 import {getProtocolByAddress} from "@bond-protocol/bond-library";
@@ -11,6 +11,8 @@ import {Button, InfoLabel, Link} from "components/atoms";
 import {BondButton, InputCard, SummaryCard} from "components/molecules";
 import {BondPurchaseModal} from "./BondPurchaseModal";
 import {trim, calculateTrimDigits} from "@bond-protocol/contract-library/dist/core/utils";
+import {CHAINS} from "@bond-protocol/bond-library";
+import {useGasPrice} from "hooks/useGasPrice";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -25,9 +27,18 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
   const [payout, setPayout] = useState<string>("0");
+  const [networkFee, setNetworkFee] = useState("0");
+  const [networkFeeUsd, setNetworkFeeUsd] = useState("0")
+  const [estimatedGas, setEstimatedGas] = useState(0);
+  const [gasPrice, setGasPrice] = useState({
+    gasPrice: "0",
+    usdPrice: "0",
+  });
+
+  const {getGasPrice} = useGasPrice();
   const { address, isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
-  const { bond, getPayoutFor } = usePurchaseBond();
+  const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
   const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
     useTokenAllowance(
       market.quoteToken.address,
@@ -42,7 +53,14 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     "address"
   );
 
-  const networkFee = 1;
+  useEffect(() => {
+    if (gasPrice && estimatedGas) {
+      const estimate = Number(gasPrice.gasPrice) * Number(estimatedGas);
+      const usdEstimate = Number(gasPrice.usdPrice) * Number(estimatedGas);
+      setNetworkFee(trim(estimate, calculateTrimDigits(estimate)));
+      setNetworkFeeUsd(trim(usdEstimate, calculateTrimDigits(usdEstimate)));
+    }
+  }, [gasPrice, estimatedGas]);
 
   const vestingLabel =
     market.vestingType === "fixed-term"
@@ -65,6 +83,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           market.auctioneer
         )
       );
+
       payout = formatLongNumber(payout, market.payoutToken.decimals);
       setPayout(
         trim(payout, calculateTrimDigits(payout)).toString()
@@ -73,6 +92,16 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
 
     void updatePayout();
   }, [amount, getPayoutFor, market.marketId, market.auctioneer]);
+
+  useEffect(() => {
+    estimate()?.then(result => {
+      setEstimatedGas(Number(result));
+    });
+
+    getGasPrice(market.network).then(result => {
+      setGasPrice(result);
+    })
+  }, [payout]);
 
   const switchChain = () => {
     const newChain = Number(
@@ -100,7 +129,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     },
     {
       label: "Network Fee",
-      value: `${networkFee} ${market.quoteToken.symbol}`,
+      value: `${networkFee} ${CHAINS.get(market.network)? CHAINS.get(market.network)?.nativeCurrency.symbol : "ETH"} ($${networkFeeUsd})`,
       tooltip: "Soon™",
     },
     {
@@ -113,6 +142,24 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
       tooltip: "Soon™",
     },
   ];
+
+  const estimate = () => {
+    if (!address) throw new Error("Not Connected");
+    try {
+      return estimateBond({
+        address,
+        amount,
+        payout,
+        payoutDecimals: market.payoutToken.decimals,
+        quoteDecimals: market.quoteToken.decimals,
+        slippage: 0.05,
+        marketId: market.marketId,
+        teller: market.teller,
+      });
+    } catch (e) {
+      console.log(e)
+    }
+  };
 
   const submitTx = () => {
     if (!address) throw new Error("Not Connected");
