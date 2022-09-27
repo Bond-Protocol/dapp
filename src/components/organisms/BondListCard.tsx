@@ -140,7 +140,11 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
     {
       label: "Bond Contract",
       value: (
-        <Link href={blockExplorerUrl} className="w-fit">
+        <Link href={blockExplorerUrl + market.auctioneer}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-fit"
+        >
           View on {blockExplorerName}
         </Link>
       ),
