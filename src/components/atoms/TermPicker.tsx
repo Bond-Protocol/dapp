@@ -24,10 +24,10 @@ export const TermPicker = (props: TermPickerProps) => {
     props.onChange && props.onChange({ id, amount });
   }, [id, amount]);
 
-  const handleChangeSelect = (id: number) => {
-    setId(id);
-    setAmount(id);
-    props.onChange && props.onChange({ id, amount: id });
+  const handleChangeSelect = (e: any, value: any) => {
+    setId(value);
+    setAmount(value);
+    props.onChange && props.onChange({ id: value, amount: value });
   };
 
   const handleChangeInput = (input: number) => {
@@ -47,7 +47,7 @@ export const TermPicker = (props: TermPickerProps) => {
             onChange={handleChangeSelect}
           />
         </div>
-        {id === 1 && (
+        {id == 1 && (
           <div className="w-3/4 mt-1">
             <Input
               value={amount}

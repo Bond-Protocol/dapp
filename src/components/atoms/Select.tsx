@@ -16,10 +16,9 @@ export const Select = (props: SelectProps) => {
   const [selected, setSelected] = useState<string>(props.defaultValue || "");
   const [open, setOpen] = useState(false);
 
-  const onChange = (value: any) => {
+  const onChange = (e: any, value: any) => {
     setSelected(value);
-    //@ts-ignore
-    props.onChange && props.onChange(value);
+    props.onChange && props.onChange(e, value);
   };
 
   useEffect(() => {
