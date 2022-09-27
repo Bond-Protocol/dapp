@@ -19,8 +19,6 @@ export const MarketCreated = () => {
     "tx"
   );
 
-  console.log(data);
-
   return (
     <div>
       {isLoading &&
