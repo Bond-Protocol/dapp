@@ -1,8 +1,9 @@
 import {useWaitForTransaction} from "wagmi";
 import {useNavigate, useParams} from "react-router-dom";
 import {getBlockExplorer} from "../../utils";
-import {getProtocolByAddress} from "@bond-protocol/bond-library";
+import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
 import Button from "../atoms/Button";
+import {useEffect, useState} from "react";
 
 export type MarketCreatedParams = {
   marketData: any;
@@ -23,6 +24,14 @@ export const MarketCreated = (props: MarketCreatedParams) => {
     "tx"
   );
 
+  const [protocol, setProtocol] = useState<Protocol | null>(null);
+
+  useEffect(() => {
+    if (data && !isError && !isLoading) {
+      setProtocol(getProtocolByAddress(data.from, props.marketData.chain));
+    }
+  }, [data, isError, isLoading]);
+
   return (
     <div>
       {isLoading &&
@@ -40,20 +49,20 @@ export const MarketCreated = (props: MarketCreatedParams) => {
             HAS BEEN DEPLOYED
           </h1>
 
-          {data?.from && getProtocolByAddress(data.from, props.marketData.chain) ?
+          {data?.from && protocol ?
             (
               <div>
                 <h2 className="text-xl text-center py-4 leading-normal">
-                  Owner verified as {getProtocolByAddress(data.from, props.marketData.chain)?.name}!
+                  Owner verified as {protocol.name}!
                 </h2>
                 <p className="text-center py-8 leading-normal">
                   Your market is live on the contract, it should appear in our market list as soon as it has been indexed by our subgraph.
                 </p>
                 <Button className="w-full font-fraktion mt-5"
                         onClick={
-                          () => navigate("/issuers/" + getProtocolByAddress(data.from, props.marketData.chain)?.name)
+                          () => navigate("/issuers/" + protocol.name)
                         }>
-                  {`Go to ${getProtocolByAddress(data.from, props.marketData.chain)?.name} page`}
+                  {`Go to ${protocol.name} page`}
                 </Button>
 
                 <Button className="w-full font-fraktion mt-5"
