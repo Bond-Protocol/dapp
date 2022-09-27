@@ -212,6 +212,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         .concat(" ")
         .concat(token)
         .concat("/Day");
+
       setEstimatedBondCadence(string);
     } else {
       setEstimatedBondCadence("");
@@ -301,11 +302,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     { label: "Capacity", value: capacityString },
     { label: "Payout Token", value: payoutTokenSymbol },
     { label: "Quote Token", value: quoteTokenSymbol },
-    {
-      label: "Estimated bond cadence",
-      tooltip: "soon",
-      value: estimatedBondCadence,
-    },
+    { label: "Estimated bond cadence", tooltip: "soon", value: estimatedBondCadence },
     { label: "Initial exchange rate", value: exchangeRateString },
     { label: "Minimum exchange rate", value: minExchangeRateString },
     { label: "Conclusion", tooltip: "soon", value: marketExpiryString },
@@ -376,8 +373,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         capacity: capacityString,
         payoutToken: payoutTokenSymbol,
         quoteToken: quoteTokenSymbol,
-        maximumBondSize: "???",
-        estimatedBondCadence: "???",
+        estimatedBondCadence: estimatedBondCadence,
         exchangeRate: exchangeRateString,
         minimumExchangeRate: minExchangeRateString,
         conclusion: marketExpiryString,

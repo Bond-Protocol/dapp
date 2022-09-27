@@ -36,10 +36,6 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
     { label: "Payout Token", value: props.data.summaryData.payoutToken },
     { label: "Quote Token", value: props.data.summaryData.quoteToken },
     {
-      label: "Maximum Bond Size",
-      value: props.data.summaryData.maximumBondSize,
-    },
-    {
       label: "Estimated Bond Cadence",
       value: props.data.summaryData.estimatedBondCadence,
     },
