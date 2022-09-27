@@ -153,7 +153,8 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   ];
 
   const estimate = () => {
-    if (!address) throw new Error("Not Connected");
+    if (!address) return;
+
     try {
       return estimateBond({
         address,
