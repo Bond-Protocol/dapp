@@ -2,7 +2,9 @@ import {useState} from "react";
 import {Tabs} from "..";
 import {CreateMarketPage, IssueMarketPage} from "components/organisms";
 
-export type CreateMarketPageProps = { a?: unknown };
+export type CreateMarketPageProps = {
+  onExecute: (marketData: any) => void;
+};
 
 export const CreateMarket = (props: CreateMarketPageProps) => {
   const [initialValues, setInitialValues] = useState<unknown>(null);
@@ -30,8 +32,8 @@ export const CreateMarket = (props: CreateMarketPageProps) => {
         <IssueMarketPage
           data={marketData}
           onEdit={() => setSelected(0)}
-          onExecute={(a) => {
-            console.log("onExecute Issue", a);
+          onExecute={(marketData) => {
+            props.onExecute(marketData);
           }}
         />
       )}

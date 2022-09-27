@@ -4,18 +4,22 @@ import {getBlockExplorer} from "../../utils";
 import {getProtocolByAddress} from "@bond-protocol/bond-library";
 import Button from "../atoms/Button";
 
-export const MarketCreated = () => {
-  const {chainId, hash} = useParams();
+export type MarketCreatedParams = {
+  marketData: any;
+};
+
+export const MarketCreated = (props: MarketCreatedParams) => {
+  const {hash} = useParams();
   const navigate = useNavigate();
 
   const {data, isError, isLoading} = useWaitForTransaction(
     {
-      chainId: Number(chainId),
+      chainId: props.marketData.chainId,
       hash: hash,
     });
 
   const {blockExplorerUrl: blockExplorerUrl, blockExplorerName: blockExplorerName} = getBlockExplorer(
-    chainId || "",
+    props.marketData.chain,
     "tx"
   );
 
@@ -36,20 +40,20 @@ export const MarketCreated = () => {
             HAS BEEN DEPLOYED
           </h1>
 
-          {data?.from && getProtocolByAddress(data.from, "goerli") ?
+          {data?.from && getProtocolByAddress(data.from, props.marketData.chain) ?
             (
               <div>
                 <h2 className="text-xl text-center py-4 leading-normal">
-                  Owner verified as {getProtocolByAddress(data.from, "goerli")?.name}!
+                  Owner verified as {getProtocolByAddress(data.from, props.marketData.chain)?.name}!
                 </h2>
                 <p className="text-center py-8 leading-normal">
                   Your market is live on the contract, it should appear in our market list as soon as it has been indexed by our subgraph.
                 </p>
                 <Button className="w-full font-fraktion mt-5"
                         onClick={
-                          () => navigate("/issuers/" + getProtocolByAddress(data.from, "goerli")?.name)
+                          () => navigate("/issuers/" + getProtocolByAddress(data.from, props.marketData.chain)?.name)
                         }>
-                  {`Go to ${getProtocolByAddress(data.from, "goerli")?.name} page`}
+                  {`Go to ${getProtocolByAddress(data.from, props.marketData.chain)?.name} page`}
                 </Button>
 
                 <Button className="w-full font-fraktion mt-5"

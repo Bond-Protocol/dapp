@@ -9,7 +9,7 @@ import { IssueMarketMultisigModal } from "components/organisms/IssueMarketMultis
 import {useNavigate} from "react-router-dom";
 
 export type IssueMarketPageProps = {
-  onExecute: (transaction: string) => void;
+  onExecute: (marketData: any) => void;
   onEdit: () => void;
   data: any;
 };
@@ -70,7 +70,8 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
       }
     );
 
-    navigate("/create/" + props.data.chain + "/" + tx.hash);
+    navigate("/create/" + tx.hash);
+    props.onExecute(props.data)
   };
 
   return (
