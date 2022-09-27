@@ -6,7 +6,7 @@ import { getToken } from "@bond-protocol/bond-library";
 import { ExpandableRow } from "components/molecules/ExpandableRow";
 import { CloseMarketCard } from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
-import { useCalculatedMarkets } from "hooks";
+import { useMarkets } from "hooks";
 import { TableHeading } from "components/atoms/TableHeading";
 import { TableCell } from "components/atoms/TableCell";
 import { CellLabel } from "components/atoms/CellLabel";
@@ -21,8 +21,7 @@ export const MarketList: FC<MarketListProps> = ({
   markets,
   allowManagement,
 }) => {
-  const { refetchAllMarkets, refetchMyMarkets, refetchOne } =
-    useCalculatedMarkets();
+  const { refetchAllMarkets, refetchMyMarkets, refetchOne } = useMarkets();
   const navigate = useNavigate();
 
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(
@@ -317,22 +316,22 @@ export const MarketList: FC<MarketListProps> = ({
                   </div>
                 </TableCell>
 
-              <TableCell className="flex flex-row py-6">
-                <CellLabel
-                  logo={singleLogo(market?.payoutToken, market?.network)}
-                  subContent={`(Market: ${market?.formattedFullPrice})`}
-                >
-                  {market?.formattedDiscountedPrice}
-                </CellLabel>
-              </TableCell>
+                <TableCell className="flex flex-row py-6">
+                  <CellLabel
+                    logo={singleLogo(market?.payoutToken, market?.network)}
+                    subContent={`(Market: ${market?.formattedFullPrice})`}
+                  >
+                    {market?.formattedDiscountedPrice}
+                  </CellLabel>
+                </TableCell>
 
-              <TableCell
-                className={`${
-                  market.discount > 0 ? "text-light-success" : "text-red-300"
-                }`}
-              >
-                {market.discount}%
-              </TableCell>
+                <TableCell
+                  className={`${
+                    market.discount > 0 ? "text-light-success" : "text-red-300"
+                  }`}
+                >
+                  {market.discount}%
+                </TableCell>
 
                 <TableCell>
                   <CellLabel subContent={`(${market.formattedMaxPayoutUsd})`}>
@@ -340,7 +339,7 @@ export const MarketList: FC<MarketListProps> = ({
                   </CellLabel>
                 </TableCell>
 
-              <TableCell>{market.formattedLongVesting}</TableCell>
+                <TableCell>{market.formattedLongVesting}</TableCell>
 
                 <TableCell>
                   <p>{market.creationDate}</p>

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { useCalculatedMarkets } from "hooks";
+import { useMarkets } from "hooks";
 import {
   Protocol,
   PROTOCOLS,
@@ -10,7 +10,6 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { InfoLabel, Link } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
 import { useParams } from "react-router-dom";
-import { formatDecimalsForDisplay } from "../../utils";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -19,7 +18,7 @@ const placeholderProtocol = {
 };
 
 export const IssuerPage: FC = () => {
-  const { marketsByIssuer } = useCalculatedMarkets();
+  const { marketsByIssuer } = useMarkets();
   const { name } = useParams();
 
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);

@@ -1,7 +1,12 @@
-import {CalculatedMarket} from "@bond-protocol/contract-library";
-import {IssuerList, MarketList, MyBondsList, MyMarkets,} from "components/organisms";
-import {Tabs} from "components/molecules";
-import {useCalculatedMarkets} from "hooks/useCalculatedMarkets";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {
+  IssuerList,
+  MarketList,
+  MyBondsList,
+  MyMarkets,
+} from "components/organisms";
+import { Tabs } from "components/molecules";
+import { useMarkets } from "hooks/useMarkets";
 
 type MarketProps = {
   markets: Map<string, CalculatedMarket>;
@@ -10,7 +15,7 @@ type MarketProps = {
 
 export const Markets = (props: MarketProps) => {
   const { isMarketOwner, marketsByIssuer, issuers, allMarkets, myMarkets } =
-    useCalculatedMarkets();
+    useMarkets();
 
   const tabs = [
     { label: "All Markets" },
