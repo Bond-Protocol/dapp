@@ -1,25 +1,18 @@
-import { FC, useEffect, useState } from "react";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { getProtocolByAddress } from "@bond-protocol/bond-library";
+import * as React from "react";
+import {FC, useEffect, useState} from "react";
+import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
+import {CHAINS, getProtocolByAddress} from "@bond-protocol/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
 import ArrowIcon from "../../assets/icons/arrow-icon.svg";
-import {
-  formatDecimalsForDisplay,
-  formatLongNumber,
-  getBlockExplorer,
-} from "../../utils";
-import { providers } from "services/owned-providers";
-import { usePurchaseBond, useTokenAllowance } from "hooks";
-import { Button, InfoLabel, Link } from "components/atoms";
-import { BondButton, InputCard, SummaryCard } from "components/molecules";
-import { BondPurchaseModal } from "./BondPurchaseModal";
-import {
-  trim,
-  calculateTrimDigits,
-} from "@bond-protocol/contract-library/dist/core/utils";
-import { CHAINS } from "@bond-protocol/bond-library";
-import { useGasPrice } from "hooks/useGasPrice";
+import {formatDecimalsForDisplay, formatLongNumber, getBlockExplorer,} from "../../utils";
+import {providers} from "services/owned-providers";
+import {usePurchaseBond, useTokenAllowance} from "hooks";
+import {Button, InfoLabel, Link} from "components/atoms";
+import {BondButton, InputCard, SummaryCard} from "components/molecules";
+import {BondPurchaseModal} from "./BondPurchaseModal";
+import {calculateTrimDigits, trim,} from "@bond-protocol/contract-library/dist/core/utils";
+import {useGasPrice} from "hooks/useGasPrice";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -29,7 +22,7 @@ export type BondListCardProps = {
   infoLabel?: boolean;
 };
 
-export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
+export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
   const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
@@ -42,11 +35,11 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     usdPrice: "0",
   });
 
-  const { getGasPrice } = useGasPrice();
-  const { address, isConnected } = useAccount();
-  const { switchNetwork } = useSwitchNetwork();
-  const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
-  const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
+  const {getGasPrice} = useGasPrice();
+  const {address, isConnected} = useAccount();
+  const {switchNetwork} = useSwitchNetwork();
+  const {bond, estimateBond, getPayoutFor} = usePurchaseBond();
+  const {approve, balance, hasSufficientAllowance, hasSufficientBalance} =
     useTokenAllowance(
       market.quoteToken.address,
       market.network,
@@ -55,10 +48,13 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     );
   const network = useNetwork();
   const protocol = getProtocolByAddress(market.owner, market.network);
-  const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
+  const {blockExplorerName, blockExplorerUrl} = getBlockExplorer(
     market.network,
     "address"
   );
+
+  const showOwnerBalanceWarning = Number(market.maxPayout) > Number(market.ownerBalance);
+  const showOwnerAllowanceWarning = Number(market.maxPayout) > Number(market.ownerAllowance);
 
   useEffect(() => {
     if (gasPrice && estimatedGas) {
@@ -189,7 +185,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     <>
       <div className="flex justify-between w-[80vw] pl-4 my-5">
         <div className="flex">
-          <TestIcon className="fill-white my-auto" />
+          <TestIcon className="fill-white my-auto"/>
           <p className="font-fraktion text-[48px]">
             {protocol?.name || market.payoutToken?.symbol}
           </p>
@@ -244,7 +240,42 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
             market={market}
             className="mt-5"
           />
-          <SummaryCard fields={summaryFields} />
+          <div className="text-xs font-light pt-2 my-1 text-red-500 justify-self-start">
+            {showOwnerBalanceWarning &&
+              <div>
+                <p className="py-1">
+                  WARNING: This market allows a max payout of {market.maxPayout} {market.payoutToken.symbol},
+                  however the market owner currently has a balance of {market.ownerBalance} {market.payoutToken.symbol}.
+                </p>
+                <p className="py-1">
+                  If you are the market owner, you can fix this issue by transferring
+                  more {market.payoutToken.symbol} to the owner address {market.owner}.
+                </p>
+              </div>
+            }
+            {showOwnerAllowanceWarning &&
+              <div>
+                <p className="py-1">
+                  WARNING: This market allows a max payout of {market.maxPayout} {market.payoutToken.symbol},
+                  however the market owner's allowance is limited to {market.ownerAllowance} {market.payoutToken.symbol}.
+                </p>
+                <p className="py-1">
+                  If you are the market owner, you can fix this issue by increasing the allowance for {market.teller} to
+                  spend {market.payoutToken.symbol} from the owner address {market.owner}.
+                </p>
+              </div>
+            }
+            {(showOwnerBalanceWarning || showOwnerAllowanceWarning) &&
+              <div>
+                <p className="py-1">
+                  As a result, attempts to purchase a bond paying out an amount in excess
+                  of {Math.min(Number(market.ownerBalance), Number(market.ownerAllowance))}
+                  &nbsp;{market.payoutToken.symbol} will fail.
+                </p>
+              </div>
+            }
+          </div>
+          <SummaryCard fields={summaryFields}/>
           <BondButton
             showConnect={!isConnected}
             showSwitcher={!correctChain}
