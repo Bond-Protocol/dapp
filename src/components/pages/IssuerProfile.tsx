@@ -1,6 +1,10 @@
 import { FC, useEffect, useState } from "react";
-import { useCalculatedMarkets } from "hooks";
-import { Protocol, PROTOCOLS, PROTOCOL_NAMES } from "@bond-protocol/bond-library";
+import { useMarkets } from "hooks";
+import {
+  Protocol,
+  PROTOCOLS,
+  PROTOCOL_NAMES,
+} from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { InfoLabel, Link } from "components/atoms";
@@ -14,7 +18,7 @@ const placeholderProtocol = {
 };
 
 export const IssuerProfile: FC = () => {
-  const { marketsByIssuer } = useCalculatedMarkets();
+  const { marketsByIssuer } = useMarkets();
   const { name } = useParams();
 
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);

@@ -27,11 +27,11 @@ export const InformationArea = (props: InformationAreaProps) => {
 
   return (
     <div
-      className={`inset-0 absolute h-[100vh] bg-turtle-blue transition-transform z-10 ${
+      className={`inset-0 fixed h-[100vh] bg-turtle-blue transition-transform z-10 ${
         props.open ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="bg-white">
+      <div className="bg-white h-[90vh]">
         <div className="mx-[5vw] h-[88px] flex justify-between items-center ">
           <ProtocolLogo
             black
@@ -66,7 +66,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           ))}
         </div>
       </div>
-      <Footer className="pt-4" />
+      <Footer />
     </div>
   );
 };

@@ -1,20 +1,20 @@
 //@ts-nocheck
-import {useTokens} from "hooks/useTokens";
-import {useQueries} from "react-query";
-import {useState} from "react";
+import { useTokens } from "hooks/useTokens";
+import { useQueries } from "react-query";
+import { useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {getProtocolByAddress, TOKENS} from "@bond-protocol/bond-library";
+import { getProtocolByAddress, TOKENS } from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {CalculatedMarket} from "@bond-protocol/contract-library";
-import {useProvider} from "wagmi";
-import {providers} from "services/owned-providers";
-import {Market} from "src/generated/graphql";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { useProvider } from "wagmi";
+import { providers } from "services/owned-providers";
+import { Market } from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import {useMarkets} from "hooks/useMarkets";
-import {useMyMarkets} from "hooks/useMyMarkets";
+import { useLoadMarkets } from "hooks/useLoadMarkets";
+import { useMyMarkets } from "hooks/useMyMarkets";
 
 export function useCalculatedMarkets() {
-  const { markets: markets } = useMarkets();
+  const { markets: markets } = useLoadMarkets();
   const { markets: myMarkets } = useMyMarkets();
   const { getPrice, getTokenDetails } = useTokens();
   const provider = useProvider();
@@ -26,9 +26,13 @@ export function useCalculatedMarkets() {
 
   const calculateMarket = (market: Market) => {
     const requestProvider = providers[market.network] || provider;
-    const purchaseLink = bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(market.network) ?
-      bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(market.network) :
-      "https://app.sushi.com/swap";
+    const purchaseLink = bondLibrary.TOKENS.get(
+      market.quoteToken.id
+    )?.purchaseLinks.get(market.network)
+      ? bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(
+          market.network
+        )
+      : "https://app.sushi.com/swap";
 
     const quoteToken = getTokenDetails(market.quoteToken);
     const payoutToken = getTokenDetails(market.payoutToken);
