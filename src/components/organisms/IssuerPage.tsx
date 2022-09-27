@@ -34,6 +34,7 @@ export const IssuerPage: FC = () => {
       : "/placeholders/token-placeholder.png";
   };
 
+  console.log({ markets });
   useEffect(() => {
     setMarkets(marketsByIssuer && marketsByIssuer.get(name));
   }, [name, marketsByIssuer]);

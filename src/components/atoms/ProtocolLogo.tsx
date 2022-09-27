@@ -1,4 +1,4 @@
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.svg";
 import blackLogo from "../../assets/logo-black.svg";
 
@@ -20,7 +20,7 @@ export const ProtocolLogo = (
       {...props}
       onClick={handleClick}
       src={props.black ? blackLogo : logo}
-      className={`hover:cursor-pointer ${props.className}`}
+      className={`select-none hover:cursor-pointer ${props.className}`}
     />
   );
 };

@@ -10,6 +10,7 @@ import { useTokens } from "hooks";
 import { getToken } from "@bond-protocol/bond-library";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { useNavigate } from "react-router-dom";
+import { TableHeading, TableCell } from "..";
 
 const NoBondsView = () => {
   const navigate = useNavigate();
@@ -85,19 +86,17 @@ export const MyBondsList = () => {
     <RequiresWallet>
       {myBonds.length > 0 ? (
         <>
-          <span className="flex justify-center py-2">
-            Showing bonds for {address}
-          </span>
           <p className="flex justify-end p-2">
             <Button onClick={refetch}>Refresh</Button>
           </p>
           <table className="w-full text-left table-fixed">
             <thead>
-              <tr>
-                <th>Bond</th>
-                <th>Network</th>
-                <th>Vesting Date</th>
-                <th>Payout</th>
+              <tr className="border-b border-white/60">
+                <TableHeading>Bond</TableHeading>
+                <TableHeading>Network</TableHeading>
+                <TableHeading>Vesting Date</TableHeading>
+                <TableHeading>Payout</TableHeading>
+                <TableHeading>Claim</TableHeading>
               </tr>
             </thead>
 
@@ -119,32 +118,43 @@ export const MyBondsList = () => {
 
                 return (
                   <tr key={bond.id}>
-                    <td className="flex flex-row">
+                    <TableCell className="flex flex-row">
                       <img className="h-[32px] w-[32px]" src={logoUrl} />
-                      {underlying?.symbol}
-                    </td>
-                    <td>{bond.network}</td>
-                    <td>{date.toDateString()}</td>
-                    <td className="flex flex-row">
-                      <div>
+                      <p className="my-auto pl-1">{underlying?.symbol}</p>
+                    </TableCell>
+                    <TableCell>{bond.network}</TableCell>
+                    <TableCell>{date.toDateString()}</TableCell>
+                    <TableCell className="flex flex-row">
+                      <div className="my-auto pr-1">
                         <img className="h-[32px] w-[32px]" src={logoUrl} />
                       </div>
                       <div>
                         <p>{balance.toFixed(2) + " " + underlying?.symbol}</p>
-                        <p className="text-xs">(Market: $???)</p>
+                        <p className="text-xs text-light-primary-500">
+                          (Market: $???)
+                        </p>
                       </div>
-                    </td>
-                    <td>
-                      {canClaim && bond.network !== chain?.network && (
-                        // @ts-ignore
-                        <Button onClick={(e) => switchChain(e, bond.network)}>
-                          Switch Chain
+                    </TableCell>
+                    <TableCell className="w-1/2">
+                      <div className="flex gap-x-2">
+                        <Button
+                          disabled={!canClaim}
+                          onClick={() => redeem(bond)}
+                        >
+                          {canClaim ? "Claim" : "vesting"}
                         </Button>
-                      )}
-                      {canClaim && bond.network === chain?.network && (
-                        <Button onClick={() => redeem(bond)}>Claim</Button>
-                      )}
-                    </td>
+                        {bond.network !== chain?.network && (
+                          // @ts-ignore
+                          <Button
+                            className="text-xs px-0"
+                            variant="secondary"
+                            onClick={(e) => switchChain(e, bond.network)}
+                          >
+                            Switch Network to Claim
+                          </Button>
+                        )}
+                      </div>
+                    </TableCell>
                   </tr>
                 );
               })}
