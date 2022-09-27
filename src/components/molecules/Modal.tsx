@@ -1,6 +1,6 @@
-import {forwardRef} from "react";
+import { forwardRef } from "react";
 import ModalUnstyled from "@mui/base/ModalUnstyled";
-import {ReactComponent as CloseIcon} from "../../assets/icons/close-icon.svg";
+import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
 
 type ModalHeaderProps = {
   onClickClose?: () => void;
@@ -46,7 +46,7 @@ export const Modal = ({ title, ...props }: ModalProps) => {
     <ModalUnstyled
       componentsProps={{
         root: { className: "fixed inset-0" },
-        backdrop: { className: "outline-0" },
+        backdrop: { className: "outline-0 bg-none" },
       }}
       open={props.open}
     >

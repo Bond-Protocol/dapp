@@ -1,5 +1,5 @@
-import {Button} from "../atoms/Button";
-import {ModalTitle} from "../atoms/ModalTitle";
+import { Button } from "../atoms/Button";
+import { ModalTitle } from "../atoms/ModalTitle";
 import useBrowserStorage from "../../hooks/useBrowserStorage";
 
 const tcLink = (
@@ -31,6 +31,7 @@ export const GeneralTermsDialog = (props: { onAccept: () => void }) => {
 
   const rejectTC = () => {
     removeItem("tc");
+    window.location.replace("http://www.bondprotocol.finance");
   };
 
   return (
