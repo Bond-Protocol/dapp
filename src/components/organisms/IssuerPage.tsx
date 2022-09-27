@@ -1,11 +1,16 @@
 import { FC, useEffect, useState } from "react";
 import { useCalculatedMarkets } from "hooks";
-import { Protocol, PROTOCOLS, PROTOCOL_NAMES } from "@bond-protocol/bond-library";
+import {
+  Protocol,
+  PROTOCOLS,
+  PROTOCOL_NAMES,
+} from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { InfoLabel, Link } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
 import { useParams } from "react-router-dom";
+import { formatDecimalsForDisplay } from "../../utils";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -65,7 +70,7 @@ export const IssuerPage: FC = () => {
 
       <div className="my-16 flex justify-between gap-16 child:w-full">
         <InfoLabel label="Total Value Bonded" tooltip="tooltip">
-          ${tbv}
+          ${Math.trunc(tbv)}
         </InfoLabel>
         <InfoLabel label="Unique Bonders" tooltip="tooltip">
           Soon™

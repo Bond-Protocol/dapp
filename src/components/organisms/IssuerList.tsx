@@ -1,11 +1,11 @@
 //@ts-nocheck
-import {useEffect, useRef, useState} from "react";
-import {PROTOCOLS} from "@bond-protocol/bond-library";
-import {IssuerCard} from "components/molecules/IssuerCard";
-import {Input} from "@material-tailwind/react";
-import {alphabeticSort, numericSort} from "services/sort";
-import {Button} from "components";
-import {CalculatedMarket} from "@bond-protocol/contract-library";
+import { useEffect, useRef, useState } from "react";
+import { PROTOCOLS } from "@bond-protocol/bond-library";
+import { IssuerCard } from "components/molecules/IssuerCard";
+import { Input } from "@material-tailwind/react";
+import { alphabeticSort, numericSort } from "services/sort";
+import { Button } from "components";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 type IssuerListProps = {
   issuers: string[];
@@ -80,6 +80,7 @@ export const IssuerList = ({ marketsByIssuer, issuers }: IssuerListProps) => {
 
   return (
     <>
+      {/* hiding search for now as there'll be little partners
       <p className="flex justify-start">
         <Input onChange={updateSearch} />
       </p>
@@ -87,7 +88,8 @@ export const IssuerList = ({ marketsByIssuer, issuers }: IssuerListProps) => {
         <Button onClick={sortByName}>Sort by Name</Button>
         <Button onClick={sortByTbv}>Sort by TBV</Button>
       </p>
-      <div className="mt-8 grid grid-cols-7 gap-8 justify-items-center">
+        */}
+      <div className="mt-8 grid grid-cols-7 gap-8">
         {sortedIssuers.map((issuer) => {
           const protocol = PROTOCOLS.get(issuer);
           if (protocol.name.toLowerCase().indexOf(search) != -1)

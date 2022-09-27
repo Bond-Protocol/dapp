@@ -1,18 +1,25 @@
-import {FC, useEffect, useRef, useState} from "react";
-import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
-import {CalculatedMarket} from "@bond-protocol/contract-library";
-import {getProtocolByAddress} from "@bond-protocol/bond-library";
+import { FC, useEffect, useState } from "react";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
-import {ReactComponent as ArrowIcon} from "../../assets/icons/arrow-icon.svg";
-import {formatLongNumber, getBlockExplorer} from "../../utils";
-import {providers} from "services/owned-providers";
-import {usePurchaseBond, useTokenAllowance} from "hooks";
-import {Button, InfoLabel, Link} from "components/atoms";
-import {BondButton, InputCard, SummaryCard} from "components/molecules";
-import {BondPurchaseModal} from "./BondPurchaseModal";
-import {trim, calculateTrimDigits} from "@bond-protocol/contract-library/dist/core/utils";
-import {CHAINS} from "@bond-protocol/bond-library";
-import {useGasPrice} from "hooks/useGasPrice";
+import ArrowIcon from "../../assets/icons/arrow-icon.svg";
+import {
+  formatDecimalsForDisplay,
+  formatLongNumber,
+  getBlockExplorer,
+} from "../../utils";
+import { providers } from "services/owned-providers";
+import { usePurchaseBond, useTokenAllowance } from "hooks";
+import { Button, InfoLabel, Link } from "components/atoms";
+import { BondButton, InputCard, SummaryCard } from "components/molecules";
+import { BondPurchaseModal } from "./BondPurchaseModal";
+import {
+  trim,
+  calculateTrimDigits,
+} from "@bond-protocol/contract-library/dist/core/utils";
+import { CHAINS } from "@bond-protocol/bond-library";
+import { useGasPrice } from "hooks/useGasPrice";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -28,14 +35,14 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   const [amount, setAmount] = useState<string>("0");
   const [payout, setPayout] = useState<string>("0");
   const [networkFee, setNetworkFee] = useState("0");
-  const [networkFeeUsd, setNetworkFeeUsd] = useState("0")
+  const [networkFeeUsd, setNetworkFeeUsd] = useState("0");
   const [estimatedGas, setEstimatedGas] = useState(0);
   const [gasPrice, setGasPrice] = useState({
     gasPrice: "0",
     usdPrice: "0",
   });
 
-  const {getGasPrice} = useGasPrice();
+  const { getGasPrice } = useGasPrice();
   const { address, isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
   const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
@@ -85,22 +92,20 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
       );
 
       payout = formatLongNumber(payout, market.payoutToken.decimals);
-      setPayout(
-        trim(payout, calculateTrimDigits(payout)).toString()
-      );
+      setPayout(trim(payout, calculateTrimDigits(payout)).toString());
     };
 
     void updatePayout();
   }, [amount, getPayoutFor, market.marketId, market.auctioneer]);
 
   useEffect(() => {
-    estimate()?.then(result => {
+    estimate()?.then((result) => {
       setEstimatedGas(Number(result));
     });
 
-    getGasPrice(market.network).then(result => {
+    getGasPrice(market.network).then((result) => {
       setGasPrice(result);
-    })
+    });
   }, [payout]);
 
   const switchChain = () => {
@@ -129,7 +134,11 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     },
     {
       label: "Network Fee",
-      value: `${networkFee} ${CHAINS.get(market.network)? CHAINS.get(market.network)?.nativeCurrency.symbol : "ETH"} ($${networkFeeUsd})`,
+      value: `${networkFee} ${
+        CHAINS.get(market.network)
+          ? CHAINS.get(market.network)?.nativeCurrency.symbol
+          : "ETH"
+      } ($${networkFeeUsd})`,
       tooltip: "Soon™",
     },
     {
@@ -158,7 +167,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
         teller: market.teller,
       });
     } catch (e) {
-      console.log(e)
+      console.log(e);
     }
   };
 
@@ -195,14 +204,17 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
             <div className="font-faketion pt-[2px] font-bold">
               {props.topRightLabel}
             </div>
-            <ArrowIcon className="fill-white color-white my-auto rotate-90 ml-2 p-1" />
+            <img
+              src={ArrowIcon}
+              className="fill-white color-white my-auto rotate-90 ml-2 p-1"
+            />
           </div>
         </Button>
       </div>
-      <div className="flex w-[80vw] mt-12 gap-4">
+      <div className="flex w-[80vw] mt-12 gap-4 mb-6">
         <div className="w-1/2">
           {protocol?.description && <p>{protocol.description}</p>}
-          <div className="text-center p-[12%] border">📈 up omhly</div>
+          <div className="text-center p-[12%] border">📈</div>
         </div>
         <div className="w-1/2 flex flex-col">
           {props.infoLabel && (
@@ -211,7 +223,16 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
                 {vestingLabel}
               </InfoLabel>
               <InfoLabel label="Remaining Capacity" tooltip="tooltip popup">
-                {market.currentCapacity} {market.payoutToken.symbol}
+                <div
+                  className={`flex justify-center items-end ${
+                    market.currentCapacity > 1000000 ? "text-lg" : ""
+                  }`}
+                >
+                  {formatDecimalsForDisplay(market.currentCapacity)}
+                  <p className="text-xs pb-1 ml-1">
+                    {market.payoutToken.symbol}
+                  </p>
+                </div>
               </InfoLabel>
             </div>
           )}
@@ -231,7 +252,11 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
             onSwitchChain={switchChain}
             network={market.network}
             quoteTokenSymbol={market.quoteToken.symbol}
-            purchaseLink={market.quoteToken.purchaseLink ? market.quoteToken.purchaseLink : "https://app.sushi.com/swap"}
+            purchaseLink={
+              market.quoteToken.purchaseLink
+                ? market.quoteToken.purchaseLink
+                : "https://app.sushi.com/swap"
+            }
           >
             <Button className="w-full mt-4" onClick={onClickBond}>
               {!hasSufficientAllowance ? "APPROVE" : "BOND"}

@@ -1,5 +1,5 @@
-import {ProtocolLogo} from "components/atoms/ProtocolLogo";
-import {SocialRow} from "components/atoms/SocialRow";
+import { ProtocolLogo } from "components/atoms/ProtocolLogo";
+import { SocialRow } from "components/atoms/SocialRow";
 
 const socials = {
   medium: "https://medium.com/@Bond_Protocol",
@@ -11,7 +11,7 @@ const socials = {
 export const Footer = ({ className = "" }: { className?: string }) => {
   return (
     <div
-      className={`bg-brand-turtle-blue h-28 mt-4 relative overflow-hidden ${className}`}
+      className={`bg-brand-turtle-blue h-28 relative overflow-hidden ${className}`}
     >
       <div className="h-full w-full px-[5vw] py-5 h-28">
         <ProtocolLogo className="absolute my-6" />

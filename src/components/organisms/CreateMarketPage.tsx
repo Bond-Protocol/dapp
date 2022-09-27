@@ -1,16 +1,24 @@
 //@ts-nocheck
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {Controller, useForm, useWatch} from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {BOND_TYPE} from "@bond-protocol/contract-library";
+import { BOND_TYPE } from "@bond-protocol/contract-library";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {providers} from "services/owned-providers";
-import {ethers} from "ethers";
-import {Button, FlatSelect, Input, Select, TermPicker} from "components";
-import {useTokens} from "hooks";
-import {trimAsNumber, calculateTrimDigits} from "@bond-protocol/contract-library/dist/core/utils";
-import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
+import { providers } from "services/owned-providers";
+import { ethers } from "ethers";
+import { Button, FlatSelect, Input, Select, TermPicker } from "components";
+import { useTokens } from "hooks";
+import {
+  trimAsNumber,
+  calculateTrimDigits,
+} from "@bond-protocol/contract-library/dist/core/utils";
+import {
+  Accordion,
+  DatePicker,
+  SummaryCard,
+  TokenPickerCard,
+} from "components/molecules";
 
 const capacityTokenOptions = [
   { label: "PAYOUT", value: 0 },
@@ -186,21 +194,36 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [minExchangeRate]);
 
   useEffect(() => {
-    if (bondsPerWeek && marketExpiryDays && marketCapacity && payoutTokenSymbol && quoteTokenSymbol) {
-      const depositInterval = (bondsPerWeek / 7);
+    if (
+      bondsPerWeek &&
+      marketExpiryDays &&
+      marketCapacity &&
+      payoutTokenSymbol &&
+      quoteTokenSymbol
+    ) {
+      const depositInterval = bondsPerWeek / 7;
       const intervals = marketExpiryDays / depositInterval;
       const cadence = marketCapacity / intervals;
 
-      const token = capacityToken === 0
-        ? payoutTokenSymbol
-        : quoteTokenSymbol
+      const token = capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol;
 
-      const string = cadence.toString().concat(" ").concat(token).concat("/Day");
+      const string = cadence
+        .toString()
+        .concat(" ")
+        .concat(token)
+        .concat("/Day");
       setEstimatedBondCadence(string);
     } else {
       setEstimatedBondCadence("");
     }
-  }, [bondsPerWeek, marketExpiryDays, marketCapacity, capacityToken, payoutTokenSymbol, quoteTokenSymbol]);
+  }, [
+    bondsPerWeek,
+    marketExpiryDays,
+    marketCapacity,
+    capacityToken,
+    payoutTokenSymbol,
+    quoteTokenSymbol,
+  ]);
 
   useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
@@ -278,7 +301,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     { label: "Capacity", value: capacityString },
     { label: "Payout Token", value: payoutTokenSymbol },
     { label: "Quote Token", value: quoteTokenSymbol },
-    { label: "Estimated bond cadence", tooltip: "soon", value: estimatedBondCadence },
+    {
+      label: "Estimated bond cadence",
+      tooltip: "soon",
+      value: estimatedBondCadence,
+    },
     { label: "Initial exchange rate", value: exchangeRateString },
     { label: "Minimum exchange rate", value: minExchangeRateString },
     { label: "Conclusion", tooltip: "soon", value: marketExpiryString },
@@ -797,6 +824,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               )}
               <Accordion
                 className="mt-5 border-y border-white/15"
+                iconClassname="fill-white"
                 label="Advanced Setup"
               >
                 <div className="mt-4">

@@ -22,7 +22,7 @@ export const App: FC = () => {
       <PageContainer>
         <RouteMap />
       </PageContainer>
-      <Footer />
+      <Footer className="mt-4" />
     </div>
   );
 };

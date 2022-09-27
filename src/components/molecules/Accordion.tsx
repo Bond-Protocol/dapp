@@ -1,13 +1,14 @@
-import {FC, useEffect, useState} from "react";
-import {ReactComponent as ArrowIcon} from "../../assets/icons/arrow-icon.svg";
+import { FC, useEffect, useState } from "react";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
 
 export const Accordion: FC<{
   children: React.ReactNode;
   label: React.ReactNode;
   className?: string;
+  iconClassname?: string;
   onOpen?: () => any;
   onClose?: () => any;
-}> = ({ children, label, className, onOpen, onClose }) => {
+}> = ({ children, label, className, onOpen, onClose, iconClassname }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export const Accordion: FC<{
         <ArrowIcon
           className={`${
             open ? "" : "-rotate-180"
-          } fill-black my-auto hover:cursor-pointer transition-all`}
+          } my-auto hover:cursor-pointer transition-all ${iconClassname}`}
         />
       </div>
 

@@ -1,13 +1,22 @@
-import {useState} from "react";
-import {Modal} from "../molecules/Modal";
-import {TransactionHashDialog, TransactionHashDialogProps,} from "../modals/TransactionHashDialog";
-import {PurchaseSuccessDialog, PurchaseSuccessDialogProps,} from "../modals/PurchaseSuccessDialog";
-import {PurchaseConfirmDialog, PurchaseConfirmDialogProps,} from "components/modals";
-import {ContractTransaction} from "ethers";
-import {useProvider} from "wagmi";
-import {getBlockExplorer} from "../../utils/getBlockExplorer";
-import {TransactionErrorDialog} from "components/modals/TransactionErrorDialog";
-import {useNavigate} from "react-router-dom";
+import { useState } from "react";
+import { Modal } from "../molecules/Modal";
+import {
+  TransactionHashDialog,
+  TransactionHashDialogProps,
+} from "../modals/TransactionHashDialog";
+import {
+  PurchaseSuccessDialog,
+  PurchaseSuccessDialogProps,
+} from "../modals/PurchaseSuccessDialog";
+import {
+  PurchaseConfirmDialog,
+  PurchaseConfirmDialogProps,
+} from "components/modals";
+import { ContractTransaction } from "ethers";
+import { useProvider } from "wagmi";
+import { getBlockExplorer } from "../../utils/getBlockExplorer";
+import { TransactionErrorDialog } from "components/modals/TransactionErrorDialog";
+import { useNavigate } from "react-router-dom";
 
 export type PurchaseBondModalProps = {
   open: boolean;
@@ -39,20 +48,30 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
       setIndex(1);
       setHash(purchaseTx.hash);
       const result = await provider.waitForTransaction(purchaseTx.hash);
-      setIndex(2);
+      if (result.status === 0) {
+        setIndex(3);
+      } else {
+        setIndex(2);
+      }
     } catch (e) {
       setIndex(3);
       setTxError(e as Error);
     }
   };
 
-  const goToMarkets = () => {
-    navigate("/markets");
+  const closeModal = () => {
     props.closeModal();
+    setIndex(0);
   };
+
+  const goToMarkets = () => {
+    closeModal();
+    navigate("/markets");
+  };
+
   const goToBondDetails = () => {
+    closeModal();
     navigate("/mybonds");
-    props.closeModal();
   };
 
   const dialogs = [
@@ -82,7 +101,7 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
   ];
 
   return (
-    <Modal open={props.open} onClickClose={props.closeModal}>
+    <Modal open={props.open} onClickClose={closeModal}>
       {dialogs[index]}
     </Modal>
   );
