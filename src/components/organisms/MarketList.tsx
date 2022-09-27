@@ -158,25 +158,25 @@ export const MarketList: FC<MarketListProps> = ({
   };
 
   const quoteLogo = (market: CalculatedMarket) => {
-    if (market?.quoteToken.lpPair != undefined) {
-      const token0 = getToken(market?.quoteToken.lpPair.token0.id);
-      const token1 = getToken(market?.quoteToken.lpPair.token1.id);
+    if (market.quoteToken.lpPair != undefined) {
+      const token0 = getToken(market.quoteToken.lpPair.token0.id);
+      const token1 = getToken(market.quoteToken.lpPair.token1.id);
 
       return (
         <div className="flex flex-row">
           <img
             className="h-[32px] w-[32px]"
-            src={singleLogo(token0, market?.network)}
+            src={singleLogo(token0, market.network)}
           />
           <img
             className="h-[32px] w-[32px] flex self-end ml-[-8px]"
-            src={singleLogo(token1, market?.network)}
+            src={singleLogo(token1, market.network)}
           />
         </div>
       );
     } else {
-      const quote = singleLogo(market?.quoteToken, market?.network);
-      const payout = singleLogo(market?.payoutToken, market?.network);
+      const quote = singleLogo(market.quoteToken, market.network);
+      const payout = singleLogo(market.payoutToken, market.network);
 
       return (
         <div className="flex flex-row">
@@ -299,19 +299,19 @@ export const MarketList: FC<MarketListProps> = ({
 
               <TableCell className="flex flex-row py-6">
                 <CellLabel
-                  logo={singleLogo(market?.payoutToken, market?.network)}
-                  subContent={`(Market: ${market?.formattedFullPrice})`}
+                  logo={singleLogo(market.payoutToken, market.network)}
+                  subContent={`(Market: ${market.formattedFullPrice})`}
                 >
-                  {market?.formattedDiscountedPrice}
+                  {market.formattedDiscountedPrice}
                 </CellLabel>
               </TableCell>
 
               <TableCell
                 className={`${
-                  market?.discount > 0 ? "text-light-success" : "text-red-300"
+                  market.discount > 0 ? "text-light-success" : "text-red-300"
                 }`}
               >
-                {market?.discount}%
+                {market.discount}%
               </TableCell>
 
               <TableCell>
@@ -322,7 +322,7 @@ export const MarketList: FC<MarketListProps> = ({
                 </CellLabel>
               </TableCell>
 
-              <TableCell>{market?.formattedLongVesting}</TableCell>
+              <TableCell>{market.formattedLongVesting}</TableCell>
 
               <TableCell>
                 <p>{market.creationDate}</p>
