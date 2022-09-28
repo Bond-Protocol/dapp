@@ -1,12 +1,11 @@
 import type { FC } from "react";
-import type { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Route, Routes as Switch } from "react-router-dom";
 import { useMarkets } from "hooks";
 import {
   CreateMarket,
   MarketInsights,
-  Markets,
   MarketTabs,
+  MarketCreated,
 } from "components/pages";
 import {
   IssuerPage,
@@ -15,9 +14,11 @@ import {
   MyBondsList,
   MyMarkets,
 } from "components/organisms";
+import {useState} from "react";
 
 export const RouteMap: FC = () => {
   const { isMarketOwner } = useMarkets();
+  const [newMarket, setNewMarket] = useState<unknown>();
 
   return (
     <Switch>
@@ -27,7 +28,8 @@ export const RouteMap: FC = () => {
         <Route path="/my-bonds" element={<MyBondsList />} />
         {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}
       </Route>
-      <Route path="/create" element={<CreateMarket />} />
+      <Route path="/create" element={<CreateMarket onExecute={(marketData) => setNewMarket(marketData)} />} />
+      <Route path="/create/:hash" element={<MarketCreated marketData={newMarket} />} />
       <Route path="/issuers/:name" element={<IssuerPage />} />
       <Route path="/market/:id" element={<MarketInsights />} />
     </Switch>

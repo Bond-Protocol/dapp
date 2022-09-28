@@ -1,14 +1,15 @@
 import { Button, SummaryCard } from "components";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import {useAccount, useNetwork, useSigner, useSwitchNetwork, useWaitForTransaction} from "wagmi";
 import { providers } from "services/owned-providers";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { IssueMarketModal } from "./IssueMarketModal";
 import { useState } from "react";
 import { IssueMarketMultisigModal } from "components/organisms/IssueMarketMultisigModal";
+import {useNavigate} from "react-router-dom";
 
 export type IssueMarketPageProps = {
-  onExecute: (transaction: string) => void;
+  onExecute: (marketData: any) => void;
   onEdit: () => void;
   data: any;
 };
@@ -19,6 +20,8 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
   const { data: signer } = useSigner();
   const network = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
+  const navigate = useNavigate();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMultisigModalOpen, setIsMultisigModalOpen] = useState(false);
   const [txnBytecode, setTxnBytecode] = useState("");
@@ -35,10 +38,6 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
     { label: "Capacity", value: props.data.summaryData.capacity },
     { label: "Payout Token", value: props.data.summaryData.payoutToken },
     { label: "Quote Token", value: props.data.summaryData.quoteToken },
-    {
-      label: "Maximum Bond Size",
-      value: props.data.summaryData.maximumBondSize,
-    },
     {
       label: "Estimated Bond Cadence",
       value: props.data.summaryData.estimatedBondCadence,
@@ -58,6 +57,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
 
   const onConfirm = async () => {
     setIsModalOpen(false);
+
     const tx = await contractLibrary.createMarket(
       props.data.marketParams,
       props.data.bondType,
@@ -69,6 +69,9 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         gasLimit: 10000000,
       }
     );
+
+    navigate("/create/" + tx.hash);
+    props.onExecute(props.data);
   };
 
   return (
@@ -88,6 +91,10 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
             props.data.bondType
           ).auctioneer
         }
+        onAccept={(txHash: string) => {
+          navigate("/create/" + txHash);
+          props.onExecute(props.data);
+        }}
         onReject={() => setIsMultisigModalOpen(false)}
       />
       <div className="mx-[15vw]">

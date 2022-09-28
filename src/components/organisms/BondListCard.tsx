@@ -42,9 +42,10 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
   const {approve, balance, hasSufficientAllowance, hasSufficientBalance} =
     useTokenAllowance(
       market.quoteToken.address,
+      market.quoteToken.decimals,
       market.network,
       market.auctioneer,
-      amount
+      amount,
     );
   const network = useNetwork();
   const protocol = getProtocolByAddress(market.owner, market.network);
@@ -112,7 +113,7 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
   };
 
   const approveSpending = () =>
-    approve(market.quoteToken.address, market.auctioneer);
+    approve(market.quoteToken.address, market.quoteToken.decimals, market.auctioneer);
 
   const onClickBond = !hasSufficientAllowance
     ? approveSpending
@@ -140,7 +141,11 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
     {
       label: "Bond Contract",
       value: (
-        <Link href={blockExplorerUrl} className="w-fit">
+        <Link href={blockExplorerUrl + market.auctioneer}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-fit"
+        >
           View on {blockExplorerName}
         </Link>
       ),

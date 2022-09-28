@@ -6,6 +6,7 @@ import {trim, calculateTrimDigits} from "@bond-protocol/contract-library/dist/co
 
 export const useTokenAllowance = (
   tokenAddress: string,
+  tokenDecimals: number,
   networkId: string,
   auctioneer: string,
   amount: string
@@ -30,14 +31,15 @@ export const useTokenAllowance = (
       tokenAddress,
       address,
       auctioneer,
-      networkId
+      networkId,
+      tokenDecimals,
     );
 
     setAllowance(allowance.toString());
   }, [tokenAddress, address, auctioneer, networkId, getAllowance]);
 
-  const approve = async (tokenAddress: string, auctioneer: string) => {
-    const approved = await approveSpending(tokenAddress, auctioneer);
+  const approve = async (tokenAddress: string, tokenDecimals: number, auctioneer: string) => {
+    const approved = await approveSpending(tokenAddress, tokenDecimals, auctioneer);
     const confirmed = await approved.wait();
     console.log({ approved, confirmed });
     void fetchAndSetAllowance();

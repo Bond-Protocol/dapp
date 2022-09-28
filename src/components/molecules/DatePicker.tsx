@@ -34,7 +34,7 @@ export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
   };
 
   useEffect(() => {
-    if (props.defaultValue instanceof Date && !isNaN(props.defaultValue.valueOf())) {
+    if (!date && props.defaultValue instanceof Date && !isNaN(props.defaultValue.valueOf())) {
       setDate(props.defaultValue);
     }
   }, [props.defaultValue]);

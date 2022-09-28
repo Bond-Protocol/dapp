@@ -53,7 +53,7 @@ export const Modal = ({ title, ...props }: ModalProps) => {
       <ModalBackdrop>
         <div
           className={`${
-            props.large ? "w-[576px] pb-20" : "w-[405px]"
+            props.large ? "w-[656px] h-[704px] pb-20" : "w-[405px]"
           } border-transparent rounded-lg bg-brand-turtle-blue`}
         >
           <ModalHeader

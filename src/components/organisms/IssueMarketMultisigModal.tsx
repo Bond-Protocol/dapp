@@ -1,18 +1,27 @@
-import {Button, Modal, ModalProps, ModalTitle} from "..";
+import {Button, Input, Modal, ModalProps, ModalTitle} from "..";
 import {CreateMarketTermsDialog} from "components/modals";
 import {useState} from "react";
 import {CHAINS} from "@bond-protocol/bond-library";
 import copyIcon from "../../assets/icons/copy-icon.svg";
+import {useForm} from "react-hook-form";
+import * as React from "react";
+import * as contractLibrary from "@bond-protocol/contract-library";
 
 export type IssueMarketMultisigModalProps = Partial<ModalProps> & {
   txnBytecode: string;
   chain: string;
   address: string;
   onReject: () => void;
+  onAccept: (txHash: string) => void;
 };
 
 export const IssueMarketMultisigModal = (props: IssueMarketMultisigModalProps) => {
+  const {register, handleSubmit, formState: {errors}} = useForm();
   const [isAccepted, setIsAccepted] = useState(false);
+
+  const onSubmit = (data: any) => {
+    props.onAccept(data.transactionHash);
+  }
 
   return (
     <Modal open={!!props.open} large={true}>
@@ -57,20 +66,35 @@ export const IssueMarketMultisigModal = (props: IssueMarketMultisigModalProps) =
                 width={16}
               />
             </div>
-            <p className="break-words">
+            <p className="break-words text-xs">
               {props.txnBytecode}
             </p>
           </div>
 
           <div className="flex flex-col items-center justify-between mt-8 h-[40px] gap-2">
-            <Button
-              onClick={props.onReject}
-              variant="secondary"
-              long
-              className="w-full"
-            >
-              Close
-            </Button>
+            <div className="mx-[15vw]">
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Input
+                  {...register("transactionHash")}
+                  label="Transaction Hash"
+                  className="mb-2"
+                  required={true}
+                />
+
+                <Button type="submit" className="w-full font-fraktion mt-5">
+                  SUBMIT
+                </Button>
+              </form>
+
+              <Button
+                onClick={props.onReject}
+                variant="secondary"
+                long
+                className="w-full font-fraktion mt-5"
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </div>
       )

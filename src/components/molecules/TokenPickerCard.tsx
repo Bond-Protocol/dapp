@@ -7,11 +7,13 @@ import {Input} from "../atoms/Input";
 
 export type TokenPickerCardProps = {
   token?: Partial<Token & { logo?: string; link?: string; blockExplorerName?: string; }>;
+  verifiedToken?: Token;
   className?: string;
   checkboxLabel?: string;
   label?: string;
   subText?: string;
   placeholder?: string;
+  verified?: boolean;
   defaultValue?: { address: string, confirmed: boolean };
   onChange?: (token: {address: string, confirmed: boolean}) => void;
   errorMessage?: any;
@@ -39,9 +41,16 @@ export const TokenPickerCard = (
         subText={props.subText}
         onChange={(e) => setAddress(e.target.value)}
       />
+
       {props.errorMessage?.type === "required" &&
         <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
           {props.errorMessage.message}
+        </div>
+      }
+
+      {props.errorMessage?.type === "isAddress" &&
+        <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
+          Must be a valid address!
         </div>
       }
 
@@ -49,6 +58,8 @@ export const TokenPickerCard = (
         address={address}
         decimals={props.token?.decimals}
         symbol={props.token?.symbol}
+        verified={props.verified}
+        verifiedToken={props.verifiedToken}
         link={props.token?.link}
         blockExplorerName={props.token?.blockExplorerName}
         className="mt-5"
