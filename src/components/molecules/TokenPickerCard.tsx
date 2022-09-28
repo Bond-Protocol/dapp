@@ -48,6 +48,12 @@ export const TokenPickerCard = (
         </div>
       }
 
+      {props.errorMessage?.type === "isAddress" &&
+        <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
+          Must be a valid address!
+        </div>
+      }
+
       <TokenPriceCard
         address={address}
         decimals={props.token?.decimals}

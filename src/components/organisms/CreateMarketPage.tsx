@@ -8,7 +8,7 @@ import * as bondLibrary from "@bond-protocol/bond-library";
 import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
 import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
-import {Button, FlatSelect, Input, Select, TermPicker} from "components";
+import {Button, FlatSelect, Input, TermPicker} from "components";
 import {useTokens} from "hooks";
 import {calculateTrimDigits, trim, trimAsNumber} from "@bond-protocol/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
@@ -173,7 +173,15 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [marketOwnerAddress, selectedChain]);
 
   useEffect(() => {
-    setShowTokenWarning((payoutTokenAddress.address !== "" && libraryPayoutToken === null) || (quoteTokenAddress.address !== "" && libraryQuoteToken === null));
+    setShowTokenWarning((
+      payoutTokenAddress.address !== "" &&
+      ethers.utils.isAddress(payoutTokenAddress.address) &&
+      libraryPayoutToken === null
+    ) || (
+      quoteTokenAddress.address !== "" &&
+      ethers.utils.isAddress(quoteTokenAddress.address) &&
+      libraryQuoteToken === null
+    ));
   }, [payoutTokenAddress, libraryPayoutToken, quoteTokenAddress, libraryQuoteToken]);
 
   useEffect(() => {
@@ -522,6 +530,15 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="marketOwnerAddress"
                   control={control}
+                  rules={{
+                    required: "Required",
+                    validate: {
+                      isAddress: (value: {
+                        address: string;
+                        confirmed: boolean;
+                      }) => ethers.utils.isAddress(value.address),
+                    },
+                  }}
                   render={({field}) => (
                     <>
                       <Input
@@ -530,6 +547,18 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         className={"mb-2"}
                         subText="Enter the market owner address to check BondProtocol verification status"
                       />
+
+                      {errors.marketOwnerAddress?.type === "required" && (
+                        <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          {errors.marketOwnerAddress?.message}
+                        </div>
+                      )}
+
+                      {errors.marketOwnerAddress?.type === "isAddress" &&
+                        <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
+                          Must be a valid address!
+                        </div>
+                      }
                     </>
                   )}
                 />
@@ -566,7 +595,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <h2 className="text-center text-lg">Verified as {protocol.name}</h2>
 
                     <p>
-                      Thank you for verifying with BondProtocol. Your market will be available via the BondProtocol dapp!
+                      Thank you for verifying with BondProtocol. Your market will be available via the BondProtocol
+                      dapp!
                     </p>
                   </div>
                 }
@@ -580,14 +610,14 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     rules={{
                       required: "Required",
                       validate: {
-                        isConfirmed: (value: {
-                          address: string;
-                          confirmed: boolean;
-                        }) => value.confirmed === true,
                         isAddress: (value: {
                           address: string;
                           confirmed: boolean;
                         }) => ethers.utils.isAddress(value.address),
+                        isConfirmed: (value: {
+                          address: string;
+                          confirmed: boolean;
+                        }) => value.confirmed === true,
                       },
                     }}
                     render={({field}) => (
@@ -613,14 +643,14 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     rules={{
                       required: "Required",
                       validate: {
-                        isConfirmed: (value: {
-                          address: string;
-                          confirmed: boolean;
-                        }) => value.confirmed === true,
                         isAddress: (value: {
                           address: string;
                           confirmed: boolean;
                         }) => ethers.utils.isAddress(value.address),
+                        isConfirmed: (value: {
+                          address: string;
+                          confirmed: boolean;
+                        }) => value.confirmed === true,
                       },
                     }}
                     render={({field}) => (
