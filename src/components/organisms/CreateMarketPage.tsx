@@ -173,15 +173,18 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [marketOwnerAddress, selectedChain]);
 
   useEffect(() => {
-    setShowTokenWarning((
-      payoutTokenAddress.address !== "" &&
-      ethers.utils.isAddress(payoutTokenAddress.address) &&
-      libraryPayoutToken === null
-    ) || (
-      quoteTokenAddress.address !== "" &&
-      ethers.utils.isAddress(quoteTokenAddress.address) &&
-      libraryQuoteToken === null
-    ));
+    console.log({
+      pta: payoutTokenAddress.address,
+      payoutTokenAddress: ethers.utils.isAddress(payoutTokenAddress.address),
+      libraryPayoutToken,
+      qta: quoteTokenAddress.address,
+      quoteTokenAddress: ethers.utils.isAddress(quoteTokenAddress.address),
+      libraryQuoteToken
+    })
+    setShowTokenWarning(
+      (ethers.utils.isAddress(payoutTokenAddress.address) && libraryPayoutToken === null) ||
+      (ethers.utils.isAddress(quoteTokenAddress.address) && libraryQuoteToken === null)
+    );
   }, [payoutTokenAddress, libraryPayoutToken, quoteTokenAddress, libraryQuoteToken]);
 
   useEffect(() => {
