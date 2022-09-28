@@ -406,6 +406,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
       chain: selectedChain,
       formValues: getValues(),
+      payoutToken: payoutTokenInfo,
+      quoteToken: quoteTokenInfo,
     };
 
     props.onConfirm(params);
