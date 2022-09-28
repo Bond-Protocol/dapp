@@ -2,23 +2,34 @@ import type { FC } from "react";
 import type { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Route, Routes as Switch } from "react-router-dom";
 import { useMarkets } from "hooks";
-import { CreateMarket, MarketInsights, Markets } from "components/pages";
-import { IssuerPage } from "components/organisms";
+import {
+  CreateMarket,
+  MarketInsights,
+  Markets,
+  MarketTabs,
+} from "components/pages";
+import {
+  IssuerPage,
+  IssuerList,
+  MarketList,
+  MyBondsList,
+  MyMarkets,
+} from "components/organisms";
 
 export const RouteMap: FC = () => {
-  const { allMarkets } = useMarkets();
-  const markets: CalculatedMarket[] = Array.from(allMarkets.values());
+  const { isMarketOwner } = useMarkets();
 
   return (
     <Switch>
-      <Route path="/" element={<Markets markets={allMarkets} />} />
-      <Route path="/markets" element={<Markets markets={allMarkets} />} />
+      <Route path="/" element={<MarketTabs />}>
+        <Route index element={<MarketList />} />
+        <Route path="/issuers" element={<IssuerList />} />
+        <Route path="/my-bonds" element={<MyBondsList />} />
+        {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}
+      </Route>
       <Route path="/create" element={<CreateMarket />} />
       <Route path="/issuers/:name" element={<IssuerPage />} />
-      <Route
-        path="/market/:id"
-        element={<MarketInsights markets={markets} />}
-      />
+      <Route path="/market/:id" element={<MarketInsights />} />
     </Switch>
   );
 };

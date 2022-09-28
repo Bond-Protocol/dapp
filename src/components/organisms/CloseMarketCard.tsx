@@ -1,15 +1,8 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import * as React from "react";
 import { FC, useEffect, useState } from "react";
 import { Button } from "..";
-import {
-  useAccount,
-  useConnect,
-  useProvider,
-  useSigner,
-  useSwitchNetwork,
-} from "wagmi";
+import { useAccount, useConnect, useSigner, useSwitchNetwork } from "wagmi";
 import { providers } from "services/owned-providers";
 import { ContractTransaction } from "ethers";
 import { InjectedConnector } from "wagmi/connectors/injected";
