@@ -24,8 +24,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
   const [protocol, setProtocol] = useState<Protocol | null>(null);
   const [allowance, setAllowance] = useState(-1);
   const [allowanceTx, setAllowanceTx] = useState("");
-
-  const {data, isError, isLoading} = useWaitForTransaction(
+  const {data, isLoading} = useWaitForTransaction(
     {
       chainId: props.marketData.chainId,
       hash: hash,
@@ -86,11 +85,11 @@ export const MarketCreated = (props: MarketCreatedParams) => {
   }
 
   useEffect(() => {
-    if (data && !isError && !isLoading) {
+    if (data && !(data.status === 0) && !isLoading) {
       setProtocol(getProtocolByAddress(data.from, props.marketData.chain));
       loadAllowance(data?.from);
     }
-  }, [data, isError, isLoading, allowanceTx]);
+  }, [data, isLoading, allowanceTx]);
 
   const displayAllowance = () => {
     switch (allowance) {
@@ -179,7 +178,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           Waiting for tx confirmation...
         </div>
       }
-      {!isLoading && !isError &&
+      {!isLoading && data && !(data.status === 0) &&
         <div>
           <h1 className="text-5xl text-center font-faketion py-10 leading-normal">
             ALL SET!
@@ -235,17 +234,17 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           }
         </div>
       }
+      {data && data.status === 0 &&
+        <div className="text-center py-8 leading-normal">
+          Error!
+        </div>
+      }
       <Button className="w-full font-fraktion mt-5"
               onClick={
                 () => window.open(blockExplorerUrl + "/" + hash, "_blank", "noreferrer")
               }>
         {`View tx on ${blockExplorerName}`}
       </Button>
-      {isError &&
-        <div className="text-center py-8 leading-normal">
-          Error!
-        </div>
-      }
     </div>
   );
 };
