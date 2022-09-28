@@ -12,6 +12,7 @@ import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
 import {calculateTrimDigits, trim, trimAsNumber} from "@bond-protocol/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
+import {ChainPicker} from "components/atoms/ChainPicker";
 
 const capacityTokenOptions = [
   {label: "PAYOUT", value: 0},
@@ -48,11 +49,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
   const [protocol, setProtocol] = useState<Protocol | null>(null);
-
-  const chainOptions = bondLibrary.SUPPORTED_CHAINS.map((supportedChain) => ({
-    id: supportedChain.chainName,
-    label: supportedChain.displayName,
-  }));
 
   const payoutTokenSymbol = payoutTokenInfo?.symbol || "";
   const quoteTokenSymbol = quoteTokenInfo?.symbol || "";
@@ -507,26 +503,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               1 SET UP MARKET
             </p>
             <div className="pt-4">
-              <div className="flex gap-6 pt-5">
+              <div className="flex flex-col pt-5 w-full">
                 <Controller
                   name="chain"
                   control={control}
                   rules={{required: "Required"}}
                   render={({field}) => (
-                    <div className="w-full">
-                      <div>
-                        <p className="text-xs font-light mb-1">Chain</p>
-                      </div>
-                      <Select
-                        {...field}
-                        defaultValue={
-                          props.initialValues?.chain
-                            ? props.initialValues.chain
-                            : chainOptions[1].id
-                        }
-                        options={chainOptions}
-                      />
-                    </div>
+                    <ChainPicker
+                      {...field}
+                      label="Chain"
+                      defaultValue={props.initialValues?.chain}
+                    />
                   )}
                 />
               </div>
