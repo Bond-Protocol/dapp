@@ -60,7 +60,8 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       props.marketData.marketParams.payoutToken,
       from,
       auctioneer,
-      props.marketData.chain
+      props.marketData.chain,
+      18,
     ).then((result) => {
       setAllowance(Number(result));
     });

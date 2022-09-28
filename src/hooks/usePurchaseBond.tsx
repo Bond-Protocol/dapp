@@ -41,7 +41,8 @@ export const usePurchaseBond = () => {
     tokenAddress: string,
     address: string,
     auctioneer: string,
-    network: string
+    network: string,
+    decimals: number,
   ) => {
     const requestProvider = providers[network];
     const allowance: BigNumberish = await contractLibrary.getAllowance(
@@ -50,7 +51,7 @@ export const usePurchaseBond = () => {
       auctioneer,
       requestProvider
     );
-    return Number(allowance) / Math.pow(10, 18);
+    return Number(allowance) / Math.pow(10, decimals);
   };
 
   const getMaxBondableAmount = (balance: string, maxAmountAccepted: string) => {

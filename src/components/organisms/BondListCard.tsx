@@ -42,9 +42,10 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
   const {approve, balance, hasSufficientAllowance, hasSufficientBalance} =
     useTokenAllowance(
       market.quoteToken.address,
+      market.quoteToken.decimals,
       market.network,
       market.auctioneer,
-      amount
+      amount,
     );
   const network = useNetwork();
   const protocol = getProtocolByAddress(market.owner, market.network);

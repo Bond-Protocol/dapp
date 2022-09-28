@@ -6,6 +6,7 @@ import {trim, calculateTrimDigits} from "@bond-protocol/contract-library/dist/co
 
 export const useTokenAllowance = (
   tokenAddress: string,
+  tokenDecimals: number,
   networkId: string,
   auctioneer: string,
   amount: string
@@ -30,7 +31,8 @@ export const useTokenAllowance = (
       tokenAddress,
       address,
       auctioneer,
-      networkId
+      networkId,
+      tokenDecimals,
     );
 
     setAllowance(allowance.toString());
