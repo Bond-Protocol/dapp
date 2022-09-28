@@ -38,8 +38,8 @@ export const useTokenAllowance = (
     setAllowance(allowance.toString());
   }, [tokenAddress, address, auctioneer, networkId, getAllowance]);
 
-  const approve = async (tokenAddress: string, auctioneer: string) => {
-    const approved = await approveSpending(tokenAddress, auctioneer);
+  const approve = async (tokenAddress: string, tokenDecimals: number, auctioneer: string) => {
+    const approved = await approveSpending(tokenAddress, tokenDecimals, auctioneer);
     const confirmed = await approved.wait();
     console.log({ approved, confirmed });
     void fetchAndSetAllowance();

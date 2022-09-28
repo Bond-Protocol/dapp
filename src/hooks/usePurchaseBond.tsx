@@ -26,11 +26,13 @@ export const usePurchaseBond = () => {
 
   const approveSpending = async (
     tokenAddress: string,
+    tokenDecimals: number,
     auctioneer: string
   ): Promise<ContractTransaction> => {
     if (!signer) throw Error("Not connected");
     return contractLibrary.changeApproval(
       tokenAddress,
+      tokenDecimals,
       auctioneer,
       "1000000000",
       signer

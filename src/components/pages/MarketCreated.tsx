@@ -75,6 +75,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
     const tx = await contractLibrary.changeApproval(
       props.marketData.marketParams.payoutToken,
+      props.marketData.payoutToken.decimals,
       auctioneer,
       data.amount,
       // @ts-ignore

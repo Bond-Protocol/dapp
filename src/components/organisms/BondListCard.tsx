@@ -113,7 +113,7 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
   };
 
   const approveSpending = () =>
-    approve(market.quoteToken.address, market.auctioneer);
+    approve(market.quoteToken.address, market.quoteToken.decimals, market.auctioneer);
 
   const onClickBond = !hasSufficientAllowance
     ? approveSpending
