@@ -1,7 +1,7 @@
 import { ProtocolLogo } from "components/atoms/ProtocolLogo";
 import { SocialRow } from "components/atoms/SocialRow";
 
-const socials = {
+export const socials = {
   medium: "https://medium.com/@Bond_Protocol",
   discord: "https://discord.gg/bondprotocol",
   twitter: "https://twitter.com/bond_protocol",
