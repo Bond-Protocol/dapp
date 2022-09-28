@@ -9,7 +9,7 @@ import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
 import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
-import {calculateTrimDigits, trimAsNumber,} from "@bond-protocol/contract-library/dist/core/utils";
+import {calculateTrimDigits, trimAsNumber, trim} from "@bond-protocol/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
 
 const capacityTokenOptions = [
@@ -201,16 +201,14 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       payoutTokenSymbol &&
       quoteTokenSymbol
     ) {
+      const capacity = capacityToken === 0 ? marketCapacity : marketCapacity / exchangeRate;
       const depositInterval = bondsPerWeek / 7;
       const intervals = marketExpiryDays / depositInterval;
-      const cadence = marketCapacity / intervals;
+      const cadence = capacity / intervals;
 
-      const token = capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol;
-
-      const string = cadence
-        .toString()
+      const string = trim(cadence, calculateTrimDigits(cadence))
         .concat(" ")
-        .concat(token)
+        .concat(payoutTokenSymbol)
         .concat("/Day");
 
       setEstimatedBondCadence(string);
