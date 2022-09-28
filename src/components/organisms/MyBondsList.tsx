@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useMyBonds } from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
 import { ContractTransaction } from "ethers";
