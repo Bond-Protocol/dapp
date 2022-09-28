@@ -21,10 +21,28 @@ export const MarketCreated = (props: MarketCreatedParams) => {
   const {register, handleSubmit} = useForm();
   const {data: signer} = useSigner();
 
+  const [protocol, setProtocol] = useState<Protocol | null>(null);
+  const [allowance, setAllowance] = useState(-1);
+  const [allowanceTx, setAllowanceTx] = useState("");
+
   const {data, isError, isLoading} = useWaitForTransaction(
     {
       chainId: props.marketData.chainId,
       hash: hash,
+    });
+
+  const {
+    data: allowanceData,
+    isError: allowanceIsError,
+    isLoading: allowanceIsLoading,
+    refetch: allowanceRefetch
+  } = useWaitForTransaction(
+    {
+      chainId: props.marketData.chainId,
+      hash: allowanceTx,
+      onSuccess(allowanceData) {
+        loadAllowance(data?.from || "");
+      }
     });
 
   const {blockExplorerUrl: blockExplorerUrl, blockExplorerName: blockExplorerName} = getBlockExplorer(
@@ -32,59 +50,101 @@ export const MarketCreated = (props: MarketCreatedParams) => {
     "tx"
   );
 
-  const [protocol, setProtocol] = useState<Protocol | null>(null);
-  const [allowance, setAllowance] = useState(-1);
-
-  const onSubmit = (data: any) => {
+  const loadAllowance = (from: string) => {
     const auctioneer = contractLibrary.getAddressesForType(
       props.marketData.chain,
       props.marketData.bondType
     ).auctioneer;
 
-    const tx = contractLibrary.changeApproval(
+    getAllowance(
+      props.marketData.marketParams.payoutToken,
+      from,
+      auctioneer,
+      props.marketData.chain
+    ).then((result) => {
+      setAllowance(Number(result));
+    });
+  }
+
+  const onSubmit = async (data: any) => {
+    const auctioneer = contractLibrary.getAddressesForType(
+      props.marketData.chain,
+      props.marketData.bondType
+    ).auctioneer;
+
+    const tx = await contractLibrary.changeApproval(
       props.marketData.marketParams.payoutToken,
       auctioneer,
       data.amount,
       // @ts-ignore
       signer
     );
+
+    setAllowanceTx(tx.hash);
   }
 
   useEffect(() => {
     if (data && !isError && !isLoading) {
       setProtocol(getProtocolByAddress(data.from, props.marketData.chain));
-      const auctioneer = contractLibrary.getAddressesForType(
-        props.marketData.chain,
-        props.marketData.bondType
-      ).auctioneer;
-
-      getAllowance(
-        props.marketData.marketParams.payoutToken,
-        data.from,
-        auctioneer,
-        props.marketData.chain
-      ).then((result) => {
-        setAllowance(Number(result));
-      })
+      loadAllowance(data?.from);
     }
-  }, [data, isError, isLoading]);
+  }, [data, isError, isLoading, allowanceTx]);
 
   const displayAllowance = () => {
     switch (allowance) {
       case -1:
         return;
       case 0:
+        const teller = contractLibrary.getAddressesForType(
+          props.marketData.chain,
+          props.marketData.bondType
+        ).teller;
         return (
           <div>
+            {!allowanceIsLoading &&
+              <div>
+                <div className="text-center pb-8 leading-normal text-red-500">
+                  Allowance: {allowance} {props.marketData.summaryData.payoutToken}
+                </div>
+                <div className="text-center pb-8 leading-normal">
+                  In order to enable the market, you must allow the BondProtocol Teller contract ({teller}) to
+                  spend {props.marketData.summaryData.payoutToken} from the market owner address ({data?.from}).
+                </div>
+                <div className="text-center pb-8 leading-normal">
+                  Please ensure the allowance is sufficient for the expected bond size of your market.
+                </div>
+              </div>
+            }
+            {allowanceIsLoading &&
+              <div className="text-center pb-8 leading-normal">
+                Awaiting allowance tx...
+              </div>
+            }
             {allowanceForm()}
           </div>
         );
       default:
         return (
           <div>
-            <div className="text-center py-8 leading-normal">
-              Allowance: {allowance} {props.marketData.summaryData.payoutToken}
-            </div>
+            {!allowanceIsLoading &&
+              <div>
+                <div className="text-center pb-8 leading-normal text-green-500">
+                  Allowance: {allowance} {props.marketData.summaryData.payoutToken}
+                </div>
+                <div className="text-center pb-8 leading-normal">
+                  You have set an allowance for the BondProtocol Teller to
+                  spend {props.marketData.summaryData.payoutToken} from the owner wallet.
+                  <br/>
+                  Please confirm the amount is sufficient for the expected bond size of your market, if not, you may update it
+                  below.
+                </div>
+              </div>
+            }
+            {allowanceIsLoading &&
+              <div className="text-center pb-8 leading-normal">
+                Awaiting allowance tx...
+              </div>
+            }
             {allowanceForm()}
           </div>
         );
@@ -98,7 +158,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           <Input
             {...register("amount")}
             defaultValue={allowance > 0 ? allowance : 1000000000}
-            label="Allowance"
+            label={`Allowance in ${props.marketData.summaryData.payoutToken}`}
             className="mb-2"
           />
 
