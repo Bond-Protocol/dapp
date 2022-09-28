@@ -5,11 +5,12 @@ import {Controller, useForm, useWatch} from "react-hook-form";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import {BOND_TYPE} from "@bond-protocol/contract-library";
 import * as bondLibrary from "@bond-protocol/bond-library";
+import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
 import {providers} from "services/owned-providers";
 import {ethers} from "ethers";
 import {Button, FlatSelect, Input, Select, TermPicker} from "components";
 import {useTokens} from "hooks";
-import {calculateTrimDigits, trimAsNumber, trim} from "@bond-protocol/contract-library/dist/core/utils";
+import {calculateTrimDigits, trim, trimAsNumber} from "@bond-protocol/contract-library/dist/core/utils";
 import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
 
 const capacityTokenOptions = [
@@ -44,7 +45,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   const [libraryPayoutToken, setLibraryPayoutToken] = useState<bondLibrary.Token | null>(null);
   const [libraryQuoteToken, setLibraryQuoteToken] = useState<bondLibrary.Token | null>(null);
+  const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
+  const [protocol, setProtocol] = useState<Protocol | null>(null);
 
   const chainOptions = bondLibrary.SUPPORTED_CHAINS.map((supportedChain) => ({
     id: supportedChain.chainName,
@@ -76,6 +79,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const selectedChain = useWatch({
     control,
     name: "chain",
+  });
+
+  const marketOwnerAddress = useWatch({
+    control,
+    name: "marketOwnerAddress",
   });
 
   const payoutTokenAddress = useWatch({
@@ -156,6 +164,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     name: "vestingType",
     defaultValue: props.initialValues?.vestingType || 0,
   });
+
+  useEffect(() => {
+    if (marketOwnerAddress) {
+      const protocol = getProtocolByAddress(marketOwnerAddress, selectedChain);
+      setProtocol(protocol);
+      setShowOwnerWarning(protocol === null);
+    } else {
+      setProtocol(null);
+      setShowOwnerWarning(false);
+    }
+  }, [marketOwnerAddress, selectedChain]);
 
   useEffect(() => {
     setShowTokenWarning((payoutTokenAddress.address !== "" && libraryPayoutToken === null) || (quoteTokenAddress.address !== "" && libraryQuoteToken === null));
@@ -510,6 +529,60 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     </div>
                   )}
                 />
+              </div>
+
+              <div className="flex flex-col pt-5 w-full">
+                <Controller
+                  name="marketOwnerAddress"
+                  control={control}
+                  render={({field}) => (
+                    <>
+                      <Input
+                        {...field}
+                        label="Market Owner Address"
+                        className={"mb-2"}
+                        subText="Enter the market owner address to check BondProtocol verification status"
+                      />
+                    </>
+                  )}
+                />
+
+                {showOwnerWarning &&
+                  <div className="flex flex-col gap-6 pt-5 w-full text-sm text-red-500">
+                    <h2 className="text-center text-lg">WARNING</h2>
+
+                    <p>
+                      This address does not match any of our verified protocols on this chain.
+                    </p>
+
+                    <p>
+                      You can still create a market which will be active on the contract level. However, it will *NOT*
+                      appear on the BondProtocol dapp's market list unless your protocol is verified. You will need your
+                      own
+                      UI, or another way for users to interact with the bond contract, for example via Etherscan.
+                    </p>
+
+                    <p>
+                      If you would like to verify your protocol, we strongly recommend doing it *BEFORE* creating the
+                      market, as the market will be active immediately upon completion of the transaction. Please see
+                      our documents for details of the verification process.
+                    </p>
+
+                    <p>
+                      NOTE: If you have already verified with a different address, or with this address but on a
+                      different chain, you can add this address/chain combination to your existing verification data.
+                    </p>
+                  </div>
+                }
+                {protocol &&
+                  <div className="flex flex-col gap-6 pt-5 w-full text-sm text-green-500">
+                    <h2 className="text-center text-lg">Verified as {protocol.name}</h2>
+
+                    <p>
+                      Thank you for verifying with BondProtocol. Your market will be available via the BondProtocol dapp!
+                    </p>
+                  </div>
+                }
               </div>
 
               <div className="flex gap-6">
