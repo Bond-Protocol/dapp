@@ -7,9 +7,9 @@ import {
 } from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { InfoLabel, Link } from "components/atoms";
+import { InfoLabel, Link, Button } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -18,6 +18,7 @@ const placeholderProtocol = {
 };
 
 export const IssuerPage: FC = () => {
+  const navigate = useNavigate();
   const { marketsByIssuer } = useMarkets();
   const { name } = useParams();
 
@@ -47,7 +48,12 @@ export const IssuerPage: FC = () => {
   }, [markets]);
 
   return (
-    <>
+    <div className="pb-12">
+      <div className="flex mt-6">
+        <Button variant="ghost" onClick={() => navigate(-1)}>
+          Back to list
+        </Button>
+      </div>
       <div className="flex flex-col content-center mt-10">
         <div className="flex flex-row justify-center items-center">
           <img className="h-[64px] w-[64px] mr-4" src={logo()} />
@@ -82,6 +88,6 @@ export const IssuerPage: FC = () => {
 
       {/*@ts-ignore for now pls*/}
       {markets && <MarketList markets={markets} allowManagement={false} />}
-    </>
+    </div>
   );
 };

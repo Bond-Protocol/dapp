@@ -2,17 +2,17 @@
 import { useEffect, useRef, useState } from "react";
 import { PROTOCOLS } from "@bond-protocol/bond-library";
 import { IssuerCard } from "components/molecules/IssuerCard";
-import { Input } from "@material-tailwind/react";
 import { alphabeticSort, numericSort } from "services/sort";
-import { Button } from "components";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { useMarkets } from "hooks";
 
 type IssuerListProps = {
   issuers: string[];
   marketsByIssuer: Map<string, CalculatedMarket>;
 };
 
-export const IssuerList = ({ marketsByIssuer, issuers }: IssuerListProps) => {
+export const IssuerList = () => {
+  const { marketsByIssuer, issuers } = useMarkets();
   const [search, setSearch] = useState("");
   const [sortedIssuers, setSortedIssuers] = useState(issuers);
   const [currentSort, setCurrentSort] = useState({
