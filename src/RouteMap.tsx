@@ -1,28 +1,37 @@
 import type { FC } from "react";
-import type { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Route, Routes as Switch } from "react-router-dom";
 import { useMarkets } from "hooks";
-import { CreateMarket, MarketInsights, Markets } from "components/pages";
-import { IssuerPage } from "components/organisms";
-import { MarketCreated } from "components/pages/MarketCreated";
+import {
+  CreateMarket,
+  MarketInsights,
+  MarketTabs,
+  MarketCreated,
+} from "components/pages";
+import {
+  IssuerPage,
+  IssuerList,
+  MarketList,
+  MyBondsList,
+  MyMarkets,
+} from "components/organisms";
 import {useState} from "react";
 
 export const RouteMap: FC = () => {
-  const { allMarkets } = useMarkets();
-  const markets: CalculatedMarket[] = Array.from(allMarkets.values());
+  const { isMarketOwner } = useMarkets();
   const [newMarket, setNewMarket] = useState<unknown>();
 
   return (
     <Switch>
-      <Route path="/" element={<Markets markets={allMarkets} />} />
-      <Route path="/markets" element={<Markets markets={allMarkets} />} />
+      <Route path="/" element={<MarketTabs />}>
+        <Route index element={<MarketList />} />
+        <Route path="/issuers" element={<IssuerList />} />
+        <Route path="/my-bonds" element={<MyBondsList />} />
+        {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}
+      </Route>
       <Route path="/create" element={<CreateMarket onExecute={(marketData) => setNewMarket(marketData)} />} />
-      <Route path="/issuers/:name" element={<IssuerPage />} />
-      <Route
-        path="/market/:id"
-        element={<MarketInsights markets={markets} />}
-      />
       <Route path="/create/:hash" element={<MarketCreated marketData={newMarket} />} />
+      <Route path="/issuers/:name" element={<IssuerPage />} />
+      <Route path="/market/:id" element={<MarketInsights />} />
     </Switch>
   );
 };

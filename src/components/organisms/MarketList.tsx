@@ -13,16 +13,19 @@ import { CellLabel } from "components/atoms/CellLabel";
 import { BondListCard } from "./BondListCard";
 
 type MarketListProps = {
-  markets: Map<string, CalculatedMarket>;
+  markets?: Map<string, CalculatedMarket>;
   allowManagement?: boolean;
 };
 
 export const MarketList: FC<MarketListProps> = ({
-  markets,
   allowManagement,
+  ...props
 }) => {
-  const { refetchAllMarkets, refetchMyMarkets, refetchOne } = useMarkets();
   const navigate = useNavigate();
+  const { refetchAllMarkets, refetchMyMarkets, refetchOne, allMarkets } =
+    useMarkets();
+
+  const markets = props.markets || allMarkets;
 
   const [sortedMarkets, setSortedMarkets] = useState<CalculatedMarket[]>(
     Array.from(markets.values())

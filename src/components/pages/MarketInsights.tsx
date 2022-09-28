@@ -6,15 +6,18 @@ import { usePurchaseBond } from "hooks/usePurchaseBond";
 import { formatLongNumber, getBlockExplorer, trimAddress } from "../../utils";
 import { InfoLabel, Link, TableCell, TableHeading } from "components/atoms";
 import receiptIcon from "../../assets/icons/receipt-icon.svg";
+import { useMarkets } from "context/market-context";
 
 export type MarketInsightsPageProps = {
   markets: CalculatedMarket[];
 };
 
-export const MarketInsights = (props: MarketInsightsPageProps) => {
+export const MarketInsights = () => {
+  const { allMarkets } = useMarkets();
   const { id } = useParams();
   const navigate = useNavigate();
-  const market = props.markets.find(({ marketId }) => marketId === Number(id));
+  const markets = Array.from(allMarkets.values());
+  const market = markets.find(({ marketId }) => marketId === Number(id));
   const { getPayoutFor } = usePurchaseBond();
   const [maxPayout, setMaxPayout] = useState("0");
 
@@ -37,7 +40,11 @@ export const MarketInsights = (props: MarketInsightsPageProps) => {
         market.marketId,
         market.auctioneer
       );
-      setMaxPayout(Math.trunc(formatLongNumber(payout, market.quoteToken.decimals)).toString());
+      setMaxPayout(
+        Math.trunc(
+          formatLongNumber(payout, market.quoteToken.decimals)
+        ).toString()
+      );
     };
 
     loadPayoutFor().catch((e) => {

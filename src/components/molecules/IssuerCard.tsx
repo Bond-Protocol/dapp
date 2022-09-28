@@ -43,7 +43,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
 
   return (
     <div
-      className="border rounded-lg border-transparent bg-white/[.05] w-min w-[137px] max-w-[137px] p-5 flex flex-col items-center overflow-hidden hover:cursor-pointer"
+      className="border rounded-lg border-transparent bg-white/[.05] w-min w-[137px] max-w-[137px] p-5 flex flex-col items-center overflow-hidden hover:cursor-pointer hover:bg-white/10"
       onClick={() => handleClick(event, issuer.id)}
     >
       <img className="h-[64px] w-[64px]" src={logo()} />

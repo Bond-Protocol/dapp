@@ -1,11 +1,11 @@
-import {Children, FC, useState} from "react";
+import { Children, FC, useState } from "react";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import TabsListUnstyled from "@mui/base/TabsListUnstyled";
 import TabUnstyled from "@mui/base/TabUnstyled";
-import {TabPanelUnstyled} from "@mui/base";
+import { TabPanelUnstyled } from "@mui/base";
 
 type TabProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   value?: number;
   largeTab?: boolean;
   tabs: Array<{

@@ -1,7 +1,7 @@
 import { ProtocolLogo } from "components/atoms/ProtocolLogo";
 import { SocialRow } from "components/atoms/SocialRow";
 
-const socials = {
+export const socials = {
   medium: "https://medium.com/@Bond_Protocol",
   discord: "https://discord.gg/bondprotocol",
   twitter: "https://twitter.com/bond_protocol",
@@ -17,13 +17,6 @@ export const Footer = ({ className = "" }: { className?: string }) => {
         <ProtocolLogo className="absolute my-6" />
         <div className="h-full flex flex-col justify-evenly my-auto">
           <SocialRow {...socials} />
-          <a
-            href="/information"
-            target="_blank"
-            className="text-center underline font-faketion uppercase tracking-wider"
-          >
-            More Information
-          </a>
         </div>
       </div>
     </div>

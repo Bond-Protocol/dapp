@@ -27,7 +27,7 @@ export const InformationArea = (props: InformationAreaProps) => {
 
   return (
     <div
-      className={`inset-0 fixed h-[100vh] bg-turtle-blue transition-transform z-10 ${
+      className={`inset-0 fixed h-[100vh] duration-500 bg-turtle-blue transition-transform z-10 ${
         props.open ? "translate-x-0" : "translate-x-full"
       }`}
     >
