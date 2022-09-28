@@ -71,7 +71,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
     );
 
     navigate("/create/" + tx.hash);
-    props.onExecute(props.data)
+    props.onExecute(props.data);
   };
 
   return (
@@ -91,6 +91,10 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
             props.data.bondType
           ).auctioneer
         }
+        onAccept={(txHash: string) => {
+          navigate("/create/" + txHash);
+          props.onExecute(props.data);
+        }}
         onReject={() => setIsMultisigModalOpen(false)}
       />
       <div className="mx-[15vw]">

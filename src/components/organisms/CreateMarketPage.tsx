@@ -173,14 +173,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [marketOwnerAddress, selectedChain]);
 
   useEffect(() => {
-    console.log({
-      pta: payoutTokenAddress.address,
-      payoutTokenAddress: ethers.utils.isAddress(payoutTokenAddress.address),
-      libraryPayoutToken,
-      qta: quoteTokenAddress.address,
-      quoteTokenAddress: ethers.utils.isAddress(quoteTokenAddress.address),
-      libraryQuoteToken
-    })
     setShowTokenWarning(
       (ethers.utils.isAddress(payoutTokenAddress.address) && libraryPayoutToken === null) ||
       (ethers.utils.isAddress(quoteTokenAddress.address) && libraryQuoteToken === null)
@@ -539,7 +531,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       isAddress: (value: {
                         address: string;
                         confirmed: boolean;
-                      }) => ethers.utils.isAddress(value.address),
+                      }) => ethers.utils.isAddress(value),
                     },
                   }}
                   render={({field}) => (

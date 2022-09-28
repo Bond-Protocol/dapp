@@ -31,10 +31,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
     });
 
   const {
-    data: allowanceData,
-    isError: allowanceIsError,
     isLoading: allowanceIsLoading,
-    refetch: allowanceRefetch
   } = useWaitForTransaction(
     {
       chainId: props.marketData.chainId,
@@ -194,6 +191,10 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 <h2 className="text-xl text-center py-4 leading-normal">
                   Owner verified as {protocol.name}!
                 </h2>
+
+                <p className="text-center py-8 leading-normal">
+                  ({data?.from})
+                </p>
 
                 <p className="text-center py-8 leading-normal">
                   Your market is live on the contract, it should appear in our market list as soon as it has been
