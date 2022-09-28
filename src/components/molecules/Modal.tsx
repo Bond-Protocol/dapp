@@ -41,6 +41,18 @@ const ModalHeader = (props: ModalHeaderProps) => {
   );
 };
 
+const ModalBackground = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="border-transparent rounded-lg bg-light-primary-900">
+      <div id="grad-1" className="border-transparent rounded-lg">
+        <div id="grad-2" className="border-transparent rounded-lg">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const Modal = ({ title, ...props }: ModalProps) => {
   return (
     <ModalUnstyled
@@ -51,17 +63,15 @@ export const Modal = ({ title, ...props }: ModalProps) => {
       open={props.open}
     >
       <ModalBackdrop>
-        <div
-          className={`${
-            props.large ? "w-[656px] h-[704px] pb-20" : "w-[405px]"
-          } border-transparent rounded-lg bg-brand-turtle-blue`}
-        >
-          <ModalHeader
-            topLeftContent={props.topLeftContent}
-            onClickClose={props.onClickClose}
-          />
-          <div className="px-5 pb-8 transition-all">{props.children}</div>
-        </div>
+        <ModalBackground>
+          <div className={`${props.large ? "w-[576px] pb-20" : "w-[405px]"} `}>
+            <ModalHeader
+              topLeftContent={props.topLeftContent}
+              onClickClose={props.onClickClose}
+            />
+            <div className="px-5 pb-8 transition-all">{props.children}</div>
+          </div>
+        </ModalBackground>
       </ModalBackdrop>
     </ModalUnstyled>
   );

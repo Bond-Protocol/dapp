@@ -1,5 +1,5 @@
-import {Button} from "../atoms/Button";
-import {ModalTitle} from "../atoms/ModalTitle";
+import { Button } from "../atoms/Button";
+import { ModalTitle } from "../atoms/ModalTitle";
 
 const tcLink = (
   <a href="/tc" target="_blank" className="text-blue-500">

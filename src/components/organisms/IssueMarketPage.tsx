@@ -1,12 +1,18 @@
 import { Button, SummaryCard } from "components";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import {useAccount, useNetwork, useSigner, useSwitchNetwork, useWaitForTransaction} from "wagmi";
+import {
+  useAccount,
+  useNetwork,
+  useSigner,
+  useSwitchNetwork,
+  useWaitForTransaction,
+} from "wagmi";
 import { providers } from "services/owned-providers";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { IssueMarketModal } from "./IssueMarketModal";
 import { useState } from "react";
 import { IssueMarketMultisigModal } from "components/organisms/IssueMarketMultisigModal";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export type IssueMarketPageProps = {
   onExecute: (marketData: any) => void;
@@ -69,7 +75,6 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         gasLimit: 10000000,
       }
     );
-
     navigate("/create/" + tx.hash);
     props.onExecute(props.data);
   };
