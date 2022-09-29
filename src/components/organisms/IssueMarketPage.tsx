@@ -1,12 +1,6 @@
 import { Button, SummaryCard } from "components";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import {
-  useAccount,
-  useNetwork,
-  useSigner,
-  useSwitchNetwork,
-  useWaitForTransaction,
-} from "wagmi";
+import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { providers } from "services/owned-providers";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { IssueMarketModal } from "./IssueMarketModal";

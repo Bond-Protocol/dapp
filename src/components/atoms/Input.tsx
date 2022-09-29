@@ -15,6 +15,7 @@ export const Input = forwardRef(function Input(
       {props.label && <p className="text-xs font-light mb-1">{props.label}</p>}
       <InputUnstyled
         {...props}
+        autoComplete="disabled-for-now-bcuz-chrome-sux"
         ref={ref}
         componentsProps={{
           root: {
