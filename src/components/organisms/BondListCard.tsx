@@ -5,13 +5,13 @@ import {CalculatedMarket} from "@bond-protocol/contract-library";
 import {CHAINS, getProtocolByAddress} from "@bond-protocol/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
 import ArrowIcon from "../../assets/icons/arrow-icon.svg";
-import {formatDecimalsForDisplay, formatLongNumber, getBlockExplorer,} from "../../utils";
+import {formatLongNumber, getBlockExplorer} from "../../utils";
 import {providers} from "services/owned-providers";
 import {usePurchaseBond, useTokenAllowance} from "hooks";
 import {Button, InfoLabel, Link} from "components/atoms";
 import {BondButton, InputCard, SummaryCard} from "components/molecules";
 import {BondPurchaseModal} from "./BondPurchaseModal";
-import {calculateTrimDigits, trim,} from "@bond-protocol/contract-library/dist/core/utils";
+import {calculateTrimDigits, trim} from "@bond-protocol/contract-library/dist/core/utils";
 import {useGasPrice} from "hooks/useGasPrice";
 
 export type BondListCardProps = {
@@ -224,16 +224,14 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
                 {vestingLabel}
               </InfoLabel>
               <InfoLabel label="Remaining Capacity" tooltip="tooltip popup">
-                <div
+                <p
                   className={`flex justify-center items-end ${
-                    market.currentCapacity > 1000000 ? "text-lg" : ""
+                    trim(market.currentCapacity, calculateTrimDigits(market.currentCapacity)).length > 7 ? "text-xs" : ""
                   }`}
                 >
-                  {formatDecimalsForDisplay(market.currentCapacity)}
-                  <p className="text-xs pb-1 ml-1">
-                    {market.payoutToken.symbol}
-                  </p>
-                </div>
+                  {trim(market.currentCapacity, calculateTrimDigits(market.currentCapacity))}
+                  &nbsp;{market.payoutToken.symbol}
+                </p>
               </InfoLabel>
             </div>
           )}
