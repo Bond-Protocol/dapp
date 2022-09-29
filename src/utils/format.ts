@@ -14,14 +14,7 @@ export const formatVestingTerm = (market: CalculatedMarket) => {
     : market.formattedShortVesting;
 };
 
-export const formatDecimalsForDisplay = (num: number, decimalsToKeep = 2) => {
-  const isRound =
-    Math.trunc(num).toFixed(decimalsToKeep) === num.toFixed(decimalsToKeep);
-  return isRound ? Math.trunc(num) : num.toFixed(decimalsToKeep);
-};
-
 export default {
   formatLongNumber,
   formatVestingTerm,
-  formatDecimalsForDisplay,
 };
