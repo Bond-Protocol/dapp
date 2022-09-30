@@ -204,12 +204,14 @@ export const useTokens = () => {
       const allTokens = mainnetData.tokens;
       setMainnetTokens(allTokens);
     }
+  }, [mainnetData]);
 
+  useEffect(() => {
     if (goerliData && goerliData.tokens) {
       const allTokens = goerliData.tokens;
       setTestnetTokens(allTokens);
     }
-  }, [mainnetData, goerliData]);
+  }, [goerliData]);
 
   /*
   If the user switches between mainnet/testnet mode, update selectedTokens.
