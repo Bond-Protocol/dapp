@@ -51,15 +51,6 @@ export const PurchaseConfirmDialog = ({
           {"Confirm Bond"}
         </Button>
       </div>
-
-      <div className="flex justify-center my-5">
-        <Link
-          href={`https://etherscan.io/${contract}`}
-          className="fill-light-secondary uppercase font-faketion text-xs text-light-secondary hover:fill-white hover:text-white"
-        >
-          {"View Bond Contract"}
-        </Link>
-      </div>
     </div>
   );
 };
