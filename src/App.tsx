@@ -19,7 +19,6 @@ export const App: FC = () => {
     <Providers>
       <div className="relative min-h-[100vh] overflow-x-hidden">
         <AppBackground />
-        <RequireTermsAndConditions />
         <InformationArea
           open={showInfoArea}
           onClose={() => setShowInfoArea(false)}

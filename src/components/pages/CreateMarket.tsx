@@ -1,6 +1,6 @@
-import {useState} from "react";
-import {Tabs} from "..";
-import {CreateMarketPage, IssueMarketPage} from "components/organisms";
+import { useState } from "react";
+import { Tabs } from "..";
+import { CreateMarketPage, IssueMarketPage } from "components/organisms";
 
 export type CreateMarketPageProps = {
   onExecute: (marketData: any) => void;

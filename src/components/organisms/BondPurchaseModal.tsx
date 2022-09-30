@@ -71,7 +71,7 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
 
   const goToBondDetails = () => {
     closeModal();
-    navigate("/mybonds");
+    navigate("/my-bonds");
   };
 
   const dialogs = [

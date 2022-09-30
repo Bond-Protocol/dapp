@@ -1,27 +1,36 @@
 //@ts-nocheck
 import * as React from "react";
-import {useEffect, useState} from "react";
-import {Controller, useForm, useWatch} from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {BOND_TYPE} from "@bond-protocol/contract-library";
+import { BOND_TYPE } from "@bond-protocol/contract-library";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
-import {providers} from "services/owned-providers";
-import {ethers} from "ethers";
-import {Button, FlatSelect, Input, TermPicker} from "components";
-import {useTokens} from "hooks";
-import {calculateTrimDigits, trim, trimAsNumber} from "@bond-protocol/contract-library/dist/core/utils";
-import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
-import {ChainPicker} from "components/atoms/ChainPicker";
+import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
+import { providers } from "services/owned-providers";
+import { ethers } from "ethers";
+import { Button, FlatSelect, Input, TermPicker } from "components";
+import { useTokens } from "hooks";
+import {
+  calculateTrimDigits,
+  trim,
+  trimAsNumber,
+} from "@bond-protocol/contract-library/dist/core/utils";
+import {
+  Accordion,
+  DatePicker,
+  SummaryCard,
+  TokenPickerCard,
+} from "components/molecules";
+import { ChainPicker } from "components/atoms/ChainPicker";
 
 const capacityTokenOptions = [
-  {label: "PAYOUT", value: 0},
-  {label: "QUOTE", value: 1},
+  { label: "PAYOUT", value: 0 },
+  { label: "QUOTE", value: 1 },
 ];
 
 const vestingOptions = [
-  {label: "FIXED EXPIRY", value: 0},
-  {label: "FIXED TERM", value: 1},
+  { label: "FIXED EXPIRY", value: 0 },
+  { label: "FIXED TERM", value: 1 },
 ];
 
 const formDefaults = {
@@ -38,14 +47,16 @@ export type CreateMarketPageProps = {
 };
 
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
-  const {getPrice, getTokenDetails} = useTokens();
+  const { getPrice, getTokenDetails } = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
   const [quoteTokenInfo, setQuoteTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
 
-  const [libraryPayoutToken, setLibraryPayoutToken] = useState<bondLibrary.Token | null>(null);
-  const [libraryQuoteToken, setLibraryQuoteToken] = useState<bondLibrary.Token | null>(null);
+  const [libraryPayoutToken, setLibraryPayoutToken] =
+    useState<bondLibrary.Token | null>(null);
+  const [libraryQuoteToken, setLibraryQuoteToken] =
+    useState<bondLibrary.Token | null>(null);
   const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
   const [protocol, setProtocol] = useState<Protocol | null>(null);
@@ -67,7 +78,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     control,
     handleSubmit,
     getValues,
-    formState: {errors, isValid, isSubmitted},
+    formState: { errors, isValid, isSubmitted },
   } = useForm({
     defaultValues: props.initialValues ? props.initialValues : formDefaults,
   });
@@ -174,10 +185,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   useEffect(() => {
     setShowTokenWarning(
-      (ethers.utils.isAddress(payoutTokenAddress.address) && libraryPayoutToken === null) ||
-      (ethers.utils.isAddress(quoteTokenAddress.address) && libraryQuoteToken === null)
+      (ethers.utils.isAddress(payoutTokenAddress.address) &&
+        libraryPayoutToken === null) ||
+        (ethers.utils.isAddress(quoteTokenAddress.address) &&
+          libraryQuoteToken === null)
     );
-  }, [payoutTokenAddress, libraryPayoutToken, quoteTokenAddress, libraryQuoteToken]);
+  }, [
+    payoutTokenAddress,
+    libraryPayoutToken,
+    quoteTokenAddress,
+    libraryQuoteToken,
+  ]);
 
   useEffect(() => {
     if (marketCapacity === undefined) {
@@ -219,7 +237,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       payoutTokenSymbol &&
       quoteTokenSymbol
     ) {
-      const capacity = capacityToken === 0 ? marketCapacity : marketCapacity / exchangeRate;
+      const capacity =
+        capacityToken === 0 ? marketCapacity : marketCapacity / exchangeRate;
       const depositInterval = bondsPerWeek / 7;
       const intervals = marketExpiryDays / depositInterval;
       const cadence = capacity / intervals;
@@ -315,16 +334,20 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [marketExpiry]);
 
   const summaryFields = [
-    {label: "Capacity", value: capacityString},
-    {label: "Payout Token", value: payoutTokenSymbol},
-    {label: "Quote Token", value: quoteTokenSymbol},
-    {label: "Estimated bond cadence", tooltip: "soon", value: estimatedBondCadence},
-    {label: "Initial exchange rate", value: exchangeRateString},
-    {label: "Minimum exchange rate", value: minExchangeRateString},
-    {label: "Conclusion", tooltip: "soon", value: marketExpiryString},
-    {label: "Vesting", tooltip: "soon", value: vestingString},
-    {label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}`},
-    {label: "Debt Buffer", value: `${debtBuffer}%`},
+    { label: "Capacity", value: capacityString },
+    { label: "Payout Token", value: payoutTokenSymbol },
+    { label: "Quote Token", value: quoteTokenSymbol },
+    {
+      label: "Estimated bond cadence",
+      tooltip: "soon",
+      value: estimatedBondCadence,
+    },
+    { label: "Initial exchange rate", value: exchangeRateString },
+    { label: "Minimum exchange rate", value: minExchangeRateString },
+    { label: "Conclusion", tooltip: "soon", value: marketExpiryString },
+    { label: "Vesting", tooltip: "soon", value: vestingString },
+    { label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}` },
+    { label: "Debt Buffer", value: `${debtBuffer}%` },
   ];
 
   const onSubmit = async (data: any) => {
@@ -468,13 +491,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       link = link.replace("#", "address");
       link = link.concat(address);
 
-      const result = {name, symbol, decimals, link, blockExplorerName, price};
+      const result = { name, symbol, decimals, link, blockExplorerName, price };
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
     } catch (e: any) {
       console.log(e.message);
       isPayout
-        ? setPayoutTokenInfo({address: "invalid"})
-        : setQuoteTokenInfo({address: "invalid"});
+        ? setPayoutTokenInfo({ address: "invalid" })
+        : setQuoteTokenInfo({ address: "invalid" });
     }
   };
 
@@ -482,7 +505,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     if (ethers.utils.isAddress(payoutTokenAddress.address)) {
       void getTokenInfo(payoutTokenAddress.address, true);
     } else {
-      setPayoutTokenInfo({address: "invalid"});
+      setPayoutTokenInfo({ address: "invalid" });
     }
   }, [payoutTokenAddress, selectedChain]);
 
@@ -490,7 +513,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     if (ethers.utils.isAddress(quoteTokenAddress.address)) {
       void getTokenInfo(quoteTokenAddress.address, false);
     } else {
-      setQuoteTokenInfo({address: "invalid"});
+      setQuoteTokenInfo({ address: "invalid" });
     }
   }, [quoteTokenAddress, selectedChain]);
 
@@ -500,7 +523,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         Create Market
       </h1>
       <div className="mx-[15vw]">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="flex-col">
             <p className="font-faketion font-bold tracking-widest">
               1 SET UP MARKET
@@ -510,8 +533,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="chain"
                   control={control}
-                  rules={{required: "Required"}}
-                  render={({field}) => (
+                  rules={{ required: "Required" }}
+                  render={({ field }) => (
                     <ChainPicker
                       {...field}
                       label="Chain"
@@ -534,10 +557,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       }) => ethers.utils.isAddress(value),
                     },
                   }}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <>
                       <Input
                         {...field}
+                        autoComplete="off"
                         label="Market Owner Address"
                         className={"mb-2"}
                         subText="Enter the market owner address to check BondProtocol verification status"
@@ -549,52 +573,61 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         </div>
                       )}
 
-                      {errors.marketOwnerAddress?.type === "isAddress" &&
+                      {errors.marketOwnerAddress?.type === "isAddress" && (
                         <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
                           Must be a valid address!
                         </div>
-                      }
+                      )}
                     </>
                   )}
                 />
 
-                {showOwnerWarning &&
+                {showOwnerWarning && (
                   <div className="flex flex-col gap-6 pt-5 w-full text-sm text-red-500">
                     <h2 className="text-center text-lg">WARNING</h2>
 
                     <p>
-                      This address does not match any of our verified protocols on this chain.
+                      This address does not match any of our verified protocols
+                      on this chain.
                     </p>
 
                     <p>
-                      You can still create a market which will be active on the contract level. However, it will *NOT*
-                      appear on the BondProtocol dapp's market list unless your protocol is verified. You will need your
-                      own
-                      UI, or another way for users to interact with the bond contract, for example via Etherscan.
+                      You can still create a market which will be active on the
+                      contract level. However, it will *NOT* appear on the
+                      BondProtocol dapp's market list unless your protocol is
+                      verified. You will need your own UI, or another way for
+                      users to interact with the bond contract, for example via
+                      Etherscan.
                     </p>
 
                     <p>
-                      If you would like to verify your protocol, we strongly recommend doing it *BEFORE* creating the
-                      market, as the market will be active immediately upon completion of the transaction. Please see
-                      our documents for details of the verification process.
+                      If you would like to verify your protocol, we strongly
+                      recommend doing it *BEFORE* creating the market, as the
+                      market will be active immediately upon completion of the
+                      transaction. Please see our documents for details of the
+                      verification process.
                     </p>
 
                     <p>
-                      NOTE: If you have already verified with a different address, or with this address but on a
-                      different chain, you can add this address/chain combination to your existing verification data.
+                      NOTE: If you have already verified with a different
+                      address, or with this address but on a different chain,
+                      you can add this address/chain combination to your
+                      existing verification data.
                     </p>
                   </div>
-                }
-                {protocol &&
+                )}
+                {protocol && (
                   <div className="flex flex-col gap-6 pt-5 w-full text-sm text-green-500">
-                    <h2 className="text-center text-lg">Verified as {protocol.name}</h2>
+                    <h2 className="text-center text-lg">
+                      Verified as {protocol.name}
+                    </h2>
 
                     <p>
-                      Thank you for verifying with BondProtocol. Your market will be available via the BondProtocol
-                      dapp!
+                      Thank you for verifying with BondProtocol. Your market
+                      will be available via the BondProtocol dapp!
                     </p>
                   </div>
-                }
+                )}
               </div>
 
               <div className="flex gap-6">
@@ -615,7 +648,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         }) => value.confirmed === true,
                       },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <TokenPickerCard
                         {...field}
                         label="Payout Token"
@@ -648,7 +681,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         }) => value.confirmed === true,
                       },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <TokenPickerCard
                         {...field}
                         label="Quote Token"
@@ -665,25 +698,29 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 </div>
               </div>
 
-              {showTokenWarning &&
+              {showTokenWarning && (
                 <div className="flex flex-col gap-6 pt-5 w-full text-sm text-red-500">
                   <p>
-                    One or more of the tokens selected is unverified. Only on-chain data is available for unverified
-                    tokens, off-chain data such as USD pricing, token images etc will be unavailable.
+                    One or more of the tokens selected is unverified. Only
+                    on-chain data is available for unverified tokens, off-chain
+                    data such as USD pricing, token images etc will be
+                    unavailable.
                   </p>
 
                   <p>
-                    As a result, although the market will function correctly on the contract level, the price and
-                    discount calculations in our UI will be displayed incorrectly.
+                    As a result, although the market will function correctly on
+                    the contract level, the price and discount calculations in
+                    our UI will be displayed incorrectly.
                   </p>
 
                   <p>
-                    If you intend for this market to be displayed on the BondProtocol website, we strongly recommend
-                    verifying tokens with us *BEFORE* creating the market. Please see our documentation for more
-                    information.
+                    If you intend for this market to be displayed on the
+                    BondProtocol website, we strongly recommend verifying tokens
+                    with us *BEFORE* creating the market. Please see our
+                    documentation for more information.
                   </p>
                 </div>
-              }
+              )}
 
               <div className="flex gap-6">
                 <div className="flex flex-col w-full pt-5">
@@ -696,7 +733,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         isNumber: (value: string) => !isNaN(Number(value)),
                       },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <>
                         <Input
                           {...field}
@@ -730,7 +767,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         isNumber: (value: string) => !isNaN(Number(value)),
                       },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <>
                         <Input
                           {...field}
@@ -776,7 +813,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         isNumber: (value: string) => !isNaN(Number(value)),
                       },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <>
                         <Input
                           {...field}
@@ -807,7 +844,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="capacityToken"
                   control={control}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <FlatSelect
                       {...field}
                       label="Capacity Token"
@@ -822,8 +859,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="marketCapacity"
                   control={control}
-                  rules={{required: "Required"}}
-                  render={({field}) => (
+                  rules={{ required: "Required" }}
+                  render={({ field }) => (
                     <>
                       <Input
                         {...field}
@@ -862,7 +899,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     isSet: (value: number) => !isNaN(value),
                   },
                 }}
-                render={({field}) => (
+                render={({ field }) => (
                   <>
                     <DatePicker
                       {...field}
@@ -885,8 +922,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               <Controller
                 name="vestingType"
                 control={control}
-                rules={{required: "Required"}}
-                render={({field}) => (
+                rules={{ required: "Required" }}
+                render={({ field }) => (
                   <FlatSelect
                     {...field}
                     label="Vesting Type"
@@ -901,8 +938,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 <Controller
                   name="timeAmount"
                   control={control}
-                  rules={{required: "Required"}}
-                  render={({field}) => (
+                  rules={{ required: "Required" }}
+                  render={({ field }) => (
                     <TermPicker
                       {...field}
                       label="Bond Vesting Period"
@@ -920,7 +957,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         vestingType !== 0 || !isNaN(value),
                     },
                   }}
-                  render={({field}) => (
+                  render={({ field }) => (
                     <>
                       <DatePicker
                         {...field}
@@ -955,7 +992,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         isNumber: (value: string) => !isNaN(Number(value)),
                       },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <>
                         <Input
                           {...field}
@@ -987,9 +1024,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         isNumber: (value: string) => !isNaN(Number(value)),
                       },
                     }}
-                    render={({field}) => (
+                    render={({ field }) => (
                       <>
-                        <Input {...field} label="Debt buffer"/>
+                        <Input {...field} label="Debt buffer" />
 
                         {errors.debtBuffer?.type === "required" && (
                           <div className="text-xs font-light my-1 text-red-500 justify-self-start">
@@ -1011,7 +1048,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
             <p className="mt-16 font-faketion font-bold tracking-widest">
               3 CONFIRMATION
             </p>
-            <SummaryCard fields={summaryFields} className="mt-8"/>
+            <SummaryCard fields={summaryFields} className="mt-8" />
 
             {!isValid && isSubmitted && (
               <div className="text-xs font-light mt-4 text-red-500">
