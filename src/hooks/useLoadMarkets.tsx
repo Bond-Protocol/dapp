@@ -20,7 +20,7 @@ export function useLoadMarkets() {
   );
   
   const { data: goerliData } = useListMarketsGoerliQuery(
-    { endpoint: endpoints[0] },
+    { endpoint: endpoints[1] },
     { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) }
   );
 

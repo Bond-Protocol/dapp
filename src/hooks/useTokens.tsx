@@ -44,7 +44,7 @@ export const useTokens = () => {
   });
 
   const { data: goerliData } = useListTokensGoerliQuery({
-    endpoint: endpoints[0],
+    endpoint: endpoints[1],
   });
 
   /*

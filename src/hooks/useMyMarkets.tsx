@@ -20,7 +20,7 @@ export function useMyMarkets() {
   );
 
   const {data: goerliData} = useListOwnedMarketsGoerliQuery(
-    {endpoint: endpoints[0]},
+    {endpoint: endpoints[1]},
     {owner: address || "0x0000000000000000"}
   );
 

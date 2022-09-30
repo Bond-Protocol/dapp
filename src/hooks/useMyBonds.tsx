@@ -41,7 +41,7 @@ export function useMyBonds() {
   
   const { data: goerliData, refetch: goerliRefetch } =
     useGetOwnerBalancesByOwnerGoerliQuery(
-      { endpoint: endpoints[0] },
+      { endpoint: endpoints[1] },
       { owner: address }
     );
 
@@ -49,7 +49,7 @@ export function useMyBonds() {
     useListErc20BondTokensMainnetQuery({ endpoint: endpoints[0] });
 
   const { data: goerliErc20Data, refetch: goerliErc20Refetch } =
-    useListErc20BondTokensGoerliQuery({ endpoint: endpoints[0] });
+    useListErc20BondTokensGoerliQuery({ endpoint: endpoints[1] });
 
   const refetchQueries = () => {
     if (testnet) {
