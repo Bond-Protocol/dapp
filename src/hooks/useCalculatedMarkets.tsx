@@ -24,7 +24,21 @@ export function useCalculatedMarkets() {
   const [issuers, setIssuers] = useState<string[]>([]);
   const [marketsByIssuer, setMarketsByIssuer] = useState(new Map());
 
-  const calculateMarket = (market: Market) => {
+  const calculateMarket = async (market: Market) => {
+    /*
+      We cannot rely on the value of isLive from the subgraph, it only updates on events.
+      If a market is manually closed, or closes after hitting capacity, the subgraph will
+      be updated, and isLive will be false. However, if it hits its expiry date, there is
+      no event, so the subgraph is not updated. Thus, we check here and return early if
+      the market is not live.
+    */
+    const isLive = await contractLibrary.isLive(
+      provider,
+      market.marketId,
+      market.auctioneer,
+    );
+    if (!isLive) return;
+
     const requestProvider = providers[market.network] || provider;
     const purchaseLink = bondLibrary.TOKENS.get(
       market.quoteToken.id
