@@ -1,10 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useMarkets } from "hooks";
-import {
-  Protocol,
-  PROTOCOLS,
-  PROTOCOL_NAMES,
-} from "@bond-protocol/bond-library";
+import { PROTOCOLS, PROTOCOL_NAMES } from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { InfoLabel, Link } from "components/atoms";
@@ -22,9 +18,7 @@ export const IssuerProfile: FC = () => {
   const { name } = useParams();
 
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
-  const [protocol] = useState<Partial<Protocol>>(
-    PROTOCOLS.get(name as PROTOCOL_NAMES) || placeholderProtocol
-  );
+  const [protocol] = useState(PROTOCOLS.get(name as PROTOCOL_NAMES));
 
   const [tbv, setTbv] = useState(0);
 
@@ -50,21 +44,25 @@ export const IssuerProfile: FC = () => {
       <div className="flex flex-col content-center mt-10">
         <div className="flex flex-row justify-center items-center">
           <img className="h-[64px] w-[64px] mr-4" src={logo()} />
-          <p className="text-5xl">{protocol.name}</p>
+          <p className="text-5xl">{protocol?.name || placeholderProtocol.name}</p>
         </div>
 
         <div className="flex flex-row justify-center mt-3">
-          <p>{protocol.description}</p>
+          <p>{protocol?.description || placeholderProtocol.description}</p>
         </div>
 
-        <SocialRow {...protocol.links} className="my-5" />
-        {protocol.links?.homepage && (
-          <div className="flex flex-row justify-center">
-            <Link href={protocol.links.homepage}>
-              {protocol.links.homepage}
-            </Link>
-          </div>
-        )}
+        {protocol &&
+          <>
+            <SocialRow {...protocol.links} className="my-5"/>
+            {protocol.links?.homepage && (
+              <div className="flex flex-row justify-center">
+                <Link href={protocol.links.homepage}>
+                  {protocol.links.homepage}
+                </Link>
+              </div>
+            )}
+          </>
+        }
       </div>
 
       <div className="my-16 flex justify-between gap-16 child:w-full">
