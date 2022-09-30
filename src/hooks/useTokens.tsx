@@ -10,7 +10,7 @@ import axios, {AxiosResponse} from "axios";
 import {useQuery} from "react-query";
 import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {LpPair} from "@bond-protocol/contract-library";
+import {LpPair, calcLpPrice} from "@bond-protocol/contract-library";
 
 export interface PriceDetails {
   price: string;
@@ -122,38 +122,71 @@ export const useTokens = () => {
   useEffect(() => {
     if (coingeckoQuery.data && customPriceQuery.data) {
       const currentPricesMap: Price = {};
-
+      const lpTokens: {value: Token, key: string}[] = [];
       bondLibrary.TOKENS.forEach(
         (value: bondLibrary.Token, tokenKey: string) => {
-          const prices: PriceDetails[] = [];
-          value.priceSources.forEach(
-            (
-              priceSource: SupportedPriceSource | CustomPriceSource,
-              priority: number
-            ) => {
-              // First, we get the price from the appropriate query data, according to the PriceSource's source field.
-              let price;
-              switch (priceSource.source) {
-                case "coingecko":
-                  price =
-                    coingeckoQuery.data[priceSource.apiId] &&
-                    coingeckoQuery.data[priceSource.apiId].usd;
-                  break;
-                case "custom":
-                  price = customPriceQuery.data.get(tokenKey);
-                  break;
+          // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
+          if (value.lpType !== undefined) {
+            lpTokens.push({value: value, key: tokenKey});
+          } else {
+            const prices: PriceDetails[] = [];
+            value.priceSources.forEach(
+              (
+                priceSource: SupportedPriceSource | CustomPriceSource,
+                priority: number
+              ) => {
+                // First, we get the price from the appropriate query data, according to the PriceSource's source field.
+                let price;
+                switch (priceSource.source) {
+                  case "coingecko":
+                    price =
+                      coingeckoQuery.data[priceSource.apiId] &&
+                      coingeckoQuery.data[priceSource.apiId].usd;
+                    break;
+                  case "custom":
+                    price = customPriceQuery.data.get(tokenKey);
+                    break;
+                }
+                // Then, we insert it into the prices array, at position [priority],
+                // where priority is the PriceSource's key in the Token.priceSources map.
+                prices[priority] = {
+                  price: price,
+                  source: priceSource.source,
+                };
               }
-              // Then, we insert it into the prices array, at position [priority],
-              // where priority is the PriceSource's key in the Token.priceSources map.
-              prices[priority] = {
-                price: price,
-                source: priceSource.source,
-              };
-            }
-          );
-          currentPricesMap[tokenKey] = prices;
+            );
+            currentPricesMap[tokenKey] = prices;
+          }
         }
       );
+
+      // Now we have the prices for the constituent tokens, we can calculate the LP pair prices
+      lpTokens.forEach((token) => {
+        const split: string[] = token.key.split("_");
+        const network = split[0];
+        const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
+        token.value["token0"] = bondLibrary.TOKENS.get(token.value.token0Address);
+        token.value["token1"] = bondLibrary.TOKENS.get(token.value.token1Address);
+
+        token.value["token0"].price = currentPricesMap[token.value.token0Address][0].price;
+        token.value["token1"].price = currentPricesMap[token.value.token1Address][0].price;
+
+        calcLpPrice(
+          {
+            lpPair: token.value,
+            address: split[1],
+          },
+          lpType,
+          providers[network],
+        ).then(result => {
+          const prices: PriceDetails[] = [];
+          prices[0] = {
+            price: result,
+            source: "custom",
+          }
+          currentPricesMap[token.key] = prices;
+        }).catch(error => console.log(error));
+      })
 
       setCurrentPrices(currentPricesMap);
     }
