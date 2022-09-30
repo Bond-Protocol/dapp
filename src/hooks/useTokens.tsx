@@ -2,7 +2,7 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
 import {providers} from "services/owned-providers";
 import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {Token, useListTokensGoerliQuery} from "../generated/graphql";
+import {Token, useListTokensGoerliQuery, useListTokensMainnetQuery} from "../generated/graphql";
 import {useCallback, useEffect, useState} from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
 import {CustomPriceSource, SupportedPriceSource} from "@bond-protocol/bond-library";
@@ -39,6 +39,10 @@ export const useTokens = () => {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
+  const { data: mainnetData } = useListTokensMainnetQuery({
+    endpoint: endpoints[0],
+  });
+
   const { data: goerliData } = useListTokensGoerliQuery({
     endpoint: endpoints[0],
   });
@@ -196,12 +200,16 @@ export const useTokens = () => {
   We get a list of all tokens being used in the app by concatenating the .tokens data from each Subgraph request.
    */
   useEffect(() => {
+    if (mainnetData && mainnetData.tokens) {
+      const allTokens = mainnetData.tokens;
+      setMainnetTokens(allTokens);
+    }
+
     if (goerliData && goerliData.tokens) {
       const allTokens = goerliData.tokens;
-      // @ts-ignore
       setTestnetTokens(allTokens);
     }
-  }, [goerliData]);
+  }, [mainnetData, goerliData]);
 
   /*
   If the user switches between mainnet/testnet mode, update selectedTokens.
