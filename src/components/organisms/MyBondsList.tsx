@@ -60,6 +60,7 @@ export const MyBondsList = () => {
   };
 
   async function redeem(bond: OwnerBalance) {
+    console.log({ bond });
     const redeemTx: ContractTransaction = await contractLibrary.redeem(
       bond.tokenId,
       bond.bondToken?.teller,
@@ -116,6 +117,11 @@ export const MyBondsList = () => {
                   tokenDetails?.logoUrl && tokenDetails.logoUrl != ""
                     ? tokenDetails.logoUrl
                     : "/placeholders/token-placeholder.png";
+                const isCorrectNetwork = bond.network === chain?.network;
+                const handleClaim = isCorrectNetwork
+                  ? () => redeem(bond)
+                  : (e: React.BaseSyntheticEvent) =>
+                      switchChain(e, bond.network);
 
                 return (
                   <tr key={bond.id}>
@@ -138,20 +144,21 @@ export const MyBondsList = () => {
                     </TableCell>
                     <TableCell className="w-1/2">
                       <div className="flex gap-x-2">
-                        <Button
-                          disabled={!canClaim}
-                          onClick={() => redeem(bond)}
-                        >
-                          {canClaim ? "Claim" : "vesting"}
-                        </Button>
-                        {bond.network !== chain?.network && (
+                        {!canClaim && (
+                          <Button className="w-full" disabled>
+                            Vesting
+                          </Button>
+                        )}
+                        {canClaim && (
                           // @ts-ignore
                           <Button
-                            className="text-xs px-0"
-                            variant="secondary"
-                            onClick={(e) => switchChain(e, bond.network)}
+                            className="w-full"
+                            variant={isCorrectNetwork ? "primary" : "secondary"}
+                            onClick={(e) => handleClaim(e)}
                           >
-                            Switch Network to Claim
+                            {isCorrectNetwork
+                              ? "Claim"
+                              : "Switch Network to Claim"}
                           </Button>
                         )}
                       </div>
