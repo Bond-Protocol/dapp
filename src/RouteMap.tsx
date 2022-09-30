@@ -14,7 +14,7 @@ import {
   MyBondsList,
   MyMarkets,
 } from "components/organisms";
-import {useState} from "react";
+import { useState } from "react";
 
 export const RouteMap: FC = () => {
   const { isMarketOwner } = useMarkets();
@@ -24,12 +24,21 @@ export const RouteMap: FC = () => {
     <Switch>
       <Route path="/" element={<MarketTabs />}>
         <Route index element={<MarketList />} />
+        <Route path="/markets" element={<MarketList />} />
         <Route path="/issuers" element={<IssuerList />} />
         <Route path="/my-bonds" element={<MyBondsList />} />
         {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}
       </Route>
-      <Route path="/create" element={<CreateMarket onExecute={(marketData) => setNewMarket(marketData)} />} />
-      <Route path="/create/:hash" element={<MarketCreated marketData={newMarket} />} />
+      <Route
+        path="/create"
+        element={
+          <CreateMarket onExecute={(marketData) => setNewMarket(marketData)} />
+        }
+      />
+      <Route
+        path="/create/:hash"
+        element={<MarketCreated marketData={newMarket} />}
+      />
       <Route path="/issuers/:name" element={<IssuerPage />} />
       <Route path="/market/:id" element={<MarketInsights />} />
     </Switch>

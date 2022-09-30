@@ -59,34 +59,11 @@ export const MarketInsights = () => {
       ? market.formattedLongVesting
       : market.formattedShortVesting;
 
-  const sampcell = (
-    <tr className="child:px-6 child:border-none">
-      <TableCell>05/19/2022 00:16</TableCell>
-      <TableCell className="text-right">$4,192,130.80</TableCell>
-      <TableCell className="text-right">
-        4200000 {market.quoteToken.symbol}
-      </TableCell>
-      <TableCell className="text-right">
-        330 {market.payoutToken.symbol}
-      </TableCell>
-      <TableCell>
-        <Link href={blockExplorerAddressUrl + market.auctioneer}>
-          {trimAddress(market.auctioneer)}
-        </Link>
-      </TableCell>
-      <TableCell>
-        <Link href={blockExplorerTxUrl + market.auctioneer}>
-          {trimAddress(market.auctioneer)}
-        </Link>
-      </TableCell>
-    </tr>
-  );
-
   return (
     <div>
       <BondListCard
         market={market}
-        onClickTopRight={() => navigate("/markets")}
+        onClickTopRight={() => navigate("/")}
         topRightLabel="Go to Markets"
       />
       <div className="my-16 flex justify-between gap-4 child:w-full">
@@ -101,9 +78,6 @@ export const MarketInsights = () => {
           >
             {Math.trunc(market.discount)}%
           </p>
-        </InfoLabel>
-        <InfoLabel label="Network Fee" tooltip="tooltip">
-          {`1 ${market.quoteToken.symbol}`}
         </InfoLabel>
         <InfoLabel label="Vesting Term" tooltip="tooltip">
           {vestingLabel}
@@ -125,10 +99,7 @@ export const MarketInsights = () => {
               <TableHeading>TX ID</TableHeading>
             </tr>
           </thead>
-          <tbody>
-            {/*tx.map(() => { })*/}
-            {sampcell}
-          </tbody>
+          <tbody>{/*tx.map(() => { })*/}</tbody>
         </table>
       </div>
     </div>
