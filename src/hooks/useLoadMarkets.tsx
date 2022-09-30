@@ -1,6 +1,5 @@
-//@ts-nocheck
 import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import { Market, useListMarketsGoerliQuery } from "../generated/graphql";
+import {Market, useListMarketsGoerliQuery, useListMarketsMainnetQuery} from "../generated/graphql";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
@@ -15,10 +14,23 @@ export function useLoadMarkets() {
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
-  const { data: goerliData } = useListMarketsGoerliQuery(
+  const { data: mainnetData } = useListMarketsMainnetQuery(
     { endpoint: endpoints[0] },
+    { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) }
+  );
+  
+  const { data: goerliData } = useListMarketsGoerliQuery(
+    { endpoint: endpoints[1] },
     { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) }
   );
+
+  useEffect(() => {
+    if (mainnetData && mainnetData.markets) {
+      const allMarkets = mainnetData.markets;
+      // @ts-ignore
+      setMainnetMarkets(allMarkets);
+    }
+  }, [mainnetData]);
 
   useEffect(() => {
     if (goerliData && goerliData.markets) {

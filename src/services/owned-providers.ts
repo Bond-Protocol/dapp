@@ -18,6 +18,32 @@ export type ProviderOptions = {
 
 const providerConfiguration: ProviderOptions[] = [
   {
+    name: "mainnet",
+    chainId: "1",
+    rpcs: [
+      {
+        url: `https://mainnet.infura.io/v3/${import.meta.env.VITE_INFURA_PUBLIC_KEY}`,
+        weight: 1,
+        priority: 1,
+      },
+      {
+        url: `https://eth-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_MAINNET_KEY}`,
+        weight: 1,
+        priority: 1,
+      },
+      {
+        url: "https://rpc.ankr.com/eth",
+        weight: 1,
+        priority: 1,
+      },
+      {
+        url: "https://eth-rpc.gateway.pokt.network",
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
+  {
     name: "goerli",
     chainId: "5",
     rpcs: [

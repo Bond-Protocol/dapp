@@ -6,8 +6,8 @@ import {useEffect, useState} from "react";
 import {
   BondToken,
   OwnerBalance,
-  useGetOwnerBalancesByOwnerGoerliQuery,
-  useListErc20BondTokensGoerliQuery,
+  useGetOwnerBalancesByOwnerGoerliQuery, useGetOwnerBalancesByOwnerMainnetQuery,
+  useListErc20BondTokensGoerliQuery, useListErc20BondTokensMainnetQuery,
 } from "../generated/graphql";
 import {useAccount} from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
@@ -33,18 +33,32 @@ export function useMyBonds() {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const { data: goerliData, refetch: goerliRefetch } =
-    useGetOwnerBalancesByOwnerGoerliQuery(
+  const { data: mainnetData, refetch: mainnetRefetch } =
+    useGetOwnerBalancesByOwnerMainnetQuery(
       { endpoint: endpoints[0] },
       { owner: address }
     );
+  
+  const { data: goerliData, refetch: goerliRefetch } =
+    useGetOwnerBalancesByOwnerGoerliQuery(
+      { endpoint: endpoints[1] },
+      { owner: address }
+    );
+
+  const { data: mainnetErc20Data, refetch: mainnetErc20Refetch } =
+    useListErc20BondTokensMainnetQuery({ endpoint: endpoints[0] });
 
   const { data: goerliErc20Data, refetch: goerliErc20Refetch } =
-    useListErc20BondTokensGoerliQuery({ endpoint: endpoints[0] });
+    useListErc20BondTokensGoerliQuery({ endpoint: endpoints[1] });
 
   const refetchQueries = () => {
-    void goerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
-    void goerliErc20Refetch().then(() => setRefetchRequest(refetchRequest + 1));
+    if (testnet) {
+      void goerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
+      void goerliErc20Refetch().then(() => setRefetchRequest(refetchRequest + 1));
+    } else {
+      void mainnetRefetch().then(() => setRefetchRequest(refetchRequest + 1));
+      void mainnetErc20Refetch().then(() => setRefetchRequest(refetchRequest + 1));
+    }
   };
 
   const getBalances = (bondTokens: BondToken[]) => {
@@ -75,7 +89,11 @@ export function useMyBonds() {
     });
 
     void Promise.allSettled(promises).then(() => {
-      setTestnetErc20Bonds(ownerBalances);
+      if (testnet) {
+        setTestnetErc20Bonds(ownerBalances);
+      } else {
+        setMainnetErc20Bonds(ownerBalances);
+      }
     });
   };
 
@@ -83,10 +101,15 @@ export function useMyBonds() {
   We get a list of all user bonds by concatenating the .bondTokens data from each Subgraph request.
    */
   useEffect(() => {
-    if (
-      goerliData &&
-      goerliData.ownerBalances
-    ) {
+    if (mainnetData && mainnetData.ownerBalances) {
+      const allTokens = mainnetData.ownerBalances;
+      // @ts-ignore
+      setMainnetBonds(allTokens);
+    }
+  }, [mainnetData, refetchRequest]);
+  
+  useEffect(() => {
+    if (goerliData && goerliData.ownerBalances) {
       const allTokens = goerliData.ownerBalances;
       // @ts-ignore
       setTestnetBonds(allTokens);
@@ -121,6 +144,14 @@ export function useMyBonds() {
   For bonds with ERC-20 rather than ERC-1155 bond tokens, we can't get the balances
   from the subgraph and need to check them manually.
    */
+  useEffect(() => {
+    if (mainnetErc20Data) {
+      const bondTokens = mainnetErc20Data.bondTokens;
+      // @ts-ignore
+      getBalances(bondTokens);
+    }
+  }, [address, mainnetErc20Data]);
+  
   useEffect(() => {
     if (goerliErc20Data) {
       const bondTokens = goerliErc20Data.bondTokens;
