@@ -250,7 +250,8 @@ export const useTokens = () => {
     return {
       id: token.id,
       address: token.address,
-      network: token.network,
+      network: token.id.split("_")[0],
+      logoUrl: bondLibraryToken?.logoUrl ? bondLibraryToken.logoUrl : "/placeholders/token-placeholder.png",
       name: bondLibraryToken ? bondLibraryToken.name : token.name,
       symbol: bondLibraryToken ? bondLibraryToken.symbol : token.symbol,
       decimals: token.decimals,
