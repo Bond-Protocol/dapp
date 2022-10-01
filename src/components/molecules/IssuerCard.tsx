@@ -31,8 +31,8 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
   }, [markets]);
 
   const logo = () => {
-    return issuer.logo && issuer.logo != ""
-      ? issuer.logo
+    return issuer.logoUrl && issuer.logoUrl != ""
+      ? issuer.logoUrl
       : "/placeholders/token-placeholder.png";
   };
 

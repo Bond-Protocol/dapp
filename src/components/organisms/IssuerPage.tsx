@@ -24,8 +24,8 @@ export const IssuerPage: FC = () => {
   const [tbv, setTbv] = useState(0);
 
   const logo = () => {
-    return protocol?.logo != ""
-      ? protocol?.logo
+    return protocol?.logoUrl != ""
+      ? protocol?.logoUrl
       : "/placeholders/token-placeholder.png";
   };
 

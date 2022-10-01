@@ -2,7 +2,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket, Token } from "@bond-protocol/contract-library";
-import { getToken } from "@bond-protocol/bond-library";
 import { ExpandableRow } from "components/molecules/ExpandableRow";
 import { CloseMarketCard } from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
