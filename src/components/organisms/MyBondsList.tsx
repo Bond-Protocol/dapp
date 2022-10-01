@@ -35,7 +35,6 @@ const NoBondsView = () => {
 export const MyBondsList = () => {
   const { myBonds, refetch } = useMyBonds();
   const { data: signer } = useSigner();
-  const { address, isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
   const { getTokenDetails } = useTokens();
@@ -110,13 +109,7 @@ export const MyBondsList = () => {
                 const balance =
                   bond.balance /
                   Math.pow(10, bond.bondToken?.underlying.decimals);
-                const underlying =
-                  bond.bondToken && getTokenDetails(bond.bondToken.underlying);
-                const tokenDetails = getToken(underlying?.id);
-                const logoUrl =
-                  tokenDetails?.logoUrl && tokenDetails.logoUrl != ""
-                    ? tokenDetails.logoUrl
-                    : "/placeholders/token-placeholder.png";
+                const underlying = bond.bondToken && getTokenDetails(bond.bondToken.underlying);
                 const isCorrectNetwork = bond.network === chain?.network;
                 const handleClaim = isCorrectNetwork
                   ? () => redeem(bond)
@@ -126,14 +119,14 @@ export const MyBondsList = () => {
                 return (
                   <tr key={bond.id}>
                     <TableCell className="flex flex-row">
-                      <img className="h-[32px] w-[32px]" src={logoUrl} />
+                      <img className="h-[32px] w-[32px]" src={underlying?.logoUrl} />
                       <p className="my-auto pl-1">{underlying?.symbol}</p>
                     </TableCell>
                     <TableCell>{bond.network}</TableCell>
                     <TableCell>{date.toDateString()}</TableCell>
                     <TableCell className="flex flex-row">
                       <div className="my-auto pr-1">
-                        <img className="h-[32px] w-[32px]" src={logoUrl} />
+                        <img className="h-[32px] w-[32px]" src={underlying?.logoUrl} />
                       </div>
                       <div>
                         <p>{balance.toFixed(2) + " " + underlying?.symbol}</p>

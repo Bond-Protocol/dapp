@@ -2,11 +2,10 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket, Token } from "@bond-protocol/contract-library";
-import { getToken } from "@bond-protocol/bond-library";
 import { ExpandableRow } from "components/molecules/ExpandableRow";
 import { CloseMarketCard } from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
-import { useMarkets } from "hooks";
+import {useMarkets, useTokens} from "hooks";
 import { TableHeading } from "components/atoms/TableHeading";
 import { TableCell } from "components/atoms/TableCell";
 import { CellLabel } from "components/atoms/CellLabel";
@@ -22,6 +21,7 @@ export const MarketList: FC<MarketListProps> = ({
   ...props
 }) => {
   const navigate = useNavigate();
+  const { getTokenDetails } = useTokens();
   const { refetchAllMarkets, refetchMyMarkets, refetchOne, allMarkets } =
     useMarkets();
 
@@ -155,34 +155,26 @@ export const MarketList: FC<MarketListProps> = ({
     ascending: true,
   });
 
-  const singleLogo = (token: Token, network: string) => {
-    if (!token) return "/placeholders/token-placeholder.png";
-    const tokenDetails = getToken(network + "_" + token.address);
-    return tokenDetails?.logoUrl && tokenDetails.logoUrl != ""
-      ? tokenDetails.logoUrl
-      : "/placeholders/token-placeholder.png";
-  };
-
   const quoteLogo = (market: CalculatedMarket) => {
     if (market.quoteToken.lpPair != undefined) {
-      const token0 = getToken(market.quoteToken.lpPair.token0.id);
-      const token1 = getToken(market.quoteToken.lpPair.token1.id);
+      const token0 = getTokenDetails(market.quoteToken.lpPair.token0).logoUrl;
+      const token1 = getTokenDetails(market.quoteToken.lpPair.token1).logoUrl;
 
       return (
         <div className="flex flex-row">
           <img
             className="h-[32px] w-[32px]"
-            src={singleLogo(token0, market.network)}
+            src={token0}
           />
           <img
             className="h-[32px] w-[32px] flex self-end ml-[-8px]"
-            src={singleLogo(token1, market.network)}
+            src={token1}
           />
         </div>
       );
     } else {
-      const quote = singleLogo(market.quoteToken, market.network);
-      const payout = singleLogo(market.payoutToken, market.network);
+      const quote = getTokenDetails(market.quoteToken).logoUrl;
+      const payout = getTokenDetails(market.payoutToken).logoUrl;
 
       return (
         <div className="flex flex-row">
@@ -321,7 +313,7 @@ export const MarketList: FC<MarketListProps> = ({
 
                 <TableCell className="flex flex-row py-6">
                   <CellLabel
-                    logo={singleLogo(market?.payoutToken, market?.network)}
+                    logo={getTokenDetails(market?.payoutToken).logoUrl}
                     subContent={`(Market: ${market?.formattedFullPrice})`}
                   >
                     {market?.formattedDiscountedPrice}
