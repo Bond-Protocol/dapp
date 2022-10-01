@@ -239,7 +239,6 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
             onChange={setAmount}
             value={amount}
             balance={balance}
-            quoteToken={market.quoteToken}
             market={market}
             className="mt-5"
           />
