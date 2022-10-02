@@ -66,7 +66,7 @@ export const TokenPriceCard = (props: TokenPriceCardProps) => {
               className="text-xs py-1 text-light-primary-500"
               iconClassName="fill-light-primary-500"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               {`View on ${props.blockExplorerName}`}
             </Link>
