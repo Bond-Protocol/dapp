@@ -351,3 +351,19 @@ export const listErc20BondTokensGoerli = gql`
         }
     }
 `;
+
+export const listUniqueBondersMainnet = gql`
+    query ListUniqueBondersMainnet {
+        uniqueBonders {
+            id
+        }
+    }
+`;
+
+export const listUniqueBondersGoerli = gql`
+    query ListUniqueBondersGoerli {
+        uniqueBonders {
+            id
+        }
+    }
+`;

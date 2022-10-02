@@ -6,6 +6,7 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { InfoLabel, Link, Button } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
 import { useNavigate, useParams } from "react-router-dom";
+import {useUniqueBonders} from "hooks/useUniqueBonders";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -16,10 +17,12 @@ const placeholderProtocol = {
 export const IssuerPage: FC = () => {
   const navigate = useNavigate();
   const { marketsByIssuer } = useMarkets();
+  const { getBondersForProtocol } = useUniqueBonders();
   const { name } = useParams();
 
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
   const [protocol] = useState(PROTOCOLS.get(name as PROTOCOL_NAMES));
+  const bonders = getBondersForProtocol(name as PROTOCOL_NAMES);
 
   const [tbv, setTbv] = useState(0);
 
@@ -78,7 +81,7 @@ export const IssuerPage: FC = () => {
           ${Math.trunc(tbv)}
         </InfoLabel>
         <InfoLabel label="Unique Bonders" tooltip="tooltip">
-          Soon™
+          {bonders}
         </InfoLabel>
         <InfoLabel label="Average Discount Rate" tooltip="tooltip">
           ?

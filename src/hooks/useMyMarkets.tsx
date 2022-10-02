@@ -28,7 +28,7 @@ export function useMyMarkets() {
     if (mainnetData && mainnetData.markets) {
       const allMarkets = mainnetData.markets;
       // @ts-ignore
-      setTestnetMarkets(allMarkets);
+      setMainnetMarkets(allMarkets);
     }
   }, [mainnetData]);
 
