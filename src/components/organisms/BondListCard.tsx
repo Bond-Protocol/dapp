@@ -161,11 +161,8 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
         address,
         amount,
         payout,
-        payoutDecimals: market.payoutToken.decimals,
-        quoteDecimals: market.quoteToken.decimals,
         slippage: 0.05,
-        marketId: market.marketId,
-        teller: market.teller,
+        market,
       });
     } catch (e) {
       console.log(e);
@@ -178,11 +175,8 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
       address,
       amount,
       payout,
-      payoutDecimals: market.payoutToken.decimals,
-      quoteDecimals: market.quoteToken.decimals,
       slippage: 0.05,
-      marketId: market.marketId,
-      teller: market.teller,
+      market,
     });
   };
 
