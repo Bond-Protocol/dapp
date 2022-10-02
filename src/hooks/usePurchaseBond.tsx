@@ -1,28 +1,18 @@
 //@ts-nocheck
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { BigNumberish, ContractTransaction, ethers, Signer } from "ethers";
 import { useProvider, useSigner } from "wagmi";
 import { providers } from "services/owned-providers";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
-
-export type PurchaseArgs = {
-  address: string;
-  marketId: number;
-  amount: number;
-  minimumOut: number;
-  teller: string;
-  signer: Signer;
-  referralAddress?: string;
-  payout: string;
-  slippage: number;
-};
+const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
+const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
 
 export const usePurchaseBond = () => {
   const provider = useProvider();
   const { data: signer } = useSigner();
-  const [txStatus, setTxStatus] = useState();
 
   const approveSpending = async (
     tokenAddress: string,
@@ -84,29 +74,30 @@ export const usePurchaseBond = () => {
   const bond = useCallback(
     async (args: {
       address: string;
-      marketId: number;
       amount: string;
-      teller: string;
-      referralAddress?: string;
       payout: string;
       slippage: number;
-      payoutDecimals: number;
-      quoteDecimals: number;
+      market: CalculatedMarket;
     }): Promise<ContractTransaction> => {
       if (!signer) throw Error("Not connected");
 
-      const { payout, slippage, ...rest } = args;
+      const { address, amount, payout, slippage, market } = args;
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
+      const referralAddress =
+        NO_FRONTEND_FEE_OWNERS.includes(market.network.concat("_").concat(market.owner)) ?
+          NO_REFERRAL_ADDRESS :
+          REFERRAL_ADDRESS;
+
       return contractLibrary.purchase(
-        rest.address,
-        REFERRAL_ADDRESS,
-        rest.marketId,
-        rest.amount,
+        address,
+        referralAddress,
+        market.marketId,
+        amount,
         minimumOut,
-        rest.payoutDecimals,
-        rest.quoteDecimals,
-        rest.teller,
+        market.payoutToken.decimals,
+        market.quoteToken.decimals,
+        market.teller,
         signer,
         {
           gasPrice: 100,
@@ -120,30 +111,31 @@ export const usePurchaseBond = () => {
   const estimateBond = useCallback(
     async (args: {
       address: string;
-      marketId: number;
       amount: string;
-      teller: string;
-      referralAddress?: string;
       payout: string;
       slippage: number;
-      payoutDecimals: number;
-      quoteDecimals: number;
+      market: CalculatedMarket;
     }): Promise<BigNumberish> => {
       if (!signer) throw Error("Not connected");
 
-      const { payout, slippage, ...rest } = args;
+      const { address, amount, payout, slippage, market } = args;
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
+
+      const referralAddress =
+        NO_FRONTEND_FEE_OWNERS.includes(market.network.concat("_").concat(market.owner)) ?
+          NO_REFERRAL_ADDRESS :
+          REFERRAL_ADDRESS;
 
       try {
         return contractLibrary.estimatePurchaseGas(
-          rest.address,
-          REFERRAL_ADDRESS,
-          rest.marketId,
-          rest.amount,
+          address,
+          referralAddress,
+          market.marketId,
+          amount,
           minimumOut,
-          rest.payoutDecimals,
-          rest.quoteDecimals,
-          rest.teller,
+          market.payoutToken.decimals,
+          market.quoteToken.decimals,
+          market.teller,
           signer,
           {
             gasPrice: 1000,
