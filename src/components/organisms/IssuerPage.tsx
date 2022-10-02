@@ -62,7 +62,9 @@ export const IssuerPage: FC = () => {
             <SocialRow {...protocol.links} className="my-5"/>
             {protocol.links?.homepage && (
               <div className="flex flex-row justify-center">
-                <Link href={protocol.links.homepage}>
+                <Link href={protocol.links.homepage}
+                      target="_blank"
+                      rel="noopener noreferrer">
                   {protocol.links.homepage}
                 </Link>
               </div>
