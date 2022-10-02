@@ -1,20 +1,104 @@
-import { useNavigate } from "react-router-dom";
-import { Accordion, Button, Footer } from "..";
-import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
-import { loremIpsum } from "../../utils";
-import { ProtocolLogo } from "components/atoms/ProtocolLogo";
+import {useNavigate} from "react-router-dom";
+import {Accordion, Button, Footer} from "..";
+import {ReactComponent as CloseIcon} from "../../assets/icons/close-icon.svg";
+import {ProtocolLogo} from "components/atoms/ProtocolLogo";
 
 export type InformationAreaProps = {
   onClose: () => void;
   open?: boolean;
 };
 
+const issueLink = (
+  <a
+    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/deploy-a-bond-market"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-black underline"
+  >
+    Find out how!
+  </a>
+);
+
+const verificationLink = (
+  <a
+    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/market-verification"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-black underline"
+  >
+    Find out how!
+  </a>
+);
+
+const closeLink = (
+  <a
+    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/my-markets"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-black underline"
+  >
+    Find out how!
+  </a>
+);
+
+const bondLink = (
+  <a
+    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/purchasing-a-bond"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-black underline"
+  >
+    Find out how!
+  </a>
+);
+
+const whoLink = (
+  <a
+    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-black underline"
+  >
+    Check out our Protocol Overview!
+  </a>
+);
+
 const content = [
-  { label: "How to issue a bond", content: loremIpsum },
-  { label: "How to get verified", content: loremIpsum },
-  { label: "How to close an issued bond", content: loremIpsum },
-  { label: "How to bond", content: loremIpsum },
-  { label: "Who are we", content: "Coming Soon" },
+  {
+    label: "How to issue a bond",
+    content:
+      <div>
+        Interested in issuing a bond market for your protocol? {issueLink}
+      </div>
+  },
+  {
+    label: "How to get verified",
+    content:
+      <div>
+        You can create a market and run your own UI without verification, but if you want your market to be listed on
+        the BondProtocol dApp, you need to verify your protocol. {verificationLink}
+      </div>
+  },
+  {
+    label: "How to close an issued bond",
+    content:
+      <div>
+        Want to close a market before it expires or sells out its full capacity? {closeLink}
+      </div>
+  },
+  {
+    label: "How to bond", content:
+      <div>
+        Want to purchase a bond listed on the dApp? {bondLink}
+      </div>
+  },
+  {
+    label: "Who are we",
+    content:
+      <div>
+        Interested in finding out more about BondProtocol? {whoLink}
+      </div>
+  },
 ];
 
 export const InformationArea = (props: InformationAreaProps) => {
@@ -53,8 +137,9 @@ export const InformationArea = (props: InformationAreaProps) => {
             Issue Bond Market
           </Button>
         </div>
-        <div className="mx-[15vw] child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
-          {content.map(({ label, content }, i) => (
+        <div
+          className="mx-[15vw] child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
+          {content.map(({label, content}, i) => (
             <Accordion
               label={label}
               className="text-black py-10 hover:bg-black/5 transition-all"
@@ -66,7 +151,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           ))}
         </div>
       </div>
-      <Footer />
+      <Footer/>
     </div>
   );
 };
