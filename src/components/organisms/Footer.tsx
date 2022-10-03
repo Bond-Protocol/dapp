@@ -32,17 +32,14 @@ export const Footer = ({
 }) => {
   const navigate = useNavigate();
 
-  console.log({ close: closeInfoArea });
   const goTo = (path: string) => {
     closeInfoArea();
     navigate(path);
   };
 
   return (
-    <div
-      className={`bg-brand-turtle-blue h-28 overflow-hidden bottom-0 w-full ${className}`}
-    >
-      <div className="h-full w-full px-[5vw] py-5 h-28 flex justify-between ">
+    <div className={`w-full ${className}`}>
+      <div className="h-full w-full px-[5vw] py-5 flex justify-between ">
         <ProtocolLogo className="my-6 left-24" />
         <div className="flex child:mx-2 font-faketion my-auto">
           <FooterLink onClick={() => goTo("/policy")}>

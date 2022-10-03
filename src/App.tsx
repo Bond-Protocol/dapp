@@ -17,20 +17,18 @@ export const App: FC = () => {
   return (
     <Providers>
       <div className="relative min-h-[100vh] overflow-x-hidden">
-        <div className="pb-28 h-[95vh] overflow-y-hidden">
-          <AppBackground />
-          <InformationArea
-            open={showInfoArea}
-            onClose={() => setShowInfoArea(false)}
-          />
-          <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
-          <PolicyRoutes />
-          <PageContainer>
-            <RouteMap />
-          </PageContainer>
-        </div>
-        <Footer closeInfoArea={() => setShowInfoArea(false)} />
+        <AppBackground />
+        <InformationArea
+          open={showInfoArea}
+          onClose={() => setShowInfoArea(false)}
+        />
+        <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
+        <PolicyRoutes />
+        <PageContainer>
+          <RouteMap />
+        </PageContainer>
       </div>
+      <Footer closeInfoArea={() => setShowInfoArea(false)} />
     </Providers>
   );
 };
