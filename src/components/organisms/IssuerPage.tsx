@@ -6,7 +6,7 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { InfoLabel, Link, Button } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
 import { useNavigate, useParams } from "react-router-dom";
-import {useUniqueBonders} from "hooks/useUniqueBonders";
+import { useUniqueBonders } from "hooks/useUniqueBonders";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -46,43 +46,52 @@ export const IssuerPage: FC = () => {
   return (
     <div className="pb-12">
       <div className="flex mt-6">
-        <Button variant="ghost" onClick={() => navigate(-1)}>
+        <Button variant="ghost" onClick={() => navigate("/issuers")}>
           Back to list
         </Button>
       </div>
       <div className="flex flex-col content-center mt-10">
         <div className="flex flex-row justify-center items-center">
           <img className="h-[64px] w-[64px] mr-4" src={logo()} />
-          <p className="text-5xl">{protocol?.name || placeholderProtocol.name}</p>
+          <p className="text-5xl">
+            {protocol?.name || placeholderProtocol.name}
+          </p>
         </div>
 
         <div className="flex flex-row justify-center mt-3">
           <p>{protocol?.description || placeholderProtocol.description}</p>
         </div>
 
-        {protocol &&
+        {protocol && (
           <>
-            <SocialRow {...protocol.links} className="my-5"/>
+            <SocialRow {...protocol.links} className="my-5" />
             {protocol.links?.homepage && (
               <div className="flex flex-row justify-center">
-                <Link href={protocol.links.homepage}
-                      target="_blank"
-                      rel="noopener noreferrer">
+                <Link
+                  href={protocol.links.homepage}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   {protocol.links.homepage}
                 </Link>
               </div>
             )}
           </>
-        }
-        </div>
+        )}
+      </div>
 
       <div className="my-16 flex justify-between gap-16 child:w-full">
-        <InfoLabel label="Total Value Bonded"
-                   tooltip={`Estimated total value in USD of all purchases from ${protocol?.name} markets.`}>
+        <InfoLabel
+          label="Total Value Bonded"
+          tooltip={`Estimated total value in USD of all purchases from ${protocol?.name} markets.`}
+        >
           ${Math.trunc(tbv)}
         </InfoLabel>
 
-        <InfoLabel label="Unique Bonders" tooltip={`The number of unique addresses which have purchased ${protocol?.name} bonds.`}>
+        <InfoLabel
+          label="Unique Bonders"
+          tooltip={`The number of unique addresses which have purchased ${protocol?.name} bonds.`}
+        >
           {bonders}
         </InfoLabel>
 
