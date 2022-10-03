@@ -3,22 +3,15 @@ import { ModalTitle } from "../atoms/ModalTitle";
 import useBrowserStorage from "../../hooks/useBrowserStorage";
 
 const tcLink = (
-  <a href="/tc" target="_blank" className="text-blue-500">
-    Terms of Service
+  <a href="/terms" target="_blank" className="text-blue-500">
+    Terms of Use
   </a>
 );
-const tcTop = (
-  <p>
-    Please read our {tcLink} and review the list of restricted countries Bond
-    Protocol does not serve.
-  </p>
-);
+const tcTop = <p>This dApp is in βeta. </p>;
+const tcMid = <p>Use at your own risk.</p>;
 
 const tcBottom = (
-  <p className="mt-5">
-    By clicking &quot;Accept&quot; you agree to our {tcLink} and confirm you do
-    not live in one of the restricted countries Bond Protocol does not serve.
-  </p>
+  <p className="mt-5">By clicking "Accept" you agree to our {tcLink}.</p>
 );
 
 export const GeneralTermsDialog = (props: { onAccept: () => void }) => {
@@ -36,9 +29,10 @@ export const GeneralTermsDialog = (props: { onAccept: () => void }) => {
 
   return (
     <div className="text-center">
-      <ModalTitle>Terms and Conditions</ModalTitle>
+      <ModalTitle>Terms of Use</ModalTitle>
       <div className="mt-5 px-10">
         {tcTop}
+        {tcMid}
         {tcBottom}
       </div>
       <div className="flex justify-between mt-8 h-[40px] gap-2">

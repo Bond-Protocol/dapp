@@ -13,7 +13,6 @@ export const Footer = ({ className = "" }: { className?: string }) => {
   const navigate = useNavigate();
 
   const goToTerms = () => navigate("/terms");
-  const goToCookiePolicy = () => navigate("/cookie-policy");
 
   return (
     <div
@@ -22,11 +21,12 @@ export const Footer = ({ className = "" }: { className?: string }) => {
       <div className="h-full w-full px-[5vw] py-5 h-28 flex justify-between ">
         <ProtocolLogo className="my-6 left-24" />
         <div className="flex child:mx-2 font-faketion my-auto">
-          <p className="hover:underline hover:cursor-pointer">Terms of Use</p>
-          <p>-</p>
-          <p className="hover:underline hover:cursor-pointer">Privacy Policy</p>
-          <p>-</p>
-          <p className="hover:underline hover:cursor-pointer">Cookie Policy</p>
+          <p
+            className="hover:underline hover:cursor-pointer"
+            onClick={goToTerms}
+          >
+            Terms of Use
+          </p>
         </div>
         <SocialRow {...socials} />
       </div>
