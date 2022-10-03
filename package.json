@@ -19,8 +19,8 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@bond-protocol/bond-library": "0.0.29",
-    "@bond-protocol/contract-library": "0.0.25",
+    "@bond-protocol/bond-library": "0.0.30",
+    "@bond-protocol/contract-library": "0.0.27",
     "@material-tailwind/react": "^1.0.6",
     "@mui/base": "^5.0.0-alpha.88",
     "@rainbow-me/rainbowkit": "^0.4.5",
