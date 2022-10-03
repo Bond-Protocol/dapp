@@ -16,7 +16,7 @@ export const Footer = ({ className = "" }: { className?: string }) => {
 
   return (
     <div
-      className={`bg-brand-turtle-blue h-28 absolute overflow-hidden bottom-0 w-full ${className}`}
+      className={`bg-brand-turtle-blue h-28 overflow-hidden bottom-0 w-full ${className}`}
     >
       <div className="h-full w-full px-[5vw] py-5 h-28 flex justify-between ">
         <ProtocolLogo className="my-6 left-24" />

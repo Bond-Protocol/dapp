@@ -1,18 +1,21 @@
 import * as React from "react";
-import {FC, useEffect, useState} from "react";
-import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
-import {CalculatedMarket} from "@bond-protocol/contract-library";
-import {CHAINS, getProtocolByAddress} from "@bond-protocol/bond-library";
+import { FC, useEffect, useState } from "react";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CHAINS, getProtocolByAddress } from "@bond-protocol/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
 import ArrowIcon from "../../assets/icons/arrow-icon.svg";
-import {formatLongNumber, getBlockExplorer} from "../../utils";
-import {providers} from "services/owned-providers";
-import {usePurchaseBond, useTokenAllowance} from "hooks";
-import {Button, InfoLabel, Link} from "components/atoms";
-import {BondButton, InputCard, SummaryCard} from "components/molecules";
-import {BondPurchaseModal} from "./BondPurchaseModal";
-import {calculateTrimDigits, trim} from "@bond-protocol/contract-library/dist/core/utils";
-import {useGasPrice} from "hooks/useGasPrice";
+import { formatLongNumber, getBlockExplorer } from "../../utils";
+import { providers } from "services/owned-providers";
+import { usePurchaseBond, useTokenAllowance } from "hooks";
+import { Button, InfoLabel, Link } from "components/atoms";
+import { BondButton, InputCard, SummaryCard } from "components/molecules";
+import { BondPurchaseModal } from "./BondPurchaseModal";
+import {
+  calculateTrimDigits,
+  trim,
+} from "@bond-protocol/contract-library/dist/core/utils";
+import { useGasPrice } from "hooks/useGasPrice";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -22,7 +25,7 @@ export type BondListCardProps = {
   infoLabel?: boolean;
 };
 
-export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
+export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
@@ -35,27 +38,29 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
     usdPrice: "0",
   });
 
-  const {getGasPrice} = useGasPrice();
-  const {address, isConnected} = useAccount();
-  const {switchNetwork} = useSwitchNetwork();
-  const {bond, estimateBond, getPayoutFor} = usePurchaseBond();
-  const {approve, balance, hasSufficientAllowance, hasSufficientBalance} =
+  const { getGasPrice } = useGasPrice();
+  const { address, isConnected } = useAccount();
+  const { switchNetwork } = useSwitchNetwork();
+  const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
+  const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
     useTokenAllowance(
       market.quoteToken.address,
       market.quoteToken.decimals,
       market.network,
       market.auctioneer,
-      amount,
+      amount
     );
   const network = useNetwork();
   const protocol = getProtocolByAddress(market.owner, market.network);
-  const {blockExplorerName, blockExplorerUrl} = getBlockExplorer(
+  const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
     market.network,
     "address"
   );
 
-  const showOwnerBalanceWarning = Number(market.maxPayout) > Number(market.ownerBalance);
-  const showOwnerAllowanceWarning = Number(market.maxPayout) > Number(market.ownerAllowance);
+  const showOwnerBalanceWarning =
+    Number(market.maxPayout) > Number(market.ownerBalance);
+  const showOwnerAllowanceWarning =
+    Number(market.maxPayout) > Number(market.ownerAllowance);
 
   useEffect(() => {
     if (gasPrice && estimatedGas) {
@@ -116,7 +121,11 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
   };
 
   const approveSpending = () =>
-    approve(market.quoteToken.address, market.quoteToken.decimals, market.auctioneer);
+    approve(
+      market.quoteToken.address,
+      market.quoteToken.decimals,
+      market.auctioneer
+    );
 
   const onClickBond = !hasSufficientAllowance
     ? approveSpending
@@ -139,15 +148,17 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
           ? CHAINS.get(market.network)?.nativeCurrency.symbol
           : "ETH"
       } ($${networkFeeUsd})`,
-      tooltip: "Estimated gas fee for this transaction. NOTE: gas fees fluctuate and the price displayed may not be the price you pay.",
+      tooltip:
+        "Estimated gas fee for this transaction. NOTE: gas fees fluctuate and the price displayed may not be the price you pay.",
     },
     {
       label: "Bond Contract",
       value: (
-        <Link href={blockExplorerUrl + market.auctioneer}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-fit"
+        <Link
+          href={blockExplorerUrl + market.auctioneer}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-fit"
         >
           View on {blockExplorerName}
         </Link>
@@ -183,10 +194,10 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
   };
 
   return (
-    <>
+    <div className="pb-8">
       <div className="flex justify-between w-[80vw] pl-4 my-5">
         <div className="flex">
-          <TestIcon className="fill-white my-auto"/>
+          <TestIcon className="fill-white my-auto" />
           <p className="font-faketion text-[48px]">
             {protocol?.name || market.payoutToken?.symbol}
           </p>
@@ -219,22 +230,37 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
           {props.infoLabel && (
             <div className="flex justify-evenly">
               <InfoLabel
-                label={market.vestingType === "fixed-term" ? "Vesting Term" : "Vesting Date"}
+                label={
+                  market.vestingType === "fixed-term"
+                    ? "Vesting Term"
+                    : "Vesting Date"
+                }
                 tooltip={
-                market.vestingType === "fixed-term" ?
-                  "Purchase from a fixed term market will vest on the specified number of days after purchase. All bonds vest at midnight UTC." :
-                  "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If the date is in the past, they will vest immediately upon purchase."}>
+                  market.vestingType === "fixed-term"
+                    ? "Purchase from a fixed term market will vest on the specified number of days after purchase. All bonds vest at midnight UTC."
+                    : "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If the date is in the past, they will vest immediately upon purchase."
+                }
+              >
                 {vestingLabel}
               </InfoLabel>
               <InfoLabel
                 label="Remaining Capacity"
-                tooltip={`Total bond capacity remaining in this market. When capacity reaches 0, the market will close.`}>
+                tooltip={`Total bond capacity remaining in this market. When capacity reaches 0, the market will close.`}
+              >
                 <p
                   className={`flex justify-center items-end ${
-                    trim(market.currentCapacity, calculateTrimDigits(market.currentCapacity)).length > 7 ? "text-xs" : ""
+                    trim(
+                      market.currentCapacity,
+                      calculateTrimDigits(market.currentCapacity)
+                    ).length > 7
+                      ? "text-xs"
+                      : ""
                   }`}
                 >
-                  {trim(market.currentCapacity, calculateTrimDigits(market.currentCapacity))}
+                  {trim(
+                    market.currentCapacity,
+                    calculateTrimDigits(market.currentCapacity)
+                  )}
                   &nbsp;{market.payoutToken.symbol}
                 </p>
               </InfoLabel>
@@ -248,41 +274,52 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
             className="mt-5"
           />
           <div className="text-xs font-light pt-2 my-1 text-red-500 justify-self-start">
-            {showOwnerBalanceWarning &&
+            {showOwnerBalanceWarning && (
               <div>
                 <p className="py-1">
-                  WARNING: This market allows a max payout of {market.maxPayout} {market.payoutToken.symbol},
-                  however the market owner currently has a balance of {market.ownerBalance} {market.payoutToken.symbol}.
+                  WARNING: This market allows a max payout of {market.maxPayout}{" "}
+                  {market.payoutToken.symbol}, however the market owner
+                  currently has a balance of {market.ownerBalance}{" "}
+                  {market.payoutToken.symbol}.
                 </p>
                 <p className="py-1">
-                  If you are the market owner, you can fix this issue by transferring
-                  more {market.payoutToken.symbol} to the owner address {market.owner}.
+                  If you are the market owner, you can fix this issue by
+                  transferring more {market.payoutToken.symbol} to the owner
+                  address {market.owner}.
                 </p>
               </div>
-            }
-            {showOwnerAllowanceWarning &&
+            )}
+            {showOwnerAllowanceWarning && (
               <div>
                 <p className="py-1">
-                  WARNING: This market allows a max payout of {market.maxPayout} {market.payoutToken.symbol},
-                  however the market owner's allowance is limited to {market.ownerAllowance} {market.payoutToken.symbol}.
+                  WARNING: This market allows a max payout of {market.maxPayout}{" "}
+                  {market.payoutToken.symbol}, however the market owner's
+                  allowance is limited to {market.ownerAllowance}{" "}
+                  {market.payoutToken.symbol}.
                 </p>
                 <p className="py-1">
-                  If you are the market owner, you can fix this issue by increasing the allowance for {market.teller} to
-                  spend {market.payoutToken.symbol} from the owner address {market.owner}.
+                  If you are the market owner, you can fix this issue by
+                  increasing the allowance for {market.teller} to spend{" "}
+                  {market.payoutToken.symbol} from the owner address{" "}
+                  {market.owner}.
                 </p>
               </div>
-            }
-            {(showOwnerBalanceWarning || showOwnerAllowanceWarning) &&
+            )}
+            {(showOwnerBalanceWarning || showOwnerAllowanceWarning) && (
               <div>
                 <p className="py-1">
-                  As a result, attempts to purchase a bond paying out an amount in excess
-                  of {Math.min(Number(market.ownerBalance), Number(market.ownerAllowance))}
+                  As a result, attempts to purchase a bond paying out an amount
+                  in excess of{" "}
+                  {Math.min(
+                    Number(market.ownerBalance),
+                    Number(market.ownerAllowance)
+                  )}
                   &nbsp;{market.payoutToken.symbol} will fail.
                 </p>
               </div>
-            }
+            )}
           </div>
-          <SummaryCard fields={summaryFields}/>
+          <SummaryCard fields={summaryFields} />
           <BondButton
             showConnect={!isConnected}
             showSwitcher={!correctChain}
@@ -312,6 +349,6 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
         issuer={protocol?.name}
         vestingTime={vestingLabel}
       />
-    </>
+    </div>
   );
 };

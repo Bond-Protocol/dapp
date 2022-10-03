@@ -5,7 +5,7 @@ import { CalculatedMarket, Token } from "@bond-protocol/contract-library";
 import { ExpandableRow } from "components/molecules/ExpandableRow";
 import { CloseMarketCard } from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
-import {useMarkets, useTokens} from "hooks";
+import { useMarkets, useTokens } from "hooks";
 import { TableHeading } from "components/atoms/TableHeading";
 import { TableCell } from "components/atoms/TableCell";
 import { CellLabel } from "components/atoms/CellLabel";
@@ -162,10 +162,7 @@ export const MarketList: FC<MarketListProps> = ({
 
       return (
         <div className="flex flex-row">
-          <img
-            className="h-[32px] w-[32px]"
-            src={token0}
-          />
+          <img className="h-[32px] w-[32px]" src={token0} />
           <img
             className="h-[32px] w-[32px] flex self-end ml-[-8px]"
             src={token1}

@@ -17,17 +17,19 @@ export const App: FC = () => {
 
   return (
     <Providers>
-      <div className="relative min-h-[100vh] overflow-x-hidden">
-        <AppBackground />
-        <InformationArea
-          open={showInfoArea}
-          onClose={() => setShowInfoArea(false)}
-        />
-        <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
-        <PolicyRoutes />
-        <PageContainer>
-          <RouteMap />
-        </PageContainer>
+      <div className="relative min-h-[100vh] overflow-x-hidden overflow-y-scroll">
+        <div className="pb-28 h-[95vh] overflow-y-hidden">
+          <AppBackground />
+          <InformationArea
+            open={showInfoArea}
+            onClose={() => setShowInfoArea(false)}
+          />
+          <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
+          <PolicyRoutes />
+          <PageContainer>
+            <RouteMap />
+          </PageContainer>
+        </div>
         <Footer className="mt-4" />
       </div>
     </Providers>
