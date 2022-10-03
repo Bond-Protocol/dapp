@@ -148,8 +148,15 @@ export const privacyPolicy = {
     },
     {
       title: "10. What If You Have Questions Regarding Your Personal Data?",
-      content:
-        "If you have any questions about this section or our data practices generally, please contact notices@bondprotocol.finance",
+      content: (
+        <>
+          If you have any questions about this section or our data practices
+          generally, please contact
+          <a href="mailto:notices@bondprotocol.finance">
+            notices@bondprotocol.finance
+          </a>
+        </>
+      ),
     },
   ],
 };

@@ -51,7 +51,9 @@ export const Footer = ({
           <p>-</p>
           <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
           <p>-</p>
-          <FooterLink onClick={() => goTo("/terms")}>Cookie Policy</FooterLink>
+          <FooterLink onClick={() => goTo("/cookies")}>
+            Cookie Policy
+          </FooterLink>
         </div>
         <SocialRow {...socials} />
       </div>
