@@ -72,7 +72,10 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
       : market.formattedShortVesting;
 
   useEffect(() => {
-    if (market.network === network?.chain?.network) {
+    if (
+      market.network === network?.chain?.network ||
+      (market.network === "mainnet" && network?.chain?.network === "homestead")
+    ) {
       setCorrectChain(true);
     }
   }, [network, market.network]);
