@@ -38,7 +38,7 @@ const formDefaults = {
   vestingType: 0,
   bondsPerWeek: 7,
   debtBuffer: 30,
-  chain: "goerli",
+  chain: "mainnet",
 };
 
 export type CreateMarketPageProps = {
