@@ -6,7 +6,7 @@ import { InformationArea } from "components/pages/InformationArea";
 import { AppBackground } from "components/atoms/AppBackground";
 import { RequireTermsAndConditions } from "components/utility/RequiresTermsAndConditions";
 import { CoverUpScreen } from "components/pages/CoverUpScreen";
-import { RouteMap } from "./RouteMap";
+import { PolicyRoutes, RouteMap } from "./RouteMap";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
@@ -24,6 +24,7 @@ export const App: FC = () => {
           onClose={() => setShowInfoArea(false)}
         />
         <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
+        <PolicyRoutes />
         <PageContainer>
           <RouteMap />
         </PageContainer>
