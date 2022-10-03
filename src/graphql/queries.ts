@@ -329,6 +329,7 @@ export const listErc20BondTokensMainnet = gql`
             expiry
             teller
             network
+            type
         }
     }
 `;
@@ -348,6 +349,7 @@ export const listErc20BondTokensGoerli = gql`
             expiry
             teller
             network
+            type
         }
     }
 `;

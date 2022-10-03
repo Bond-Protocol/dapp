@@ -60,10 +60,9 @@ export const MyBondsList = () => {
 
   async function redeemBond(bond: OwnerBalance) {
     const redeemTx: ContractTransaction = await redeem(
-      bond.tokenId,
-      bond.bondToken?.teller,
-      // @ts-ignore
-      bond.bondToken?.type,
+      bond.bondToken.id,
+      bond.bondToken.network,
+      bond.bondToken.type,
       bond.balance.toString(),
       signer,
       {
@@ -113,19 +112,19 @@ export const MyBondsList = () => {
                 usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
 
                 const underlying = bond.bondToken && getTokenDetails(bond.bondToken.underlying);
-                const isCorrectNetwork = bond.network === chain?.network;
+                const isCorrectNetwork = bond.bondToken.network === chain?.network;
                 const handleClaim = isCorrectNetwork
                   ? () => redeemBond(bond)
                   : (e: React.BaseSyntheticEvent) =>
-                      switchChain(e, bond.network);
+                      switchChain(e, bond.bondToken.network);
 
                 return (
-                  <tr key={bond.id}>
+                  <tr key={bond.bondToken.id}>
                     <TableCell className="flex flex-row">
                       <img className="h-[32px] w-[32px]" src={underlying?.logoUrl} />
                       <p className="my-auto pl-1">{underlying?.symbol}</p>
                     </TableCell>
-                    <TableCell>{bond.network}</TableCell>
+                    <TableCell>{bond.bondToken.network}</TableCell>
                     <TableCell>{date.toDateString()}</TableCell>
                     <TableCell className="flex flex-row">
                       <div className="my-auto pr-1">

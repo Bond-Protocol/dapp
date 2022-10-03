@@ -78,10 +78,7 @@ export function useMyBonds() {
                 ownerBalances.push({
                   balance: balance,
                   bondToken: bondToken,
-                  id: bondToken.id,
-                  network: bondToken.network,
                   owner: address,
-                  tokenId: bondToken.id,
                 });
               }
             })
