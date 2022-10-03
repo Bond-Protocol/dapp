@@ -152,7 +152,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           ))}
         </div>
       </div>
-      <Footer closeInfoArea={props.onClose} />
+      <Footer closeInfoArea={props.onClose} className="bg-brand-turtle-blue" />
     </div>
   );
 };
