@@ -47,7 +47,7 @@ export type CreateMarketPageProps = {
 };
 
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
-  const { getPrice, getTokenDetails } = useTokens();
+  const { getPrice } = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
   const [quoteTokenInfo, setQuoteTokenInfo] =
