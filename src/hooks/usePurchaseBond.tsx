@@ -99,10 +99,7 @@ export const usePurchaseBond = () => {
         market.quoteToken.decimals,
         market.teller,
         signer,
-        {
-          gasPrice: 100,
-          gasLimit: 10000000,
-        }
+        {}
       );
     },
     [signer]
@@ -137,10 +134,7 @@ export const usePurchaseBond = () => {
           market.quoteToken.decimals,
           market.teller,
           signer,
-          {
-            gasPrice: 1000,
-            gasLimit: 1000000000000,
-          }
+          {}
         );
       } catch (e) {
         console.log(e);
