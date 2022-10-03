@@ -4,7 +4,6 @@ import { Footer, Navbar } from "components/organisms";
 import { PageContainer } from "components/atoms";
 import { InformationArea } from "components/pages/InformationArea";
 import { AppBackground } from "components/atoms/AppBackground";
-import { RequireTermsAndConditions } from "components/utility/RequiresTermsAndConditions";
 import { CoverUpScreen } from "components/pages/CoverUpScreen";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
 
@@ -17,7 +16,7 @@ export const App: FC = () => {
 
   return (
     <Providers>
-      <div className="relative min-h-[100vh] overflow-x-hidden overflow-y-scroll">
+      <div className="relative min-h-[100vh] overflow-x-hidden">
         <div className="pb-28 h-[95vh] overflow-y-hidden">
           <AppBackground />
           <InformationArea
@@ -30,7 +29,7 @@ export const App: FC = () => {
             <RouteMap />
           </PageContainer>
         </div>
-        <Footer className="mt-4" />
+        <Footer closeInfoArea={() => setShowInfoArea(false)} />
       </div>
     </Providers>
   );

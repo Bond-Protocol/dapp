@@ -16,7 +16,7 @@ import {
 } from "components/organisms";
 import { useState } from "react";
 import { PolicyPage } from "components/pages/PolicyPage";
-import { terms } from "./content/terms-of-use";
+import { terms, privacyPolicy } from "./content";
 
 export const RouteMap: FC = () => {
   const { isMarketOwner } = useMarkets();
@@ -58,6 +58,7 @@ export const PolicyRoutes = () => {
   return (
     <Switch>
       <Route path="/terms" element={<PolicyPage {...terms} />} />
+      <Route path="/policy" element={<PolicyPage {...privacyPolicy} />} />
     </Switch>
   );
 };
