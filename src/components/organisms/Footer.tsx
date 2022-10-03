@@ -1,5 +1,6 @@
 import { ProtocolLogo } from "components/atoms/ProtocolLogo";
 import { SocialRow } from "components/atoms/SocialRow";
+import { useNavigate } from "react-router-dom";
 
 export const socials = {
   medium: "https://medium.com/@Bond_Protocol",
@@ -9,15 +10,25 @@ export const socials = {
 };
 
 export const Footer = ({ className = "" }: { className?: string }) => {
+  const navigate = useNavigate();
+
+  const goToTerms = () => navigate("/terms");
+  const goToCookiePolicy = () => navigate("/cookie-policy");
+
   return (
     <div
-      className={`bg-brand-turtle-blue h-28 relative overflow-hidden ${className}`}
+      className={`bg-brand-turtle-blue h-28 absolute overflow-hidden bottom-0 w-full ${className}`}
     >
-      <div className="h-full w-full px-[5vw] py-5 h-28">
-        <ProtocolLogo className="absolute my-6" />
-        <div className="h-full flex flex-col justify-evenly my-auto">
-          <SocialRow {...socials} />
+      <div className="h-full w-full px-[5vw] py-5 h-28 flex justify-between ">
+        <ProtocolLogo className="my-6 left-24" />
+        <div className="flex child:mx-2 font-faketion my-auto">
+          <p className="hover:underline hover:cursor-pointer">Terms of Use</p>
+          <p>-</p>
+          <p className="hover:underline hover:cursor-pointer">Privacy Policy</p>
+          <p>-</p>
+          <p className="hover:underline hover:cursor-pointer">Cookie Policy</p>
         </div>
+        <SocialRow {...socials} />
       </div>
     </div>
   );
