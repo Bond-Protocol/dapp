@@ -1,6 +1,6 @@
 type Condition = {
   title: string;
-  content: string;
+  content: string | React.ReactNode;
 };
 
 export type TermsPage = {
