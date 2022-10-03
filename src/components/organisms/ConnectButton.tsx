@@ -1,6 +1,7 @@
-import {ConnectButton as ConnectButtonUnstyled} from "@rainbow-me/rainbowkit";
-import {useState} from "react";
-import {Button} from "..";
+import { ConnectButton as ConnectButtonUnstyled } from "@rainbow-me/rainbowkit";
+import { useState } from "react";
+import { Button } from "..";
+import { ReactComponent as WalletIcon } from "../../assets/icons/wallet.svg";
 
 export const ConnectButton = () => {
   const [hovering, setHovering] = useState(false);
@@ -34,11 +35,14 @@ export const ConnectButton = () => {
               if (!connected) {
                 return (
                   <Button
-                    className="px-2.5"
+                    className="flex px-[20px]"
                     variant="ghost"
                     onClick={openConnectModal}
                   >
-                    Connect Wallet
+                    <WalletIcon className="fill-white my-auto hover:fill-brand-yella hover:color-brand-yella" />
+                    <p className="pl-2 capitalize font-light text-sm">
+                      Connect
+                    </p>
                   </Button>
                 );
               }
