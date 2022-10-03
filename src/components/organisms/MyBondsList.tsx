@@ -3,15 +3,15 @@ import { useMyBonds } from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
 import { ContractTransaction } from "ethers";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "src/generated/graphql";
 import { useEffect, useRef, useState } from "react";
 import { providers } from "services/owned-providers";
 import { useTokens } from "hooks";
-import { getToken } from "@bond-protocol/bond-library";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { useNavigate } from "react-router-dom";
 import { TableHeading, TableCell } from "..";
+import {calculateTrimDigits, trim} from "@bond-protocol/contract-library/dist/core/utils";
 
 const NoBondsView = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export const MyBondsList = () => {
   const { data: signer } = useSigner();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
-  const { getTokenDetails } = useTokens();
+  const { getTokenDetails, getPrice } = useTokens();
 
   const [numBonds, setNumBonds] = useState<number>(myBonds.length);
   const timerRef = useRef<NodeJS.Timeout>();
@@ -59,7 +59,6 @@ export const MyBondsList = () => {
   };
 
   async function redeem(bond: OwnerBalance) {
-    console.log({ bond });
     const redeemTx: ContractTransaction = await contractLibrary.redeem(
       bond.tokenId,
       bond.bondToken?.teller,
@@ -106,9 +105,13 @@ export const MyBondsList = () => {
                 const date = new Date(bond.bondToken?.expiry * 1000);
                 const now = new Date(Date.now());
                 const canClaim = now >= date;
-                const balance =
-                  bond.balance /
-                  Math.pow(10, bond.bondToken?.underlying.decimals);
+
+                let balance = bond.balance / Math.pow(10, bond.bondToken?.underlying.decimals);
+                balance = trim(balance, calculateTrimDigits(balance));
+
+                let usdPrice = getPrice(bond.bondToken?.underlying?.id) * balance;
+                usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
+
                 const underlying = bond.bondToken && getTokenDetails(bond.bondToken.underlying);
                 const isCorrectNetwork = bond.network === chain?.network;
                 const handleClaim = isCorrectNetwork
@@ -129,9 +132,9 @@ export const MyBondsList = () => {
                         <img className="h-[32px] w-[32px]" src={underlying?.logoUrl} />
                       </div>
                       <div>
-                        <p>{balance.toFixed(2) + " " + underlying?.symbol}</p>
+                        <p>{balance + " " + underlying?.symbol}</p>
                         <p className="text-xs text-light-primary-500">
-                          (Market: $???)
+                          (Market: ${usdPrice})
                         </p>
                       </div>
                     </TableCell>
@@ -143,7 +146,6 @@ export const MyBondsList = () => {
                           </Button>
                         )}
                         {canClaim && (
-                          // @ts-ignore
                           <Button
                             className="w-full"
                             variant={isCorrectNetwork ? "primary" : "secondary"}

@@ -127,16 +127,16 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
     {
       label: "Max Bondable",
       value: `${market.maxAmountAccepted} ${market.quoteToken.symbol}`,
-      tooltip: "Soon™",
+      tooltip: `The maximum amount of ${market.quoteToken.symbol} accepted in a single transaction.`,
     },
     {
-      label: "Network Fee",
+      label: "Estimated Gas Fee",
       value: `${networkFee} ${
         CHAINS.get(market.network)
           ? CHAINS.get(market.network)?.nativeCurrency.symbol
           : "ETH"
       } ($${networkFeeUsd})`,
-      tooltip: "Soon™",
+      tooltip: "Estimated gas fee for this transaction. NOTE: gas fees fluctuate and the price displayed may not be the price you pay.",
     },
     {
       label: "Bond Contract",
@@ -149,7 +149,6 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
           View on {blockExplorerName}
         </Link>
       ),
-      tooltip: "Soon™",
     },
   ];
 
@@ -185,7 +184,7 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
       <div className="flex justify-between w-[80vw] pl-4 my-5">
         <div className="flex">
           <TestIcon className="fill-white my-auto"/>
-          <p className="font-fraktion text-[48px]">
+          <p className="font-faketion text-[48px]">
             {protocol?.name || market.payoutToken?.symbol}
           </p>
         </div>
@@ -209,15 +208,24 @@ export const BondListCard: FC<BondListCardProps> = ({market, ...props}) => {
       <div className="flex w-[80vw] mt-12 gap-4 mb-6">
         <div className="w-1/2">
           {protocol?.description && <p>{protocol.description}</p>}
-          <div className="text-center p-[12%] border">📈</div>
+          {/* TODO: Hide graph until data is available
+            <div className="text-center p-[12%] border">📈</div>
+          */}
         </div>
         <div className="w-1/2 flex flex-col">
           {props.infoLabel && (
             <div className="flex justify-evenly">
-              <InfoLabel label="Vesting Term" tooltip="tooltip popup">
+              <InfoLabel
+                label={market.vestingType === "fixed-term" ? "Vesting Term" : "Vesting Date"}
+                tooltip={
+                market.vestingType === "fixed-term" ?
+                  "Purchase from a fixed term market will vest on the specified number of days after purchase. All bonds vest at midnight UTC." :
+                  "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If the date is in the past, they will vest immediately upon purchase."}>
                 {vestingLabel}
               </InfoLabel>
-              <InfoLabel label="Remaining Capacity" tooltip="tooltip popup">
+              <InfoLabel
+                label="Remaining Capacity"
+                tooltip={`Total bond capacity remaining in this market. When capacity reaches 0, the market will close.`}>
                 <p
                   className={`flex justify-center items-end ${
                     trim(market.currentCapacity, calculateTrimDigits(market.currentCapacity)).length > 7 ? "text-xs" : ""

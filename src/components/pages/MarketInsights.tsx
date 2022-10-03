@@ -1,16 +1,10 @@
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondListCard } from "..";
-import { usePurchaseBond } from "hooks/usePurchaseBond";
-import { formatLongNumber, getBlockExplorer, trimAddress } from "../../utils";
-import { InfoLabel, Link, TableCell, TableHeading } from "components/atoms";
+import { InfoLabel, TableHeading } from "components/atoms";
 import receiptIcon from "../../assets/icons/receipt-icon.svg";
 import { useMarkets } from "context/market-context";
-
-export type MarketInsightsPageProps = {
-  markets: CalculatedMarket[];
-};
+import {calculateTrimDigits, trim} from "@bond-protocol/contract-library/dist/core/utils";
+import * as React from "react";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
@@ -18,39 +12,6 @@ export const MarketInsights = () => {
   const navigate = useNavigate();
   const markets = Array.from(allMarkets.values());
   const market = markets.find(({ marketId }) => marketId === Number(id));
-  const { getPayoutFor } = usePurchaseBond();
-  const [maxPayout, setMaxPayout] = useState("0");
-
-  const { blockExplorerUrl: blockExplorerAddressUrl } = getBlockExplorer(
-    market?.network || "",
-    "address"
-  );
-  const { blockExplorerUrl: blockExplorerTxUrl } = getBlockExplorer(
-    market?.network || "",
-    "tx"
-  );
-
-  useEffect(() => {
-    const loadPayoutFor = async () => {
-      if (!market) return;
-
-      const payout = await getPayoutFor(
-        market.maxAmountAccepted,
-        market.quoteToken.decimals,
-        market.marketId,
-        market.auctioneer
-      );
-      setMaxPayout(
-        Math.trunc(
-          formatLongNumber(payout, market.quoteToken.decimals)
-        ).toString()
-      );
-    };
-
-    loadPayoutFor().catch((e) => {
-      console.log(e, "Failed to load payout");
-    });
-  }, [getPayoutFor, market]);
 
   if (!market) return <div>Unsupported Market</div>;
 
@@ -67,19 +28,26 @@ export const MarketInsights = () => {
         topRightLabel="Go to Markets"
       />
       <div className="my-16 flex justify-between gap-4 child:w-full">
-        <InfoLabel label="Max Payout" tooltip="tooltip">
-          {maxPayout} {market.payoutToken.symbol}
+        <InfoLabel label="Max Payout" tooltip="The maximum payout currently available from this market.">
+          {trim(market.maxPayoutUsd, calculateTrimDigits(market.maxPayoutUsd))} {market.payoutToken.symbol}
         </InfoLabel>
-        <InfoLabel label="Current Discount" tooltip="Tooltip">
+
+        <InfoLabel label="Current Discount" tooltip="The current discount available from this market.">
           <p
             className={
               market?.discount > 0 ? "text-light-success" : "text-red-300"
             }
           >
-            {Math.trunc(market.discount)}%
+            {trim(market.discount, calculateTrimDigits(market.discount))}%
           </p>
         </InfoLabel>
-        <InfoLabel label="Vesting Term" tooltip="tooltip">
+
+        <InfoLabel
+          label={market.vestingType === "fixed-term" ? "Vesting Term" : "Vesting Date"}
+          tooltip={
+            market.vestingType === "fixed-term" ?
+              "Purchase from a fixed term market will vest on the specified number of days after purchase. All bonds vest at midnight UTC." :
+              "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If the date is in the past, they will vest immediately upon purchase."}>
           {vestingLabel}
         </InfoLabel>
       </div>

@@ -34,7 +34,7 @@ export const TableHeading = (props: TableHeadingProps) => {
       }}
     >
       <div
-        className={`flex font-fraktion tracking-widest ${
+        className={`flex font-faketion tracking-widest ${
           props.alignEnd ? "justify-end" : "justify-start"
         }`}
       >

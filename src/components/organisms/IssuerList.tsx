@@ -3,13 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { PROTOCOLS } from "@bond-protocol/bond-library";
 import { IssuerCard } from "components/molecules/IssuerCard";
 import { alphabeticSort, numericSort } from "services/sort";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { useMarkets } from "hooks";
-
-type IssuerListProps = {
-  issuers: string[];
-  marketsByIssuer: Map<string, CalculatedMarket>;
-};
 
 export const IssuerList = () => {
   const { marketsByIssuer, issuers } = useMarkets();
@@ -89,7 +83,7 @@ export const IssuerList = () => {
         <Button onClick={sortByTbv}>Sort by TBV</Button>
       </p>
         */}
-      <div className="mt-8 grid grid-cols-7 gap-8">
+      <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 2xl:grid-cols-7 gap-8">
         {sortedIssuers.map((issuer) => {
           const protocol = PROTOCOLS.get(issuer);
           if (protocol.name.toLowerCase().indexOf(search) != -1)

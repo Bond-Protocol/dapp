@@ -27,7 +27,7 @@ export const IssuerPage: FC = () => {
   const [tbv, setTbv] = useState(0);
 
   const logo = () => {
-    return protocol?.logoUrl != ""
+    return protocol?.logoUrl
       ? protocol?.logoUrl
       : "/placeholders/token-placeholder.png";
   };
@@ -77,15 +77,20 @@ export const IssuerPage: FC = () => {
         </div>
 
       <div className="my-16 flex justify-between gap-16 child:w-full">
-        <InfoLabel label="Total Value Bonded" tooltip="tooltip">
+        <InfoLabel label="Total Value Bonded"
+                   tooltip={`Estimated total value in USD of all purchases from ${protocol?.name} markets.`}>
           ${Math.trunc(tbv)}
         </InfoLabel>
-        <InfoLabel label="Unique Bonders" tooltip="tooltip">
+
+        <InfoLabel label="Unique Bonders" tooltip={`The number of unique addresses which have purchased ${protocol?.name} bonds.`}>
           {bonders}
         </InfoLabel>
-        <InfoLabel label="Average Discount Rate" tooltip="tooltip">
+
+        {/*  //TODO add back in when data is ready
+        <InfoLabel label="Average Discount Rate" tooltip={`The estimated average discount of all bond purchases from ${protocol?.name} markets.`}>
           ?
         </InfoLabel>
+        */}
       </div>
 
       {/*@ts-ignore for now pls*/}
