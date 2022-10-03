@@ -18,7 +18,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
           </div>
         </Tooltip>
       </div>
-      <h2 className="pb-4 font-fraktion text-2xl 2xl:text-4xl">
+      <h2 className="pb-4 font-faketion text-2xl 2xl:text-4xl">
         {props.children}
       </h2>
     </div>

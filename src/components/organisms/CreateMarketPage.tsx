@@ -1057,7 +1057,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               </div>
             )}
 
-            <Button type="submit" className="w-full font-fraktion mt-5">
+            <Button type="submit" className="w-full font-faketion mt-5">
               CONFIRM INFORMATION
             </Button>
           </div>

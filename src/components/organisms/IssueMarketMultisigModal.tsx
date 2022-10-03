@@ -81,7 +81,7 @@ export const IssueMarketMultisigModal = (props: IssueMarketMultisigModalProps) =
                   required={true}
                 />
 
-                <Button type="submit" className="w-full font-fraktion mt-5">
+                <Button type="submit" className="w-full font-faketion mt-5">
                   SUBMIT
                 </Button>
               </form>
@@ -90,7 +90,7 @@ export const IssueMarketMultisigModal = (props: IssueMarketMultisigModalProps) =
                 onClick={props.onReject}
                 variant="secondary"
                 long
-                className="w-full font-fraktion mt-5"
+                className="w-full font-faketion mt-5"
               >
                 Cancel
               </Button>

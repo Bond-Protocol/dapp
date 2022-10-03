@@ -108,27 +108,27 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         {!isConnected ? (
           <Button
             onClick={openConnectModal}
-            className="w-full font-fraktion mt-5"
+            className="w-full font-faketion mt-5"
           >
             CONNECT WALLET
           </Button>
         ) : network.chain && network.chain.network == props.data.chain ? (
           <Button
             onClick={() => setIsModalOpen(true)}
-            className="w-full font-fraktion mt-5"
+            className="w-full font-faketion mt-5"
           >
             DEPLOY BOND USING WALLET
           </Button>
         ) : (
           // @ts-ignore
-          <Button onClick={switchChain} className="w-full font-fraktion mt-5">
+          <Button onClick={switchChain} className="w-full font-faketion mt-5">
             Switch Chain
           </Button>
         )}
 
         <Button
           type="submit"
-          className="w-full font-fraktion mt-5"
+          className="w-full font-faketion mt-5"
           onClick={() => {
             setTxnBytecode(
               contractLibrary.createMarketMultisig(props.data.marketParams)
@@ -139,7 +139,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
           CONFIGURE FOR MULTI-SIG
         </Button>
 
-        <Button onClick={props.onEdit} className="w-full font-fraktion mt-5">
+        <Button onClick={props.onEdit} className="w-full font-faketion mt-5">
           EDIT
         </Button>
       </div>

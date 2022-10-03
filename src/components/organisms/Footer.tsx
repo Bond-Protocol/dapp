@@ -5,7 +5,7 @@ export const socials = {
   medium: "https://medium.com/@Bond_Protocol",
   discord: "https://discord.gg/bondprotocol",
   twitter: "https://twitter.com/bond_protocol",
-  gitbook: "https://gitbook.org/bondprotocol",
+  gitbook: "https://docs.bondprotocol.finance",
 };
 
 export const Footer = ({ className = "" }: { className?: string }) => {

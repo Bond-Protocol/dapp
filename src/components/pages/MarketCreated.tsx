@@ -160,7 +160,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
             className="mb-2"
           />
 
-          <Button type="submit" className="w-full font-fraktion mt-5">
+          <Button type="submit" className="w-full font-faketion mt-5">
             UPDATE ALLOWANCE
           </Button>
         </form>
@@ -205,7 +205,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                   {displayAllowance()}
                 </div>
 
-                <Button className="w-full font-fraktion mt-5"
+                <Button className="w-full font-faketion mt-5"
                         onClick={
                           () => navigate("/issuers/" + protocol.name)
                         }>
@@ -240,7 +240,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           Error!
         </div>
       }
-      <Button className="w-full font-fraktion mt-5"
+      <Button className="w-full font-faketion mt-5"
               onClick={
                 () => window.open(blockExplorerUrl + "/" + hash, "_blank", "noreferrer")
               }>
