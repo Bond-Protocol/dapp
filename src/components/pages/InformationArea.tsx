@@ -1,7 +1,7 @@
-import {useNavigate} from "react-router-dom";
-import {Accordion, Button, Footer} from "..";
-import {ReactComponent as CloseIcon} from "../../assets/icons/close-icon.svg";
-import {ProtocolLogo} from "components/atoms/ProtocolLogo";
+import { useNavigate } from "react-router-dom";
+import { Accordion, Button, Footer } from "..";
+import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
+import { ProtocolLogo } from "components/atoms/ProtocolLogo";
 
 export type InformationAreaProps = {
   onClose: () => void;
@@ -66,38 +66,40 @@ const whoLink = (
 const content = [
   {
     label: "How to issue a bond",
-    content:
+    content: (
       <div>
         Interested in issuing a bond market for your protocol? {issueLink}
       </div>
+    ),
   },
   {
     label: "How to get verified",
-    content:
+    content: (
       <div>
-        You can create a market and run your own UI without verification, but if you want your market to be listed on
-        the BondProtocol dApp, you need to verify your protocol. {verificationLink}
+        You can create a market and run your own UI without verification, but if
+        you want your market to be listed on the BondProtocol dApp, you need to
+        verify your protocol. {verificationLink}
       </div>
+    ),
   },
   {
     label: "How to close an issued bond",
-    content:
+    content: (
       <div>
-        Want to close a market before it expires or sells out its full capacity? {closeLink}
+        Want to close a market before it expires or sells out its full capacity?{" "}
+        {closeLink}
       </div>
+    ),
   },
   {
-    label: "How to bond", content:
-      <div>
-        Want to purchase a bond listed on the dApp? {bondLink}
-      </div>
+    label: "How to bond",
+    content: <div>Want to purchase a bond listed on the dApp? {bondLink}</div>,
   },
   {
     label: "Who are we",
-    content:
-      <div>
-        Interested in finding out more about BondProtocol? {whoLink}
-      </div>
+    content: (
+      <div>Interested in finding out more about BondProtocol? {whoLink}</div>
+    ),
   },
 ];
 
@@ -137,9 +139,8 @@ export const InformationArea = (props: InformationAreaProps) => {
             Issue Bond Market
           </Button>
         </div>
-        <div
-          className="mx-[15vw] child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
-          {content.map(({label, content}, i) => (
+        <div className="mx-[15vw] child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
+          {content.map(({ label, content }, i) => (
             <Accordion
               label={label}
               className="text-black py-10 hover:bg-black/5 transition-all"
@@ -151,7 +152,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           ))}
         </div>
       </div>
-      <Footer/>
+      <Footer closeInfoArea={props.onClose} />
     </div>
   );
 };

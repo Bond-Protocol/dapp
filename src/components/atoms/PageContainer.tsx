@@ -7,7 +7,7 @@ export const PageContainer: TailwindComponent = ({
   className = "",
 }) => {
   return (
-    <div className={`z-10 mx-[10vw] h-[76vh] min-heigh-[90vh] ${className}`}>
+    <div className={`z-10 mx-[10vw] min-height-[90vh] ${className}`}>
       {children}
     </div>
   );
