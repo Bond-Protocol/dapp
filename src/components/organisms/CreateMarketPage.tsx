@@ -37,8 +37,8 @@ const formDefaults = {
   capacityToken: 0,
   vestingType: 0,
   bondsPerWeek: 7,
-  debtBuffer: 10,
-  chain: "goerli",
+  debtBuffer: 30,
+  chain: "mainnet",
 };
 
 export type CreateMarketPageProps = {
@@ -47,7 +47,7 @@ export type CreateMarketPageProps = {
 };
 
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
-  const { getPrice, getTokenDetails } = useTokens();
+  const { getPrice } = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
     useState<Partial<contractLibrary.Token & { error?: string }>>();
   const [quoteTokenInfo, setQuoteTokenInfo] =
@@ -157,13 +157,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const bondsPerWeek = useWatch({
     control,
     name: "bondsPerWeek",
-    defaultValue: 7,
   });
 
   const debtBuffer = useWatch({
     control,
     name: "debtBuffer",
-    defaultValue: 10,
   });
 
   const vestingType = useWatch({

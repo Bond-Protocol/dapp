@@ -1,5 +1,7 @@
 import { atom } from "jotai";
 
-const testnetMode = atom(true);
+const isTestnet = import.meta.env.VITE_TESTNET;
+
+const testnetMode = atom(isTestnet);
 
 export default testnetMode;
