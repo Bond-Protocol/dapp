@@ -2,7 +2,6 @@
 import { useMyBonds } from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
 import { ContractTransaction } from "ethers";
-import * as contractLibrary from "@bond-protocol/contract-library";
 import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "src/generated/graphql";
 import { useEffect, useRef, useState } from "react";
@@ -11,7 +10,8 @@ import { useTokens } from "hooks";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { useNavigate } from "react-router-dom";
 import { TableHeading, TableCell } from "..";
-import {calculateTrimDigits, trim} from "@bond-protocol/contract-library/dist/core/utils";
+import { calculateTrimDigits, trim } from "@bond-protocol/contract-library/dist/core/utils";
+import { redeem } from "@bond-protocol/contract-library";
 
 const NoBondsView = () => {
   const navigate = useNavigate();
@@ -58,8 +58,8 @@ export const MyBondsList = () => {
     switchNetwork?.(newChain);
   };
 
-  async function redeem(bond: OwnerBalance) {
-    const redeemTx: ContractTransaction = await contractLibrary.redeem(
+  async function redeemBond(bond: OwnerBalance) {
+    const redeemTx: ContractTransaction = await redeem(
       bond.tokenId,
       bond.bondToken?.teller,
       // @ts-ignore
@@ -115,7 +115,7 @@ export const MyBondsList = () => {
                 const underlying = bond.bondToken && getTokenDetails(bond.bondToken.underlying);
                 const isCorrectNetwork = bond.network === chain?.network;
                 const handleClaim = isCorrectNetwork
-                  ? () => redeem(bond)
+                  ? () => redeemBond(bond)
                   : (e: React.BaseSyntheticEvent) =>
                       switchChain(e, bond.network);
 
