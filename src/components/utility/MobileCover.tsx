@@ -8,8 +8,9 @@ export const MobileCover = () => {
       <div className="flex flex-col place-items-center justify-center h-[100vh]">
         <ProtocolLogo />
         <div className="font-jakarta pt-8 text-center px-[10vw]">
-          Our dApp is in βeta and is best experienced on desktop. <br />
-          Mobile compatibility coming soon™
+          <p>Our dApp is in βeta and is best experienced on desktop.</p>
+
+          <p className="mt-6">Mobile compatibility coming soon™</p>
         </div>
       </div>
     </div>
