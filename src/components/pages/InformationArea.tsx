@@ -10,7 +10,7 @@ export type InformationAreaProps = {
 
 const issueLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/deploy-a-bond-market"
+    href="https://docs.bondprotocol.finance/bond-marketplace/deploy-a-bond-market"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -21,7 +21,7 @@ const issueLink = (
 
 const verificationLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/market-verification"
+    href="https://docs.bondprotocol.finance/bond-marketplace/market-verification"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -32,7 +32,7 @@ const verificationLink = (
 
 const closeLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/my-markets"
+    href="https://docs.bondprotocol.finance/bond-marketplace/my-markets"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -43,7 +43,7 @@ const closeLink = (
 
 const bondLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/purchasing-a-bond"
+    href="https://docs.bondprotocol.finance/bond-marketplace/purchasing-a-bond"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -54,7 +54,7 @@ const bondLink = (
 
 const whoLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/"
+    href="https://docs.bondprotocol.finance/"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
