@@ -16,6 +16,10 @@ module.exports = withMT({
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      screens: {
+        xs: "100px",
+        fml: "600px",
+      },
       colors: {
         ...brandColors,
         light: {
