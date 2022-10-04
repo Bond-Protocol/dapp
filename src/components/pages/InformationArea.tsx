@@ -117,7 +117,7 @@ export const InformationArea = (props: InformationAreaProps) => {
         props.open ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="bg-white h-[90vh]">
+      <div className="bg-white h-[90vh] font-jakarta">
         <div className="mx-[5vw] h-[88px] flex justify-between items-center ">
           <ProtocolLogo
             black
@@ -139,7 +139,7 @@ export const InformationArea = (props: InformationAreaProps) => {
             Issue Bond Market
           </Button>
         </div>
-        <div className="mx-[15vw] child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
+        <div className="mx-[15vw] pb-20 child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
           {content.map(({ label, content }, i) => (
             <Accordion
               label={label}
