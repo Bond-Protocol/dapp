@@ -41,18 +41,27 @@ export const cookiePolicy = {
             your browser to disable cookies, you may not be able to use all
             features of the Site. You can find out more information about how to
             change your browser cookie settings at{" "}
-            <a href="www.allaboutcookies.org">www.allaboutcookies.org</a>. Some
-            third parties may use Advertising Cookies to help gather information
-            about your browsing activity so that they can deliver website
-            advertising to you that is relevant to your interests. The
+            <a
+              href="https://www.allaboutcookies.org"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:underline"
+            >
+              www.allaboutcookies.org
+            </a>
+            . Some third parties may use Advertising Cookies to help gather
+            information about your browsing activity so that they can deliver
+            website advertising to you that is relevant to your interests. The
             advertising industries in the European Union (EU) have developed
             schemes to help you opt-out of receiving cookies used for these
-            purposes. You can find out more about the EU scheme from
+            purposes. You can find out more about the EU scheme from{" "}
             <a
-              href="
-                  http://www.youronlinechoices.eu"
+              href="https://www.youronlinechoices.eu"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:underline"
             >
-              http://www.youronlinechoices.eu
+              www.youronlinechoices.eu
             </a>
             .
           </p>
@@ -70,7 +79,10 @@ export const cookiePolicy = {
         <>
           If you have any questions about this cookie policy, please contact us
           by email at{" "}
-          <a href="mailto:notices@bondprotocol.finance">
+          <a
+            href="mailto:notices@bondprotocol.finance"
+            className="hover:underline"
+          >
             notices@bondprotocol.finance
           </a>
         </>
