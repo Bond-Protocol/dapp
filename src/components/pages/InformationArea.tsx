@@ -10,7 +10,7 @@ export type InformationAreaProps = {
 
 const issueLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/deploy-a-bond-market"
+    href="https://docs.bondprotocol.finance/bond-marketplace/deploy-a-bond-market"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -21,7 +21,7 @@ const issueLink = (
 
 const verificationLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/market-verification"
+    href="https://docs.bondprotocol.finance/bond-marketplace/market-verification"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -32,7 +32,7 @@ const verificationLink = (
 
 const closeLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/my-markets"
+    href="https://docs.bondprotocol.finance/bond-marketplace/my-markets"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -43,7 +43,7 @@ const closeLink = (
 
 const bondLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/bond-marketplace/purchasing-a-bond"
+    href="https://docs.bondprotocol.finance/bond-marketplace/purchasing-a-bond"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -54,7 +54,7 @@ const bondLink = (
 
 const whoLink = (
   <a
-    href="https://bond-protocol.gitbook.io/untitled/W1hpf3rsUqcc6Evs7Qws/"
+    href="https://docs.bondprotocol.finance/"
     target="_blank"
     rel="noopener noreferrer"
     className="text-black underline"
@@ -117,7 +117,7 @@ export const InformationArea = (props: InformationAreaProps) => {
         props.open ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="bg-white h-[90vh]">
+      <div className="bg-white h-[90vh] font-jakarta">
         <div className="mx-[5vw] h-[88px] flex justify-between items-center ">
           <ProtocolLogo
             black
@@ -139,7 +139,7 @@ export const InformationArea = (props: InformationAreaProps) => {
             Issue Bond Market
           </Button>
         </div>
-        <div className="mx-[15vw] child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
+        <div className="mx-[15vw] pb-20 child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
           {content.map(({ label, content }, i) => (
             <Accordion
               label={label}
