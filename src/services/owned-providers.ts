@@ -1,5 +1,5 @@
-import {Provider} from "@wagmi/core";
-import {ethers} from "ethers";
+import { Provider } from "@wagmi/core";
+import { ethers } from "ethers";
 
 type FallbackProviderConfig = {
   //RPC URL
@@ -22,12 +22,9 @@ const providerConfiguration: ProviderOptions[] = [
     chainId: "1",
     rpcs: [
       {
-        url: `https://mainnet.infura.io/v3/${import.meta.env.VITE_INFURA_PUBLIC_KEY}`,
-        weight: 1,
-        priority: 1,
-      },
-      {
-        url: `https://eth-mainnet.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_MAINNET_KEY}`,
+        url: `https://eth-mainnet.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_MAINNET_KEY
+        }`,
         weight: 1,
         priority: 1,
       },
@@ -48,12 +45,16 @@ const providerConfiguration: ProviderOptions[] = [
     chainId: "5",
     rpcs: [
       {
-        url: `https://goerli.infura.io/v3/${import.meta.env.VITE_INFURA_PUBLIC_KEY}`,
+        url: `https://goerli.infura.io/v3/${
+          import.meta.env.VITE_INFURA_PUBLIC_KEY
+        }`,
         weight: 1,
         priority: 1,
       },
       {
-        url: `https://eth-goerli.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_GOERLI_KEY}`,
+        url: `https://eth-goerli.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_GOERLI_KEY
+        }`,
         weight: 1,
         priority: 1,
       },
@@ -75,7 +76,7 @@ export const providers: { [key: string]: Provider } =
   //Go through every chain
   providerConfiguration.reduce((acc, config: ProviderOptions) => {
     //Setup static providers for nodes we own/trust
-    const ownedNodesConfig = config.rpcs.map(({url, priority, weight}) => {
+    const ownedNodesConfig = config.rpcs.map(({ url, priority, weight }) => {
       return {
         priority,
         weight,
