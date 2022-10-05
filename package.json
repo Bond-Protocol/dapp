@@ -21,9 +21,10 @@
   "dependencies": {
     "@bond-protocol/bond-library": "0.0.30",
     "@bond-protocol/contract-library": "0.0.27",
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@material-tailwind/react": "^1.0.6",
     "@mui/base": "^5.0.0-alpha.88",
-    "@rainbow-me/rainbowkit": "^0.4.5",
+    "@rainbow-me/rainbowkit": "0.7.1",
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
     "date-fns": "^2.29.2",
