@@ -9,6 +9,9 @@ export default defineConfig({
   plugins: [react(), svgr()],
   root: "src",
   envDir: "..",
+  define: {
+    global: 'globalThis'
+  },
   build: {
     outDir: "../dist",
     rollupOptions: {
