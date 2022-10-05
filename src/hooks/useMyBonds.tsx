@@ -1,17 +1,19 @@
 //@ts-nocheck
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {useAtom} from "jotai";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
   BondToken,
   OwnerBalance,
-  useGetOwnerBalancesByOwnerGoerliQuery, useGetOwnerBalancesByOwnerMainnetQuery,
-  useListErc20BondTokensGoerliQuery, useListErc20BondTokensMainnetQuery,
+  useGetOwnerBalancesByOwnerGoerliQuery,
+  useGetOwnerBalancesByOwnerMainnetQuery,
+  useListErc20BondTokensGoerliQuery,
+  useListErc20BondTokensMainnetQuery,
 } from "../generated/graphql";
-import {useAccount} from "wagmi";
+import { useAccount } from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {providers} from "services/owned-providers";
+import { providers } from "services/owned-providers";
 
 export function useMyBonds() {
   const endpoints = getSubgraphEndpoints();
@@ -33,31 +35,49 @@ export function useMyBonds() {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const { data: mainnetData, refetch: mainnetRefetch } =
-    useGetOwnerBalancesByOwnerMainnetQuery(
-      { endpoint: endpoints[0] },
-      { owner: address }
-    );
-  
-  const { data: goerliData, refetch: goerliRefetch } =
-    useGetOwnerBalancesByOwnerGoerliQuery(
-      { endpoint: endpoints[1] },
-      { owner: address }
-    );
+  const {
+    data: mainnetData,
+    refetch: mainnetRefetch,
+    ...mainnetQuery
+  } = useGetOwnerBalancesByOwnerMainnetQuery(
+    { endpoint: endpoints[0] },
+    { owner: address },
+    { enabled: !testnet }
+  );
 
-  const { data: mainnetErc20Data, refetch: mainnetErc20Refetch } =
-    useListErc20BondTokensMainnetQuery({ endpoint: endpoints[0] });
+  const {
+    data: goerliData,
+    refetch: goerliRefetch,
+    ...testnetQuery
+  } = useGetOwnerBalancesByOwnerGoerliQuery(
+    { endpoint: endpoints[1] },
+    { owner: address },
+    { enabled: !!testnet }
+  );
 
-  const { data: goerliErc20Data, refetch: goerliErc20Refetch } =
-    useListErc20BondTokensGoerliQuery({ endpoint: endpoints[1] });
+  const {
+    data: mainnetErc20Data,
+    refetch: mainnetErc20Refetch,
+    ...mainERC20Query
+  } = useListErc20BondTokensMainnetQuery({ endpoint: endpoints[0] });
+
+  const {
+    data: goerliErc20Data,
+    refetch: goerliErc20Refetch,
+    ...testnetERC20Query
+  } = useListErc20BondTokensGoerliQuery({ endpoint: endpoints[1] });
 
   const refetchQueries = () => {
     if (testnet) {
       void goerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
-      void goerliErc20Refetch().then(() => setRefetchRequest(refetchRequest + 1));
+      void goerliErc20Refetch().then(() =>
+        setRefetchRequest(refetchRequest + 1)
+      );
     } else {
       void mainnetRefetch().then(() => setRefetchRequest(refetchRequest + 1));
-      void mainnetErc20Refetch().then(() => setRefetchRequest(refetchRequest + 1));
+      void mainnetErc20Refetch().then(() =>
+        setRefetchRequest(refetchRequest + 1)
+      );
     }
   };
 
@@ -104,7 +124,7 @@ export function useMyBonds() {
       setMainnetBonds(allTokens);
     }
   }, [mainnetData, refetchRequest]);
-  
+
   useEffect(() => {
     if (goerliData && goerliData.ownerBalances) {
       const allTokens = goerliData.ownerBalances;
@@ -148,7 +168,7 @@ export function useMyBonds() {
       getBalances(bondTokens);
     }
   }, [address, mainnetErc20Data]);
-  
+
   useEffect(() => {
     if (goerliErc20Data) {
       const bondTokens = goerliErc20Data.bondTokens;
@@ -163,5 +183,8 @@ export function useMyBonds() {
   return {
     myBonds: myBonds,
     refetch: () => refetchQueries(),
+    isLoading: testnet
+      ? testnetQuery.isLoading || testnetERC20Query.isLoading
+      : mainnetQuery.isLoading || mainERC20Query.isLoading,
   };
 }

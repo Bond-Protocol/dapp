@@ -57,6 +57,8 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     "address"
   );
 
+  console.log({ protocol });
+
   const showOwnerBalanceWarning =
     Number(market.maxPayout) > Number(market.ownerBalance);
   const showOwnerAllowanceWarning =
@@ -197,7 +199,9 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     <div className="pb-8">
       <div className="flex justify-between w-[80vw] pl-4 my-5">
         <div className="flex">
-          <TestIcon className="fill-white my-auto" />
+          {protocol?.logoUrl && (
+            <img src={protocol.logoUrl} className="w-[52px] h-[52px] my-auto" />
+          )}
           <p className="font-faketion text-[48px]">
             {protocol?.name || market.payoutToken?.symbol}
           </p>

@@ -14,9 +14,14 @@ import { useLoadMarkets } from "hooks/useLoadMarkets";
 import { useMyMarkets } from "hooks/useMyMarkets";
 
 export function useCalculatedMarkets() {
-  const { markets: markets } = useLoadMarkets();
-  const { markets: myMarkets } = useMyMarkets();
-  const { getPrice, getTokenDetails, currentPrices } = useTokens();
+  const { markets: markets, isLoading: isMarketLoading } = useLoadMarkets();
+  const { markets: myMarkets, isLoading: isMyMarketLoading } = useMyMarkets();
+  const {
+    getPrice,
+    getTokenDetails,
+    currentPrices,
+    isLoading: areTokensLoading,
+  } = useTokens();
   const provider = useProvider();
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
@@ -35,7 +40,7 @@ export function useCalculatedMarkets() {
     const isLive = await contractLibrary.isLive(
       provider,
       market.marketId,
-      market.auctioneer,
+      market.auctioneer
     );
     if (!isLive) return;
 
@@ -121,6 +126,10 @@ export function useCalculatedMarkets() {
       };
     })
   );
+  console.log({ calculateAllMarkets });
+
+  const isCalculatingAll = calculateAllMarkets.some((m) => m.isLoading);
+  const isCalculatingMine = calculateMyMarkets.some((m) => m.isLoading);
 
   const refetchOne = (id: string) => {
     calculateAllMarkets.forEach((result) => {
@@ -185,5 +194,14 @@ export function useCalculatedMarkets() {
     refetchAllMarkets: () => refetchAllMarkets(),
     refetchMyMarkets: () => refetchMyMarkets(),
     refetchOne: (id: string) => refetchOne(id),
+    getTokenDetails,
+    getPrice,
+    isLoading: {
+      market: isMarketLoading,
+      myMarkets: isMyMarketLoading,
+      tokens: areTokensLoading,
+      priceCalcs: isCalculatingAll,
+      myPriceCalcs: isCalculatingMine,
+    },
   };
 }
