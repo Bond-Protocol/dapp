@@ -2,7 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import { useAccount, useBalance } from "wagmi";
 import { providers } from "services/owned-providers";
 import { usePurchaseBond } from "./usePurchaseBond";
-import {trim, calculateTrimDigits} from "@bond-protocol/contract-library/dist/core/utils";
+import {
+  trim,
+  calculateTrimDigits,
+} from "@bond-protocol/contract-library/dist/core/utils";
 
 export const useTokenAllowance = (
   tokenAddress: string,
@@ -32,16 +35,23 @@ export const useTokenAllowance = (
       address,
       auctioneer,
       networkId,
-      tokenDecimals,
+      tokenDecimals
     );
 
     setAllowance(allowance.toString());
   }, [tokenAddress, address, auctioneer, networkId, getAllowance]);
 
-  const approve = async (tokenAddress: string, tokenDecimals: number, auctioneer: string) => {
-    const approved = await approveSpending(tokenAddress, tokenDecimals, auctioneer);
+  const approve = async (
+    tokenAddress: string,
+    tokenDecimals: number,
+    auctioneer: string
+  ) => {
+    const approved = await approveSpending(
+      tokenAddress,
+      tokenDecimals,
+      auctioneer
+    );
     const confirmed = await approved.wait();
-    console.log({ approved, confirmed });
     void fetchAndSetAllowance();
   };
 

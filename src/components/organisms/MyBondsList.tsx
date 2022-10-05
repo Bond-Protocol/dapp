@@ -6,17 +6,25 @@ import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "src/generated/graphql";
 import { useEffect, useRef, useState } from "react";
 import { providers } from "services/owned-providers";
-import { useTokens } from "hooks";
+import { useMarkets } from "hooks";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { useNavigate } from "react-router-dom";
 import { TableHeading, TableCell } from "..";
-import { calculateTrimDigits, trim } from "@bond-protocol/contract-library/dist/core/utils";
+import {
+  calculateTrimDigits,
+  trim,
+} from "@bond-protocol/contract-library/dist/core/utils";
 import { redeem } from "@bond-protocol/contract-library";
+import { Loading } from "components/atoms/Loading";
 
-const NoBondsView = () => {
+const NoBondsView = ({ loading }: { loading: boolean }) => {
   const navigate = useNavigate();
 
   const goToMarkets = () => navigate("/markets");
+
+  if (loading) {
+    return <Loading content="your bonds" />;
+  }
 
   return (
     <div className="mt-10 flex flex-col">
@@ -33,11 +41,11 @@ const NoBondsView = () => {
 };
 
 export const MyBondsList = () => {
-  const { myBonds, refetch } = useMyBonds();
+  const { myBonds, refetch, isLoading: areMyBondsLoading } = useMyBonds();
   const { data: signer } = useSigner();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
-  const { getTokenDetails, getPrice } = useTokens();
+  const { getTokenDetails, getPrice, isLoading } = useMarkets();
 
   const [numBonds, setNumBonds] = useState<number>(myBonds.length);
   const timerRef = useRef<NodeJS.Timeout>();
@@ -105,14 +113,19 @@ export const MyBondsList = () => {
                 const now = new Date(Date.now());
                 const canClaim = now >= date;
 
-                let balance = bond.balance / Math.pow(10, bond.bondToken?.underlying.decimals);
+                let balance =
+                  bond.balance /
+                  Math.pow(10, bond.bondToken?.underlying.decimals);
                 balance = trim(balance, calculateTrimDigits(balance));
 
-                let usdPrice = getPrice(bond.bondToken?.underlying?.id) * balance;
+                let usdPrice =
+                  getPrice(bond.bondToken?.underlying?.id) * balance;
                 usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
 
-                const underlying = bond.bondToken && getTokenDetails(bond.bondToken.underlying);
-                const isCorrectNetwork = bond.bondToken.network === chain?.network;
+                const underlying =
+                  bond.bondToken && getTokenDetails(bond.bondToken.underlying);
+                const isCorrectNetwork =
+                  bond.bondToken.network === chain?.network;
                 const handleClaim = isCorrectNetwork
                   ? () => redeemBond(bond)
                   : (e: React.BaseSyntheticEvent) =>
@@ -121,14 +134,20 @@ export const MyBondsList = () => {
                 return (
                   <tr key={bond.bondToken.id}>
                     <TableCell className="flex flex-row">
-                      <img className="h-[32px] w-[32px]" src={underlying?.logoUrl} />
+                      <img
+                        className="h-[32px] w-[32px]"
+                        src={underlying?.logoUrl}
+                      />
                       <p className="my-auto pl-1">{underlying?.symbol}</p>
                     </TableCell>
                     <TableCell>{bond.bondToken.network}</TableCell>
                     <TableCell>{date.toDateString()}</TableCell>
                     <TableCell className="flex flex-row">
                       <div className="my-auto pr-1">
-                        <img className="h-[32px] w-[32px]" src={underlying?.logoUrl} />
+                        <img
+                          className="h-[32px] w-[32px]"
+                          src={underlying?.logoUrl}
+                        />
                       </div>
                       <div>
                         <p>{balance + " " + underlying?.symbol}</p>
@@ -164,7 +183,7 @@ export const MyBondsList = () => {
           </table>
         </>
       ) : (
-        <NoBondsView />
+        <NoBondsView loading={areMyBondsLoading} />
       )}
     </RequiresWallet>
   );

@@ -10,6 +10,7 @@ import { TableHeading } from "components/atoms/TableHeading";
 import { TableCell } from "components/atoms/TableCell";
 import { CellLabel } from "components/atoms/CellLabel";
 import { BondListCard } from "./BondListCard";
+import { Loading } from "components/atoms/Loading";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -22,8 +23,13 @@ export const MarketList: FC<MarketListProps> = ({
 }) => {
   const navigate = useNavigate();
   const { getTokenDetails } = useTokens();
-  const { refetchAllMarkets, refetchMyMarkets, refetchOne, allMarkets } =
-    useMarkets();
+  const {
+    refetchAllMarkets,
+    refetchMyMarkets,
+    refetchOne,
+    allMarkets,
+    isLoading,
+  } = useMarkets();
 
   const markets = props.markets || allMarkets;
 
@@ -189,6 +195,10 @@ export const MarketList: FC<MarketListProps> = ({
     marketsRef.current = markets;
     currentSort.sortBy();
   }, [markets]);
+
+  if (isLoading.market || isLoading.priceCalcs) {
+    return <Loading content="markets" />;
+  }
 
   return (
     <div>
