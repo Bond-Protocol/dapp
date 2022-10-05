@@ -126,7 +126,6 @@ export function useCalculatedMarkets() {
       };
     })
   );
-  console.log({ calculateAllMarkets });
 
   const isCalculatingAll = calculateAllMarkets.some((m) => m.isLoading);
   const isCalculatingMine = calculateMyMarkets.some((m) => m.isLoading);

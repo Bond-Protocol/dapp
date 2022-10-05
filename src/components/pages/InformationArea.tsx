@@ -123,7 +123,6 @@ export const InformationArea = (props: InformationAreaProps) => {
             black
             onClick={() => {
               props.onClose();
-              console.log("haiii");
             }}
           />
           <CloseIcon

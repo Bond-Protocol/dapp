@@ -50,8 +50,6 @@ export const MyBondsList = () => {
   const [numBonds, setNumBonds] = useState<number>(myBonds.length);
   const timerRef = useRef<NodeJS.Timeout>();
 
-  console.log({ areMyBondsLoading });
-
   useEffect(() => {
     if (myBonds.length < numBonds) {
       clearInterval(timerRef.current);

@@ -57,8 +57,6 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     "address"
   );
 
-  console.log({ protocol });
-
   const showOwnerBalanceWarning =
     Number(market.maxPayout) > Number(market.ownerBalance);
   const showOwnerAllowanceWarning =
