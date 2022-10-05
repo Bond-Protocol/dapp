@@ -8,7 +8,6 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
   const [isTestnet, setTestnet] = useAtom(testnetMode);
 
   const handleSwitch = () => setTestnet(false);
-  console.log({ isTestnet, setTestnet });
 
   return (
     <div
