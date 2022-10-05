@@ -139,11 +139,27 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                   <br/>
                   Capacity: {props.marketData.formValues.marketCapacity} {props.marketData.summaryData.payoutToken}
                 </div>
+                {isAllowanceSufficient &&
+                  <div className="text-center pb-8 leading-normal">
+                    <p className="pb-8">
+                      You have set a sufficient allowance for the capacity of your market.
+                    </p>
+                    <p className="pb-8">
+                      If you have multiple markets paying out {props.marketData.summaryData.payoutToken} from
+                      this address, you should adjust the allowance to cover the sum capacity of all markets.
+                    </p>
+                    {allowanceForm()}
+                  </div>
+                }
                 {allowance > 0 && !isAllowanceSufficient &&
                   <div className="text-center pb-8 leading-normal">
                     <p className="pb-8">
                       You have set an insufficient allowance for the capacity of your market.
-                      Please see the recommended allowance transaction below.
+                      We recommend setting the allowance high enough to cover the full market capacity.
+                    </p>
+                    <p className="pb-8">
+                      If you have multiple markets paying out {props.marketData.summaryData.payoutToken} from
+                      this address, you should adjust the allowance to cover the sum capacity of all markets.
                     </p>
                     {allowanceForm()}
                   </div>
@@ -168,7 +184,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
               {...register("amount")}
-              defaultValue={allowance > 0 ? allowance : 1000000000}
+              defaultValue={props.marketData.formValues.marketCapacity}
               label={`Allowance in ${props.marketData.summaryData.payoutToken}`}
               className="mb-2"
             />
