@@ -1,5 +1,6 @@
 import { ProtocolLogo } from "components/atoms/ProtocolLogo";
 import { SocialRow } from "components/atoms/SocialRow";
+import { useNavigate } from "react-router-dom";
 
 export const socials = {
   medium: "https://medium.com/@Bond_Protocol",
@@ -8,16 +9,50 @@ export const socials = {
   gitbook: "https://docs.bondprotocol.finance",
 };
 
-export const Footer = ({ className = "" }: { className?: string }) => {
+const FooterLink = ({
+  onClick,
+  children,
+}: {
+  onClick: () => void;
+  children: React.ReactNode;
+}) => {
   return (
-    <div
-      className={`bg-brand-turtle-blue h-28 relative overflow-hidden ${className}`}
-    >
-      <div className="h-full w-full px-[5vw] py-5 h-28">
-        <ProtocolLogo className="absolute my-6" />
-        <div className="h-full flex flex-col justify-evenly my-auto">
-          <SocialRow {...socials} />
+    <p className="hover:underline hover:cursor-pointer" onClick={onClick}>
+      {children}
+    </p>
+  );
+};
+
+export const Footer = ({
+  className = "",
+  closeInfoArea,
+}: {
+  className?: string;
+  closeInfoArea: () => void;
+}) => {
+  const navigate = useNavigate();
+
+  const goTo = (path: string) => {
+    closeInfoArea();
+    navigate(path);
+  };
+
+  return (
+    <div className={`w-full ${className}`}>
+      <div className="h-full w-full px-[5vw] py-5 flex justify-between ">
+        <ProtocolLogo className="my-6 left-24" />
+        <div className="flex child:mx-2 font-faketion my-auto">
+          <FooterLink onClick={() => goTo("/policy")}>
+            Privacy Policy
+          </FooterLink>
+          <p>-</p>
+          <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
+          <p>-</p>
+          <FooterLink onClick={() => goTo("/cookies")}>
+            Cookie Policy
+          </FooterLink>
         </div>
+        <SocialRow {...socials} />
       </div>
     </div>
   );

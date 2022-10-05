@@ -15,6 +15,8 @@ import {
   MyMarkets,
 } from "components/organisms";
 import { useState } from "react";
+import { PolicyPage } from "components/pages/PolicyPage";
+import { terms, privacyPolicy, cookiePolicy } from "./content";
 
 export const RouteMap: FC = () => {
   const { isMarketOwner } = useMarkets();
@@ -41,6 +43,23 @@ export const RouteMap: FC = () => {
       />
       <Route path="/issuers/:name" element={<IssuerPage />} />
       <Route path="/market/:id" element={<MarketInsights />} />
+    </Switch>
+  );
+};
+
+const sample = {
+  title: "hai",
+  welcome: "oi",
+  updateDate: "June 3, 1992",
+  conditions: [{ title: "bad", content: "worse" }],
+};
+
+export const PolicyRoutes = () => {
+  return (
+    <Switch>
+      <Route path="/terms" element={<PolicyPage {...terms} />} />
+      <Route path="/policy" element={<PolicyPage {...privacyPolicy} />} />
+      <Route path="/cookies" element={<PolicyPage {...cookiePolicy} />} />
     </Switch>
   );
 };

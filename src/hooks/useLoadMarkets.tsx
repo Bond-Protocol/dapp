@@ -1,5 +1,9 @@
 import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import {Market, useListMarketsGoerliQuery, useListMarketsMainnetQuery} from "../generated/graphql";
+import {
+  Market,
+  useListMarketsGoerliQuery,
+  useListMarketsMainnetQuery,
+} from "../generated/graphql";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
@@ -14,31 +18,35 @@ export function useLoadMarkets() {
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
-  const { data: mainnetData } = useListMarketsMainnetQuery(
+  const { data: mainnetData, ...mainetQuery } = useListMarketsMainnetQuery(
     { endpoint: endpoints[0] },
-    { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) }
+    { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) },
+    { enabled: !testnet }
   );
-  
-  const { data: goerliData } = useListMarketsGoerliQuery(
+
+  const { data: goerliData, ...testnetQuery } = useListMarketsGoerliQuery(
     { endpoint: endpoints[1] },
-    { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) }
+    { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
+    { enabled: !!testnet }
   );
 
   useEffect(() => {
+    if (testnet) return;
     if (mainnetData && mainnetData.markets) {
       const allMarkets = mainnetData.markets;
       // @ts-ignore
       setMainnetMarkets(allMarkets);
     }
-  }, [mainnetData]);
+  }, [mainnetData, testnet]);
 
   useEffect(() => {
+    if (!testnet) return;
     if (goerliData && goerliData.markets) {
       const allMarkets = goerliData.markets;
       // @ts-ignore
       setTestnetMarkets(allMarkets);
     }
-  }, [goerliData]);
+  }, [goerliData, testnet]);
 
   useEffect(() => {
     if (testnet) {
@@ -56,8 +64,11 @@ export function useLoadMarkets() {
     setMarketsMap(map);
   }, [selectedMarkets]);
 
+  const isLoading = testnet ? testnetQuery.isLoading : mainetQuery.isLoading;
+
   return {
     markets: selectedMarkets,
     marketsMap: marketsMap,
+    isLoading,
   };
 }

@@ -5,11 +5,12 @@ import { CalculatedMarket, Token } from "@bond-protocol/contract-library";
 import { ExpandableRow } from "components/molecules/ExpandableRow";
 import { CloseMarketCard } from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
-import {useMarkets, useTokens} from "hooks";
+import { useMarkets, useTokens } from "hooks";
 import { TableHeading } from "components/atoms/TableHeading";
 import { TableCell } from "components/atoms/TableCell";
 import { CellLabel } from "components/atoms/CellLabel";
 import { BondListCard } from "./BondListCard";
+import { Loading } from "components/atoms/Loading";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -22,8 +23,13 @@ export const MarketList: FC<MarketListProps> = ({
 }) => {
   const navigate = useNavigate();
   const { getTokenDetails } = useTokens();
-  const { refetchAllMarkets, refetchMyMarkets, refetchOne, allMarkets } =
-    useMarkets();
+  const {
+    refetchAllMarkets,
+    refetchMyMarkets,
+    refetchOne,
+    allMarkets,
+    isLoading,
+  } = useMarkets();
 
   const markets = props.markets || allMarkets;
 
@@ -162,10 +168,7 @@ export const MarketList: FC<MarketListProps> = ({
 
       return (
         <div className="flex flex-row">
-          <img
-            className="h-[32px] w-[32px]"
-            src={token0}
-          />
+          <img className="h-[32px] w-[32px]" src={token0} />
           <img
             className="h-[32px] w-[32px] flex self-end ml-[-8px]"
             src={token1}
@@ -192,6 +195,10 @@ export const MarketList: FC<MarketListProps> = ({
     marketsRef.current = markets;
     currentSort.sortBy();
   }, [markets]);
+
+  if (isLoading.market || isLoading.priceCalcs) {
+    return <Loading content="markets" />;
+  }
 
   return (
     <div>

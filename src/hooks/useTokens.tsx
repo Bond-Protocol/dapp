@@ -1,16 +1,24 @@
 //@ts-nocheck
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {providers} from "services/owned-providers";
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {Token, useListTokensGoerliQuery, useListTokensMainnetQuery} from "../generated/graphql";
-import {useCallback, useEffect, useState} from "react";
+import { providers } from "services/owned-providers";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import {
+  Token,
+  useListTokensGoerliQuery,
+  useListTokensMainnetQuery,
+} from "../generated/graphql";
+import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {CustomPriceSource, SupportedPriceSource} from "@bond-protocol/bond-library";
-import axios, {AxiosResponse} from "axios";
-import {useQuery} from "react-query";
-import {useAtom} from "jotai";
+import {
+  CustomPriceSource,
+  SupportedPriceSource,
+} from "@bond-protocol/bond-library";
+import axios, { AxiosResponse } from "axios";
+import { useQuery } from "react-query";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {LpPair, calcLpPrice} from "@bond-protocol/contract-library";
+import { LpPair, calcLpPrice } from "@bond-protocol/contract-library";
+import { mainnet } from "@wagmi/core/dist/declarations/src/constants/chains";
 
 export interface PriceDetails {
   price: string;
@@ -23,7 +31,7 @@ export interface Price {
 
 export const useTokens = () => {
   const endpoints = getSubgraphEndpoints();
-  const [testnet, setTestnet] = useAtom(testnetMode);
+  const [testnet] = useAtom(testnetMode);
   const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
   const [mainnetTokens, setMainnetTokens] = useState<Token[]>([]);
   const [testnetTokens, setTestnetTokens] = useState<Token[]>([]);
@@ -39,12 +47,14 @@ export const useTokens = () => {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const { data: mainnetData } = useListTokensMainnetQuery({
+  const { data: mainnetData, ...mainnetQuery } = useListTokensMainnetQuery({
     endpoint: endpoints[0],
+    enabled: !testnet,
   });
 
-  const { data: goerliData } = useListTokensGoerliQuery({
+  const { data: goerliData, ...testnetQuery } = useListTokensGoerliQuery({
     endpoint: endpoints[1],
+    enabled: !!testnet,
   });
 
   /*
@@ -126,12 +136,12 @@ export const useTokens = () => {
   useEffect(() => {
     if (coingeckoQuery.data && customPriceQuery.data) {
       const currentPricesMap: Price = {};
-      const lpTokens: {value: Token, key: string}[] = [];
+      const lpTokens: { value: Token; key: string }[] = [];
       bondLibrary.TOKENS.forEach(
         (value: bondLibrary.Token, tokenKey: string) => {
           // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
           if (value.lpType !== undefined) {
-            lpTokens.push({value: value, key: tokenKey});
+            lpTokens.push({ value: value, key: tokenKey });
           } else {
             const prices: PriceDetails[] = [];
             value.priceSources.forEach(
@@ -169,11 +179,17 @@ export const useTokens = () => {
         const split: string[] = token.key.split("_");
         const network = split[0];
         const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
-        token.value["token0"] = bondLibrary.TOKENS.get(token.value.token0Address);
-        token.value["token1"] = bondLibrary.TOKENS.get(token.value.token1Address);
+        token.value["token0"] = bondLibrary.TOKENS.get(
+          token.value.token0Address
+        );
+        token.value["token1"] = bondLibrary.TOKENS.get(
+          token.value.token1Address
+        );
 
-        token.value["token0"].price = currentPricesMap[token.value.token0Address][0].price;
-        token.value["token1"].price = currentPricesMap[token.value.token1Address][0].price;
+        token.value["token0"].price =
+          currentPricesMap[token.value.token0Address][0].price;
+        token.value["token1"].price =
+          currentPricesMap[token.value.token1Address][0].price;
 
         calcLpPrice(
           {
@@ -181,16 +197,18 @@ export const useTokens = () => {
             address: split[1],
           },
           lpType,
-          providers[network],
-        ).then(result => {
-          const prices: PriceDetails[] = [];
-          prices[0] = {
-            price: result,
-            source: "custom",
-          }
-          currentPricesMap[token.key] = prices;
-        }).catch(error => console.log(error));
-      })
+          providers[network]
+        )
+          .then((result) => {
+            const prices: PriceDetails[] = [];
+            prices[0] = {
+              price: result,
+              source: "custom",
+            };
+            currentPricesMap[token.key] = prices;
+          })
+          .catch((error) => console.log(error));
+      });
 
       setCurrentPrices(currentPricesMap);
     }
@@ -200,18 +218,20 @@ export const useTokens = () => {
   We get a list of all tokens being used in the app by concatenating the .tokens data from each Subgraph request.
    */
   useEffect(() => {
+    if (testnet) return;
     if (mainnetData && mainnetData.tokens) {
       const allTokens = mainnetData.tokens;
       setMainnetTokens(allTokens);
     }
-  }, [mainnetData]);
+  }, [mainnetData, testnet]);
 
   useEffect(() => {
+    if (!testnet) return;
     if (goerliData && goerliData.tokens) {
       const allTokens = goerliData.tokens;
       setTestnetTokens(allTokens);
     }
-  }, [goerliData]);
+  }, [goerliData, testnet]);
 
   /*
   If the user switches between mainnet/testnet mode, update selectedTokens.
@@ -243,15 +263,17 @@ export const useTokens = () => {
     if (token.lpPair != undefined) {
       pair = {
         token0: getTokenDetails(token.lpPair.token0),
-        token1: getTokenDetails(token.lpPair.token1)
-      }
+        token1: getTokenDetails(token.lpPair.token1),
+      };
     }
 
     return {
       id: token.id,
       address: token.address,
       network: token.id.split("_")[0],
-      logoUrl: bondLibraryToken?.logoUrl ? bondLibraryToken.logoUrl : "/placeholders/token-placeholder.png",
+      logoUrl: bondLibraryToken?.logoUrl
+        ? bondLibraryToken.logoUrl
+        : "/placeholders/token-placeholder.png",
       name: bondLibraryToken ? bondLibraryToken.name : token.name,
       symbol: bondLibraryToken ? bondLibraryToken.symbol : token.symbol,
       decimals: token.decimals,
@@ -292,5 +314,6 @@ export const useTokens = () => {
     getPrice: (id: string) => getPrice(id),
     getTokenDetails: (token: any) => getTokenDetails(token),
     getTokenDetailsFromChain,
+    isLoading: testnet ? testnetQuery.isLoading : mainnetQuery.isLoading,
   };
 };
