@@ -3,6 +3,7 @@ import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import nodePolyfills from "rollup-plugin-polyfill-node";
 
 export default defineConfig({
   plugins: [react(), svgr()],
@@ -10,6 +11,12 @@ export default defineConfig({
   envDir: "..",
   build: {
     outDir: "../dist",
+    rollupOptions: {
+      plugins: [nodePolyfills()],
+    },
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
   },
   optimizeDeps: {
     esbuildOptions: {
