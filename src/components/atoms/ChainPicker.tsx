@@ -29,7 +29,7 @@ export const ChainPicker = (props: ChainPickerProps) => {
 
   return (
     <div>
-      {props.label && <p className="text-xs font-light mb-1">{props.label}</p>}
+      {props.label && <p className="text-xs font-light">{props.label}</p>}
       <div className="flex gap-1">
         <div className="w-full">
           <Select

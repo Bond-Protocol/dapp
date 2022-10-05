@@ -516,17 +516,14 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [quoteTokenAddress, selectedChain]);
 
   return (
-    <div className="my-32">
-      <h1 className="text-center text-5xl font-jakarta font-extralight pb-12 tracking-widest">
-        Create Market
-      </h1>
+    <div className="my-8">
       <div className="mx-[15vw]">
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="flex-col">
             <p className="font-faketion font-bold tracking-widest">
               1 SET UP MARKET
             </p>
-            <div className="pt-4">
+            <div>
               <div className="flex flex-col pt-5 w-full">
                 <Controller
                   name="chain"
@@ -620,7 +617,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       Verified as {protocol.name}
                     </h2>
 
-                    <p>
+                    <p className="text-center">
                       Thank you for verifying with BondProtocol. Your market
                       will be available via the BondProtocol dapp!
                     </p>
