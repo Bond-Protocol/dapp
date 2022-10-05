@@ -58,6 +58,8 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
   const onConfirm = async () => {
     setIsModalOpen(false);
 
+    props.data.isMultisig = false;
+
     const tx = await contractLibrary.createMarket(
       props.data.marketParams,
       props.data.bondType,
@@ -133,6 +135,8 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
             setTxnBytecode(
               contractLibrary.createMarketMultisig(props.data.marketParams)
             );
+            props.data.isMultisig = true;
+
             setIsMultisigModalOpen(true);
           }}
         >

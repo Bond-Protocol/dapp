@@ -9,6 +9,7 @@ import {usePurchaseBond} from "hooks";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import {Input} from "components";
 import {useForm} from "react-hook-form";
+import {ethers} from "ethers";
 
 export type MarketCreatedParams = {
   marketData: any;
@@ -24,11 +25,18 @@ export const MarketCreated = (props: MarketCreatedParams) => {
   const [protocol, setProtocol] = useState<Protocol | null>(null);
   const [allowance, setAllowance] = useState(-1);
   const [allowanceTx, setAllowanceTx] = useState("");
+  const [ownerAddress, setOwnerAddress] = useState(props.marketData.formValues.marketOwnerAddress);
+
   const {data, isLoading} = useWaitForTransaction(
     {
       chainId: props.marketData.chainId,
       hash: hash,
     });
+
+  const teller = contractLibrary.getAddressesForType(
+    props.marketData.chain,
+    props.marketData.bondType
+  ).teller;
 
   const {
     isLoading: allowanceIsLoading,
@@ -37,7 +45,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       chainId: props.marketData.chainId,
       hash: allowanceTx,
       onSuccess(allowanceData) {
-        loadAllowance(data?.from || "");
+        loadAllowance();
       }
     });
 
@@ -46,7 +54,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
     "tx"
   );
 
-  const loadAllowance = (from: string) => {
+  const loadAllowance = () => {
     const auctioneer = contractLibrary.getAddressesForType(
       props.marketData.chain,
       props.marketData.bondType
@@ -54,7 +62,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
     getAllowance(
       props.marketData.marketParams.payoutToken,
-      from,
+      ownerAddress,
       auctioneer,
       props.marketData.chain,
       props.marketData.payoutToken.decimals,
@@ -83,8 +91,9 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   useEffect(() => {
     if (data && !(data.status === 0) && !isLoading) {
-      setProtocol(getProtocolByAddress(data.from, props.marketData.chain));
-      loadAllowance(data?.from);
+      setProtocol(getProtocolByAddress(ownerAddress, props.marketData.chain));
+      setOwnerAddress(props.marketData.isMultisig ? data.to : data.from);
+      loadAllowance();
     }
   }, [data, isLoading, allowanceTx]);
 
@@ -93,10 +102,6 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       case -1:
         return;
       case 0:
-        const teller = contractLibrary.getAddressesForType(
-          props.marketData.chain,
-          props.marketData.bondType
-        ).teller;
         return (
           <div>
             {!allowanceIsLoading &&
@@ -106,7 +111,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 </div>
                 <div className="text-center pb-8 leading-normal">
                   In order to enable the market, you must allow the BondProtocol Teller contract ({teller}) to
-                  spend {props.marketData.summaryData.payoutToken} from the market owner address ({data?.from}).
+                  spend {props.marketData.summaryData.payoutToken} from the market owner address ({ownerAddress}).
                 </div>
                 <div className="text-center pb-8 leading-normal">
                   Please ensure the allowance is sufficient for the expected bond size of your market.
@@ -152,7 +157,8 @@ export const MarketCreated = (props: MarketCreatedParams) => {
   const allowanceForm = () => {
     return (
       <div className="mx-[15vw]">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {props.marketData.isMultisig === false &&
+          <form onSubmit={handleSubmit(onSubmit)}>
           <Input
             {...register("amount")}
             defaultValue={allowance > 0 ? allowance : 1000000000}
@@ -160,10 +166,29 @@ export const MarketCreated = (props: MarketCreatedParams) => {
             className="mb-2"
           />
 
-          <Button type="submit" className="w-full font-faketion mt-5">
-            UPDATE ALLOWANCE
-          </Button>
+            <Button type="submit" className="w-full font-faketion mt-5">
+              UPDATE ALLOWANCE
+            </Button>
         </form>
+        }
+        {props.marketData.isMultisig === true &&
+          <div>
+            <div>
+              Please execute the following transaction with your multisig to update the allowance:
+            </div>
+
+            <div>
+              <p>Contract Address: {props.marketData.marketParams.payoutToken}</p>
+              <p>Method Name: approve</p>
+              <p>_spender: {teller}</p>
+              <p>amount: {ethers.utils.parseUnits(props.marketData.formValues.marketCapacity, props.marketData.payoutToken.decimals).toString()}</p>
+            </div>
+
+            <Button onClick={() => loadAllowance()} className="w-full font-faketion mt-5">
+              REFRESH ALLOWANCE
+            </Button>
+          </div>
+        }
       </div>
     );
   }
@@ -185,7 +210,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
             HAS BEEN DEPLOYED
           </h1>
 
-          {data?.from && protocol ?
+          {ownerAddress && protocol ?
             (
               <div>
                 <h2 className="text-xl text-center py-4 leading-normal">
@@ -193,7 +218,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 </h2>
 
                 <p className="text-center py-8 leading-normal">
-                  ({data?.from})
+                  ({ownerAddress})
                 </p>
 
                 <p className="text-center py-8 leading-normal">
@@ -216,7 +241,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
               <div>
                 <p className="text-center py-8 leading-normal">
                   Your market is live on the contract, however we cannot find protocol details for the owner
-                  address {data?.from}.
+                  address {ownerAddress}.
                 </p>
 
                 <p className="text-center py-8 leading-normal">
