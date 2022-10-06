@@ -59,13 +59,19 @@ export function useMyBonds() {
     data: mainnetErc20Data,
     refetch: mainnetErc20Refetch,
     ...mainERC20Query
-  } = useListErc20BondTokensMainnetQuery({ endpoint: endpoints[0] });
+  } = useListErc20BondTokensMainnetQuery(
+    { endpoint: endpoints[0] },
+    { enabled: !testnet }
+  );
 
   const {
     data: goerliErc20Data,
     refetch: goerliErc20Refetch,
     ...testnetERC20Query
-  } = useListErc20BondTokensGoerliQuery({ endpoint: endpoints[1] });
+  } = useListErc20BondTokensGoerliQuery(
+    { endpoint: endpoints[1] },
+    { enabled: !!testnet }
+  );
 
   const refetchQueries = () => {
     if (testnet) {
@@ -118,6 +124,7 @@ export function useMyBonds() {
   We get a list of all user bonds by concatenating the .bondTokens data from each Subgraph request.
    */
   useEffect(() => {
+    if (testnet) return;
     if (mainnetData && mainnetData.ownerBalances) {
       const allTokens = mainnetData.ownerBalances;
       // @ts-ignore
@@ -126,6 +133,7 @@ export function useMyBonds() {
   }, [mainnetData, refetchRequest]);
 
   useEffect(() => {
+    if (!testnet) return;
     if (goerliData && goerliData.ownerBalances) {
       const allTokens = goerliData.ownerBalances;
       // @ts-ignore
@@ -162,6 +170,7 @@ export function useMyBonds() {
   from the subgraph and need to check them manually.
    */
   useEffect(() => {
+    if (testnet) return;
     if (mainnetErc20Data) {
       const bondTokens = mainnetErc20Data.bondTokens;
       // @ts-ignore
@@ -170,6 +179,7 @@ export function useMyBonds() {
   }, [address, mainnetErc20Data]);
 
   useEffect(() => {
+    if (!testnet) return;
     if (goerliErc20Data) {
       const bondTokens = goerliErc20Data.bondTokens;
       // @ts-ignore
