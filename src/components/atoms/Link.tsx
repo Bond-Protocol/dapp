@@ -3,7 +3,7 @@ import ButtonUnstyled, {
   ButtonUnstyledOwnerState,
   ButtonUnstyledProps,
 } from "@mui/base/ButtonUnstyled";
-import LinkIcon from "../../assets/icons/external-link";
+import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg";
 
 const styles = {
   base: "text-white fill-white",
@@ -37,7 +37,7 @@ export const Link = forwardRef(function Button(
     >
       <p className="pt-[2px]">{children}</p>
       <LinkIcon
-        className={`my-auto mx-1 ml-1.5 hover:fill-inherit ${props.iconClassName}`}
+        className={`my-auto mx-1 ml-1.5 color-inherit ${props.iconClassName}`}
       />
     </ButtonUnstyled>
   );

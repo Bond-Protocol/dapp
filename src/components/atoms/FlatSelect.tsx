@@ -30,7 +30,9 @@ export const FlatSelect = (props: FlatSelectProps) => {
             key={i}
             onClick={() => handleChange(o.value)}
             className={`border-transparent font-faketion tracking-widest py-1 rounded-lg w-full transition-all duration-200 ${
-              selected === o.value ? "bg-white/20 text-light-secondary" : ""
+              selected === o.value
+                ? "bg-white/20 text-light-secondary"
+                : "hover:bg-white/10 "
             }`}
           >
             {o.label}
