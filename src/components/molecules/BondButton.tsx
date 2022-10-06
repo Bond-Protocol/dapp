@@ -1,6 +1,6 @@
-import {Button} from "../atoms/Button";
-import {ConnectButton} from "@rainbow-me/rainbowkit";
-import {Link} from "..";
+import { Button } from "../atoms/Button";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Link } from "..";
 
 export type BondButtonProps = {
   showConnect: boolean;
@@ -32,12 +32,12 @@ export const BondButton = (props: BondButtonProps) => {
   if (props.showPurchaseLink) {
     return (
       <Link
-        className="mx-auto mt-4 border rounded-lg px-5 py-3 w-full flex justify-center border-brand-yella"
+        className="mx-auto mt-4 rounded-lg px-5 py-3 w-full flex justify-center bg-brand-yella text-black color-black font-faketion font-bold hover:text-black hover:color-black hover:bg-white"
         href={props.purchaseLink}
         target="_blank"
         rel="noopener noreferrer"
       >
-        Buy {props.quoteTokenSymbol}
+        BUY {props.quoteTokenSymbol}
       </Link>
     );
   }

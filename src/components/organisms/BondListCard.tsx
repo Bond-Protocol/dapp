@@ -4,7 +4,7 @@ import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { CHAINS, getProtocolByAddress } from "@bond-protocol/bond-library";
 import TestIcon from "../../assets/icons/test-icon";
-import ArrowIcon from "../../assets/icons/arrow-icon.svg";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
 import { formatLongNumber, getBlockExplorer } from "../../utils";
 import { providers } from "services/owned-providers";
 import { usePurchaseBond, useTokenAllowance } from "hooks";
@@ -214,10 +214,8 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
             <div className="font-faketion pt-[2px] font-bold">
               {props.topRightLabel}
             </div>
-            <img
-              src={ArrowIcon}
-              className="fill-white color-white my-auto rotate-90 ml-2 p-1"
-            />
+
+            <ArrowIcon className="fill-white color-white my-auto rotate-90 color-white ml-2 hover:color-brand-yella" />
           </div>
         </Button>
       </div>
@@ -230,7 +228,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
         </div>
         <div className="w-1/2 flex flex-col">
           {props.infoLabel && (
-            <div className="flex justify-evenly">
+            <div className="flex justify-between gap-6">
               <InfoLabel
                 label={
                   market.vestingType === "fixed-term"
@@ -247,7 +245,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
               </InfoLabel>
               <InfoLabel
                 label="Remaining Capacity"
-                tooltip={`Total bond capacity remaining in this market. When capacity reaches 0, the market will close.`}
+                tooltip="Total bond capacity remaining in this market. When capacity reaches 0, the market will close."
               >
                 <p
                   className={`flex justify-center items-end ${

@@ -209,7 +209,7 @@ export const MarketList: FC<MarketListProps> = ({
           <Button onClick={refetchAllMarkets}>Refresh</Button>
         )}
       </p>
-      <table className="w-full table-fixed">
+      <table className="w-full table-fixed font-jakarta">
         <thead>
           <tr className="border-b border-white/60">
             <TableHeading
