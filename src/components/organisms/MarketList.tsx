@@ -209,9 +209,9 @@ export const MarketList: FC<MarketListProps> = ({
           <Button onClick={refetchAllMarkets}>Refresh</Button>
         )}
       </p>
-      <table className="w-full table-fixed">
+      <table className="w-full table-fixed font-jakarta">
         <thead>
-          <tr className="border-b border-white/60">
+          <tr className="border-b border-white/60 child:pl-2">
             <TableHeading
               ascending={currentSort.ascending}
               sortName="name"
@@ -285,7 +285,7 @@ export const MarketList: FC<MarketListProps> = ({
             return (
               <ExpandableRow
                 key={market.id}
-                className="gap-x-2 border-y border-white/15"
+                className="gap-x-2 border-y border-white/15 child:pl-2"
                 onOpen={() => {
                   timerRef.current = setInterval(() => {
                     refetchOne(market.id);
