@@ -1,5 +1,5 @@
 export * from "./BondListCard";
-export * from "./BondPurchaseModal";
+export * from "../modals/BondPurchaseModal";
 export * from "./CloseMarketCard";
 export * from "./IssuerList";
 export * from "./IssuerPage";

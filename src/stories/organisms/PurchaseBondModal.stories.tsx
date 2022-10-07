@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { BondPurchaseModal } from "../../components/organisms/BondPurchaseModal";
+import { BondPurchaseModal } from "../../components/modals/BondPurchaseModal";
 
 export default {
   title: "Components/Organisms/BondPurchaseModal",

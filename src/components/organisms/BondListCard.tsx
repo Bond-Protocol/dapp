@@ -10,7 +10,7 @@ import { providers } from "services/owned-providers";
 import { usePurchaseBond, useTokenAllowance } from "hooks";
 import { Button, InfoLabel, Link } from "components/atoms";
 import { BondButton, InputCard, SummaryCard } from "components/molecules";
-import { BondPurchaseModal } from "./BondPurchaseModal";
+import { BondPurchaseModal } from "../modals/BondPurchaseModal";
 import {
   calculateTrimDigits,
   trim,

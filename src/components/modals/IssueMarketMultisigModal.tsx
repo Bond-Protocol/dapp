@@ -1,11 +1,10 @@
-import {Button, Input, Modal, ModalProps, ModalTitle} from "..";
-import {CreateMarketTermsDialog} from "components/modals";
+import {Button, Input, Modal, ModalProps, ModalTitle} from "../index";
+import {CreateMarketTermsDialog} from "components/modals/index";
+import * as React from "react";
 import {useState} from "react";
 import {CHAINS} from "@bond-protocol/bond-library";
-import copyIcon from "../../assets/icons/copy-icon.svg";
+import copyIcon from "assets/icons/copy-icon.svg";
 import {useForm} from "react-hook-form";
-import * as React from "react";
-import * as contractLibrary from "@bond-protocol/contract-library";
 
 export type IssueMarketMultisigModalProps = Partial<ModalProps> & {
   txnBytecode: string;
@@ -66,35 +65,45 @@ export const IssueMarketMultisigModal = (props: IssueMarketMultisigModalProps) =
                 width={16}
               />
             </div>
-            <p className="break-words text-xs">
+
+            <p className="break-words text-xs pb-4">
               {props.txnBytecode}
             </p>
           </div>
 
-          <div className="flex flex-col items-center justify-between mt-8 h-[40px] gap-2">
-            <div className="mx-[15vw]">
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <Input
-                  {...register("transactionHash")}
-                  label="Transaction Hash"
-                  className="mb-2"
-                  required={true}
-                />
+          <div className="mt-5 px-6 font-extralight text-sm">
+            After executing the transation, enter the transaction hash below for final confirmation
+            and token allowance checks.
+          </div>
 
-                <Button type="submit" className="w-full font-faketion mt-5">
-                  SUBMIT
-                </Button>
-              </form>
+          <div className="mt-5 px-6 font-extralight text-sm">
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-2">
+                <div>
+                  <Input
+                    {...register("transactionHash")}
+                    label="Transaction Hash"
+                    className="mb-2"
+                    required={true}
+                  />
+                </div>
 
-              <Button
-                onClick={props.onReject}
-                variant="secondary"
-                long
-                className="w-full font-faketion mt-5"
-              >
-                Cancel
-              </Button>
-            </div>
+                <div className="flex flex-row justify-center gap-2">
+                  <Button type="submit" className="font-faketion mt-5 w-1/2">
+                    SUBMIT
+                  </Button>
+
+                  <Button
+                    onClick={props.onReject}
+                    variant="secondary"
+                    long
+                    className="font-faketion mt-5 w-1/2"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
       )
