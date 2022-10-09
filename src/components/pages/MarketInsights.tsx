@@ -29,7 +29,7 @@ export const MarketInsights = () => {
       />
       <div className="my-16 flex justify-between gap-4 child:w-full">
         <InfoLabel label="Max Payout" tooltip="The maximum payout currently available from this market.">
-          {trim(market.maxPayoutUsd, calculateTrimDigits(market.maxPayoutUsd))} {market.payoutToken.symbol}
+          {trim(market.maxPayout, calculateTrimDigits(market.maxPayout))} {market.payoutToken.symbol}
         </InfoLabel>
 
         <InfoLabel label="Current Discount" tooltip="The current discount available from this market.">
