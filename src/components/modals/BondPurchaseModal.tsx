@@ -3,15 +3,15 @@ import { Modal } from "../molecules/Modal";
 import {
   TransactionHashDialog,
   TransactionHashDialogProps,
-} from "../modals/TransactionHashDialog";
+} from "./TransactionHashDialog";
 import {
   PurchaseSuccessDialog,
   PurchaseSuccessDialogProps,
-} from "../modals/PurchaseSuccessDialog";
+} from "./PurchaseSuccessDialog";
 import {
   PurchaseConfirmDialog,
   PurchaseConfirmDialogProps,
-} from "components/modals";
+} from "components/modals/index";
 import { ContractTransaction } from "ethers";
 import { useProvider } from "wagmi";
 import { getBlockExplorer } from "../../utils/getBlockExplorer";
