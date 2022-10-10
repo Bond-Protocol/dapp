@@ -1,5 +1,4 @@
-import { Tooltip } from "@material-tailwind/react";
-import TooltipIcon from "../../assets/icons/tooltip-icon";
+import { Tooltip } from "components/atoms";
 
 export type InfoLabelProps = {
   label: string;
@@ -11,17 +10,15 @@ export type InfoLabelProps = {
 export const InfoLabel = (props: InfoLabelProps) => {
   return (
     <div
-      className={`w-full bg-white/[.05] px-1 text-center overflow-hidden ${props.className}`}
+      className={`w-full bg-white/[.05] px-1 py-4 text-center overflow-hidden ${props.className}`}
     >
-      <div className="flex justify-center pt-3 text-[12px] text-light-primary-500 font-inter uppercase">
-        <div className="my-auto">{props.label}</div>
-        <Tooltip content={props.tooltip}>
-          <div className="ml-0.5 cursor-help">
-            <TooltipIcon className="fill-light-primary-500" width="16" />
-          </div>
-        </Tooltip>
+      <div className="flex justify-center text-[12px] text-light-primary-500 font-inter uppercase ml-1.5">
+        <div className="my-auto mr-1">{props.label}</div>
+        <Tooltip content={props.tooltip} iconClassname="pb-0.5" />
       </div>
-      <h2 className="pb-4 font-faketion text-[48px]">{props.children}</h2>
+      <h2 className="font-faketion text-[48px] leading-[56px]">
+        {props.children}
+      </h2>
     </div>
   );
 };

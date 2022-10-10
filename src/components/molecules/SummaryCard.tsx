@@ -18,7 +18,13 @@ export const SummaryCard = (props: SummaryCardProps) => {
         <li key={i}>
           <div className="flex">
             <p className="font-jakarta font-light ml-2 mr-1">{f.label}</p>
-            {f.tooltip && <Tooltip content={f.tooltip} />}
+            {f.tooltip && (
+              <Tooltip
+                content={f.tooltip}
+                iconWidth={13.33}
+                iconClassname="pb-1.5 fill-light-primary-50"
+              />
+            )}
           </div>
           <span className="mx-2 my-auto font-bold">{f.value}</span>
         </li>

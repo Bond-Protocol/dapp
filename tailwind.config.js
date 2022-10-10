@@ -34,6 +34,7 @@ module.exports = withMT({
           success: "#88F6D7",
           neutral: "#A8A8A8",
           grey: "#737373",
+          tooltip: "#090B15",
         },
       },
       fontFamily: {
