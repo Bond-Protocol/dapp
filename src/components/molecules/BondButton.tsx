@@ -1,5 +1,5 @@
 import { Button } from "../atoms/Button";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { ConnectButton } from "../organisms/ConnectButton";
 import { Link } from "..";
 
 export type BondButtonProps = {
