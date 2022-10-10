@@ -4,8 +4,8 @@ import { getProtocols } from "@bond-protocol/bond-library";
 import { IssuerCard } from "components/molecules/IssuerCard";
 import { alphabeticSort, numericSort } from "services/sort";
 import { useMarkets } from "hooks";
-import {useBondPurchases} from "hooks/useBondPurchases";
-import {useAtom} from "jotai";
+import { useBondPurchases } from "hooks/useBondPurchases";
+import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 
 export const IssuerList = () => {
@@ -49,13 +49,12 @@ export const IssuerList = () => {
         : false;
 
     sortIssuers((i1: string, i2: string) => {
-        return numericSort(
-          tbvByProtocol.get(i1.id),
-          tbvByProtocol.get(i2.id),
-          ascending
-        )
-      }
-    );
+      return numericSort(
+        tbvByProtocol.get(i1.id),
+        tbvByProtocol.get(i2.id),
+        ascending
+      );
+    });
     setCurrentSort({ sortBy: sortByTbv, ascending: ascending });
   }
 
@@ -78,16 +77,14 @@ export const IssuerList = () => {
         <Button onClick={sortByTbv}>Sort by TBV</Button>
       </p>
         */}
-      <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 2xl:grid-cols-7 gap-8">
+      <div className="mt-8 flex gap-x-12 gap-y-10 flex-wrap">
         {sortedIssuers.map((issuer) => {
           if (issuer.name && issuer.name.toLowerCase().indexOf(search) != -1) {
             const markets = marketsByIssuer.get(issuer.id) || [];
             return (
-              <IssuerCard
-                key={issuer.id}
-                issuer={issuer}
-                markets={markets}
-              />
+              <div key={issuer.id} className="w-full flex-1">
+                <IssuerCard issuer={issuer} markets={markets} />
+              </div>
             );
           }
         })}

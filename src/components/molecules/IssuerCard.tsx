@@ -24,11 +24,13 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
 
   return (
     <div
-      className="border border-transparent rounded-lg bg-white/[.05] p-5 flex flex-col justify-between items-center hover:cursor-pointer hover:bg-white/10"
+      className="border border-transparent rounded-lg bg-white/[.05] p-5 flex flex-col justify-between items-center hover:cursor-pointer hover:bg-white/10 w-full"
       onClick={() => handleClick(issuer.id)}
     >
       <img className="h-[64px] w-[64px]" src={logo} />
-      <p className="my-2 font-bold tracking-wide text-center">{issuer.name}</p>
+      <p className="my-2 font-bold tracking-wide text-center">
+        {issuer.name + ""}
+      </p>
       <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
       <p className="text-[10px] text-light-primary-300">
         TBV ${Math.floor(tbv)}
