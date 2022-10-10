@@ -14,6 +14,10 @@ export const App: FC = () => {
   const [showInfoArea, setShowInfoArea] = useState(false);
 
   if (underMaintenance) return <CoverUpScreen />;
+  const closeInfoArea = () => {
+    window.scrollTo(0, 0);
+    setShowInfoArea(false);
+  };
 
   return (
     <>
@@ -21,18 +25,15 @@ export const App: FC = () => {
       <div className="xs:hidden fml:block">
         <Providers>
           <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
-          <div className="relative min-h-[88vh] overflow-x-hidden antialiased pb-16">
+          <div className="relative font-jakarta min-h-[88vh] overflow-x-hidden antialiased pb-16">
             <AppBackground />
-            <InformationArea
-              open={showInfoArea}
-              onClose={() => setShowInfoArea(false)}
-            />
+            <InformationArea open={showInfoArea} onClose={closeInfoArea} />
             <PolicyRoutes />
             <PageContainer>
               <RouteMap />
             </PageContainer>
           </div>
-          <Footer closeInfoArea={() => setShowInfoArea(false)} />
+          <Footer closeInfoArea={closeInfoArea} />
         </Providers>
       </div>
     </>

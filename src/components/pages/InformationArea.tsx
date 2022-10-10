@@ -142,7 +142,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           {content.map(({ label, content }, i) => (
             <Accordion
               label={label}
-              className="text-black py-10 hover:bg-black/5 transition-all"
+              className="text-black py-10 hover:bg-black/5 transition-all uppercase"
               iconClassname="fill-black"
               key={i}
             >

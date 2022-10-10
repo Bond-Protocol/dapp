@@ -18,7 +18,6 @@ import { useQuery } from "react-query";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import { LpPair, calcLpPrice } from "@bond-protocol/contract-library";
-import { mainnet } from "@wagmi/core/dist/declarations/src/constants/chains";
 
 export interface PriceDetails {
   price: string;
