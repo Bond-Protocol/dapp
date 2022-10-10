@@ -382,6 +382,10 @@ export const listBondPurchasesMainnet = gql`
             payout
             recipient
             timestamp
+            network
+            quoteToken {
+              id
+            }
         }
     }
 `;
@@ -398,6 +402,10 @@ export const listBondPurchasesTestnet = gql`
             payout
             recipient
             timestamp
+            network
+            quoteToken {
+              id
+            }
         }
     }
 `;
