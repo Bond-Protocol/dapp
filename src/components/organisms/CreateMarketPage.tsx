@@ -23,15 +23,17 @@ import {
 } from "components/molecules";
 import { ChainPicker } from "components/atoms/ChainPicker";
 
-const capacityTokenOptions = [
-  { label: "PAYOUT", value: 0 },
-  { label: "QUOTE", value: 1 },
-];
-
 const vestingOptions = [
   { label: "FIXED EXPIRY", value: 0 },
   { label: "FIXED TERM", value: 1 },
 ];
+
+const getCustomCapacityLabel = (quote, payout) => {
+  return [
+    { label: payout || "PAYOUT", value: 0 },
+    { label: quote || "QUOTE", value: 1 },
+  ];
+};
 
 const formDefaults = {
   capacityToken: 0,
@@ -520,7 +522,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       <div className="mx-[15vw]">
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="flex-col">
-            <p className="font-faketion font-bold tracking-widest">
+            <p className="font-faketion font-extrabold tracking-widest">
               1 SET UP MARKET
             </p>
             <div>
@@ -538,7 +540,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   )}
                 />
               </div>
-
               <div className="flex flex-col pt-5 w-full">
                 <Controller
                   name="marketOwnerAddress"
@@ -624,7 +625,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   </div>
                 )}
               </div>
-
               <div className="flex gap-6">
                 <div className="flex flex-col w-full pt-5">
                   <Controller
@@ -692,7 +692,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   />
                 </div>
               </div>
-
               {showTokenWarning && (
                 <div className="flex flex-col gap-6 pt-5 w-full text-sm text-red-500">
                   <p>
@@ -716,7 +715,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   </p>
                 </div>
               )}
-
               <div className="flex gap-6">
                 <div className="flex flex-col w-full pt-5">
                   <Controller
@@ -786,7 +784,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   />
                 </div>
               </div>
-
               <div className="flex gap-6">
                 <div className="flex flex-col w-full pt-5">
                   <p className="text-xs font-light mb-1">
@@ -834,49 +831,52 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   </div>
                 )}
               </div>
+              <div className="flex gap-6">
+                <div className="flex flex-col pt-5 w-full">
+                  <Controller
+                    name="marketCapacity"
+                    control={control}
+                    rules={{ required: "Required" }}
+                    render={({ field }) => (
+                      <>
+                        <Input
+                          {...field}
+                          label="Market Capacity"
+                          className={"mb-2"}
+                        />
 
-              <div className="flex flex-col pt-5 w-full">
-                <Controller
-                  name="capacityToken"
-                  control={control}
-                  render={({ field }) => (
-                    <FlatSelect
-                      {...field}
-                      label="Capacity Token"
-                      options={capacityTokenOptions}
-                      default={props.initialValues?.capacityToken}
-                    />
-                  )}
-                />
-              </div>
+                        {errors.marketCapacity?.type === "required" && (
+                          <div className="text-xs font-light my-1 text-red-500">
+                            {errors.marketCapacity?.message}
+                          </div>
+                        )}
 
-              <div className="flex flex-col pt-5 w-full">
-                <Controller
-                  name="marketCapacity"
-                  control={control}
-                  rules={{ required: "Required" }}
-                  render={({ field }) => (
-                    <>
-                      <Input
+                        {errors.marketCapacity?.type === "isNumber" && (
+                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                            Must be a number
+                          </div>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col pt-5 w-full">
+                  <Controller
+                    name="capacityToken"
+                    control={control}
+                    render={({ field }) => (
+                      <FlatSelect
                         {...field}
-                        label="Market Capacity"
-                        className={"mb-2"}
+                        label="Capacity Token"
+                        options={getCustomCapacityLabel(
+                          quoteTokenInfo?.symbol,
+                          payoutTokenInfo?.symbol
+                        )}
+                        default={props.initialValues?.capacityToken}
                       />
-
-                      {errors.marketCapacity?.type === "required" && (
-                        <div className="text-xs font-light my-1 text-red-500">
-                          {errors.marketCapacity?.message}
-                        </div>
-                      )}
-
-                      {errors.marketCapacity?.type === "isNumber" && (
-                        <div className="text-xs font-light my-1 text-red-500 justify-self-start">
-                          Must be a number
-                        </div>
-                      )}
-                    </>
-                  )}
-                />
+                    )}
+                  />
+                </div>
               </div>
             </div>
 

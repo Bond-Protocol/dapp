@@ -62,7 +62,7 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
             </p>
           )}
           <div
-            className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer flex justify-between ${props.dateClassName}`}
+            className={`px-3 h-10 py-2 border rounded-lg hover:cursor-pointer flex justify-between ${props.dateClassName}`}
           >
             <p
               className={`${date ? "font-bold" : ""} font-jakarta text-[15px]`}
