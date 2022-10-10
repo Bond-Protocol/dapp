@@ -1,12 +1,18 @@
 //@ts-nocheck
-import { useEffect, useRef, useState } from "react";
-import { PROTOCOLS } from "@bond-protocol/bond-library";
+import { useEffect, useState } from "react";
+import { getProtocols } from "@bond-protocol/bond-library";
 import { IssuerCard } from "components/molecules/IssuerCard";
 import { alphabeticSort, numericSort } from "services/sort";
 import { useMarkets } from "hooks";
+import {useBondPurchases} from "hooks/useBondPurchases";
+import {useAtom} from "jotai";
+import testnetMode from "../../atoms/testnetMode.atom";
 
 export const IssuerList = () => {
   const { marketsByIssuer, issuers } = useMarkets();
+  const { tbvByProtocol } = useBondPurchases();
+
+  const [testnet, setTestnet] = useAtom(testnetMode);
   const [search, setSearch] = useState("");
   const [sortedIssuers, setSortedIssuers] = useState(issuers);
   const [currentSort, setCurrentSort] = useState({
@@ -14,14 +20,11 @@ export const IssuerList = () => {
     ascending: false,
   });
 
-  const issuersRef = useRef(issuers);
-  const tbvMapRef = useRef(new Map());
-
   const sortIssuers = function (
     compareFunction: (i1: string, i2: string) => number
   ) {
     const arr: string[] = [];
-    issuersRef.current.forEach((issuer) => {
+    getProtocols(testnet).forEach((issuer) => {
       arr.push(issuer);
     });
     setSortedIssuers(arr.sort(compareFunction));
@@ -32,8 +35,9 @@ export const IssuerList = () => {
       currentSort.sortBy.toString() === sortByName.toString()
         ? !currentSort.ascending
         : true;
+
     sortIssuers((i1: string, i2: string) =>
-      alphabeticSort(PROTOCOLS.get(i1).name, PROTOCOLS.get(i2).name, ascending)
+      alphabeticSort(i1.name, i2.name, ascending)
     );
     setCurrentSort({ sortBy: sortByName, ascending: ascending });
   }
@@ -44,12 +48,13 @@ export const IssuerList = () => {
         ? !currentSort.ascending
         : false;
 
-    sortIssuers((i1: string, i2: string) =>
-      numericSort(
-        tbvMapRef.current.get(i1),
-        tbvMapRef.current.get(i2),
-        ascending
-      )
+    sortIssuers((i1: string, i2: string) => {
+        return numericSort(
+          tbvByProtocol.get(i1.id),
+          tbvByProtocol.get(i2.id),
+          ascending
+        )
+      }
     );
     setCurrentSort({ sortBy: sortByTbv, ascending: ascending });
   }
@@ -59,18 +64,8 @@ export const IssuerList = () => {
   };
 
   useEffect(() => {
-    issuersRef.current = issuers;
-
-    const map = new Map();
-    marketsByIssuer.forEach((value, key) => {
-      let tbv = 0;
-      value.forEach((market) => (tbv = tbv + market.tbvUsd));
-      map.set(key, tbv);
-    });
-    tbvMapRef.current = map;
-
     currentSort.sortBy();
-  }, [issuers, marketsByIssuer, search]);
+  }, [issuers, marketsByIssuer, tbvByProtocol, search]);
 
   return (
     <>
@@ -85,15 +80,16 @@ export const IssuerList = () => {
         */}
       <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 2xl:grid-cols-7 gap-8">
         {sortedIssuers.map((issuer) => {
-          const protocol = PROTOCOLS.get(issuer);
-          if (protocol.name.toLowerCase().indexOf(search) != -1)
+          if (issuer.name && issuer.name.toLowerCase().indexOf(search) != -1) {
+            const markets = marketsByIssuer.get(issuer.id) || [];
             return (
               <IssuerCard
-                key={issuer}
-                issuer={protocol}
-                markets={marketsByIssuer.get(issuer)}
+                key={issuer.id}
+                issuer={issuer}
+                markets={markets}
               />
             );
+          }
         })}
       </div>
     </>

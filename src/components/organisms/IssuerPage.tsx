@@ -7,6 +7,7 @@ import { InfoLabel, Link, Button } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
+import { useBondPurchases } from "hooks/useBondPurchases";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -18,6 +19,7 @@ export const IssuerPage: FC = () => {
   const navigate = useNavigate();
   const { marketsByIssuer } = useMarkets();
   const { getBondersForProtocol } = useUniqueBonders();
+  const { tbvByProtocol } = useBondPurchases();
   const { name } = useParams();
 
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
@@ -37,11 +39,8 @@ export const IssuerPage: FC = () => {
   }, [name, marketsByIssuer]);
 
   useEffect(() => {
-    if (markets) {
-      const tbv = markets.reduce((tbv, market) => tbv + market.tbvUsd, 0);
-      setTbv(tbv);
-    }
-  }, [markets]);
+    setTbv(tbvByProtocol.get(name as PROTOCOL_NAMES) || 0);
+  }, [tbvByProtocol]);
 
   return (
     <div className="pb-12">

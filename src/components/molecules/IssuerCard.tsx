@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import { Protocol } from "@bond-protocol/bond-library";
+import {Protocol, PROTOCOL_NAMES} from "@bond-protocol/bond-library";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {useBondPurchases} from "hooks/useBondPurchases";
 
 type IssuerCardProps = {
   issuer: Protocol;
@@ -19,16 +20,13 @@ const splitCamelCaseText = (name: string) => {
 
 export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
   const navigate = useNavigate();
+  const { tbvByProtocol } = useBondPurchases();
 
   const [tbv, setTbv] = useState(0);
 
   useEffect(() => {
-    if (markets) {
-      let tbv = 0;
-      markets.forEach((market) => (tbv = tbv + market.tbvUsd));
-      setTbv(tbv);
-    }
-  }, [markets]);
+    setTbv(tbvByProtocol.get(issuer.name as PROTOCOL_NAMES) || 0);
+  }, [tbvByProtocol]);
 
   const logo = () => {
     return issuer.logoUrl && issuer.logoUrl != ""
@@ -52,7 +50,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
           ? splitCamelCaseText(issuer.name)
           : issuer.name}
       </p>
-      <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
+      <p className="text-xs text-light-primary-50">{markets.length} {markets.length === 1 ? "Market" : "Markets"}</p>
       <p className="text-[10px] text-light-primary-300">
         TBV ${Math.floor(tbv)}
       </p>
