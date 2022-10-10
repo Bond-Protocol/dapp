@@ -20,7 +20,7 @@ export const App: FC = () => {
       <MobileCover />
       <div className="xs:hidden fml:block">
         <Providers>
-          <div className="relative min-h-[100vh] overflow-x-hidden">
+          <div className="relative min-h-[100vh] overflow-x-hidden antialiased">
             <AppBackground />
             <InformationArea
               open={showInfoArea}

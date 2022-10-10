@@ -42,7 +42,7 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
                  border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4 select-none
                  ${
                    selected === i
-                     ? "bg-light-primary-900"
+                     ? "bg-light-primary-900 font-extrabold"
                      : "bg-transparent hover:bg-light-primary-900/50"
                  } 
                  ${props.largeTab ? "px-36" : ""}`,

@@ -14,6 +14,7 @@ const styles = {
 export type LinkProps = ButtonUnstyledProps &
   AnchorHTMLAttributes<HTMLAnchorElement> & {
     iconClassName?: string;
+    labelClassname?: string;
   };
 
 export const Link = forwardRef(function Button(
@@ -35,9 +36,9 @@ export const Link = forwardRef(function Button(
         }),
       }}
     >
-      <p className="pt-[2px]">{children}</p>
+      <p className={`pt-[2px] ${props.labelClassname}`}>{children}</p>
       <LinkIcon
-        className={`my-auto mx-1 ml-1.5 color-inherit ${props.iconClassName}`}
+        className={`my-auto ml-1.5 mr-0.5 color-inherit ${props.iconClassName}`}
       />
     </ButtonUnstyled>
   );

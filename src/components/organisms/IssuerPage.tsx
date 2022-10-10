@@ -43,7 +43,7 @@ export const IssuerPage: FC = () => {
   }, [tbvByProtocol]);
 
   return (
-    <div className="pb-12">
+    <div className="pb-12 font-jakarta">
       <div className="flex mt-6">
         <Button variant="ghost" onClick={() => navigate("/issuers")}>
           Back to list
@@ -52,7 +52,7 @@ export const IssuerPage: FC = () => {
       <div className="flex flex-col content-center mt-10">
         <div className="flex flex-row justify-center items-center">
           <img className="h-[64px] w-[64px] mr-4" src={logo()} />
-          <p className="text-5xl">
+          <p className="text-5xl font-bold">
             {protocol?.name || placeholderProtocol.name}
           </p>
         </div>
@@ -70,6 +70,8 @@ export const IssuerPage: FC = () => {
                   href={protocol.links.homepage}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="text-[15px]"
+                  iconClassName="mt-1"
                 >
                   {protocol.links.homepage}
                 </Link>

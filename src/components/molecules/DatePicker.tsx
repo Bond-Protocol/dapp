@@ -57,12 +57,18 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
           onClick={() => setOpen((prev) => !prev)}
         >
           {props.label && (
-            <p className="text-xs font-light mb-1">{props.label}</p>
+            <p className="text-xs font-light mb-1 font-jakarta">
+              {props.label}
+            </p>
           )}
           <div
             className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer flex justify-between ${props.dateClassName}`}
           >
-            <p>{date ? formattedDate : props.placeholder}</p>
+            <p
+              className={`${date ? "font-bold" : ""} font-jakarta text-[15px]`}
+            >
+              {date ? formattedDate : props.placeholder}
+            </p>
             <CalendarIcon className="color-white my-auto" />
           </div>
         </div>
@@ -73,7 +79,7 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
             onSelect={handleClose}
             fromDate={fromDate}
             toDate={toDate}
-            className="absolute text-xs p-3 backdrop-blur-xl border rounded-lg z-10"
+            className="absolute text-xs p-3 backdrop-blur-xl border rounded-lg z-10 font-jakarta"
           />
         )}
       </div>

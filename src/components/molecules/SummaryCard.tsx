@@ -17,7 +17,7 @@ export const SummaryCard = (props: SummaryCardProps) => {
       {props.fields.map((f, i) => (
         <li key={i}>
           <div className="flex">
-            <p className="font-jakarta font-light ml-2 mr-1">{f.label}</p>
+            <p className="font-jakarta ml-2 mr-1">{f.label}</p>
             {f.tooltip && (
               <Tooltip
                 content={f.tooltip}

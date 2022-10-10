@@ -28,7 +28,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
       onClick={() => handleClick(issuer.id)}
     >
       <img className="h-[64px] w-[64px]" src={logo} />
-      <p className="my-2 font-bold tracking-wide text-center">
+      <p className="my-2 font-jakarta font-bold tracking-wide text-center">
         {issuer.name + ""}
       </p>
       <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
