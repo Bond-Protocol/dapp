@@ -24,7 +24,7 @@ export const FlatSelect = (props: FlatSelectProps) => {
       {props.label && (
         <p className="text-xs font-jakarta font-light mb-1">{props.label}</p>
       )}
-      <div className="flex border rounded-lg justify-evenly p-1">
+      <div className="flex border rounded-lg justify-evenly p-1 h-10">
         {props.options.map((o, i) => (
           <ButtonUnstyled
             key={i}
@@ -32,7 +32,7 @@ export const FlatSelect = (props: FlatSelectProps) => {
             className={`border-transparent font-faketion tracking-widest py-1 rounded-lg w-full transition-all duration-200 ${
               selected === o.value
                 ? "bg-white/20 text-light-secondary"
-                : "hover:bg-white/10 "
+                : "hover:bg-white/15 "
             }`}
           >
             {o.label}

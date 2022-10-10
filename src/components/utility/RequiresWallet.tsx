@@ -1,5 +1,6 @@
-import { ConnectButton } from "components/organisms/ConnectButton";
-import { useAccount } from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { useAccount, useConnect } from "wagmi";
+import { Button } from "..";
 
 export type RequireWalletProps = {
   children: React.ReactNode;
@@ -11,16 +12,20 @@ export type RequireWalletProps = {
  */
 export const RequiresWallet = ({ className, children }: RequireWalletProps) => {
   const { isConnected } = useAccount();
+  const { openConnectModal } = useConnectModal();
 
   return isConnected ? (
     <>{children}</>
   ) : (
-    <div className={`w-full p-8 flex justify-center text-center ${className}`}>
-      <div className="p-8 bg-white/10 rounded-lg">
-        <p className="text-xs">Connect your wallet</p>
-        <p className="text-xs mb-4">to continue</p>
-        <ConnectButton />
-      </div>
+    <div className="mt-10 flex flex-col">
+      <h1 className="text-5xl text-center font-faketion py-10 leading-normal">
+        CONNECT WALLET
+        <br />
+        TO CONTINUE
+      </h1>
+      <Button className="mx-auto w-[20vw]" onClick={openConnectModal}>
+        Connect
+      </Button>
     </div>
   );
 };

@@ -1,9 +1,9 @@
-import {useState} from "react";
-import {Tooltip} from "@material-tailwind/react";
-import {TableCell, TableCellProps} from "./TableCell";
+import { useState } from "react";
+import { Tooltip } from "@material-tailwind/react";
+import { TableCell, TableCellProps } from "./TableCell";
 import TooltipIcon from "../../assets/icons/tooltip-icon";
 import ArrowDownIcon from "../../assets/icons/arrow-down-icon";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import marketListSort from "../../atoms/marketListSort.atom";
 
 export type TableHeadingProps = TableCellProps & {
@@ -17,14 +17,19 @@ export type TableHeadingProps = TableCellProps & {
 export const TableHeading = (props: TableHeadingProps) => {
   const [sorting, setSorting] = useState(false);
   const [marketSort, setMarketSort] = useAtom(marketListSort);
+  const isSorting =
+    sorting &&
+    marketSort &&
+    props.sortName &&
+    marketSort.localeCompare(props.sortName) === 0;
 
   return (
     <TableCell
       {...props}
       heading
-      className={`${props.onClick && "cursor-pointer"} w-2 text-left ${
-        props.className
-      }`}
+      className={`${
+        props.onClick && "cursor-pointer"
+      } text-base w-2 text-left pb-4 ${props.className}`}
       onClick={(e) => {
         if (!props.onClick) return;
 
@@ -38,7 +43,7 @@ export const TableHeading = (props: TableHeadingProps) => {
           props.alignEnd ? "justify-end" : "justify-start"
         }`}
       >
-        {sorting && marketSort && props.sortName && marketSort.localeCompare(props.sortName) === 0 && (
+        {isSorting && (
           <div
             className="mr-1 my-auto cursor-pointer"
             onClick={props.onClickIcon}

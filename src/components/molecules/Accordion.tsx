@@ -25,7 +25,7 @@ export const Accordion: FC<{
         }
         onClick={() => setOpen((prev) => !prev)}
       >
-        <div className="w-full hover:cursor-pointer font-bold uppercase select-none">
+        <div className="w-full hover:cursor-pointer font-bold select-none">
           {label}
         </div>
         <ArrowIcon

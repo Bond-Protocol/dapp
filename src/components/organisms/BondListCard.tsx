@@ -159,6 +159,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           target="_blank"
           rel="noopener noreferrer"
           className="w-fit"
+          labelClassname="mb-1"
         >
           View on {blockExplorerName}
         </Link>
@@ -194,14 +195,14 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   };
 
   return (
-    <div className="pb-8">
-      <div className="flex justify-between w-[80vw] pl-4 my-5">
+    <div className="pb-8 w-[100vw] max-w-[1440px]">
+      <div className="flex justify-between pl-4 my-5">
         <div className="flex">
           {protocol?.logoUrl && (
             <img src={protocol.logoUrl} className="w-[52px] h-[52px] my-auto" />
           )}
-          <p className="font-faketion text-[48px]">
-            {protocol?.name || market.payoutToken?.symbol}
+          <p className="font-faketion text-[48px] pl-1">
+            {market.quoteToken?.symbol}
           </p>
         </div>
         <Button
@@ -211,7 +212,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           className="text-[12px] my-auto"
         >
           <div className="flex pl-2 fill-inherit">
-            <div className="font-faketion pt-[2px] font-bold">
+            <div className="font-faketion pt-[2px] font-extrabold">
               {props.topRightLabel}
             </div>
 
@@ -219,8 +220,11 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           </div>
         </Button>
       </div>
-      <div className="flex w-[80vw] mt-12 gap-4 mb-6">
+      <div className="flex mt-12 gap-4 mb-6 font-jakarta">
         <div className="w-1/2">
+          {protocol?.name && (
+            <p className="text-4xl font-jakarta font-bold">{protocol.name}</p>
+          )}
           {protocol?.description && <p>{protocol.description}</p>}
           {/* TODO: Hide graph until data is available
             <div className="text-center p-[12%] border">📈</div>

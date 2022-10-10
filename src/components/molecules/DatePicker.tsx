@@ -1,7 +1,8 @@
 import "react-day-picker/dist/style.css";
-import {DayPicker} from "react-day-picker";
-import {useEffect, useState} from "react";
-import {ClickAwayListener} from "@mui/base";
+import { DayPicker } from "react-day-picker";
+import { useEffect, useState } from "react";
+import { ClickAwayListener } from "@mui/base";
+import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
 
 export type DatePickerProps = {
   onChange?: (date?: number) => void;
@@ -13,17 +14,18 @@ export type DatePickerProps = {
   defaultValue?: Date;
 };
 
-export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
+export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
   const [open, setOpen] = useState(false);
   const [date, setDate] = useState<Date>();
 
   const fromDate = new Date();
   const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
 
-  const formattedDate = date &&
-    new Date(date.getTime() - (date.getTimezoneOffset() * 60000 ))
-    .toISOString()
-    .split("T")[0];
+  const formattedDate =
+    date &&
+    new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+      .toISOString()
+      .split("T")[0];
 
   const handleClose = (date: unknown) => {
     if (date instanceof Date && !isNaN(date.valueOf())) {
@@ -34,13 +36,17 @@ export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
   };
 
   useEffect(() => {
-    if (!date && props.defaultValue instanceof Date && !isNaN(props.defaultValue.valueOf())) {
+    if (
+      !date &&
+      props.defaultValue instanceof Date &&
+      !isNaN(props.defaultValue.valueOf())
+    ) {
       setDate(props.defaultValue);
     }
   }, [props.defaultValue]);
 
   useEffect(() => {
-      onChange && onChange((date as Date)?.getTime() / 1000);
+    onChange && onChange((date as Date)?.getTime() / 1000);
   }, [onChange, date]);
 
   return (
@@ -51,12 +57,19 @@ export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
           onClick={() => setOpen((prev) => !prev)}
         >
           {props.label && (
-            <p className="text-xs font-light mb-1">{props.label}</p>
+            <p className="text-xs font-light mb-1 font-jakarta">
+              {props.label}
+            </p>
           )}
           <div
-            className={`px-4 h-10 py-2 border rounded-lg hover:cursor-pointer ${props.dateClassName}`}
+            className={`px-3 h-10 py-2 border rounded-lg hover:cursor-pointer flex justify-between ${props.dateClassName}`}
           >
-            <p>{date ? formattedDate : props.placeholder}</p>
+            <p
+              className={`${date ? "font-bold" : ""} font-jakarta text-[15px]`}
+            >
+              {date ? formattedDate : props.placeholder}
+            </p>
+            <CalendarIcon className="color-white my-auto" />
           </div>
         </div>
         {open && (
@@ -66,7 +79,7 @@ export const DatePicker = ({onChange, ...props}: DatePickerProps) => {
             onSelect={handleClose}
             fromDate={fromDate}
             toDate={toDate}
-            className="absolute text-xs p-3 backdrop-blur-xl border rounded-lg z-10"
+            className="absolute text-xs p-3 backdrop-blur-xl border rounded-lg z-10 font-jakarta"
           />
         )}
       </div>

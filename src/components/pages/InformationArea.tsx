@@ -113,11 +113,11 @@ export const InformationArea = (props: InformationAreaProps) => {
 
   return (
     <div
-      className={`inset-0 fixed h-[100vh] duration-500 bg-turtle-blue transition-transform z-10 ${
+      className={`inset-0 fixed h-[100vh] duration-500 bg-brand-turtle-blue transition-transform z-10 ${
         props.open ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="bg-white h-[90vh] font-jakarta">
+      <div className="bg-white h-[88vh] font-jakarta">
         <div className="mx-[5vw] h-[88px] flex justify-between items-center ">
           <ProtocolLogo
             black
@@ -142,7 +142,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           {content.map(({ label, content }, i) => (
             <Accordion
               label={label}
-              className="text-black py-10 hover:bg-black/5 transition-all"
+              className="text-black py-10 hover:bg-black/5 transition-all uppercase"
               iconClassname="fill-black"
               key={i}
             >

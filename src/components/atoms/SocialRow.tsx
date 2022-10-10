@@ -1,10 +1,10 @@
-import gitbookIcon from "../../assets/icons/socials/gitbook.svg";
-import githubIcon from "../../assets/icons/socials/github.svg";
-import mediumIcon from "../../assets/icons/socials/medium.svg";
-import twitterIcon from "../../assets/icons/socials/twitter.svg";
-import discordIcon from "../../assets/icons/socials/discord.svg";
-import telegramIcon from "../../assets/icons/socials/telegram.svg";
-import {LinkIcon} from "../../components/atoms/LinkIcon";
+import { ReactComponent as GitbookIcon } from "../../assets/icons/socials/gitbook.svg";
+import { ReactComponent as GithubIcon } from "../../assets/icons/socials/github.svg";
+import { ReactComponent as MediumIcon } from "../../assets/icons/socials/medium.svg";
+import { ReactComponent as TwitterIcon } from "../../assets/icons/socials/twitter.svg";
+import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discord.svg";
+import { ReactComponent as TelegramIcon } from "../../assets/icons/socials/telegram.svg";
+import { LinkIcon } from "../../components/atoms/LinkIcon";
 
 export type SocialRowProps = {
   gitbook?: string;
@@ -21,12 +21,38 @@ export const SocialRow = (props: SocialRowProps) => {
     <div
       className={`flex justify-center gap-9 my-auto child:my-auto ${props.className}`}
     >
-      {props.gitbook && <LinkIcon src={gitbookIcon} href={props.gitbook} />}
-      {props.github && <LinkIcon src={githubIcon} href={props.github} />}
-      {props.medium && <LinkIcon src={mediumIcon} href={props.medium} />}
-      {props.twitter && <LinkIcon src={twitterIcon} href={props.twitter} />}
-      {props.discord && <LinkIcon src={discordIcon} href={props.discord} />}
-      {props.telegram && <LinkIcon src={telegramIcon} href={props.telegram} />}
+      {props.gitbook && (
+        <LinkIcon href={props.gitbook}>
+          <GitbookIcon />
+        </LinkIcon>
+      )}
+      {props.github && (
+        <LinkIcon href={props.github}>
+          <GithubIcon />
+        </LinkIcon>
+      )}
+
+      {props.medium && (
+        <LinkIcon href={props.medium}>
+          <MediumIcon />
+        </LinkIcon>
+      )}
+
+      {props.twitter && (
+        <LinkIcon href={props.twitter} className="hover:text-[#1DA1F2]">
+          <TwitterIcon />
+        </LinkIcon>
+      )}
+      {props.discord && (
+        <LinkIcon href={props.discord}>
+          <DiscordIcon className="hover:text-[#7289da]" />
+        </LinkIcon>
+      )}
+      {props.telegram && (
+        <LinkIcon href={props.telegram}>
+          <TelegramIcon />
+        </LinkIcon>
+      )}
     </div>
   );
 };

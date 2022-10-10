@@ -34,11 +34,13 @@ module.exports = withMT({
           success: "#88F6D7",
           neutral: "#A8A8A8",
           grey: "#737373",
+          tooltip: "#090B15",
         },
       },
       fontFamily: {
         jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
         faketion: ["POEVetica", ...defaultTheme.fontFamily.mono],
+        inter: ["Inter", ...defaultTheme.fontFamily.mono],
       },
       opacity: {
         15: ".15",
@@ -48,27 +50,7 @@ module.exports = withMT({
   },
   plugins: [
     plugin(function ({ addBase }) {
-      addBase({
-        "@font-face": {
-          fontFamily: "FraktionSans",
-          fontWeight: "500",
-          src: "url(/fonts/PPFraktionSans-Bold.woff2) format('woff2')",
-        },
-      });
-      addBase({
-        "@font-face": {
-          fontFamily: "PlusJakartaSans",
-          fontWeight: "800",
-          src: "url(/fonts/PlusJakartaSans-Medium.woff) format('woff')",
-        },
-      });
-      addBase({
-        "@font-face": {
-          fontFamily: "PlusJakartaSans",
-          fontWeight: "400",
-          src: "url(/fonts/PlusJakartaSans-Light.woff2) format('woff2')",
-        },
-      });
+      //JAKARTA
       addBase({
         "@font-face": {
           fontFamily: "PlusJakartaSans",
@@ -76,6 +58,50 @@ module.exports = withMT({
           src: "url(/fonts/PlusJakartaSans-ExtraLight.woff2) format('woff2')",
         },
       });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "300",
+          src: "url(/fonts/PlusJakartaSans-Light.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "400",
+          src: "url(/fonts/PlusJakartaSans-Regular.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "500",
+          src: "url(/fonts/PlusJakartaSans-Medium.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "600",
+          src: "url(/fonts/PlusJakartaSans-SemiBold.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "700",
+          src: "url(/fonts/PlusJakartaSans-Bold.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PlusJakartaSans",
+          fontWeight: "800",
+          src: "url(/fonts/PlusJakartaSans-ExtraBold.woff2) format('woff2')",
+        },
+      });
+
+      //INTER
       addBase({
         "@font-face": {
           fontFamily: "Inter",
@@ -86,25 +112,29 @@ module.exports = withMT({
       addBase({
         "@font-face": {
           fontFamily: "Inter",
-          fontWeight: "700",
+          fontWeight: "800",
           src: "url(/fonts/Inter-Bold.woff2) format('woff2')",
         },
       });
-      addBase({
-        "@font-face": {
-          fontFamily: "POEVetica",
-          fontWeight: "500",
-          src: "url(/fonts/POE-Vetica-Mono.woff) format('woff')",
-        },
-      });
+
+      //FAKE Fraktion
       addBase({
         "@font-face": {
           fontFamily: "POEVetica",
           fontWeight: "700",
+          src: "url(/fonts/POE-Vetica-Mono.woff) format('woff')",
+        },
+      });
+
+      addBase({
+        "@font-face": {
+          fontFamily: "POEVetica",
+          fontWeight: "800",
           src: "url(/fonts/POE-Vetica-Mono-Bold.woff) format('woff')",
         },
       });
     }),
+
     function ({ addVariant }) {
       addVariant("child", "& > *");
       addVariant("child-hover", "& > *:hover");

@@ -35,10 +35,11 @@ export const Footer = ({
   const goTo = (path: string) => {
     closeInfoArea();
     navigate(path);
+    window.scrollTo(0, 0);
   };
 
   return (
-    <div className={`w-full ${className}`}>
+    <div className={`w-full ${className} antialiased`}>
       <div className="h-full w-full px-[5vw] py-5 flex justify-between ">
         <ProtocolLogo className="my-6 left-24" />
         <div className="flex child:mx-2 font-faketion my-auto">

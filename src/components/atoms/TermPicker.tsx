@@ -1,7 +1,7 @@
 //@ts-nocheck
-import {Select} from "./Select";
-import {Input} from "./Input";
-import {useEffect, useState} from "react";
+import { Select } from "./Select";
+import { Input } from "./Input";
+import { useEffect, useState } from "react";
 
 export type TermPickerProps = {
   className?: string;
@@ -17,8 +17,12 @@ const options = [
 ];
 
 export const TermPicker = (props: TermPickerProps) => {
-  const [id, setId] = useState(props.defaultValue? props.defaultValue.id : options[0].id);
-  const [amount, setAmount] = useState(props.defaultValue? props.defaultValue.amount : options[0].id);
+  const [id, setId] = useState(
+    props.defaultValue ? props.defaultValue.id : options[0].id
+  );
+  const [amount, setAmount] = useState(
+    props.defaultValue ? props.defaultValue.amount : options[0].id
+  );
 
   useEffect(() => {
     props.onChange && props.onChange({ id, amount });
@@ -36,13 +40,15 @@ export const TermPicker = (props: TermPickerProps) => {
   };
 
   return (
-    <div>
-      {props.label && <p className="text-xs font-light mb-1">{props.label}</p>}
+    <div className="w-full">
+      {props.label && <p className="text-xs font-light">{props.label}</p>}
       <div className="flex gap-1">
-        <div className="w-1/4">
+        <div className={id === 1 ? "w-1/4" : "w-full"}>
           <Select
             value={id}
-            defaultValue={props.defaultValue? props.defaultValue.id : options[0].id}
+            defaultValue={
+              props.defaultValue ? props.defaultValue.id : options[0].id
+            }
             options={options}
             onChange={handleChangeSelect}
           />
@@ -50,6 +56,8 @@ export const TermPicker = (props: TermPickerProps) => {
         {id == 1 && (
           <div className="w-3/4 mt-1">
             <Input
+              placeholder="enter amount"
+              className="w-full"
               value={amount}
               onChange={(event) =>
                 handleChangeInput(Number(event.target.value))

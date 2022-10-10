@@ -2,8 +2,8 @@ import { forwardRef } from "react";
 import { InputUnstyled, InputUnstyledProps } from "@mui/base";
 
 export type InputProps = InputUnstyledProps & {
-  label?: string;
-  subText?: string;
+  label?: string | React.ReactNode;
+  subText?: string | React.ReactNode;
 };
 
 export const Input = forwardRef(function Input(

@@ -23,15 +23,19 @@ import {
 } from "components/molecules";
 import { ChainPicker } from "components/atoms/ChainPicker";
 
-const capacityTokenOptions = [
-  { label: "PAYOUT", value: 0 },
-  { label: "QUOTE", value: 1 },
-];
-
 const vestingOptions = [
   { label: "FIXED EXPIRY", value: 0 },
   { label: "FIXED TERM", value: 1 },
 ];
+
+const getCustomCapacityLabel = (quote, payout) => {
+  const sameToken = payout === quote;
+
+  return [
+    { label: (!sameToken && payout) || "PAYOUT", value: 0 },
+    { label: (!sameToken && quote) || "QUOTE", value: 1 },
+  ];
+};
 
 const formDefaults = {
   capacityToken: 0,
@@ -520,7 +524,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       <div className="mx-[15vw]">
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="flex-col">
-            <p className="font-faketion font-bold tracking-widest">
+            <p className="font-faketion font-extrabold tracking-widest">
               1 SET UP MARKET
             </p>
             <div>
@@ -538,7 +542,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   )}
                 />
               </div>
-
               <div className="flex flex-col pt-5 w-full">
                 <Controller
                   name="marketOwnerAddress"
@@ -559,7 +562,15 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         autoComplete="off"
                         label="Market Owner Address"
                         className={"mb-2"}
-                        subText="Enter the market owner address to check BondProtocol verification status"
+                        subText={
+                          protocol ? (
+                            <p className="font-bold text-green-500">
+                              Verified as {protocol.name}
+                            </p>
+                          ) : (
+                            "Enter the market owner address to check BondProtocol verification status"
+                          )
+                        }
                       />
 
                       {errors.marketOwnerAddress?.type === "required" && (
@@ -578,8 +589,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 />
 
                 {showOwnerWarning && (
-                  <div className="flex flex-col gap-6 pt-5 w-full text-sm text-red-500">
-                    <h2 className="text-center text-lg">WARNING</h2>
+                  <div className="flex flex-col border border-red-900 rounded-lg mt-3 p-3 text-center px-16 gap-3 pt-3 w-full text-sm text-red-700">
+                    <h2 className="text-center text-lg font-bold">WARNING</h2>
 
                     <p>
                       This address does not match any of our verified protocols
@@ -612,11 +623,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   </div>
                 )}
                 {protocol && (
-                  <div className="flex flex-col gap-6 pt-5 w-full text-sm text-green-500">
-                    <h2 className="text-center text-lg">
-                      Verified as {protocol.name}
-                    </h2>
-
+                  <div className="mt-4 flex border rounded-lg border-green-900 flex-col gap-1 py-2 w-full text-sm text-green-700">
                     <p className="text-center">
                       Thank you for verifying with BondProtocol. Your market
                       will be available via the BondProtocol dapp!
@@ -624,7 +631,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   </div>
                 )}
               </div>
-
               <div className="flex gap-6">
                 <div className="flex flex-col w-full pt-5">
                   <Controller
@@ -692,9 +698,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   />
                 </div>
               </div>
-
               {showTokenWarning && (
-                <div className="flex flex-col gap-6 pt-5 w-full text-sm text-red-500">
+                <div className="flex border rounded-lg mt-4 border-red-900 flex-col gap-3 py-3 px-12 font-jakarta w-full text-sm text-center text-red-500">
                   <p>
                     One or more of the tokens selected is unverified. Only
                     on-chain data is available for unverified tokens, off-chain
@@ -708,15 +713,22 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     our UI will be displayed incorrectly.
                   </p>
 
-                  <p>
+                  <p className="font-bold">
                     If you intend for this market to be displayed on the
                     BondProtocol website, we strongly recommend verifying tokens
-                    with us *BEFORE* creating the market. Please see our
-                    documentation for more information.
+                    with us *BEFORE* creating the market. Please see{" "}
+                    <a
+                      className="underline underline-offset-2"
+                      target="_blank"
+                      rel="noreferrer"
+                      href="https://docs.bondprotocol.finance/bond-marketplace/market-verification"
+                    >
+                      our documentation{" "}
+                    </a>
+                    for more information.
                   </p>
                 </div>
               )}
-
               <div className="flex gap-6">
                 <div className="flex flex-col w-full pt-5">
                   <Controller
@@ -786,7 +798,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   />
                 </div>
               </div>
-
               <div className="flex gap-6">
                 <div className="flex flex-col w-full pt-5">
                   <p className="text-xs font-light mb-1">
@@ -834,49 +845,52 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   </div>
                 )}
               </div>
+              <div className="flex gap-6">
+                <div className="flex flex-col pt-5 w-full">
+                  <Controller
+                    name="marketCapacity"
+                    control={control}
+                    rules={{ required: "Required" }}
+                    render={({ field }) => (
+                      <>
+                        <Input
+                          {...field}
+                          label="Market Capacity"
+                          className={"mb-2"}
+                        />
 
-              <div className="flex flex-col pt-5 w-full">
-                <Controller
-                  name="capacityToken"
-                  control={control}
-                  render={({ field }) => (
-                    <FlatSelect
-                      {...field}
-                      label="Capacity Token"
-                      options={capacityTokenOptions}
-                      default={props.initialValues?.capacityToken}
-                    />
-                  )}
-                />
-              </div>
+                        {errors.marketCapacity?.type === "required" && (
+                          <div className="text-xs font-light my-1 text-red-500">
+                            {errors.marketCapacity?.message}
+                          </div>
+                        )}
 
-              <div className="flex flex-col pt-5 w-full">
-                <Controller
-                  name="marketCapacity"
-                  control={control}
-                  rules={{ required: "Required" }}
-                  render={({ field }) => (
-                    <>
-                      <Input
+                        {errors.marketCapacity?.type === "isNumber" && (
+                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                            Must be a number
+                          </div>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
+                <div className="flex flex-col pt-5 w-full">
+                  <Controller
+                    name="capacityToken"
+                    control={control}
+                    render={({ field }) => (
+                      <FlatSelect
                         {...field}
-                        label="Market Capacity"
-                        className={"mb-2"}
+                        label="Capacity Token"
+                        options={getCustomCapacityLabel(
+                          quoteTokenInfo?.symbol,
+                          payoutTokenInfo?.symbol
+                        )}
+                        default={props.initialValues?.capacityToken}
                       />
-
-                      {errors.marketCapacity?.type === "required" && (
-                        <div className="text-xs font-light my-1 text-red-500">
-                          {errors.marketCapacity?.message}
-                        </div>
-                      )}
-
-                      {errors.marketCapacity?.type === "isNumber" && (
-                        <div className="text-xs font-light my-1 text-red-500 justify-self-start">
-                          Must be a number
-                        </div>
-                      )}
-                    </>
-                  )}
-                />
+                    )}
+                  />
+                </div>
               </div>
             </div>
 

@@ -27,7 +27,7 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
         <ConnectButton />
         <HamburgerIcon
           onClick={props.onHamburgerClick}
-          className="hover:cursor-pointer my-auto ml-4"
+          className="hover:cursor-pointer my-auto ml-3"
         />
       </div>
     </div>
