@@ -16,7 +16,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
         <div className="my-auto mr-1">{props.label}</div>
         <Tooltip content={props.tooltip} iconClassname="pb-0.5" />
       </div>
-      <h2 className="font-faketion text-[48px] leading-[56px]">
+      <h2 className="font-faketion text-[48px] leading-[56px] tracking-tighter">
         {props.children}
       </h2>
     </div>

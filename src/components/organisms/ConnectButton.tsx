@@ -35,7 +35,7 @@ export const ConnectButton = () => {
               if (!connected) {
                 return (
                   <Button
-                    className="flex px-[20px]"
+                    className="flex justify-center"
                     variant="ghost"
                     onClick={openConnectModal}
                   >
@@ -58,7 +58,7 @@ export const ConnectButton = () => {
                 );
               }
               return (
-                <div className="flex ">
+                <div className="flex">
                   {chain.hasIcon && (
                     <div
                       onClick={openChainModal}

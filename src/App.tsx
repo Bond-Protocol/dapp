@@ -20,13 +20,13 @@ export const App: FC = () => {
       <MobileCover />
       <div className="xs:hidden fml:block">
         <Providers>
+          <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
           <div className="relative min-h-[88vh] overflow-x-hidden antialiased pb-16">
             <AppBackground />
             <InformationArea
               open={showInfoArea}
               onClose={() => setShowInfoArea(false)}
             />
-            <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
             <PolicyRoutes />
             <PageContainer>
               <RouteMap />

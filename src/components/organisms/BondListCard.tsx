@@ -201,7 +201,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           {protocol?.logoUrl && (
             <img src={protocol.logoUrl} className="w-[52px] h-[52px] my-auto" />
           )}
-          <p className="font-faketion text-[48px]">
+          <p className="font-faketion text-[48px] pl-1">
             {market.quoteToken?.symbol}
           </p>
         </div>
