@@ -27,6 +27,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
   const [txnBytecode, setTxnBytecode] = useState("");
 
   const switchChain = (e: Event) => {
+    e.preventDefault();
     const newChain = Number(
       "0x" + providers[props.data.chain].network.chainId.toString()
     );
