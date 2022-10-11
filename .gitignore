@@ -25,5 +25,8 @@ src/generated/*
 *.sln
 *.sw?
 
+##yarn only sorry bois
 package-lock.json
+
 .env
+.eslintcache

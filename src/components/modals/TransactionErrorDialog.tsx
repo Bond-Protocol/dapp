@@ -1,4 +1,4 @@
-import {ModalTitle} from "../atoms/ModalTitle";
+import { ModalTitle } from "../atoms/ModalTitle";
 
 export type TransactionErrorDialogProps = {
   error?: Error;

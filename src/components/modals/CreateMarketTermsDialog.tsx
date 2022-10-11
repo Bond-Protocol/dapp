@@ -1,6 +1,6 @@
-import {useState} from "react";
-import {Button, Checkbox, Link} from "../atoms";
-import {ModalTitle} from "../atoms/ModalTitle";
+import { useState } from "react";
+import { Button, Checkbox, Link } from "../atoms";
+import { ModalTitle } from "../atoms/ModalTitle";
 
 const verificationLink = (
   <Link

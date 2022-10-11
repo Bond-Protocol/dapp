@@ -1,6 +1,6 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import {SummaryCard} from "../components/molecules/SummaryCard";
-import {Modal} from "../components/molecules/Modal";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { SummaryCard } from "../components/molecules/SummaryCard";
+import { Modal } from "../components/molecules/Modal";
 import {
   CreateMarketTermsDialog,
   GeneralTermsDialog,
