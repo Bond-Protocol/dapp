@@ -19,7 +19,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@bond-protocol/bond-library": "0.0.34",
+    "@bond-protocol/bond-library": "0.0.35",
     "@bond-protocol/contract-library": "0.0.28",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@material-tailwind/react": "^1.0.6",
