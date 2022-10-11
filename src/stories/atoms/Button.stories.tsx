@@ -1,6 +1,5 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import TestIcon from "../styles/icons/test-icon";
-import {Button} from "../components/atoms/Button";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Button } from "components/atoms/Button";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -48,11 +47,9 @@ const VariantsTemplate: ComponentStory<any> = (args) => {
 
 const sample = {
   text: "LABEL",
-  icon: <TestIcon className="fill-brand-covenant" />,
   Element: (props: any) => <p {...props}>LABEL</p>,
   Complex: () => (
     <div className="flex text-center items-center">
-      <TestIcon className="mx-2 fill-brand-covenant" />
       <p>LABEL</p>
     </div>
   ),
@@ -84,7 +81,7 @@ WithIcon.args = {
 
 export const IconOnly = Template.bind({});
 IconOnly.args = {
-  children: <TestIcon className="fill-brand-covenant" />,
+  children: "",
   icon: true,
 };
 

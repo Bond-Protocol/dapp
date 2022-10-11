@@ -58,7 +58,7 @@ export const InputCard = ({
     <>
       <div className={`flex justify-between mb-1 ${className}`}>
         <div className="text-xs my-auto">
-          Balance: {balance + " " + market.quoteToken.symbol}
+          Balance: {balance + " " + market?.quoteToken?.symbol}
         </div>
         <div className="child:mr-1 self-end">
           <Chip onClick={() => setSome(25)}>25%</Chip>
@@ -74,7 +74,7 @@ export const InputCard = ({
             wrapped
             className="w-[10vw]"
             label={market.quoteToken.symbol || ""}
-            logo={getTokenDetails(market.quoteToken).logoUrl}
+            logo={getTokenDetails(market?.quoteToken).logoUrl}
           />
         </div>
         <Input

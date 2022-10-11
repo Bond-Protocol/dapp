@@ -1,9 +1,11 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { BondPurchaseModal } from "../../components/modals/BondPurchaseModal";
+import { RouterDecorator } from "../decorators";
 
 export default {
   title: "Components/Organisms/BondPurchaseModal",
   component: BondPurchaseModal,
+  decorators: [RouterDecorator],
 } as ComponentMeta<typeof BondPurchaseModal>;
 
 const Template: ComponentStory<typeof BondPurchaseModal> = (args) => (

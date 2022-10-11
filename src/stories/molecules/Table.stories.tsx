@@ -1,6 +1,6 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import {TableHeading} from "../components/atoms/TableHeading";
-import {TableCell} from "../components/atoms/TableCell";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { TableHeading } from "components/atoms/TableHeading";
+import { TableCell } from "components/atoms/TableCell";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
