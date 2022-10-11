@@ -75,6 +75,11 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
     props.onExecute(props.data);
   };
 
+  //(TODO: (aphex) wagmi displays mainnet as homestead :(
+  const selectedNetwork =
+    network.chain?.network === "homestead"
+      ? "mainnet"
+      : network?.chain?.network;
   return (
     <>
       <IssueMarketModal
@@ -114,7 +119,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
           >
             CONNECT WALLET
           </Button>
-        ) : network.chain && network.chain.network == props.data.chain ? (
+        ) : network.chain && selectedNetwork == props.data.chain ? (
           <Button
             onClick={() => setIsModalOpen(true)}
             className="w-full font-faketion mt-5"
