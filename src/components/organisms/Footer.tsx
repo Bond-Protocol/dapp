@@ -40,20 +40,22 @@ export const Footer = ({
 
   return (
     <div className={`w-full ${className} antialiased`}>
-      <div className="h-full w-full px-[5vw] py-5 flex justify-between ">
-        <ProtocolLogo className="my-6 left-24" />
-        <div className="flex child:mx-2 font-faketion my-auto">
+      <div className="h-full w-full py-5 flex justify-between">
+        <div className="w-1/3">
+          <ProtocolLogo className="my-6 pl-[5vw]" />
+        </div>
+        <SocialRow {...socials} className="w-1/3 " />
+        <div className="flex justify-end child:mx-2 font-faketion my-auto w-1/3 pr-[1vw]">
+          <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
+          <p>-</p>
           <FooterLink onClick={() => goTo("/policy")}>
             Privacy Policy
           </FooterLink>
-          <p>-</p>
-          <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
           <p>-</p>
           <FooterLink onClick={() => goTo("/cookies")}>
             Cookie Policy
           </FooterLink>
         </div>
-        <SocialRow {...socials} />
       </div>
     </div>
   );
