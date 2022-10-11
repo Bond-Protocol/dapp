@@ -17,7 +17,10 @@ const FooterLink = ({
   children: React.ReactNode;
 }) => {
   return (
-    <p className="hover:underline hover:cursor-pointer" onClick={onClick}>
+    <p
+      className="hover:underline hover:cursor-pointer text-white/80 text-[12px]"
+      onClick={onClick}
+    >
       {children}
     </p>
   );
@@ -45,7 +48,7 @@ export const Footer = ({
           <ProtocolLogo className="my-6 pl-[5vw]" />
         </div>
         <SocialRow {...socials} className="w-1/3 " />
-        <div className="flex justify-end child:mx-2 font-faketion my-auto w-1/3 pr-[1vw]">
+        <div className="flex justify-end child:mx-2 font-faketion my-auto w-1/3 pr-[1vw] text-[12px]">
           <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
           <p>-</p>
           <FooterLink onClick={() => goTo("/policy")}>
