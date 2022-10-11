@@ -39,7 +39,7 @@ module.exports = withMT({
       },
       fontFamily: {
         jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
-        faketion: ["POEVetica", ...defaultTheme.fontFamily.mono],
+        faketion: ["PlusJakartaSans", ...defaultTheme.fontFamily.mono],
         inter: ["Inter", ...defaultTheme.fontFamily.mono],
       },
       opacity: {
