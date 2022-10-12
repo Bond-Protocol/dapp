@@ -36,7 +36,7 @@ export const TokenPriceCard = (props: TokenPriceCardProps) => {
   if (props.address === "invalid") {
     return (
       <div className={`justify-center bg-white/[.05] ${props.className}`}>
-        <div className="my-auto flex-col px-3 py-2 flex">
+        <div className="my-auto flex flex-col px-3 py-2">
           <p className="font-Jakarta font-light tracking-tight">
             Invalid Address
           </p>
@@ -51,12 +51,12 @@ export const TokenPriceCard = (props: TokenPriceCardProps) => {
 
   return (
     <div
-      className={`justify-center bg-white/[.05] min-h-[88px] ${props.className}`}
+      className={`min-h-[88px] justify-center bg-white/[.05] ${props.className}`}
     >
-      <div className="my-auto flex-col px-3 flex justify-center h-[88px] gap-2">
+      <div className="my-auto flex h-[88px] flex-col justify-center gap-2 px-3">
         {!props.symbol ? (
           <>
-            <p className="tracking-tight text-sm">{"Enter Token Address"}</p>
+            <p className="text-sm tracking-tight">{"Enter Token Address"}</p>
             <p className="text-xs text-light-primary-500">
               Token details will appear here when a valid address is entered.
             </p>
@@ -74,7 +74,7 @@ export const TokenPriceCard = (props: TokenPriceCardProps) => {
             </Link>
             {props.decimals && (
               <p
-                className={`text-xs mt-0.5 font-bold my-auto ${
+                className={`my-auto mt-0.5 text-xs font-bold ${
                   props.verified ? "text-green-500" : "text-red-500"
                 }`}
               >

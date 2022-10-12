@@ -113,12 +113,12 @@ export const InformationArea = (props: InformationAreaProps) => {
 
   return (
     <div
-      className={`inset-0 fixed h-[100vh] duration-500 bg-brand-turtle-blue transition-transform z-10 ${
+      className={`fixed inset-0 z-10 h-[100vh] bg-brand-turtle-blue transition-transform duration-500 ${
         props.open ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="bg-white h-[88vh] font-jakarta">
-        <div className="mx-[5vw] h-[88px] flex justify-between items-center ">
+      <div className="h-[88vh] bg-white font-jakarta">
+        <div className="mx-[5vw] flex h-[88px] items-center justify-between ">
           <ProtocolLogo
             black
             onClick={() => {
@@ -126,11 +126,11 @@ export const InformationArea = (props: InformationAreaProps) => {
             }}
           />
           <CloseIcon
-            className="fill-black hover:cursor-pointer w-[14px] h-[14px] mr-0.5"
+            className="mr-0.5 h-[14px] w-[14px] fill-black hover:cursor-pointer"
             onClick={props.onClose}
           />
         </div>
-        <div className="mt-20 mb-10 mx-[15vw] flex justify-end">
+        <div className="mx-[15vw] mt-20 mb-10 flex justify-end">
           <Button
             onClick={goToCreateMarket}
             className="hover:bg-brand-turtle-blue hover:text-brand-yella"
@@ -138,11 +138,11 @@ export const InformationArea = (props: InformationAreaProps) => {
             Issue Bond Market
           </Button>
         </div>
-        <div className="mx-[15vw] pb-20 child:border-b child:border-black border-t border-black overflow-auto overflow-x-hidden h-fill h-[65vh]">
+        <div className="h-fill mx-[15vw] h-[65vh] overflow-auto overflow-x-hidden border-t border-black pb-20 child:border-b child:border-black">
           {content.map(({ label, content }, i) => (
             <Accordion
               label={label}
-              className="text-black py-10 hover:bg-black/5 transition-all uppercase"
+              className="py-10 uppercase text-black transition-all hover:bg-black/5"
               iconClassname="fill-black"
               key={i}
             >

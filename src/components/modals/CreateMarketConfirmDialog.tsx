@@ -20,11 +20,11 @@ export const CreateMarketConfirmDialog = (props: {
   onReject: () => void;
 }) => {
   return (
-    <div className="text-center pb-8">
+    <div className="pb-8 text-center">
       <ModalTitle>Terms of Service</ModalTitle>
       <p className="mt-5">You are about to issue a Bond Market</p>
       <div className="mt-5 px-10">{textContent}</div>
-      <div className="flex flex-col justify-between mt-8 h-[40px] gap-2">
+      <div className="mt-8 flex h-[40px] flex-col justify-between gap-2">
         <Button onClick={props.onAccept} long className="w-full">
           Deploy Bond
         </Button>

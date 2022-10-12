@@ -1,12 +1,16 @@
 import "@rainbow-me/rainbowkit/styles.css";
-import {connectorsForWallets, darkTheme, RainbowKitProvider} from '@rainbow-me/rainbowkit';
+import {
+  connectorsForWallets,
+  darkTheme,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
 import {
   coinbaseWallet,
   injectedWallet,
   metaMaskWallet,
   rainbowWallet,
   walletConnectWallet,
-} from '@rainbow-me/rainbowkit/wallets';
+} from "@rainbow-me/rainbowkit/wallets";
 
 import type { FC, ReactNode } from "react";
 import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
@@ -21,13 +25,13 @@ const { chains, provider } = configureChains(
 
 const connectors = connectorsForWallets([
   {
-    groupName: 'Recommended',
+    groupName: "Recommended",
     wallets: [
       metaMaskWallet({ chains }),
       rainbowWallet({ chains }),
       coinbaseWallet({
         appName: "BondProtocol",
-        chains: chains
+        chains: chains,
       }),
       walletConnectWallet({ chains }),
       injectedWallet({ chains, shimDisconnect: true }),

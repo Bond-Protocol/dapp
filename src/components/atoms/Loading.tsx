@@ -1,7 +1,7 @@
 import spinner from "../../assets/spinner.gif";
 export const Loading = ({ content }: { content: string }) => {
   return (
-    <div className="text-center font-faketion mt-20 uppercase">
+    <div className="mt-20 text-center font-faketion uppercase">
       <h1 className="text-5xl leading-normal">
         Hang on, <br />
         loading {content}

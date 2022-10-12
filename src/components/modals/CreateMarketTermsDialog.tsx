@@ -1,12 +1,12 @@
-import {useState} from "react";
-import {Button, Checkbox, Link} from "../atoms";
-import {ModalTitle} from "../atoms/ModalTitle";
+import { useState } from "react";
+import { Button, Checkbox, Link } from "../atoms";
+import { ModalTitle } from "../atoms/ModalTitle";
 
 const verificationLink = (
   <Link
     href="/verify-market"
     target="_blank"
-    className="uppercase font-faketion tracking-widest"
+    className="font-faketion uppercase tracking-widest"
   >
     Read the Verification Requirements
   </Link>
@@ -21,9 +21,9 @@ export const CreateMarketTermsDialog = (props: {
     props.onAccept();
   };
   return (
-    <div className="text-center flex flex-col">
+    <div className="flex flex-col text-center">
       <ModalTitle>Terms of Service</ModalTitle>
-      <div className="mt-5 px-6 font-extralight text-sm">
+      <div className="mt-5 px-6 text-sm font-extralight">
         <p>
           Your market will be live on the contract immediately. If you would
           like your bond to appear on the BondProtocol site, you should submit
@@ -32,14 +32,14 @@ export const CreateMarketTermsDialog = (props: {
         <p>Alternatively, you can provide your own UI, or none at all.</p>
       </div>
 
-      <div className="flex mx-auto mt-5">
+      <div className="mx-auto mt-5 flex">
         <Checkbox onChange={setChecked} />
-        <p className="text-xs my-auto ml-2">
+        <p className="my-auto ml-2 text-xs">
           By checking this box I confirm I have read and understand the terms
           and services
         </p>
       </div>
-      <div className="flex flex-col items-center justify-between mt-8 h-[40px] gap-2">
+      <div className="mt-8 flex h-[40px] flex-col items-center justify-between gap-2">
         <Button
           long
           onClick={handleClick}

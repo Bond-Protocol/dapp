@@ -18,7 +18,7 @@ const FooterLink = ({
 }) => {
   return (
     <p
-      className="hover:underline hover:cursor-pointer text-white/80 text-[12px]"
+      className="text-[12px] text-white/80 hover:cursor-pointer hover:underline"
       onClick={onClick}
     >
       {children}
@@ -43,12 +43,12 @@ export const Footer = ({
 
   return (
     <div className={`w-full ${className} antialiased`}>
-      <div className="h-full w-full py-5 flex justify-between">
+      <div className="flex h-full w-full justify-between py-5">
         <div className="w-1/3">
           <ProtocolLogo className="my-6 pl-[5vw]" />
         </div>
         <SocialRow {...socials} className="w-1/3 " />
-        <div className="flex justify-end child:mx-2 font-faketion my-auto w-1/3 pr-[1vw] text-[12px]">
+        <div className="my-auto flex w-1/3 justify-end pr-[1vw] font-faketion text-[12px] child:mx-2">
           <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
           <p>-</p>
           <FooterLink onClick={() => goTo("/policy")}>

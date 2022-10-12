@@ -10,9 +10,9 @@ export type InfoLabelProps = {
 export const InfoLabel = (props: InfoLabelProps) => {
   return (
     <div
-      className={`w-full bg-white/[.05] px-1 py-4 text-center overflow-hidden ${props.className}`}
+      className={`w-full overflow-hidden bg-white/[.05] px-1 py-4 text-center ${props.className}`}
     >
-      <div className="flex justify-center text-[12px] text-light-primary-500 font-jakarta uppercase ml-1.5">
+      <div className="ml-1.5 flex justify-center font-jakarta text-[12px] uppercase text-light-primary-500">
         <div className="my-auto mr-1">{props.label}</div>
         <Tooltip content={props.tooltip} iconClassname="pb-0.5" />
       </div>

@@ -41,13 +41,13 @@ export const TokenInput = forwardRef(function TokenInput(
     <div className={`w-full ${className}`}>
       {props.label && (
         <p
-          className={`font-extralight font-jakarta tracking-wide mb-1 ${props.labelClassName}`}
+          className={`mb-1 font-jakarta font-extralight tracking-wide ${props.labelClassName}`}
         >
           {props.label}
         </p>
       )}
       <ClickAwayListener onClickAway={handleClose}>
-        <div className="flex justify-between px-4 py-2 border rounded-lg ">
+        <div className="flex justify-between rounded-lg border px-4 py-2 ">
           <div className="flex w-full">
             {props.logo && <img src={props.logo} width={24} />}
             {editing ? (
@@ -84,7 +84,7 @@ export const TokenInput = forwardRef(function TokenInput(
         </div>
       </ClickAwayListener>
       {props.subText && (
-        <p className="text-xs font-faketion font-light text-light-grey mt-1">
+        <p className="mt-1 font-faketion text-xs font-light text-light-grey">
           {props.subText}
         </p>
       )}

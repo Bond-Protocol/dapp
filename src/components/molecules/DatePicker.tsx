@@ -57,12 +57,12 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
           onClick={() => setOpen((prev) => !prev)}
         >
           {props.label && (
-            <p className="text-xs font-light mb-1 font-jakarta">
+            <p className="mb-1 font-jakarta text-xs font-light">
               {props.label}
             </p>
           )}
           <div
-            className={`px-3 h-10 py-2 border rounded-lg hover:cursor-pointer flex justify-between ${props.dateClassName}`}
+            className={`flex h-10 justify-between rounded-lg border px-3 py-2 hover:cursor-pointer ${props.dateClassName}`}
           >
             <p
               className={`${date ? "font-bold" : ""} font-jakarta text-[15px]`}
@@ -79,7 +79,7 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
             onSelect={handleClose}
             fromDate={fromDate}
             toDate={toDate}
-            className="absolute text-xs p-3 backdrop-blur-xl border rounded-lg z-10 font-jakarta"
+            className="absolute z-10 rounded-lg border p-3 font-jakarta text-xs backdrop-blur-xl"
           />
         )}
       </div>

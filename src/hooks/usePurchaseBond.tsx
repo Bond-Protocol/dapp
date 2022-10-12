@@ -34,7 +34,7 @@ export const usePurchaseBond = () => {
     address: string,
     auctioneer: string,
     network: string,
-    decimals: number,
+    decimals: number
   ) => {
     const requestProvider = providers[network];
     const allowance: BigNumberish = await contractLibrary.getAllowance(
@@ -84,10 +84,11 @@ export const usePurchaseBond = () => {
       const { address, amount, payout, slippage, market } = args;
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
-      const referralAddress =
-        NO_FRONTEND_FEE_OWNERS.includes(market.network.concat("_").concat(market.owner)) ?
-          NO_REFERRAL_ADDRESS :
-          REFERRAL_ADDRESS;
+      const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
+        market.network.concat("_").concat(market.owner)
+      )
+        ? NO_REFERRAL_ADDRESS
+        : REFERRAL_ADDRESS;
 
       return contractLibrary.purchase(
         address,
@@ -118,10 +119,11 @@ export const usePurchaseBond = () => {
       const { address, amount, payout, slippage, market } = args;
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
-      const referralAddress =
-        NO_FRONTEND_FEE_OWNERS.includes(market.network.concat("_").concat(market.owner)) ?
-          NO_REFERRAL_ADDRESS :
-          REFERRAL_ADDRESS;
+      const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
+        market.network.concat("_").concat(market.owner)
+      )
+        ? NO_REFERRAL_ADDRESS
+        : REFERRAL_ADDRESS;
 
       try {
         return contractLibrary.estimatePurchaseGas(

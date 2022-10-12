@@ -1,33 +1,53 @@
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {useAtom} from "jotai";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {useEffect, useState} from "react";
-import {BondPurchase, useListBondPurchasesMainnetQuery, useListBondPurchasesTestnetQuery,} from "../generated/graphql";
-import {CHAIN_ID, getAddressesByChain, getProtocolByAddress} from "@bond-protocol/bond-library";
-import {useTokens} from "hooks/useTokens";
+import { useEffect, useState } from "react";
+import {
+  BondPurchase,
+  useListBondPurchasesMainnetQuery,
+  useListBondPurchasesTestnetQuery,
+} from "../generated/graphql";
+import {
+  CHAIN_ID,
+  getAddressesByChain,
+  getProtocolByAddress,
+} from "@bond-protocol/bond-library";
+import { useTokens } from "hooks/useTokens";
 
 export function useBondPurchases() {
   const endpoints = getSubgraphEndpoints();
-  const {getPrice} = useTokens();
+  const { getPrice } = useTokens();
 
   const [testnet, setTestnet] = useAtom(testnetMode);
-  const [selectedBondPurchases, setSelectedBondPurchases] = useState<BondPurchase[]>([]);
-  const [bondPurchasesByMarket, setBondPurchasesByMarket] = useState<Map<string, BondPurchase[]>>(new Map());
-  const [tbvByProtocol, setTbvByProtocol] = useState<Map<string, number>>(new Map());
-  const [mainnetBondPurchases, setMainnetBondPurchases] = useState<BondPurchase[]>([]);
-  const [testnetBondPurchases, setTestnetBondPurchases] = useState<BondPurchase[]>([]);
-
-  const {data: mainnetData, ...mainetQuery} = useListBondPurchasesMainnetQuery(
-    {endpoint: endpoints[0]},
-    {addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET)},
-    {enabled: !testnet}
+  const [selectedBondPurchases, setSelectedBondPurchases] = useState<
+    BondPurchase[]
+  >([]);
+  const [bondPurchasesByMarket, setBondPurchasesByMarket] = useState<
+    Map<string, BondPurchase[]>
+  >(new Map());
+  const [tbvByProtocol, setTbvByProtocol] = useState<Map<string, number>>(
+    new Map()
   );
+  const [mainnetBondPurchases, setMainnetBondPurchases] = useState<
+    BondPurchase[]
+  >([]);
+  const [testnetBondPurchases, setTestnetBondPurchases] = useState<
+    BondPurchase[]
+  >([]);
 
-  const {data: goerliData, ...testnetQuery} = useListBondPurchasesTestnetQuery(
-    {endpoint: endpoints[1]},
-    {addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET)},
-    {enabled: !!testnet}
-  );
+  const { data: mainnetData, ...mainetQuery } =
+    useListBondPurchasesMainnetQuery(
+      { endpoint: endpoints[0] },
+      { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) },
+      { enabled: !testnet }
+    );
+
+  const { data: goerliData, ...testnetQuery } =
+    useListBondPurchasesTestnetQuery(
+      { endpoint: endpoints[1] },
+      { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
+      { enabled: !!testnet }
+    );
 
   useEffect(() => {
     if (testnet) return;
@@ -63,12 +83,15 @@ export function useBondPurchases() {
       array.push(bondPurchase);
       bondPurchasesByMarketMap.set(bondPurchase.marketId, array);
 
-      const protocol = getProtocolByAddress(bondPurchase.owner, bondPurchase.network);
+      const protocol = getProtocolByAddress(
+        bondPurchase.owner,
+        bondPurchase.network
+      );
       if (!protocol) return;
 
       let value = tbvByProtocolMap.get(protocol.id) || 0;
       const price = getPrice(bondPurchase.quoteToken.id);
-      value = value + (bondPurchase.amount * price);
+      value = value + bondPurchase.amount * price;
       tbvByProtocolMap.set(protocol.id, value);
     });
 
@@ -80,5 +103,5 @@ export function useBondPurchases() {
     bondPurchases: selectedBondPurchases,
     purchasesByMarket: bondPurchasesByMarket,
     tbvByProtocol: tbvByProtocol,
-  }
+  };
 }

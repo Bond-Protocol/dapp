@@ -44,20 +44,20 @@ export const IssuerPage: FC = () => {
 
   return (
     <div className="pb-12 font-jakarta">
-      <div className="flex mt-6">
+      <div className="mt-6 flex">
         <Button variant="ghost" onClick={() => navigate("/issuers")}>
           Back to list
         </Button>
       </div>
-      <div className="flex flex-col content-center mt-10">
-        <div className="flex flex-row justify-center items-center">
-          <img className="h-[64px] w-[64px] mr-4" src={logo()} />
+      <div className="mt-10 flex flex-col content-center">
+        <div className="flex flex-row items-center justify-center">
+          <img className="mr-4 h-[64px] w-[64px]" src={logo()} />
           <p className="text-5xl font-bold">
             {protocol?.name || placeholderProtocol.name}
           </p>
         </div>
 
-        <div className="flex flex-row justify-center mt-3">
+        <div className="mt-3 flex flex-row justify-center">
           <p>{protocol?.description || placeholderProtocol.description}</p>
         </div>
 

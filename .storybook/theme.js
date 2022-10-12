@@ -12,7 +12,7 @@ export default create({
   brandUrl: "https://bondprotocol.finance",
   brandImage: "/logo.svg",
   brandTarget: "_self",
-  fontBase: '"PPFraktionSans", sans-serif',
+  fontBase: '"Jakarta", sans-serif',
 
   appBg: dark,
   appContentBg: dark,

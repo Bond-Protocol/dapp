@@ -12,8 +12,8 @@ const TokenLabelBase = (props: TokenLabelProps) => {
     <div className={`flex child:my-auto ${props.className}`}>
       {props.logo && <img src={props.logo} width={24} />}
       {props.children}
-      <div className="flex-col mx-1">
-        <p className={props.secondary ? "leading-none text-[14px]" : ""}>
+      <div className="mx-1 flex-col">
+        <p className={props.secondary ? "text-[14px] leading-none" : ""}>
           {props.label}
         </p>
         {props.secondary && (
@@ -30,7 +30,7 @@ export const TokenLabel = (props: TokenLabelProps) => {
   if (!props.wrapped) return <TokenLabelBase {...props} />;
 
   return (
-    <div className={`px-4 py-2 border rounded-lg ${props.className}`}>
+    <div className={`rounded-lg border px-4 py-2 ${props.className}`}>
       <TokenLabelBase {...props} />
     </div>
   );

@@ -46,13 +46,13 @@ export const TokenPickerCard = (
       />
 
       {props.errorMessage?.type === "required" && (
-        <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
+        <div className="mt-1 justify-self-start text-xs font-light text-red-500">
           {props.errorMessage.message}
         </div>
       )}
 
       {props.errorMessage?.type === "isAddress" && (
-        <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
+        <div className="mt-1 justify-self-start text-xs font-light text-red-500">
           Must be a valid address!
         </div>
       )}
@@ -68,18 +68,18 @@ export const TokenPickerCard = (
         className="mt-5"
       />
 
-      <div className="flex mt-2">
+      <div className="mt-2 flex">
         <Checkbox
           onChange={setConfirmed}
           startChecked={props.defaultValue?.confirmed}
         />
-        <p className="ml-1 font-light text-xs my-auto">
+        <p className="my-auto ml-1 text-xs font-light">
           I confirm this is the correct token
         </p>
       </div>
 
       {props.errorMessage?.type === "isConfirmed" && (
-        <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
+        <div className="mt-1 justify-self-start text-xs font-light text-red-500">
           Requires confirmation!
         </div>
       )}

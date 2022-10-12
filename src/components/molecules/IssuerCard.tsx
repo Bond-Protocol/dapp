@@ -24,11 +24,11 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
 
   return (
     <div
-      className="border border-transparent rounded-lg bg-white/[.05] p-5 flex flex-col justify-between items-center hover:cursor-pointer hover:bg-white/10 w-full"
+      className="flex w-full flex-col items-center justify-between rounded-lg border border-transparent bg-white/[.05] p-5 hover:cursor-pointer hover:bg-white/10"
       onClick={() => handleClick(issuer.id)}
     >
       <img className="h-[64px] w-[64px]" src={logo} />
-      <p className="my-2 font-jakarta font-bold tracking-wide text-center">
+      <p className="my-2 text-center font-jakarta font-bold tracking-wide">
         {issuer.name + ""}
       </p>
       <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
