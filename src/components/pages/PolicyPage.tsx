@@ -17,15 +17,15 @@ export const PolicyPage = (props: TermsPage) => {
         <p className="text-3xl text-brand-yella">
           Effective: {props.updateDate}
         </p>
-        <p className="font-bold text-5xl pt-2">{props.title}</p>
+        <p className="pt-2 text-5xl font-bold">{props.title}</p>
         <p className="pt-4">{props.welcome}</p>
       </div>
-      <div className="my-16 bg-white text-black py-8 pb-16">
+      <div className="my-16 bg-white py-8 pb-16 text-black">
         {props.conditions.map(({ title, content }, i) => {
           return (
-            <div className="pt-14 mx-[10vw]" key={i}>
-              <p className="font-bold text-black text-[24px]">{title}</p>
-              <p className="text-light-grey mt-2">{content}</p>
+            <div className="mx-[10vw] pt-14" key={i}>
+              <p className="text-[24px] font-bold text-black">{title}</p>
+              <p className="mt-2 text-light-grey">{content}</p>
             </div>
           );
         })}

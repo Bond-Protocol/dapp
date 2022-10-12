@@ -195,13 +195,13 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   };
 
   return (
-    <div className="pb-8 w-[100vw] max-w-[1440px]">
-      <div className="flex justify-between pl-4 my-5">
+    <div className="w-[100vw] max-w-[1440px] pb-8">
+      <div className="my-5 flex justify-between pl-4">
         <div className="flex">
           {protocol?.logoUrl && (
-            <img src={protocol.logoUrl} className="w-[52px] h-[52px] my-auto" />
+            <img src={protocol.logoUrl} className="my-auto h-[52px] w-[52px]" />
           )}
-          <p className="font-faketion text-[48px] pl-1">
+          <p className="pl-1 font-faketion text-[48px]">
             {market.quoteToken?.symbol}
           </p>
         </div>
@@ -209,28 +209,28 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           onClick={props.onClickTopRight}
           thin
           variant="ghost"
-          className="text-[12px] my-auto"
+          className="my-auto text-[12px]"
         >
-          <div className="flex pl-2 fill-inherit">
-            <div className="font-faketion pt-[2px] font-extrabold">
+          <div className="flex fill-inherit pl-2">
+            <div className="pt-[2px] font-faketion font-extrabold">
               {props.topRightLabel}
             </div>
 
-            <ArrowIcon className="fill-white color-white my-auto rotate-90 color-white ml-2 hover:color-brand-yella" />
+            <ArrowIcon className="color-white color-white hover:color-brand-yella my-auto ml-2 rotate-90 fill-white" />
           </div>
         </Button>
       </div>
-      <div className="flex mt-12 gap-4 mb-6 font-jakarta">
+      <div className="mt-12 mb-6 flex gap-4 font-jakarta">
         <div className="w-1/2">
           {protocol?.name && (
-            <p className="text-4xl font-jakarta font-bold">{protocol.name}</p>
+            <p className="font-jakarta text-4xl font-bold">{protocol.name}</p>
           )}
           {protocol?.description && <p>{protocol.description}</p>}
           {/* TODO: Hide graph until data is available
             <div className="text-center p-[12%] border">📈</div>
           */}
         </div>
-        <div className="w-1/2 flex flex-col">
+        <div className="flex w-1/2 flex-col">
           {props.infoLabel && (
             <div className="flex justify-between gap-6">
               <InfoLabel
@@ -252,7 +252,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
                 tooltip="Total bond capacity remaining in this market. When capacity reaches 0, the market will close."
               >
                 <p
-                  className={`flex justify-center items-end ${
+                  className={`flex items-end justify-center ${
                     trim(
                       market.currentCapacity,
                       calculateTrimDigits(market.currentCapacity)
@@ -277,7 +277,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
             market={market}
             className="mt-5"
           />
-          <div className="text-xs font-light pt-2 my-1 text-red-500 justify-self-start">
+          <div className="my-1 justify-self-start pt-2 text-xs font-light text-red-500">
             {showOwnerBalanceWarning && (
               <div>
                 <p className="py-1">
@@ -337,7 +337,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
                 : "https://app.sushi.com/swap"
             }
           >
-            <Button className="w-full mt-4" onClick={onClickBond}>
+            <Button className="mt-4 w-full" onClick={onClickBond}>
               {!hasSufficientAllowance ? "APPROVE" : "BOND"}
             </Button>
           </BondButton>

@@ -20,7 +20,7 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
   return (
     <TabsUnstyled
       defaultValue={selected}
-      className=" mt-4 border-transparent rounded-t-lg overflow-hidden"
+      className=" mt-4 overflow-hidden rounded-t-lg border-transparent"
     >
       <TabsListUnstyled
         componentsProps={{

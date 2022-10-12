@@ -13,7 +13,7 @@ export const PurchaseSuccessDialog = (props: PurchaseSuccessDialogProps) => {
       <ModalTitle>Transaction Done!</ModalTitle>
       <p className="mt-5">Thanks for bonding at</p>
       <p>{props.issuer}</p>
-      <div className="flex justify-between mt-8 h-[40px] gap-2">
+      <div className="mt-8 flex h-[40px] justify-between gap-2">
         <Button
           onClick={props.goToMarkets}
           variant="secondary"

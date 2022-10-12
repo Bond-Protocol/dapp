@@ -1,6 +1,6 @@
 export const ModalTitle = (props: { children: string }) => {
   return (
-    <p className="font-faketion tracking-widest text-light-secondary uppercase text-center">
+    <p className="text-center font-faketion uppercase tracking-widest text-light-secondary">
       {props.children}
     </p>
   );

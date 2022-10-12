@@ -21,7 +21,7 @@ const ModalBackdrop = forwardRef(function ModalContainer(
   return (
     <div
       ref={ref}
-      className="fixed inset-0 backdrop-blur-lg flex justify-center items-center outline-0"
+      className="fixed inset-0 flex items-center justify-center outline-0 backdrop-blur-lg"
     >
       {props.children}
     </div>
@@ -30,11 +30,11 @@ const ModalBackdrop = forwardRef(function ModalContainer(
 
 const ModalHeader = (props: ModalHeaderProps) => {
   return (
-    <div className="p-5 flex justify-between">
-      <p className="tracking-wider font-light">{props?.topLeftContent}</p>
+    <div className="flex justify-between p-5">
+      <p className="font-light tracking-wider">{props?.topLeftContent}</p>
       {props.onClickClose && (
         <div onClick={props.onClickClose}>
-          <CloseIcon className="h-[14px] fill-white w-[14px] my-auto hover:cursor-pointer" />
+          <CloseIcon className="my-auto h-[14px] w-[14px] fill-white hover:cursor-pointer" />
         </div>
       )}
     </div>
@@ -43,9 +43,9 @@ const ModalHeader = (props: ModalHeaderProps) => {
 
 const ModalBackground = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="border-transparent rounded-lg bg-light-primary-900">
-      <div id="grad-1" className="border-transparent rounded-lg">
-        <div id="grad-2" className="border-transparent rounded-lg">
+    <div className="rounded-lg border-transparent bg-light-primary-900">
+      <div id="grad-1" className="rounded-lg border-transparent">
+        <div id="grad-2" className="rounded-lg border-transparent">
           {children}
         </div>
       </div>

@@ -28,12 +28,12 @@ const MultiTemplate: ComponentStory<any> = ({ buttons, ...args }) => {
 const VariantsTemplate: ComponentStory<any> = (args) => {
   return (
     <>
-      <div className="flex justify-around w-1/3">
+      <div className="flex w-1/3 justify-around">
         <p>Primary</p>
         <p>Secondary</p>
         <p>Ghost</p>
       </div>
-      <div className="grid grid-rows-4 grid-flow-col w-1/3">
+      <div className="grid w-1/3 grid-flow-col grid-rows-4">
         {args.buttons.map((b: any, i: number) => (
           <>
             {args.showIndex ? `${i}:` : ""}
@@ -49,7 +49,7 @@ const sample = {
   text: "LABEL",
   Element: (props: any) => <p {...props}>LABEL</p>,
   Complex: () => (
-    <div className="flex text-center items-center">
+    <div className="flex items-center text-center">
       <p>LABEL</p>
     </div>
   ),

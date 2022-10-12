@@ -70,9 +70,9 @@ export const MarketInsights = () => {
       <div className="border-y">
         <div className="flex">
           <img src={receiptIcon} />
-          <p className="uppercase font-faketion ml-2 py-4"> Transactions</p>
+          <p className="ml-2 py-4 font-faketion uppercase"> Transactions</p>
         </div>
-        <table className="w-full table-fixed mt-6">
+        <table className="mt-6 w-full table-fixed">
           <thead>
             <tr className="child:px-6">
               <TableHeading>TIME</TableHeading>

@@ -22,13 +22,13 @@ export const PurchaseConfirmDialog = ({
 }: PurchaseConfirmDialogProps) => {
   return (
     <div className="text-center">
-      <p className="font-faketion tracking-widest text-light-secondary uppercase">
+      <p className="font-faketion uppercase tracking-widest text-light-secondary">
         {"Transaction Confirmation"}
       </p>
-      <div className="mt-8 mx-10">
+      <div className="mx-10 mt-8">
         <p>{`You are about to bond ${issuer ? "at " + issuer : ""}`}</p>
-        <div className="flex mt-5">
-          <div className="flex flex-col items-start mx-auto">
+        <div className="mt-5 flex">
+          <div className="mx-auto flex flex-col items-start">
             <p>{"You are paying"}</p>
             <p>{"You are receiving"}</p>
             <p>{"The vesting period lasts"}</p>
@@ -43,7 +43,7 @@ export const PurchaseConfirmDialog = ({
           {"This transaction can not be undone"}
         </p>
       </div>
-      <div className="flex justify-between mt-10 gap-2 h-[40px]">
+      <div className="mt-10 flex h-[40px] justify-between gap-2">
         <Button variant="secondary" className="w-1/2" onClick={onCancel}>
           {"Cancel"}
         </Button>

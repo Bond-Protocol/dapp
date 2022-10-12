@@ -25,7 +25,7 @@ export const App: FC = () => {
       <div className="xs:hidden fml:block">
         <Providers>
           <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
-          <div className="relative font-jakarta min-h-[88vh] overflow-x-hidden antialiased pb-16">
+          <div className="relative min-h-[88vh] overflow-x-hidden pb-16 font-jakarta antialiased">
             <AppBackground />
             <InformationArea open={showInfoArea} onClose={closeInfoArea} />
             <PolicyRoutes />

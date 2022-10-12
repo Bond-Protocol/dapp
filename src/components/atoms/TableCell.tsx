@@ -15,7 +15,7 @@ export const TableCell = forwardRef(function TableCell(
     <CellType
       {...props}
       ref={ref}
-      className={`font-jakarta font-light text-[15px] ${border} ${props.className}`}
+      className={`font-jakarta text-[15px] font-light ${border} ${props.className}`}
     >
       {props.children}
     </CellType>

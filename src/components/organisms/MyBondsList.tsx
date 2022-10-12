@@ -28,7 +28,7 @@ const NoBondsView = ({ loading }: { loading: boolean }) => {
 
   return (
     <div className="mt-10 flex flex-col">
-      <h1 className="text-5xl text-center font-faketion py-10 leading-normal">
+      <h1 className="py-10 text-center font-faketion text-5xl leading-normal">
         YOU DONT
         <br />
         HAVE A BOND YET
@@ -96,7 +96,7 @@ export const MyBondsList = () => {
           <p className="flex justify-end p-2">
             <Button onClick={refetch}>Refresh</Button>
           </p>
-          <table className="w-full text-left table-fixed">
+          <table className="w-full table-fixed text-left">
             <thead>
               <tr className="border-b border-white/60">
                 <TableHeading>Bond</TableHeading>

@@ -25,12 +25,12 @@ export const Checkbox = ({
   return (
     <div
       onClick={!disabled ? toggle : () => {}}
-      className={`border border-light-neutral rounded-full flex items-center w-6 h-6 ${
+      className={`flex h-6 w-6 items-center rounded-full border border-light-neutral ${
         disabled ? "opacity-80" : "hover:cursor-pointer"
       }`}
     >
       <div
-        className={`mx-auto transition-all relative bg-light-primary-500 rounded-full w-[14px] h-[14px] ${
+        className={`relative mx-auto h-[14px] w-[14px] rounded-full bg-light-primary-500 transition-all ${
           checked ? "opacity-100" : "opacity-0"
         }`}
       ></div>

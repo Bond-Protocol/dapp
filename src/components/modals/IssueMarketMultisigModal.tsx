@@ -36,15 +36,15 @@ export const IssueMarketMultisigModal = (
           onReject={props.onReject}
         />
       ) : (
-        <div className="text-center flex flex-col">
+        <div className="flex flex-col text-center">
           <ModalTitle>Transaction Details</ModalTitle>
 
-          <div className="mt-5 px-6 font-extralight text-sm">
+          <div className="mt-5 px-6 text-sm font-extralight">
             <ModalTitle>Chain</ModalTitle>
             <p>{CHAINS.get(props.chain)?.displayName}</p>
           </div>
 
-          <div className="mt-5 px-6 font-extralight text-sm">
+          <div className="mt-5 px-6 text-sm font-extralight">
             <div className="flex flex-row justify-center gap-2">
               <ModalTitle>Contract Address</ModalTitle>
               <img
@@ -57,7 +57,7 @@ export const IssueMarketMultisigModal = (
             <p>{props.address}</p>
           </div>
 
-          <div className="mt-5 px-6 font-extralight text-sm">
+          <div className="mt-5 px-6 text-sm font-extralight">
             <div className="flex flex-row justify-center gap-2">
               <ModalTitle>Transaction Bytecode</ModalTitle>
               <img
@@ -68,15 +68,15 @@ export const IssueMarketMultisigModal = (
               />
             </div>
 
-            <p className="break-words text-xs pb-4">{props.txnBytecode}</p>
+            <p className="break-words pb-4 text-xs">{props.txnBytecode}</p>
           </div>
 
-          <div className="mt-5 px-6 font-extralight text-sm">
+          <div className="mt-5 px-6 text-sm font-extralight">
             After executing the transation, enter the transaction hash below for
             final confirmation and token allowance checks.
           </div>
 
-          <div className="mt-5 px-6 font-extralight text-sm">
+          <div className="mt-5 px-6 text-sm font-extralight">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-2">
                 <div>
@@ -89,7 +89,7 @@ export const IssueMarketMultisigModal = (
                 </div>
 
                 <div className="flex flex-row justify-center gap-2">
-                  <Button type="submit" className="font-faketion mt-5 w-1/2">
+                  <Button type="submit" className="mt-5 w-1/2 font-faketion">
                     SUBMIT
                   </Button>
 
@@ -97,7 +97,7 @@ export const IssueMarketMultisigModal = (
                     onClick={props.onReject}
                     variant="secondary"
                     long
-                    className="font-faketion mt-5 w-1/2"
+                    className="mt-5 w-1/2 font-faketion"
                   >
                     Cancel
                   </Button>

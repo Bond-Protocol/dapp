@@ -77,7 +77,7 @@ export const IssuerList = () => {
         <Button onClick={sortByTbv}>Sort by TBV</Button>
       </p>
         */}
-      <div className="mt-8 flex gap-x-12 gap-y-10 flex-wrap">
+      <div className="mt-8 flex flex-wrap gap-x-12 gap-y-10">
         {sortedIssuers.map((issuer) => {
           if (issuer.name && issuer.name.toLowerCase().indexOf(search) != -1) {
             const markets = marketsByIssuer.get(issuer.id) || [];

@@ -18,7 +18,7 @@ export const RequiresWallet = ({ className, children }: RequireWalletProps) => {
     <>{children}</>
   ) : (
     <div className="mt-10 flex flex-col">
-      <h1 className="text-5xl text-center font-faketion py-10 leading-normal">
+      <h1 className="py-10 text-center font-faketion text-5xl leading-normal">
         CONNECT WALLET
         <br />
         TO CONTINUE

@@ -12,12 +12,12 @@ export type SummaryCardProps = {
 export const SummaryCard = (props: SummaryCardProps) => {
   return (
     <ol
-      className={`text-[12px] child:mt-3 child:flex child:justify-between child:h-[18px] child:bg-white/[.05] ${props.className}`}
+      className={`text-[12px] child:mt-3 child:flex child:h-[18px] child:justify-between child:bg-white/[.05] ${props.className}`}
     >
       {props.fields.map((f, i) => (
         <li key={i}>
           <div className="flex">
-            <p className="font-jakarta ml-2 mr-1">{f.label}</p>
+            <p className="ml-2 mr-1 font-jakarta">{f.label}</p>
             {f.tooltip && (
               <Tooltip
                 content={f.tooltip}

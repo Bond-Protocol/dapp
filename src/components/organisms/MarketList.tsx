@@ -170,7 +170,7 @@ export const MarketList: FC<MarketListProps> = ({
         <div className="flex flex-row">
           <img className="h-[32px] w-[32px]" src={token0} />
           <img
-            className="h-[32px] w-[32px] flex self-end ml-[-8px]"
+            className="ml-[-8px] flex h-[32px] w-[32px] self-end"
             src={token1}
           />
         </div>
@@ -183,7 +183,7 @@ export const MarketList: FC<MarketListProps> = ({
         <div className="flex flex-row">
           <img className="h-[32px] w-[32px]" src={quote} />
           <img
-            className="h-[16px] w-[16px] flex self-end ml-[-8px]"
+            className="ml-[-8px] flex h-[16px] w-[16px] self-end"
             src={payout}
           />
         </div>
@@ -312,7 +312,7 @@ export const MarketList: FC<MarketListProps> = ({
                 }
               >
                 <TableCell>
-                  <div className="flex flex-column">
+                  <div className="flex-column flex">
                     <p className="w-[48px]">{quoteLogo(market)}</p>
                     <p className="pl-4">{market.quoteToken.symbol}</p>
                   </div>
