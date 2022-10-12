@@ -100,7 +100,7 @@ export function useMyBonds() {
             .then((result) => {
               if (Number(result) > 0) {
                 // Now we have all the data required to make an OwnerBalances object
-                const balance = Number(result);
+                const balance = result;
                 ownerBalances.push({
                   balance: balance,
                   bondToken: bondToken,
