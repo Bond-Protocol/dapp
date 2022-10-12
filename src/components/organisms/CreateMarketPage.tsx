@@ -82,6 +82,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     control,
     handleSubmit,
     getValues,
+    setValue,
     formState: { errors, isValid, isSubmitted },
   } = useForm({
     defaultValues: props.initialValues ? props.initialValues : formDefaults,
@@ -264,6 +265,25 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   ]);
 
   useEffect(() => {
+    if (
+      bondsPerWeek &&
+      marketExpiryDays &&
+      marketCapacity
+    ) {
+      const duration = marketExpiryDays * 24 * 60 * 60;
+      const depositInterval = (bondsPerWeek / 7) * 24 * 60 * 60;
+      const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
+      const debtBuffer = (marketCapacity * 0.25) / (marketCapacity * decayInterval / duration) * 100;
+
+      setValue("debtBuffer", Math.round(debtBuffer));
+    }
+  }, [
+    bondsPerWeek,
+    marketExpiryDays,
+    marketCapacity
+  ]);
+
+  useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
       setMinExchangeRateString(
         `${minExchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`
@@ -336,20 +356,44 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [marketExpiry]);
 
   const summaryFields = [
-    { label: "Capacity", value: capacityString },
+    {
+      label: "Capacity",
+      tooltip: "The maximum amount of payout tokens to be paid out during the market's lifetime.",
+      value: capacityString
+    },
     { label: "Payout Token", value: payoutTokenSymbol },
     { label: "Quote Token", value: quoteTokenSymbol },
     {
       label: "Estimated bond cadence",
-      tooltip: "soon",
+      tooltip: "The estimated amount of payout tokens sold per day.",
       value: estimatedBondCadence,
     },
     { label: "Initial exchange rate", value: exchangeRateString },
-    { label: "Minimum exchange rate", value: minExchangeRateString },
-    { label: "Conclusion", tooltip: "soon", value: marketExpiryString },
-    { label: "Vesting", tooltip: "soon", value: vestingString },
-    { label: "Bonds per week", tooltip: "soon", value: `${bondsPerWeek}` },
-    { label: "Debt Buffer", value: `${debtBuffer}%` },
+    {
+      label: "Minimum exchange rate",
+      tooltip: "The lowest exchange rate the market will offer",
+      value: minExchangeRateString
+    },
+    {
+      label: "Conclusion",
+      tooltip: "The date on which the market will close for new purchases, regardless of whether capacity has been reached.",
+      value: marketExpiryString
+    },
+    {
+      label: "Vesting",
+      tooltip: "The date on which bond purchasers will be able to claim their payout.",
+      value: vestingString
+    },
+    {
+      label: "Bonds per week",
+      tooltip: "The target number of maximum bonds per week. This could be split across multiple small transactions which add up to a maximum bond.",
+      value: `${bondsPerWeek}`
+    },
+    {
+      label: "Debt Buffer",
+      tooltip: "The recommended value is calculated based on your market's capacity, duration and deposit interval. We recommend you do not change this unless you are sure you know what you are doing.",
+      value: `${debtBuffer}%`
+    },
   ];
 
   const onSubmit = async (data: any) => {
