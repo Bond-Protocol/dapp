@@ -22,8 +22,10 @@ module.exports = {
       path.resolve(__dirname, "../vite.config.ts")
     );
 
+    const { define, ...rest } = userConfig;
+
     return mergeConfig(config, {
-      ...userConfig,
+      ...rest,
       // manually specify plugins to avoid conflict
       plugins: [svgr()],
     });

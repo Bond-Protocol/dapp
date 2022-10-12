@@ -30,3 +30,6 @@ package-lock.json
 
 .env
 .eslintcache
+
+## Storybook
+storybook-static
