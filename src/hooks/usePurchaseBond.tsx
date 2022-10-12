@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useCallback } from "react";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { BigNumberish, ContractTransaction, ethers, Signer } from "ethers";
+import { BigNumberish, ContractTransaction } from "ethers";
 import { useProvider, useSigner } from "wagmi";
 import { providers } from "services/owned-providers";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
@@ -55,17 +55,17 @@ export const usePurchaseBond = () => {
       amount: string,
       decimals: number,
       marketId: number,
-      auctioneer: string,
-      requestProvider?: typeof provider
+      chainId: string
     ): Promise<BigNumberish> => {
-      const amt = ethers.utils.parseUnits(amount, decimals);
+      const requestProvider = provider || providers[chainId];
 
       return contractLibrary.payoutFor(
-        requestProvider || provider,
-        amt.toString(),
         marketId,
-        auctioneer,
-        REFERRAL_ADDRESS
+        amount,
+        decimals,
+        REFERRAL_ADDRESS,
+        requestProvider || provider,
+        chainId
       );
     },
     [provider]

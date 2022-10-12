@@ -37,14 +37,15 @@ export function useCalculatedMarkets() {
       no event, so the subgraph is not updated. Thus, we check here and return early if
       the market is not live.
     */
+    const requestProvider = providers[market.network] || provider;
+
     const isLive = await contractLibrary.isLive(
-      provider,
       market.marketId,
-      market.auctioneer
+      requestProvider,
+      market.network
     );
     if (!isLive) return;
 
-    const requestProvider = providers[market.network] || provider;
     const purchaseLink = bondLibrary.TOKENS.get(
       market.quoteToken.id
     )?.purchaseLinks.get(market.network)

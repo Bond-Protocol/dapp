@@ -92,7 +92,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           amount,
           market.quoteToken.decimals,
           market.marketId,
-          market.auctioneer
+          market.network
         )
       );
 
