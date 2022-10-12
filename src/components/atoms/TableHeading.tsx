@@ -29,7 +29,7 @@ export const TableHeading = (props: TableHeadingProps) => {
       heading
       className={`${
         props.onClick && "cursor-pointer"
-      } text-base w-2 text-left pb-4 ${props.className}`}
+      } w-2 pb-4 text-left text-base ${props.className}`}
       onClick={(e) => {
         if (!props.onClick) return;
 
@@ -45,7 +45,7 @@ export const TableHeading = (props: TableHeadingProps) => {
       >
         {isSorting && (
           <div
-            className="mr-1 my-auto cursor-pointer"
+            className="my-auto mr-1 cursor-pointer"
             onClick={props.onClickIcon}
           >
             <ArrowDownIcon

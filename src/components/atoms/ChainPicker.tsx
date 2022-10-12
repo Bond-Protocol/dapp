@@ -1,7 +1,7 @@
 //@ts-nocheck
-import {Select} from "./Select";
-import {Input} from "./Input";
-import {useEffect, useState} from "react";
+import { Select } from "./Select";
+import { Input } from "./Input";
+import { useEffect, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
 
 export type ChainPickerProps = {
@@ -17,7 +17,9 @@ const options = bondLibrary.SUPPORTED_CHAINS.map((supportedChain) => ({
 }));
 
 export const ChainPicker = (props: ChainPickerProps) => {
-  const [selected, setSelected] = useState(props.defaultValue? props.defaultValue.id : options[0].id);
+  const [selected, setSelected] = useState(
+    props.defaultValue ? props.defaultValue.id : options[0].id
+  );
 
   useEffect(() => {
     props.onChange && props.onChange(selected);
@@ -34,7 +36,9 @@ export const ChainPicker = (props: ChainPickerProps) => {
         <div className="w-full">
           <Select
             value={selected}
-            defaultValue={props.defaultValue? props.defaultValue.id : options[0].id}
+            defaultValue={
+              props.defaultValue ? props.defaultValue.id : options[0].id
+            }
             options={options}
             onChange={handleChangeSelect}
           />

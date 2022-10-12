@@ -38,7 +38,7 @@ export const Link = forwardRef(function Button(
     >
       <p className={`pt-[2px] ${props.labelClassname}`}>{children}</p>
       <LinkIcon
-        className={`my-auto ml-1.5 mr-0.5 color-inherit ${props.iconClassName}`}
+        className={`color-inherit my-auto ml-1.5 mr-0.5 ${props.iconClassName}`}
       />
     </ButtonUnstyled>
   );

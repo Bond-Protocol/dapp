@@ -11,7 +11,7 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
 
   return (
     <div
-      className="flex justify-between items-center px-[5vw] h-[91px]"
+      className="flex h-[91px] items-center justify-between px-[5vw]"
       id="navbar"
     >
       <ProtocolLogo className="py-6" />
@@ -27,7 +27,7 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
         <ConnectButton />
         <HamburgerIcon
           onClick={props.onHamburgerClick}
-          className="hover:cursor-pointer my-auto ml-3"
+          className="my-auto ml-3 hover:cursor-pointer"
         />
       </div>
     </div>

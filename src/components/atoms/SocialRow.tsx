@@ -19,7 +19,7 @@ export type SocialRowProps = {
 export const SocialRow = (props: SocialRowProps) => {
   return (
     <div
-      className={`flex justify-center gap-9 my-auto child:my-auto ${props.className}`}
+      className={`my-auto flex justify-center gap-9 child:my-auto ${props.className}`}
     >
       {props.gitbook && (
         <LinkIcon href={props.gitbook}>

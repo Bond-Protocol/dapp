@@ -54,7 +54,7 @@ export const TermPicker = (props: TermPickerProps) => {
           />
         </div>
         {id == 1 && (
-          <div className="w-3/4 mt-1">
+          <div className="mt-1 w-3/4">
             <Input
               placeholder="enter amount"
               className="w-full"

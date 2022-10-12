@@ -39,8 +39,8 @@ export const ConnectButton = () => {
                     variant="ghost"
                     onClick={openConnectModal}
                   >
-                    <WalletIcon className="fill-white my-auto hover:fill-brand-yella hover:color-brand-yella" />
-                    <p className="pl-2 capitalize font-light text-sm">
+                    <WalletIcon className="hover:color-brand-yella my-auto fill-white hover:fill-brand-yella" />
+                    <p className="pl-2 text-sm font-light capitalize">
                       Connect
                     </p>
                   </Button>
@@ -49,7 +49,7 @@ export const ConnectButton = () => {
               if (chain.unsupported) {
                 return (
                   <Button
-                    className="px-2.5 text-red-400 border-red-400"
+                    className="border-red-400 px-2.5 text-red-400"
                     variant="secondary"
                     onClick={openChainModal}
                   >
@@ -62,7 +62,7 @@ export const ConnectButton = () => {
                   {chain.hasIcon && (
                     <div
                       onClick={openChainModal}
-                      className="mr-3 rounded-full my-auto"
+                      className="my-auto mr-3 rounded-full"
                     >
                       {chain.iconUrl && (
                         <img

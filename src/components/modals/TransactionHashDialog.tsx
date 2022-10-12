@@ -15,7 +15,7 @@ export const TransactionHashDialog = (props: TransactionHashDialogProps) => {
       <div className="flex justify-center ">
         <Link
           href={`${props.blockExplorerUrl}${props.hash}`}
-          className="fill-light-secondary uppercase font-faketion text-xs text-light-secondary hover:fill-white hover:text-white"
+          className="fill-light-secondary font-faketion text-xs uppercase text-light-secondary hover:fill-white hover:text-white"
           target="_blank"
           rel="noopener noreferrer"
         >

@@ -1,35 +1,44 @@
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {useAtom} from "jotai";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
   useListUniqueBondersGoerliQuery,
-  useListUniqueBondersMainnetQuery
+  useListUniqueBondersMainnetQuery,
 } from "../generated/graphql";
-import {getAddressesByProtocol, PROTOCOL_NAMES} from "@bond-protocol/bond-library";
+import {
+  getAddressesByProtocol,
+  PROTOCOL_NAMES,
+} from "@bond-protocol/bond-library";
 
 export function useUniqueBonders() {
   const endpoints = getSubgraphEndpoints();
   const [testnet, setTestnet] = useAtom(testnetMode);
-  
-  const [selectedBonders, setSelectedBonders] = useState(new Map<string, number>());
-  const [mainnetBonders, setMainnetBonders] = useState(new Map<string, number>());
-  const [testnetBonders, setTestnetBonders] = useState(new Map<string, number>());
 
-  const {data: mainnetData} = useListUniqueBondersMainnetQuery(
-    {endpoint: endpoints[0]}
+  const [selectedBonders, setSelectedBonders] = useState(
+    new Map<string, number>()
+  );
+  const [mainnetBonders, setMainnetBonders] = useState(
+    new Map<string, number>()
+  );
+  const [testnetBonders, setTestnetBonders] = useState(
+    new Map<string, number>()
   );
 
-  const {data: goerliData} = useListUniqueBondersGoerliQuery(
-    {endpoint: endpoints[1]}
-  );
+  const { data: mainnetData } = useListUniqueBondersMainnetQuery({
+    endpoint: endpoints[0],
+  });
+
+  const { data: goerliData } = useListUniqueBondersGoerliQuery({
+    endpoint: endpoints[1],
+  });
 
   useEffect(() => {
     if (mainnetData && mainnetData.uniqueBonders) {
       const allBonders = mainnetData.uniqueBonders;
       const bonderMap = new Map();
 
-      allBonders.forEach(bonder => {
+      allBonders.forEach((bonder) => {
         const split = bonder.id.split("__");
         const current = bonderMap.get(split[0]);
         if (current) {
@@ -48,7 +57,7 @@ export function useUniqueBonders() {
       const allBonders = goerliData.uniqueBonders;
       const bonderMap = new Map();
 
-      allBonders.forEach(bonder => {
+      allBonders.forEach((bonder) => {
         const split = bonder.id.split("__");
         const current = bonderMap.get(split[0]);
         if (current) {
@@ -74,7 +83,7 @@ export function useUniqueBonders() {
     const addresses = getAddressesByProtocol(name as PROTOCOL_NAMES);
     let count = 0;
 
-    addresses.forEach(address => {
+    addresses.forEach((address) => {
       const id = (address.chainId + "_" + address.address).toLowerCase();
       const bonders = selectedBonders.get(id);
       if (bonders) count = count + bonders;
@@ -85,6 +94,7 @@ export function useUniqueBonders() {
 
   return {
     bonders: selectedBonders,
-    getBondersForProtocol: (name: PROTOCOL_NAMES) => getBondersForProtocol(name),
+    getBondersForProtocol: (name: PROTOCOL_NAMES) =>
+      getBondersForProtocol(name),
   };
 }

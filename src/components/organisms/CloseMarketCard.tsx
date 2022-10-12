@@ -56,8 +56,8 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
 
   return (
     props.market.isLive && (
-      <div className="px-2 pb-2 w-[80vw]">
-        <div className="flex pt-2 justify-center">
+      <div className="w-[80vw] px-2 pb-2">
+        <div className="flex justify-center pt-2">
           {!isConnected && <ConnectButton />}
 
           {isConnected && !correctChain && (

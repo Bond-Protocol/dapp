@@ -572,7 +572,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               1 SET UP MARKET
             </p>
             <div>
-              <div className="flex flex-col pt-5 w-full">
+              <div className="flex w-full flex-col pt-5">
                 <Controller
                   name="chain"
                   control={control}
@@ -586,7 +586,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   )}
                 />
               </div>
-              <div className="flex flex-col pt-5 w-full">
+              <div className="flex w-full flex-col pt-5">
                 <Controller
                   name="marketOwnerAddress"
                   control={control}
@@ -618,13 +618,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       />
 
                       {errors.marketOwnerAddress?.type === "required" && (
-                        <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                        <div className="my-1 justify-self-start text-xs font-light text-red-500">
                           {errors.marketOwnerAddress?.message}
                         </div>
                       )}
 
                       {errors.marketOwnerAddress?.type === "isAddress" && (
-                        <div className="text-xs font-light mt-1 text-red-500 justify-self-start">
+                        <div className="mt-1 justify-self-start text-xs font-light text-red-500">
                           Must be a valid address!
                         </div>
                       )}
@@ -633,7 +633,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 />
 
                 {showOwnerWarning && (
-                  <div className="flex flex-col border border-red-900 rounded-lg mt-3 p-3 text-center px-16 gap-3 pt-3 w-full text-sm text-red-700">
+                  <div className="mt-3 flex w-full flex-col gap-3 rounded-lg border border-red-900 p-3 px-16 pt-3 text-center text-sm text-red-700">
                     <h2 className="text-center text-lg font-bold">WARNING</h2>
 
                     <p>
@@ -667,7 +667,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   </div>
                 )}
                 {protocol && (
-                  <div className="mt-4 flex border rounded-lg border-green-900 flex-col gap-1 py-2 w-full text-sm text-green-700">
+                  <div className="mt-4 flex w-full flex-col gap-1 rounded-lg border border-green-900 py-2 text-sm text-green-700">
                     <p className="text-center">
                       Thank you for verifying with BondProtocol. Your market
                       will be available via the BondProtocol dapp!
@@ -676,7 +676,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 )}
               </div>
               <div className="flex gap-6">
-                <div className="flex flex-col w-full pt-5">
+                <div className="flex w-full flex-col pt-5">
                   <Controller
                     name="payoutToken"
                     control={control}
@@ -709,7 +709,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   />
                 </div>
 
-                <div className="flex flex-col pt-5 w-full">
+                <div className="flex w-full flex-col pt-5">
                   <Controller
                     name="quoteToken"
                     control={control}
@@ -743,7 +743,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 </div>
               </div>
               {showTokenWarning && (
-                <div className="flex border rounded-lg mt-4 border-red-900 flex-col gap-3 py-3 px-12 font-jakarta w-full text-sm text-center text-red-500">
+                <div className="mt-4 flex w-full flex-col gap-3 rounded-lg border border-red-900 py-3 px-12 text-center font-jakarta text-sm text-red-500">
                   <p>
                     One or more of the tokens selected is unverified. Only
                     on-chain data is available for unverified tokens, off-chain
@@ -774,7 +774,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 </div>
               )}
               <div className="flex gap-6">
-                <div className="flex flex-col w-full pt-5">
+                <div className="flex w-full flex-col pt-5">
                   <Controller
                     name="payoutTokenPrice"
                     control={control}
@@ -793,13 +793,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         />
 
                         {errors.payoutTokenPrice?.type === "required" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             {errors.payoutTokenPrice?.message}
                           </div>
                         )}
 
                         {errors.payoutTokenPrice?.type === "isNumber" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             Must be a number
                           </div>
                         )}
@@ -808,7 +808,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   />
                 </div>
 
-                <div className="flex flex-col pt-5 w-full">
+                <div className="flex w-full flex-col pt-5">
                   <Controller
                     name="quoteTokenPrice"
                     control={control}
@@ -827,13 +827,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         />
 
                         {errors.quoteTokenPrice?.type === "required" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             {errors.quoteTokenPrice?.message}
                           </div>
                         )}
 
                         {errors.quoteTokenPrice?.type === "isNumber" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             Must be a number
                           </div>
                         )}
@@ -843,8 +843,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 </div>
               </div>
               <div className="flex gap-6">
-                <div className="flex flex-col w-full pt-5">
-                  <p className="text-xs font-light mb-1">
+                <div className="flex w-full flex-col pt-5">
+                  <p className="mb-1 text-xs font-light">
                     Current Exchange Rate
                   </p>
                   <p className="mt-3">
@@ -852,7 +852,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   </p>
                 </div>
 
-                <div className="flex flex-col pt-5 w-full">
+                <div className="flex w-full flex-col pt-5">
                   <Controller
                     name="minExchangeRate"
                     control={control}
@@ -878,19 +878,19 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 </div>
 
                 {errors.minExchangeRate?.type === "required" && (
-                  <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                  <div className="my-1 justify-self-start text-xs font-light text-red-500">
                     {errors.minExchangeRate?.message}
                   </div>
                 )}
 
                 {errors.minExchangeRate?.type === "isNumber" && (
-                  <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                  <div className="my-1 justify-self-start text-xs font-light text-red-500">
                     Must be a number
                   </div>
                 )}
               </div>
               <div className="flex gap-6">
-                <div className="flex flex-col pt-5 w-full">
+                <div className="flex w-full flex-col pt-5">
                   <Controller
                     name="marketCapacity"
                     control={control}
@@ -904,13 +904,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         />
 
                         {errors.marketCapacity?.type === "required" && (
-                          <div className="text-xs font-light my-1 text-red-500">
+                          <div className="my-1 text-xs font-light text-red-500">
                             {errors.marketCapacity?.message}
                           </div>
                         )}
 
                         {errors.marketCapacity?.type === "isNumber" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             Must be a number
                           </div>
                         )}
@@ -918,7 +918,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     )}
                   />
                 </div>
-                <div className="flex flex-col pt-5 w-full">
+                <div className="flex w-full flex-col pt-5">
                   <Controller
                     name="capacityToken"
                     control={control}
@@ -965,7 +965,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     />
 
                     {errors.marketExpiryDate?.type === "isSet" && (
-                      <div className="text-xs font-light mt-2 text-red-500 justify-self-start">
+                      <div className="mt-2 justify-self-start text-xs font-light text-red-500">
                         Date must be set
                       </div>
                     )}
@@ -1022,7 +1022,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       />
 
                       {errors.expiryDate?.type === "isSet" && (
-                        <div className="text-xs font-light mt-2 text-red-500 justify-self-start">
+                        <div className="mt-2 justify-self-start text-xs font-light text-red-500">
                           Date must be set
                         </div>
                       )}
@@ -1054,13 +1054,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         />
 
                         {errors.bondsPerWeek?.type === "required" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             {errors.bondsPerWeek?.message}
                           </div>
                         )}
 
                         {errors.bondsPerWeek?.type === "isNumber" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             Must be a number
                           </div>
                         )}
@@ -1082,13 +1082,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         <Input {...field} label="Debt buffer" />
 
                         {errors.debtBuffer?.type === "required" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             {errors.debtBuffer?.message}
                           </div>
                         )}
 
                         {errors.debtBuffer?.type === "isNumber" && (
-                          <div className="text-xs font-light my-1 text-red-500 justify-self-start">
+                          <div className="my-1 justify-self-start text-xs font-light text-red-500">
                             Must be a number
                           </div>
                         )}
@@ -1104,13 +1104,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
             <SummaryCard fields={summaryFields} className="mt-8" />
 
             {!isValid && isSubmitted && (
-              <div className="text-xs font-light mt-4 text-red-500">
+              <div className="mt-4 text-xs font-light text-red-500">
                 Form has errors, please check all fields are filled out
                 correctly.
               </div>
             )}
 
-            <Button type="submit" className="w-full font-faketion mt-5">
+            <Button type="submit" className="mt-5 w-full font-faketion">
               CONFIRM INFORMATION
             </Button>
           </div>

@@ -109,14 +109,14 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           <div>
             {!allowanceIsLoading && (
               <div>
-                <div className="text-center pb-8 leading-normal text-red-500">
+                <div className="pb-8 text-center leading-normal text-red-500">
                   Allowance: {allowance}{" "}
                   {props.marketData.summaryData.payoutToken}
                   <br />
                   Capacity: {props.marketData.formValues.marketCapacity}{" "}
                   {props.marketData.summaryData.payoutToken}
                 </div>
-                <div className="text-center pb-8 leading-normal">
+                <div className="pb-8 text-center leading-normal">
                   In order to enable the market, you must allow the BondProtocol
                   Teller contract ({teller}) to spend{" "}
                   {props.marketData.summaryData.payoutToken} from the market
@@ -125,7 +125,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
               </div>
             )}
             {allowanceIsLoading && (
-              <div className="text-center pb-8 leading-normal">
+              <div className="pb-8 text-center leading-normal">
                 Awaiting allowance tx...
               </div>
             )}
@@ -138,7 +138,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
             {!allowanceIsLoading && (
               <div>
                 <div
-                  className={`text-center pb-8 leading-normal ${
+                  className={`pb-8 text-center leading-normal ${
                     isAllowanceSufficient ? `text-green-500` : `text-red-500`
                   }`}
                 >
@@ -149,7 +149,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                   {props.marketData.summaryData.payoutToken}
                 </div>
                 {isAllowanceSufficient && (
-                  <div className="text-center pb-8 leading-normal">
+                  <div className="pb-8 text-center leading-normal">
                     <p className="pb-8">
                       You have set a sufficient allowance for the capacity of
                       your market.
@@ -164,7 +164,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                   </div>
                 )}
                 {allowance > 0 && !isAllowanceSufficient && (
-                  <div className="text-center pb-8 leading-normal">
+                  <div className="pb-8 text-center leading-normal">
                     <p className="pb-8">
                       You have set an insufficient allowance for the capacity of
                       your market. We recommend setting the allowance high
@@ -182,7 +182,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
               </div>
             )}
             {allowanceIsLoading && (
-              <div className="text-center pb-8 leading-normal">
+              <div className="pb-8 text-center leading-normal">
                 Awaiting allowance tx...
               </div>
             )}
@@ -193,7 +193,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   const allowanceForm = () => {
     return (
-      <div className="w-full flex justify-center">
+      <div className="flex w-full justify-center">
         {props.marketData.isMultisig === false && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
@@ -203,7 +203,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
               className="mb-2"
             />
 
-            <Button type="submit" className="w-full font-faketion mt-5">
+            <Button type="submit" className="mt-5 w-full font-faketion">
               UPDATE ALLOWANCE
             </Button>
           </form>
@@ -215,11 +215,11 @@ export const MarketCreated = (props: MarketCreatedParams) => {
               update the allowance:
             </div>
 
-            <div className="py-8 flex justify-center">
+            <div className="flex justify-center py-8">
               <table>
                 <tr>
-                  <td className="text-left pr-4">Contract Address</td>
-                  <td className="text-xs pr-4">
+                  <td className="pr-4 text-left">Contract Address</td>
+                  <td className="pr-4 text-xs">
                     {props.marketData.marketParams.payoutToken}
                   </td>
                   <td>
@@ -236,12 +236,12 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="text-left pr-4">Method Name</td>
-                  <td className="text-xs pr-4">approve</td>
+                  <td className="pr-4 text-left">Method Name</td>
+                  <td className="pr-4 text-xs">approve</td>
                 </tr>
                 <tr>
-                  <td className="text-left pr-4">_spender</td>
-                  <td className="text-xs pr-4">{teller}</td>
+                  <td className="pr-4 text-left">_spender</td>
+                  <td className="pr-4 text-xs">{teller}</td>
                   <td>
                     <img
                       onClick={() => navigator.clipboard.writeText(teller)}
@@ -252,8 +252,8 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="text-left pr-4">amount</td>
-                  <td className="text-xs pr-4">
+                  <td className="pr-4 text-left">amount</td>
+                  <td className="pr-4 text-xs">
                     {ethers.utils
                       .parseUnits(
                         props.marketData.formValues.marketCapacity,
@@ -284,7 +284,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
             <Button
               onClick={() => loadAllowance()}
-              className="w-full font-faketion mt-5"
+              className="mt-5 w-full font-faketion"
             >
               REFRESH ALLOWANCE
             </Button>
@@ -297,13 +297,13 @@ export const MarketCreated = (props: MarketCreatedParams) => {
   return (
     <div className="mx-[20vw]">
       {isLoading && (
-        <div className="text-xl text-center py-4 leading-normal">
+        <div className="py-4 text-center text-xl leading-normal">
           Waiting for tx confirmation...
         </div>
       )}
       {!isLoading && data && !(data.status === 0) && (
         <div>
-          <h1 className="text-5xl text-center font-faketion py-10 leading-normal">
+          <h1 className="py-10 text-center font-faketion text-5xl leading-normal">
             ALL SET!
             <br />
             YOUR BOND MARKET
@@ -313,15 +313,15 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
           {ownerAddress && protocol ? (
             <div>
-              <h2 className="text-xl text-center py-4 leading-normal text-green-500">
+              <h2 className="py-4 text-center text-xl leading-normal text-green-500">
                 Owner verified as {protocol.name}!
               </h2>
 
-              <p className="text-center pb-4 leading-normal text-green-500">
+              <p className="pb-4 text-center leading-normal text-green-500">
                 ({ownerAddress})
               </p>
 
-              <p className="text-center py-8 leading-normal">
+              <p className="py-8 text-center leading-normal">
                 Your market is live on the contract, it should appear in our
                 market list as soon as it has been indexed by our subgraph.
               </p>
@@ -329,7 +329,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
               <div className="pb-8">{displayAllowance()}</div>
 
               <Button
-                className="w-full font-faketion mt-5"
+                className="mt-5 w-full font-faketion"
                 onClick={() => navigate("/issuers/" + protocol.name)}
               >
                 {`Go to ${protocol.name} page`}
@@ -337,18 +337,18 @@ export const MarketCreated = (props: MarketCreatedParams) => {
             </div>
           ) : (
             <div>
-              <p className="text-center py-8 leading-normal">
+              <p className="py-8 text-center leading-normal">
                 Your market is live on the contract, however we cannot find
                 protocol details for the owner address {ownerAddress}.
               </p>
 
-              <p className="text-center py-8 leading-normal">
+              <p className="py-8 text-center leading-normal">
                 In order for BondProtocol to display your market on our site,
                 you must verify your protocol details with us. If you have not
                 done so already, click below to start the process.
               </p>
 
-              <p className="text-center py-8 leading-normal">
+              <p className="py-8 text-center leading-normal">
                 If this is not done, the market will still be live, but users
                 will need to access it directly via the contract, or via your
                 own UI.
@@ -360,10 +360,10 @@ export const MarketCreated = (props: MarketCreatedParams) => {
         </div>
       )}
       {data && data.status === 0 && (
-        <div className="text-center py-8 leading-normal">Error!</div>
+        <div className="py-8 text-center leading-normal">Error!</div>
       )}
       <Button
-        className="w-full font-faketion mt-5"
+        className="mt-5 w-full font-faketion"
         onClick={() =>
           window.open(blockExplorerUrl + "/" + hash, "_blank", "noreferrer")
         }

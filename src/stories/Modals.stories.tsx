@@ -1,6 +1,6 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import {SummaryCard} from "../components/molecules/SummaryCard";
-import {Modal} from "../components/molecules/Modal";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { SummaryCard } from "../components/molecules/SummaryCard";
+import { Modal } from "../components/molecules/Modal";
 import {
   CreateMarketTermsDialog,
   GeneralTermsDialog,
@@ -10,7 +10,7 @@ import {
 } from "../components/modals";
 
 const ModalDecorator = (Story) => (
-  <div className="border h-[100vh]">
+  <div className="h-[100vh] border">
     <Modal open={true} onClickClose={() => {}}>
       <Story />
     </Modal>
@@ -18,7 +18,7 @@ const ModalDecorator = (Story) => (
 );
 
 const LargeModalDecorator = (Story) => (
-  <div className="border h-[100vh]">
+  <div className="h-[100vh] border">
     <Modal large open={true} onClickClose={() => {}}>
       <Story />
     </Modal>

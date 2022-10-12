@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { useCallback } from "react";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { BigNumberish, ContractTransaction, ethers, Signer } from "ethers";
+import { BigNumberish, ContractTransaction } from "ethers";
 import { useProvider, useSigner } from "wagmi";
 import { providers } from "services/owned-providers";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
@@ -34,7 +34,7 @@ export const usePurchaseBond = () => {
     address: string,
     auctioneer: string,
     network: string,
-    decimals: number,
+    decimals: number
   ) => {
     const requestProvider = providers[network];
     const allowance: BigNumberish = await contractLibrary.getAllowance(
@@ -55,17 +55,17 @@ export const usePurchaseBond = () => {
       amount: string,
       decimals: number,
       marketId: number,
-      auctioneer: string,
-      requestProvider?: typeof provider
+      chainId: string
     ): Promise<BigNumberish> => {
-      const amt = ethers.utils.parseUnits(amount, decimals);
+      const requestProvider = provider || providers[chainId];
 
       return contractLibrary.payoutFor(
-        requestProvider || provider,
-        amt.toString(),
         marketId,
-        auctioneer,
-        REFERRAL_ADDRESS
+        amount,
+        decimals,
+        REFERRAL_ADDRESS,
+        requestProvider || provider,
+        chainId
       );
     },
     [provider]
@@ -84,10 +84,11 @@ export const usePurchaseBond = () => {
       const { address, amount, payout, slippage, market } = args;
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
-      const referralAddress =
-        NO_FRONTEND_FEE_OWNERS.includes(market.network.concat("_").concat(market.owner)) ?
-          NO_REFERRAL_ADDRESS :
-          REFERRAL_ADDRESS;
+      const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
+        market.network.concat("_").concat(market.owner)
+      )
+        ? NO_REFERRAL_ADDRESS
+        : REFERRAL_ADDRESS;
 
       return contractLibrary.purchase(
         address,
@@ -118,10 +119,11 @@ export const usePurchaseBond = () => {
       const { address, amount, payout, slippage, market } = args;
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
-      const referralAddress =
-        NO_FRONTEND_FEE_OWNERS.includes(market.network.concat("_").concat(market.owner)) ?
-          NO_REFERRAL_ADDRESS :
-          REFERRAL_ADDRESS;
+      const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
+        market.network.concat("_").concat(market.owner)
+      )
+        ? NO_REFERRAL_ADDRESS
+        : REFERRAL_ADDRESS;
 
       try {
         return contractLibrary.estimatePurchaseGas(

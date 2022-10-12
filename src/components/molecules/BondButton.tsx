@@ -16,14 +16,14 @@ export type BondButtonProps = {
 export const BondButton = (props: BondButtonProps) => {
   if (props.showConnect)
     return (
-      <div className="w-full flex justify-center py-4">
+      <div className="flex w-full justify-center py-4">
         <ConnectButton />
       </div>
     );
 
   if (props.showSwitcher) {
     return (
-      <Button className="w-full mt-4" onClick={props.onSwitchChain}>
+      <Button className="mt-4 w-full" onClick={props.onSwitchChain}>
         Switch to {props.network}
       </Button>
     );
@@ -32,7 +32,7 @@ export const BondButton = (props: BondButtonProps) => {
   if (props.showPurchaseLink) {
     return (
       <Link
-        className="mx-auto mt-4 rounded-lg px-5 py-3 font-extrabold w-full flex justify-center bg-brand-yella text-black color-black font-faketion font-bold hover:text-black hover:color-black hover:bg-white"
+        className="color-black hover:color-black mx-auto mt-4 flex w-full justify-center rounded-lg bg-brand-yella px-5 py-3 font-faketion font-extrabold font-bold text-black hover:bg-white hover:text-black"
         href={props.purchaseLink}
         target="_blank"
         rel="noopener noreferrer"

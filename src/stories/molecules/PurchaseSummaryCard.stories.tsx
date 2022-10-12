@@ -1,5 +1,5 @@
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import {SummaryCard} from "../components/molecules/SummaryCard";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { SummaryCard } from "components/molecules/SummaryCard";
 
 export default {
   title: "Components/Molecules/SummaryCard",

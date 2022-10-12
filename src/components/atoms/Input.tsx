@@ -12,7 +12,7 @@ export const Input = forwardRef(function Input(
 ) {
   return (
     <div className="w-full">
-      {props.label && <p className="text-xs font-light mb-1">{props.label}</p>}
+      {props.label && <p className="mb-1 text-xs font-light">{props.label}</p>}
       <InputUnstyled
         {...props}
         autoComplete="disabled-for-now-bcuz-chrome-sux"
@@ -28,7 +28,7 @@ export const Input = forwardRef(function Input(
         }}
       />
       {props.subText && (
-        <p className="text-xs font-light text-light-neutral mt-1">
+        <p className="mt-1 text-xs font-light text-light-neutral">
           {props.subText}
         </p>
       )}
