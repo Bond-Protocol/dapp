@@ -33,3 +33,4 @@ package-lock.json
 
 ## Storybook
 storybook-static
+src/stories/*
