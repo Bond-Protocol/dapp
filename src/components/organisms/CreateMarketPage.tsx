@@ -265,23 +265,18 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   ]);
 
   useEffect(() => {
-    if (
-      bondsPerWeek &&
-      marketExpiryDays &&
-      marketCapacity
-    ) {
+    if (bondsPerWeek && marketExpiryDays && marketCapacity) {
       const duration = marketExpiryDays * 24 * 60 * 60;
       const depositInterval = (bondsPerWeek / 7) * 24 * 60 * 60;
       const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
-      const debtBuffer = (marketCapacity * 0.25) / (marketCapacity * decayInterval / duration) * 100;
+      const debtBuffer =
+        ((marketCapacity * 0.25) /
+          ((marketCapacity * decayInterval) / duration)) *
+        100;
 
       setValue("debtBuffer", Math.round(debtBuffer));
     }
-  }, [
-    bondsPerWeek,
-    marketExpiryDays,
-    marketCapacity
-  ]);
+  }, [bondsPerWeek, marketExpiryDays, marketCapacity]);
 
   useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
@@ -358,8 +353,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const summaryFields = [
     {
       label: "Capacity",
-      tooltip: "The maximum amount of payout tokens to be paid out during the market's lifetime.",
-      value: capacityString
+      tooltip:
+        "The maximum amount of payout tokens to be paid out during the market's lifetime.",
+      value: capacityString,
     },
     { label: "Payout Token", value: payoutTokenSymbol },
     { label: "Quote Token", value: quoteTokenSymbol },
@@ -372,27 +368,31 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     {
       label: "Minimum exchange rate",
       tooltip: "The lowest exchange rate the market will offer",
-      value: minExchangeRateString
+      value: minExchangeRateString,
     },
     {
       label: "Conclusion",
-      tooltip: "The date on which the market will close for new purchases, regardless of whether capacity has been reached.",
-      value: marketExpiryString
+      tooltip:
+        "The date on which the market will close for new purchases, regardless of whether capacity has been reached.",
+      value: marketExpiryString,
     },
     {
       label: "Vesting",
-      tooltip: "The date on which bond purchasers will be able to claim their payout.",
-      value: vestingString
+      tooltip:
+        "The date on which bond purchasers will be able to claim their payout.",
+      value: vestingString,
     },
     {
       label: "Bonds per week",
-      tooltip: "The target number of maximum bonds per week. This could be split across multiple small transactions which add up to a maximum bond.",
-      value: `${bondsPerWeek}`
+      tooltip:
+        "The target number of maximum bonds per week. This could be split across multiple small transactions which add up to a maximum bond.",
+      value: `${bondsPerWeek}`,
     },
     {
       label: "Debt Buffer",
-      tooltip: "The recommended value is calculated based on your market's capacity, duration and deposit interval. We recommend you do not change this unless you are sure you know what you are doing.",
-      value: `${debtBuffer}%`
+      tooltip:
+        "The recommended value is calculated based on your market's capacity, duration and deposit interval. We recommend you do not change this unless you are sure you know what you are doing.",
+      value: `${debtBuffer}%`,
     },
   ];
 
