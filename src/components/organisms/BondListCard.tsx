@@ -14,6 +14,7 @@ import {
   trim,
 } from "@bond-protocol/contract-library/dist/core/utils";
 import { useGasPrice } from "hooks/useGasPrice";
+import { BondDiscountChart } from "./BondDiscountChart";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -219,11 +220,8 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
         </Button>
       </div>
       <div className="mt-12 mb-6 flex gap-4 font-jakarta">
-        <div className="w-1/2">
-          {protocol?.name && (
-            <p className="font-jakarta text-4xl font-bold">{protocol.name}</p>
-          )}
-          {protocol?.description && <p>{protocol.description}</p>}
+        <div className="flex w-1/2 flex-col justify-between ">
+          <BondDiscountChart />
           {/* TODO: Hide graph until data is available
             <div className="text-center p-[12%] border">📈</div>
           */}

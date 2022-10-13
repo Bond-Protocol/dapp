@@ -22,7 +22,7 @@ export const LineChart = (props: ChartProps) => {
   );
 
   return (
-    <div className="h-[30vh] max-w-[55vw]">
+    <div className="h-full max-w-[55vw]">
       <Chart
         options={{
           data: props.data,

@@ -72,10 +72,12 @@ export const _prices = [
 
 export const _discounts = _prices.map((entry) => {
   const [date, price] = entry;
-  let discount = Math.random();
-  discount = discount > 0.4 ? discount - 0.55 : discount;
+  const getDiscount = (discount: number) => {
+    return discount > 0.2 ? getDiscount(Math.random()) : discount;
+  };
 
-  const newPrice = Math.random() > 0.5 ? price - discount : price + discount;
+  let discount = getDiscount(Math.random());
+  const newPrice = Math.random() > 0.2 ? price - discount : price + discount;
   return [date, newPrice];
 });
 
