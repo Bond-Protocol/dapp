@@ -79,7 +79,7 @@ export function useBondPurchases() {
     const bondPurchasesByMarketMap: Map<string, BondPurchase[]> = new Map();
     const tbvByProtocolMap: Map<string, number> = new Map();
     selectedBondPurchases.forEach((bondPurchase) => {
-      let array = bondPurchasesByMarketMap.get(bondPurchase.marketId) || [];
+      const array = bondPurchasesByMarketMap.get(bondPurchase.marketId) || [];
       array.push(bondPurchase);
       bondPurchasesByMarketMap.set(bondPurchase.marketId, array);
 

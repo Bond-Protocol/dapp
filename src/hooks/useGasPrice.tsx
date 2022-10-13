@@ -12,7 +12,7 @@ export const useGasPrice = () => {
       CHAINS.get(chainName)?.nativeCurrency;
     const price = getPrice(nativeCurrency?.symbol.toString() || "eth");
 
-    let gasPrice = await providers[chainName]?.getFeeData().then((result) => {
+    const gasPrice = await providers[chainName]?.getFeeData().then((result) => {
       if (result.maxFeePerGas === null) return "0";
       return Number(
         ethers.utils.formatUnits(

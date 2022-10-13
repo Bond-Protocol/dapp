@@ -56,7 +56,7 @@ export const useTokenAllowance = (
   };
 
   useEffect(() => {
-    const balance: number = Number(data?.formatted || "0");
+    const balance = Number(data?.formatted || "0");
     setBalance(trim(balance, calculateTrimDigits(balance)));
   }, [data]);
 

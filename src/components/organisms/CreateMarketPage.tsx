@@ -295,7 +295,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [exchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
 
   useEffect(() => {
-    let days =
+    const days =
       Number(
         (
           Math.round(bondExpiry - new Date().getTime() / 1000) /
@@ -326,7 +326,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [bondExpiry, timeAmount && timeAmount.amount, vestingType]);
 
   useEffect(() => {
-    let days =
+    const days =
       Number(
         (
           Math.round(marketExpiry - new Date().getTime() / 1000) /
@@ -499,7 +499,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   };
 
   const getTokenInfo = async (address: string, isPayout: boolean) => {
-    let token = bondLibrary.getToken(selectedChain + "_" + address);
+    const token = bondLibrary.getToken(selectedChain + "_" + address);
     if (token) token.id = selectedChain + "_" + address;
 
     if (isPayout) {
