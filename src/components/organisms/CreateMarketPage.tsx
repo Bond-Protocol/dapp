@@ -644,7 +644,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <p>
                       You can still create a market which will be active on the
                       contract level. However, it will *NOT* appear on the
-                      BondProtocol dapp's market list unless your protocol is
+                      BondProtocol dapp&apos;s market list unless your protocol is
                       verified. You will need your own UI, or another way for
                       users to interact with the bond contract, for example via
                       Etherscan.

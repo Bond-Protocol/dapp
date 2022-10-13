@@ -189,7 +189,7 @@ export const terms = {
             INTO THROUGH THE SITE; ANY ACTIVITIES OR COMMUNICATIONS OF THIRD
             PARTIES; OR ANY DATA OR MATERIAL FROM A THIRD PERSON ACCESSED ON OR
             THROUGH THE SITE. WE MAKE NO WARRANTIES OR REPRESENTATIONS ABOUT THE
-            ACCURACY OR COMPLETENESS OF THE SITE'S CONTENT OR THE CONTENT OF ANY
+            ACCURACY OR COMPLETENESS OF THE SITE&apos;S CONTENT OR THE CONTENT OF ANY
             WEBSITES LINKED TO THE SITE.
           </p>
           <p className="mt-4">
@@ -291,7 +291,7 @@ export const terms = {
             through informal, good faith negotiations. If a potential dispute
             arises, you must contact us by sending an email to
             notices@bondprotocol.finance so that we can attempt to resolve it
-            without resorting to formal dispute resolution. If we aren't able to
+            without resorting to formal dispute resolution. If we aren&apos;t able to
             reach an informal resolution within sixty days of your email, then
             you and we both agree to resolve the potential dispute according to
             the process set forth below.
