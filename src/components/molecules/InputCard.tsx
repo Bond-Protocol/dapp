@@ -22,7 +22,7 @@ export const InputCard = ({
   const { getTokenDetails } = useTokens();
 
   const setSome = (num: number) => {
-    let max = Math.min(Number(balance), Number(market.maxAmountAccepted));
+    const max = Math.min(Number(balance), Number(market.maxAmountAccepted));
     handleChange((num * max) / 100 + "");
   };
 

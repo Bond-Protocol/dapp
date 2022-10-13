@@ -1,23 +1,15 @@
-//@ts-nocheck
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { providers } from "services/owned-providers";
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import {
-  Token,
-  useListTokensGoerliQuery,
-  useListTokensMainnetQuery,
-} from "../generated/graphql";
-import { useCallback, useEffect, useState } from "react";
+import {calcLpPrice, LpPair} from "@bond-protocol/contract-library";
+import {providers} from "services/owned-providers";
+import {getSubgraphEndpoints} from "services/subgraph-endpoints";
+import {Token, useListTokensGoerliQuery, useListTokensMainnetQuery,} from "../generated/graphql";
+import {useCallback, useEffect, useState} from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {
-  CustomPriceSource,
-  SupportedPriceSource,
-} from "@bond-protocol/bond-library";
-import axios, { AxiosResponse } from "axios";
-import { useQuery } from "react-query";
-import { useAtom } from "jotai";
+import {CustomPriceSource, SupportedPriceSource} from "@bond-protocol/bond-library";
+import axios, {AxiosResponse} from "axios";
+import {useQuery} from "react-query";
+import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import { LpPair, calcLpPrice } from "@bond-protocol/contract-library";
 
 export interface PriceDetails {
   price: string;
@@ -26,6 +18,17 @@ export interface PriceDetails {
 
 export interface Price {
   [key: string]: PriceDetails;
+}
+
+export interface TokenDetails {
+  id: string;
+  address: string;
+  network: string;
+  logoUrl: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  lpPair: LpPair | undefined;
 }
 
 export const useTokens = () => {
@@ -48,11 +51,13 @@ export const useTokens = () => {
    */
   const { data: mainnetData, ...mainnetQuery } = useListTokensMainnetQuery({
     endpoint: endpoints[0],
+    // @ts-ignore
     enabled: !testnet,
   });
 
   const { data: goerliData, ...testnetQuery } = useListTokensGoerliQuery({
     endpoint: endpoints[1],
+    // @ts-ignore
     enabled: !!testnet,
   });
 
@@ -135,11 +140,11 @@ export const useTokens = () => {
   useEffect(() => {
     if (coingeckoQuery.data && customPriceQuery.data) {
       const currentPricesMap: Price = {};
-      const lpTokens: { value: Token; key: string }[] = [];
+      const lpTokens: { value: bondLibrary.LpToken; key: string }[] = [];
       bondLibrary.TOKENS.forEach(
-        (value: bondLibrary.Token, tokenKey: string) => {
+        (value: bondLibrary.Token | bondLibrary.LpToken, tokenKey: string) => {
           // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
-          if (value.lpType !== undefined) {
+          if ("lpType" in value && value.lpType !== undefined) {
             lpTokens.push({ value: value, key: tokenKey });
           } else {
             const prices: PriceDetails[] = [];
@@ -168,6 +173,7 @@ export const useTokens = () => {
                 };
               }
             );
+            // @ts-ignore
             currentPricesMap[tokenKey] = prices;
           }
         }
@@ -175,23 +181,32 @@ export const useTokens = () => {
 
       // Now we have the prices for the constituent tokens, we can calculate the LP pair prices
       lpTokens.forEach((token) => {
+        if (token.value.lpType === undefined) return;
         const split: string[] = token.key.split("_");
         const network = split[0];
         const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
+        // @ts-ignore
         token.value["token0"] = bondLibrary.TOKENS.get(
           token.value.token0Address
         );
+        // @ts-ignore
         token.value["token1"] = bondLibrary.TOKENS.get(
           token.value.token1Address
         );
 
+        // @ts-ignore
         token.value["token0"].price =
+          // @ts-ignore
           currentPricesMap[token.value.token0Address][0].price;
+
+        // @ts-ignore
         token.value["token1"].price =
+          // @ts-ignore
           currentPricesMap[token.value.token1Address][0].price;
 
         calcLpPrice(
           {
+            // @ts-ignore
             lpPair: token.value,
             address: split[1],
           },
@@ -201,9 +216,11 @@ export const useTokens = () => {
           .then((result) => {
             const prices: PriceDetails[] = [];
             prices[0] = {
+              // @ts-ignore
               price: result,
               source: "custom",
             };
+            // @ts-ignore
             currentPricesMap[token.key] = prices;
           })
           .catch((error) => console.log(error));
@@ -220,6 +237,7 @@ export const useTokens = () => {
     if (testnet) return;
     if (mainnetData && mainnetData.tokens) {
       const allTokens = mainnetData.tokens;
+      // @ts-ignore
       setMainnetTokens(allTokens);
     }
   }, [mainnetData, testnet]);
@@ -228,6 +246,7 @@ export const useTokens = () => {
     if (!testnet) return;
     if (goerliData && goerliData.tokens) {
       const allTokens = goerliData.tokens;
+      // @ts-ignore
       setTestnetTokens(allTokens);
     }
   }, [goerliData, testnet]);
@@ -246,6 +265,7 @@ export const useTokens = () => {
   function getPrice(id: string): number {
     const sources = currentPrices[id.toLowerCase()];
     if (!sources) return 0;
+    // @ts-ignore
     for (const source of sources) {
       if (source == undefined || source.price == undefined) {
         continue;
@@ -255,13 +275,15 @@ export const useTokens = () => {
     return 0;
   }
 
-  function getTokenDetails(token: any) {
+  function getTokenDetails(token: any): TokenDetails {
     const bondLibraryToken = bondLibrary.TOKENS.get(token.id);
 
     let pair: LpPair;
     if (token.lpPair != undefined) {
       pair = {
+        // @ts-ignore
         token0: getTokenDetails(token.lpPair.token0),
+        // @ts-ignore
         token1: getTokenDetails(token.lpPair.token1),
       };
     }
@@ -276,6 +298,7 @@ export const useTokens = () => {
       name: bondLibraryToken ? bondLibraryToken.name : token.name,
       symbol: bondLibraryToken ? bondLibraryToken.symbol : token.symbol,
       decimals: token.decimals,
+      // @ts-ignore
       lpPair: pair,
     };
   }

@@ -1,17 +1,16 @@
-//@ts-nocheck
-import { useTokens } from "hooks/useTokens";
-import { useQueries } from "react-query";
-import { useState } from "react";
+import {useTokens} from "hooks/useTokens";
+import {useQueries} from "react-query";
+import {useState} from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import { getProtocolByAddress, TOKENS } from "@bond-protocol/bond-library";
+import {CHAIN_ID, getProtocolByAddress} from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { useProvider } from "wagmi";
-import { providers } from "services/owned-providers";
-import { Market } from "src/generated/graphql";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
+import {useProvider} from "wagmi";
+import {providers} from "services/owned-providers";
+import {Market} from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import { useLoadMarkets } from "hooks/useLoadMarkets";
-import { useMyMarkets } from "hooks/useMyMarkets";
+import {useLoadMarkets} from "hooks/useLoadMarkets";
+import {useMyMarkets} from "hooks/useMyMarkets";
 
 export function useCalculatedMarkets() {
   const { markets: markets, isLoading: isMarketLoading } = useLoadMarkets();
@@ -48,9 +47,9 @@ export function useCalculatedMarkets() {
 
     const purchaseLink = bondLibrary.TOKENS.get(
       market.quoteToken.id
-    )?.purchaseLinks.get(market.network)
+    )?.purchaseLinks.get(market.network as CHAIN_ID)
       ? bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(
-          market.network
+          market.network as CHAIN_ID
         )
       : "https://app.sushi.com/swap";
 
@@ -101,9 +100,10 @@ export function useCalculatedMarkets() {
         },
         bondLibrary.TOKENS.get(market.quoteToken.id)
           ? bondLibrary.LP_TYPES.get(
+              // @ts-ignore
               bondLibrary.TOKENS.get(market.quoteToken.id)?.lpType
             )
-          : null
+          : undefined
       )
       .then((result: CalculatedMarket) => result);
   };

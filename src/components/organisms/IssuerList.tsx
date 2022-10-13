@@ -1,11 +1,10 @@
-//@ts-nocheck
-import { useEffect, useState } from "react";
-import { getProtocols } from "@bond-protocol/bond-library";
-import { IssuerCard } from "components/molecules/IssuerCard";
-import { alphabeticSort, numericSort } from "services/sort";
-import { useMarkets } from "hooks";
-import { useBondPurchases } from "hooks/useBondPurchases";
-import { useAtom } from "jotai";
+import {useEffect, useState} from "react";
+import {getProtocols, Protocol} from "@bond-protocol/bond-library";
+import {IssuerCard} from "components/molecules/IssuerCard";
+import {alphabeticSort, numericSort} from "services/sort";
+import {useMarkets} from "hooks";
+import {useBondPurchases} from "hooks/useBondPurchases";
+import {useAtom} from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 
 export const IssuerList = () => {
@@ -14,16 +13,16 @@ export const IssuerList = () => {
 
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [search, setSearch] = useState("");
-  const [sortedIssuers, setSortedIssuers] = useState(issuers);
+  const [sortedIssuers, setSortedIssuers] = useState<Protocol[]>(issuers);
   const [currentSort, setCurrentSort] = useState({
     sortBy: sortByTbv,
     ascending: false,
   });
 
   const sortIssuers = function (
-    compareFunction: (i1: string, i2: string) => number
+    compareFunction: (i1: Protocol, i2: Protocol) => number
   ) {
-    const arr: string[] = [];
+    const arr: Protocol[] = [];
     getProtocols(testnet).forEach((issuer) => {
       arr.push(issuer);
     });
@@ -36,7 +35,7 @@ export const IssuerList = () => {
         ? !currentSort.ascending
         : true;
 
-    sortIssuers((i1: string, i2: string) =>
+    sortIssuers((i1: Protocol, i2: Protocol) =>
       alphabeticSort(i1.name, i2.name, ascending)
     );
     setCurrentSort({ sortBy: sortByName, ascending: ascending });
@@ -48,19 +47,21 @@ export const IssuerList = () => {
         ? !currentSort.ascending
         : false;
 
-    sortIssuers((i1: string, i2: string) => {
+    sortIssuers((i1: Protocol, i2: Protocol) => {
       return numericSort(
-        tbvByProtocol.get(i1.id),
-        tbvByProtocol.get(i2.id),
+        tbvByProtocol.get(i1.id) || 0,
+        tbvByProtocol.get(i2.id) || 0,
         ascending
       );
     });
     setCurrentSort({ sortBy: sortByTbv, ascending: ascending });
   }
 
+  /*
   const updateSearch = () => {
     setSearch(event.target.value);
   };
+   */
 
   useEffect(() => {
     currentSort.sortBy();

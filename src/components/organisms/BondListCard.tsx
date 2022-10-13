@@ -1,9 +1,11 @@
-import * as React from "react";
 import { FC, useEffect, useState } from "react";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { CHAINS, getProtocolByAddress } from "@bond-protocol/bond-library";
-import TestIcon from "../../assets/icons/test-icon";
+import {
+  CHAINS,
+  PROTOCOL_NAMES,
+  getProtocolByAddress,
+} from "@bond-protocol/bond-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
 import { formatLongNumber, getBlockExplorer } from "../../utils";
 import { providers } from "services/owned-providers";
@@ -57,10 +59,12 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
     "address"
   );
 
+  const olympusBond = protocol?.name === PROTOCOL_NAMES.OLYMPUS_DAO;
+
   const showOwnerBalanceWarning =
-    Number(market.maxPayout) > Number(market.ownerBalance);
+    Number(market.maxPayout) > Number(market.ownerBalance) && !olympusBond;
   const showOwnerAllowanceWarning =
-    Number(market.maxPayout) > Number(market.ownerAllowance);
+    Number(market.maxPayout) > Number(market.ownerAllowance) && !olympusBond;
 
   useEffect(() => {
     if (gasPrice && estimatedGas) {
@@ -104,11 +108,11 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   }, [amount, getPayoutFor, market.marketId, market.auctioneer]);
 
   useEffect(() => {
-    estimate()?.then((result) => {
+    void estimate()?.then((result) => {
       setEstimatedGas(Number(result));
     });
 
-    getGasPrice(market.network).then((result) => {
+    void getGasPrice(market.network).then((result) => {
       setGasPrice(result);
     });
   }, [payout]);
@@ -297,7 +301,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
               <div>
                 <p className="py-1">
                   WARNING: This market allows a max payout of {market.maxPayout}{" "}
-                  {market.payoutToken.symbol}, however the market owner's
+                  {market.payoutToken.symbol}, however the market owner&apos;s
                   allowance is limited to {market.ownerAllowance}{" "}
                   {market.payoutToken.symbol}.
                 </p>

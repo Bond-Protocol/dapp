@@ -1,5 +1,5 @@
-import { Button } from "../atoms/Button";
-import { ModalTitle } from "../atoms/ModalTitle";
+import {Button} from "../atoms/Button";
+import {ModalTitle} from "../atoms/ModalTitle";
 import useBrowserStorage from "../../hooks/useBrowserStorage";
 
 const tcLink = (
@@ -11,7 +11,9 @@ const tcTop = <p>This dApp is in βeta. </p>;
 const tcMid = <p>Use at your own risk.</p>;
 
 const tcBottom = (
-  <p className="mt-5">By clicking "Accept" you agree to our {tcLink}.</p>
+  <p className="mt-5">
+    By clicking &quot;Accept&quot; you agree to our {tcLink}.
+  </p>
 );
 
 export const GeneralTermsDialog = (props: { onAccept: () => void }) => {
