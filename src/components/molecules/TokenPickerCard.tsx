@@ -8,7 +8,7 @@ import {TokenInfo} from "components/organisms";
 
 export type TokenPickerCardProps = {
   token?: TokenInfo;
-  verifiedToken?: Partial<Token & { id?: string; }>;
+  verifiedToken?: Partial<Token & { id?: string }>;
   className?: string;
   checkboxLabel?: string;
   label?: string;

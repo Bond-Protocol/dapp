@@ -49,13 +49,13 @@ export const useTokens = () => {
   Load the data from the subgraph.
   Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
    */
-  const {data: mainnetData, ...mainnetQuery} = useListTokensMainnetQuery({
+  const { data: mainnetData, ...mainnetQuery } = useListTokensMainnetQuery({
     endpoint: endpoints[0],
     // @ts-ignore
     enabled: !testnet,
   });
 
-  const {data: goerliData, ...testnetQuery} = useListTokensGoerliQuery({
+  const { data: goerliData, ...testnetQuery } = useListTokensGoerliQuery({
     endpoint: endpoints[1],
     // @ts-ignore
     enabled: !!testnet,
@@ -145,7 +145,7 @@ export const useTokens = () => {
         (value: bondLibrary.Token | bondLibrary.LpToken, tokenKey: string) => {
           // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
           if ("lpType" in value && value.lpType !== undefined) {
-            lpTokens.push({value: value, key: tokenKey});
+            lpTokens.push({ value: value, key: tokenKey });
           } else {
             const prices: PriceDetails[] = [];
             value.priceSources.forEach(
@@ -304,27 +304,27 @@ export const useTokens = () => {
   }
 
   const getTokenDetailsFromChain = useCallback(async function (
-      address: string,
-      chain: string
-    ) {
-      const contract = contractLibrary.IERC20__factory.connect(
-        address,
-        providers[chain]
-      );
-      try {
-        const [name, symbol] = await Promise.all([
-          contract.name(),
-          contract.symbol(),
-        ]);
+    address: string,
+    chain: string
+  ) {
+    const contract = contractLibrary.IERC20__factory.connect(
+      address,
+      providers[chain]
+    );
+    try {
+      const [name, symbol] = await Promise.all([
+        contract.name(),
+        contract.symbol(),
+      ]);
 
-        return {name, symbol};
-      } catch (e: any) {
-        const error =
-          "Not an ERC-20 token, please double check the address and chain.";
-        throw Error(error);
-      }
-    },
-    []);
+      return { name, symbol };
+    } catch (e: any) {
+      const error =
+        "Not an ERC-20 token, please double check the address and chain.";
+      throw Error(error);
+    }
+  },
+  []);
 
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks

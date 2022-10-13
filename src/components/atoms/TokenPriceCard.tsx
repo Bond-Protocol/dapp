@@ -9,7 +9,7 @@ export type TokenPriceCardProps = {
   symbol?: string;
   decimals?: string | number;
   verified?: boolean;
-  verifiedToken?: Partial<Token & { id?: string; }>;
+  verifiedToken?: Partial<Token & { id?: string }>;
   className?: string;
   link?: string;
   blockExplorerName?: string;

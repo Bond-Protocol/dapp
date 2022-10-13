@@ -12,7 +12,7 @@ const initialState = {
     myMarkets: false,
     tokens: false,
     priceCalcs: false,
-    myPriceCalcs: false
+    myPriceCalcs: false,
   },
   refetchAllMarkets: () => {},
   refetchMyMarkets: () => {},
@@ -29,8 +29,9 @@ export const useMarkets = () => {
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
   const calculatedMarkets = useCalculatedMarkets();
 
-  // @ts-ignore
-  return (<MarketContext.Provider value={calculatedMarkets}>
+  return (
+    // @ts-ignore
+    <MarketContext.Provider value={calculatedMarkets}>
       {children}
     </MarketContext.Provider>
   );

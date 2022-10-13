@@ -62,7 +62,7 @@ export const MyBondsList = () => {
     switchNetwork?.(newChain);
   };
 
-  async function redeemBond(bond: OwnerBalance) {
+  async function redeemBond(bond: Partial<OwnerBalance>) {
     if (!bond.bondToken) return;
     const redeemTx: ContractTransaction = await redeem(
       bond.bondToken.id,
@@ -106,7 +106,7 @@ export const MyBondsList = () => {
             </thead>
 
             <tbody className="gap-x-2">
-              {myBonds.map((bond: OwnerBalance) => {
+              {myBonds.map((bond: Partial<OwnerBalance>) => {
                 if (!bond.bondToken || !bond.bondToken.underlying) return;
 
                 const date = new Date(bond.bondToken.expiry * 1000);
@@ -119,18 +119,21 @@ export const MyBondsList = () => {
                 balance = trim(balance, calculateTrimDigits(balance));
 
                 let usdPrice: number | string =
-                  Number(getPrice(bond.bondToken.underlying.id)) * Number(balance);
+                  Number(getPrice(bond.bondToken.underlying.id)) *
+                  Number(balance);
                 usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
 
                 const underlying: TokenDetails =
                   bond.bondToken && getTokenDetails(bond.bondToken.underlying);
+
                 const isCorrectNetwork =
                   bond.bondToken.network === chain?.network;
+
                 const handleClaim = isCorrectNetwork
                   ? () => redeemBond(bond)
                   : (e: React.BaseSyntheticEvent) =>
-                    // @ts-ignore
-                    switchChain(e, bond.bondToken.network);
+                      // @ts-ignore
+                      switchChain(e, bond.bondToken.network);
 
                 return (
                   <tr key={bond.bondToken.id}>

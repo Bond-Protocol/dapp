@@ -42,7 +42,7 @@ export type TokenInfo = {
   link: string;
   blockExplorerName: string;
   price: string;
-}
+};
 
 export type CreateMarketPageProps = {
   onConfirm: (marketData: any) => void;
@@ -51,15 +51,15 @@ export type CreateMarketPageProps = {
 
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const { getPrice } = useTokens();
-  const [payoutTokenInfo, setPayoutTokenInfo] =
-    useState<TokenInfo>();
-  const [quoteTokenInfo, setQuoteTokenInfo] =
-    useState<TokenInfo>();
+  const [payoutTokenInfo, setPayoutTokenInfo] = useState<TokenInfo>();
+  const [quoteTokenInfo, setQuoteTokenInfo] = useState<TokenInfo>();
 
-  const [libraryPayoutToken, setLibraryPayoutToken] =
-    useState<bondLibrary.Token | undefined>(undefined);
-  const [libraryQuoteToken, setLibraryQuoteToken] =
-    useState<bondLibrary.Token | undefined>(undefined);
+  const [libraryPayoutToken, setLibraryPayoutToken] = useState<
+    bondLibrary.Token | undefined
+  >(undefined);
+  const [libraryQuoteToken, setLibraryQuoteToken] = useState<
+    bondLibrary.Token | undefined
+  >(undefined);
   const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
   const [protocol, setProtocol] = useState<Protocol | null>(null);
@@ -520,7 +520,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         contract.decimals(),
       ]);
       const price: number = getPrice(selectedChain + "_" + address) || -1;
-      let formattedPrice: string = "0";
+      let formattedPrice = "0";
 
       if (price != -1) {
         const digits = price > 1 ? 2 : price > 0.001 ? 4 : 6;
@@ -539,13 +539,18 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       link = link.replace("#", "address");
       link = link.concat(address);
 
-      const result: TokenInfo = { name, symbol, decimals, link, blockExplorerName, price: formattedPrice };
+      const result: TokenInfo = {
+        name,
+        symbol,
+        decimals,
+        link,
+        blockExplorerName,
+        price: formattedPrice,
+      };
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
     } catch (e: any) {
       console.log(e.message);
-      isPayout
-        ? setPayoutTokenInfo(undefined)
-        : setQuoteTokenInfo(undefined);
+      isPayout ? setPayoutTokenInfo(undefined) : setQuoteTokenInfo(undefined);
     }
   };
 
@@ -581,11 +586,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   rules={{ required: "Required" }}
                   render={({ field }) => (
                     <>
-                    <ChainPicker
-                      {...field}
-                      label="Chain"
-                      defaultValue={props.initialValues?.chain}
-                    />
+                      <ChainPicker
+                        {...field}
+                        label="Chain"
+                        defaultValue={props.initialValues?.chain}
+                      />
 
                       {errors.chain?.type === "required" && (
                         <div className="my-1 justify-self-start text-xs font-light text-red-500">
@@ -603,7 +608,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   rules={{
                     required: "Required",
                     validate: {
-                      isAddress: (address: string) => ethers.utils.isAddress(address),
+                      isAddress: (address: string) =>
+                        ethers.utils.isAddress(address),
                     },
                   }}
                   render={({ field }) => (
@@ -651,8 +657,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <p>
                       You can still create a market which will be active on the
                       contract level. However, it will *NOT* appear on the
-                      BondProtocol dapp&apos;s market list unless your protocol is
-                      verified. You will need your own UI, or another way for
+                      BondProtocol dapp&apos;s market list unless your protocol
+                      is verified. You will need your own UI, or another way for
                       users to interact with the bond contract, for example via
                       Etherscan.
                     </p>

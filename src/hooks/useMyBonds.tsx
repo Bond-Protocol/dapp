@@ -21,12 +21,12 @@ export function useMyBonds() {
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [testnetBonds, setTestnetBonds] = useState<Partial<OwnerBalance>[]>([]);
   const [mainnetBonds, setMainnetBonds] = useState<Partial<OwnerBalance>[]>([]);
-  const [testnetErc20Bonds, setTestnetErc20Bonds] = useState<Partial<OwnerBalance>[]>(
-    []
-  );
-  const [mainnetErc20Bonds, setMainnetErc20Bonds] = useState<Partial<OwnerBalance>[]>(
-    []
-  );
+  const [testnetErc20Bonds, setTestnetErc20Bonds] = useState<
+    Partial<OwnerBalance>[]
+  >([]);
+  const [mainnetErc20Bonds, setMainnetErc20Bonds] = useState<
+    Partial<OwnerBalance>[]
+  >([]);
   const [myBonds, setMyBonds] = useState<Partial<OwnerBalance>[]>([]);
   const [refetchRequest, setRefetchRequest] = useState(0);
 
@@ -154,8 +154,8 @@ export function useMyBonds() {
     setMyBonds(
       bonds.sort(
         (n1: Partial<OwnerBalance>, n2: Partial<OwnerBalance>) =>
-        // @ts-ignore
-        n1.bondToken.expiry - n2.bondToken.expiry
+          // @ts-ignore
+          n1.bondToken.expiry - n2.bondToken.expiry
       )
     );
   }, [
