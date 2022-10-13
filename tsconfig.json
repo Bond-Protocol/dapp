@@ -21,6 +21,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
+<<<<<<< HEAD
       "src/*": [
         "src/*"
       ],
@@ -69,6 +70,25 @@
     "node_modules",
     "src/stories"
   ],
+=======
+      "components/*": ["src/components/*"],
+      "components": ["src/components/index"],
+      "context/*": ["src/context/*"],
+      "context": ["src/context/index"],
+      "pages/*": ["src/pages/*"],
+      "pages": ["src/pages/index"],
+      "services/*": ["src/services/*"],
+      "services": ["src/services/index"],
+      "hooks/*": ["src/hooks/*"],
+      "hooks": ["src/hooks/index"],
+      "utils/*": ["src/hooks/*"],
+      "utils": ["src/hooks/index"],
+      "assets/*": ["src/assets/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "src/stories"],
+>>>>>>> f6ca2e8 (initial chart setup)
   "references": [
     {
       "path": "./tsconfig.node.json"
