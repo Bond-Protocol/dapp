@@ -22,7 +22,7 @@ module.exports = {
       path.resolve(__dirname, "../vite.config.ts")
     );
 
-    const { resolve, ...other } = userConfig;
+    const { resolve } = userConfig;
 
     return mergeConfig(config, {
       resolve,

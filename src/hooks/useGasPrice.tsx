@@ -1,5 +1,5 @@
 import { providers } from "services/owned-providers";
-import { CHAINS, TOKENS } from "@bond-protocol/bond-library";
+import { CHAINS} from "@bond-protocol/bond-library";
 import { ethers } from "ethers";
 import { useTokens } from "hooks/useTokens";
 import { NativeCurrency } from "@bond-protocol/bond-library/dist/chains/chains";
