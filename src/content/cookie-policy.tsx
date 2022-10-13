@@ -37,10 +37,10 @@ export const cookiePolicy = {
             You can usually use the browser that you are viewing the Site
             through to enable, disable or delete cookies. To do this, follow the
             instructions provided by your browser (usually located within the
-            "Help", "Tools" or "Edit" settings). Please note that if you set
-            your browser to disable cookies, you may not be able to use all
-            features of the Site. You can find out more information about how to
-            change your browser cookie settings at{" "}
+            &quot;Help&quot;, &quot;Tools&quot; or &quot;Edit&quot; settings).
+            Please note that if you set your browser to disable cookies, you may
+            not be able to use all features of the Site. You can find out more
+            information about how to change your browser cookie settings at{" "}
             <a
               href="https://www.allaboutcookies.org"
               target="_blank"

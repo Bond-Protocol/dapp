@@ -5,11 +5,12 @@ export const terms = {
     <>
       <p>
         Welcome to https://app.bondprotocol.finance, a website and hosted user
-        application (the "Site") provided by Bond Labs Ltd. ("Bond", "we",
-        "our", or "us"). The Site provides access to a decentralized protocol
-        that allows users to deploy and manage bonded assets (the "Bond
-        Protocol" or the "Protocol"). The Site is one, but not the exclusive,
-        means of accessing the Protocol. These Terms of Use ("Terms") explain
+        application (the &quot;Site&quot;) provided by Bond Labs Ltd.
+        (&quot;Bond&quot;, &quot;we&quot;, &quot;our&quot;, or &quot;us&quot;).
+        The Site provides access to a decentralized protocol that allows users
+        to deploy and manage bonded assets (the &quot;Bond Protocol&quot; or the
+        &quot;Protocol&quot;). The Site is one, but not the exclusive, means of
+        accessing the Protocol. These Terms of Use (&quot;Terms&quot;) explain
         the terms and conditions by which you may access and use the Site. By
         accessing or using the Site, you signify that you have read, understand,
         and agree to be bound by these Terms in their entirety. If you do not
@@ -17,11 +18,11 @@ export const terms = {
         use the Site.
       </p>
       <p className="mt-4 font-bold">
-        PLEASE NOTE: THE "DISPUTE RESOLUTION" SECTION OF THESE TERMS CONTAINS AN
-        ARBITRATION CLAUSE THAT REQUIRES DISPUTES TO BE ARBITRATED ON AN
-        INDIVIDUAL BASIS, AND PROHIBITS CLASS ACTION CLAIMS. IT AFFECTS HOW
-        DISPUTES BETWEEN YOU AND US ARE RESOLVED. BY ACCEPTING THESE TERMS, YOU
-        AGREE TO BE BOUND BY THIS ARBITRATION PROVISION. PLEASE READ IT
+        PLEASE NOTE: THE &quot;DISPUTE RESOLUTION&quot; SECTION OF THESE TERMS
+        CONTAINS AN ARBITRATION CLAUSE THAT REQUIRES DISPUTES TO BE ARBITRATED
+        ON AN INDIVIDUAL BASIS, AND PROHIBITS CLASS ACTION CLAIMS. IT AFFECTS
+        HOW DISPUTES BETWEEN YOU AND US ARE RESOLVED. BY ACCEPTING THESE TERMS,
+        YOU AGREE TO BE BOUND BY THIS ARBITRATION PROVISION. PLEASE READ IT
         CAREFULLY.
       </p>
     </>
@@ -56,7 +57,7 @@ export const terms = {
             United States. Finally, you represent that your access and use of
             the Site will fully comply with all applicable laws and regulations,
             and that you will not access or use the Site to conduct, promote, or
-            otherwise facilitate any illegal activity.,
+            otherwise facilitate any illegal activity.
           </p>
         </>
       ),
@@ -173,23 +174,23 @@ export const terms = {
       content: (
         <>
           <p>
-            THE SITE IS PROVIDED ON AN "AS-IS" AND "AS-AVAILABLE" BASIS. TO THE
-            MAXIMUM EXTENT PERMITTED BY LAW, BOND WILL NOT BE LIABLE FOR ANY
-            DAMAGES OF ANY KIND ARISING FROM THE USE OF THE WEBAPP, INCLUDING,
-            BUT NOT LIMITED TO INDIRECT, INCIDENTAL, PUNITIVE, EXEMPLARY,
-            SPECIAL OR CONSEQUENTIAL DAMAGES, EVEN IF WE HAVE BEEN ADVISED OF
-            THE POSSIBILITY OF SUCH DAMAGES. YOU AGREE THAT YOUR USE OF THE SITE
-            WILL BE AT YOUR SOLE RISK. BOND IS NOT RESPONSIBLE FOR ANY DAMAGES
-            OR LOSSES THAT RESULT FROM YOUR USE OF THE SITE, INCLUDING, BUT NOT
-            LIMITED TO, YOUR USE OR INABILITY TO USE THE SITE; ANY CHANGES TO OR
-            INACCESSIBILITY OR TERMINATION OF THE SITE; ANY DELAY, FAILURE,
-            UNAUTHORIZED ACCESS TO, OR ALTERATION OF ANY TRANSMISSION OR DATA;
-            ANY TRANSACTION OR AGREEMENT ENTERED INTO THROUGH THE SITE; ANY
-            ACTIVITIES OR COMMUNICATIONS OF THIRD PARTIES; OR ANY DATA OR
-            MATERIAL FROM A THIRD PERSON ACCESSED ON OR THROUGH THE SITE. WE
-            MAKE NO WARRANTIES OR REPRESENTATIONS ABOUT THE ACCURACY OR
-            COMPLETENESS OF THE SITE'S CONTENT OR THE CONTENT OF ANY WEBSITES
-            LINKED TO THE SITE.
+            THE SITE IS PROVIDED ON AN &quot;AS-IS&quot; AND
+            &quot;AS-AVAILABLE&quot; BASIS. TO THE MAXIMUM EXTENT PERMITTED BY
+            LAW, BOND WILL NOT BE LIABLE FOR ANY DAMAGES OF ANY KIND ARISING
+            FROM THE USE OF THE WEBAPP, INCLUDING, BUT NOT LIMITED TO INDIRECT,
+            INCIDENTAL, PUNITIVE, EXEMPLARY, SPECIAL OR CONSEQUENTIAL DAMAGES,
+            EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. YOU
+            AGREE THAT YOUR USE OF THE SITE WILL BE AT YOUR SOLE RISK. BOND IS
+            NOT RESPONSIBLE FOR ANY DAMAGES OR LOSSES THAT RESULT FROM YOUR USE
+            OF THE SITE, INCLUDING, BUT NOT LIMITED TO, YOUR USE OR INABILITY TO
+            USE THE SITE; ANY CHANGES TO OR INACCESSIBILITY OR TERMINATION OF
+            THE SITE; ANY DELAY, FAILURE, UNAUTHORIZED ACCESS TO, OR ALTERATION
+            OF ANY TRANSMISSION OR DATA; ANY TRANSACTION OR AGREEMENT ENTERED
+            INTO THROUGH THE SITE; ANY ACTIVITIES OR COMMUNICATIONS OF THIRD
+            PARTIES; OR ANY DATA OR MATERIAL FROM A THIRD PERSON ACCESSED ON OR
+            THROUGH THE SITE. WE MAKE NO WARRANTIES OR REPRESENTATIONS ABOUT THE
+            ACCURACY OR COMPLETENESS OF THE SITE'S CONTENT OR THE CONTENT OF ANY
+            WEBSITES LINKED TO THE SITE.
           </p>
           <p className="mt-4">
             BOND ASSUMES NO LIABILITY OR RESPONSIBILITY FOR ANY (1) ERRORS,
@@ -299,17 +300,17 @@ export const terms = {
             Any claim or controversy arising out of or relating to the Site,
             these Terms, or any other acts or omissions for which you may
             contend that we are liable, including (but not limited to) any claim
-            or controversy as to arbitrability ("Dispute"), shall be finally and
-            exclusively settled by arbitration under the JAMS Optional Expedited
-            Arbitration Procedures. You understand that you are required to
-            resolve all Disputes by binding arbitration. The arbitration shall
-            be held on a confidential basis before a single arbitrator, who
-            shall be selected pursuant to JAMS rules. The arbitration will be
-            held in British Virgin Islands, unless you and we both agree to hold
-            it elsewhere. Unless we agree otherwise, the arbitrator may not
-            consolidate your claims with those of any other party. Any judgment
-            on the award rendered by the arbitrator may be entered in any court
-            of competent jurisdiction.
+            or controversy as to arbitrability (&quot;Dispute&quot;), shall be
+            finally and exclusively settled by arbitration under the JAMS
+            Optional Expedited Arbitration Procedures. You understand that you
+            are required to resolve all Disputes by binding arbitration. The
+            arbitration shall be held on a confidential basis before a single
+            arbitrator, who shall be selected pursuant to JAMS rules. The
+            arbitration will be held in British Virgin Islands, unless you and
+            we both agree to hold it elsewhere. Unless we agree otherwise, the
+            arbitrator may not consolidate your claims with those of any other
+            party. Any judgment on the award rendered by the arbitrator may be
+            entered in any court of competent jurisdiction.
           </p>
         </>
       ),
