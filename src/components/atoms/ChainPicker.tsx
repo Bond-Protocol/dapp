@@ -1,14 +1,12 @@
-//@ts-nocheck
-import { Select } from "./Select";
-import { Input } from "./Input";
-import { useEffect, useState } from "react";
+import {Select} from "./Select";
+import {useEffect, useState} from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
 
 export type ChainPickerProps = {
   className?: string;
   label?: string;
   defaultValue?: { label: string; id: string };
-  onChange?: (chain: { label: string; id: string }) => void;
+  onChange?: (chain: string) => void;
 };
 
 const options = bondLibrary.SUPPORTED_CHAINS.map((supportedChain) => ({

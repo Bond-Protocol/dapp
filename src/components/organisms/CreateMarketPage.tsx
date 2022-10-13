@@ -1,34 +1,24 @@
-//@ts-nocheck
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import {useEffect, useState} from "react";
+import {Controller, useForm, useWatch} from "react-hook-form";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { BOND_TYPE } from "@bond-protocol/contract-library";
+import {BOND_TYPE} from "@bond-protocol/contract-library";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
-import { providers } from "services/owned-providers";
-import { ethers } from "ethers";
-import { Button, FlatSelect, Input, TermPicker } from "components";
-import { useTokens } from "hooks";
-import {
-  calculateTrimDigits,
-  trim,
-  trimAsNumber,
-} from "@bond-protocol/contract-library/dist/core/utils";
-import {
-  Accordion,
-  DatePicker,
-  SummaryCard,
-  TokenPickerCard,
-} from "components/molecules";
-import { ChainPicker } from "components/atoms/ChainPicker";
+import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
+import {providers} from "services/owned-providers";
+import {ethers} from "ethers";
+import {Button, FlatSelect, Input, TermPicker} from "components";
+import {useTokens} from "hooks";
+import {calculateTrimDigits, trim, trimAsNumber,} from "@bond-protocol/contract-library/dist/core/utils";
+import {Accordion, DatePicker, SummaryCard, TokenPickerCard,} from "components/molecules";
+import {ChainPicker} from "components/atoms/ChainPicker";
 
 const vestingOptions = [
   { label: "FIXED EXPIRY", value: 0 },
   { label: "FIXED TERM", value: 1 },
 ];
 
-const getCustomCapacityLabel = (quote, payout) => {
+const getCustomCapacityLabel = (quote?: string, payout?: string) => {
   const sameToken = payout === quote;
 
   return [
@@ -45,6 +35,15 @@ const formDefaults = {
   chain: "mainnet",
 };
 
+export type TokenInfo = {
+  name: string;
+  symbol: string;
+  decimals: number;
+  link: string;
+  blockExplorerName: string;
+  price: string;
+}
+
 export type CreateMarketPageProps = {
   onConfirm: (marketData: any) => void;
   initialValues?: any;
@@ -53,14 +52,14 @@ export type CreateMarketPageProps = {
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const { getPrice } = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] =
-    useState<Partial<contractLibrary.Token & { error?: string }>>();
+    useState<TokenInfo>();
   const [quoteTokenInfo, setQuoteTokenInfo] =
-    useState<Partial<contractLibrary.Token & { error?: string }>>();
+    useState<TokenInfo>();
 
   const [libraryPayoutToken, setLibraryPayoutToken] =
-    useState<bondLibrary.Token | null>(null);
+    useState<bondLibrary.Token | undefined>(undefined);
   const [libraryQuoteToken, setLibraryQuoteToken] =
-    useState<bondLibrary.Token | null>(null);
+    useState<bondLibrary.Token | undefined>(undefined);
   const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
   const [protocol, setProtocol] = useState<Protocol | null>(null);
@@ -189,9 +188,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   useEffect(() => {
     setShowTokenWarning(
       (ethers.utils.isAddress(payoutTokenAddress.address) &&
-        libraryPayoutToken === null) ||
+        libraryPayoutToken === undefined) ||
         (ethers.utils.isAddress(quoteTokenAddress.address) &&
-          libraryQuoteToken === null)
+          libraryQuoteToken === undefined)
     );
   }, [
     payoutTokenAddress,
@@ -303,7 +302,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         ).toFixed(0)
       ) + 1;
 
-    let string;
+    let string = "";
     if (vestingType === 0 && days >= 0) {
       if (isNaN(days)) {
         string = "";
@@ -397,6 +396,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   ];
 
   const onSubmit = (data: any) => {
+    if (!payoutTokenInfo || !quoteTokenInfo) return;
+
     let vesting;
     if (data.vestingType === 0) {
       vesting = data.expiryDate;
@@ -422,7 +423,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const minPriceDecimalDiff = Number(minPrice.substring(minSymbolIndex));
 
     const tokenDecimalOffset =
-      payoutTokenInfo?.decimals - quoteTokenInfo?.decimals;
+      payoutTokenInfo.decimals - quoteTokenInfo.decimals;
 
     let priceDecimalOffset = priceDecimalDiff / 2;
 
@@ -435,8 +436,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const exp =
       36 +
       scaleAdjustment +
-      quoteTokenInfo?.decimals -
-      payoutTokenInfo?.decimals +
+      quoteTokenInfo.decimals -
+      payoutTokenInfo.decimals +
       priceDecimalDiff;
 
     // Calculate the decimal difference in the initial price and minimum price to offset the exponent
@@ -499,7 +500,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   };
 
   const getTokenInfo = async (address: string, isPayout: boolean) => {
-    const token = bondLibrary.getToken(selectedChain + "_" + address);
+    const token: any = bondLibrary.getToken(selectedChain + "_" + address);
     if (token) token.id = selectedChain + "_" + address;
 
     if (isPayout) {
@@ -518,11 +519,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         contract.symbol(),
         contract.decimals(),
       ]);
-      let price = getPrice(selectedChain + "_" + address) || "-1";
+      const price: number = getPrice(selectedChain + "_" + address) || -1;
+      let formattedPrice: string = "0";
 
-      if (price != "-1") {
+      if (price != -1) {
         const digits = price > 1 ? 2 : price > 0.001 ? 4 : 6;
-        price = new Intl.NumberFormat("en-US", {
+        formattedPrice = new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",
           maximumFractionDigits: digits,
@@ -531,19 +533,19 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       }
 
       const blockExplorerName: string =
-        bondLibrary.CHAINS.get(selectedChain).blockExplorerName;
+        bondLibrary.CHAINS.get(selectedChain)?.blockExplorerName || "";
       let link: string =
-        bondLibrary.CHAINS.get(selectedChain).blockExplorerUrls[0];
+        bondLibrary.CHAINS.get(selectedChain)?.blockExplorerUrls[0] || "";
       link = link.replace("#", "address");
       link = link.concat(address);
 
-      const result = { name, symbol, decimals, link, blockExplorerName, price };
+      const result: TokenInfo = { name, symbol, decimals, link, blockExplorerName, price: formattedPrice };
       isPayout ? setPayoutTokenInfo(result) : setQuoteTokenInfo(result);
     } catch (e: any) {
       console.log(e.message);
       isPayout
-        ? setPayoutTokenInfo({ address: "invalid" })
-        : setQuoteTokenInfo({ address: "invalid" });
+        ? setPayoutTokenInfo(undefined)
+        : setQuoteTokenInfo(undefined);
     }
   };
 
@@ -551,7 +553,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     if (ethers.utils.isAddress(payoutTokenAddress.address)) {
       void getTokenInfo(payoutTokenAddress.address, true);
     } else {
-      setPayoutTokenInfo({ address: "invalid" });
+      setPayoutTokenInfo(undefined);
     }
   }, [payoutTokenAddress, selectedChain]);
 
@@ -559,7 +561,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     if (ethers.utils.isAddress(quoteTokenAddress.address)) {
       void getTokenInfo(quoteTokenAddress.address, false);
     } else {
-      setQuoteTokenInfo({ address: "invalid" });
+      setQuoteTokenInfo(undefined);
     }
   }, [quoteTokenAddress, selectedChain]);
 
@@ -578,11 +580,19 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   control={control}
                   rules={{ required: "Required" }}
                   render={({ field }) => (
+                    <>
                     <ChainPicker
                       {...field}
                       label="Chain"
                       defaultValue={props.initialValues?.chain}
                     />
+
+                      {errors.chain?.type === "required" && (
+                        <div className="my-1 justify-self-start text-xs font-light text-red-500">
+                          <>{errors.chain?.message}</>
+                        </div>
+                      )}
+                    </>
                   )}
                 />
               </div>
@@ -593,10 +603,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   rules={{
                     required: "Required",
                     validate: {
-                      isAddress: (value: {
-                        address: string;
-                        confirmed: boolean;
-                      }) => ethers.utils.isAddress(value),
+                      isAddress: (address: string) => ethers.utils.isAddress(address),
                     },
                   }}
                   render={({ field }) => (
@@ -619,7 +626,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
                       {errors.marketOwnerAddress?.type === "required" && (
                         <div className="my-1 justify-self-start text-xs font-light text-red-500">
-                          {errors.marketOwnerAddress?.message}
+                          <>{errors.marketOwnerAddress?.message}</>
                         </div>
                       )}
 
@@ -734,7 +741,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         checkboxLabel="I confirm this is the token"
                         token={quoteTokenInfo}
                         verifiedToken={libraryQuoteToken}
-                        verified={libraryQuoteToken !== null}
+                        verified={libraryQuoteToken !== undefined}
                         defaultValue={props.initialValues?.quoteToken}
                         errorMessage={errors.quoteToken}
                       />
@@ -794,7 +801,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
                         {errors.payoutTokenPrice?.type === "required" && (
                           <div className="my-1 justify-self-start text-xs font-light text-red-500">
-                            {errors.payoutTokenPrice?.message}
+                            <>{errors.payoutTokenPrice?.message}</>
                           </div>
                         )}
 
@@ -828,7 +835,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
                         {errors.quoteTokenPrice?.type === "required" && (
                           <div className="my-1 justify-self-start text-xs font-light text-red-500">
-                            {errors.quoteTokenPrice?.message}
+                            <>{errors.quoteTokenPrice?.message}</>
                           </div>
                         )}
 
@@ -879,7 +886,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
                 {errors.minExchangeRate?.type === "required" && (
                   <div className="my-1 justify-self-start text-xs font-light text-red-500">
-                    {errors.minExchangeRate?.message}
+                    <>{errors.minExchangeRate?.message}</>
                   </div>
                 )}
 
@@ -905,7 +912,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
                         {errors.marketCapacity?.type === "required" && (
                           <div className="my-1 text-xs font-light text-red-500">
-                            {errors.marketCapacity?.message}
+                            <>{errors.marketCapacity?.message}</>
                           </div>
                         )}
 
@@ -1055,7 +1062,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
                         {errors.bondsPerWeek?.type === "required" && (
                           <div className="my-1 justify-self-start text-xs font-light text-red-500">
-                            {errors.bondsPerWeek?.message}
+                            <>{errors.bondsPerWeek?.message}</>
                           </div>
                         )}
 
@@ -1083,7 +1090,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
                         {errors.debtBuffer?.type === "required" && (
                           <div className="my-1 justify-self-start text-xs font-light text-red-500">
-                            {errors.debtBuffer?.message}
+                            <>{errors.debtBuffer?.message}</>
                           </div>
                         )}
 

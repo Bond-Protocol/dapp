@@ -1,15 +1,15 @@
-import { Token } from "@bond-protocol/contract-library";
-import { Link } from "../atoms/Link";
-import { useTokens } from "hooks";
-import { calculateTrimDigits } from "@bond-protocol/contract-library/dist/core/utils";
-import { useEffect, useState } from "react";
+import {Token} from "@bond-protocol/contract-library";
+import {Link} from "../atoms/Link";
+import {useTokens} from "hooks";
+import {calculateTrimDigits} from "@bond-protocol/contract-library/dist/core/utils";
+import {useEffect, useState} from "react";
 
 export type TokenPriceCardProps = {
   address?: string;
   symbol?: string;
   decimals?: string | number;
   verified?: boolean;
-  verifiedToken?: Token;
+  verifiedToken?: Partial<Token & { id?: string; }>;
   className?: string;
   link?: string;
   blockExplorerName?: string;
@@ -21,7 +21,7 @@ export const TokenPriceCard = (props: TokenPriceCardProps) => {
   const [price, setPrice] = useState<number | string>("");
 
   useEffect(() => {
-    if (!props.verifiedToken) return;
+    if (!props.verifiedToken || !props.verifiedToken.id) return;
     const digits = calculateTrimDigits(getPrice(props.verifiedToken.id));
     setPrice(
       new Intl.NumberFormat("en-US", {

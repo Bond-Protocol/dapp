@@ -1,15 +1,14 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
-import { Token } from "@bond-protocol/contract-library";
-import { Checkbox } from "../atoms/Checkbox";
-import { TokenPriceCard } from "../atoms/TokenPriceCard";
-import { Input } from "../atoms/Input";
+import {useEffect, useState} from "react";
+import {Token} from "@bond-protocol/contract-library";
+import {Checkbox} from "../atoms/Checkbox";
+import {TokenPriceCard} from "../atoms/TokenPriceCard";
+import {Input} from "../atoms/Input";
+import {TokenInfo} from "components/organisms";
 
 export type TokenPickerCardProps = {
-  token?: Partial<
-    Token & { logo?: string; link?: string; blockExplorerName?: string }
-  >;
-  verifiedToken?: Token;
+  token?: TokenInfo;
+  verifiedToken?: Partial<Token & { id?: string; }>;
   className?: string;
   checkboxLabel?: string;
   label?: string;

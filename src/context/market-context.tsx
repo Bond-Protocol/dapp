@@ -1,6 +1,5 @@
-//@ts-nocheck
-import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
-import { createContext, useContext } from "react";
+import {useCalculatedMarkets} from "hooks/useCalculatedMarkets";
+import {createContext, useContext} from "react";
 
 const initialState = {
   allMarkets: new Map(),
@@ -8,9 +7,16 @@ const initialState = {
   marketsByIssuer: new Map(),
   issuers: [],
   isMarketOwner: false,
+  isLoading: {
+    market: false,
+    myMarkets: false,
+    tokens: false,
+    priceCalcs: false,
+    myPriceCalcs: false
+  },
   refetchAllMarkets: () => {},
   refetchMyMarkets: () => {},
-  refetchOne: () => {},
+  refetchOne: (id: string) => {},
 };
 
 export const MarketContext = createContext(initialState);
@@ -23,8 +29,8 @@ export const useMarkets = () => {
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
   const calculatedMarkets = useCalculatedMarkets();
 
-  return (
-    <MarketContext.Provider value={calculatedMarkets}>
+  // @ts-ignore
+  return (<MarketContext.Provider value={calculatedMarkets}>
       {children}
     </MarketContext.Provider>
   );
