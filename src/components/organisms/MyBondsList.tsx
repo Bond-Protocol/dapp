@@ -1,21 +1,17 @@
-//@ts-nocheck
-import { useMyBonds } from "hooks/useMyBonds";
+import {useMyBonds} from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
-import { ContractTransaction } from "ethers";
-import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
-import { OwnerBalance } from "src/generated/graphql";
-import { useEffect, useRef, useState } from "react";
-import { providers } from "services/owned-providers";
-import { useMarkets } from "hooks";
-import { RequiresWallet } from "components/utility/RequiresWallet";
-import { useNavigate } from "react-router-dom";
-import { TableHeading, TableCell } from "..";
-import {
-  calculateTrimDigits,
-  trim,
-} from "@bond-protocol/contract-library/dist/core/utils";
-import { redeem } from "@bond-protocol/contract-library";
-import { Loading } from "components/atoms/Loading";
+import {ContractTransaction} from "ethers";
+import {useNetwork, useSigner, useSwitchNetwork} from "wagmi";
+import {OwnerBalance} from "src/generated/graphql";
+import {useEffect, useRef, useState} from "react";
+import {providers} from "services/owned-providers";
+import {TokenDetails, useTokens} from "hooks";
+import {RequiresWallet} from "components/utility/RequiresWallet";
+import {useNavigate} from "react-router-dom";
+import {TableCell, TableHeading} from "..";
+import {calculateTrimDigits, trim,} from "@bond-protocol/contract-library/dist/core/utils";
+import {BOND_TYPE, redeem} from "@bond-protocol/contract-library";
+import {Loading} from "components/atoms/Loading";
 
 const NoBondsView = ({ loading }: { loading: boolean }) => {
   const navigate = useNavigate();
@@ -45,7 +41,7 @@ export const MyBondsList = () => {
   const { data: signer } = useSigner();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
-  const { getTokenDetails, getPrice, isLoading } = useMarkets();
+  const { getTokenDetails, getPrice } = useTokens();
 
   const [numBonds, setNumBonds] = useState<number>(myBonds.length);
   const timerRef = useRef<NodeJS.Timeout>();
@@ -66,12 +62,14 @@ export const MyBondsList = () => {
     switchNetwork?.(newChain);
   };
 
-  async function redeemBond(bond: OwnerBalance) {
+  async function redeemBond(bond: Partial<OwnerBalance>) {
+    if (!bond.bondToken) return;
     const redeemTx: ContractTransaction = await redeem(
       bond.bondToken.id,
       bond.bondToken.network,
-      bond.bondToken.type,
+      bond.bondToken.type as BOND_TYPE,
       bond.balance.toString(),
+      // @ts-ignore
       signer,
       {
         gasPrice: 100,
@@ -108,27 +106,33 @@ export const MyBondsList = () => {
             </thead>
 
             <tbody className="gap-x-2">
-              {myBonds.map((bond: OwnerBalance) => {
-                const date = new Date(bond.bondToken?.expiry * 1000);
+              {myBonds.map((bond: Partial<OwnerBalance>) => {
+                if (!bond.bondToken || !bond.bondToken.underlying) return;
+
+                const date = new Date(bond.bondToken.expiry * 1000);
                 const now = new Date(Date.now());
                 const canClaim = now >= date;
 
-                let balance =
+                let balance: number | string =
                   bond.balance /
-                  Math.pow(10, bond.bondToken?.underlying.decimals);
+                  Math.pow(10, bond.bondToken.underlying.decimals);
                 balance = trim(balance, calculateTrimDigits(balance));
 
-                let usdPrice =
-                  getPrice(bond.bondToken?.underlying?.id) * balance;
+                let usdPrice: number | string =
+                  Number(getPrice(bond.bondToken.underlying.id)) *
+                  Number(balance);
                 usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
 
-                const underlying =
+                const underlying: TokenDetails =
                   bond.bondToken && getTokenDetails(bond.bondToken.underlying);
+
                 const isCorrectNetwork =
                   bond.bondToken.network === chain?.network;
+
                 const handleClaim = isCorrectNetwork
                   ? () => redeemBond(bond)
                   : (e: React.BaseSyntheticEvent) =>
+                      // @ts-ignore
                       switchChain(e, bond.bondToken.network);
 
                 return (

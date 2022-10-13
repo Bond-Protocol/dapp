@@ -1,10 +1,9 @@
-//@ts-nocheck
-import { useCallback } from "react";
+import {useCallback} from "react";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { BigNumberish, ContractTransaction } from "ethers";
-import { useProvider, useSigner } from "wagmi";
-import { providers } from "services/owned-providers";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
+import {BigNumberish, ContractTransaction} from "ethers";
+import {useProvider, useSigner} from "wagmi";
+import {providers} from "services/owned-providers";
 
 const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
@@ -95,7 +94,7 @@ export const usePurchaseBond = () => {
         referralAddress,
         market.marketId,
         amount,
-        minimumOut,
+        minimumOut.toString(),
         market.payoutToken.decimals,
         market.quoteToken.decimals,
         market.teller,
@@ -131,7 +130,7 @@ export const usePurchaseBond = () => {
           referralAddress,
           market.marketId,
           amount,
-          minimumOut,
+          minimumOut.toString(),
           market.payoutToken.decimals,
           market.quoteToken.decimals,
           market.teller,
@@ -140,6 +139,7 @@ export const usePurchaseBond = () => {
         );
       } catch (e) {
         console.log(e);
+        // @ts-ignore
         throw Error(e);
       }
     },

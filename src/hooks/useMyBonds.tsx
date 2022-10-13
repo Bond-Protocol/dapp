@@ -1,8 +1,7 @@
-//@ts-nocheck
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import { useAtom } from "jotai";
+import {getSubgraphEndpoints} from "services/subgraph-endpoints";
+import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {
   BondToken,
   OwnerBalance,
@@ -11,24 +10,24 @@ import {
   useListErc20BondTokensGoerliQuery,
   useListErc20BondTokensMainnetQuery,
 } from "../generated/graphql";
-import { useAccount } from "wagmi";
+import {useAccount} from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { providers } from "services/owned-providers";
+import {providers} from "services/owned-providers";
 
 export function useMyBonds() {
   const endpoints = getSubgraphEndpoints();
 
   const { address } = useAccount();
   const [testnet, setTestnet] = useAtom(testnetMode);
-  const [testnetBonds, setTestnetBonds] = useState<OwnerBalance[]>([]);
-  const [mainnetBonds, setMainnetBonds] = useState<OwnerBalance[]>([]);
-  const [testnetErc20Bonds, setTestnetErc20Bonds] = useState<OwnerBalance[]>(
-    []
-  );
-  const [mainnetErc20Bonds, setMainnetErc20Bonds] = useState<OwnerBalance[]>(
-    []
-  );
-  const [myBonds, setMyBonds] = useState<OwnerBalance[]>([]);
+  const [testnetBonds, setTestnetBonds] = useState<Partial<OwnerBalance>[]>([]);
+  const [mainnetBonds, setMainnetBonds] = useState<Partial<OwnerBalance>[]>([]);
+  const [testnetErc20Bonds, setTestnetErc20Bonds] = useState<
+    Partial<OwnerBalance>[]
+  >([]);
+  const [mainnetErc20Bonds, setMainnetErc20Bonds] = useState<
+    Partial<OwnerBalance>[]
+  >([]);
+  const [myBonds, setMyBonds] = useState<Partial<OwnerBalance>[]>([]);
   const [refetchRequest, setRefetchRequest] = useState(0);
 
   /*
@@ -41,7 +40,7 @@ export function useMyBonds() {
     ...mainnetQuery
   } = useGetOwnerBalancesByOwnerMainnetQuery(
     { endpoint: endpoints[0] },
-    { owner: address },
+    { owner: address || "" },
     { enabled: !testnet }
   );
 
@@ -51,7 +50,7 @@ export function useMyBonds() {
     ...testnetQuery
   } = useGetOwnerBalancesByOwnerGoerliQuery(
     { endpoint: endpoints[1] },
-    { owner: address },
+    { owner: address || "" },
     { enabled: !!testnet }
   );
 
@@ -61,6 +60,7 @@ export function useMyBonds() {
     ...mainERC20Query
   } = useListErc20BondTokensMainnetQuery(
     { endpoint: endpoints[0] },
+    // @ts-ignore
     { enabled: !testnet }
   );
 
@@ -70,6 +70,7 @@ export function useMyBonds() {
     ...testnetERC20Query
   } = useListErc20BondTokensGoerliQuery(
     { endpoint: endpoints[1] },
+    // @ts-ignore
     { enabled: !!testnet }
   );
 
@@ -90,7 +91,7 @@ export function useMyBonds() {
   const getBalances = (bondTokens: BondToken[]) => {
     if (!address) return;
 
-    const ownerBalances: OwnerBalance[] = [];
+    const ownerBalances: Partial<OwnerBalance>[] = [];
     const promises: Promise<any>[] = [];
     bondTokens.forEach((bondToken) => {
       address &&
@@ -152,8 +153,8 @@ export function useMyBonds() {
 
     setMyBonds(
       bonds.sort(
-        // @ts-ignore
-        (n1: OwnerBalance, n2: OwnerBalance) =>
+        (n1: Partial<OwnerBalance>, n2: Partial<OwnerBalance>) =>
+          // @ts-ignore
           n1.bondToken.expiry - n2.bondToken.expiry
       )
     );

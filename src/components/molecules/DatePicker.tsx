@@ -29,9 +29,9 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
 
   const handleClose = (date: unknown) => {
     if (date instanceof Date && !isNaN(date.valueOf())) {
-      setDate(date as Date);
+      setDate(date);
       setOpen(false);
-      onChange && onChange((date as Date)?.getTime() / 1000);
+      onChange && onChange(date?.getTime() / 1000);
     }
   };
 

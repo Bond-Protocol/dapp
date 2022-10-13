@@ -1,16 +1,15 @@
-//@ts-nocheck
-import { FC, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CalculatedMarket, Token } from "@bond-protocol/contract-library";
-import { ExpandableRow } from "components/molecules/ExpandableRow";
-import { CloseMarketCard } from "components/organisms/CloseMarketCard";
+import {FC, useEffect, useRef, useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {CalculatedMarket} from "@bond-protocol/contract-library";
+import {ExpandableRow} from "components/molecules/ExpandableRow";
+import {CloseMarketCard} from "components/organisms/CloseMarketCard";
 import Button from "../atoms/Button";
-import { useMarkets, useTokens } from "hooks";
-import { TableHeading } from "components/atoms/TableHeading";
-import { TableCell } from "components/atoms/TableCell";
-import { CellLabel } from "components/atoms/CellLabel";
-import { BondListCard } from "./BondListCard";
-import { Loading } from "components/atoms/Loading";
+import {useMarkets, useTokens} from "hooks";
+import {TableHeading} from "components/atoms/TableHeading";
+import {TableCell} from "components/atoms/TableCell";
+import {CellLabel} from "components/atoms/CellLabel";
+import {BondListCard} from "./BondListCard";
+import {Loading} from "components/atoms/Loading";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -81,7 +80,7 @@ export const MarketList: FC<MarketListProps> = ({
         ? !currentSort.ascending
         : false;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
-      alphabeticSort(m1.maxPayoutUsd, m2.maxPayoutUsd, ascending)
+      numericSort(m1.maxPayoutUsd, m2.maxPayoutUsd, ascending)
     );
     setCurrentSort({ sortBy: sortByMaxPayout, ascending: ascending });
   }
@@ -162,7 +161,10 @@ export const MarketList: FC<MarketListProps> = ({
   });
 
   const quoteLogo = (market: CalculatedMarket) => {
-    if (market.quoteToken.lpPair != undefined) {
+    if (
+      "lpPair" in market.quoteToken &&
+      market.quoteToken.lpPair != undefined
+    ) {
       const token0 = getTokenDetails(market.quoteToken.lpPair.token0).logoUrl;
       const token1 = getTokenDetails(market.quoteToken.lpPair.token1).logoUrl;
 

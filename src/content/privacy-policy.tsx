@@ -4,10 +4,10 @@ export const privacyPolicy = {
   welcome: (
     <>
       <p>
-        Bond Labs Ltd. ("Bond") is committed to protecting and respecting your
-        privacy. This Privacy Policy describes how your personal or behavioral
-        data is collected, used and stored when you access
-        https://bondprotocol.finance (the "Site").
+        Bond Labs Ltd. (&quot;Bond&quot;) is committed to protecting and
+        respecting your privacy. This Privacy Policy describes how your personal
+        or behavioral data is collected, used and stored when you access
+        https://bondprotocol.finance (the &quot;Site&quot;).
       </p>
       <p className="mt-4">
         This Privacy Policy may be modified from time to time which will be
@@ -29,14 +29,14 @@ export const privacyPolicy = {
             further below.
           </p>
           <p className="mt-4">
-            Additional "just-in-time" disclosures or information about the data
-            processing practices of specific services may be provided. These
-            notices may supplement or clarify the privacy practices applicable
-            to the Site or may provide you with additional choices about how
-            your data is processed. If you do not agree with or you are not
-            comfortable with any aspect of this Privacy Policy, you should
-            immediately discontinue access or use of the Site. You may only
-            access the Site if you are above the age of majority in your
+            Additional &quot;just-in-time&quot; disclosures or information about
+            the data processing practices of specific services may be provided.
+            These notices may supplement or clarify the privacy practices
+            applicable to the Site or may provide you with additional choices
+            about how your data is processed. If you do not agree with or you
+            are not comfortable with any aspect of this Privacy Policy, you
+            should immediately discontinue access or use of the Site. You may
+            only access the Site if you are above the age of majority in your
             jurisdiction of residence.
           </p>
         </>
@@ -83,10 +83,10 @@ export const privacyPolicy = {
           </ul>
           <p className="mt-4">
             <p className="font-bold">Do Not Track policy. </p> Some Internet
-            browsers include the ability to transmit "Do Not Track" or "DNT"
-            signals. Since uniform standards for "DNT" signals have not been
-            adopted, the Site does not currently process or respond to "DNT"
-            signals.
+            browsers include the ability to transmit &quot;Do Not Track&quot; or
+            &quot;DNT&quot; signals. Since uniform standards for &quot;DNT&quot;
+            signals have not been adopted, the Site does not currently process
+            or respond to &quot;DNT&quot; signals.
           </p>
           <p className="mt-4">
             <p className="font-bold">
@@ -119,19 +119,21 @@ export const privacyPolicy = {
       content: (
         <>
           <p>
-            If you are a resident of the European Economic Area ("EEA") or
-            Switzerland, you may have additional rights under the General Data
-            Protection Regulation (the "GDPR") and other applicable law with
-            respect to your Personal Data, as outlined below.
+            If you are a resident of the European Economic Area
+            (&quot;EEA&quot;) or Switzerland, you may have additional rights
+            under the General Data Protection Regulation (the &quot;GDPR&quot;)
+            and other applicable law with respect to your Personal Data, as
+            outlined below.
           </p>
           <p className="mt-4">
-            For this section, we use the terms "Personal Data" and "processing"
-            as they are defined in the GDPR, but "Personal Data" generally means
-            information that can be used to individually identify a person, and
-            "processing" generally covers actions that can be performed in
-            connection with data such as collection, use, storage and
-            disclosure. Bond will be the controller of your Personal Data
-            processed in connection with the Site.
+            For this section, we use the terms &quot;Personal Data&quot; and
+            &quot;processing&quot; as they are defined in the GDPR, but
+            &quot;Personal Data&quot; generally means information that can be
+            used to individually identify a person, and &quot;processing&quot;
+            generally covers actions that can be performed in connection with
+            data such as collection, use, storage and disclosure. Bond will be
+            the controller of your Personal Data processed in connection with
+            the Site.
           </p>
         </>
       ),
