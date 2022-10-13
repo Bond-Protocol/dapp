@@ -60,7 +60,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       props.marketData.bondType
     ).auctioneer;
 
-    getAllowance(
+    void getAllowance(
       props.marketData.marketParams.payoutToken,
       ownerAddress,
       auctioneer,

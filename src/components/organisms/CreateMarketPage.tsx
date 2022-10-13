@@ -396,7 +396,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     },
   ];
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = (data: any) => {
     let vesting;
     if (data.vestingType === 0) {
       vesting = data.expiryDate;

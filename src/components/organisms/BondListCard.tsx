@@ -104,11 +104,11 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
   }, [amount, getPayoutFor, market.marketId, market.auctioneer]);
 
   useEffect(() => {
-    estimate()?.then((result) => {
+    void estimate()?.then((result) => {
       setEstimatedGas(Number(result));
     });
 
-    getGasPrice(market.network).then((result) => {
+    void getGasPrice(market.network).then((result) => {
       setGasPrice(result);
     });
   }, [payout]);
