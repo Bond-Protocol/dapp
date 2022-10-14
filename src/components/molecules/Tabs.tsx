@@ -1,8 +1,9 @@
-import { Children, FC, useState } from "react";
+import {Children, FC, useEffect, useState} from "react";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import TabsListUnstyled from "@mui/base/TabsListUnstyled";
 import TabUnstyled from "@mui/base/TabUnstyled";
-import { TabPanelUnstyled } from "@mui/base";
+import {TabPanelUnstyled} from "@mui/base";
+import {useLocation} from "react-router-dom";
 
 type TabProps = {
   children?: React.ReactNode;
@@ -16,10 +17,25 @@ type TabProps = {
 
 export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
   const [selected, setSelected] = useState(value || 0);
+  const location = useLocation();
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case "/issuers":
+        setSelected(1);
+        break;
+      case "/my-bonds":
+        setSelected(2);
+        break;
+      default:
+        setSelected(0);
+        break;
+    }
+  }, [location.pathname]);
 
   return (
     <TabsUnstyled
-      defaultValue={selected}
+      value={selected}
       className=" mt-4 overflow-hidden rounded-t-lg border-transparent"
     >
       <TabsListUnstyled
