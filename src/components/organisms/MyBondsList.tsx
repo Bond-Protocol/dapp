@@ -12,6 +12,7 @@ import {TableCell, TableHeading} from "..";
 import {calculateTrimDigits, trim,} from "@bond-protocol/contract-library/dist/core/utils";
 import {BOND_TYPE, redeem} from "@bond-protocol/contract-library";
 import {Loading} from "components/atoms/Loading";
+import {format} from "date-fns";
 
 const NoBondsView = ({ loading }: { loading: boolean }) => {
   const navigate = useNavigate();
@@ -145,7 +146,7 @@ export const MyBondsList = () => {
                       <p className="my-auto pl-1">{underlying?.symbol}</p>
                     </TableCell>
                     <TableCell>{bond.bondToken.network}</TableCell>
-                    <TableCell>{date.toDateString()}</TableCell>
+                    <TableCell>{format(date, "yyyy-MM-dd")}</TableCell>
                     <TableCell className="flex flex-row">
                       <div className="my-auto pr-1">
                         <img

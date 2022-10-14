@@ -19,14 +19,14 @@ export const IssuerPage: FC = () => {
   const navigate = useNavigate();
   const { marketsByIssuer } = useMarkets();
   const { getBondersForProtocol } = useUniqueBonders();
-  const { tbvByProtocol } = useBondPurchases();
+  const { tvbByProtocol } = useBondPurchases();
   const { name } = useParams();
 
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
   const [protocol] = useState(PROTOCOLS.get(name as PROTOCOL_NAMES));
   const bonders = getBondersForProtocol(name as PROTOCOL_NAMES);
 
-  const [tbv, setTbv] = useState(0);
+  const [tvb, setTvb] = useState(0);
 
   const logo = () => {
     return protocol?.logoUrl
@@ -39,8 +39,8 @@ export const IssuerPage: FC = () => {
   }, [name, marketsByIssuer]);
 
   useEffect(() => {
-    setTbv(tbvByProtocol.get(name as PROTOCOL_NAMES) || 0);
-  }, [tbvByProtocol]);
+    setTvb(tvbByProtocol.get(name as PROTOCOL_NAMES) || 0);
+  }, [tvbByProtocol]);
 
   return (
     <div className="pb-12 font-jakarta">
@@ -86,7 +86,7 @@ export const IssuerPage: FC = () => {
           label="Total Value Bonded"
           tooltip={`Estimated total value in USD of all purchases from ${protocol?.name} markets.`}
         >
-          ${Math.trunc(tbv)}
+          ${Math.trunc(tvb)}
         </InfoLabel>
 
         <InfoLabel

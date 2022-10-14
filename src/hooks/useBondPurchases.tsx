@@ -25,7 +25,7 @@ export function useBondPurchases() {
   const [bondPurchasesByMarket, setBondPurchasesByMarket] = useState<
     Map<string, BondPurchase[]>
   >(new Map());
-  const [tbvByProtocol, setTbvByProtocol] = useState<Map<string, number>>(
+  const [tvbByProtocol, setTvbByProtocol] = useState<Map<string, number>>(
     new Map()
   );
   const [mainnetBondPurchases, setMainnetBondPurchases] = useState<
@@ -77,7 +77,7 @@ export function useBondPurchases() {
 
   useEffect(() => {
     const bondPurchasesByMarketMap: Map<string, BondPurchase[]> = new Map();
-    const tbvByProtocolMap: Map<string, number> = new Map();
+    const tvbByProtocolMap: Map<string, number> = new Map();
     selectedBondPurchases.forEach((bondPurchase) => {
       const array = bondPurchasesByMarketMap.get(bondPurchase.marketId) || [];
       array.push(bondPurchase);
@@ -89,19 +89,19 @@ export function useBondPurchases() {
       );
       if (!protocol) return;
 
-      let value = tbvByProtocolMap.get(protocol.id) || 0;
+      let value = tvbByProtocolMap.get(protocol.id) || 0;
       const price = getPrice(bondPurchase.quoteToken.id);
       value = value + bondPurchase.amount * price;
-      tbvByProtocolMap.set(protocol.id, value);
+      tvbByProtocolMap.set(protocol.id, value);
     });
 
     setBondPurchasesByMarket(bondPurchasesByMarketMap);
-    setTbvByProtocol(tbvByProtocolMap);
+    setTvbByProtocol(tvbByProtocolMap);
   }, [selectedBondPurchases]);
 
   return {
     bondPurchases: selectedBondPurchases,
     purchasesByMarket: bondPurchasesByMarket,
-    tbvByProtocol: tbvByProtocol,
+    tvbByProtocol: tvbByProtocol,
   };
 }
