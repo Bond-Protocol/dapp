@@ -33,7 +33,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
       </p>
       <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
       <p className="text-[10px] text-light-primary-300">
-        TBV ${Math.floor(tbv)}
+        TVB ${Math.floor(tbv)}
       </p>
     </div>
   );
