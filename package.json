@@ -40,6 +40,7 @@
     "react-hook-form": "^7.33.1",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
+    "recharts": "^2.1.15",
     "rollup-plugin-polyfill-node": "^0.10.2",
     "use-deep-compare-effect": "^1.8.1",
     "wagmi": "^0.7.7"

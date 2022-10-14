@@ -1,4 +1,4 @@
-import { LineChart } from "./Chart";
+import { LineChart } from "./LineChart";
 import { prices, discounts } from "../../utils/mock-data";
 
 const data = [
