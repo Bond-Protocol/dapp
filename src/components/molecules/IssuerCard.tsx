@@ -11,13 +11,13 @@ type IssuerCardProps = {
 
 export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
   const navigate = useNavigate();
-  const { tbvByProtocol } = useBondPurchases();
+  const { tvbByProtocol } = useBondPurchases();
 
-  const [tbv, setTbv] = useState(0);
+  const [tvb, setTvb] = useState(0);
 
   useEffect(() => {
-    setTbv(tbvByProtocol.get(issuer.name as PROTOCOL_NAMES) || 0);
-  }, [tbvByProtocol]);
+    setTvb(tvbByProtocol.get(issuer.name as PROTOCOL_NAMES) || 0);
+  }, [tvbByProtocol]);
   const handleClick = (name: string) => navigate("/issuers/" + name);
 
   const logo = issuer?.logoUrl || "/placeholders/token-placeholder.png";
@@ -33,7 +33,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
       </p>
       <p className="text-xs text-light-primary-50">{markets.length} Markets</p>
       <p className="text-[10px] text-light-primary-300">
-        TVB ${Math.floor(tbv)}
+        TVB ${Math.floor(tvb)}
       </p>
     </div>
   );
