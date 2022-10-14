@@ -343,7 +343,7 @@ export const MarketList: FC<MarketListProps> = ({
                   </CellLabel>
                 </TableCell>
 
-                <TableCell>{market.formattedLongVesting}</TableCell>
+                <TableCell>{market.formattedShortVesting}</TableCell>
 
                 <TableCell>
                   <p>{market.creationDate}</p>
