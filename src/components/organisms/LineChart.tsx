@@ -24,50 +24,48 @@ const getDiscountColor = (price, discount) => {
   return price > discount ? "text-light-success" : "text-red-400";
 };
 
-const settings = [
-  { dataKey: "discount", name: "Discount", fill: "#40749b" },
-  { datakey: "price", name: "Price", fill: "#F2A94A" },
-];
-
 const TooltipLabel = (props: {
-  value: number;
+  value: string;
   label: string;
   className: string;
-  color: string;
+  valueClassName?: string;
 }) => {
   return (
-    <div
-      className={`flex w-full justify-between text-light-secondary ${props.className}`}
-    >
-      <p className="">{props.label}</p>
-      <p className={`w-1/3 pr-4 text-left text-white ${props.color}`}>
+    <div className={`flex w-full justify-between ${props.className}`}>
+      <p className="w-1/2">{props.label}</p>
+      <p className={`text-left text-white ${props.valueClassName}`}>
         {props.value}
       </p>
     </div>
   );
 };
 
-const Tooltips = (props, ...rest) => {
+const Tooltips = (props) => {
   const [data] = props?.payload || {};
   const price = data?.payload.price || 0;
   const discount = data?.payload.discount || 0;
   const date = data?.payload.date || Date.now();
 
   return (
-    <div className="min-w-[100px] rounded-lg border border-transparent bg-light-tooltip p-2 py-1 font-jakarta text-xs font-extralight">
+    <div className="min-w-[150px] rounded-lg border border-transparent bg-light-tooltip p-2 py-1 font-jakarta text-xs font-extralight">
       <TooltipLabel
         value={"$" + price.toFixed(2)}
         label={`${props.token} Price: `}
-        className="mt-2 text-light-secondary"
-        color=""
+        className="mt-2 text-light-primary"
+        valueClassName=""
       />
       <TooltipLabel
         value={"$" + discount.toFixed(2)}
         label="Bond Price: "
-        className="text-light-primary"
-        color={getDiscountColor(price, discount)}
+        className="text-light-secondary"
       />
-      <div className="mt-2 text-center text-[10px] text-light-primary-50">
+      <TooltipLabel
+        value={`${discount > price ? "-" : ""}${1.32}%`}
+        label={`Discount: `}
+        className="text-white"
+        valueClassName={`${getDiscountColor(price, discount)} text-right`}
+      />
+      <div className="mt-2 text-[10px] text-light-primary-50">
         {format(date, "yyyy-MM-dd HH:MM:ss")}
       </div>
     </div>
@@ -94,13 +92,8 @@ export const LineChart = (props: ChartProps) => {
               backgroundColor: "transparent",
             }}
           />
-          <UnstyledLine
-            isAnimationActive={false}
-            dot={false}
-            stroke="#F2A94A"
-            dataKey="price"
-          />
-          <UnstyledLine dot={false} stroke="#40749b" dataKey="discount" />
+          <UnstyledLine dot={false} stroke="#40749b" dataKey="price" />
+          <UnstyledLine dot={false} stroke="#F2A94A" dataKey="discount" />
         </Chart>
       </ResponsiveContainer>
     </div>
