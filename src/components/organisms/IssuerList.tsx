@@ -75,7 +75,7 @@ export const IssuerList = () => {
       </p>
       <p className="flex justify-start">
         <Button onClick={sortByName}>Sort by Name</Button>
-        <Button onClick={sortByTbv}>Sort by TVB</Button>
+        <Button onClick={sortByTbv}>Sort by TBV</Button>
       </p>
         */}
       <div className="mt-8 flex flex-wrap gap-x-12 gap-y-10">

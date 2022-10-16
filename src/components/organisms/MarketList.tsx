@@ -267,7 +267,7 @@ export const MarketList: FC<MarketListProps> = ({
               sortName="tbv"
               onClick={sortByTbv}
             >
-              TVB
+              TBV
             </TableHeading>
 
             {allowManagement && (
