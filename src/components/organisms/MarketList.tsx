@@ -107,15 +107,15 @@ export const MarketList: FC<MarketListProps> = ({
     setCurrentSort({ sortBy: sortByDiscount, ascending: ascending });
   }
 
-  function sortByTvb() {
+  function sortByTbv() {
     const ascending =
-      currentSort.sortBy.toString() === sortByTvb.toString()
+      currentSort.sortBy.toString() === sortByTbv.toString()
         ? !currentSort.ascending
         : false;
     sortMarkets((m1: CalculatedMarket, m2: CalculatedMarket) =>
-      numericSort(m1.tvbUsd, m2.tvbUsd, ascending)
+      numericSort(m1.tbvUsd, m2.tbvUsd, ascending)
     );
-    setCurrentSort({ sortBy: sortByTvb, ascending: ascending });
+    setCurrentSort({ sortBy: sortByTbv, ascending: ascending });
   }
 
   function sortByVesting() {
@@ -264,8 +264,8 @@ export const MarketList: FC<MarketListProps> = ({
 
             <TableHeading
               ascending={currentSort.ascending}
-              sortName="tvb"
-              onClick={sortByTvb}
+              sortName="tbv"
+              onClick={sortByTbv}
             >
               TVB
             </TableHeading>
@@ -349,7 +349,7 @@ export const MarketList: FC<MarketListProps> = ({
                   <p>{market.creationDate}</p>
                 </TableCell>
 
-                <TableCell>{market.formattedTvbUsd}</TableCell>
+                <TableCell>{market.formattedTbvUsd}</TableCell>
 
                 {allowManagement && (
                   <TableCell>

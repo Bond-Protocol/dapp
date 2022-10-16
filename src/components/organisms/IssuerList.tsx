@@ -9,13 +9,13 @@ import testnetMode from "../../atoms/testnetMode.atom";
 
 export const IssuerList = () => {
   const { marketsByIssuer, issuers } = useMarkets();
-  const { tvbByProtocol } = useBondPurchases();
+  const { tbvByProtocol } = useBondPurchases();
 
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [search, setSearch] = useState("");
   const [sortedIssuers, setSortedIssuers] = useState<Protocol[]>(issuers);
   const [currentSort, setCurrentSort] = useState({
-    sortBy: sortByTvb,
+    sortBy: sortByTbv,
     ascending: false,
   });
 
@@ -41,20 +41,20 @@ export const IssuerList = () => {
     setCurrentSort({ sortBy: sortByName, ascending: ascending });
   }
 
-  function sortByTvb() {
+  function sortByTbv() {
     const ascending =
-      currentSort.sortBy.toString() === sortByTvb.toString()
+      currentSort.sortBy.toString() === sortByTbv.toString()
         ? !currentSort.ascending
         : false;
 
     sortIssuers((i1: Protocol, i2: Protocol) => {
       return numericSort(
-        tvbByProtocol.get(i1.id) || 0,
-        tvbByProtocol.get(i2.id) || 0,
+        tbvByProtocol.get(i1.id) || 0,
+        tbvByProtocol.get(i2.id) || 0,
         ascending
       );
     });
-    setCurrentSort({ sortBy: sortByTvb, ascending: ascending });
+    setCurrentSort({ sortBy: sortByTbv, ascending: ascending });
   }
 
   /*
@@ -65,7 +65,7 @@ export const IssuerList = () => {
 
   useEffect(() => {
     currentSort.sortBy();
-  }, [issuers, marketsByIssuer, tvbByProtocol, search]);
+  }, [issuers, marketsByIssuer, tbvByProtocol, search]);
 
   return (
     <>
@@ -75,7 +75,7 @@ export const IssuerList = () => {
       </p>
       <p className="flex justify-start">
         <Button onClick={sortByName}>Sort by Name</Button>
-        <Button onClick={sortByTvb}>Sort by TVB</Button>
+        <Button onClick={sortByTbv}>Sort by TVB</Button>
       </p>
         */}
       <div className="mt-8 flex flex-wrap gap-x-12 gap-y-10">
