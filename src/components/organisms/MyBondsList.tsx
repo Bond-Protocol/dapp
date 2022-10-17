@@ -1,18 +1,25 @@
-import {useMyBonds} from "hooks/useMyBonds";
+import { useMyBonds } from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
-import {ContractTransaction} from "ethers";
-import {useNetwork, useSigner, useSwitchNetwork} from "wagmi";
-import {OwnerBalance} from "src/generated/graphql";
-import {useEffect, useRef, useState} from "react";
-import {providers} from "services/owned-providers";
-import {TokenDetails, useTokens} from "hooks";
-import {RequiresWallet} from "components/utility/RequiresWallet";
-import {useNavigate} from "react-router-dom";
-import {TableCell, TableHeading} from "..";
-import {calculateTrimDigits, trim,} from "@bond-protocol/contract-library/dist/core/utils";
-import {BOND_TYPE, redeem} from "@bond-protocol/contract-library";
-import {Loading} from "components/atoms/Loading";
-import {format} from "date-fns";
+import { ContractTransaction } from "ethers";
+import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { OwnerBalance } from "src/generated/graphql";
+import { useEffect, useRef, useState } from "react";
+import { providers } from "services/owned-providers";
+import { TokenDetails, useTokens } from "hooks";
+import { RequiresWallet } from "components/utility/RequiresWallet";
+import { useNavigate } from "react-router-dom";
+import { TableCell, TableHeading } from "..";
+import {
+  calculateTrimDigits,
+  trim,
+} from "@bond-protocol/contract-library/dist/core/utils";
+import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
+import { Loading } from "components/atoms/Loading";
+import { format } from "date-fns";
+
+const isMainnet = (chain?: string) => {
+  return chain === "mainnet" || chain === "homestead";
+};
 
 const NoBondsView = ({ loading }: { loading: boolean }) => {
   const navigate = useNavigate();
@@ -128,6 +135,8 @@ export const MyBondsList = () => {
                   bond.bondToken && getTokenDetails(bond.bondToken.underlying);
 
                 const isCorrectNetwork =
+                  (isMainnet(bond.bondToken.network) &&
+                    isMainnet(chain?.network)) ||
                   bond.bondToken.network === chain?.network;
 
                 const handleClaim = isCorrectNetwork
