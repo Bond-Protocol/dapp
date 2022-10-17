@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useMarkets } from "hooks";
-import { PROTOCOLS, PROTOCOL_NAMES } from "@bond-protocol/bond-library";
+import { PROTOCOLS } from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { InfoLabel, Link, Button } from "components/atoms";
@@ -23,8 +23,8 @@ export const IssuerPage: FC = () => {
   const { name } = useParams();
 
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
-  const [protocol] = useState(PROTOCOLS.get(name as PROTOCOL_NAMES));
-  const bonders = getBondersForProtocol(name as PROTOCOL_NAMES);
+  const [protocol] = useState(PROTOCOLS.get(name || ""));
+  const bonders = getBondersForProtocol(name || "");
 
   const [tbv, setTbv] = useState(0);
 
