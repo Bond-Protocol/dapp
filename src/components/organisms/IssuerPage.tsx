@@ -83,7 +83,7 @@ export const IssuerPage: FC = () => {
 
       <div className="my-16 flex justify-between gap-16 child:w-full">
         <InfoLabel
-          label="Total Value Bonded"
+          label="Total Bonded Value"
           tooltip={`Estimated total value in USD of all purchases from ${protocol?.name} markets.`}
         >
           ${Math.trunc(tvb)}
