@@ -265,7 +265,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   useEffect(() => {
     if (bondsPerWeek && marketExpiryDays && marketCapacity) {
       const duration = marketExpiryDays * 24 * 60 * 60;
-      const depositInterval = (bondsPerWeek / 7) * 24 * 60 * 60;
+      const depositInterval = 24 * 60 * 60 / (bondsPerWeek / 7);
       const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
       const debtBuffer =
         ((marketCapacity * 0.25) /
@@ -357,11 +357,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     },
     { label: "Payout Token", value: payoutTokenSymbol },
     { label: "Quote Token", value: quoteTokenSymbol },
+    /*
     {
       label: "Estimated bond cadence",
       tooltip: "The estimated amount of payout tokens sold per day.",
       value: estimatedBondCadence,
     },
+     */
     { label: "Initial exchange rate", value: exchangeRateString },
     {
       label: "Minimum exchange rate",
@@ -484,7 +486,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         debtBuffer: ~~(data.debtBuffer * Math.pow(10, 3)), // Account for 3 decimal places, truncate anything else
         vesting: vesting,
         conclusion: data.marketExpiryDate,
-        depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
+        depositInterval: 24 * 60 * 60 / (data.bondsPerWeek / 7),
         scaleAdjustment: scaleAdjustment,
       },
       bondType:
