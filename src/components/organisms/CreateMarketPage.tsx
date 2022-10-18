@@ -481,7 +481,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         capacityInQuote: data.capacityToken !== 0,
         formattedInitialPrice: formattedInitialPrice.toString(),
         formattedMinimumPrice: formattedMinimumPrice.toString(),
-        debtBuffer: data.debtBuffer,
+        debtBuffer: ~~(data.debtBuffer * Math.pow(10, 3)), // Account for 3 decimal places, truncate anything else
         vesting: vesting,
         conclusion: data.marketExpiryDate,
         depositInterval: (data.bondsPerWeek / 7) * 24 * 60 * 60,
