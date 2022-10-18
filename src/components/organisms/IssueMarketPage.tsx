@@ -38,10 +38,12 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
     { label: "Capacity", value: props.data.summaryData.capacity },
     { label: "Payout Token", value: props.data.summaryData.payoutToken },
     { label: "Quote Token", value: props.data.summaryData.quoteToken },
+    /*
     {
       label: "Estimated Bond Cadence",
       value: props.data.summaryData.estimatedBondCadence,
     },
+     */
     {
       label: "Minimum Exchange Rate",
       value: props.data.summaryData.minimumExchangeRate,
