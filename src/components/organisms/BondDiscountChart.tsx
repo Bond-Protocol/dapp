@@ -1,11 +1,10 @@
 import { LineChart } from "./LineChart";
 import { prices, discounts } from "../../utils/mock-data";
 
-const data = [
-  { label: "Price", data: discounts },
-  { label: "Discount", data: prices },
-];
+const dataset = prices.map((p, i) => {
+  return { date: p.date, price: p.price, discount: discounts[i].price };
+});
 
 export const BondDiscountChart = () => {
-  return <LineChart data={data} />;
+  return <LineChart data={dataset} />;
 };

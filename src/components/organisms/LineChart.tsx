@@ -1,14 +1,11 @@
-import { fromUnixTime, format } from "date-fns";
-import { forwardRef } from "react";
+import { format } from "date-fns";
 import {
   LineChart as Chart,
-  Line as UnstyledLine,
-  CartesianGrid,
+  Line,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  LineProps,
 } from "recharts";
 
 export type PriceData = { date: number; price: number };
@@ -17,9 +14,9 @@ export type ChartProps = {
   data: LineChartData;
 };
 
-const getBottomPadding = (min) => min - min / 90;
-const getTopPadding = (max) => max + max / 90;
-const getDiscountColor = (price, discount) => {
+const getBottomPadding = (min: number) => min - min / 90;
+const getTopPadding = (max: number) => max + max / 90;
+const getDiscountColor = (price: number, discount: number) => {
   if (price === discount) return "text-white";
   return price > discount ? "text-light-success" : "text-red-400";
 };
@@ -40,8 +37,19 @@ const TooltipLabel = (props: {
   );
 };
 
-const Tooltips = (props) => {
-  const [data] = props?.payload || {};
+export type BondChartDataset = {
+  price: number;
+  discount: number;
+  date: Date;
+};
+
+export type ChartTooltipProps = {
+  tokenSymbol: string;
+  payload?: Array<{ payload: BondChartDataset }>;
+};
+
+const Tooltips = (props: ChartTooltipProps) => {
+  const [data] = props.payload || [];
   const price = data?.payload.price || 0;
   const discount = data?.payload.discount || 0;
   const date = data?.payload.date || Date.now();
@@ -50,7 +58,7 @@ const Tooltips = (props) => {
     <div className="min-w-[150px] rounded-lg border border-transparent bg-light-tooltip p-2 py-1 font-jakarta text-xs font-extralight">
       <TooltipLabel
         value={"$" + price.toFixed(2)}
-        label={`${props.token} Price: `}
+        label={`${props.tokenSymbol} Price: `}
         className="mt-2 text-light-primary"
         valueClassName=""
       />
@@ -74,7 +82,7 @@ const Tooltips = (props) => {
 
 export const LineChart = (props: ChartProps) => {
   return (
-    <div className="h-[35vh] max-h-[35vh] w-[40vw] max-w-[40vw] border">
+    <div className="h-full min-h-[20vh] min-w-[25vw] border-b border-l border-light-primary-50/10">
       <ResponsiveContainer>
         <Chart data={props.data}>
           <XAxis hide dataKey="date" tickLine={false} padding={{ right: 10 }} />
@@ -86,14 +94,14 @@ export const LineChart = (props: ChartProps) => {
             }}
           />
           <Tooltip
-            content={<Tooltips token="OHM" />}
+            content={<Tooltips tokenSymbol="OHM" />}
             wrapperStyle={{
               outline: "none",
               backgroundColor: "transparent",
             }}
           />
-          <UnstyledLine dot={false} stroke="#40749b" dataKey="price" />
-          <UnstyledLine dot={false} stroke="#F2A94A" dataKey="discount" />
+          <Line dot={false} stroke="#40749b" dataKey="price" />
+          <Line dot={false} stroke="#F2A94A" dataKey="discount" />
         </Chart>
       </ResponsiveContainer>
     </div>
