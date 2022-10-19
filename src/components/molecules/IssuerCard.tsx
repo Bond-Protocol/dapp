@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Protocol, PROTOCOL_NAMES } from "@bond-protocol/bond-library";
+import { Protocol } from "@bond-protocol/bond-library";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { useBondPurchases } from "hooks/useBondPurchases";
@@ -16,7 +16,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({ issuer, markets }) => {
   const [tbv, setTbv] = useState(0);
 
   useEffect(() => {
-    setTbv(tbvByProtocol.get(issuer.name as PROTOCOL_NAMES) || 0);
+    setTbv(tbvByProtocol.get(issuer.name) || 0);
   }, [tbvByProtocol]);
   const handleClick = (name: string) => navigate("/issuers/" + name);
 
