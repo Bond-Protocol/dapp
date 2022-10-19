@@ -39,7 +39,7 @@ export const IssuerPage: FC = () => {
   }, [name, marketsByIssuer]);
 
   useEffect(() => {
-    setTbv(tbvByProtocol.get(name as PROTOCOL_NAMES) || 0);
+    setTbv(tbvByProtocol.get(name || "") || 0);
   }, [tbvByProtocol]);
 
   return (

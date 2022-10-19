@@ -209,10 +209,6 @@ export const useTokens = () => {
         // @ts-ignore
         token.value["token1"].price = currentPricesMap[token1Address][0].price;
 
-        // token.value.token0Address = token0Address;
-        // token.value.token1Address = token1Address;
-
-        console.log({ token });
         calcLpPrice(
           {
             // @ts-ignore
@@ -229,6 +225,7 @@ export const useTokens = () => {
               price: result,
               source: "custom",
             };
+
             // @ts-ignore
             currentPricesMap[token.key] = prices;
           })
