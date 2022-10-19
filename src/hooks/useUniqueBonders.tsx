@@ -8,7 +8,6 @@ import {
 } from "../generated/graphql";
 import {
   getAddressesByProtocol,
-  PROTOCOL_NAMES,
 } from "@bond-protocol/bond-library";
 
 export function useUniqueBonders() {
@@ -80,7 +79,7 @@ export function useUniqueBonders() {
   }, [testnet, mainnetBonders, testnetBonders]);
 
   function getBondersForProtocol(name: string): number {
-    const addresses = getAddressesByProtocol(name as PROTOCOL_NAMES);
+    const addresses = getAddressesByProtocol(name);
     let count = 0;
 
     addresses.forEach((address) => {
@@ -94,7 +93,7 @@ export function useUniqueBonders() {
 
   return {
     bonders: selectedBonders,
-    getBondersForProtocol: (name: PROTOCOL_NAMES) =>
+    getBondersForProtocol: (name: string) =>
       getBondersForProtocol(name),
   };
 }
