@@ -79,10 +79,7 @@ export const MyBondsList = () => {
       bond.balance.toString(),
       // @ts-ignore
       signer,
-      {
-        gasPrice: 100,
-        gasLimit: 10000000,
-      }
+      {}
     );
 
     await signer?.provider
