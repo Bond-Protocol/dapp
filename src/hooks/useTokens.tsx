@@ -1,14 +1,21 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {calcLpPrice, LpPair} from "@bond-protocol/contract-library";
-import {providers} from "services/owned-providers";
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {Token, useListTokensGoerliQuery, useListTokensMainnetQuery,} from "../generated/graphql";
-import {useCallback, useEffect, useState} from "react";
+import { calcLpPrice, LpPair } from "@bond-protocol/contract-library";
+import { providers } from "services/owned-providers";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import {
+  Token,
+  useListTokensGoerliQuery,
+  useListTokensMainnetQuery,
+} from "../generated/graphql";
+import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {CustomPriceSource, SupportedPriceSource} from "@bond-protocol/bond-library";
-import axios, {AxiosResponse} from "axios";
-import {useQuery} from "react-query";
-import {useAtom} from "jotai";
+import {
+  CustomPriceSource,
+  SupportedPriceSource,
+} from "@bond-protocol/bond-library";
+import axios, { AxiosResponse } from "axios";
+import { useQuery } from "react-query";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export interface PriceDetails {
@@ -84,7 +91,9 @@ export const useTokens = () => {
   const customPriceQuery = useQuery("customPriceData", async () => {
     const requests: Set<Promise<string>> = new Set();
     const functions: Map<() => Promise<string>, string[]> = new Map();
+
     const pricesMap = new Map();
+
     try {
       bondLibrary.TOKENS.forEach((token: bondLibrary.Token, key: string) => {
         token.priceSources.forEach((priceSource: any | CustomPriceSource) => {
@@ -185,24 +194,20 @@ export const useTokens = () => {
         const split: string[] = token.key.split("_");
         const network = split[0];
         const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
-        // @ts-ignore
-        token.value["token0"] = bondLibrary.TOKENS.get(
-          token.value.token0Address
-        );
-        // @ts-ignore
-        token.value["token1"] = bondLibrary.TOKENS.get(
-          token.value.token1Address
-        );
 
-        // @ts-ignore
-        token.value["token0"].price =
-          // @ts-ignore
-          currentPricesMap[token.value.token0Address][0].price;
+        //TODO: (aphex) patched this manually due to library fixes, should be made consistent
+        const token0Address = network + "_" + token.value.token0Address;
+        const token1Address = network + "_" + token.value.token1Address;
 
+        //@ts-ignore
+        token.value["token0"] = bondLibrary.TOKENS.get(token0Address);
+        //@ts-ignore
+        token.value["token1"] = bondLibrary.TOKENS.get(token1Address);
+
+        //@ts-ignore
+        token.value["token0"].price = currentPricesMap[token0Address][0].price;
         // @ts-ignore
-        token.value["token1"].price =
-          // @ts-ignore
-          currentPricesMap[token.value.token1Address][0].price;
+        token.value["token1"].price = currentPricesMap[token1Address][0].price;
 
         calcLpPrice(
           {
