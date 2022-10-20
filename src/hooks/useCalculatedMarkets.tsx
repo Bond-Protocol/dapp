@@ -110,6 +110,10 @@ export function useCalculatedMarkets() {
 
   const calculateAllMarkets = useQueries(
     markets.map((market) => {
+      console.log({
+        ptp: market.payoutToken.symbol + ": " + getPrice(market.payoutToken.id),
+        qtp: market.quoteToken.symbol + ": " + getPrice(market.quoteToken.id)
+    })
       return {
         queryKey: market.id,
         queryFn: () => calculateMarket(market),
@@ -149,8 +153,8 @@ export function useCalculatedMarkets() {
   };
 
   useDeepCompareEffect(() => {
-    console.log(currentPrices)
     if (Object.keys(currentPrices).length > 0) {
+      console.log(currentPrices)
       const calculatedPricesMap = new Map();
       const issuerMarkets = new Map();
 
