@@ -149,6 +149,7 @@ export function useCalculatedMarkets() {
   };
 
   useDeepCompareEffect(() => {
+    console.log(currentPrices)
     if (Object.keys(currentPrices).length > 0) {
       const calculatedPricesMap = new Map();
       const issuerMarkets = new Map();
