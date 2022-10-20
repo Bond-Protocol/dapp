@@ -16,7 +16,7 @@ import { useTokens } from "hooks/useTokens";
 
 export function useBondPurchases() {
   const endpoints = getSubgraphEndpoints();
-  const { getPrice } = useTokens();
+  const { getPrice, currentPrices } = useTokens();
 
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [selectedBondPurchases, setSelectedBondPurchases] = useState<
@@ -35,7 +35,7 @@ export function useBondPurchases() {
     BondPurchase[]
   >([]);
 
-  const { data: mainnetData, ...mainetQuery } =
+  const { data: mainnetData, ...mainnetQuery } =
     useListBondPurchasesMainnetQuery(
       { endpoint: endpoints[0] },
       { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) },
@@ -78,6 +78,7 @@ export function useBondPurchases() {
   useEffect(() => {
     const bondPurchasesByMarketMap: Map<string, BondPurchase[]> = new Map();
     const tbvByProtocolMap: Map<string, number> = new Map();
+
     selectedBondPurchases.forEach((bondPurchase) => {
       const array = bondPurchasesByMarketMap.get(bondPurchase.marketId) || [];
       array.push(bondPurchase);
@@ -97,7 +98,7 @@ export function useBondPurchases() {
 
     setBondPurchasesByMarket(bondPurchasesByMarketMap);
     setTbvByProtocol(tbvByProtocolMap);
-  }, [selectedBondPurchases]);
+  }, [selectedBondPurchases, currentPrices]);
 
   return {
     bondPurchases: selectedBondPurchases,

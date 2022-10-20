@@ -188,6 +188,7 @@ export const useTokens = () => {
         }
       );
 
+      const promises: Promise<any>[] = [];
       // Now we have the prices for the constituent tokens, we can calculate the LP pair prices
       lpTokens.forEach((token) => {
         if (token.value.lpType === undefined) return;
@@ -209,7 +210,7 @@ export const useTokens = () => {
         // @ts-ignore
         token.value["token1"].price = currentPricesMap[token1Address][0].price;
 
-        calcLpPrice(
+        promises.push(calcLpPrice(
           {
             // @ts-ignore
             lpPair: { ...token.value, address: split[1] },
@@ -229,10 +230,13 @@ export const useTokens = () => {
             // @ts-ignore
             currentPricesMap[token.key] = prices;
           })
-          .catch((error) => console.log(error));
+          .catch((error) => console.log(error))
+        );
       });
 
-      setCurrentPrices(currentPricesMap);
+      Promise.allSettled(promises).then(() => {
+        setCurrentPrices(currentPricesMap);
+      });
     }
   }, [coingeckoQuery.data, customPriceQuery.data]);
 

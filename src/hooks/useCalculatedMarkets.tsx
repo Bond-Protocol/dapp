@@ -113,7 +113,7 @@ export function useCalculatedMarkets() {
       return {
         queryKey: market.id,
         queryFn: () => calculateMarket(market),
-        enabled: true,
+        enabled: Object.keys(currentPrices).length > 0,
       };
     })
   );
@@ -123,7 +123,7 @@ export function useCalculatedMarkets() {
       return {
         queryKey: market.id,
         queryFn: () => calculateMarket(market),
-        enabled: true,
+        enabled: Object.keys(currentPrices).length > 0,
       };
     })
   );
