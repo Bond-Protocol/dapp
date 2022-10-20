@@ -300,11 +300,12 @@ export const listOwnedMarketsGoerli = gql`
 
 export const listErc20BondTokensMainnet = gql`
   query ListErc20BondTokensMainnet {
-    bondTokens(where: 
-    { 
-      type: "fixed-expiration",
-      teller_not_in: ["0x007fe7c498a2cf30971ad8f2cbc36bd14ac51156"]
-    }) {
+    bondTokens(
+      where: {
+        type: "fixed-expiration"
+        teller_not_in: ["0x007fe7c498a2cf30971ad8f2cbc36bd14ac51156"]
+      }
+    ) {
       id
       symbol
       decimals
@@ -400,7 +401,7 @@ export const listOwnerTokenTbvsMainnet = gql`
       tbv
       network
     }
-  }  
+  }
 `;
 
 export const listOwnerTokenTbvsTestnet = gql`
@@ -411,5 +412,27 @@ export const listOwnerTokenTbvsTestnet = gql`
       tbv
       network
     }
-  }  
+  }
+`;
+export const listBondPurchasesPerMarket = gql`
+  query ListBondPurchasesPerMarket($marketId: String) {
+    bondPurchases(where: { marketId: $marketId }) {
+      id
+      payout
+      amount
+      timestamp
+      quoteToken {
+        id
+        name
+        symbol
+        address
+      }
+      payoutToken {
+        id
+        name
+        symbol
+        address
+      }
+    }
+  }
 `;

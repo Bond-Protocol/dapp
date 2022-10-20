@@ -8,8 +8,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export type PriceData = { date: number; price: number };
-export type LineChartData = Array<{ label: string; data: PriceData[] }>;
+export type BondDiscountData = {
+  date: number;
+  price: number;
+  discountedPrice: number;
+  discount?: number;
+};
+
+export type LineChartData = Array<{ label: string; data: BondDiscountData[] }>;
 export type ChartProps = {
   data: LineChartData;
 };
@@ -40,6 +46,7 @@ const TooltipLabel = (props: {
 export type BondChartDataset = {
   price: number;
   discount: number;
+  discountedPrice: number;
   date: Date;
 };
 
@@ -52,6 +59,7 @@ const Tooltips = (props: ChartTooltipProps) => {
   const [data] = props.payload || [];
   const price = data?.payload.price || 0;
   const discount = data?.payload.discount || 0;
+  const discountedPrice = data?.payload.discountedPrice || 0;
   const date = data?.payload.date || Date.now();
 
   return (
@@ -63,15 +71,18 @@ const Tooltips = (props: ChartTooltipProps) => {
         valueClassName=""
       />
       <TooltipLabel
-        value={"$" + discount.toFixed(2)}
+        value={"$" + discountedPrice.toFixed(2)}
         label="Bond Price: "
         className="text-light-secondary"
       />
       <TooltipLabel
-        value={`${discount > price ? "-" : ""}${1.32}%`}
+        value={`${discount.toFixed(2)}%`}
         label={`Discount: `}
         className="text-white"
-        valueClassName={`${getDiscountColor(price, discount)} text-right`}
+        valueClassName={`${getDiscountColor(
+          price,
+          discountedPrice
+        )} text-right`}
       />
       <div className="mt-2 text-[10px] text-light-primary-50">
         {format(date, "yyyy-MM-dd HH:MM:ss")}
@@ -86,6 +97,12 @@ export const LineChart = (props: ChartProps) => {
       <ResponsiveContainer>
         <Chart data={props.data}>
           <XAxis hide dataKey="date" tickLine={false} padding={{ right: 10 }} />
+          <XAxis
+            hide
+            dataKey="discountDate"
+            tickLine={false}
+            padding={{ right: 10 }}
+          />
           <YAxis
             hide
             domain={[getBottomPadding, getTopPadding]}
@@ -95,13 +112,10 @@ export const LineChart = (props: ChartProps) => {
           />
           <Tooltip
             content={<Tooltips tokenSymbol="OHM" />}
-            wrapperStyle={{
-              outline: "none",
-              backgroundColor: "transparent",
-            }}
+            wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
           />
           <Line dot={false} stroke="#40749b" dataKey="price" />
-          <Line dot={false} stroke="#F2A94A" dataKey="discount" />
+          <Line dot={false} stroke="#F2A94A" dataKey="discountedPrice" />
         </Chart>
       </ResponsiveContainer>
     </div>

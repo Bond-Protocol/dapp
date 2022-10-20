@@ -1134,16 +1134,12 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-<<<<<<< HEAD
-"@babel/runtime@^7.14.6":
-=======
 "@babel/runtime@^7.1.2", "@babel/runtime@^7.14.6":
->>>>>>> 01ddd1b (update chart tooltips)
-  version "7.19.4"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.19.4.tgz#a42f814502ee467d55b38dd1c256f53a7b885c78"
-  integrity sha512-EXpLCrk55f+cYqmHsSR+yD/0gAIMxxA9QK9lnQWzhMCvt+YmoBN7Zx94s++Kv0+unHk39vxNO8t+CMA2WSS3wA==
+  version "7.20.1"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.20.1.tgz#1148bb33ab252b165a06698fde7576092a78b4a9"
+  integrity sha512-mrzLkl6U9YLF8qpqI7TB82PESyEGjm/0Ly91jG575eVxMMlb8fYfOXFZIJ8XfLrJZQbm7dlKry2bJmXBUEkdFg==
   dependencies:
-    regenerator-runtime "^0.13.4"
+    regenerator-runtime "^0.13.10"
 
 "@babel/runtime@~7.5.4":
   version "7.5.5"
@@ -1198,10 +1194,13 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> cdbe36d (improvements)
 <<<<<<< HEAD
+=======
+>>>>>>> ae5980c (add discount data, price parsers)
 "@bond-protocol/bond-library@0.1.4":
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.4.tgz#3ba3dc19880e8c0c83f52801a43ee07a8f5f5a9a"
@@ -1211,26 +1210,6 @@
     ethers "^5.6.8"
     require-dir "^1.2.0"
     ts-node "^10.9.1"
-=======
-"@bond-protocol/bond-library@0.0.37":
-  version "0.0.37"
-  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.0.37.tgz#d9967de26a1c67c18d3b4f71227d939109b096ed"
-  integrity sha512-WTErvOz8JWWp0HbDnIH2aab5an7u6P9YldP+eRsmk3XGRAia9MB4OmsW0+IoVmNLC9AG24UXa3whRdjVQV+SjQ==
-  dependencies:
-    axios "^0.27.2"
-    ethers "^5.6.8"
->>>>>>> 01ddd1b (update chart tooltips)
-=======
-"@bond-protocol/bond-library@0.1.3":
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.3.tgz#4c9626a35ab6a7408591c61d0a984a77939094a1"
-  integrity sha512-kX5/qKS9Lolu1k7+vy//h3KufeviEuiNbiqkmpcGUpVYVSzCVdw8HHLnd5mmH6li3Hklo+tob1IP+kAhP96o6A==
-  dependencies:
-    axios "^0.27.2"
-    ethers "^5.6.8"
-    require-dir "^1.2.0"
-    ts-node "^10.9.1"
->>>>>>> 8a258c1 (improvements)
 
 >>>>>>> 163ce4d (update chart tooltips)
 "@bond-protocol/bond-library@^0.0.36":
@@ -1241,6 +1220,7 @@
     axios "^0.27.2"
     ethers "^5.6.8"
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 "@bond-protocol/bond-library@^0.1.6":
@@ -1261,19 +1241,12 @@
 =======
 >>>>>>> 8a258c1 (improvements)
 >>>>>>> cdbe36d (improvements)
+=======
+>>>>>>> ae5980c (add discount data, price parsers)
 "@bond-protocol/contract-library@0.0.38":
   version "0.0.38"
   resolved "https://registry.yarnpkg.com/@bond-protocol/contract-library/-/contract-library-0.0.38.tgz#bcdf4c795bdec0c2cfb53f99ac1afa22b1ffba97"
   integrity sha512-vXphpxBpwbVGPRgj0d2Te5tLB/CibPqCqQ299nUjLVc/Ol7h/5C+2zh21gRcz2GkKE55Xqg3v3pWhrRIoo9nrg==
-<<<<<<< HEAD
-=======
-"@bond-protocol/contract-library@0.0.33":
-  version "0.0.33"
-  resolved "https://registry.yarnpkg.com/@bond-protocol/contract-library/-/contract-library-0.0.33.tgz#a90d6a46ea97342e168ef93a7a1fba3f412a2dbc"
-  integrity sha512-DNZdtWEE/q4R0b8EOuwxce7XwMi612O1mz5qFwPAu9XguKUcp/4Q5Ywz5q1SvPwOOk3PpJQVkcCP5XbUmvzqGw==
->>>>>>> 01ddd1b (update chart tooltips)
-=======
->>>>>>> 8a258c1 (improvements)
   dependencies:
     "@bond-protocol/bond-library" "^0.0.36"
     "@ethersproject/providers" "^5.6.6"
@@ -1291,7 +1264,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+<<<<<<< HEAD
 "@coinbase/wallet-sdk@^3.5.3":
+=======
+"@coinbase/wallet-sdk@^3.3.0":
+>>>>>>> ae5980c (add discount data, price parsers)
   version "3.5.4"
   resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-3.5.4.tgz#957aa74521a4afa61ae99e1e2b948a6e017fcc87"
   integrity sha512-+5s05dmB6YUPUnV5vThP96GVG1O4GgS3qYvjYJhe56ds8YFz+keU3/docFBLf8FQOCIO5j7IZtZmVGvz7G+kRw==
@@ -3721,6 +3698,7 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
+<<<<<<< HEAD
 "@tanstack/query-core@4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.13.0.tgz#89153096d1fce42c0294fa1d1ae4b3e72aa5353b"
@@ -3751,6 +3729,38 @@
   integrity sha512-dI/5hJ/pGQ74P5hxBLC9h6K0/Cap2T3k0ZjjjFLBCNnohDYgl7LNmMopzrRzBHk2mMjf2hgXHIzcKNG8GOZ5hg==
   dependencies:
     "@tanstack/query-core" "4.13.0"
+=======
+"@tanstack/query-core@4.14.5":
+  version "4.14.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.14.5.tgz#f8c061a9dd4d7a87f9992db4ddda35c479e93c4a"
+  integrity sha512-Su1AyrPb6xnm7wXTvpN5tt+B7LViYSh9k04vvuc6+eMVH0HkE9ktZTXibRrTvV83BI1KP5MG7v/k90ne/4zQzw==
+
+"@tanstack/query-persist-client-core@4.14.5":
+  version "4.14.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-4.14.5.tgz#938b86c14956ce5451894d36f5b8e4a00bab2fd9"
+  integrity sha512-L3PKTR4XEyEwPSAmtWq5ZGd5O5MGo5/BTLidhfW/nr9+updlsHTQfDAHMmE1aaWehU+PYbFH8ws1qBpJiJ/S8g==
+
+"@tanstack/query-sync-storage-persister@^4.0.10":
+  version "4.14.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-4.14.5.tgz#bace9e4b5044248dfbf8a5a58dd05f6bdc93934d"
+  integrity sha512-+ZqGzAUQOTqPASCqUgzbRU9TszCK50wojwV8Hy4lfBms6SXUSN8suioOi8ZuADkHL810LBMTbhM++nbvEA5Pyw==
+  dependencies:
+    "@tanstack/query-persist-client-core" "4.14.5"
+
+"@tanstack/react-query-persist-client@^4.0.10":
+  version "4.14.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-4.14.5.tgz#c4b093c0ad9a7aaccebe95f019a3b55e5c9d59b7"
+  integrity sha512-RG39cq4t9bfR+K/xvrpJIoHqYU3MPeZoUFPzy0QR2sWE35Y4Cx8+IuRxGoxhjbZVD1aiB1TJFQtJy958puFYEw==
+  dependencies:
+    "@tanstack/query-persist-client-core" "4.14.5"
+
+"@tanstack/react-query@^4.0.10":
+  version "4.14.5"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.14.5.tgz#e2ff6419ee94426ec5e0eecf9bf77efbeb1a0e4b"
+  integrity sha512-CuWl/SxSB0zHhHaTja8LNhy9Vdk+vk9IkW3Oiq3lo4gPnTguHmbUzfjEA1x3RfvPeHfPMuq/pYMSbV+CX4aDQA==
+  dependencies:
+    "@tanstack/query-core" "4.14.5"
+>>>>>>> ae5980c (add discount data, price parsers)
     use-sync-external-store "^1.2.0"
 
 "@testing-library/dom@^8.3.0":
@@ -3831,8 +3841,6 @@
   resolved "https://registry.yarnpkg.com/@types/d3-array/-/d3-array-3.0.3.tgz#87d990bf504d14ad6b16766979d04e943c046dac"
   integrity sha512-Reoy+pKnvsksN0lQUlcH6dOGjRZ/3WRwXR//m+/8lt1BXeI4xyaUZoqULNjyXXRuh0Mj4LNpkCvhUpQlY3X5xQ==
 
-<<<<<<< HEAD
-=======
 "@types/d3-color@^2":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@types/d3-color/-/d3-color-2.0.3.tgz#8bc4589073c80e33d126345542f588056511fe82"
@@ -3845,14 +3853,11 @@
   dependencies:
     "@types/d3-color" "^2"
 
->>>>>>> 01ddd1b (update chart tooltips)
 "@types/d3-path@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/d3-path/-/d3-path-3.0.0.tgz#939e3a784ae4f80b1fde8098b91af1776ff1312b"
   integrity sha512-0g/A+mZXgFkQxN3HniRDbXMN79K3CdTpLsevj+PXiTcb2hVyvkZUBg37StmgCQkaD84cUJ4uaDAWq7UJOQy2Tg==
 
-<<<<<<< HEAD
-=======
 "@types/d3-path@^2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@types/d3-path/-/d3-path-2.0.2.tgz#6052f38f6186319769dfabab61b5514b0e02c75c"
@@ -3865,7 +3870,6 @@
   dependencies:
     "@types/d3-time" "^2"
 
->>>>>>> 01ddd1b (update chart tooltips)
 "@types/d3-scale@^4.0.1":
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@types/d3-scale/-/d3-scale-4.0.2.tgz#41be241126af4630524ead9cb1008ab2f0f26e69"
@@ -3873,8 +3877,6 @@
   dependencies:
     "@types/d3-time" "*"
 
-<<<<<<< HEAD
-=======
 "@types/d3-shape@^2.0.0":
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/@types/d3-shape/-/d3-shape-2.1.3.tgz#35d397b9e687abaa0de82343b250b9897b8cacf3"
@@ -3882,7 +3884,6 @@
   dependencies:
     "@types/d3-path" "^2"
 
->>>>>>> 01ddd1b (update chart tooltips)
 "@types/d3-shape@^3.0.1":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@types/d3-shape/-/d3-shape-3.1.0.tgz#1d87a6ddcf28285ef1e5c278ca4bdbc0658f3505"
@@ -3895,14 +3896,11 @@
   resolved "https://registry.yarnpkg.com/@types/d3-time/-/d3-time-3.0.0.tgz#e1ac0f3e9e195135361fa1a1d62f795d87e6e819"
   integrity sha512-sZLCdHvBUcNby1cB6Fd3ZBrABbjz3v1Vm90nysCQ6Vt7vd6e/h9Lt7SiJUoEX0l4Dzc7P5llKyhqSi1ycSf1Hg==
 
-<<<<<<< HEAD
-=======
 "@types/d3-time@^2":
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/@types/d3-time/-/d3-time-2.1.1.tgz#743fdc821c81f86537cbfece07093ac39b4bc342"
   integrity sha512-9MVYlmIgmRR31C5b4FVSWtuMmBHh2mOWQYfl7XAYOa8dsnb7iEmUmRSWSFgXFtkjxO65d7hTUHQC+RhR/9IWFg==
 
->>>>>>> 01ddd1b (update chart tooltips)
 "@types/eslint-scope@^3.7.3":
   version "3.7.4"
   resolved "https://registry.yarnpkg.com/@types/eslint-scope/-/eslint-scope-3.7.4.tgz#37fc1223f0786c39627068a12e94d6e6fc61de16"
@@ -4108,9 +4106,9 @@
   integrity sha512-taW5/WYqo36N7V39oYyHP9Ipfd5pNFvGTIQsNGj86xV88YQ7GnI30/yMfKDF7Zgin0m3e+ikX88FvImnK4RjGw==
 
 "@types/react-dom@^17.0.9":
-  version "17.0.17"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.17.tgz#2e3743277a793a96a99f1bf87614598289da68a1"
-  integrity sha512-VjnqEmqGnasQKV0CWLevqMTXBYG9GbwuE6x3VetERLh0cq2LTptFE73MrQi2S7GkKXCf2GgwItB/melLnxfnsg==
+  version "17.0.18"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.18.tgz#8f7af38f5d9b42f79162eea7492e5a1caff70dc2"
+  integrity sha512-rLVtIfbwyur2iFKykP2w0pl/1unw26b5td16d5xMgp7/yjTHomkyxPYChFoCr/FtEX1lN9wY6lFj1qvKdS5kDw==
   dependencies:
     "@types/react" "^17"
 
@@ -4138,9 +4136,9 @@
     csstype "^3.0.2"
 
 "@types/react@^17", "@types/react@^17.0.14":
-  version "17.0.50"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.50.tgz#39abb4f7098f546cfcd6b51207c90c4295ee81fc"
-  integrity sha512-ZCBHzpDb5skMnc1zFXAXnL3l1FAdi+xZvwxK+PkglMmBrwjpp9nKaWuEvrGnSifCJmBFGxZOOFuwC6KH/s0NuA==
+  version "17.0.52"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.52.tgz#10d8b907b5c563ac014a541f289ae8eaa9bf2e9b"
+  integrity sha512-vwk8QqVODi0VaZZpDXQCmEmiOuyjEFPY7Ttaw5vjM112LOq37yz1CDJGrRJwA1fYEq4Iitd5rnjd1yWAc/bT+A==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -4387,10 +4385,17 @@
     magic-string "^0.26.2"
     react-refresh "^0.14.0"
 
+<<<<<<< HEAD
 "@wagmi/core@^0.6.6":
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.6.6.tgz#f39e6819b12d3c21d28a62b0523a7851992ace26"
   integrity sha512-1gEjDFmlJ6R2uF6BX04Q768OdpoW/pNGGUTaJU+W7YP/3uOf4TwsXgqMEN/0uyZqptL+RQsworeVh11JXCbX1g==
+=======
+"@wagmi/core@^0.5.8":
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.5.8.tgz#9e375c0dd31c3b22973d000694e1c2b06c05dbbc"
+  integrity sha512-1mABf1bXyn3AOHyQkios4FTGqoARa8y1tf7GMH6t1c7q0nAMSbpXoTDdjEidUHy8qhWoG0y3Ez4PjCi8WQnmMg==
+>>>>>>> ae5980c (add discount data, price parsers)
   dependencies:
     abitype "^0.1.7"
     eventemitter3 "^4.0.7"
@@ -6324,11 +6329,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-<<<<<<< HEAD
-classnames@^2.3.1:
-=======
 classnames@^2.2.5, classnames@^2.3.1:
->>>>>>> 01ddd1b (update chart tooltips)
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
   integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
@@ -6907,14 +6908,11 @@ css-select@^4.1.3:
     domutils "^2.8.0"
     nth-check "^2.0.1"
 
-<<<<<<< HEAD
-=======
 css-unit-converter@^1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/css-unit-converter/-/css-unit-converter-1.1.2.tgz#4c77f5a1954e6dbff60695ecb214e3270436ab21"
   integrity sha512-IiJwMC8rdZE0+xiEZHeru6YoONC4rfPMqGm2W85jMIbkFvv5nFTwJVFHam2eFrN6txmoUYFAFXiv8ICVeTO0MA==
 
->>>>>>> 01ddd1b (update chart tooltips)
 css-what@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-5.1.0.tgz#3f7b707aadf633baf62c2ceb8579b545bb40f7fe"
@@ -6978,11 +6976,7 @@ d3-delaunay@5.3.0:
   resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-2.0.0.tgz#a10bcc0f986c372b729ba447382413aabf5b0767"
   integrity sha512-Ab3S6XuE/Q+flY96HXT0jOXcM4EAClYFnRGY5zsjRGNy6qCYrQsMffs7cV5Q9xejb35zxW5hf/guKw34kvIKsA==
 
-<<<<<<< HEAD
-"d3-interpolate@1.2.0 - 2":
-=======
 "d3-interpolate@1.2.0 - 2", d3-interpolate@^2.0.0:
->>>>>>> 01ddd1b (update chart tooltips)
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-2.0.1.tgz#98be499cfb8a3b94d4ff616900501a64abc91163"
   integrity sha512-c5UhwwTs/yybcmTpAVqwSFl6vrQ8JZJoT5F7xNFK9pymv5C0Ymcc9/LIJHtYIggg/yS9YHw8i8O8tgb9pupjeQ==
@@ -6994,11 +6988,7 @@ d3-delaunay@5.3.0:
   resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-2.0.0.tgz#55d86ac131a0548adae241eebfb56b4582dd09d8"
   integrity sha512-ZwZQxKhBnv9yHaiWd6ZU4x5BtCQ7pXszEV9CU6kRgwIQVQGLMv1oiL4M+MK/n79sYzsj+gcgpPQSctJUsLN7fA==
 
-<<<<<<< HEAD
-d3-scale@^3.3.0:
-=======
 d3-scale@^3.0.0, d3-scale@^3.3.0:
->>>>>>> 01ddd1b (update chart tooltips)
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-3.3.0.tgz#28c600b29f47e5b9cd2df9749c206727966203f3"
   integrity sha512-1JGp44NQCt5d1g+Yy+GeOnZP7xHo0ii8zsQp6PGzd+C1/dl0KGsp9A7Mxwp+1D1o4unbTTxVdU/ZOIEBoeZPbQ==
@@ -7009,11 +6999,7 @@ d3-scale@^3.0.0, d3-scale@^3.3.0:
     d3-time "^2.1.1"
     d3-time-format "2 - 3"
 
-<<<<<<< HEAD
-d3-shape@^2.1.0:
-=======
 d3-shape@^2.0.0, d3-shape@^2.1.0:
->>>>>>> 01ddd1b (update chart tooltips)
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-2.1.0.tgz#3b6a82ccafbc45de55b57fcf956c584ded3b666f"
   integrity sha512-PnjUqfM2PpskbSLTJvAzp2Wv4CZsnAgTfcVRTwW03QR3MkXF8Uo7B1y/lWkAsmbKwuecto++4NlsYcvYpXpTHA==
@@ -7094,14 +7080,11 @@ decamelize@^1.1.2, decamelize@^1.2.0:
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
   integrity sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==
 
-<<<<<<< HEAD
-=======
 decimal.js-light@^2.4.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/decimal.js-light/-/decimal.js-light-2.5.1.tgz#134fd32508f19e208f4fb2f8dac0d2626a867934"
   integrity sha512-qIMFpTMZmny+MMIitAB6D7iVPEorVw6YQRWkvarTkT4tBeSLLiHzcwj6q0MmYSFCiVpiqPJTJEYIrpcPzVEIvg==
 
->>>>>>> 01ddd1b (update chart tooltips)
 decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
@@ -7368,8 +7351,6 @@ dom-converter@^0.2.0:
   dependencies:
     utila "~0.4"
 
-<<<<<<< HEAD
-=======
 dom-helpers@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/dom-helpers/-/dom-helpers-3.4.0.tgz#e9b369700f959f62ecde5a6babde4bccd9169af8"
@@ -7377,7 +7358,6 @@ dom-helpers@^3.4.0:
   dependencies:
     "@babel/runtime" "^7.1.2"
 
->>>>>>> 01ddd1b (update chart tooltips)
 dom-serializer@^1.0.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-1.4.1.tgz#de5d41b1aea290215dc45a6dae8adcf1d32e2d30"
@@ -8320,11 +8300,7 @@ event-target-shim@^5.0.0:
   resolved "https://registry.yarnpkg.com/event-target-shim/-/event-target-shim-5.0.1.tgz#5d4d3ebdf9583d63a5333ce2deb7480ab2b05789"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
-<<<<<<< HEAD
-eventemitter3@4.0.7, eventemitter3@^4.0.7:
-=======
 eventemitter3@4.0.7, eventemitter3@^4.0.1, eventemitter3@^4.0.7:
->>>>>>> 01ddd1b (update chart tooltips)
   version "4.0.7"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
@@ -8508,14 +8484,11 @@ fast-diff@^1.1.2:
   resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.2.0.tgz#73ee11982d86caaf7959828d519cfe927fac5f03"
   integrity sha512-xJuoT5+L99XlZ8twedaRf6Ax2TgQVxvgZOYoPKqZufmJib0tL2tegPBOZb1pVNgIhlqDlA0eO0c3wBvQcmzx4w==
 
-<<<<<<< HEAD
-=======
 fast-equals@^2.0.0:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/fast-equals/-/fast-equals-2.0.4.tgz#3add9410585e2d7364c2deeb6a707beadb24b927"
   integrity sha512-caj/ZmjHljPrZtbzJ3kfH5ia/k4mTJe/qSiXAGzxZWRZgsgDV0cvNaQULqUX8t0/JVlzzEdYOwCN5DmzTxoD4w==
 
->>>>>>> 01ddd1b (update chart tooltips)
 fast-glob@^2.2.6:
   version "2.2.7"
   resolved "https://registry.yarnpkg.com/fast-glob/-/fast-glob-2.2.7.tgz#6953857c3afa475fff92ee6015d52da70a4cd39d"
@@ -12478,14 +12451,11 @@ postcss-selector-parser@^6.0.0, postcss-selector-parser@^6.0.10, postcss-selecto
     cssesc "^3.0.0"
     util-deprecate "^1.0.2"
 
-<<<<<<< HEAD
-=======
 postcss-value-parser@^3.3.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-3.3.1.tgz#9ff822547e2893213cf1c30efa51ac5fd1ba8281"
   integrity sha512-pISE66AbVkp4fDQ7VHBwRNXzAAKJjw4Vw7nWI/+Q3vuly7SNfgYXvm6i5IgFylHGK5sP/xHAbB7N49OS4gWNyQ==
 
->>>>>>> 01ddd1b (update chart tooltips)
 postcss-value-parser@^4.0.0, postcss-value-parser@^4.1.0, postcss-value-parser@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
@@ -12633,11 +12603,7 @@ prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-<<<<<<< HEAD
-prop-types@^15.0.0, prop-types@^15.7.2, prop-types@^15.8.1:
-=======
 prop-types@^15.0.0, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
->>>>>>> 01ddd1b (update chart tooltips)
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -12947,11 +12913,7 @@ react-is@17.0.2, react-is@^17.0.1, react-is@^17.0.2:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-<<<<<<< HEAD
-react-is@^16.13.1:
-=======
 react-is@^16.10.2, react-is@^16.13.1:
->>>>>>> 01ddd1b (update chart tooltips)
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
@@ -12961,14 +12923,11 @@ react-is@^18.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-<<<<<<< HEAD
-=======
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
->>>>>>> 01ddd1b (update chart tooltips)
 react-merge-refs@^1.0.0, react-merge-refs@v1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-merge-refs/-/react-merge-refs-1.1.0.tgz#73d88b892c6c68cbb7a66e0800faa374f4c38b06"
@@ -13024,8 +12983,6 @@ react-remove-scroll@2.5.4:
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
 
-<<<<<<< HEAD
-=======
 react-resize-detector@^7.1.2:
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-7.1.2.tgz#8ef975dd8c3d56f9a5160ac382ef7136dcd2d86c"
@@ -13033,7 +12990,6 @@ react-resize-detector@^7.1.2:
   dependencies:
     lodash "^4.17.21"
 
->>>>>>> 01ddd1b (update chart tooltips)
 react-router-dom@^6.3.0:
   version "6.4.1"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.1.tgz#99c9b7c4967890701c888517475aa5d54d25760e"
@@ -13049,8 +13005,6 @@ react-router@6.4.1:
   dependencies:
     "@remix-run/router" "1.0.1"
 
-<<<<<<< HEAD
-=======
 react-smooth@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-smooth/-/react-smooth-2.0.1.tgz#74c7309916d6ccca182c4b30c8992f179e6c5a05"
@@ -13059,7 +13013,6 @@ react-smooth@^2.0.1:
     fast-equals "^2.0.0"
     react-transition-group "2.9.0"
 
->>>>>>> 01ddd1b (update chart tooltips)
 react-style-singleton@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-style-singleton/-/react-style-singleton-2.2.1.tgz#f99e420492b2d8f34d38308ff660b60d0b1205b4"
@@ -13069,8 +13022,6 @@ react-style-singleton@^2.2.1:
     invariant "^2.2.4"
     tslib "^2.0.0"
 
-<<<<<<< HEAD
-=======
 react-transition-group@2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-2.9.0.tgz#df9cdb025796211151a436c69a8f3b97b5b07c8d"
@@ -13081,7 +13032,6 @@ react-transition-group@2.9.0:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
->>>>>>> 01ddd1b (update chart tooltips)
 react@^18.0.0:
   version "18.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
@@ -13170,8 +13120,6 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
-<<<<<<< HEAD
-=======
 recharts-scale@^0.4.4:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/recharts-scale/-/recharts-scale-0.4.5.tgz#0969271f14e732e642fcc5bd4ab270d6e87dd1d9"
@@ -13180,9 +13128,9 @@ recharts-scale@^0.4.4:
     decimal.js-light "^2.4.1"
 
 recharts@^2.1.15:
-  version "2.1.15"
-  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.1.15.tgz#896ad292ae10ad9eb528b30ad919a99d7da8948e"
-  integrity sha512-16VMAvrsdqkEe7sT9uyJ1F+OZzrC6+5eW+pVSU04SVO6O5Nr5lY78h/uKMjsZJTN0nfOfgV7YfHZcivtqgPU9g==
+  version "2.1.16"
+  resolved "https://registry.yarnpkg.com/recharts/-/recharts-2.1.16.tgz#f1448175dbce1988421276b0655c8a74d8a1e0a7"
+  integrity sha512-aYn1plTjYzRCo3UGxtWsduslwYd+Cuww3h/YAAEoRdGe0LRnBgYgaXSlVrNFkWOOSXrBavpmnli9h7pvRuk5wg==
   dependencies:
     "@types/d3-interpolate" "^2.0.0"
     "@types/d3-scale" "^3.0.0"
@@ -13199,7 +13147,6 @@ recharts@^2.1.15:
     recharts-scale "^0.4.4"
     reduce-css-calc "^2.1.8"
 
->>>>>>> 01ddd1b (update chart tooltips)
 redent@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/redent/-/redent-1.0.0.tgz#cf916ab1fd5f1f16dfb20822dd6ec7f730c2afde"
@@ -13208,8 +13155,6 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-<<<<<<< HEAD
-=======
 reduce-css-calc@^2.1.8:
   version "2.1.8"
   resolved "https://registry.yarnpkg.com/reduce-css-calc/-/reduce-css-calc-2.1.8.tgz#7ef8761a28d614980dc0c982f772c93f7a99de03"
@@ -13218,7 +13163,6 @@ reduce-css-calc@^2.1.8:
     css-unit-converter "^1.1.1"
     postcss-value-parser "^3.3.0"
 
->>>>>>> 01ddd1b (update chart tooltips)
 reduce-flatten@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/reduce-flatten/-/reduce-flatten-2.0.0.tgz#734fd84e65f375d7ca4465c69798c25c9d10ae27"
@@ -13235,6 +13179,11 @@ regenerate@^1.4.2:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.2.tgz#b9346d8827e8f5a32f7ba29637d398b69014848a"
   integrity sha512-zrceR/XhGYU/d/opr2EKO7aRHUeiBI8qjtfHqADTwZd6Szfy16la6kqD0MIUs5z5hx6AaKa+PixpPrR289+I0A==
+
+regenerator-runtime@^0.13.10:
+  version "0.13.10"
+  resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.10.tgz#ed07b19616bcbec5da6274ebc75ae95634bfc2ee"
+  integrity sha512-KepLsg4dU12hryUO7bp/axHAKvwGOCV0sGloQtpagJ12ai+ojVDqkeGSiRX1zlq+kjIMZ1t7gpze+26QqtdGqw==
 
 regenerator-runtime@^0.13.2, regenerator-runtime@^0.13.4, regenerator-runtime@^0.13.7:
   version "0.13.9"
@@ -13438,20 +13387,11 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 8a258c1 (improvements)
 require-dir@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/require-dir/-/require-dir-1.2.0.tgz#0d443b75e96012d3ca749cf19f529a789ae74817"
   integrity sha512-LY85DTSu+heYgDqq/mK+7zFHWkttVNRXC9NKcKGyuGLdlsfbjEPrIEYdCVrx6hqnJb+xSu3Lzaoo8VnmOhhjNA==
 
-<<<<<<< HEAD
-=======
->>>>>>> 01ddd1b (update chart tooltips)
-=======
->>>>>>> 8a258c1 (improvements)
 require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/require-directory/-/require-directory-2.1.1.tgz#8c64ad5fd30dab1c976e2344ffe7f792a6a6df42"
@@ -14837,15 +14777,7 @@ ts-log@^2.2.3:
   resolved "https://registry.yarnpkg.com/ts-log/-/ts-log-2.2.5.tgz#aef3252f1143d11047e2cb6f7cfaac7408d96623"
   integrity sha512-PGcnJoTBnVGy6yYNFxWVNkdcAuAMstvutN9MgDJIV6L0oG8fB+ZNNy1T+wJzah8RPGor1mZuPQkVfXNDpy9eHA==
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 ts-node@^10.8.1, ts-node@^10.9.1:
-=======
-ts-node@^10.8.1:
->>>>>>> 01ddd1b (update chart tooltips)
-=======
-ts-node@^10.8.1, ts-node@^10.9.1:
->>>>>>> 8a258c1 (improvements)
   version "10.9.1"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.9.1.tgz#e73de9102958af9e1f0b168a6ff320e25adcff4b"
   integrity sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==
@@ -15448,6 +15380,7 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+<<<<<<< HEAD
 wagmi@^0.7.7:
   version "0.7.7"
   resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.7.7.tgz#7d120778e1e88476e9275e05c8123623f5719199"
@@ -15460,6 +15393,19 @@ wagmi@^0.7.7:
     "@wagmi/core" "^0.6.6"
     "@walletconnect/ethereum-provider" "^1.8.0"
     abitype "^0.1.7"
+=======
+wagmi@^0.6.6:
+  version "0.6.8"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.6.8.tgz#bfc65686ec08cf1c508b1dbf5fbefbbe828653cd"
+  integrity sha512-pIOn7I56KPfdPQ1WRIWzWnpC8eJZm1V25Rcn5fbgOJ2eV3kjGNchnIub/ERY1VMKywxkCAfgXfn2D/tqwCJsWw==
+  dependencies:
+    "@coinbase/wallet-sdk" "^3.3.0"
+    "@tanstack/query-sync-storage-persister" "^4.0.10"
+    "@tanstack/react-query" "^4.0.10"
+    "@tanstack/react-query-persist-client" "^4.0.10"
+    "@wagmi/core" "^0.5.8"
+    "@walletconnect/ethereum-provider" "^1.7.8"
+>>>>>>> ae5980c (add discount data, price parsers)
     use-sync-external-store "^1.2.0"
 
 walker@^1.0.7, walker@~1.0.5:
@@ -15972,10 +15918,17 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
+<<<<<<< HEAD
 zustand@^4.1.1:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.1.3.tgz#72bc4c0ed8ed906fbd92c7c20cde8dd6114c018f"
   integrity sha512-AdFyr6+4sVD6xlyc/ArQaOrleqzxJEBbAXglufZ5lgvisoz8GUN3icOrKOnX1uRSxmpmdVUQPen9hhymWIzhBg==
+=======
+zustand@^4.0.0:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.1.4.tgz#b0286da4cc9edd35e91c96414fa54bfa4652a54d"
+  integrity sha512-k2jVOlWo8p4R83mQ+/uyB8ILPO2PCJOf+QVjcL+1PbMCk1w5OoPYpAIxy9zd93FSfmJqoH6lGdwzzjwqJIRU5A==
+>>>>>>> ae5980c (add discount data, price parsers)
   dependencies:
     use-sync-external-store "1.2.0"
 

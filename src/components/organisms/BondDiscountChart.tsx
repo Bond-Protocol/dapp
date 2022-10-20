@@ -1,10 +1,13 @@
 import { LineChart } from "./LineChart";
-import { prices, discounts } from "../../utils/mock-data";
+import { useBondAnalytics } from "hooks/useBondAnalytics";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 
-const dataset = prices.map((p, i) => {
-  return { date: p.date, price: p.price, discount: discounts[i].price };
-});
+export type BondDiscountChartProps = {
+  market: CalculatedMarket;
+};
 
-export const BondDiscountChart = () => {
-  return <LineChart data={dataset} />;
+export const BondDiscountChart = ({ market }: BondDiscountChartProps) => {
+  const bondAnalyticsData = useBondAnalytics(market);
+
+  return <LineChart data={bondAnalyticsData} />;
 };

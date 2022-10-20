@@ -182,7 +182,6 @@ export function useCalculatedMarkets() {
     }
   }, [calculateMyMarkets, currentPrices]);
 
-  console.log({ marketsByIssuer });
   return {
     allMarkets: calculatedMarkets,
     myMarkets: myCalculatedMarkets,
