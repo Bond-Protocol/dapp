@@ -346,7 +346,7 @@ export const listUniqueBondersGoerli = gql`
 
 export const listBondPurchasesMainnet = gql`
   query ListBondPurchasesMainnet($addresses: [String!]!) {
-    bondPurchases(where: { owner_in: $addresses }) {
+    bondPurchases(first: 1000, where: { owner_in: $addresses }) {
       id
       marketId
       owner
@@ -364,7 +364,7 @@ export const listBondPurchasesMainnet = gql`
 
 export const listBondPurchasesTestnet = gql`
   query ListBondPurchasesTestnet($addresses: [String!]!) {
-    bondPurchases(where: { owner_in: $addresses }) {
+    bondPurchases(first: 1000, where: { owner_in: $addresses }) {
       id
       marketId
       owner

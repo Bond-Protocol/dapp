@@ -150,12 +150,12 @@ export function useCalculatedMarkets() {
 
   useDeepCompareEffect(() => {
     if (Object.keys(currentPrices).length > 0) {
-      const calculatedPricesMap = new Map();
+      const calculatedMarketsMap = new Map();
       const issuerMarkets = new Map();
 
       calculateAllMarkets.forEach((result) => {
         if (result && result.data) {
-          calculatedPricesMap.set(result.data.id, result.data);
+          calculatedMarketsMap.set(result.data.id, result.data);
 
           const protocol = getProtocolByAddress(
             result.data.owner,
@@ -168,7 +168,7 @@ export function useCalculatedMarkets() {
         }
       });
 
-      setCalculatedMarkets(calculatedPricesMap);
+      setCalculatedMarkets(calculatedMarketsMap);
       setIssuers(Array.from(issuerMarkets.keys()));
       setMarketsByIssuer(issuerMarkets);
     }
@@ -176,12 +176,12 @@ export function useCalculatedMarkets() {
 
   useDeepCompareEffect(() => {
     if (Object.keys(currentPrices).length > 0) {
-      const calculatedPricesMap = new Map();
+      const calculatedMarketsMap = new Map();
       calculateMyMarkets.forEach((result) => {
-        result.data && calculatedPricesMap.set(result.data.id, result.data);
+        result.data && calculatedMarketsMap.set(result.data.id, result.data);
       });
 
-      setMyCalculatedMarkets(calculatedPricesMap);
+      setMyCalculatedMarkets(calculatedMarketsMap);
     }
   }, [calculateMyMarkets, currentPrices]);
 
