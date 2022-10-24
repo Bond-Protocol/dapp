@@ -3,13 +3,13 @@ import {getProtocols, Protocol} from "@bond-protocol/bond-library";
 import {IssuerCard} from "components/molecules/IssuerCard";
 import {alphabeticSort, numericSort} from "services/sort";
 import {useMarkets} from "hooks";
-import {useBondPurchases} from "hooks/useBondPurchases";
 import {useAtom} from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
+import {useOwnerTokenTbvs} from "hooks/useOwnerTokenTbvs";
 
 export const IssuerList = () => {
   const { marketsByIssuer, issuers } = useMarkets();
-  const { tbvByProtocol } = useBondPurchases();
+  const { protocolTbvs } = useOwnerTokenTbvs();
 
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [search, setSearch] = useState("");
@@ -49,8 +49,8 @@ export const IssuerList = () => {
 
     sortIssuers((i1: Protocol, i2: Protocol) => {
       return numericSort(
-        tbvByProtocol.get(i1.id) || 0,
-        tbvByProtocol.get(i2.id) || 0,
+        protocolTbvs?.get(i1.id) || 0,
+        protocolTbvs?.get(i2.id) || 0,
         ascending
       );
     });
@@ -65,7 +65,7 @@ export const IssuerList = () => {
 
   useEffect(() => {
     currentSort.sortBy();
-  }, [issuers, marketsByIssuer, tbvByProtocol, search]);
+  }, [issuers, marketsByIssuer, protocolTbvs, search]);
 
   return (
     <>
@@ -84,7 +84,7 @@ export const IssuerList = () => {
             const markets = marketsByIssuer.get(issuer.id) || [];
             return (
               <div key={issuer.id} className="w-full flex-1">
-                <IssuerCard issuer={issuer} markets={markets} />
+                <IssuerCard issuer={issuer} tbv={protocolTbvs?.get(issuer.id) || 0} markets={markets} />
               </div>
             );
           }
