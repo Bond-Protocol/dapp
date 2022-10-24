@@ -379,3 +379,25 @@ export const listBondPurchasesTestnet = gql`
     }
   }
 `;
+
+export const listOwnerTokenTbvsMainnet = gql`
+  query ListOwnerTokenTbvsMainnet {
+    ownerTokenTbvs(first: 1000) {
+      owner
+      token
+      tbv
+      network
+    }
+  }  
+`;
+
+export const listOwnerTokenTbvsTestnet = gql`
+  query ListOwnerTokenTbvsTestnet {
+    ownerTokenTbvs(first: 1000) {
+      owner
+      token
+      tbv
+      network
+    }
+  }  
+`;
