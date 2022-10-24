@@ -28,7 +28,7 @@ export function useOwnerTokenTbvs() {
 
   const {data: goerliData, ...goerliQuery} =
     useListOwnerTokenTbvsTestnetQuery(
-      {endpoint: endpoints[0]},
+      {endpoint: endpoints[1]},
       {},
       {enabled: !!testnet}
     );
