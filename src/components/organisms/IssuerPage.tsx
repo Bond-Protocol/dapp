@@ -7,7 +7,7 @@ import { InfoLabel, Link, Button } from "components/atoms";
 import { SocialRow } from "components/atoms/SocialRow";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
-import { useBondPurchases } from "hooks/useBondPurchases";
+import {useOwnerTokenTbvs} from "hooks/useOwnerTokenTbvs";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -19,7 +19,7 @@ export const IssuerPage: FC = () => {
   const navigate = useNavigate();
   const { marketsByIssuer } = useMarkets();
   const { getBondersForProtocol } = useUniqueBonders();
-  const { tbvByProtocol } = useBondPurchases();
+  const { protocolTbvs } = useOwnerTokenTbvs();
   const { name } = useParams();
 
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
@@ -39,8 +39,8 @@ export const IssuerPage: FC = () => {
   }, [name, marketsByIssuer]);
 
   useEffect(() => {
-    setTbv(tbvByProtocol.get(name || "") || 0);
-  }, [tbvByProtocol]);
+    setTbv(protocolTbvs?.get(name || "") || 0);
+  }, [protocolTbvs]);
 
   return (
     <div className="pb-12 font-jakarta">

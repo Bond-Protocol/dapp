@@ -10,13 +10,10 @@ import {
 import {
   CHAIN_ID,
   getAddressesByChain,
-  getProtocolByAddress,
 } from "@bond-protocol/bond-library";
-import { useTokens } from "hooks/useTokens";
 
 export function useBondPurchases() {
   const endpoints = getSubgraphEndpoints();
-  const { getPrice, currentPrices } = useTokens();
 
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [selectedBondPurchases, setSelectedBondPurchases] = useState<
@@ -25,9 +22,6 @@ export function useBondPurchases() {
   const [bondPurchasesByMarket, setBondPurchasesByMarket] = useState<
     Map<string, BondPurchase[]>
   >(new Map());
-  const [tbvByProtocol, setTbvByProtocol] = useState<Map<string, number>>(
-    new Map()
-  );
   const [mainnetBondPurchases, setMainnetBondPurchases] = useState<
     BondPurchase[]
   >([]);
@@ -42,7 +36,7 @@ export function useBondPurchases() {
       { enabled: !testnet }
     );
 
-  const { data: goerliData, ...testnetQuery } =
+  const { data: goerliData, ...goerliQuery } =
     useListBondPurchasesTestnetQuery(
       { endpoint: endpoints[1] },
       { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
@@ -77,32 +71,18 @@ export function useBondPurchases() {
 
   useEffect(() => {
     const bondPurchasesByMarketMap: Map<string, BondPurchase[]> = new Map();
-    const tbvByProtocolMap: Map<string, number> = new Map();
 
     selectedBondPurchases.forEach((bondPurchase) => {
       const array = bondPurchasesByMarketMap.get(bondPurchase.marketId) || [];
       array.push(bondPurchase);
       bondPurchasesByMarketMap.set(bondPurchase.marketId, array);
-
-      const protocol = getProtocolByAddress(
-        bondPurchase.owner,
-        bondPurchase.network
-      );
-      if (!protocol) return;
-
-      let value = tbvByProtocolMap.get(protocol.id) || 0;
-      const price = getPrice(bondPurchase.quoteToken.id);
-      value = value + bondPurchase.amount * price;
-      tbvByProtocolMap.set(protocol.id, value);
     });
 
     setBondPurchasesByMarket(bondPurchasesByMarketMap);
-    setTbvByProtocol(tbvByProtocolMap);
-  }, [selectedBondPurchases, currentPrices]);
+  }, [selectedBondPurchases]);
 
   return {
     bondPurchases: selectedBondPurchases,
     purchasesByMarket: bondPurchasesByMarket,
-    tbvByProtocol: tbvByProtocol,
   };
 }
