@@ -197,8 +197,11 @@ export const useTokens = () => {
         const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
 
         //TODO: (aphex) patched this manually due to library fixes, should be made consistent
-        const token0Address = network + "_" + token.value.token0Address;
-        const token1Address = network + "_" + token.value.token1Address;
+        let token0Address = token.value.token0Address;
+        let token1Address = token.value.token1Address;
+
+        if (token0Address.indexOf("_") === -1) token0Address = network + "_" + token0Address;
+        if (token1Address.indexOf("_") === -1) token1Address = network + "_" + token1Address;
 
         //@ts-ignore
         token.value["token0"] = bondLibrary.TOKENS.get(token0Address);
