@@ -19,8 +19,6 @@ export const InputCard = ({
   onChange,
   market,
 }: InputCardProps) => {
-  const { getTokenDetails } = useTokens();
-
   const setSome = (num: number) => {
     const max = Math.min(Number(balance), Number(market.maxAmountAccepted));
     handleChange((num * max) / 100 + "");
@@ -72,9 +70,9 @@ export const InputCard = ({
         <div className="relative w-min pr-3">
           <TokenLabel
             wrapped
-            className="w-[10vw]"
+            className="w-[11vw]"
             label={market.quoteToken.symbol || ""}
-            logo={getTokenDetails(market?.quoteToken).logoUrl}
+            token={market.quoteToken}
           />
         </div>
         <Input
