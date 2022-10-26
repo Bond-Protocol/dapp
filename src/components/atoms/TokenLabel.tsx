@@ -3,7 +3,7 @@ import {useTokens} from "hooks";
 
 export type TokenLabelProps = {
   label: string;
-  token: Token | LpToken;
+  token?: Token | LpToken;
   secondary?: string | React.ReactNode;
   wrapped?: boolean;
   className?: string;
@@ -43,7 +43,7 @@ const TokenLabelBase = (props: TokenLabelProps) => {
 
   return (
     <div className={`flex child:my-auto ${props.className}`}>
-      {quoteLogo(props.token)}
+      {props.token && quoteLogo(props.token)}
       {props.children}
       <div className="mx-1 flex-col">
         <p className={props.secondary ? "text-[14px] leading-none" : ""}>

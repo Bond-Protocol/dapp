@@ -75,6 +75,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const [exchangeRateString, setExchangeRateString] = useState("");
   const [minExchangeRateString, setMinExchangeRateString] = useState("");
   const [estimatedBondCadence, setEstimatedBondCadence] = useState("");
+  const [payoutPriceInitialized, setPayoutPriceInitialized] = useState(false);
+  const [quotePriceInitialized, setQuotePriceInitialized] = useState(false);
 
   const {
     control,
@@ -209,6 +211,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       );
     }
   }, [marketCapacity, capacityToken]);
+
+  useEffect(() => {
+    console.log({
+      ptp: payoutTokenInfo?.price,
+      qtp: quoteTokenInfo?.price
+    })
+  }, [payoutTokenInfo, quoteTokenInfo]);
 
   useEffect(() => {
     let rate = Number(payoutTokenPrice) / Number(quoteTokenPrice);
@@ -506,8 +515,16 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
     if (isPayout) {
       setLibraryPayoutToken(token);
+      if (!payoutPriceInitialized) {
+        setValue("payoutTokenPrice", token.price);
+        setPayoutPriceInitialized(true);
+      }
     } else {
       setLibraryQuoteToken(token);
+      if (!quotePriceInitialized) {
+        setValue("quoteTokenPrice", token.price);
+        setQuotePriceInitialized(true);
+      }
     }
 
     const contract = contractLibrary.IERC20__factory.connect(
