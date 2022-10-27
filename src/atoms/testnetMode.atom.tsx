@@ -1,6 +1,7 @@
 import { atom } from "jotai";
+import { environment } from "src/env-state";
 
-const isTestnet = import.meta.env.VITE_TESTNET;
+const isTestnet = environment.isTesting || environment.isStaging;
 
 const testnetMode = atom(isTestnet);
 

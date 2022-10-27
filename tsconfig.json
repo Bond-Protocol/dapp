@@ -2,7 +2,11 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -17,20 +21,57 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "components/*": ["src/components/*"],
-      "components": ["src/components/index"],
-      "context/*": ["src/context/*"],
-      "context": ["src/context/index"],
-      "pages/*": ["src/pages/*"],
-      "pages": ["src/pages/index"],
-      "services/*": ["src/services/*"],
-      "services": ["src/services/index"],
-      "hooks/*": ["src/hooks/*"],
-      "hooks": ["src/hooks/index"],
-      "assets/*": ["src/assets/*"]
+      "src/*": [
+        "src/*"
+      ],
+      "src": [
+        "src/index"
+      ],
+      "components/*": [
+        "src/components/*"
+      ],
+      "components": [
+        "src/components/index"
+      ],
+      "context/*": [
+        "src/context/*"
+      ],
+      "context": [
+        "src/context/index"
+      ],
+      "pages/*": [
+        "src/pages/*"
+      ],
+      "pages": [
+        "src/pages/index"
+      ],
+      "services/*": [
+        "src/services/*"
+      ],
+      "services": [
+        "src/services/index"
+      ],
+      "hooks/*": [
+        "src/hooks/*"
+      ],
+      "hooks": [
+        "src/hooks/index"
+      ],
+      "assets/*": [
+        "src/assets/*"
+      ]
     }
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "src/stories"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/stories"
+  ],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

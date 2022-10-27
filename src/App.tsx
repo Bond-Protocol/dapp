@@ -7,6 +7,7 @@ import { AppBackground } from "components/atoms/AppBackground";
 import { CoverUpScreen } from "components/pages/CoverUpScreen";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
 import { MobileCover } from "components/utility/MobileCover";
+import { AppStatusCard } from "components/organisms/AppStatusCard";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
@@ -25,6 +26,7 @@ export const App: FC = () => {
       <div className="xs:hidden fml:block">
         <Providers>
           <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
+          <AppStatusCard />
           <div className="relative min-h-[88vh] overflow-x-hidden pb-16 font-jakarta antialiased">
             <AppBackground />
             <InformationArea open={showInfoArea} onClose={closeInfoArea} />
