@@ -23,6 +23,7 @@ module.exports = withMT({
       colors: {
         ...brandColors,
         light: {
+          base: '#14182D',
           primary: {
             DEFAULT: "#40749B",
             50: "#9DBBC4",
@@ -49,7 +50,7 @@ module.exports = withMT({
     },
   },
   plugins: [
-    plugin(function ({ addBase }) {
+    plugin(function({ addBase }) {
       //JAKARTA
       addBase({
         "@font-face": {
@@ -135,7 +136,7 @@ module.exports = withMT({
       });
     }),
 
-    function ({ addVariant }) {
+    function({ addVariant }) {
       addVariant("child", "& > *");
       addVariant("child-hover", "& > *:hover");
     },
