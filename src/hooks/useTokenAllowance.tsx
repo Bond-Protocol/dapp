@@ -6,6 +6,7 @@ import {
   trim,
   calculateTrimDigits,
 } from "@bond-protocol/contract-library/dist/core/utils";
+import * as contractLibrary from "@bond-protocol/contract-library";
 
 export const useTokenAllowance = (
   tokenAddress: string,
@@ -21,11 +22,11 @@ export const useTokenAllowance = (
   const { address } = useAccount();
   const { approveSpending, getAllowance } = usePurchaseBond();
 
-  const { data } = useBalance({
-    token: tokenAddress,
-    addressOrName: address,
-    chainId: providers[networkId].network.chainId,
-  });
+  const fetchAndSetBalance = useCallback(async () => {
+    const result = await contractLibrary.getBalance(tokenAddress, address || "", providers[networkId]);
+    const balance = Number(result || "0") / Math.pow(10, tokenDecimals);
+    setBalance(trim(balance, calculateTrimDigits(balance)));
+  }, [tokenAddress, address, networkId]);
 
   const fetchAndSetAllowance = useCallback(async () => {
     if (!address) throw Error("Not connected");
@@ -56,11 +57,6 @@ export const useTokenAllowance = (
   };
 
   useEffect(() => {
-    const balance = Number(data?.formatted || "0");
-    setBalance(trim(balance, calculateTrimDigits(balance)));
-  }, [data]);
-
-  useEffect(() => {
     setHasSufficientAllowance(
       Number(allowance) > 0 && Number(allowance) >= Number(amount)
     );
@@ -74,6 +70,7 @@ export const useTokenAllowance = (
 
   useEffect(() => {
     void fetchAndSetAllowance();
+    void fetchAndSetBalance();
   }, []);
 
   return {
