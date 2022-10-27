@@ -114,7 +114,7 @@ export const usePurchaseBond = () => {
       slippage: number;
       market: CalculatedMarket;
     }): Promise<BigNumberish> => {
-      if (!signer) throw Error("Not connected");
+      if (!signer) return 0;
 
       const { address, amount, payout, slippage, market } = args;
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);

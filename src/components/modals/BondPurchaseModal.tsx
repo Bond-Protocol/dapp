@@ -13,10 +13,10 @@ import {
   PurchaseConfirmDialogProps,
 } from "components/modals/index";
 import { ContractTransaction } from "ethers";
-import { useProvider } from "wagmi";
 import { getBlockExplorer } from "../../utils/getBlockExplorer";
 import { TransactionErrorDialog } from "components/modals/TransactionErrorDialog";
 import { useNavigate } from "react-router-dom";
+import {providers} from "services/owned-providers";
 
 export type PurchaseBondModalProps = {
   open: boolean;
@@ -39,10 +39,10 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
     props.network,
     "tx"
   );
-  const provider = useProvider();
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    const provider = providers[props.network];
     try {
       const purchaseTx = await props.onSubmit();
       setIndex(1);

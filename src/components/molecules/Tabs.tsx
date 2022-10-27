@@ -27,6 +27,9 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
       case "/my-bonds":
         setSelected(2);
         break;
+      case "/my-markets":
+        setSelected(3);
+        break;
       default:
         setSelected(0);
         break;
