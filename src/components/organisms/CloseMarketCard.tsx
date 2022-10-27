@@ -47,10 +47,7 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
         providers[props.market.network].network.chainId.toString(),
         // @ts-ignore
         signer,
-        {
-          gasPrice: 100,
-          gasLimit: 10000000,
-        }
+        {}
       );
   }
 

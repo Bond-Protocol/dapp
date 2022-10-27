@@ -5,7 +5,6 @@ import * as bondLibrary from "@bond-protocol/bond-library";
 import {CHAIN_ID, getProtocolByAddress} from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import {CalculatedMarket} from "@bond-protocol/contract-library";
-import {useProvider} from "wagmi";
 import {providers} from "services/owned-providers";
 import {Market} from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
@@ -21,8 +20,6 @@ export function useCalculatedMarkets() {
     currentPrices,
     isLoading: areTokensLoading,
   } = useTokens();
-  const provider = useProvider();
-
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [myCalculatedMarkets, setMyCalculatedMarkets] = useState(new Map());
   const [issuers, setIssuers] = useState<string[]>([]);
@@ -36,7 +33,7 @@ export function useCalculatedMarkets() {
       no event, so the subgraph is not updated. Thus, we check here and return early if
       the market is not live.
     */
-    const requestProvider = providers[market.network] || provider;
+    const requestProvider = providers[market.network];
 
     const isLive = await contractLibrary.isLive(
       market.marketId,
