@@ -23,13 +23,15 @@ export const useTokenAllowance = (
   const { approveSpending, getAllowance } = usePurchaseBond();
 
   const fetchAndSetBalance = useCallback(async () => {
+    if (!address) return;
+
     const result = await contractLibrary.getBalance(tokenAddress, address || "", providers[networkId]);
     const balance = Number(result || "0") / Math.pow(10, tokenDecimals);
     setBalance(trim(balance, calculateTrimDigits(balance)));
   }, [tokenAddress, address, networkId]);
 
   const fetchAndSetAllowance = useCallback(async () => {
-    if (!address) throw Error("Not connected");
+    if (!address) return;
 
     const allowance = await getAllowance(
       tokenAddress,
