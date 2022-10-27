@@ -10,12 +10,8 @@ const TestnetMessage = () => (
     <div className="flex text-black ">
       <InfoIcon />
       <div className="my-auto">
-        You're on <span className="underline">{window.origin}</span>, a testing
-        environment.{" "}
-        <span className="font-bold">
-          It may have experimental features and bugs.
-        </span>
-        You can find the live BondProtocol dApp{" "}
+        You're on <span className="underline">{window.origin}</span>, a testnet
+        environment. You can find the live BondProtocol dApp{" "}
         <a href={dAppLink} className="underline hover:cursor-pointer">
           here
         </a>
