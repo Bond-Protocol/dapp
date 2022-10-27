@@ -1,15 +1,14 @@
 import {useCallback} from "react";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import {CalculatedMarket} from "@bond-protocol/contract-library";
-import {BigNumberish, ContractTransaction} from "ethers";
-import {useProvider, useSigner} from "wagmi";
+import {BigNumber, BigNumberish, ContractTransaction} from "ethers";
+import {useSigner} from "wagmi";
 import {providers} from "services/owned-providers";
 const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
 
 export const usePurchaseBond = () => {
-  const provider = useProvider();
   const { data: signer } = useSigner();
 
   const approveSpending = async (
@@ -55,18 +54,21 @@ export const usePurchaseBond = () => {
       marketId: number,
       chainId: string
     ): Promise<BigNumberish> => {
-      const requestProvider = provider || providers[chainId];
-
-      return contractLibrary.payoutFor(
-        marketId,
-        amount,
-        decimals,
-        REFERRAL_ADDRESS,
-        requestProvider || provider,
-        chainId
-      );
+      try {
+        return contractLibrary.payoutFor(
+          marketId,
+          amount,
+          decimals,
+          REFERRAL_ADDRESS,
+          providers[chainId],
+          chainId
+        );
+      } catch (e) {
+        console.log(e);
+        return BigNumber.from(0);
+      }
     },
-    [provider]
+    []
   );
 
   const bond = useCallback(
