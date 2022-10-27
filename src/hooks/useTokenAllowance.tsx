@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { useAccount, useBalance } from "wagmi";
+import { useAccount } from "wagmi";
 import { providers } from "services/owned-providers";
 import { usePurchaseBond } from "./usePurchaseBond";
 import {
