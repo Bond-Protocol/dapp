@@ -1,11 +1,8 @@
-import { useState, useEffect, useCallback } from "react";
-import { useAccount } from "wagmi";
-import { providers } from "services/owned-providers";
-import { usePurchaseBond } from "./usePurchaseBond";
-import {
-  trim,
-  calculateTrimDigits,
-} from "@bond-protocol/contract-library/dist/core/utils";
+import {useCallback, useEffect, useState} from "react";
+import {useAccount} from "wagmi";
+import {providers} from "services/owned-providers";
+import {usePurchaseBond} from "./usePurchaseBond";
+import {calculateTrimDigits, trim,} from "@bond-protocol/contract-library/dist/core/utils";
 import * as contractLibrary from "@bond-protocol/contract-library";
 
 export const useTokenAllowance = (
@@ -19,19 +16,30 @@ export const useTokenAllowance = (
   const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
   const [allowance, setAllowance] = useState<string>("0");
   const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
-  const { address } = useAccount();
-  const { approveSpending, getAllowance } = usePurchaseBond();
+  const {address, isConnected} = useAccount();
+  const {approveSpending, getAllowance} = usePurchaseBond();
 
   const fetchAndSetBalance = useCallback(async () => {
-    if (!address) return;
+    if (!isConnected || !address) {
+      setBalance("0");
+      return;
+    }
 
-    const result = await contractLibrary.getBalance(tokenAddress, address || "", providers[networkId]);
+    const result = await contractLibrary.getBalance(
+      tokenAddress,
+      address,
+      providers[networkId]
+    );
+
     const balance = Number(result || "0") / Math.pow(10, tokenDecimals);
     setBalance(trim(balance, calculateTrimDigits(balance)));
-  }, [tokenAddress, address, networkId]);
+  }, [tokenAddress, address, networkId, isConnected]);
 
   const fetchAndSetAllowance = useCallback(async () => {
-    if (!address) return;
+    if (!isConnected || !address) {
+      setAllowance("0");
+      return;
+    }
 
     const allowance = await getAllowance(
       tokenAddress,
@@ -42,7 +50,7 @@ export const useTokenAllowance = (
     );
 
     setAllowance(allowance.toString());
-  }, [tokenAddress, address, auctioneer, networkId, getAllowance]);
+  }, [tokenAddress, address, isConnected, auctioneer, networkId, getAllowance]);
 
   const approve = async (
     tokenAddress: string,
@@ -73,7 +81,7 @@ export const useTokenAllowance = (
   useEffect(() => {
     void fetchAndSetAllowance();
     void fetchAndSetBalance();
-  }, []);
+  }, [isConnected, address]);
 
   return {
     approve,
