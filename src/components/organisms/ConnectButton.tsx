@@ -39,7 +39,7 @@ export const ConnectButton = () => {
                     variant="ghost"
                     onClick={openConnectModal}
                   >
-                    <WalletIcon className="hover:color-brand-yella my-auto fill-white hover:fill-brand-yella" />
+                    <WalletIcon className="hover:color-brand-yella my-auto fill-white hover:fill-brand-yella w-[20px] h-[20px]" />
                     <p className="pl-2 text-sm font-light capitalize">
                       Connect
                     </p>
