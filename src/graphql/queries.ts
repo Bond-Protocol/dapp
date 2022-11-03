@@ -154,6 +154,8 @@ export const getOwnerBalancesByOwnerMainnet = gql`
       network
       bondToken {
         id
+        symbol
+        decimals
         expiry
         network
         type
@@ -178,6 +180,8 @@ export const getOwnerBalancesByOwnerGoerli = gql`
       network
       bondToken {
         id
+        symbol
+        decimals
         expiry
         network
         type
@@ -298,6 +302,8 @@ export const listErc20BondTokensMainnet = gql`
   query ListErc20BondTokensMainnet {
     bondTokens(where: { type: "fixed-expiration" }) {
       id
+      symbol
+      decimals
       underlying {
         id
         symbol
@@ -315,6 +321,8 @@ export const listErc20BondTokensGoerli = gql`
   query ListErc20BondTokensGoerli {
     bondTokens(where: { type: "fixed-expiration" }) {
       id
+      symbol
+      decimals
       underlying {
         id
         symbol

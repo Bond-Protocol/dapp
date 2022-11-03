@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getBlockExplorer } from "../../utils";
 import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
 import Button from "../atoms/Button";
-import * as React from "react";
 import { useEffect, useState } from "react";
 import { usePurchaseBond } from "hooks";
 import * as contractLibrary from "@bond-protocol/contract-library";
@@ -33,6 +32,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   const { data, isLoading } = useWaitForTransaction({
     chainId: props.marketData.chainId,
+    //@ts-ignore (TODO): fix thsi
     hash: hash,
   });
 
@@ -43,6 +43,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   const { isLoading: allowanceIsLoading } = useWaitForTransaction({
     chainId: props.marketData.chainId,
+    //@ts-ignore (TODO): fix thsi
     hash: allowanceTx,
     onSuccess() {
       loadAllowance();

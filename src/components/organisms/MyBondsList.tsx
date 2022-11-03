@@ -1,7 +1,7 @@
 import { useMyBonds } from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
 import { ContractTransaction } from "ethers";
-import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "src/generated/graphql";
 import { useEffect, useRef, useState } from "react";
 import { providers } from "services/owned-providers";
@@ -16,6 +16,8 @@ import {
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
 import { Loading } from "components/atoms/Loading";
 import { format } from "date-fns";
+import { formatSymbolForWallet } from "src/utils";
+import { ReactComponent as WalletIcon } from "../../assets/icons/wallet.svg";
 
 const isMainnet = (chain?: string) => {
   return chain === "mainnet" || chain === "homestead";
@@ -50,6 +52,7 @@ export const MyBondsList = () => {
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
   const { getTokenDetails, getPrice } = useTokens();
+  const account = useAccount();
 
   const [numBonds, setNumBonds] = useState<number>(myBonds.length);
   const timerRef = useRef<NodeJS.Timeout>();
@@ -96,14 +99,11 @@ export const MyBondsList = () => {
     <RequiresWallet>
       {myBonds.length > 0 ? (
         <>
-          <p className="flex justify-end p-2">
-            <Button onClick={refetch}>Refresh</Button>
-          </p>
           <table className="w-full table-fixed text-left">
             <thead>
               <tr className="border-b border-white/60">
                 <TableHeading>Bond</TableHeading>
-                <TableHeading>Network</TableHeading>
+                <TableHeading>Vesting Token</TableHeading>
                 <TableHeading>Vesting Date</TableHeading>
                 <TableHeading>Payout</TableHeading>
                 <TableHeading>Claim</TableHeading>
@@ -151,8 +151,45 @@ export const MyBondsList = () => {
                       />
                       <p className="my-auto pl-1">{underlying?.symbol}</p>
                     </TableCell>
-                    <TableCell>{bond.bondToken.network}</TableCell>
+
+                    <TableCell>
+                      {bond.bondToken && bond.bondToken.decimals && (
+                        <div className="grid grid-cols-2">
+                          <div className="col-span-1">
+                            {bond.bondToken.symbol}
+                          </div>
+
+                          <div>
+                            <button>
+                              <WalletIcon
+                                className="my-auto mt-[2px] h-[20px] w-[20px] fill-white hover:text-brand-yella"
+                                onClick={() => {
+                                  if (
+                                    bond.bondToken?.decimals == undefined ||
+                                    bond.bondToken?.symbol == undefined
+                                  )
+                                    return;
+                                  account.connector!.watchAsset!({
+                                    address: bond.bondToken?.id,
+                                    symbol: formatSymbolForWallet(
+                                      bond.bondToken?.symbol
+                                    ),
+                                    decimals: bond.bondToken?.decimals,
+                                  }).catch((error) => console.log(error));
+                                }}
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {bond.bondToken && !bond.bondToken.decimals && (
+                        <span>ERC-1155</span>
+                      )}
+                    </TableCell>
+
                     <TableCell>{format(date, "yyyy-MM-dd")}</TableCell>
+
                     <TableCell className="flex flex-row">
                       <div className="my-auto pr-1">
                         <img
@@ -167,6 +204,7 @@ export const MyBondsList = () => {
                         </p>
                       </div>
                     </TableCell>
+
                     <TableCell className="w-1/2">
                       <div className="flex gap-x-2">
                         {!canClaim && (
@@ -180,9 +218,7 @@ export const MyBondsList = () => {
                             variant={isCorrectNetwork ? "primary" : "secondary"}
                             onClick={(e) => handleClaim(e)}
                           >
-                            {isCorrectNetwork
-                              ? "Claim"
-                              : "Switch Network to Claim"}
+                            {isCorrectNetwork ? "Claim" : "Switch Network"}
                           </Button>
                         )}
                       </div>
