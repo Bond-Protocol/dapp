@@ -211,7 +211,7 @@ export const MarketList: FC<MarketListProps> = ({
           <a href={socials.discord} target="_blank">
             <Button>Join our Discord</Button>
           </a>
-          <p className="pt-2">for the latest updates!</p>
+          <p className="pt-2 text-sm uppercase">for the latest updates</p>
         </div>
       </div>
     );
