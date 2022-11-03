@@ -1,15 +1,16 @@
-import {FC, useEffect, useRef, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {CalculatedMarket} from "@bond-protocol/contract-library";
-import {ExpandableRow} from "components/molecules/ExpandableRow";
-import {CloseMarketCard} from "components/organisms/CloseMarketCard";
-import Button from "../atoms/Button";
-import {useMarkets, useTokens} from "hooks";
-import {TableHeading} from "components/atoms/TableHeading";
-import {TableCell} from "components/atoms/TableCell";
-import {CellLabel} from "components/atoms/CellLabel";
-import {BondListCard} from "./BondListCard";
-import {Loading} from "components/atoms/Loading";
+import { FC, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { ExpandableRow } from "components/molecules/ExpandableRow";
+import { CloseMarketCard } from "components/organisms/CloseMarketCard";
+import { useMarkets, useTokens } from "hooks";
+import { TableHeading } from "components/atoms/TableHeading";
+import { TableCell } from "components/atoms/TableCell";
+import { CellLabel } from "components/atoms/CellLabel";
+import { BondListCard } from "./BondListCard";
+import { Loading } from "components/atoms/Loading";
+import { Button } from "components/atoms";
+import { socials } from "..";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -22,13 +23,7 @@ export const MarketList: FC<MarketListProps> = ({
 }) => {
   const navigate = useNavigate();
   const { getTokenDetails } = useTokens();
-  const {
-    refetchAllMarkets,
-    refetchMyMarkets,
-    refetchOne,
-    allMarkets,
-    isLoading,
-  } = useMarkets();
+  const { refetchOne, allMarkets, isLoading } = useMarkets();
 
   const markets = props.markets || allMarkets;
 
@@ -202,15 +197,28 @@ export const MarketList: FC<MarketListProps> = ({
     return <Loading content="markets" />;
   }
 
+  if (
+    !Object.values(isLoading).some((loading) => loading) ||
+    !Array.from(allMarkets.keys()).length
+  ) {
+    return (
+      <div className="flex flex-col">
+        <div className="mt-20 text-center text-5xl uppercase leading-normal">
+          No Bond Markets <br />
+          are currently open
+        </div>
+        <div className="flex flex-col items-center justify-center pt-8">
+          <a href={socials.discord} target="_blank">
+            <Button>Join our Discord</Button>
+          </a>
+          <p className="pt-2">for the latest updates!</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <p className="flex justify-end p-2">
-        {allowManagement ? (
-          <Button onClick={refetchMyMarkets}>Refresh</Button>
-        ) : (
-          <Button onClick={refetchAllMarkets}>Refresh</Button>
-        )}
-      </p>
+    <div className="pt-10">
       <table className="w-full table-fixed font-jakarta">
         <thead>
           <tr className="border-b border-white/60 child:pl-2">
