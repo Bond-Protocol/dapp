@@ -47,13 +47,6 @@ export const RouteMap: FC = () => {
   );
 };
 
-const sample = {
-  title: "hai",
-  welcome: "oi",
-  updateDate: "June 3, 1992",
-  conditions: [{ title: "bad", content: "worse" }],
-};
-
 export const PolicyRoutes = () => {
   return (
     <Switch>

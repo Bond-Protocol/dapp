@@ -1,39 +1,42 @@
-import {useMyBonds} from "hooks/useMyBonds";
+import { useMyBonds } from "hooks/useMyBonds";
 import Button from "components/atoms/Button";
-import {ContractTransaction} from "ethers";
-import {useAccount, useNetwork, useSigner, useSwitchNetwork} from "wagmi";
-import {OwnerBalance} from "src/generated/graphql";
-import {useEffect, useRef, useState} from "react";
-import {providers} from "services/owned-providers";
-import {TokenDetails, useTokens} from "hooks";
-import {RequiresWallet} from "components/utility/RequiresWallet";
-import {useNavigate} from "react-router-dom";
-import {TableCell, TableHeading} from "..";
-import {calculateTrimDigits, trim,} from "@bond-protocol/contract-library/dist/core/utils";
-import {BOND_TYPE, redeem} from "@bond-protocol/contract-library";
-import {Loading} from "components/atoms/Loading";
-import {format} from "date-fns";
-import {formatSymbolForWallet} from "src/utils";
-import {ReactComponent as WalletIcon} from "../../assets/icons/wallet.svg";
+import { ContractTransaction } from "ethers";
+import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { OwnerBalance } from "src/generated/graphql";
+import { useEffect, useRef, useState } from "react";
+import { providers } from "services/owned-providers";
+import { TokenDetails, useTokens } from "hooks";
+import { RequiresWallet } from "components/utility/RequiresWallet";
+import { useNavigate } from "react-router-dom";
+import { TableCell, TableHeading } from "..";
+import {
+  calculateTrimDigits,
+  trim,
+} from "@bond-protocol/contract-library/dist/core/utils";
+import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
+import { Loading } from "components/atoms/Loading";
+import { format } from "date-fns";
+import { formatSymbolForWallet } from "src/utils";
+import { ReactComponent as WalletIcon } from "../../assets/icons/wallet.svg";
 
 const isMainnet = (chain?: string) => {
   return chain === "mainnet" || chain === "homestead";
 };
 
-const NoBondsView = ({loading}: { loading: boolean }) => {
+const NoBondsView = ({ loading }: { loading: boolean }) => {
   const navigate = useNavigate();
 
   const goToMarkets = () => navigate("/markets");
 
   if (loading) {
-    return <Loading content="your bonds"/>;
+    return <Loading content="your bonds" />;
   }
 
   return (
     <div className="mt-10 flex flex-col">
       <h1 className="py-10 text-center font-faketion text-5xl leading-normal">
         YOU DONT
-        <br/>
+        <br />
         HAVE A BOND YET
       </h1>
       <Button className="mx-auto" onClick={goToMarkets}>
@@ -44,11 +47,11 @@ const NoBondsView = ({loading}: { loading: boolean }) => {
 };
 
 export const MyBondsList = () => {
-  const {myBonds, refetch, isLoading: areMyBondsLoading} = useMyBonds();
-  const {data: signer} = useSigner();
-  const {switchNetwork} = useSwitchNetwork();
-  const {chain} = useNetwork();
-  const {getTokenDetails, getPrice} = useTokens();
+  const { myBonds, refetch, isLoading: areMyBondsLoading } = useMyBonds();
+  const { data: signer } = useSigner();
+  const { switchNetwork } = useSwitchNetwork();
+  const { chain } = useNetwork();
+  const { getTokenDetails, getPrice } = useTokens();
   const account = useAccount();
 
   const [numBonds, setNumBonds] = useState<number>(myBonds.length);
@@ -96,136 +99,138 @@ export const MyBondsList = () => {
     <RequiresWallet>
       {myBonds.length > 0 ? (
         <>
-          <p className="flex justify-end p-2">
-            <Button onClick={refetch}>Refresh</Button>
-          </p>
           <table className="w-full table-fixed text-left">
             <thead>
-            <tr className="border-b border-white/60">
-              <TableHeading>Bond</TableHeading>
-              <TableHeading>Vesting Token</TableHeading>
-              <TableHeading>Vesting Date</TableHeading>
-              <TableHeading>Payout</TableHeading>
-              <TableHeading>Claim</TableHeading>
-            </tr>
+              <tr className="border-b border-white/60">
+                <TableHeading>Bond</TableHeading>
+                <TableHeading>Vesting Token</TableHeading>
+                <TableHeading>Vesting Date</TableHeading>
+                <TableHeading>Payout</TableHeading>
+                <TableHeading>Claim</TableHeading>
+              </tr>
             </thead>
 
             <tbody className="gap-x-2">
-            {myBonds.map((bond: Partial<OwnerBalance>) => {
-              if (!bond.bondToken || !bond.bondToken.underlying) return;
+              {myBonds.map((bond: Partial<OwnerBalance>) => {
+                if (!bond.bondToken || !bond.bondToken.underlying) return;
 
-              const date = new Date(bond.bondToken.expiry * 1000);
-              const now = new Date(Date.now());
-              const canClaim = now >= date;
+                const date = new Date(bond.bondToken.expiry * 1000);
+                const now = new Date(Date.now());
+                const canClaim = now >= date;
 
-              let balance: number | string =
-                bond.balance /
-                Math.pow(10, bond.bondToken.underlying.decimals);
-              balance = trim(balance, calculateTrimDigits(balance));
+                let balance: number | string =
+                  bond.balance /
+                  Math.pow(10, bond.bondToken.underlying.decimals);
+                balance = trim(balance, calculateTrimDigits(balance));
 
-              let usdPrice: number | string =
-                Number(getPrice(bond.bondToken.underlying.id)) *
-                Number(balance);
-              usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
+                let usdPrice: number | string =
+                  Number(getPrice(bond.bondToken.underlying.id)) *
+                  Number(balance);
+                usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
 
-              const underlying: TokenDetails =
-                bond.bondToken && getTokenDetails(bond.bondToken.underlying);
+                const underlying: TokenDetails =
+                  bond.bondToken && getTokenDetails(bond.bondToken.underlying);
 
-              const isCorrectNetwork =
-                (isMainnet(bond.bondToken.network) &&
-                  isMainnet(chain?.network)) ||
-                bond.bondToken.network === chain?.network;
+                const isCorrectNetwork =
+                  (isMainnet(bond.bondToken.network) &&
+                    isMainnet(chain?.network)) ||
+                  bond.bondToken.network === chain?.network;
 
-              const handleClaim = isCorrectNetwork
-                ? () => redeemBond(bond)
-                : (e: React.BaseSyntheticEvent) =>
-                  // @ts-ignore
-                  switchChain(e, bond.bondToken.network);
+                const handleClaim = isCorrectNetwork
+                  ? () => redeemBond(bond)
+                  : (e: React.BaseSyntheticEvent) =>
+                      // @ts-ignore
+                      switchChain(e, bond.bondToken.network);
 
-              return (
-                <tr key={bond.bondToken.id}>
-                  <TableCell className="flex flex-row">
-                    <img
-                      className="h-[32px] w-[32px]"
-                      src={underlying?.logoUrl}
-                    />
-                    <p className="my-auto pl-1">{underlying?.symbol}</p>
-                  </TableCell>
-
-                  <TableCell>
-                    {bond.bondToken && bond.bondToken.decimals &&
-                      <div className="grid grid-cols-2">
-                        <div className="col-span-1">
-                          {bond.bondToken.symbol}
-                        </div>
-
-                        <div>
-                          <button>
-                            <WalletIcon
-                              className="mt-[2px] hover:text-brand-yella my-auto fill-white w-[20px] h-[20px]"
-                              onClick={() => {
-                                if (bond.bondToken?.decimals == undefined || bond.bondToken?.symbol == undefined) return;
-                                account.connector!.watchAsset!({
-                                  address: bond.bondToken?.id,
-                                  symbol: formatSymbolForWallet(bond.bondToken?.symbol),
-                                  decimals: bond.bondToken?.decimals,
-                                }).catch(error => console.log(error))
-                              }}/>
-                          </button>
-                        </div>
-                      </div>
-                    }
-
-                    {bond.bondToken && !bond.bondToken.decimals &&
-                      <span>ERC-1155</span>
-                    }
-                  </TableCell>
-
-                  <TableCell>{format(date, "yyyy-MM-dd")}</TableCell>
-
-                  <TableCell className="flex flex-row">
-                    <div className="my-auto pr-1">
+                return (
+                  <tr key={bond.bondToken.id}>
+                    <TableCell className="flex flex-row">
                       <img
                         className="h-[32px] w-[32px]"
                         src={underlying?.logoUrl}
                       />
-                    </div>
-                    <div>
-                      <p>{balance + " " + underlying?.symbol}</p>
-                      <p className="text-xs text-light-primary-500">
-                        (Market: ${usdPrice})
-                      </p>
-                    </div>
-                  </TableCell>
+                      <p className="my-auto pl-1">{underlying?.symbol}</p>
+                    </TableCell>
 
-                  <TableCell className="w-1/2">
-                    <div className="flex gap-x-2">
-                      {!canClaim && (
-                        <Button className="w-full" disabled>
-                          Vesting
-                        </Button>
+                    <TableCell>
+                      {bond.bondToken && bond.bondToken.decimals && (
+                        <div className="grid grid-cols-2">
+                          <div className="col-span-1">
+                            {bond.bondToken.symbol}
+                          </div>
+
+                          <div>
+                            <button>
+                              <WalletIcon
+                                className="my-auto mt-[2px] h-[20px] w-[20px] fill-white hover:text-brand-yella"
+                                onClick={() => {
+                                  if (
+                                    bond.bondToken?.decimals == undefined ||
+                                    bond.bondToken?.symbol == undefined
+                                  )
+                                    return;
+                                  account.connector!.watchAsset!({
+                                    address: bond.bondToken?.id,
+                                    symbol: formatSymbolForWallet(
+                                      bond.bondToken?.symbol
+                                    ),
+                                    decimals: bond.bondToken?.decimals,
+                                  }).catch((error) => console.log(error));
+                                }}
+                              />
+                            </button>
+                          </div>
+                        </div>
                       )}
-                      {canClaim && (
-                        <Button
-                          className="w-full"
-                          variant={isCorrectNetwork ? "primary" : "secondary"}
-                          onClick={(e) => handleClaim(e)}
-                        >
-                          {isCorrectNetwork
-                            ? "Claim"
-                            : "Switch Network"}
-                        </Button>
+
+                      {bond.bondToken && !bond.bondToken.decimals && (
+                        <span>ERC-1155</span>
                       )}
-                    </div>
-                  </TableCell>
-                </tr>
-              );
-            })}
+                    </TableCell>
+
+                    <TableCell>{format(date, "yyyy-MM-dd")}</TableCell>
+
+                    <TableCell className="flex flex-row">
+                      <div className="my-auto pr-1">
+                        <img
+                          className="h-[32px] w-[32px]"
+                          src={underlying?.logoUrl}
+                        />
+                      </div>
+                      <div>
+                        <p>{balance + " " + underlying?.symbol}</p>
+                        <p className="text-xs text-light-primary-500">
+                          (Market: ${usdPrice})
+                        </p>
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="w-1/2">
+                      <div className="flex gap-x-2">
+                        {!canClaim && (
+                          <Button className="w-full" disabled>
+                            Vesting
+                          </Button>
+                        )}
+                        {canClaim && (
+                          <Button
+                            className="w-full"
+                            variant={isCorrectNetwork ? "primary" : "secondary"}
+                            onClick={(e) => handleClaim(e)}
+                          >
+                            {isCorrectNetwork ? "Claim" : "Switch Network"}
+                          </Button>
+                        )}
+                      </div>
+                    </TableCell>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </>
       ) : (
-        <NoBondsView loading={areMyBondsLoading}/>
+        <NoBondsView loading={areMyBondsLoading} />
       )}
     </RequiresWallet>
   );
