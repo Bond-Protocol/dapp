@@ -1,8 +1,7 @@
 import { providers } from "services/owned-providers";
-import { CHAINS} from "@bond-protocol/bond-library";
+import { CHAINS, NativeCurrency } from "@bond-protocol/bond-library";
 import { ethers } from "ethers";
 import { useTokens } from "hooks/useTokens";
-import { NativeCurrency } from "@bond-protocol/bond-library/dist/chains/chains";
 
 export const useGasPrice = () => {
   const { getPrice } = useTokens();
