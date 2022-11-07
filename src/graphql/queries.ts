@@ -421,6 +421,7 @@ export const listBondPurchasesPerMarket = gql`
       payout
       amount
       timestamp
+      postPurchasePrice
       quoteToken {
         id
         name

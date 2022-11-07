@@ -8,7 +8,6 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { generateFetcher, getClosest } from "../utils";
 import { CHAIN_ID, TOKENS } from "@bond-protocol/bond-library";
-import { useMemo } from "react";
 
 const getCoingeckoPriceHistory = (
   apiId: string,
@@ -35,7 +34,7 @@ const purchasesToDataset = (
   purchases: BondPurchase[]
 ) => {
   const priceTimestamps = priceData?.map((d) => ({
-    date: getUnixTime(d[0]),
+    date: d[0],
     price: d[1],
   }));
 
@@ -43,14 +42,16 @@ const purchasesToDataset = (
     //Get closest timestamp of the price at time of purchase
     const date = getClosest(
       priceTimestamps?.map((d) => d.date),
-      p.timestamp
+      Math.floor(p.timestamp * 1000)
     );
 
     const { price } = priceTimestamps?.find((d) => d.date === date)!;
 
-    const discount = calcDiscount(p?.amount, p?.payout, price);
+    const { discount } = calcDiscount(p?.amount, p?.payout, price);
 
-    return { date, price, ...discount };
+    const discountedPrice = parseFloat(p.postPurchasePrice);
+
+    return { date, discountedPrice, discount, price };
   });
 
   return priceTimestamps?.map((p) => {
@@ -83,5 +84,6 @@ export const useBondAnalytics = (market: CalculatedMarket, dayRange = 3) => {
     purchaseData?.data?.bondPurchases
   );
 
+  console.log({ purchaseData, priceData, result });
   return result;
 };
