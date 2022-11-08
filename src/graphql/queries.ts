@@ -300,7 +300,11 @@ export const listOwnedMarketsGoerli = gql`
 
 export const listErc20BondTokensMainnet = gql`
   query ListErc20BondTokensMainnet {
-    bondTokens(where: { type: "fixed-expiration" }) {
+    bondTokens(where: 
+    { 
+      type: "fixed-expiration",
+      teller_not_in: ["0x007fe7c498a2cf30971ad8f2cbc36bd14ac51156"]
+    }) {
       id
       symbol
       decimals
