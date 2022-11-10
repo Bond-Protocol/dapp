@@ -16,7 +16,6 @@ export type BondDiscountData = {
 };
 
 export type LineChartData = Array<{ label: string; data: BondDiscountData[] }>;
-
 export type ChartProps = {
   data: LineChartData;
 };
@@ -37,10 +36,13 @@ export const LineChart = (props: ChartProps) => {
       <ResponsiveContainer>
         <Chart data={props.data}>
           <XAxis hide dataKey="date" tickLine={false} padding={{ right: 10 }} />
-          <XAxis hide tickLine={false} padding={{ right: 10 }} />
-          <YAxis hide domain={[getBottomPadding, getTopPadding]} />
+          <YAxis
+            hide
+            domain={[getBottomPadding, getTopPadding]}
+            tickFormatter={(t) => Number(t).toPrecision(4)}
+          />
           <Tooltip
-            content={<BondDiscountTooltip tokenSymbol="OHM" />}
+            content={<BondDiscountTooltip tokenSymbol="ETH" />}
             wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
           />
           <Line dot={false} stroke="#40749b" dataKey="price" />

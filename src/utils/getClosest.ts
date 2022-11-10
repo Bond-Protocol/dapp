@@ -4,7 +4,9 @@
  * @param {target} - the target value to be compared
  */
 export const getClosest = (list: number[], target: number) => {
-  return list?.reduce((prev, curr) =>
-    Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev
+  return list?.reduce(
+    (prev, curr) =>
+      Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev,
+    0
   );
 };

@@ -2,12 +2,14 @@ import { sub, getUnixTime } from "date-fns";
 import { useQuery } from "react-query";
 import {
   BondPurchase,
+  ListBondPurchasesPerMarketQuery,
   useListBondPurchasesPerMarketQuery,
 } from "../generated/graphql";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { generateFetcher, getClosest } from "../utils";
 import { CHAIN_ID, TOKENS } from "@bond-protocol/bond-library";
+import { BondChartDataset } from "components/organisms/LineChart";
 
 const getCoingeckoPriceHistory = (
   apiId: string,
@@ -23,67 +25,92 @@ const getCoingeckoPriceHistory = (
   );
 };
 
-const calcDiscount = (amount: string, payout: string, price: number) => {
-  const discountedPrice = (parseFloat(amount) * price) / parseFloat(payout);
-  const discount = (100 * (price - discountedPrice)) / price;
-  return { discount, discountedPrice };
+const calcDiscountPercentage = (price: number, bondPrice: number) => {
+  return (100 * (price - bondPrice)) / price;
 };
 
-const purchasesToDataset = (
-  priceData: Array<number[]>,
-  purchases: BondPurchase[]
+const getMarketPriceAtPurchaseTime = (
+  timestamp: number,
+  prices: Array<{ date: number; price: number }>
 ) => {
-  const priceTimestamps = priceData?.map((d) => ({
+  const priceDate = getClosest(
+    prices?.map((d) => d.date),
+    timestamp
+  );
+  const details = prices?.find((d) => d.date === priceDate)!;
+  return details?.price || 0;
+};
+
+type createBondPurchaseDatasetArgs = { priceData: Array<number[]> } & Pick<
+  ListBondPurchasesPerMarketQuery,
+  "bondPurchases"
+>;
+
+const createBondPurchaseDataset = ({
+  priceData,
+  bondPurchases,
+}: createBondPurchaseDatasetArgs): BondChartDataset[] => {
+  const priceDetails = priceData?.map((d) => ({
     date: d[0],
     price: d[1],
   }));
 
-  const updatedPurchases = purchases?.map((p) => {
-    //Get closest timestamp of the price at time of purchase
-    const date = getClosest(
-      priceTimestamps?.map((d) => d.date),
-      Math.floor(p.timestamp * 1000)
-    );
+  //@ts-ignore
+  return bondPurchases?.reduce((entries, purchase) => {
+    const date = Math.floor(purchase.timestamp * 1000);
+    const price = getMarketPriceAtPurchaseTime(date, priceDetails);
 
-    const { price } = priceTimestamps?.find((d) => d.date === date)!;
+    const purchaseEntry = {
+      date,
+      price,
+      discount: calcDiscountPercentage(price, purchase.purchasePrice),
+      discountedPrice: parseFloat(purchase.purchasePrice),
+    };
 
-    const { discount } = calcDiscount(p?.amount, p?.payout, price);
+    const postPurchaseEntry = {
+      date,
+      price,
+      discount: calcDiscountPercentage(price, purchase.postPurchasePrice),
+      discountedPrice: parseFloat(purchase.postPurchasePrice),
+    };
 
-    const discountedPrice = parseFloat(p.postPurchasePrice);
-
-    return { date, discountedPrice, discount, price };
-  });
-
-  return priceTimestamps?.map((p) => {
-    const res = updatedPurchases.find(({ date }) => p.date === date);
-    return res ? res : { ...p, discountedPrice: p.price };
-  });
+    return [...entries, purchaseEntry, postPurchaseEntry];
+  }, []);
 };
 
-/**
- * Aims to be a reusable way to get all desirable information about a bond market
- * For now, only does bond discounts
- **/
 export const useBondAnalytics = (market: CalculatedMarket, dayRange = 3) => {
-  const purchaseData = useListBondPurchasesPerMarketQuery(
-    { endpoint: subgraphEndpoints[market.network as CHAIN_ID] },
-    { marketId: market.id }
-  );
-
   //@ts-ignore (TODO): fix bond-library types (again)
-  const { priceSources } = TOKENS.get(market.payoutToken.id);
-  const tokenApiId = priceSources[0].apiId;
+  const priceSources = TOKENS.get(market.payoutToken.id)?.priceSources || [];
+  //@ts-ignore
+  const tokenApiId = priceSources[0]?.apiId;
 
-  const { data: priceData } = useQuery(
+  const { data: priceData, ...priceQuery } = useQuery(
     `token-price-history-${market.payoutToken.symbol}`,
     getCoingeckoPriceHistory(tokenApiId, { days: dayRange }, Date.now())
   );
 
-  const result = purchasesToDataset(
-    priceData?.prices,
-    purchaseData?.data?.bondPurchases
+  const { data, ...purchaseQuery } = useListBondPurchasesPerMarketQuery(
+    { endpoint: subgraphEndpoints[market.network as CHAIN_ID] },
+    { marketId: market.id }
   );
+  const isLoading = [priceQuery, purchaseQuery].some((q) => q.isLoading);
 
-  console.log({ purchaseData, priceData, result });
-  return result;
+  const prepped =
+    createBondPurchaseDataset({
+      priceData: priceData?.prices,
+      bondPurchases: data?.bondPurchases as BondPurchase[],
+    }) || [];
+
+  const dataset = [
+    ...prepped,
+    {
+      // add current information
+      date: Date.now(),
+      discountedPrice: market.discountedPrice,
+      discount: market.discount,
+      price: market.fullPrice,
+    },
+  ];
+
+  return { isLoading, dataset, purchases: data?.bondPurchases };
 };

@@ -416,11 +416,12 @@ export const listOwnerTokenTbvsTestnet = gql`
 `;
 export const listBondPurchasesPerMarket = gql`
   query ListBondPurchasesPerMarket($marketId: String) {
-    bondPurchases(where: { marketId: $marketId }) {
+    bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
       id
       payout
       amount
       timestamp
+      purchasePrice
       postPurchasePrice
       quoteToken {
         id

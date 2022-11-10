@@ -7,7 +7,7 @@ export type BondDiscountChartProps = {
 };
 
 export const BondDiscountChart = ({ market }: BondDiscountChartProps) => {
-  const bondAnalyticsData = useBondAnalytics(market);
+  const { dataset, isLoading } = useBondAnalytics(market);
 
-  return <LineChart data={bondAnalyticsData} />;
+  return <LineChart data={dataset} />;
 };

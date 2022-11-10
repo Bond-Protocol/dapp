@@ -56,7 +56,7 @@ export const BondDiscountTooltip = (props: ChartTooltipProps) => {
         )} text-right`}
       />
       <div className="mt-2 text-[10px] text-light-primary-50">
-        {format(date, "yyyy-MM-dd HH:MM:ss")}
+        {format(date, "PP pp")}
       </div>
     </div>
   );
