@@ -35,7 +35,14 @@ export const LineChart = (props: ChartProps) => {
     <div className="h-full min-h-[20vh] min-w-[25vw] border-b border-l border-light-primary-50/10">
       <ResponsiveContainer>
         <Chart data={props.data}>
-          <XAxis hide dataKey="date" tickLine={false} padding={{ right: 10 }} />
+          <XAxis
+            hide
+            dataKey="date"
+            scale="time"
+            tickLine={false}
+            padding={{ right: 10 }}
+          />
+
           <YAxis
             hide
             domain={[getBottomPadding, getTopPadding]}
@@ -45,8 +52,13 @@ export const LineChart = (props: ChartProps) => {
             content={<BondDiscountTooltip tokenSymbol="ETH" />}
             wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
           />
-          <Line dot={false} stroke="#40749b" dataKey="price" />
-          <Line dot={false} stroke="#F2A94A" dataKey="discountedPrice" />
+          <Line connectNulls dot={false} stroke="#40749b" dataKey="price" />
+          <Line
+            connectNulls
+            dot={false}
+            stroke="#F2A94A"
+            dataKey="discountedPrice"
+          />
         </Chart>
       </ResponsiveContainer>
     </div>

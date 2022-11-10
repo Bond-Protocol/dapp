@@ -1,4 +1,3 @@
-import { sub, getUnixTime } from "date-fns";
 import { useQuery } from "react-query";
 import {
   BondPurchase,
@@ -7,27 +6,17 @@ import {
 } from "../generated/graphql";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
-import { generateFetcher, getClosest } from "../utils";
+import { getClosest } from "../utils";
 import { CHAIN_ID, TOKENS } from "@bond-protocol/bond-library";
 import { BondChartDataset } from "components/organisms/LineChart";
+import { calcDiscountPercentage } from "../utils/calculate-percentage";
+import { interpolate } from "../utils/interpolate-price";
+import { getCoingeckoPriceHistory } from "services/custom-queries";
 
-const getCoingeckoPriceHistory = (
-  apiId: string,
-  range: Duration,
-  to = Date.now()
-) => {
-  const from = sub(to, range);
-  const fromTimestamp = getUnixTime(from);
-  const toTimestamp = getUnixTime(to);
-
-  return generateFetcher(
-    `https://api.coingecko.com/api/v3/coins/${apiId}/market_chart/range?vs_currency=usd&from=${fromTimestamp}&to=${toTimestamp}`
-  );
-};
-
-const calcDiscountPercentage = (price: number, bondPrice: number) => {
-  return (100 * (price - bondPrice)) / price;
-};
+type createBondPurchaseDatasetArgs = { priceData: Array<number[]> } & Pick<
+  ListBondPurchasesPerMarketQuery,
+  "bondPurchases"
+>;
 
 const getMarketPriceAtPurchaseTime = (
   timestamp: number,
@@ -38,44 +27,61 @@ const getMarketPriceAtPurchaseTime = (
     timestamp
   );
   const details = prices?.find((d) => d.date === priceDate)!;
-  return details?.price || 0;
+  return { price: details?.price || 0, priceDate: priceDate };
 };
-
-type createBondPurchaseDatasetArgs = { priceData: Array<number[]> } & Pick<
-  ListBondPurchasesPerMarketQuery,
-  "bondPurchases"
->;
 
 const createBondPurchaseDataset = ({
   priceData,
   bondPurchases,
 }: createBondPurchaseDatasetArgs): BondChartDataset[] => {
-  const priceDetails = priceData?.map((d) => ({
-    date: d[0],
-    price: d[1],
-  }));
+  const priceDetails =
+    priceData?.map((d) => ({
+      date: d[0],
+      price: d[1],
+    })) || [];
+
+  const datesToRemove: number[] = [];
+
+  const updatedPurchases =
+    //@ts-ignore
+    bondPurchases?.reduce((entries, purchase) => {
+      const date = Math.floor(purchase.timestamp * 1000);
+      const { price, priceDate } = getMarketPriceAtPurchaseTime(
+        date,
+        priceDetails
+      );
+
+      datesToRemove.push(priceDate);
+      const purchaseEntry = {
+        date,
+        price,
+        discount: calcDiscountPercentage(price, purchase.purchasePrice),
+        discountedPrice: parseFloat(purchase.purchasePrice),
+      };
+
+      const postPurchaseEntry = {
+        date: date + 1000,
+        price,
+        discount: calcDiscountPercentage(price, purchase.postPurchasePrice),
+        discountedPrice: parseFloat(purchase.postPurchasePrice),
+      };
+
+      return [...entries, purchaseEntry, postPurchaseEntry];
+    }, []) || ([] as BondChartDataset[]);
 
   //@ts-ignore
-  return bondPurchases?.reduce((entries, purchase) => {
-    const date = Math.floor(purchase.timestamp * 1000);
-    const price = getMarketPriceAtPurchaseTime(date, priceDetails);
+  const earliestPurchase = updatedPurchases?.sort((a, b) => a.date - b.date)[0]
+    ?.date;
 
-    const purchaseEntry = {
-      date,
-      price,
-      discount: calcDiscountPercentage(price, purchase.purchasePrice),
-      discountedPrice: parseFloat(purchase.purchasePrice),
-    };
-
-    const postPurchaseEntry = {
-      date,
-      price,
-      discount: calcDiscountPercentage(price, purchase.postPurchasePrice),
-      discountedPrice: parseFloat(purchase.postPurchasePrice),
-    };
-
-    return [...entries, purchaseEntry, postPurchaseEntry];
-  }, []);
+  return (
+    [
+      ...priceDetails.filter((d) => !datesToRemove.includes(d.date)),
+      //@ts-ignore
+      ...updatedPurchases,
+    ]
+      .filter((p, i, self) => p.date > earliestPurchase)
+      .sort((a, b) => a.date - b.date) || []
+  );
 };
 
 export const useBondAnalytics = (market: CalculatedMarket, dayRange = 3) => {
@@ -93,18 +99,15 @@ export const useBondAnalytics = (market: CalculatedMarket, dayRange = 3) => {
     { endpoint: subgraphEndpoints[market.network as CHAIN_ID] },
     { marketId: market.id }
   );
+
   const isLoading = [priceQuery, purchaseQuery].some((q) => q.isLoading);
 
-  const prepped =
-    createBondPurchaseDataset({
+  const dataset = [
+    ...createBondPurchaseDataset({
       priceData: priceData?.prices,
       bondPurchases: data?.bondPurchases as BondPurchase[],
-    }) || [];
-
-  const dataset = [
-    ...prepped,
+    }),
     {
-      // add current information
       date: Date.now(),
       discountedPrice: market.discountedPrice,
       discount: market.discount,
@@ -112,5 +115,9 @@ export const useBondAnalytics = (market: CalculatedMarket, dayRange = 3) => {
     },
   ];
 
-  return { isLoading, dataset, purchases: data?.bondPurchases };
+  return {
+    isLoading,
+    dataset: interpolate(dataset).slice(0, dataset.length - 1),
+    purchases: data?.bondPurchases,
+  };
 };
