@@ -198,8 +198,8 @@ export const MarketList: FC<MarketListProps> = ({
   }
 
   if (
-    !Object.values(isLoading).some((loading) => loading) ||
-    !Array.from(allMarkets.keys()).length
+    Object.values(isLoading).some((loading) => loading) ||
+    allMarkets.size === 0
   ) {
     return (
       <div className="flex flex-col">
