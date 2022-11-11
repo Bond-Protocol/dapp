@@ -39,13 +39,11 @@ const CustomTick = ({
   xAxis?: boolean;
   elements?: any[];
 }) => {
-  const style = xAxis
-    ? "h-min justify-evenly pt-0.5 "
-    : "flex-col border-r py-4";
+  const style = xAxis ? "h-min pt-0.5 pl-8" : "flex-col border-r py-2";
 
   return (
     <div
-      className={`flex h-full justify-between border-light-primary-100 text-xs ${style} opacity-60`}
+      className={`flex h-full justify-between border-light-primary-100/20 text-xs ${style} opacity-60`}
     >
       {elements?.map((e) => (
         <div className="pr-0.5 text-[10px] text-light-primary-100">{e}</div>
@@ -66,7 +64,7 @@ export const LineChart = (props: ChartProps) => {
     <>
       <div className="flex h-full">
         <CustomTick elements={props.yAxisTicks} />
-        <div className="h-full min-h-[20vh] w-full min-w-[25vw] border-b border-light-primary-100/60">
+        <div className="h-full min-h-[20vh] w-full min-w-[25vw] border-b border-light-primary-100/20">
           <ResponsiveContainer>
             <Chart data={props.data}>
               <XAxis hide dataKey="date" scale="time" />

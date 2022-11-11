@@ -32,14 +32,14 @@ const getMarketPriceAtPurchaseTime = (
 };
 
 const createBondPurchaseDataset = ({
-  priceData,
-  bondPurchases,
+  priceData = [],
+  bondPurchases = [],
 }: CreateBondPurchaseDatasetArgs): BondChartDataset[] => {
   const datesToRemove: number[] = [];
 
   const updatedPurchases =
     //@ts-ignore
-    (bondPurchases?.reduce((entries, purchase) => {
+    (bondPurchases.reduce((entries, purchase) => {
       const date = Math.floor(purchase.timestamp * 1000);
       const { price, priceDate } = getMarketPriceAtPurchaseTime(
         date,
@@ -71,7 +71,7 @@ const createBondPurchaseDataset = ({
   return [
     ...updatedPurchases,
     ...priceData.filter(
-      (d) => !datesToRemove.includes(d.date) && d.date > earliestPurchase
+      (d) => !datesToRemove.includes(d?.date) && d?.date > earliestPurchase
     ),
   ];
 };
@@ -83,41 +83,40 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
   const tokenApiId = priceSources[0]?.apiId;
 
   const { data: priceData, ...priceQuery } = useQuery(
-    `token-price-history-${market.payoutToken.symbol}`,
+    `token-price-history-${market.payoutToken.symbol}-${dayRange}`,
     getCoingeckoPriceHistory(tokenApiId, { days: dayRange }, Date.now())
   );
-
   const { data, ...purchaseQuery } = useListBondPurchasesPerMarketQuery(
     { endpoint: subgraphEndpoints[market.network as CHAIN_ID] },
     { marketId: market.id }
   );
 
+  const _priceData = priceData?.prices?.map((x: Array<number>) => ({
+    date: x[0],
+    price: x[1],
+  }));
+
+  const earliestDate = _priceData?.[0]?.date;
+  const dataset: BondChartDataset[] = createBondPurchaseDataset({
+    priceData: _priceData,
+    bondPurchases: data?.bondPurchases as BondPurchase[],
+  }).concat({
+    date: Date.now(),
+    discountedPrice: market.discountedPrice,
+    discount: market.discount,
+    price: market.fullPrice,
+  });
+
   const isLoading = [priceQuery, purchaseQuery].some((q) => q.isLoading);
-
-  const dataset: BondChartDataset[] = [
-    ...createBondPurchaseDataset({
-      priceData: priceData?.prices?.map((x: Array<number>) => ({
-        date: x[0],
-        price: x[1],
-      })),
-      bondPurchases: data?.bondPurchases as BondPurchase[],
-    }),
-    {
-      date: Date.now(),
-      discountedPrice: market.discountedPrice,
-      discount: market.discount,
-      price: market.fullPrice,
-    },
-  ];
-
   return {
     isLoading,
+    purchases: data?.bondPurchases,
     dataset: interpolate(dataset)
       .slice(0, dataset.length - 1)
+      .filter((d) => d.date > earliestDate)
       .map((data) => ({
         ...data,
-        discount: calcDiscountPercentage(data.price, data.discountedPrice),
+        discount: calcDiscountPercentage(data?.price, data?.discountedPrice),
       })),
-    purchases: data?.bondPurchases,
   };
 };

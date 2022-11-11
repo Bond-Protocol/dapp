@@ -6,9 +6,12 @@
   body {
     @apply bg-light-base text-white font-jakarta
   }
-}
 
 @layer components {
+  .bond-chip {
+    @apply rounded-full border border-transparent bg-white/10 px-3 py-0.5 hover:border-gray-600;
+  }
+
   .bg-base {
     z-index:-100;
     @apply absolute inset-0 h-full w-full
