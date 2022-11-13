@@ -21,12 +21,6 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "src/*": [
-        "src/*"
-      ],
-      "src": [
-        "src/index"
-      ],
       "components/*": [
         "src/components/*"
       ],
@@ -55,6 +49,12 @@
         "src/hooks/*"
       ],
       "hooks": [
+        "src/hooks/index"
+      ],
+      "utils/*": [
+        "src/hooks/*"
+      ],
+      "utils": [
         "src/hooks/index"
       ],
       "assets/*": [

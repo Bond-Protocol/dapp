@@ -1,6 +1,5 @@
 export * from "./useBrowserStorage";
 export * from "./useCalculatedMarkets";
-export * from "./useLoadApp";
 export * from "./useMarkets";
 export * from "./useMyBonds";
 export * from "./useLoadMarkets";

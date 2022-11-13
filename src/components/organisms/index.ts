@@ -1,6 +1,10 @@
 export * from "./BondListCard";
 export * from "../modals/BondPurchaseModal";
+export * from "./BondDiscountChart";
 export * from "./CloseMarketCard";
+export * from "./ConnectButton";
+export * from "./CreateMarketPage";
+export * from "./Footer";
 export * from "./IssuerList";
 export * from "./IssuerPage";
 export * from "./IssueMarketPage";
@@ -8,5 +12,4 @@ export * from "./MarketList";
 export * from "./MyBondsList";
 export * from "./MyMarkets";
 export * from "./Navbar";
-export * from "./CreateMarketPage";
-export * from "./Footer";
+export * from "./PlaceholderChart";

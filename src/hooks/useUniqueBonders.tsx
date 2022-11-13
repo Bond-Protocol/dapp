@@ -6,9 +6,7 @@ import {
   useListUniqueBondersGoerliQuery,
   useListUniqueBondersMainnetQuery,
 } from "../generated/graphql";
-import {
-  getAddressesByProtocol,
-} from "@bond-protocol/bond-library";
+import { getAddressesByProtocol } from "@bond-protocol/bond-library";
 
 export function useUniqueBonders() {
   const endpoints = getSubgraphEndpoints();
@@ -93,7 +91,6 @@ export function useUniqueBonders() {
 
   return {
     bonders: selectedBonders,
-    getBondersForProtocol: (name: string) =>
-      getBondersForProtocol(name),
+    getBondersForProtocol: (name: string) => getBondersForProtocol(name),
   };
 }
