@@ -23,10 +23,10 @@ export type BondChartDataset = {
 };
 
 export type ChartProps = {
-  tooltip?: any;
   data: any[];
-  xAxisTicks?: any[];
-  yAxisTicks?: any[];
+  tooltip?: any;
+  xAxisLabels?: any[];
+  yAxisLabels?: any[];
 };
 
 const getBottomPadding = (min: number) => min - min / 90;
@@ -39,7 +39,7 @@ const CustomTick = ({
   xAxis?: boolean;
   elements?: any[];
 }) => {
-  const style = xAxis ? "h-min pt-0.5 pl-8" : "flex-col border-r py-2";
+  const style = xAxis ? "h-min pt-0.5 pl-8 border-t" : "flex-col border-r pb-2";
 
   return (
     <div
@@ -60,29 +60,46 @@ export const generateTicks = (entries: number[], size: number) => {
 };
 
 export const LineChart = (props: ChartProps) => {
+  if (!props.data.length) {
+    return <div />;
+  }
+
   return (
     <>
       <div className="flex h-full">
-        <CustomTick elements={props.yAxisTicks} />
-        <div className="h-full min-h-[20vh] w-full min-w-[25vw] border-b border-light-primary-100/20">
+        {props.yAxisLabels && <CustomTick elements={props.yAxisLabels} />}
+        <div className="h-full min-h-[20vh] w-full min-w-[25vw] border-light-primary-100/20">
           <ResponsiveContainer>
             <Chart data={props.data}>
-              <XAxis hide dataKey="date" scale="time" />
-              <YAxis hide domain={[getBottomPadding, getTopPadding]} />
+              <XAxis
+                hide
+                tick={false}
+                tickFormatter={() => "0"}
+                dataKey="date"
+                scale="time"
+              />
+              <YAxis
+                hide
+                tick={false}
+                tickFormatter={() => "0"}
+                domain={[getBottomPadding, getTopPadding]}
+              />
               <Line dot={false} stroke="#40749b" dataKey="price" />
               <Line dot={false} stroke="#F2A94A" dataKey="discountedPrice" />
-              <Tooltip
-                content={props.tooltip}
-                wrapperStyle={{
-                  outline: "none",
-                  backgroundColor: "transparent",
-                }}
-              />
+              {props.tooltip && (
+                <Tooltip
+                  content={props.tooltip}
+                  wrapperStyle={{
+                    outline: "none",
+                    backgroundColor: "transparent",
+                  }}
+                />
+              )}
             </Chart>
           </ResponsiveContainer>
         </div>
       </div>
-      <CustomTick xAxis elements={props.xAxisTicks} />
+      {props.xAxisLabels && <CustomTick xAxis elements={props.xAxisLabels} />}
     </>
   );
 };

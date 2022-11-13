@@ -7,7 +7,7 @@ export const generateFetcher = (url: string) => {
   };
 };
 
-export const getCoingeckoPriceHistory = (
+export const getTokenPriceHistory = (
   apiId: string,
   range: Duration,
   to = Date.now()

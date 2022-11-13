@@ -11,7 +11,7 @@ import { CHAIN_ID, TOKENS } from "@bond-protocol/bond-library";
 import { BondChartDataset } from "components/organisms/LineChart";
 import { calcDiscountPercentage } from "../utils/calculate-percentage";
 import { interpolate } from "../utils/interpolate-price";
-import { getCoingeckoPriceHistory } from "services/custom-queries";
+import { getTokenPriceHistory } from "services/custom-queries";
 
 type PriceDataArray = Array<{ date: number; price: number }>;
 
@@ -82,24 +82,26 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
   //@ts-ignore
   const tokenApiId = priceSources[0]?.apiId;
 
-  const { data: priceData, ...priceQuery } = useQuery(
-    `token-price-history-${market.payoutToken.symbol}-${dayRange}`,
-    getCoingeckoPriceHistory(tokenApiId, { days: dayRange }, Date.now())
-  );
-  const { data, ...purchaseQuery } = useListBondPurchasesPerMarketQuery(
-    { endpoint: subgraphEndpoints[market.network as CHAIN_ID] },
-    { marketId: market.id }
+  const { data: tokenHistory, ...tokenHistoryQuery } = useQuery(
+    `token-price-history-${market.payoutToken.symbol}-${dayRange}-days`,
+    getTokenPriceHistory(tokenApiId, { days: dayRange }, Date.now())
   );
 
-  const _priceData = priceData?.prices?.map((x: Array<number>) => ({
-    date: x[0],
-    price: x[1],
+  const { data: purchaseData, ...purchasesQuery } =
+    useListBondPurchasesPerMarketQuery(
+      { endpoint: subgraphEndpoints[market.network as CHAIN_ID] },
+      { marketId: market.id }
+    );
+
+  const priceData = tokenHistory?.prices?.map((element: Array<number>) => ({
+    date: element[0],
+    price: element[1],
   }));
 
-  const earliestDate = _priceData?.[0]?.date;
+  const earliestDate = priceData?.[0]?.date;
   const dataset: BondChartDataset[] = createBondPurchaseDataset({
-    priceData: _priceData,
-    bondPurchases: data?.bondPurchases as BondPurchase[],
+    priceData: priceData,
+    bondPurchases: purchaseData?.bondPurchases as BondPurchase[],
   }).concat({
     date: Date.now(),
     discountedPrice: market.discountedPrice,
@@ -107,13 +109,17 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
     price: market.fullPrice,
   });
 
-  const isLoading = [priceQuery, purchaseQuery].some((q) => q.isLoading);
+  const isLoading = [tokenHistoryQuery, purchasesQuery].some(
+    (q) => q.isLoading
+  );
+  console.log({ market });
+
   return {
     isLoading,
-    purchases: data?.bondPurchases,
+    purchases: purchaseData?.bondPurchases,
     dataset: interpolate(dataset)
       .slice(0, dataset.length - 1)
-      .filter((d) => d.date > earliestDate)
+      .filter((data) => data.date > earliestDate)
       .map((data) => ({
         ...data,
         discount: calcDiscountPercentage(data?.price, data?.discountedPrice),

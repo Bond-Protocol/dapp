@@ -1192,26 +1192,6 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> cdbe36d (improvements)
-<<<<<<< HEAD
-=======
->>>>>>> ae5980c (add discount data, price parsers)
-"@bond-protocol/bond-library@0.1.4":
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.4.tgz#3ba3dc19880e8c0c83f52801a43ee07a8f5f5a9a"
-  integrity sha512-GsqoA1g/YtrLRuzZIolZVG7BSxexDBXZv532/zHFN32clNQ4iPEJpNgF6VSD7dbxyrEZrO+PxzimYBIed2sNmg==
-  dependencies:
-    axios "^0.27.2"
-    ethers "^5.6.8"
-    require-dir "^1.2.0"
-    ts-node "^10.9.1"
-
->>>>>>> 163ce4d (update chart tooltips)
 "@bond-protocol/bond-library@^0.0.36":
   version "0.0.36"
   resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.0.36.tgz#4eeaf80b562844702f37f720e73aa2f1fc38689f"
@@ -1220,9 +1200,6 @@
     axios "^0.27.2"
     ethers "^5.6.8"
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 "@bond-protocol/bond-library@^0.1.6":
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.6.tgz#7f123b034c590cc8736c90700bfb4b354b7e1cd9"
@@ -1233,16 +1210,6 @@
     require-dir "^1.2.0"
     ts-node "^10.9.1"
 
-=======
-<<<<<<< HEAD
->>>>>>> 163ce4d (update chart tooltips)
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 8a258c1 (improvements)
->>>>>>> cdbe36d (improvements)
-=======
->>>>>>> ae5980c (add discount data, price parsers)
 "@bond-protocol/contract-library@0.0.38":
   version "0.0.38"
   resolved "https://registry.yarnpkg.com/@bond-protocol/contract-library/-/contract-library-0.0.38.tgz#bcdf4c795bdec0c2cfb53f99ac1afa22b1ffba97"
@@ -1264,11 +1231,7 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-<<<<<<< HEAD
 "@coinbase/wallet-sdk@^3.5.3":
-=======
-"@coinbase/wallet-sdk@^3.3.0":
->>>>>>> ae5980c (add discount data, price parsers)
   version "3.5.4"
   resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-3.5.4.tgz#957aa74521a4afa61ae99e1e2b948a6e017fcc87"
   integrity sha512-+5s05dmB6YUPUnV5vThP96GVG1O4GgS3qYvjYJhe56ds8YFz+keU3/docFBLf8FQOCIO5j7IZtZmVGvz7G+kRw==
@@ -3698,7 +3661,6 @@
   dependencies:
     defer-to-connect "^1.0.1"
 
-<<<<<<< HEAD
 "@tanstack/query-core@4.13.0":
   version "4.13.0"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.13.0.tgz#89153096d1fce42c0294fa1d1ae4b3e72aa5353b"
@@ -3729,38 +3691,6 @@
   integrity sha512-dI/5hJ/pGQ74P5hxBLC9h6K0/Cap2T3k0ZjjjFLBCNnohDYgl7LNmMopzrRzBHk2mMjf2hgXHIzcKNG8GOZ5hg==
   dependencies:
     "@tanstack/query-core" "4.13.0"
-=======
-"@tanstack/query-core@4.14.5":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.14.5.tgz#f8c061a9dd4d7a87f9992db4ddda35c479e93c4a"
-  integrity sha512-Su1AyrPb6xnm7wXTvpN5tt+B7LViYSh9k04vvuc6+eMVH0HkE9ktZTXibRrTvV83BI1KP5MG7v/k90ne/4zQzw==
-
-"@tanstack/query-persist-client-core@4.14.5":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-4.14.5.tgz#938b86c14956ce5451894d36f5b8e4a00bab2fd9"
-  integrity sha512-L3PKTR4XEyEwPSAmtWq5ZGd5O5MGo5/BTLidhfW/nr9+updlsHTQfDAHMmE1aaWehU+PYbFH8ws1qBpJiJ/S8g==
-
-"@tanstack/query-sync-storage-persister@^4.0.10":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-4.14.5.tgz#bace9e4b5044248dfbf8a5a58dd05f6bdc93934d"
-  integrity sha512-+ZqGzAUQOTqPASCqUgzbRU9TszCK50wojwV8Hy4lfBms6SXUSN8suioOi8ZuADkHL810LBMTbhM++nbvEA5Pyw==
-  dependencies:
-    "@tanstack/query-persist-client-core" "4.14.5"
-
-"@tanstack/react-query-persist-client@^4.0.10":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-4.14.5.tgz#c4b093c0ad9a7aaccebe95f019a3b55e5c9d59b7"
-  integrity sha512-RG39cq4t9bfR+K/xvrpJIoHqYU3MPeZoUFPzy0QR2sWE35Y4Cx8+IuRxGoxhjbZVD1aiB1TJFQtJy958puFYEw==
-  dependencies:
-    "@tanstack/query-persist-client-core" "4.14.5"
-
-"@tanstack/react-query@^4.0.10":
-  version "4.14.5"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.14.5.tgz#e2ff6419ee94426ec5e0eecf9bf77efbeb1a0e4b"
-  integrity sha512-CuWl/SxSB0zHhHaTja8LNhy9Vdk+vk9IkW3Oiq3lo4gPnTguHmbUzfjEA1x3RfvPeHfPMuq/pYMSbV+CX4aDQA==
-  dependencies:
-    "@tanstack/query-core" "4.14.5"
->>>>>>> ae5980c (add discount data, price parsers)
     use-sync-external-store "^1.2.0"
 
 "@testing-library/dom@^8.3.0":
@@ -4385,17 +4315,10 @@
     magic-string "^0.26.2"
     react-refresh "^0.14.0"
 
-<<<<<<< HEAD
 "@wagmi/core@^0.6.6":
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.6.6.tgz#f39e6819b12d3c21d28a62b0523a7851992ace26"
   integrity sha512-1gEjDFmlJ6R2uF6BX04Q768OdpoW/pNGGUTaJU+W7YP/3uOf4TwsXgqMEN/0uyZqptL+RQsworeVh11JXCbX1g==
-=======
-"@wagmi/core@^0.5.8":
-  version "0.5.8"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-0.5.8.tgz#9e375c0dd31c3b22973d000694e1c2b06c05dbbc"
-  integrity sha512-1mABf1bXyn3AOHyQkios4FTGqoARa8y1tf7GMH6t1c7q0nAMSbpXoTDdjEidUHy8qhWoG0y3Ez4PjCi8WQnmMg==
->>>>>>> ae5980c (add discount data, price parsers)
   dependencies:
     abitype "^0.1.7"
     eventemitter3 "^4.0.7"
@@ -15380,7 +15303,6 @@ vm-browserify@^1.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
-<<<<<<< HEAD
 wagmi@^0.7.7:
   version "0.7.7"
   resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.7.7.tgz#7d120778e1e88476e9275e05c8123623f5719199"
@@ -15393,19 +15315,6 @@ wagmi@^0.7.7:
     "@wagmi/core" "^0.6.6"
     "@walletconnect/ethereum-provider" "^1.8.0"
     abitype "^0.1.7"
-=======
-wagmi@^0.6.6:
-  version "0.6.8"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-0.6.8.tgz#bfc65686ec08cf1c508b1dbf5fbefbbe828653cd"
-  integrity sha512-pIOn7I56KPfdPQ1WRIWzWnpC8eJZm1V25Rcn5fbgOJ2eV3kjGNchnIub/ERY1VMKywxkCAfgXfn2D/tqwCJsWw==
-  dependencies:
-    "@coinbase/wallet-sdk" "^3.3.0"
-    "@tanstack/query-sync-storage-persister" "^4.0.10"
-    "@tanstack/react-query" "^4.0.10"
-    "@tanstack/react-query-persist-client" "^4.0.10"
-    "@wagmi/core" "^0.5.8"
-    "@walletconnect/ethereum-provider" "^1.7.8"
->>>>>>> ae5980c (add discount data, price parsers)
     use-sync-external-store "^1.2.0"
 
 walker@^1.0.7, walker@~1.0.5:
@@ -15918,17 +15827,10 @@ yocto-queue@^0.1.0:
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
 
-<<<<<<< HEAD
 zustand@^4.1.1:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.1.3.tgz#72bc4c0ed8ed906fbd92c7c20cde8dd6114c018f"
   integrity sha512-AdFyr6+4sVD6xlyc/ArQaOrleqzxJEBbAXglufZ5lgvisoz8GUN3icOrKOnX1uRSxmpmdVUQPen9hhymWIzhBg==
-=======
-zustand@^4.0.0:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.1.4.tgz#b0286da4cc9edd35e91c96414fa54bfa4652a54d"
-  integrity sha512-k2jVOlWo8p4R83mQ+/uyB8ILPO2PCJOf+QVjcL+1PbMCk1w5OoPYpAIxy9zd93FSfmJqoH6lGdwzzjwqJIRU5A==
->>>>>>> ae5980c (add discount data, price parsers)
   dependencies:
     use-sync-external-store "1.2.0"
 

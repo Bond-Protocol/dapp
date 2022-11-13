@@ -4,6 +4,7 @@ export * from "./DatePicker";
 export * from "./ExpandableRow";
 export * from "./InputCard";
 export * from "./IssuerCard";
+export * from "./LineChart";
 export * from "./Modal";
 export * from "./SummaryCard";
 export * from "./Table";
