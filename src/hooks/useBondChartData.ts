@@ -8,7 +8,7 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { getClosest } from "../utils";
 import { CHAIN_ID, TOKENS } from "@bond-protocol/bond-library";
-import { BondChartDataset } from "components/organisms/LineChart";
+import { BondChartDataset } from "components/molecules/LineChart";
 import { calcDiscountPercentage } from "../utils/calculate-percentage";
 import { interpolate } from "../utils/interpolate-price";
 import { getTokenPriceHistory } from "services/custom-queries";

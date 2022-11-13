@@ -1,4 +1,4 @@
-import { BondChartDataset } from "components/organisms/LineChart";
+import { BondChartDataset } from "components/molecules/LineChart";
 
 export const generateRange = (min: number, max: number, distance: number) => {
   const gapAmount = (max - min) / (distance + 1);

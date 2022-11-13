@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { BondChartDataset } from "./LineChart";
+import { BondChartDataset } from "components/molecules/LineChart";
 
 const getDiscountColor = (price: number, discount: number) => {
   if (price === discount) return "text-white";
