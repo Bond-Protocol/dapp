@@ -11,6 +11,7 @@ import { BondListCard } from "./BondListCard";
 import { Loading } from "components/atoms/Loading";
 import { Button } from "components/atoms";
 import { socials } from "..";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -218,10 +219,19 @@ export const MarketList: FC<MarketListProps> = ({
   }
 
   return (
-    <div className="pt-10">
+    <div className="pt-16">
       <table className="w-full table-fixed font-jakarta">
+        <col className="w-[12%]" />
+        <col className="w-[10%]" />
+        <col className="w-[12%]" />
+        <col className="w-[10%]" />
+        <col className="w-[12%]" />
+        <col className="w-[12%]" />
+        <col className="w-[10%]" />
+        <col className="w-[2%]" />
+
         <thead>
-          <tr className="border-b border-white/60 child:pl-2">
+          <tr className="border-b border-white/60 child:pl-3">
             <TableHeading
               ascending={currentSort.ascending}
               sortName="name"
@@ -277,7 +287,7 @@ export const MarketList: FC<MarketListProps> = ({
             >
               TBV
             </TableHeading>
-
+            <TableHeading />
             {allowManagement && (
               <TableHeading
                 ascending={currentSort.ascending}
@@ -295,7 +305,7 @@ export const MarketList: FC<MarketListProps> = ({
             return (
               <ExpandableRow
                 key={market.id}
-                className="gap-x-2 border-y border-white/15 child:pl-2"
+                className="gap-x-2 border-y border-white/15 child:pl-3"
                 onOpen={() => {
                   timerRef.current = setInterval(() => {
                     refetchOne(market.id);
@@ -358,7 +368,6 @@ export const MarketList: FC<MarketListProps> = ({
                 </TableCell>
 
                 <TableCell>{market.formattedTbvUsd}</TableCell>
-
                 {allowManagement && (
                   <TableCell>
                     {market && market.isLive ? "Live" : "Closed"}
