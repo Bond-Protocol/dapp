@@ -219,7 +219,7 @@ export const MarketList: FC<MarketListProps> = ({
   }
 
   return (
-    <div className="pt-10">
+    <div className="pt-16">
       <table className="w-full table-fixed font-jakarta">
         <col className="w-[12%]" />
         <col className="w-[10%]" />
