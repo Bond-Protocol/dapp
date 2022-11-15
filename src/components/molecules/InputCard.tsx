@@ -21,7 +21,11 @@ export const InputCard = ({
 }: InputCardProps) => {
   const setSome = (num: number) => {
     const max = Math.min(Number(balance), Number(market.maxAmountAccepted));
-    handleChange((num * max) / 100 + "");
+    const val = Number(
+      Number((num * max) / 100 + "").toFixed(market.quoteToken.decimals)
+    ).toString();
+
+    handleChange(val);
   };
 
   const setMax = () => {
