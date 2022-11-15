@@ -114,7 +114,7 @@ export const InformationArea = (props: InformationAreaProps) => {
   return (
     <div
       className={`fixed inset-0 z-10 h-[100vh] bg-brand-turtle-blue transition-transform duration-500 ${
-        props.open ? "translate-x-0" : "translate-x-full"
+        props.open ? "-translate-x-0" : "-translate-x-full"
       }`}
     >
       <div className="h-[88vh] bg-white font-jakarta">

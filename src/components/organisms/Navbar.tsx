@@ -11,9 +11,15 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
   return (
     <div
       id="navbar"
-      className="bg-navbar flex h-[91px] items-center justify-between px-[5vw]"
+      className="bg-navbar flex h-[91px] items-center justify-between px-[4vw]"
     >
-      <ProtocolLogo className="py-6" />
+      <div className="flex">
+        <HamburgerIcon
+          onClick={props.onHamburgerClick}
+          className="my-auto mr-3 hover:cursor-pointer"
+        />
+        <ProtocolLogo className="py-6" />
+      </div>
       <div className="flex">
         {showTestnetToggle && (
           <button
@@ -24,10 +30,6 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
           </button>
         )}
         <ConnectButton />
-        <HamburgerIcon
-          onClick={props.onHamburgerClick}
-          className="my-auto ml-3 hover:cursor-pointer"
-        />
       </div>
     </div>
   );
