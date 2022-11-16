@@ -1,0 +1,44 @@
+import { useState } from "react";
+import { ButtonUnstyled } from "@mui/base";
+
+type FlatSelectProps = {
+  options: Array<{ label: string; value: string | number }>;
+  onChange: (value: string | number) => void;
+  label?: string;
+  className?: string;
+  default?: string | number;
+};
+
+export const FlatSelect = (props: FlatSelectProps) => {
+  const [selected, setSelected] = useState(
+    props.default || props.options[0].value
+  );
+
+  const handleChange = (value: string | number) => {
+    setSelected(value);
+    props.onChange && props.onChange(value);
+  };
+
+  return (
+    <div className={`w-full ${props.className}`}>
+      {props.label && (
+        <p className="font-jakarta mb-1 text-xs font-light">{props.label}</p>
+      )}
+      <div className="flex h-10 justify-evenly rounded-lg border p-1">
+        {props.options.map((o, i) => (
+          <ButtonUnstyled
+            key={i}
+            onClick={() => handleChange(o.value)}
+            className={`font-faketion w-full rounded-lg border-transparent py-1 tracking-widest transition-all duration-200 ${
+              selected === o.value
+                ? "text-light-secondary bg-white/20"
+                : "hover:bg-white/15 "
+            }`}
+          >
+            {o.label}
+          </ButtonUnstyled>
+        ))}
+      </div>
+    </div>
+  );
+};
