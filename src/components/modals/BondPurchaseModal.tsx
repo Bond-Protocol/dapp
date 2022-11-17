@@ -13,10 +13,10 @@ import {
   PurchaseConfirmDialogProps,
 } from "components/modals/index";
 import { ContractTransaction } from "ethers";
-import { getBlockExplorer } from "../../../../contract-library/src/core/getBlockExplorer";
 import { TransactionErrorDialog } from "components/modals/TransactionErrorDialog";
 import { useNavigate } from "react-router-dom";
 import {providers} from "services/owned-providers";
+import {getBlockExplorer} from "@bond-protocol/contract-library";
 
 export type PurchaseBondModalProps = {
   open: boolean;

@@ -71,7 +71,6 @@ export function useCalculatedMarkets() {
           owner: market.owner,
           vesting: market.vesting,
           vestingType: market.vestingType,
-          isLive: market.isLive,
           isInstantSwap: market.isInstantSwap,
           totalBondedAmount: market.totalBondedAmount,
           totalPayoutAmount: market.totalPayoutAmount,

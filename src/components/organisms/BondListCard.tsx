@@ -3,7 +3,7 @@ import {CalculatedMarket} from "@bond-protocol/contract-library";
 import {CHAINS, getProtocolByAddress, NativeCurrency} from "@bond-protocol/bond-library";
 import {ReactComponent as ArrowIcon} from "../../assets/icons/arrow-icon.svg";
 import {Button} from "components/atoms";
-import {BondDetails} from "components/molecules/BondDetails";
+import {BondDetails} from "components/molecules";
 import {BondDiscountChart} from "components/organisms/BondDiscountChart";
 import {useTokens} from "hooks";
 import {providers} from "services/owned-providers";
