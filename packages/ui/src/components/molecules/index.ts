@@ -7,4 +7,3 @@ export * from "./Modal";
 export * from "./SummaryCard";
 export * from "./Table";
 export * from "./Tabs";
-export * from "./BondDetails";

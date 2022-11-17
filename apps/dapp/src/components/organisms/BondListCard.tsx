@@ -10,7 +10,8 @@ import { BondDiscountChart } from "components/organisms/BondDiscountChart";
 import { useTokens } from "hooks";
 import { providers } from "services/owned-providers";
 import { useSigner } from "wagmi";
-import { Button, BondDetails } from "ui";
+import { Button } from "ui";
+import { BondDetails } from "components/organisms";
 
 export type BondListCardProps = {
   market: CalculatedMarket;

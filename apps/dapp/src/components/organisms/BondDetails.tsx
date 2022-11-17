@@ -1,39 +1,39 @@
-import {FC, useEffect, useState} from "react";
+import { FC, useEffect, useState } from "react";
 import {
   CalculatedMarket,
   calculateTrimDigits,
   trim,
   formatLongNumber,
   getBlockExplorer,
-  useGasPrice,
-  usePurchaseBond,
-  useTokenAllowance
 } from "@bond-protocol/contract-library";
-import {BondButton, BondPurchaseModal, Button, InfoLabel, InputCard, Link, SummaryCard} from "components";
-import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
-import {NativeCurrency} from "@bond-protocol/bond-library";
-import {Signer} from "ethers";
-import {Provider} from "@wagmi/core";
+import { useGasPrice, usePurchaseBond, useTokenAllowance } from "hooks";
+import { Button, InfoLabel, InputCard, Link, SummaryCard } from "ui";
+import { BondButton } from "./BondButton";
+import { BondPurchaseModal } from "..";
+import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { NativeCurrency } from "@bond-protocol/bond-library";
+import { Signer } from "ethers";
+import { Provider } from "@wagmi/core";
 
 export type BondDetailsProps = {
-  market: CalculatedMarket,
-  nativeCurrency: NativeCurrency,
-  nativeCurrencyPrice: number,
-  referralAddress: string,
-  issuerName: string,
-  provider: Provider,
-  signer: Signer,
-}
+  market: CalculatedMarket;
+  nativeCurrency: NativeCurrency;
+  nativeCurrencyPrice: number;
+  referralAddress: string;
+  issuerName: string;
+  provider: Provider;
+  signer: Signer;
+};
 
 export const BondDetails: FC<BondDetailsProps> = ({
-                                                    market,
-                                                    nativeCurrency,
-                                                    nativeCurrencyPrice,
-                                                    referralAddress,
-                                                    issuerName,
-                                                    provider,
-                                                    signer
-                                                  }) => {
+  market,
+  nativeCurrency,
+  nativeCurrencyPrice,
+  referralAddress,
+  issuerName,
+  provider,
+  signer,
+}) => {
   const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
@@ -46,13 +46,13 @@ export const BondDetails: FC<BondDetailsProps> = ({
     usdPrice: "0",
   });
 
-  const {address, isConnected} = useAccount();
-  const {switchNetwork} = useSwitchNetwork();
+  const { address, isConnected } = useAccount();
+  const { switchNetwork } = useSwitchNetwork();
   const network = useNetwork();
 
-  const {getGasPrice} = useGasPrice();
-  const {bond, estimateBond, getPayoutFor} = usePurchaseBond();
-  const {approve, balance, hasSufficientAllowance, hasSufficientBalance} =
+  const { getGasPrice } = useGasPrice();
+  const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
+  const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
     useTokenAllowance(
       // @ts-ignore
       address,
@@ -65,7 +65,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
       signer
     );
 
-  const {blockExplorerName, blockExplorerUrl} = getBlockExplorer(
+  const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
     market.network,
     "address"
   );
@@ -123,19 +123,15 @@ export const BondDetails: FC<BondDetailsProps> = ({
       setEstimatedGas(Number(result));
     });
 
-    void getGasPrice(
-      nativeCurrency,
-      nativeCurrencyPrice,
-      provider
-    ).then((result) => {
-      setGasPrice(result);
-    });
+    void getGasPrice(nativeCurrency, nativeCurrencyPrice, provider).then(
+      (result) => {
+        setGasPrice(result);
+      }
+    );
   }, [payout]);
 
   const switchChain = () => {
-    const newChain = Number(
-      "0x" + provider.network.chainId.toString()
-    );
+    const newChain = Number("0x" + provider.network.chainId.toString());
     switchNetwork?.(newChain);
   };
 
@@ -202,15 +198,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
 
   const submitTx = () => {
     if (!address) throw new Error("Not Connected");
-    return bond(
-      address,
-      amount,
-      payout,
-      0.05,
-      market,
-      referralAddress,
-      signer
-    );
+    return bond(address, amount, payout, 0.05, market, referralAddress, signer);
   };
 
   return (
@@ -265,8 +253,8 @@ export const BondDetails: FC<BondDetailsProps> = ({
             <div>
               <p className="py-1">
                 WARNING: This market allows a max payout of {market.maxPayout}{" "}
-                {market.payoutToken.symbol}, however the market owner
-                currently has a balance of {market.ownerBalance}{" "}
+                {market.payoutToken.symbol}, however the market owner currently
+                has a balance of {market.ownerBalance}{" "}
                 {market.payoutToken.symbol}.
               </p>
               <p className="py-1">
@@ -295,8 +283,8 @@ export const BondDetails: FC<BondDetailsProps> = ({
           {(showOwnerBalanceWarning || showOwnerAllowanceWarning) && (
             <div>
               <p className="py-1">
-                As a result, attempts to purchase a bond paying out an amount
-                in excess of{" "}
+                As a result, attempts to purchase a bond paying out an amount in
+                excess of{" "}
                 {Math.min(
                   Number(market.ownerBalance),
                   Number(market.ownerAllowance)
@@ -306,7 +294,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
             </div>
           )}
         </div>
-        <SummaryCard fields={summaryFields}/>
+        <SummaryCard fields={summaryFields} />
         <BondButton
           showConnect={!isConnected}
           showSwitcher={!correctChain}
@@ -337,4 +325,4 @@ export const BondDetails: FC<BondDetailsProps> = ({
       />
     </div>
   );
-}
+};

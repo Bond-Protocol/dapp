@@ -1225,7 +1225,7 @@
     require-dir "^1.2.0"
     ts-node "^10.9.1"
 
-"@bond-protocol/contract-library@0.0.40":
+"@bond-protocol/contract-library@^0.0.40":
   version "0.0.40"
   resolved "https://registry.yarnpkg.com/@bond-protocol/contract-library/-/contract-library-0.0.40.tgz#eb7246a2ee8afe75230fd3dfe2572927982f1f47"
   integrity sha512-bOtyy6ZlNpSOe8/R/NcNF8hVLJdOJSvpR6FYFrlQbqDsiTdsM9DrBCdY4tgl7ro8Rdy/c73gTMgT+DcXTTeApQ==

@@ -1,13 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import {
-  ExpandableRow,
-  TableHeading,
-  CellLabel,
-  TableCell,
-  Loading,
-  BondDetails,
-} from "ui";
+import { ExpandableRow, TableHeading, CellLabel, TableCell, Loading } from "ui";
+import { BondDetails } from "..";
 import { useMarkets, useTokens } from "hooks";
 import { providers } from "services/owned-providers";
 import {

@@ -93,7 +93,7 @@ export function useCalculatedMarkets() {
             lpPair: quoteToken.lpPair,
             purchaseLink: purchaseLink,
           },
-        },
+        }, //@ts-ignore
         bondLibrary.TOKENS.get(market.quoteToken.id)
           ? bondLibrary.LP_TYPES.get(
               // @ts-ignore

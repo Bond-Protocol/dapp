@@ -7,8 +7,9 @@ import { Button, Input } from "ui";
 import { useForm } from "react-hook-form";
 import { ethers } from "ethers";
 import copyIcon from "assets/icons/copy-icon.svg";
-import {providers} from "services/owned-providers";
-import {getBlockExplorer} from "@bond-protocol/contract-library";
+import { providers } from "services/owned-providers";
+import { getBlockExplorer } from "@bond-protocol/contract-library";
+import { usePurchaseBond } from "hooks/usePurchaseBond";
 
 export type MarketCreatedParams = {
   marketData: any;
@@ -17,7 +18,7 @@ export type MarketCreatedParams = {
 export const MarketCreated = (props: MarketCreatedParams) => {
   const { hash } = useParams();
   const navigate = useNavigate();
-  const { getTokenAllowance } = contractLibrary.usePurchaseBond();
+  const { getTokenAllowance } = usePurchaseBond();
   const { register, handleSubmit } = useForm();
   const { data: signer } = useSigner();
 

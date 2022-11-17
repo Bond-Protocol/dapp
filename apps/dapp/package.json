@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@bond-protocol/bond-library": "^0.1.6",
-    "@bond-protocol/contract-library": "0.0.38",
+    "@bond-protocol/contract-library": "^0.0.40",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@material-tailwind/react": "^1.0.6",
     "@mui/base": "^5.0.0-alpha.88",
