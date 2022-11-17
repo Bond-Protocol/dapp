@@ -1,7 +1,7 @@
 import { Token } from "@bond-protocol/contract-library";
 import { Link } from "ui";
 import { useTokens } from "hooks";
-import { calculateTrimDigits } from "@bond-protocol/contract-library/dist/core/utils";
+import { calculateTrimDigits } from "@bond-protocol/contract-library";
 import { useEffect, useState } from "react";
 
 export type TokenPriceCardProps = {

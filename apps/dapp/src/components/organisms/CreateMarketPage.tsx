@@ -21,7 +21,7 @@ import {
   calculateTrimDigits,
   trim,
   trimAsNumber,
-} from "@bond-protocol/contract-library/dist/core/utils";
+} from "@bond-protocol/contract-library";
 import { TokenPickerCard } from "./TokenPickerCard";
 
 const vestingOptions = [

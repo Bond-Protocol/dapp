@@ -43,3 +43,5 @@ yarn.lock
 
 src/**/*.no-commit.*
 src/types/contracts/*
+
+tsconfig.tsbuildinfo

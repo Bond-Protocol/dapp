@@ -1,6 +1,6 @@
 {
   "name": "@bond-protocol/contract-library",
-  "version": "0.0.40",
+  "version": "0.0.41",
   "author": "spaceturtleship <spaceturtleship@protonmail.com>",
   "license": "MIT",
   "engines": {
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/Bond-Protocol/contract-library.git"
   },
   "files": [
-    "dist"
+    "dist/**/*"
   ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -19,10 +19,9 @@
     "build": "tsc && tsc-alias",
     "dev": "tsc -w && tsc-alias -w",
     "test": "jest",
-    "doc": "typedoc",
     "format": "prettier --write ./src/**/**/*.ts",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "yarn build",
     "typechain": "typechain --target ethers-v5 --out-dir src/types/contracts 'src/abis/**/*.json'"
   },
   "lint-staged": {

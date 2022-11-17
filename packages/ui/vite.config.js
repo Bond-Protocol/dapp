@@ -6,12 +6,8 @@ import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfil
 import dts from 'vite-plugin-dts'
 
 export default defineConfig({
-  plugins: [react(), svgr(), dts()],
+  plugins: [react(), svgr(), dts({ skipDiagnostics: true })],
   root: ".",
-  envDir: "..",
-  define: {
-    global: "globalThis",
-  },
   build: {
     outDir: "dist",
     lib: {
@@ -20,20 +16,17 @@ export default defineConfig({
       fileName: 'ui-lib'
     },
     rollupOptions: {
-      external: ['react'],
+      external: ['react', 'react-dom'],
       output: {
         globals: {
-          react: 'React'
+          react: 'React',
+          'react-dom': "ReactDom"
         },
       },
     },
   },
   optimizeDeps: {
     esbuildOptions: {
-      // Node.js global to browser globalThis
-      define: {
-        global: "globalThis",
-      },
       // Enable esbuild polyfill plugins
       plugins: [
         NodeGlobalsPolyfillPlugin({

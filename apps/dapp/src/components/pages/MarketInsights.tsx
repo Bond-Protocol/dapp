@@ -3,10 +3,7 @@ import { BondListCard } from "..";
 import { InfoLabel, TableHeading } from "ui";
 import receiptIcon from "../../assets/icons/receipt-icon.svg";
 import { useMarkets } from "context/market-context";
-import {
-  calculateTrimDigits,
-  trim,
-} from "@bond-protocol/contract-library/dist/core/utils";
+import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();

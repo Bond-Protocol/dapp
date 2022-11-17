@@ -1,5 +1,5 @@
 {
-  "name": "@bondprotocol/frontend-monorepo",
+  "name": "frontend-monorepo",
   "private": true,
   "version": "1.0.0",
   "workspaces": [

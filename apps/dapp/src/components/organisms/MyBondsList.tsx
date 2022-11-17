@@ -11,8 +11,9 @@ import { useNavigate } from "react-router-dom";
 import {
   calculateTrimDigits,
   trim,
-} from "@bond-protocol/contract-library/dist/core/utils";
-import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
+  BOND_TYPE,
+  redeem,
+} from "@bond-protocol/contract-library";
 import { format } from "date-fns";
 import { formatSymbolForWallet } from "src/utils";
 import { ReactComponent as WalletIcon } from "../../assets/icons/wallet.svg";

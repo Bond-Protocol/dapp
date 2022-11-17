@@ -1,13 +1,11 @@
 {
-  "extends": "tsconfig/base.json",
+  "extends": "tsconfig/react-library.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "src",
     "lib": [
       "ESNext"
     ],
-    "module": "ESNext",
-    "target": "ESNext",
     "baseUrl": "./src",
     "paths": {
       "src/*": [

@@ -1,8 +1,8 @@
-import {useCallback, useEffect, useState} from "react";
-import {useAccount} from "wagmi";
-import {providers} from "services/owned-providers";
-import {usePurchaseBond} from "./usePurchaseBond";
-import {calculateTrimDigits, trim,} from "@bond-protocol/contract-library/dist/core/utils";
+import { useCallback, useEffect, useState } from "react";
+import { useAccount } from "wagmi";
+import { providers } from "services/owned-providers";
+import { usePurchaseBond } from "./usePurchaseBond";
+import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
 
 export const useTokenAllowance = (
@@ -16,8 +16,8 @@ export const useTokenAllowance = (
   const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
   const [allowance, setAllowance] = useState<string>("0");
   const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
-  const {address, isConnected} = useAccount();
-  const {approveSpending, getAllowance} = usePurchaseBond();
+  const { address, isConnected } = useAccount();
+  const { approveSpending, getAllowance } = usePurchaseBond();
 
   const fetchAndSetBalance = useCallback(async () => {
     if (!isConnected || !address) {

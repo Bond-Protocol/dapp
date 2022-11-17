@@ -7,7 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-.tsbuildinfo
+./**/tsconfig.tsbuildinfo
+tsconfig.tsbuildinfo
+packages/contract-library/tsconfig.tsbuildinfo
 node_modules
 generated
 dist
