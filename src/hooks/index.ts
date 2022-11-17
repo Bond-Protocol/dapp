@@ -4,6 +4,4 @@ export * from "./useMarkets";
 export * from "./useMyBonds";
 export * from "./useLoadMarkets";
 export * from "./useProtocol";
-export * from "./usePurchaseBond";
-export * from "./useTokenAllowance";
 export * from "./useTokens";

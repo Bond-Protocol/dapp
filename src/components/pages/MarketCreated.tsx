@@ -4,12 +4,12 @@ import { getBlockExplorer } from "../../utils";
 import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
 import Button from "../atoms/Button";
 import { useEffect, useState } from "react";
-import { usePurchaseBond } from "hooks";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { Input } from "components";
 import { useForm } from "react-hook-form";
 import { ethers } from "ethers";
 import copyIcon from "assets/icons/copy-icon.svg";
+import {providers} from "services/owned-providers";
 
 export type MarketCreatedParams = {
   marketData: any;
@@ -18,7 +18,7 @@ export type MarketCreatedParams = {
 export const MarketCreated = (props: MarketCreatedParams) => {
   const { hash } = useParams();
   const navigate = useNavigate();
-  const { getAllowance } = usePurchaseBond();
+  const { getTokenAllowance } = contractLibrary.usePurchaseBond();
   const { register, handleSubmit } = useForm();
   const { data: signer } = useSigner();
 
@@ -61,12 +61,12 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       props.marketData.bondType
     ).auctioneer;
 
-    void getAllowance(
+    void getTokenAllowance(
       props.marketData.marketParams.payoutToken,
       ownerAddress,
       auctioneer,
-      props.marketData.chain,
-      props.marketData.payoutToken.decimals
+      props.marketData.payoutToken.decimals,
+      providers[props.marketData.network]
     ).then((result) => {
       setAllowance(Number(result));
       setIsAllowanceSufficient(

@@ -1210,10 +1210,10 @@
     require-dir "^1.2.0"
     ts-node "^10.9.1"
 
-"@bond-protocol/contract-library@0.0.39":
-  version "0.0.39"
-  resolved "https://registry.yarnpkg.com/@bond-protocol/contract-library/-/contract-library-0.0.39.tgz#232f4e142443a89927c50ebd41b4b5cb881131fa"
-  integrity sha512-sxnj3pI7rO9rOk8/ceanU5kkWw74v5FqtBudQ6uyD+w3vZq490RzMgxnRbpNk12CKds3CfE8q580RJF9Zf3h4A==
+"@bond-protocol/contract-library@0.0.40":
+  version "0.0.40"
+  resolved "https://registry.yarnpkg.com/@bond-protocol/contract-library/-/contract-library-0.0.40.tgz#eb7246a2ee8afe75230fd3dfe2572927982f1f47"
+  integrity sha512-bOtyy6ZlNpSOe8/R/NcNF8hVLJdOJSvpR6FYFrlQbqDsiTdsM9DrBCdY4tgl7ro8Rdy/c73gTMgT+DcXTTeApQ==
   dependencies:
     "@bond-protocol/bond-library" "^0.0.36"
     "@ethersproject/providers" "^5.6.6"

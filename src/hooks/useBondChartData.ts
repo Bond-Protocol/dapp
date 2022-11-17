@@ -112,7 +112,6 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
   const isLoading = [tokenHistoryQuery, purchasesQuery].some(
     (q) => q.isLoading
   );
-  console.log({ market });
 
   return {
     isLoading,
