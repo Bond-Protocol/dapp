@@ -32,7 +32,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   const { data, isLoading } = useWaitForTransaction({
     chainId: props.marketData.chainId,
-    //@ts-ignore (TODO): fix thsi
+    //@ts-ignore (TODO): fix this
     hash: hash,
   });
 
@@ -43,7 +43,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   const { isLoading: allowanceIsLoading } = useWaitForTransaction({
     chainId: props.marketData.chainId,
-    //@ts-ignore (TODO): fix thsi
+    //@ts-ignore (TODO): fix this
     hash: allowanceTx,
     onSuccess() {
       loadAllowance();
