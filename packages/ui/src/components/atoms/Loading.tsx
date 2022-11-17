@@ -1,5 +1,3 @@
-import spinner from "../../assets/spinner.gif";
-
 export const Loading = ({ content }: { content: string }) => {
   return (
     <div className="font-faketion mt-20 text-center uppercase">
@@ -7,7 +5,6 @@ export const Loading = ({ content }: { content: string }) => {
         Hang on, <br />
         loading {content}
       </h1>
-      <img src={spinner} width="52" className="mx-auto" />
     </div>
   );
 };

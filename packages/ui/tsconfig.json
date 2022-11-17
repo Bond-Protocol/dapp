@@ -1,6 +1,30 @@
 {
-  "extends": "tsconfig/base.json",
+  "extends": "tsconfig/react-library.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "baseUrl": "src",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "paths": {
+      "components/*": [
+        "./components/*"
+      ],
+      "assets/*": [
+        "./assets/*"
+      ],
+      "assets": [
+        "./assets/index"
+      ],
+    }
+  },
   "include": [
-    "."
+    "src/**/*",
+    "src/main.d.ts",
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules"
   ]
 }

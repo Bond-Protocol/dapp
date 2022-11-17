@@ -3,22 +3,29 @@ import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
-import nodePolyfills from "rollup-plugin-polyfill-node";
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
-  plugins: [react(), svgr()],
-  root: "src",
+  plugins: [react(), svgr(), dts()],
+  root: ".",
   envDir: "..",
   define: {
     global: "globalThis",
   },
   build: {
-    outDir: "../dist",
-    rollupOptions: {
-      plugins: [nodePolyfills()],
+    outDir: "dist",
+    lib: {
+      entry: path.resolve(__dirname, 'src/index.ts'),
+      name: 'ui',
+      fileName: 'ui-lib'
     },
-    commonjsOptions: {
-      transformMixedEsModules: true,
+    rollupOptions: {
+      external: ['react'],
+      output: {
+        globals: {
+          react: 'React'
+        },
+      },
     },
   },
   optimizeDeps: {

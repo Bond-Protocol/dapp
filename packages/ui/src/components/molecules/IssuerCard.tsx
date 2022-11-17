@@ -1,18 +1,22 @@
 import { FC } from "react";
 import { Protocol } from "@bond-protocol/bond-library";
-import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 type IssuerCardProps = {
   issuer: Protocol;
   tbv: number;
   markets: CalculatedMarket[];
+  navigate?: (to: string) => void;
 };
 
-export const IssuerCard: FC<IssuerCardProps> = ({ issuer, tbv, markets }) => {
-  const navigate = useNavigate();
-
-  const handleClick = (name: string) => navigate("/issuers/" + name);
+export const IssuerCard: FC<IssuerCardProps> = ({
+  issuer,
+  tbv,
+  markets,
+  navigate,
+}) => {
+  const handleClick = (name: string) =>
+    navigate && navigate("/issuers/" + name);
 
   const logo = issuer?.logoUrl || "/placeholders/token-placeholder.png";
 
