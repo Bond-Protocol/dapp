@@ -1,19 +1,39 @@
 import {FC, useEffect, useState} from "react";
-import {CalculatedMarket} from "../../../../contract-library";
-import {formatLongNumber, getBlockExplorer} from "src/utils";
-import {usePurchaseBond, useTokenAllowance} from "hooks";
-import {calculateTrimDigits, trim} from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  calculateTrimDigits,
+  trim,
+  formatLongNumber,
+  getBlockExplorer,
+  useGasPrice,
+  usePurchaseBond,
+  useTokenAllowance
+} from "@bond-protocol/contract-library";
 import {BondButton, BondPurchaseModal, Button, InfoLabel, InputCard, Link, SummaryCard} from "components";
-import {useGasPrice} from "hooks/useGasPrice";
 import {useAccount, useNetwork, useSwitchNetwork} from "wagmi";
-import {CHAINS, getProtocolByAddress} from "@bond-protocol/bond-library";
-import {providers} from "services/owned-providers";
+import {NativeCurrency} from "@bond-protocol/bond-library";
+import {Signer} from "ethers";
+import {Provider} from "@wagmi/core";
 
 export type BondDetailsProps = {
-  market: CalculatedMarket
+  market: CalculatedMarket,
+  nativeCurrency: NativeCurrency,
+  nativeCurrencyPrice: number,
+  referralAddress: string,
+  issuerName: string,
+  provider: Provider,
+  signer: Signer,
 }
 
-export const BondDetails: FC<BondDetailsProps> = ({market}) => {
+export const BondDetails: FC<BondDetailsProps> = ({
+                                                    market,
+                                                    nativeCurrency,
+                                                    nativeCurrencyPrice,
+                                                    referralAddress,
+                                                    issuerName,
+                                                    provider,
+                                                    signer
+                                                  }) => {
   const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
@@ -26,20 +46,25 @@ export const BondDetails: FC<BondDetailsProps> = ({market}) => {
     usdPrice: "0",
   });
 
-  const {getGasPrice} = useGasPrice();
   const {address, isConnected} = useAccount();
   const {switchNetwork} = useSwitchNetwork();
+  const network = useNetwork();
+
+  const {getGasPrice} = useGasPrice();
   const {bond, estimateBond, getPayoutFor} = usePurchaseBond();
   const {approve, balance, hasSufficientAllowance, hasSufficientBalance} =
     useTokenAllowance(
+      // @ts-ignore
+      address,
       market.quoteToken.address,
       market.quoteToken.decimals,
       market.network,
       market.auctioneer,
-      amount
+      amount,
+      provider,
+      signer
     );
-  const network = useNetwork();
-  const protocol = getProtocolByAddress(market.owner, market.network);
+
   const {blockExplorerName, blockExplorerUrl} = getBlockExplorer(
     market.network,
     "address"
@@ -80,7 +105,9 @@ export const BondDetails: FC<BondDetailsProps> = ({market}) => {
           amount,
           market.quoteToken.decimals,
           market.marketId,
-          market.network
+          market.network,
+          referralAddress,
+          provider
         )
       );
 
@@ -96,14 +123,18 @@ export const BondDetails: FC<BondDetailsProps> = ({market}) => {
       setEstimatedGas(Number(result));
     });
 
-    void getGasPrice(market.network).then((result) => {
+    void getGasPrice(
+      nativeCurrency,
+      nativeCurrencyPrice,
+      provider
+    ).then((result) => {
       setGasPrice(result);
     });
   }, [payout]);
 
   const switchChain = () => {
     const newChain = Number(
-      "0x" + providers[market.network].network.chainId.toString()
+      "0x" + provider.network.chainId.toString()
     );
     switchNetwork?.(newChain);
   };
@@ -131,11 +162,7 @@ export const BondDetails: FC<BondDetailsProps> = ({market}) => {
     },
     {
       label: "Estimated Gas Fee",
-      value: `${networkFee} ${
-        CHAINS.get(market.network)
-          ? CHAINS.get(market.network)?.nativeCurrency.symbol
-          : "ETH"
-      } ($${networkFeeUsd})`,
+      value: `${networkFee} ${nativeCurrency.symbol} ($${networkFeeUsd})`,
       tooltip:
         "Estimated gas fee for this transaction. NOTE: gas fees fluctuate and the price displayed may not be the price you pay.",
     },
@@ -159,13 +186,15 @@ export const BondDetails: FC<BondDetailsProps> = ({market}) => {
     if (!address) return;
 
     try {
-      return estimateBond({
+      return estimateBond(
         address,
         amount,
         payout,
-        slippage: 0.05,
+        0.05,
         market,
-      });
+        referralAddress,
+        signer
+      );
     } catch (e) {
       console.log(e);
     }
@@ -173,13 +202,15 @@ export const BondDetails: FC<BondDetailsProps> = ({market}) => {
 
   const submitTx = () => {
     if (!address) throw new Error("Not Connected");
-    return bond({
+    return bond(
       address,
       amount,
       payout,
-      slippage: 0.05,
+      0.05,
       market,
-    });
+      referralAddress,
+      signer
+    );
   };
 
   return (
@@ -301,7 +332,7 @@ export const BondDetails: FC<BondDetailsProps> = ({market}) => {
         closeModal={() => setShowModal(false)}
         amount={`${amount} ${market.quoteToken.symbol}`}
         payout={`${Number(payout).toFixed(4)} ${market.payoutToken.symbol}`}
-        issuer={protocol?.name}
+        issuer={issuerName}
         vestingTime={vestingLabel}
       />
     </div>

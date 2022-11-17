@@ -13,7 +13,7 @@ import {
   PurchaseConfirmDialogProps,
 } from "components/modals/index";
 import { ContractTransaction } from "ethers";
-import { getBlockExplorer } from "../../utils/getBlockExplorer";
+import { getBlockExplorer } from "../../../../contract-library/src/core/getBlockExplorer";
 import { TransactionErrorDialog } from "components/modals/TransactionErrorDialog";
 import { useNavigate } from "react-router-dom";
 import {providers} from "services/owned-providers";
