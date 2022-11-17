@@ -1,6 +1,5 @@
 import { useSigner, useWaitForTransaction } from "wagmi";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBlockExplorer } from "../../utils";
 import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
 import Button from "../atoms/Button";
 import { useEffect, useState } from "react";
@@ -10,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { ethers } from "ethers";
 import copyIcon from "assets/icons/copy-icon.svg";
 import {providers} from "services/owned-providers";
+import {getBlockExplorer} from "@bond-protocol/contract-library";
 
 export type MarketCreatedParams = {
   marketData: any;
@@ -32,7 +32,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   const { data, isLoading } = useWaitForTransaction({
     chainId: props.marketData.chainId,
-    //@ts-ignore (TODO): fix thsi
+    //@ts-ignore (TODO): fix this
     hash: hash,
   });
 
@@ -43,7 +43,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   const { isLoading: allowanceIsLoading } = useWaitForTransaction({
     chainId: props.marketData.chainId,
-    //@ts-ignore (TODO): fix thsi
+    //@ts-ignore (TODO): fix this
     hash: allowanceTx,
     onSuccess() {
       loadAllowance();
