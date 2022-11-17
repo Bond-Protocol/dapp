@@ -1,0 +1,9 @@
+node_modules
+build
+out
+public
+coverage
+storybook-static
+**/*.no-commit.*
+sandbox
+src/.deprecated/*

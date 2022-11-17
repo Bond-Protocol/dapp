@@ -1,6 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-#echo ' 🏗️  Compiling your code before pushing...'
-#npm run build;
-#echo ' 🏗️  Code compiled!'
