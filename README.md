@@ -1,4 +1,4 @@
-# ![logo](packages/ui/src/assets/logo-24/png) Frontend Monorepo
+# ![logo](packages/ui/src/assets/logo-24.png) Frontend Monorepo
 
 ## Usage
 
