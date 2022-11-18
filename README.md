@@ -1,20 +1,13 @@
-# Bond Protocol dApp
+# ![logo](packages/ui/src/assets/logo-24.png) Frontend Monorepo
 
-### Dev setup (for now)
+## Usage
 
-```bash
+```
 yarn install
-
-#Assuming you've installed these libraries locally before using `yarn link` on each
-yarn link @bond-protocol/bond-library @bond-protocol/contract-library
-
-#Running
 yarn dev
 
-#Other Commands
-
-#Building for prod
-yarn build
-#Serve prod/compiled code locally
-yarn preview
 ```
+
+### Useful Links
+
+[Turbopack](https://turbo.build/repo/docs)

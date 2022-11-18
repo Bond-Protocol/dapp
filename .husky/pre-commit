@@ -1,6 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-#echo ' 🎨 Formatting code and making it prettier... Hang on fren.'
-#npm run lint-staged
-#echo ' 🎨 Done!'
