@@ -13,11 +13,11 @@
   "files": [
     "dist/**/*"
   ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "dev": "tsc -w && tsc-alias -w",
+    "build": "tsc --build --verbose && tsc-alias -v",
+    "dev": "tsc -w && tsc-alias -w -p tsconfig.json",
     "test": "jest",
     "format": "prettier --write ./src/**/*.ts",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",

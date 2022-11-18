@@ -3,22 +3,22 @@
   "version": "0.1.0",
   "license": "MIT",
   "type": "module",
-  "main": "./dist/ui-lib.js",
-  "module": "./dist/ui-lib.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/src/index.js",
+  "module": "./dist/src/index.umd.cjs",
+  "types": "./dist/src/index.d.ts",
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
-      "import": "./dist/ui-lib.js",
-      "require": "./dist/ui-lib.umd.cjs"
+      "import": "./dist/src/index.js",
+      "require": "./dist/src/index.umd.cjs"
     },
     "./style.css": "./src/style.css",
     "./assets/*": "./src/assets/*"
   },
   "scripts": {
-    "dev": "tsc -w && vite",
+    "dev": "vite build --watch",
     "build": "tsc && vite build",
     "lint": "prettier --write ./**/*.{js,json,ts,tsx}"
   },

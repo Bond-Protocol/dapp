@@ -9,18 +9,18 @@ export default defineConfig({
   plugins: [react(), svgr(), dts({ skipDiagnostics: true })],
   root: ".",
   build: {
-    outDir: "dist",
+    outDir: "dist/src",
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'ui',
-      fileName: 'ui-lib'
+      fileName: 'index'
     },
     rollupOptions: {
       external: ['react', 'react-dom'],
       output: {
         globals: {
           react: 'React',
-          'react-dom': "ReactDom"
+          'react-dom': "ReactDOM"
         },
       },
     },

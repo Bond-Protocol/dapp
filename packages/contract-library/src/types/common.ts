@@ -1,4 +1,4 @@
-import { PromiseOrValue } from 'types/contracts/common';
+import { PromiseOrValue } from './contracts/common';
 import { BigNumberish } from 'ethers';
 
 export type CreateMarketParams = {
