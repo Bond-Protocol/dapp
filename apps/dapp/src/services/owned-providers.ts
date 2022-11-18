@@ -28,16 +28,6 @@ const providerConfiguration: ProviderOptions[] = [
         weight: 1,
         priority: 1,
       },
-      {
-        url: "https://rpc.ankr.com/eth",
-        weight: 1,
-        priority: 1,
-      },
-      {
-        url: "https://eth-rpc.gateway.pokt.network",
-        weight: 1,
-        priority: 1,
-      },
     ],
   },
   {
@@ -48,16 +38,6 @@ const providerConfiguration: ProviderOptions[] = [
         url: `https://eth-goerli.g.alchemy.com/v2/${
           import.meta.env.VITE_ALCHEMY_GOERLI_KEY
         }`,
-        weight: 1,
-        priority: 1,
-      },
-      {
-        url: "https://rpc.ankr.com/eth_goerli",
-        weight: 1,
-        priority: 1,
-      },
-      {
-        url: "https://eth-goerli.gateway.pokt.network",
         weight: 1,
         priority: 1,
       },
