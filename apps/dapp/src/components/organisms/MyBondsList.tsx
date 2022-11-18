@@ -81,6 +81,7 @@ export const MyBondsList = () => {
       bond.balance.toString(),
       // @ts-ignore
       signer,
+      bond.bondToken.teller,
       {}
     );
 

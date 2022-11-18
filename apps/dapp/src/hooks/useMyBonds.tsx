@@ -94,6 +94,7 @@ export function useMyBonds() {
     const ownerBalances: Partial<OwnerBalance>[] = [];
     const promises: Promise<any>[] = [];
     bondTokens.forEach((bondToken) => {
+      if (bondToken.teller.toLowerCase() === "0x007FE7c498A2Cf30971ad8f2cbC36bd14Ac51156".toLowerCase()) return;
       address &&
         promises.push(
           contractLibrary
