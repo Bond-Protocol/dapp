@@ -45,13 +45,6 @@ const providerConfiguration: ProviderOptions[] = [
     chainId: "5",
     rpcs: [
       {
-        url: `https://goerli.infura.io/v3/${
-          import.meta.env.VITE_INFURA_PUBLIC_KEY
-        }`,
-        weight: 1,
-        priority: 1,
-      },
-      {
         url: `https://eth-goerli.g.alchemy.com/v2/${
           import.meta.env.VITE_ALCHEMY_GOERLI_KEY
         }`,
