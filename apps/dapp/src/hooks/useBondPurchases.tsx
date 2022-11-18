@@ -7,10 +7,7 @@ import {
   useListBondPurchasesMainnetQuery,
   useListBondPurchasesTestnetQuery,
 } from "../generated/graphql";
-import {
-  CHAIN_ID,
-  getAddressesByChain,
-} from "@bond-protocol/bond-library";
+import { CHAIN_ID, getAddressesByChain } from "@bond-protocol/bond-library";
 
 export function useBondPurchases() {
   const endpoints = getSubgraphEndpoints();
@@ -36,12 +33,11 @@ export function useBondPurchases() {
       { enabled: !testnet }
     );
 
-  const { data: goerliData, ...goerliQuery } =
-    useListBondPurchasesTestnetQuery(
-      { endpoint: endpoints[1] },
-      { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
-      { enabled: !!testnet }
-    );
+  const { data: goerliData, ...goerliQuery } = useListBondPurchasesTestnetQuery(
+    { endpoint: endpoints[1] },
+    { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
+    { enabled: !!testnet }
+  );
 
   useEffect(() => {
     if (testnet) return;

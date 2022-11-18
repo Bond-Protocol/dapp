@@ -1,5 +1,5 @@
-import {LpToken, Token} from "@bond-protocol/contract-library";
-import {useTokens} from "hooks";
+import { LpToken, Token } from "@bond-protocol/contract-library";
+import { useTokens } from "hooks";
 
 export type TokenLabelProps = {
   label: string;
@@ -10,14 +10,11 @@ export type TokenLabelProps = {
   children?: React.ReactNode;
 };
 
-const TokenLabelBase = (props: TokenLabelProps) => {  
+const TokenLabelBase = (props: TokenLabelProps) => {
   const { getTokenDetails } = useTokens();
 
   const quoteLogo = (token: Token | LpToken) => {
-    if (
-      "lpPair" in token &&
-      token.lpPair != undefined
-    ) {
+    if ("lpPair" in token && token.lpPair != undefined) {
       const token0 = getTokenDetails(token.lpPair.token0).logoUrl;
       const token1 = getTokenDetails(token.lpPair.token1).logoUrl;
 

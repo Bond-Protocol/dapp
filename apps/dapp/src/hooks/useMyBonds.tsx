@@ -1,7 +1,7 @@
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {useAtom} from "jotai";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
   BondToken,
   OwnerBalance,
@@ -10,9 +10,9 @@ import {
   useListErc20BondTokensGoerliQuery,
   useListErc20BondTokensMainnetQuery,
 } from "../generated/graphql";
-import {useAccount} from "wagmi";
+import { useAccount } from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {providers} from "services/owned-providers";
+import { providers } from "services/owned-providers";
 
 export function useMyBonds() {
   const endpoints = getSubgraphEndpoints();

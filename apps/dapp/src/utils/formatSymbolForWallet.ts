@@ -9,6 +9,9 @@ export const formatSymbolForWallet = (symbol: string) => {
   } else if (length === 6) {
     return parts[0].concat("-").concat(parts[1].substring(parts[1].length - 4));
   } else {
-    return parts[0].substring(0, 6).concat("-").concat(parts[1].substring(parts[1].length - 4));
+    return parts[0]
+      .substring(0, 6)
+      .concat("-")
+      .concat(parts[1].substring(parts[1].length - 4));
   }
 };

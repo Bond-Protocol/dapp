@@ -200,8 +200,10 @@ export const useTokens = () => {
         let token0Address = token.value.token0Address;
         let token1Address = token.value.token1Address;
 
-        if (token0Address.indexOf("_") === -1) token0Address = network + "_" + token0Address;
-        if (token1Address.indexOf("_") === -1) token1Address = network + "_" + token1Address;
+        if (token0Address.indexOf("_") === -1)
+          token0Address = network + "_" + token0Address;
+        if (token1Address.indexOf("_") === -1)
+          token1Address = network + "_" + token1Address;
 
         //@ts-ignore
         token.value["token0"] = bondLibrary.TOKENS.get(token0Address);
@@ -213,27 +215,28 @@ export const useTokens = () => {
         // @ts-ignore
         token.value["token1"].price = currentPricesMap[token1Address][0].price;
 
-        promises.push(calcLpPrice(
-          {
-            // @ts-ignore
-            lpPair: { ...token.value, address: split[1] },
-            address: split[1],
-          },
-          lpType,
-          providers[network]
-        )
-          .then((result) => {
-            const prices: PriceDetails[] = [];
-            prices[0] = {
+        promises.push(
+          calcLpPrice(
+            {
               // @ts-ignore
-              price: result,
-              source: "custom",
-            };
+              lpPair: { ...token.value, address: split[1] },
+              address: split[1],
+            },
+            lpType,
+            providers[network]
+          )
+            .then((result) => {
+              const prices: PriceDetails[] = [];
+              prices[0] = {
+                // @ts-ignore
+                price: result,
+                source: "custom",
+              };
 
-            // @ts-ignore
-            currentPricesMap[token.key] = prices;
-          })
-          .catch((error) => console.log(error))
+              // @ts-ignore
+              currentPricesMap[token.key] = prices;
+            })
+            .catch((error) => console.log(error))
         );
       });
 

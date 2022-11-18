@@ -1,17 +1,17 @@
-import { ethers } from 'ethers';
-import { NativeCurrency } from '@bond-protocol/bond-library';
-import { Provider } from '@ethersproject/providers';
+import { ethers } from "ethers";
+import { NativeCurrency } from "@bond-protocol/bond-library";
+import { Provider } from "@ethersproject/providers";
 
 export const useGasPrice = () => {
   const getGasPrice = async (
     currency: NativeCurrency,
     currencyPrice: number,
-    provider: Provider,
+    provider: Provider
   ) => {
     const gasPrice = await provider.getFeeData().then((result) => {
-      if (result.maxFeePerGas === null) return '0';
+      if (result.maxFeePerGas === null) return "0";
       return Number(
-        ethers.utils.formatUnits(result.maxFeePerGas, currency.decimals),
+        ethers.utils.formatUnits(result.maxFeePerGas, currency.decimals)
       ).toFixed(currency.decimals);
     });
     return {
@@ -24,7 +24,7 @@ export const useGasPrice = () => {
     getGasPrice: (
       currency: NativeCurrency,
       currencyPrice: number,
-      provider: Provider,
+      provider: Provider
     ) => getGasPrice(currency, currencyPrice, provider),
   };
 };

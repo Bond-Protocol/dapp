@@ -19,7 +19,8 @@
   },
   "scripts": {
     "dev": "tsc -w && vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "lint": "prettier --write ./**/*.{js,json,ts,tsx}"
   },
   "dependencies": {
     "@bond-protocol/contract-library": "*"

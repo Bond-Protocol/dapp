@@ -19,7 +19,7 @@
     "build": "tsc && tsc-alias",
     "dev": "tsc -w && tsc-alias -w",
     "test": "jest",
-    "format": "prettier --write ./src/**/**/*.ts",
+    "format": "prettier --write ./src/**/*.ts",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "prepublishOnly": "yarn build",
     "typechain": "typechain --target ethers-v5 --out-dir src/types/contracts 'src/abis/**/*.json'"
