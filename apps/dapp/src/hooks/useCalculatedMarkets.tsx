@@ -34,6 +34,13 @@ export function useCalculatedMarkets() {
       the market is not live.
     */
     const requestProvider = providers[market.network];
+    const obsoleteAuctioneers = [
+      "0x007f7a58103a31109f848df1a14f7020e1f1b28a",
+      "0x007f7a6012a5e03f6f388dd9f19fd1d754cfc128",
+      "0x007fea7a23da99f3ce7ea34f976f32bf79a09c43",
+      "0x007fea2a31644f20b0fe18f69643890b6f878aa6"
+    ]
+    if (obsoleteAuctioneers.includes(market.auctioneer)) return;
 
     const isLive = await contractLibrary.isLive(
       market.marketId,
@@ -145,7 +152,7 @@ export function useCalculatedMarkets() {
   };
 
   useDeepCompareEffect(() => {
-    if (Object.keys(currentPrices).length > 0) {
+    if (!isCalculatingAll && Object.keys(currentPrices).length > 0) {
       const calculatedMarketsMap = new Map();
       const issuerMarkets = new Map();
 
@@ -171,7 +178,7 @@ export function useCalculatedMarkets() {
   }, [calculateAllMarkets, currentPrices]);
 
   useDeepCompareEffect(() => {
-    if (Object.keys(currentPrices).length > 0) {
+    if (!isCalculatingMine && Object.keys(currentPrices).length > 0) {
       const calculatedMarketsMap = new Map();
       calculateMyMarkets.forEach((result) => {
         result.data && calculatedMarketsMap.set(result.data.id, result.data);
