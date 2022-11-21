@@ -1,13 +1,12 @@
 import { FC, useState } from "react";
 import { Providers } from "context/app-providers";
 import { Footer, Navbar } from "components/organisms";
-import { PageContainer, AppBackground, Button } from "ui";
+import { PageContainer, AppBackground } from "ui";
 import { InformationArea } from "components/pages/InformationArea";
 import { CoverUpScreen } from "components/pages/CoverUpScreen";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
 import { MobileCover } from "components/utility/MobileCover";
 import { AppStatusCard } from "components/organisms/AppStatusCard";
-import { banana } from "@bond-protocol/contract-library";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
@@ -20,7 +19,6 @@ export const App: FC = () => {
     setShowInfoArea(false);
   };
 
-  banana();
   return (
     <>
       <MobileCover />

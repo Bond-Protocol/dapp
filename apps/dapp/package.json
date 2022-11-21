@@ -7,6 +7,7 @@
     "npm": ">=6.4.0"
   },
   "scripts": {
+    "clean": "rm -rf ./dist",
     "prepare": "husky install",
     "dev": "vite",
     "build": "tsc && vite build --emptyOutDir",
