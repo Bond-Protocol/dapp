@@ -19,7 +19,7 @@
   },
   "scripts": {
     "clean": "rm -rf ./dist",
-    "dev": "vite build --watch",
+    "dev": "vite build --watch --mode=development",
     "build": "tsc && vite build",
     "lint": "prettier --write ./**/*.{js,json,ts,tsx}"
   },
