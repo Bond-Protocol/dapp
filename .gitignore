@@ -7,9 +7,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+./**/tsconfig.tsbuildinfo
+tsconfig.tsbuildinfo
+packages/contract-library/tsconfig.tsbuildinfo
 node_modules
 generated
 dist
+build
 dist-ssr
 *.local
 src/generated/*
@@ -33,3 +37,6 @@ package-lock.json
 
 ## Storybook
 storybook-static
+
+## Turbo
+.turbo

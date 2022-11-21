@@ -1,0 +1,84 @@
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { useAtom } from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
+import { useEffect, useState } from "react";
+import {
+  BondPurchase,
+  useListBondPurchasesMainnetQuery,
+  useListBondPurchasesTestnetQuery,
+} from "../generated/graphql";
+import { CHAIN_ID, getAddressesByChain } from "@bond-protocol/bond-library";
+
+export function useBondPurchases() {
+  const endpoints = getSubgraphEndpoints();
+
+  const [testnet, setTestnet] = useAtom(testnetMode);
+  const [selectedBondPurchases, setSelectedBondPurchases] = useState<
+    BondPurchase[]
+  >([]);
+  const [bondPurchasesByMarket, setBondPurchasesByMarket] = useState<
+    Map<string, BondPurchase[]>
+  >(new Map());
+  const [mainnetBondPurchases, setMainnetBondPurchases] = useState<
+    BondPurchase[]
+  >([]);
+  const [testnetBondPurchases, setTestnetBondPurchases] = useState<
+    BondPurchase[]
+  >([]);
+
+  const { data: mainnetData, ...mainnetQuery } =
+    useListBondPurchasesMainnetQuery(
+      { endpoint: endpoints[0] },
+      { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) },
+      { enabled: !testnet }
+    );
+
+  const { data: goerliData, ...goerliQuery } = useListBondPurchasesTestnetQuery(
+    { endpoint: endpoints[1] },
+    { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
+    { enabled: !!testnet }
+  );
+
+  useEffect(() => {
+    if (testnet) return;
+    if (mainnetData && mainnetData.bondPurchases) {
+      const allBondPurchases = mainnetData.bondPurchases;
+      // @ts-ignore
+      setMainnetBondPurchases(allBondPurchases);
+    }
+  }, [mainnetData, testnet]);
+
+  useEffect(() => {
+    if (!testnet) return;
+    if (goerliData && goerliData.bondPurchases) {
+      const allBondPurchases = goerliData.bondPurchases;
+      // @ts-ignore
+      setTestnetBondPurchases(allBondPurchases);
+    }
+  }, [goerliData, testnet]);
+
+  useEffect(() => {
+    if (testnet) {
+      setSelectedBondPurchases(testnetBondPurchases);
+    } else {
+      setSelectedBondPurchases(mainnetBondPurchases);
+    }
+  }, [testnet, mainnetBondPurchases, testnetBondPurchases]);
+
+  useEffect(() => {
+    const bondPurchasesByMarketMap: Map<string, BondPurchase[]> = new Map();
+
+    selectedBondPurchases.forEach((bondPurchase) => {
+      const array = bondPurchasesByMarketMap.get(bondPurchase.marketId) || [];
+      array.push(bondPurchase);
+      bondPurchasesByMarketMap.set(bondPurchase.marketId, array);
+    });
+
+    setBondPurchasesByMarket(bondPurchasesByMarketMap);
+  }, [selectedBondPurchases]);
+
+  return {
+    bondPurchases: selectedBondPurchases,
+    purchasesByMarket: bondPurchasesByMarket,
+  };
+}
