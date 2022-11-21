@@ -16,9 +16,6 @@ export default defineConfig(({ command, mode }) => ({
       name: 'ui',
       fileName: 'index'
     },
-    watch: {
-      clearScreen: false,
-    },
     rollupOptions: {
       external: ['react', 'react-dom'],
       output: {

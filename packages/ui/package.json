@@ -20,7 +20,7 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "dev": "vite build --watch --mode=development",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build --mode=production",
     "lint": "prettier --write ./**/*.{js,json,ts,tsx}"
   },
   "dependencies": {
