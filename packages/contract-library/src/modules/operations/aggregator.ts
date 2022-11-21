@@ -90,6 +90,20 @@ export async function marketScale(
   }
 }
 
+export async function marketCounter(
+  provider: Provider,
+  chainId: string
+): Promise<BigNumberish> {
+  const aggregator = getAggregator(provider, chainId);
+
+  try {
+    return aggregator.marketCounter();
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
 // Payout due for amount of quote tokens
 // Inputting the zero address will take into account just the protocol fee.
 // @param marketId     The ID of the market
@@ -211,8 +225,8 @@ export async function liveMarketsFor(
 // @param ownerAddress    Address of owner to query by
 export async function liveMarketsBy(
   ownerAddress: string,
-  firstIndex: number,
-  lastIndex: number,
+  firstIndex: BigNumberish,
+  lastIndex: BigNumberish,
   provider: Provider,
   chainId: string,
 ): Promise<BigNumberish[]> {

@@ -5,7 +5,7 @@ import {
   getMarketData,
   liveMarketsBy,
   CalculatedMarket,
-  PrecalculatedMarket,
+  PrecalculatedMarket, marketCounter,
 } from "@bond-protocol/contract-library";
 import { CHAIN_ID } from "@bond-protocol/bond-library";
 
@@ -26,7 +26,9 @@ export function useFetchMarkets(
   const fetchMarketData = async () => {
     if (!isLoading) {
       isLoading = true;
-      const marketIds = await liveMarketsBy(ownerAddress, provider, chainId);
+
+      const count = await marketCounter(provider, chainId);
+      const marketIds = await liveMarketsBy(ownerAddress, 0, count, provider, chainId);
 
       const promises = getMarketData(
         marketIds,
