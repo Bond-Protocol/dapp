@@ -211,13 +211,15 @@ export async function liveMarketsFor(
 // @param ownerAddress    Address of owner to query by
 export async function liveMarketsBy(
   ownerAddress: string,
+  firstIndex: number,
+  lastIndex: number,
   provider: Provider,
   chainId: string,
 ): Promise<BigNumberish[]> {
   const aggregator = getAggregator(provider, chainId);
 
   try {
-    return aggregator.liveMarketsBy(ownerAddress);
+    return aggregator.liveMarketsBy(ownerAddress, firstIndex, lastIndex);
   } catch (e) {
     console.log(e);
     throw e;
