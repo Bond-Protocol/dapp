@@ -14,9 +14,6 @@ export default defineConfig({
   },
   build: {
     outDir: "../dist",
-    watch: {
-      clearScreen: false
-    },
     rollupOptions: {
       plugins: [nodePolyfills()],
     },
