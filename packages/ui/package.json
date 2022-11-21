@@ -18,7 +18,8 @@
     "./assets/*": "./src/assets/*"
   },
   "scripts": {
-    "dev": "vite build --watch",
+    "clean": "rm -rf ./dist",
+    "dev": "vite build --watch --mode=development",
     "build": "tsc && vite build",
     "lint": "prettier --write ./**/*.{js,json,ts,tsx}"
   },

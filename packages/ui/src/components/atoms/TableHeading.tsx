@@ -59,7 +59,6 @@ export const TableHeading = ({
             />
           </div>
         )}
-
         {props.children}
         {props.tooltip && (
           <Tooltip content={props.tooltip}>
