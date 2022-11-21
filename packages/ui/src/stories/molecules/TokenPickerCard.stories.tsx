@@ -1,7 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { TokenPickerCard } from "../../components/molecules/TokenPickerCard";
 import baseLogo from "../../assets/icons/eth-icon.svg";
-import { ReactQueryDecorator } from "../decorators";
 
 export default {
   title: "Components/Molecules/TokenPickerCard",
