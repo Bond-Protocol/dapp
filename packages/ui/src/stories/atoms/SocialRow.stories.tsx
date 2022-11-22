@@ -14,8 +14,10 @@ const Template: ComponentStory<typeof SocialRow> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  githubUrl: "http://hello.com",
-  discordUrl: "http://hello.com",
-  mediumUrl: "http://hello.com",
-  twitterUrl: "http://hello.com",
+  discord: "https://bondprotocol.finance",
+  gitbook: "http://bondprotocol.finance",
+  github: "https://bondprotocol.finance",
+  medium: "https://bondprotocol.finance",
+  twitter: "https://bondprotocol.finance",
+  telegram: "https://bondprotocol.finance",
 };
