@@ -1,8 +1,6 @@
-import "../src/styles/index.css";
+import "../src/style.css";
+import theme, { colors } from "./theme";
 import { ThemeProvider } from "@material-tailwind/react";
-import { EvmProvider } from "../src/context/evm-provider";
-import { colors } from "../contants.json";
-import theme from "./theme";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -29,9 +27,7 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <ThemeProvider>
-      <EvmProvider>
-        <Story />
-      </EvmProvider>
+      <Story />
     </ThemeProvider>
   ),
 ];

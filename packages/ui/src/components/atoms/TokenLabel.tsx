@@ -1,9 +1,8 @@
-import { LpToken, Token } from "@bond-protocol/contract-library";
 import { getTokenDetails } from "../../utils/getTokenDetails";
 
 export type TokenLabelProps = {
   label: string;
-  token?: Token | LpToken;
+  token?: any;
   secondary?: string | React.ReactNode;
   wrapped?: boolean;
   className?: string;
@@ -12,7 +11,7 @@ export type TokenLabelProps = {
 };
 
 const TokenLabelBase = (props: TokenLabelProps) => {
-  const quoteLogo = (token: Token | LpToken) => {
+  const quoteLogo = (token: any) => {
     if ("lpPair" in token && token.lpPair != undefined) {
       const token0 = getTokenDetails(token.lpPair.token0).logoUrl;
       const token1 = getTokenDetails(token.lpPair.token1).logoUrl;

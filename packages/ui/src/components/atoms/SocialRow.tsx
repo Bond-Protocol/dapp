@@ -26,6 +26,7 @@ export const SocialRow = (props: SocialRowProps) => {
           <GitbookIcon />
         </LinkIcon>
       )}
+
       {props.github && (
         <LinkIcon href={props.github}>
           <GithubIcon />
@@ -43,11 +44,13 @@ export const SocialRow = (props: SocialRowProps) => {
           <TwitterIcon />
         </LinkIcon>
       )}
+
       {props.discord && (
         <LinkIcon href={props.discord}>
           <DiscordIcon className="hover:text-[#7289da]" />
         </LinkIcon>
       )}
+
       {props.telegram && (
         <LinkIcon href={props.telegram}>
           <TelegramIcon />

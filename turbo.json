@@ -23,6 +23,13 @@
     "codegen": {
       "outputs": ["src/genearted/graphql.ts"]
     },
+    "storybook": {
+      "dependsOn": [],
+      "inputs": ["src"]
+    },
+    "build:storybook": {
+      "dependsOn": []
+    },
     "format": {
       "outputs": []
     },

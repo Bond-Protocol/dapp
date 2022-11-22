@@ -3,7 +3,7 @@ import { TokenInput } from "components/atoms/TokenInput";
 import baseIcon from "assets/icons/eth-icon.svg";
 
 export default {
-  title: "Components/Atoms/TokenInput",
+  title: "Components/Molecules/TokenInput",
   component: TokenInput,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

@@ -1,4 +1,3 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Chip } from "../atoms/Chip";
 import { Input } from "../atoms/Input";
 import { TokenLabel } from "../atoms/TokenLabel";
@@ -8,7 +7,7 @@ export type InputCardProps = {
   className?: string;
   onChange?: (amount: string) => void;
   value?: string;
-  market: CalculatedMarket;
+  market: any;
 };
 
 export const InputCard = ({
