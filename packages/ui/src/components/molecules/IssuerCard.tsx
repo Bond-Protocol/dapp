@@ -1,11 +1,9 @@
 import { FC } from "react";
-import { Protocol } from "@bond-protocol/bond-library";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 type IssuerCardProps = {
-  issuer: Protocol;
+  issuer: any;
   tbv: number;
-  markets: CalculatedMarket[];
+  markets: any[];
   navigate?: (to: string) => void;
 };
 

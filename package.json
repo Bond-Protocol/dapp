@@ -12,7 +12,9 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "dev": "turbo run dev --parallel",
-    "preview": "turbo run preview"
+    "preview": "turbo run preview",
+    "storybook": "turbo run storybook",
+    "build:storybook": "turbo run build:storybook"
   },
   "devDependencies": {
     "turbo": "^1.6.3",
