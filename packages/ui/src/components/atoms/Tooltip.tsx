@@ -18,7 +18,7 @@ export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
       <div className="cursor-help">
         {props.children || (
           <TooltipIcon
-            className={`fill-light-primary-500 ${props.iconClassname}`}
+            className={`fill-white ${props.iconClassname}`}
             width={iconWidth}
           />
         )}

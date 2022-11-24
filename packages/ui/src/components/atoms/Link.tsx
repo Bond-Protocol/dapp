@@ -36,12 +36,8 @@ export const Link = forwardRef(function Button(
         }),
       }}
     >
-      <p className={`pt-[2px] ${props.labelClassname}`}>{children}</p>
-      <LinkIcon
-        className={`color-inherit my-auto ml-1.5 mr-0.5 ${props.iconClassName}`}
-      />
+      <p className={`pt-[2px] mr-1.5${props.labelClassname}`}>{children}</p>
+      <LinkIcon className={`color-inherit my-auto ${props.iconClassName}`} />
     </ButtonUnstyled>
   );
 });
-
-export default Link;
