@@ -1,3 +1,4 @@
+export * from "./ActionInfo";
 export * from "./AppBackground";
 export * from "./Button";
 export * from "./CellLabel";
@@ -8,6 +9,7 @@ export * from "./DataRow";
 export * from "./FlatSelect";
 export * from "./InfoLabel";
 export * from "./Input";
+export * from "./Label";
 export * from "./Loading";
 export * from "./Link";
 export * from "./ModalTitle";
