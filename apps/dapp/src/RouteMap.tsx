@@ -24,13 +24,10 @@ export const RouteMap: FC = () => {
 
   return (
     <Switch>
-      <Route path="/" element={<MarketTabs />}>
-        <Route index element={<MarketList />} />
-        <Route path="/markets" element={<MarketList />} />
-        <Route path="/issuers" element={<IssuerList />} />
-        <Route path="/my-bonds" element={<MyBondsList />} />
-        {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}
-      </Route>
+      <Route path="/markets" element={<MarketList />} />
+      <Route path="/issuers" element={<IssuerList />} />
+      <Route path="/my-bonds" element={<MyBondsList />} />
+      {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}
       <Route
         path="/create"
         element={
