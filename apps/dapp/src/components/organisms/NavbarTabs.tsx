@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { useMarkets } from "hooks/useMarkets";
-import { Outlet, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export interface NavbarTabsProps {
   selected?: number;
@@ -8,34 +7,33 @@ export interface NavbarTabsProps {
 }
 
 export const NavbarTabs = (props: NavbarTabsProps) => {
-  const [selected, setSelected] = useState(props.selected);
   const { isMarketOwner } = useMarkets();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const tabs = [
-    { label: "Markets", handleClick: () => navigate("/markets") },
-    { label: "Issuers", handleClick: () => navigate("/issuers") },
-    { label: "My Bonds", handleClick: () => navigate("/my-bonds") },
+    { label: "Markets", path: "/markets" },
+    { label: "Issuers", path: "/issuers" },
+    { label: "My Bonds", path: "/my-bonds" },
   ];
 
-  const marketOwnerTab = {
-    label: "My Markets",
-    handleClick: () => navigate("my-markets"),
+  const marketOwnerTab = { label: "My Markets", path: "/my-markets" };
+
+  const isSelected = (path: string) => {
+    if (path === "/issuers" && location.pathname === "/") return true;
+    return path.substring(1) === location.pathname.split("/")[1];
   };
 
   const marketTabs = isMarketOwner ? [...tabs, marketOwnerTab] : tabs;
 
   return (
     <div className={`flex justify-center gap-6 ${props.className}`}>
-      {marketTabs.map((tab, i) => (
+      {marketTabs.map((tab) => (
         <div
           className={`text-[15px] uppercase hover:cursor-pointer ${
-            selected === i ? "text-light-secondary" : ""
+            isSelected(tab.path) ? "text-light-secondary" : ""
           }`}
-          onClick={() => {
-            setSelected(i);
-            tab.handleClick();
-          }}
+          onClick={() => navigate(tab.path)}
         >
           {tab.label}
         </div>
