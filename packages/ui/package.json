@@ -2,16 +2,16 @@
   "name": "ui",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "./dist/src/index.js",
-  "module": "./dist/src/index.umd.cjs",
+  "main": "./dist/src/index.mjs",
+  "module": "./dist/src/index.mjs",
   "types": "./dist/src/index.d.ts",
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
-      "import": "./dist/src/index.js",
-      "require": "./dist/src/index.umd.cjs"
+      "import": "./dist/src/index.mjs",
+      "require": "./dist/src/index.umd.js"
     },
     "./style.css": "./src/style.css",
     "./assets/*": "./src/assets/*"
