@@ -24,6 +24,7 @@ export const RouteMap: FC = () => {
 
   return (
     <Switch>
+      <Route path="/" element={<IssuerList />} />
       <Route path="/markets" element={<MarketList />} />
       <Route path="/issuers" element={<IssuerList />} />
       <Route path="/my-bonds" element={<MyBondsList />} />
