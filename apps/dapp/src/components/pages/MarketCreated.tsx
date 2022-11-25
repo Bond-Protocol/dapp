@@ -1,54 +1,48 @@
-import { useSigner, useWaitForTransaction } from "wagmi";
-import { useNavigate, useParams } from "react-router-dom";
-import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
-import { useEffect, useState } from "react";
+import {useSigner} from "wagmi";
+import {useNavigate, useParams} from "react-router-dom";
+import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
+import {useEffect, useState} from "react";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { Button, Input } from "ui";
-import { useForm } from "react-hook-form";
-import { ethers } from "ethers";
+import {getBlockExplorer} from "@bond-protocol/contract-library";
+import {Button, Input} from "ui";
+import {useForm} from "react-hook-form";
+import {ethers} from "ethers";
 import copyIcon from "assets/icons/copy-icon.svg";
-import { providers } from "services/owned-providers";
-import { getBlockExplorer } from "@bond-protocol/contract-library";
-import { usePurchaseBond } from "hooks/usePurchaseBond";
+import {providers} from "services/owned-providers";
+import {usePurchaseBond} from "hooks/usePurchaseBond";
 
 export type MarketCreatedParams = {
   marketData: any;
 };
 
 export const MarketCreated = (props: MarketCreatedParams) => {
-  const { hash } = useParams();
+  const {hash} = useParams();
   const navigate = useNavigate();
-  const { getTokenAllowance } = usePurchaseBond();
-  const { register, handleSubmit } = useForm();
-  const { data: signer } = useSigner();
+  const {getTokenAllowance} = usePurchaseBond();
+  const {register, handleSubmit} = useForm();
+  const {data: signer} = useSigner();
 
   const [protocol, setProtocol] = useState<Protocol | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [createTx, setCreateTx] = useState<any>();
+  const [allowanceIsLoading, setAllowanceIsLoading] = useState(false);
   const [allowance, setAllowance] = useState(-1);
-  const [allowanceTx, setAllowanceTx] = useState("");
   const [isAllowanceSufficient, setIsAllowanceSufficient] = useState(false);
   const [ownerAddress, setOwnerAddress] = useState(
     props.marketData.formValues.marketOwnerAddress
   );
 
-  const { data, isLoading } = useWaitForTransaction({
-    chainId: props.marketData.chainId,
-    //@ts-ignore (TODO): fix this
-    hash: hash,
-  });
+  providers[props.marketData.chain].waitForTransaction(hash || "")
+    .then(result => {
+      if (result.status === 1) {
+        setCreateTx(result);
+      }
+    });
 
   const teller = contractLibrary.getAddressesForType(
     props.marketData.chain,
     props.marketData.bondType
   ).teller;
-
-  const { isLoading: allowanceIsLoading } = useWaitForTransaction({
-    chainId: props.marketData.chainId,
-    //@ts-ignore (TODO): fix this
-    hash: allowanceTx,
-    onSuccess() {
-      loadAllowance();
-    },
-  });
 
   const {
     blockExplorerUrl: blockExplorerUrl,
@@ -60,18 +54,20 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       props.marketData.chain,
       props.marketData.bondType
     ).auctioneer;
+    setAllowanceIsLoading(true);
 
     void getTokenAllowance(
       props.marketData.marketParams.payoutToken,
       ownerAddress,
       auctioneer,
       props.marketData.payoutToken.decimals,
-      providers[props.marketData.network]
+      providers[props.marketData.chain]
     ).then((result) => {
       setAllowance(Number(result));
       setIsAllowanceSufficient(
         Number(props.marketData.formValues.marketCapacity) <= Number(result)
       );
+      setAllowanceIsLoading(false);
     });
   };
 
@@ -90,16 +86,20 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       signer
     );
 
-    setAllowanceTx(tx.hash);
+    providers[props.marketData.chain].waitForTransaction(tx.hash)
+      .then(() => {
+        loadAllowance();
+      });
   };
 
   useEffect(() => {
-    if (data && !(data.status === 0) && !isLoading) {
+    if (createTx && !(createTx.status === 0) && isLoading) {
       setProtocol(getProtocolByAddress(ownerAddress, props.marketData.chain));
-      setOwnerAddress(props.marketData.isMultisig ? data.to : data.from);
+      setOwnerAddress(props.marketData.isMultisig ? createTx.to : createTx.from);
+      setIsLoading(false);
       loadAllowance();
     }
-  }, [data, isLoading, allowanceTx]);
+  }, [createTx, isLoading]);
 
   const displayAllowance = () => {
     switch (allowance) {
@@ -113,7 +113,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 <div className="pb-8 text-center leading-normal text-red-500">
                   Allowance: {allowance}{" "}
                   {props.marketData.summaryData.payoutToken}
-                  <br />
+                  <br/>
                   Capacity: {props.marketData.formValues.marketCapacity}{" "}
                   {props.marketData.summaryData.payoutToken}
                 </div>
@@ -145,7 +145,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 >
                   Allowance: {allowance}{" "}
                   {props.marketData.summaryData.payoutToken}
-                  <br />
+                  <br/>
                   Capacity: {props.marketData.formValues.marketCapacity}{" "}
                   {props.marketData.summaryData.payoutToken}
                 </div>
@@ -302,13 +302,13 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           Waiting for tx confirmation...
         </div>
       )}
-      {!isLoading && data && !(data.status === 0) && (
+      {!isLoading && createTx && !(createTx.status === 0) && (
         <div>
           <h1 className="py-10 text-center font-faketion text-5xl leading-normal">
             ALL SET!
-            <br />
+            <br/>
             YOUR BOND MARKET
-            <br />
+            <br/>
             HAS BEEN DEPLOYED
           </h1>
 
@@ -360,7 +360,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           )}
         </div>
       )}
-      {data && data.status === 0 && (
+      {createTx && createTx.status === 0 && (
         <div className="py-8 text-center leading-normal">Error!</div>
       )}
       <Button
