@@ -32,9 +32,11 @@ export const App: FC = () => {
               <AppBackground />
               <InformationArea open={showInfoArea} onClose={closeInfoArea} />
               <PolicyRoutes />
-              <PageContainer>
-                <RouteMap />
-              </PageContainer>
+              <div className="mx-auto max-w-[1136px]">
+                <PageContainer>
+                  <RouteMap />
+                </PageContainer>
+              </div>
             </div>
             <Footer closeInfoArea={closeInfoArea} />
           </div>

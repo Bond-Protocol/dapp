@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProtocols, Protocol } from "@bond-protocol/bond-library";
-import { IssuerCard } from "ui";
+import { InfoLabel, IssuerCard } from "ui";
 import { alphabeticSort, numericSort } from "services/sort";
 import { useMarkets } from "hooks";
 import { useAtom } from "jotai";
@@ -71,21 +71,37 @@ export const IssuerList = () => {
 
   return (
     <>
-      {/* hiding search for now as there'll be little partners
-      <p className="flex justify-start">
-        <Input onChange={updateSearch} />
-      </p>
-      <p className="flex justify-start">
-        <Button onClick={sortByName}>Sort by Name</Button>
-        <Button onClick={sortByTbv}>Sort by TBV</Button>
-      </p>
-        */}
-      <div className="mt-8 flex flex-wrap gap-x-12 gap-y-10">
+      <div>
+        <h1 className="font-fraktion text-5xl font-bold uppercase">
+          Bond Issuers
+        </h1>
+      </div>
+      <div className="flex gap-x-5 py-10">
+        <InfoLabel
+          label="Total Value Bonded"
+          tooltip="Total Value Bonded across all Issuers"
+        >
+          $26.5M
+        </InfoLabel>
+        <InfoLabel
+          label="Unique Bonders"
+          tooltip="Total unique addresses that interacted with protocol markets"
+        >
+          20k
+        </InfoLabel>
+        <InfoLabel
+          label="Average Discount Rate"
+          tooltip="Average discount at what bonds are acquired"
+        >
+          4%
+        </InfoLabel>
+      </div>
+      <div className="flex flex-wrap gap-x-6 gap-y-10">
         {sortedIssuers.map((issuer) => {
           if (issuer.name && issuer.name.toLowerCase().indexOf(search) != -1) {
             const markets = marketsByIssuer.get(issuer.id) || [];
             return (
-              <div key={issuer.id} className="w-full flex-1">
+              <div key={issuer.id} className="max-w-[169px] flex-1">
                 <IssuerCard
                   issuer={issuer}
                   tbv={protocolTbvs?.get(issuer.id) || 0}
