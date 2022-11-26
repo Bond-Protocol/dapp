@@ -10,7 +10,7 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
   const showTestnetToggle = environment.isStaging || environment.isDevelopment;
 
   return (
-    <div className="flex h-[91px] items-center justify-between px-[4vw]">
+    <div className="flex h-[96px] items-center justify-between px-[4vw]">
       <div className="flex w-1/3">
         <HamburgerIcon
           onClick={props.onHamburgerClick}

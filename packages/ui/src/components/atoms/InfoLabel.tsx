@@ -10,13 +10,18 @@ export type InfoLabelProps = {
 export const InfoLabel = (props: InfoLabelProps) => {
   return (
     <div
-      className={`w-full overflow-hidden bg-white/[.05] px-1 py-4 text-center ${props.className}`}
+      className={`flex h-[104px] max-h-[104px] w-full flex-col justify-center overflow-hidden bg-white/[.05] text-center ${props.className}`}
     >
-      <div className="font-jakarta text-light-primary-500 ml-1.5 flex justify-center text-[12px] uppercase">
-        <div className="my-auto mr-1">{props.label}</div>
-        <Tooltip content={props.tooltip} iconClassname="pb-0.5" />
+      <div className="text-light-primary-500 ml-1.5 flex justify-center uppercase">
+        <div className="font-fraktion my-auto mr-1 font-bold">
+          {props.label}
+        </div>
+        <Tooltip
+          content={props.tooltip}
+          iconClassname="fill-light-primary-500 text-light-primary-500"
+        />
       </div>
-      <h2 className="font-faketion text-[48px] leading-[56px] tracking-tighter">
+      <h2 className="font-fraktion text-[48px] leading-none">
         {props.children}
       </h2>
     </div>

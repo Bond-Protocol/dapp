@@ -30,7 +30,7 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
     <div className={`flex justify-center gap-6 ${props.className}`}>
       {marketTabs.map((tab) => (
         <div
-          className={`text-[15px] uppercase hover:cursor-pointer ${
+          className={`font-fraktion uppercase hover:cursor-pointer ${
             isSelected(tab.path) ? "text-light-secondary" : ""
           }`}
           onClick={() => navigate(tab.path)}
