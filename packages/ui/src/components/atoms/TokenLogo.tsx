@@ -1,9 +1,8 @@
-export interface TokenLogoProps {
+export interface TokenLogoProps
+  extends React.HtmlHTMLAttributes<HTMLDivElement> {
   icon?: string;
   pairIcon?: string;
-  width?: number;
   even?: boolean;
-  className?: string;
 }
 
 export const TokenLogo = (props: TokenLogoProps) => {

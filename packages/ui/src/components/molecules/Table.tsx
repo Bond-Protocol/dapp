@@ -1,89 +1,89 @@
-import { TableHeading, TableCell, Label, LabelProps, DiscountLabel } from "..";
-import logo from "../../assets/icon-logo.png";
+import { useState } from "react";
+import { TableHeading, TableCell, Label, LabelProps } from "..";
 
-const sample: Record<string, LabelProps | string> = {
-  bond: {
-    icon: logo,
-    pairIcon: logo,
-    value: "OHM-DAI",
-    even: true,
-  },
-  price: {
-    icon: logo,
-    value: "$0.0194",
-    subtext: "$0.0204 Market",
-  },
-  discount: { value: "33%" },
-  maxPayout: { value: "3,333.33", subtext: "$15,457.48" },
-  vesting: { value: "04-20-2577", subtext: "Expiry" },
-  creationDate: { value: "04-20-2022" },
-  tbv: { value: "33,333,333" },
-  issuer: { icon: logo, value: "Bond Protocol" },
-};
+export interface Cell extends LabelProps {
+  sortValue?: string;
+}
 
-const sample2: Record<string, LabelProps | string> = {
-  bond: {
-    icon: logo,
-    pairIcon: logo,
-    value: "OHM-DAI",
-  },
-  price: {
-    icon: logo,
-    value: "$0.0194",
-    subtext: "$0.0204 Market",
-  },
-  discount: { value: "-33%" },
-  maxPayout: { value: "3,333.33", subtext: "$15,457.48" },
-  vesting: { value: "04-20-2577", subtext: "Expiry" },
-  creationDate: { value: "04-20-2022" },
-  tbv: { value: "33,333,333" },
-  issuer: { icon: logo, value: "Bond Protocol" },
-};
+export interface Column {
+  label: string;
+  accessor: string;
+  alignEnd?: boolean;
+  unsortable?: boolean;
+  width?: string;
+  Component?: (props: any) => JSX.Element;
+}
 
-const sampels = [sample, sample2, sample];
-const cols = [
-  { label: "Bond", accessor: "bond" },
-  { label: "Bond Price", accessor: "price" },
-  {
-    label: "Discount",
-    accessor: "discount",
-    alignEnd: true,
-    Component: DiscountLabel,
-  },
-  { label: "Max Payout", accessor: "maxPayout", alignEnd: true },
-  { label: "Vesting", accessor: "vesting" },
-  { label: "Creation Date", accessor: "creationDate" },
-  { label: "TBV", accessor: "tbv", alignEnd: true },
-  { label: "Issuer", accessor: "issuer" },
-];
+export interface TableProps {
+  columns: Array<Column>;
+  data?: Array<Record<string, Cell>>;
+}
 
-export const Table = () => {
+export const Table = (props: TableProps) => {
+  const [data, setData] = useState(props.data || []);
+
+  const handleSorting = (sortField: string, sortOrder: string) => {
+    if (sortField) {
+      const sorted = [...data].sort((a, b) => {
+        const current = a[sortField]?.sortValue || a[sortField].value;
+        const next = b[sortField]?.sortValue || b[sortField].value;
+        if (!current) return 1;
+        if (!next) return -1;
+        if (!current && !next) return 0;
+
+        return (
+          current.toString().localeCompare(next.toString(), "en", {
+            numeric: true,
+          }) * (sortOrder === "asc" ? 1 : -1)
+        );
+      });
+      setData(sorted);
+    }
+  };
+
   return (
     <table className="w-full table-fixed">
-      <TableHead columns={cols} />
-      <TableBody columns={cols} rows={sampels} />
+      {props.columns.map((c) => (
+        <col className={c.width && c.width} />
+      ))}
+      <TableHead columns={props.columns} handleSorting={handleSorting} />
+      <TableBody columns={props.columns} rows={data} />
     </table>
   );
 };
 
-interface Column {
-  label: string;
-  accessor: string;
-  tooltip?: string;
-  alignEnd?: boolean;
-  Component?: (props: any) => JSX.Element;
-}
-
 export interface TableHeadProps {
   columns: Column[];
+  handleSorting: (field: string, sortOrder: string) => void;
 }
 
 export const TableHead = (props: TableHeadProps) => {
+  const [sortField, setSortField] = useState("");
+  const [order, setOrder] = useState("asc");
+
+  const handleSortingChange = (accessor: string) => {
+    const sortOrder =
+      accessor === sortField && order === "asc" ? "desc" : "asc";
+    setSortField(accessor);
+    setOrder(sortOrder);
+    props.handleSorting(accessor, sortOrder);
+  };
+
   return (
     <thead className="">
-      <tr className="border-y border-white/25">
+      <tr className="child:pl-5 border-y border-white/25 ">
         {props.columns.map((field) => (
-          <TableHeading key={field.accessor} alignEnd={field.alignEnd}>
+          <TableHeading
+            isSorting={sortField === field.accessor}
+            ascending={order === "asc"}
+            key={field.accessor}
+            alignEnd={field.alignEnd}
+            onClick={
+              field.unsortable
+                ? undefined
+                : () => handleSortingChange(field.accessor)
+            }
+          >
             {field.label}
           </TableHeading>
         ))}
@@ -93,7 +93,7 @@ export const TableHead = (props: TableHeadProps) => {
 };
 
 export interface TableBodyProps {
-  rows: any[];
+  rows: Array<Record<string, Cell>>;
   columns: Column[];
 }
 
@@ -102,7 +102,7 @@ export const TableBody = ({ rows, columns }: TableBodyProps) => {
     <tbody>
       {rows.map((field) => {
         return (
-          <tr className="border-white/15 h-20 border-b">
+          <tr className="child:pl-5 border-white/15 h-20 border-b">
             {columns.map(({ accessor, alignEnd, Component }) => (
               <TableCell alignEnd={alignEnd}>
                 {Component ? (

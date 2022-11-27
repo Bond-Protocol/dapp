@@ -3,14 +3,15 @@ import { TokenLogo, TokenLogoProps } from "../atoms";
 export interface LabelProps extends TokenLogoProps {
   value?: string | React.ReactNode;
   subtext?: string;
-  children?: React.ReactNode;
-  className?: string;
 }
 
 export const Label = (props: LabelProps) => {
   return (
     <>
-      <div className={`child:my-auto flex ${props.className}`}>
+      <div
+        onClick={props.onClick}
+        className={`child:my-auto flex ${props.className}`}
+      >
         {props.icon && (
           <TokenLogo
             className={props.pairIcon ? "mr-1 w-10" : "mr-1"}

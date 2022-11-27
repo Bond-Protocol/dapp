@@ -9,6 +9,7 @@ export type TableHeadingProps = TableCellProps & {
   onClickIcon?: () => void;
   sortName?: string;
   ascending?: boolean;
+  isSorting?: boolean;
   marketSort?: string;
   setMarketSort?: (value: string) => void;
 };
@@ -16,14 +17,10 @@ export type TableHeadingProps = TableCellProps & {
 export const TableHeading = ({
   marketSort,
   setMarketSort,
+  isSorting,
   ...props
 }: TableHeadingProps) => {
   const [sorting, setSorting] = useState(false);
-  const isSorting =
-    sorting &&
-    marketSort &&
-    props.sortName &&
-    marketSort.localeCompare(props.sortName) === 0;
 
   return (
     <TableCell
@@ -31,7 +28,9 @@ export const TableHeading = ({
       heading
       className={`${
         props.onClick && "cursor-pointer"
-      } w-2 select-none tracking-wide ${props.className}`}
+      } w-2 select-none pb-2 pt-1.5 leading-none tracking-wide ${
+        props.className
+      }`}
       onClick={(e) => {
         if (!props.onClick) return;
 
