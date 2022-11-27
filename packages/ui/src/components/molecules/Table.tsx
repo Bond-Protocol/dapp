@@ -1,35 +1,63 @@
-import { FC } from "react";
-import { TableHeading, TableCell } from "..";
+import { TableHeading, TableCell, Label, LabelProps, DiscountLabel } from "..";
+import logo from "../../assets/icon-logo.png";
 
-export const Table_old: FC<{ children: React.ReactNode }> = (props) => {
-  return (
-    <table className="w-full table-fixed text-left">{props.children}</table>
-  );
+const sample: Record<string, LabelProps | string> = {
+  bond: {
+    icon: logo,
+    pairIcon: logo,
+    value: "OHM-DAI",
+    even: true,
+  },
+  price: {
+    icon: logo,
+    value: "$0.0194",
+    subtext: "$0.0204 Market",
+  },
+  discount: { value: "33%" },
+  maxPayout: { value: "3,333.33", subtext: "$15,457.48" },
+  vesting: { value: "04-20-2577", subtext: "Expiry" },
+  creationDate: { value: "04-20-2022" },
+  tbv: { value: "33,333,333" },
+  issuer: { icon: logo, value: "Bond Protocol" },
 };
 
-const sample = {
-  bond: "OHM-DAI",
-  price: "33.33",
-  discount: "33",
-  maxPayout: "3,333.33",
-  vesting: "04-20-2577",
-  creationDate: "04-20-2022",
-  tbv: "33,333,333",
+const sample2: Record<string, LabelProps | string> = {
+  bond: {
+    icon: logo,
+    pairIcon: logo,
+    value: "OHM-DAI",
+  },
+  price: {
+    icon: logo,
+    value: "$0.0194",
+    subtext: "$0.0204 Market",
+  },
+  discount: { value: "-33%" },
+  maxPayout: { value: "3,333.33", subtext: "$15,457.48" },
+  vesting: { value: "04-20-2577", subtext: "Expiry" },
+  creationDate: { value: "04-20-2022" },
+  tbv: { value: "33,333,333" },
+  issuer: { icon: logo, value: "Bond Protocol" },
 };
 
-const sampels = [sample, sample, sample];
+const sampels = [sample, sample2, sample];
+const cols = [
+  { label: "Bond", accessor: "bond" },
+  { label: "Bond Price", accessor: "price" },
+  {
+    label: "Discount",
+    accessor: "discount",
+    alignEnd: true,
+    Component: DiscountLabel,
+  },
+  { label: "Max Payout", accessor: "maxPayout", alignEnd: true },
+  { label: "Vesting", accessor: "vesting" },
+  { label: "Creation Date", accessor: "creationDate" },
+  { label: "TBV", accessor: "tbv", alignEnd: true },
+  { label: "Issuer", accessor: "issuer" },
+];
 
-export const Table = (props) => {
-  const cols = [
-    { label: "Bond", accessor: "bond" },
-    { label: "Bond Price", accessor: "price" },
-    { label: "Discount", accessor: "discount" },
-    { label: "Max Payout", accessor: "maxPayout" },
-    { label: "Vesting", accessor: "vesting" },
-    { label: "Creation Date", accessor: "creationDate" },
-    { label: "TBV", accessor: "tbv" },
-  ];
-
+export const Table = () => {
   return (
     <table className="w-full table-fixed">
       <TableHead columns={cols} />
@@ -42,6 +70,8 @@ interface Column {
   label: string;
   accessor: string;
   tooltip?: string;
+  alignEnd?: boolean;
+  Component?: (props: any) => JSX.Element;
 }
 
 export interface TableHeadProps {
@@ -51,9 +81,11 @@ export interface TableHeadProps {
 export const TableHead = (props: TableHeadProps) => {
   return (
     <thead className="">
-      <tr className="">
+      <tr className="border-y border-white/25">
         {props.columns.map((field) => (
-          <TableHeading key={field.accessor}>{field.label}</TableHeading>
+          <TableHeading key={field.accessor} alignEnd={field.alignEnd}>
+            {field.label}
+          </TableHeading>
         ))}
       </tr>
     </thead>
@@ -65,22 +97,20 @@ export interface TableBodyProps {
   columns: Column[];
 }
 
-type Halp = {
-  value: string;
-  subtext?: string;
-  icon?: string;
-  pairIcon?: string;
-  smallPair?: boolean;
-};
-
 export const TableBody = ({ rows, columns }: TableBodyProps) => {
   return (
     <tbody>
       {rows.map((field) => {
         return (
-          <tr>
-            {columns.map(({ accessor }) => (
-              <TableCell>{field[accessor]}</TableCell>
+          <tr className="border-white/15 h-20 border-b">
+            {columns.map(({ accessor, alignEnd, Component }) => (
+              <TableCell alignEnd={alignEnd}>
+                {Component ? (
+                  <Component {...field[accessor]} />
+                ) : (
+                  <Label {...field[accessor]} />
+                )}
+              </TableCell>
             ))}
           </tr>
         );

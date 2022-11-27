@@ -2,6 +2,7 @@ import { forwardRef } from "react";
 
 export type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {
   heading?: boolean;
+  alignEnd?: boolean;
 };
 
 export const TableCell = forwardRef(function TableCell(
@@ -9,15 +10,19 @@ export const TableCell = forwardRef(function TableCell(
   ref: React.ForwardedRef<HTMLTableCellElement>
 ) {
   const CellType = heading ? "th" : "td";
-  const border = heading ? "" : "border-gray-700";
+  const style = heading ? "font-fraktion uppercase" : "border-gray-700";
 
   return (
     <CellType
       {...props}
       ref={ref}
-      className={`font-jakarta text-[15px] font-light ${border} ${props.className}`}
+      className={`${style} ${props.className} ${
+        props.alignEnd ? "text-right" : ""
+      }`}
     >
-      {props.children}
+      <div className={`flex ${props.alignEnd && "justify-end pr-10"}`}>
+        {props.children}
+      </div>
     </CellType>
   );
 });
