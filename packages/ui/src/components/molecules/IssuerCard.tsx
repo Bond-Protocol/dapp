@@ -17,6 +17,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({
     navigate && navigate("/issuers/" + name);
 
   const logo = issuer?.logoUrl || "/placeholders/token-placeholder.png";
+  const _tbv = new Intl.NumberFormat("en-US").format(Math.floor(tbv));
 
   return (
     <div
@@ -28,8 +29,8 @@ export const IssuerCard: FC<IssuerCardProps> = ({
         {issuer.name + ""}
       </p>
       <p className="text-light-primary-50 text-xs">{markets.length} Markets</p>
-      <p className="text-light-primary-300 text-[10px]">
-        TBV ${Math.floor(tbv)}
+      <p className="text-light-primary-300 font-mono text-[10px]">
+        TBV ${_tbv}
       </p>
     </div>
   );

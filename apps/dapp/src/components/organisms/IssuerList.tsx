@@ -87,7 +87,7 @@ export const IssuerList = () => {
           label="Unique Bonders"
           tooltip="Total unique addresses that interacted with protocol markets"
         >
-          20k
+          20K
         </InfoLabel>
         <InfoLabel
           label="Average Discount Rate"
@@ -96,7 +96,7 @@ export const IssuerList = () => {
           4%
         </InfoLabel>
       </div>
-      <div className="flex flex-wrap gap-x-6 gap-y-10">
+      <div className="mx-auto flex flex-wrap justify-center gap-x-6 gap-y-10">
         {sortedIssuers.map((issuer) => {
           if (issuer.name && issuer.name.toLowerCase().indexOf(search) != -1) {
             const markets = marketsByIssuer.get(issuer.id) || [];

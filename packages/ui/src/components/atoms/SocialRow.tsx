@@ -14,46 +14,49 @@ export type SocialRowProps = {
   discord?: string;
   telegram?: string;
   className?: string;
+  width?: number;
 };
 
 export const SocialRow = (props: SocialRowProps) => {
   return (
     <div
-      className={`child:my-auto my-auto flex justify-center gap-9 ${props.className}`}
+      className={`child:my-auto my-auto flex ${props.className} ${
+        props.width ? "gap-4" : "gap-9"
+      }`}
     >
       {props.gitbook && (
         <LinkIcon href={props.gitbook}>
-          <GitbookIcon />
+          <GitbookIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.github && (
         <LinkIcon href={props.github}>
-          <GithubIcon />
+          <GithubIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.medium && (
         <LinkIcon href={props.medium}>
-          <MediumIcon />
+          <MediumIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.twitter && (
         <LinkIcon href={props.twitter} className="hover:text-[#1DA1F2]">
-          <TwitterIcon />
+          <TwitterIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.discord && (
         <LinkIcon href={props.discord}>
-          <DiscordIcon className="hover:text-[#7289da]" />
+          <DiscordIcon className="hover:text-[#7289da]" width={props.width} />
         </LinkIcon>
       )}
 
       {props.telegram && (
         <LinkIcon href={props.telegram}>
-          <TelegramIcon />
+          <TelegramIcon width={props.width} />
         </LinkIcon>
       )}
     </div>

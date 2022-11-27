@@ -7,7 +7,7 @@ import { NavbarTabs } from "./NavbarTabs";
 
 export const Navbar = (props: { onHamburgerClick: () => void }) => {
   const { isTestnet, toggleTestnet } = useTestnet();
-  const showTestnetToggle = environment.isStaging || environment.isDevelopment;
+  const showTestnetToggle = false; // environment.isStaging || environment.isDevelopment;
 
   return (
     <div className="flex h-[96px] items-center justify-between px-[4vw]">
@@ -22,7 +22,7 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
       <div className="flex w-1/3 justify-end">
         {showTestnetToggle && (
           <button
-            className="px-3 font-faketion text-brand-yella"
+            className="font-faketion px-3 text-brand-yella"
             onClick={toggleTestnet}
           >
             {isTestnet ? "T" : "M"}

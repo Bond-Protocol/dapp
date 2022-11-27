@@ -32,7 +32,7 @@ export const TableHeading = ({
       heading
       className={`${
         props.onClick && "cursor-pointer"
-      } w-2 pb-4 text-left text-base ${props.className}`}
+      } w-2 select-none text-left text-base ${props.className}`}
       onClick={(e) => {
         if (!props.onClick) return;
 

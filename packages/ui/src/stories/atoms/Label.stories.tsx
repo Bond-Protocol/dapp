@@ -11,7 +11,6 @@ export default {
   argTypes: {},
   args: {
     value: "Label",
-    icon: logo,
   },
 } as ComponentMeta<typeof Label>;
 
@@ -19,10 +18,30 @@ const Template: ComponentStory<typeof Label> = (args) => <Label {...args} />;
 
 export const Primary = Template.bind({});
 
+export const Subtext = Template.bind({});
+Subtext.args = {
+  subtext: "hello",
+};
+
+export const Icon = Template.bind({});
+Icon.args = {
+  icon: logo,
+};
+
+export const All = Template.bind({});
+All.args = {
+  ...Subtext.args,
+  ...Icon.args,
+};
+
 export const WithTooltip = Template.bind({});
 WithTooltip.args = {
   children: (
-    <Tooltip content="1) What" iconWidth={13.3} iconClassname="pb-0.5 ml-1" />
+    <Tooltip
+      content="1) What"
+      iconWidth={13.3}
+      iconClassname="pt-0.5 ml-1 fill-white my-auto"
+    />
   ),
 };
 

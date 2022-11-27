@@ -10,7 +10,7 @@ import {
 import {
   IssuerPage,
   IssuerList,
-  MarketList,
+  MarketListV3,
   MyBondsList,
   MyMarkets,
 } from "components/organisms";
@@ -25,7 +25,7 @@ export const RouteMap: FC = () => {
   return (
     <Switch>
       <Route path="/" element={<IssuerList />} />
-      <Route path="/markets" element={<MarketList />} />
+      <Route path="/markets" element={<MarketListV3 />} />
       <Route path="/issuers" element={<IssuerList />} />
       <Route path="/my-bonds" element={<MyBondsList />} />
       {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}

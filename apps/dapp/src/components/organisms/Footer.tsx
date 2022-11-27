@@ -45,8 +45,8 @@ export const Footer = ({
         <div className="w-1/3">
           <ProtocolLogo className="my-6 pl-[5vw]" />
         </div>
-        <SocialRow {...socials} className="w-1/3 " />
-        <div className="my-auto flex w-1/3 justify-end pr-[1vw] font-faketion text-[12px] child:mx-2">
+        <SocialRow {...socials} className="w-1/3 justify-center" />
+        <div className="font-faketion my-auto flex w-1/3 justify-end pr-[1vw] text-[12px] child:mx-2">
           <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
           <p>-</p>
           <FooterLink onClick={() => goTo("/policy")}>

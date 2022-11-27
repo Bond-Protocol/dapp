@@ -21,3 +21,9 @@ Primary.args = {
   twitter: "https://bondprotocol.finance",
   telegram: "https://bondprotocol.finance",
 };
+
+export const Secondary = Template.bind({});
+Secondary.args = {
+  ...Primary.args,
+  width: 13,
+};
