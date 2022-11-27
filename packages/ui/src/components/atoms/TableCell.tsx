@@ -20,7 +20,7 @@ export const TableCell = forwardRef(function TableCell(
         props.alignEnd ? "text-right" : ""
       }`}
     >
-      <div className={`flex ${props.alignEnd && "justify-end pr-10"}`}>
+      <div className={`flex px-1 ${props.alignEnd && "justify-end"}`}>
         {props.children}
       </div>
     </CellType>
