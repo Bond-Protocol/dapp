@@ -7,7 +7,6 @@ import ArrowDownIcon from "../../assets/icons/arrow-down-icon";
 export type TableHeadingProps = TableCellProps & {
   tooltip?: string;
   onClickIcon?: () => void;
-  alignEnd?: boolean;
   sortName?: string;
   ascending?: boolean;
   marketSort?: string;
@@ -32,7 +31,7 @@ export const TableHeading = ({
       heading
       className={`${
         props.onClick && "cursor-pointer"
-      } w-2 select-none text-left text-base ${props.className}`}
+      } w-2 select-none tracking-wide ${props.className}`}
       onClick={(e) => {
         if (!props.onClick) return;
 
@@ -41,33 +40,27 @@ export const TableHeading = ({
         props.onClick(e);
       }}
     >
-      <div
-        className={`font-faketion flex tracking-widest ${
-          props.alignEnd ? "justify-end" : "justify-start"
-        }`}
-      >
-        {isSorting && (
-          <div
-            className="my-auto mr-1 cursor-pointer"
-            onClick={props.onClickIcon}
-          >
-            <ArrowDownIcon
-              width="16"
-              className={`${props.ascending ? "rotate-180" : ""} ${
-                sorting ? "opacity-100" : "opacity-0"
-              } mt-[1px] fill-white`}
-            />
+      {isSorting && (
+        <div
+          className="my-auto mr-1 cursor-pointer "
+          onClick={props.onClickIcon}
+        >
+          <ArrowDownIcon
+            width="16"
+            className={`${props.ascending ? "rotate-180" : ""} ${
+              sorting ? "opacity-100" : "opacity-0"
+            } mt-[1px] fill-white`}
+          />
+        </div>
+      )}
+      {props.children}
+      {props.tooltip && (
+        <Tooltip content={props.tooltip}>
+          <div className="ml-0.5 cursor-help">
+            <TooltipIcon className="fill-white" width="16" />
           </div>
-        )}
-        {props.children}
-        {props.tooltip && (
-          <Tooltip content={props.tooltip}>
-            <div className="ml-0.5 cursor-help">
-              <TooltipIcon className="fill-white" width="16" />
-            </div>
-          </Tooltip>
-        )}
-      </div>
+        </Tooltip>
+      )}
     </TableCell>
   );
 };

@@ -8,11 +8,7 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof Table>;
 
-const Base: ComponentStory<typeof Table> = (args) => (
-  <div className="w-[80vw]">
-    <Table {...args} />
-  </div>
-);
+const Base: ComponentStory<typeof Table> = (args) => <Table {...args} />;
 
 export const Primary = Base.bind({});
 Primary.args = {};

@@ -1,7 +1,8 @@
-interface LabelProps {
+import { TokenLogo, TokenLogoProps } from "../atoms";
+
+export interface LabelProps extends TokenLogoProps {
   value?: string | React.ReactNode;
   subtext?: string;
-  icon?: string;
   children?: React.ReactNode;
   className?: string;
 }
@@ -11,7 +12,12 @@ export const Label = (props: LabelProps) => {
     <>
       <div className={`child:my-auto flex ${props.className}`}>
         {props.icon && (
-          <img src={props.icon} width={24} className="mr-1.5 h-full" />
+          <TokenLogo
+            className={props.pairIcon ? "mr-1 w-10" : "mr-1"}
+            icon={props.icon}
+            pairIcon={props.pairIcon}
+            even={props.even}
+          />
         )}
         <div className="flex flex-col gap-0.5">
           <p
