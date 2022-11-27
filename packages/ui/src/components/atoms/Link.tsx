@@ -36,7 +36,9 @@ export const Link = forwardRef(function Button(
         }),
       }}
     >
-      <p className={`pt-[2px] mr-1.5${props.labelClassname}`}>{children}</p>
+      {children && (
+        <p className={`my-auto mr-1.5 ${props.labelClassname}`}>{children}</p>
+      )}
       <LinkIcon className={`color-inherit my-auto ${props.iconClassName}`} />
     </ButtonUnstyled>
   );

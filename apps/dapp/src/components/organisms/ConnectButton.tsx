@@ -35,7 +35,7 @@ export const ConnectButton = () => {
               if (!connected) {
                 return (
                   <Button
-                    className="flex justify-center"
+                    className="flex justify-center p-3"
                     variant="ghost"
                     onClick={openConnectModal}
                   >
@@ -60,16 +60,15 @@ export const ConnectButton = () => {
               return (
                 <div className="flex">
                   {chain.hasIcon && (
-                    <div
-                      onClick={openChainModal}
-                      className="my-auto mr-3 rounded-full"
-                    >
+                    <div onClick={openChainModal} className="my-auto mr-3 ">
                       {chain.iconUrl && (
-                        <img
-                          className="hover:cursor-pointer"
-                          alt={chain.name ?? "Chain icon"}
-                          src={chain.iconUrl}
-                        />
+                        <div className="max-h-[40px] w-10 rounded border p-1">
+                          <img
+                            className="mx-auto hover:cursor-pointer"
+                            alt={chain.name ?? "Chain icon"}
+                            src={chain.iconUrl}
+                          />
+                        </div>
                       )}
                     </div>
                   )}
@@ -78,7 +77,7 @@ export const ConnectButton = () => {
                     onClick={openAccountModal}
                     type="button"
                     thin
-                    className="font-extralight hover:cursor-pointer"
+                    className="p-3 font-mono font-medium hover:cursor-pointer"
                   >
                     {account.displayName}
                   </Button>
