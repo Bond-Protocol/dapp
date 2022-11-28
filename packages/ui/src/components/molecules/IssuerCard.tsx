@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-type IssuerCardProps = {
+export type IssuerCardProps = {
   issuer: any;
   tbv: number;
   markets: any[];
@@ -24,7 +24,9 @@ export const IssuerCard: FC<IssuerCardProps> = ({
       className="flex w-full flex-col items-center justify-between rounded-lg border border-transparent bg-white/[.05] p-5 hover:cursor-pointer hover:bg-white/10"
       onClick={() => handleClick(issuer.id)}
     >
-      <img className="h-[64px] w-[64px]" src={logo} />
+      <div className="overflow-hidden rounded-full">
+        <img className="h-[64px] w-[64px]" src={logo} />
+      </div>
       <p className="font-jakarta my-2 text-center font-bold tracking-wide">
         {issuer.name + ""}
       </p>

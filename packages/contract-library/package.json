@@ -17,7 +17,7 @@
   "types": "./dist/src/index.d.ts",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsc --build --verbose && tsc-alias -v",
+    "build": "tsc --build && tsc-alias -v",
     "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "test": "jest",
     "format": "prettier --write ./src/**/*.ts",
@@ -60,7 +60,7 @@
     "concurrently": "^7.6.0"
   },
   "dependencies": {
-    "@bond-protocol/bond-library": "^0.1.8",
+    "@bond-protocol/bond-library": "*",
     "@ethersproject/providers": "^5.6.6",
     "@ethersproject/transactions": "^5.6.0",
     "@typechain/ethers-v5": "^10.0.0",
