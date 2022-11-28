@@ -1,3 +1,5 @@
+import { getTokenDetails } from "utils";
+import { Label } from "..";
 import { Chip } from "../atoms/Chip";
 import { Input } from "../atoms/Input";
 import { TokenLabel } from "../atoms/TokenLabel";
@@ -18,9 +20,9 @@ export const InputCard = ({
   market,
 }: InputCardProps) => {
   const setSome = (num: number) => {
-    const max = Math.min(Number(balance), Number(market.maxAmountAccepted));
+    const max = Math.min(Number(balance), Number(market?.maxAmountAccepted));
     const val = Number(
-      Number((num * max) / 100 + "").toFixed(market.quoteToken.decimals)
+      Number((num * max) / 100 + "").toFixed(market?.quoteToken.decimals)
     ).toString();
 
     handleChange(val);
@@ -29,7 +31,7 @@ export const InputCard = ({
   const setMax = () => {
     let max = Math.min(
       Number(balance),
-      Number(market.maxAmountAccepted)
+      Number(market?.maxAmountAccepted)
     ).toString();
 
     if (max.toString().indexOf("e") !== -1) {
@@ -54,6 +56,8 @@ export const InputCard = ({
     onChange && onChange(amount);
   };
 
+  const token = getTokenDetails(market.quoteToken);
+
   return (
     <>
       <div className={`mb-1 flex justify-between ${className}`}>
@@ -68,14 +72,9 @@ export const InputCard = ({
         </div>
       </div>
 
-      <div className="flex">
-        <div className="relative w-min pr-3">
-          <TokenLabel
-            wrapped
-            className="w-[11vw]"
-            label={market.quoteToken.symbol || ""}
-            token={market.quoteToken}
-          />
+      <div className="flex w-full gap-2">
+        <div className="my-auto rounded-md border px-2 py-[7px] pr-4">
+          <Label icon={token.logoUrl} value={market.quoteToken.symbol} />
         </div>
         <Input
           value={value}

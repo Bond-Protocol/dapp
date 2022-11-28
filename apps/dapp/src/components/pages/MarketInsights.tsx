@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
-import { InfoLabel, TableHeading } from "ui";
 import receiptIcon from "../../assets/icons/receipt-icon.svg";
 import { useMarkets } from "context/market-context";
 import {
@@ -9,7 +8,16 @@ import {
   trim,
 } from "@bond-protocol/contract-library";
 import { PageHeader } from "components/atoms/PageHeader";
-import { getTokenDetails } from "ui";
+import { Table, InfoLabel, getTokenDetails } from "ui";
+
+const tableColumns = [
+  { accessor: "time", label: "Time" },
+  { accessor: "tbv", label: "Total Value" },
+  { accessor: "amount", label: "Bound Amount" },
+  { accessor: "payout", label: "Payout Amount" },
+  { accessor: "address", label: "Address" },
+  { accessor: "txId", label: "Tx Id" },
+];
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
@@ -36,12 +44,6 @@ export const MarketInsights = () => {
         icon={quoteToken.logoUrl}
         pairIcon={payoutToken.logoUrl}
         even={true}
-      />
-
-      <BondCard
-        market={market}
-        onClickTopRight={() => navigate("/")}
-        topRightLabel="Go to Markets"
       />
       <div className="my-16 flex justify-between gap-4 child:w-full">
         <InfoLabel
@@ -80,24 +82,13 @@ export const MarketInsights = () => {
           {vestingLabel}
         </InfoLabel>
       </div>
-      <div className="border-y">
-        <div className="flex">
-          <img src={receiptIcon} />
-          <p className="font-faketion ml-2 py-4 uppercase"> Transactions</p>
-        </div>
-        <table className="mt-6 w-full table-fixed">
-          <thead>
-            <tr className="child:px-6">
-              <TableHeading>TIME</TableHeading>
-              <TableHeading alignEnd>TOTAL VALUE</TableHeading>
-              <TableHeading alignEnd>BOND AMOUNT</TableHeading>
-              <TableHeading alignEnd>PAYOUT AMOUNT</TableHeading>
-              <TableHeading>ADDRESS</TableHeading>
-              <TableHeading>TX ID</TableHeading>
-            </tr>
-          </thead>
-          <tbody>{/*tx.map(() => { })*/}</tbody>
-        </table>
+
+      <BondCard market={market} />
+      <div className="">
+        <p className="ml-4 py-4 font-fraktion text-2xl uppercase">
+          Transaction History
+        </p>
+        <Table columns={tableColumns} />
       </div>
     </div>
   );
