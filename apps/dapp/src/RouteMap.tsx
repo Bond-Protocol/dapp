@@ -1,16 +1,11 @@
 import type { FC } from "react";
 import { Route, Routes as Switch } from "react-router-dom";
 import { useMarkets } from "hooks";
-import {
-  CreateMarket,
-  MarketInsights,
-  MarketTabs,
-  MarketCreated,
-} from "components/pages";
+import { CreateMarket, MarketInsights, MarketCreated } from "components/pages";
 import {
   IssuerPage,
   IssuerList,
-  MarketListV3,
+  MarketList,
   MyBondsList,
   MyMarkets,
 } from "components/organisms";
@@ -25,7 +20,7 @@ export const RouteMap: FC = () => {
   return (
     <Switch>
       <Route path="/" element={<IssuerList />} />
-      <Route path="/markets" element={<MarketListV3 />} />
+      <Route path="/markets" element={<MarketList />} />
       <Route path="/issuers" element={<IssuerList />} />
       <Route path="/my-bonds" element={<MyBondsList />} />
       {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}

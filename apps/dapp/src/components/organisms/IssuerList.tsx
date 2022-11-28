@@ -7,6 +7,7 @@ import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
 import { useNavigate } from "react-router-dom";
+import { PageHeader } from "components/atoms/PageHeader";
 
 export const IssuerList = () => {
   const { marketsByIssuer, issuers } = useMarkets();
@@ -71,11 +72,7 @@ export const IssuerList = () => {
 
   return (
     <>
-      <div>
-        <h1 className="font-fraktion text-5xl font-bold uppercase">
-          Bond Issuers
-        </h1>
-      </div>
+      <PageHeader title="Bond Issuers" />
       <div className="flex gap-x-5 py-10">
         <InfoLabel
           label="Total Value Bonded"

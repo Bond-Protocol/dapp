@@ -3,7 +3,7 @@ import { useMarkets } from "hooks";
 import { PROTOCOLS } from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { InfoLabel, Link, Button, SocialRow } from "ui";
+import { InfoLabel, Link, SocialRow } from "ui";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";

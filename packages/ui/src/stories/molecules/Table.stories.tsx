@@ -1,9 +1,8 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Table } from "../../components/molecules/Table";
-import { DiscountLabel, Button } from "../../components";
-
 import { data } from "../mock-data/table";
+import { DiscountLabel, Button } from "../../components";
 
 const cols = [
   { label: "Bond", accessor: "bond", unsortable: true },
@@ -51,7 +50,7 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof Table>;
 
-const Base: ComponentStory<typeof Table> = (args) => <Table {...args} />;
+export const Base: ComponentStory<typeof Table> = (args) => <Table {...args} />;
 
 export const Primary = Base.bind({});
 Primary.args = {

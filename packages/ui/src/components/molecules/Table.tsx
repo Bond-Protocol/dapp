@@ -5,17 +5,18 @@ export interface Cell extends LabelProps {
   sortValue?: string;
 }
 
-export interface Column {
+export interface Column<T> {
   label: string;
   accessor: string;
   alignEnd?: boolean;
   unsortable?: boolean;
   width?: string;
   Component?: (props: any) => JSX.Element;
+  formatter?: (element: T) => Cell;
 }
 
 export interface TableProps {
-  columns: Array<Column>;
+  columns: Array<Column<any>>;
   data?: Array<Record<string, Cell>>;
 }
 
@@ -53,7 +54,7 @@ export const Table = (props: TableProps) => {
 };
 
 export interface TableHeadProps {
-  columns: Column[];
+  columns: Column<unknown>[];
   handleSorting: (field: string, sortOrder: string) => void;
 }
 
@@ -94,7 +95,7 @@ export const TableHead = (props: TableHeadProps) => {
 
 export interface TableBodyProps {
   rows: Array<Record<string, Cell>>;
-  columns: Column[];
+  columns: Column<unknown>[];
 }
 
 export const TableBody = ({ rows, columns }: TableBodyProps) => {
