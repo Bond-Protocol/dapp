@@ -1,11 +1,11 @@
 import { FC, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { getProtocol, getToken } from "@bond-protocol/bond-library";
 import { Button, Loading, Table, DiscountLabel, Column, Cell } from "ui";
+import { PageHeader } from "components/atoms/PageHeader";
 import { useMarkets } from "hooks";
 import { socials } from "..";
-import { getProtocol, getToken } from "@bond-protocol/bond-library";
-import { PageHeader } from "components/atoms/PageHeader";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -148,6 +148,7 @@ export const MarketList: FC<MarketListProps> = ({
 
   const markets = props.markets || allMarkets;
 
+  console.log({ markets });
   const tableMarkets = useMemo(
     () =>
       Array.from(markets.values())

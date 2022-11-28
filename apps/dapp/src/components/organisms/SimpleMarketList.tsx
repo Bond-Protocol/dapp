@@ -1,7 +1,7 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { ExpandableRow, TableHeading, CellLabel, TableCell, Loading } from "ui";
-import { BondDetails } from "..";
+import { BondPurchaseCard } from "..";
 import { useMarkets, useTokens } from "hooks";
 import { providers } from "services/owned-providers";
 import {
@@ -250,7 +250,7 @@ export const SimpleMarketList: FC<SimpleMarketListProps> = ({ ...props }) => {
                 onClose={() => clearInterval(timerRef.current)}
                 expanded={
                   <div className="w-[100vw] max-w-[1440px] py-8">
-                    <BondDetails
+                    <BondPurchaseCard
                       market={market}
                       nativeCurrency={nativeCurrency}
                       nativeCurrencyPrice={nativeCurrencyPrice}
