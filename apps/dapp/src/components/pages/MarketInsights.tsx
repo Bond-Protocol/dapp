@@ -1,9 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { BondListCard } from "..";
+import { BondCard } from "..";
 import { InfoLabel, TableHeading } from "ui";
 import receiptIcon from "../../assets/icons/receipt-icon.svg";
 import { useMarkets } from "context/market-context";
 import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
+import { PageHeader } from "components/atoms/PageHeader";
+import { getTokenDetails } from "ui";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
@@ -16,6 +18,8 @@ export const MarketInsights = () => {
   );
 
   if (!market) return <div>Unsupported Market</div>;
+  const quoteToken = getTokenDetails(market.quoteToken);
+  const payoutToken = getTokenDetails(market.payoutToken);
 
   const vestingLabel =
     market.vestingType === "fixed-term"
@@ -24,7 +28,14 @@ export const MarketInsights = () => {
 
   return (
     <div>
-      <BondListCard
+      <PageHeader
+        title={market?.quoteToken.symbol + "-" + market.payoutToken.symbol}
+        icon={quoteToken.logoUrl}
+        pairIcon={payoutToken.logoUrl}
+        even={true}
+      />
+
+      <BondCard
         market={market}
         onClickTopRight={() => navigate("/")}
         topRightLabel="Go to Markets"
@@ -69,7 +80,7 @@ export const MarketInsights = () => {
       <div className="border-y">
         <div className="flex">
           <img src={receiptIcon} />
-          <p className="ml-2 py-4 font-faketion uppercase"> Transactions</p>
+          <p className="font-faketion ml-2 py-4 uppercase"> Transactions</p>
         </div>
         <table className="mt-6 w-full table-fixed">
           <thead>
