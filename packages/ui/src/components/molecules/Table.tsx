@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { TableHeading, TableCell, Label, LabelProps } from "..";
+import { useSorting } from "hooks";
 
 export interface Cell extends LabelProps {
   sortValue?: string;
@@ -18,29 +19,12 @@ export interface Column<T> {
 export interface TableProps {
   columns: Array<Column<any>>;
   data?: Array<Record<string, Cell>>;
+  loading?: boolean;
+  Fallback?: (props?: any) => JSX.Element;
 }
 
 export const Table = (props: TableProps) => {
-  const [data, setData] = useState(props.data || []);
-
-  const handleSorting = (sortField: string, sortOrder: string) => {
-    if (sortField) {
-      const sorted = [...data].sort((a, b) => {
-        const current = a[sortField]?.sortValue || a[sortField].value;
-        const next = b[sortField]?.sortValue || b[sortField].value;
-        if (!current) return 1;
-        if (!next) return -1;
-        if (!current && !next) return 0;
-
-        return (
-          current.toString().localeCompare(next.toString(), "en", {
-            numeric: true,
-          }) * (sortOrder === "asc" ? 1 : -1)
-        );
-      });
-      setData(sorted);
-    }
-  };
+  const [data, handleSorting] = useSorting(props.data);
 
   return (
     <table className="w-full table-fixed">
@@ -48,7 +32,8 @@ export const Table = (props: TableProps) => {
         <col className={c.width && c.width} />
       ))}
       <TableHead columns={props.columns} handleSorting={handleSorting} />
-      <TableBody columns={props.columns} rows={data} />
+      {props.loading && props.Fallback && <props.Fallback />}
+      {!props.loading && <TableBody columns={props.columns} rows={data} />}
     </table>
   );
 };
@@ -94,14 +79,14 @@ export const TableHead = (props: TableHeadProps) => {
 };
 
 export interface TableBodyProps {
-  rows: Array<Record<string, Cell>>;
   columns: Column<unknown>[];
+  rows?: Array<Record<string, Cell>>;
 }
 
 export const TableBody = ({ rows, columns }: TableBodyProps) => {
   return (
     <tbody>
-      {rows.map((field) => {
+      {rows?.map((field) => {
         return (
           <tr className="child:pl-5 border-white/15 h-20 border-b">
             {columns.map(({ accessor, alignEnd, Component }) => (

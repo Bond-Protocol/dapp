@@ -1,19 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
-import receiptIcon from "../../assets/icons/receipt-icon.svg";
 import { useMarkets } from "context/market-context";
 import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 import { PageHeader } from "components/atoms/PageHeader";
-import { Table, InfoLabel, getTokenDetails } from "ui";
-
-const tableColumns = [
-  { accessor: "time", label: "Time" },
-  { accessor: "tbv", label: "Total Value" },
-  { accessor: "amount", label: "Bound Amount" },
-  { accessor: "payout", label: "Payout Amount" },
-  { accessor: "address", label: "Address" },
-  { accessor: "txId", label: "Tx Id" },
-];
+import { InfoLabel, getTokenDetails, Loading } from "ui";
+import { TransactionHistory } from "components/organisms/TransactionHistory";
+import { PageNavigation } from "components/atoms";
+import { getProtocol } from "@bond-protocol/bond-library";
+import { meme } from "src/utils/words";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
@@ -25,7 +19,9 @@ export const MarketInsights = () => {
       marketId === Number(id) && marketNetwork === network
   );
 
-  if (!market) return <div>Unsupported Market</div>;
+  if (!market) return <Loading content={meme()} />;
+
+  const protocol = getProtocol(market.owner);
   const quoteToken = getTokenDetails(market.quoteToken);
   const payoutToken = getTokenDetails(market.payoutToken);
 
@@ -36,8 +32,16 @@ export const MarketInsights = () => {
 
   return (
     <div>
+      <PageNavigation
+        onClickLeft={() => navigate(-1)}
+        onClickRight={() => navigate("/issuers/" + protocol?.id)}
+        rightText="View Issuer"
+      />
       <PageHeader
-        title={market?.quoteToken.symbol + "-" + market.payoutToken.symbol}
+        className="mt-8"
+        title={
+          market?.quoteToken.symbol + "-" + market.payoutToken.symbol + " Bond"
+        }
         icon={quoteToken.logoUrl}
         pairIcon={payoutToken.logoUrl}
         even={true}
@@ -47,7 +51,10 @@ export const MarketInsights = () => {
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {trim(market.maxPayout, calculateTrimDigits(market.maxPayout))}{" "}
+          {trim(
+            market.maxPayout,
+            calculateTrimDigits(parseFloat(market.maxPayout))
+          )}
           {market.payoutToken.symbol}
         </InfoLabel>
 
@@ -81,12 +88,7 @@ export const MarketInsights = () => {
       </div>
 
       <BondCard market={market} />
-      <div className="">
-        <p className="ml-4 py-4 font-fraktion text-2xl uppercase">
-          Transaction History
-        </p>
-        <Table columns={tableColumns} />
-      </div>
+      <TransactionHistory market={market} />
     </div>
   );
 };

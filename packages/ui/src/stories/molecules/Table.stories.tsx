@@ -50,7 +50,7 @@ export default {
   argTypes: {},
 } as ComponentMeta<typeof Table>;
 
-export const Base: ComponentStory<typeof Table> = (args) => <Table {...args} />;
+const Base: ComponentStory<typeof Table> = (args) => <Table {...args} />;
 
 export const Primary = Base.bind({});
 Primary.args = {
