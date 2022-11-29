@@ -1,40 +1,44 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import { useTokens } from "hooks/useTokens";
-import { useAtom } from "jotai";
+import {getSubgraphEndpoints} from "services/subgraph-endpoints";
+import {useTokens} from "hooks/useTokens";
+import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import {
   OwnerTokenTbv,
+  useListOwnerTokenTbvsArbitrumGoerliQuery,
+  useListOwnerTokenTbvsGoerliQuery,
   useListOwnerTokenTbvsMainnetQuery,
-  useListOwnerTokenTbvsTestnetQuery,
 } from "../generated/graphql";
-import { useEffect, useState } from "react";
-import { getProtocolByAddress } from "@bond-protocol/bond-library";
+import {useEffect, useState} from "react";
+import {getProtocolByAddress} from "@bond-protocol/bond-library";
 
 export function useOwnerTokenTbvs() {
   const endpoints = getSubgraphEndpoints();
-  const { getPrice, currentPrices } = useTokens();
+  const {getPrice, currentPrices} = useTokens();
   const [testnet, setTestnet] = useAtom(testnetMode);
 
   const [protocolTbvs, setProtocolTbvs] = useState<Map<string, number>>();
-  const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<
-    OwnerTokenTbv[]
-  >([]);
-  const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<
-    OwnerTokenTbv[]
-  >([]);
+  const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
+  const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
 
-  const { data: mainnetData, ...mainnetQuery } =
+  const {data: mainnetData, ...mainnetQuery} =
     useListOwnerTokenTbvsMainnetQuery(
-      { endpoint: endpoints[0] },
+      {endpoint: endpoints[0]},
       {},
-      { enabled: !testnet }
+      {enabled: !testnet}
     );
 
-  const { data: goerliData, ...goerliQuery } =
-    useListOwnerTokenTbvsTestnetQuery(
-      { endpoint: endpoints[1] },
+  const {data: goerliData, ...goerliQuery} =
+    useListOwnerTokenTbvsGoerliQuery(
+      {endpoint: endpoints[1]},
       {},
-      { enabled: !!testnet }
+      {enabled: !!testnet}
+    );
+
+  const {data: arbitrumGoerliData, ...arbitrumGoerliQuery} =
+    useListOwnerTokenTbvsArbitrumGoerliQuery(
+      {endpoint: endpoints[3]},
+      {},
+      {enabled: !!testnet}
     );
 
   useEffect(() => {
@@ -48,12 +52,14 @@ export function useOwnerTokenTbvs() {
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.ownerTokenTbvs) {
-      const allOwnerTokens = goerliData.ownerTokenTbvs;
+    if (goerliData && goerliData.ownerTokenTbvs && arbitrumGoerliData && arbitrumGoerliData.ownerTokenTbvs) {
+      const allOwnerTokens =
+        goerliData.ownerTokenTbvs
+          .concat(arbitrumGoerliData.ownerTokenTbvs);
       // @ts-ignore
       setTestnetOwnerTokenTbvs(allOwnerTokens);
     }
-  }, [goerliData, testnet]);
+  }, [goerliData, arbitrumGoerliData, testnet]);
 
   useEffect(() => {
     const ownerTokenTbvMap: Map<string, number> = new Map();

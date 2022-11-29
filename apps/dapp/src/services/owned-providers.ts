@@ -43,6 +43,19 @@ const providerConfiguration: ProviderOptions[] = [
       },
     ],
   },
+  {
+    name: "arbitrum-goerli",
+    chainId: "5",
+    rpcs: [
+      {
+        url: `https://arb-goerli.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_ARBITRUM_GOERLI_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
 ];
 
 export const providers: { [key: string]: Provider } =

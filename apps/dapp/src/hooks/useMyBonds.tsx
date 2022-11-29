@@ -1,32 +1,30 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import { useAtom } from "jotai";
+import {getSubgraphEndpoints} from "services/subgraph-endpoints";
+import {useAtom} from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {
   BondToken,
   OwnerBalance,
+  useGetOwnerBalancesByOwnerArbitrumGoerliQuery,
   useGetOwnerBalancesByOwnerGoerliQuery,
   useGetOwnerBalancesByOwnerMainnetQuery,
+  useListErc20BondTokensArbitrumGoerliQuery,
   useListErc20BondTokensGoerliQuery,
   useListErc20BondTokensMainnetQuery,
 } from "../generated/graphql";
-import { useAccount } from "wagmi";
+import {useAccount} from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { providers } from "services/owned-providers";
+import {providers} from "services/owned-providers";
 
 export function useMyBonds() {
   const endpoints = getSubgraphEndpoints();
 
-  const { address } = useAccount();
+  const {address} = useAccount();
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [testnetBonds, setTestnetBonds] = useState<Partial<OwnerBalance>[]>([]);
   const [mainnetBonds, setMainnetBonds] = useState<Partial<OwnerBalance>[]>([]);
-  const [testnetErc20Bonds, setTestnetErc20Bonds] = useState<
-    Partial<OwnerBalance>[]
-  >([]);
-  const [mainnetErc20Bonds, setMainnetErc20Bonds] = useState<
-    Partial<OwnerBalance>[]
-  >([]);
+  const [testnetErc20Bonds, setTestnetErc20Bonds] = useState<Partial<OwnerBalance>[]>([]);
+  const [mainnetErc20Bonds, setMainnetErc20Bonds] = useState<Partial<OwnerBalance>[]>([]);
   const [myBonds, setMyBonds] = useState<Partial<OwnerBalance>[]>([]);
   const [refetchRequest, setRefetchRequest] = useState(0);
 
@@ -39,19 +37,29 @@ export function useMyBonds() {
     refetch: mainnetRefetch,
     ...mainnetQuery
   } = useGetOwnerBalancesByOwnerMainnetQuery(
-    { endpoint: endpoints[0] },
-    { owner: address || "" },
-    { enabled: !testnet }
+    {endpoint: endpoints[0]},
+    {owner: address || ""},
+    {enabled: !testnet}
   );
 
   const {
     data: goerliData,
     refetch: goerliRefetch,
-    ...testnetQuery
+    ...goerliQuery
   } = useGetOwnerBalancesByOwnerGoerliQuery(
-    { endpoint: endpoints[1] },
-    { owner: address || "" },
-    { enabled: !!testnet }
+    {endpoint: endpoints[1]},
+    {owner: address || ""},
+    {enabled: !!testnet}
+  );
+
+  const {
+    data: arbitrumGoerliData,
+    refetch: arbitrumGoerliRefetch,
+    ...arbitrumGoerliQuery
+  } = useGetOwnerBalancesByOwnerArbitrumGoerliQuery(
+    {endpoint: endpoints[3]},
+    {owner: address || ""},
+    {enabled: !!testnet}
   );
 
   const {
@@ -59,25 +67,39 @@ export function useMyBonds() {
     refetch: mainnetErc20Refetch,
     ...mainERC20Query
   } = useListErc20BondTokensMainnetQuery(
-    { endpoint: endpoints[0] },
+    {endpoint: endpoints[0]},
     // @ts-ignore
-    { enabled: !testnet }
+    {enabled: !testnet}
   );
 
   const {
     data: goerliErc20Data,
     refetch: goerliErc20Refetch,
-    ...testnetERC20Query
+    ...goerliERC20Query
   } = useListErc20BondTokensGoerliQuery(
-    { endpoint: endpoints[1] },
+    {endpoint: endpoints[1]},
     // @ts-ignore
-    { enabled: !!testnet }
+    {enabled: !!testnet}
+  );
+
+  const {
+    data: arbitrumGoerliErc20Data,
+    refetch: arbitrumGoerliErc20Refetch,
+    ...arbitrumGoerliERC20Query
+  } = useListErc20BondTokensArbitrumGoerliQuery(
+    {endpoint: endpoints[3]},
+    // @ts-ignore
+    {enabled: !!testnet}
   );
 
   const refetchQueries = () => {
     if (testnet) {
       void goerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
       void goerliErc20Refetch().then(() =>
+        setRefetchRequest(refetchRequest + 1)
+      );
+      void arbitrumGoerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
+      void arbitrumGoerliErc20Refetch().then(() =>
         setRefetchRequest(refetchRequest + 1)
       );
     } else {
@@ -96,21 +118,21 @@ export function useMyBonds() {
     bondTokens.forEach((bondToken) => {
       if (bondToken.teller.toLowerCase() === "0x007FE7c498A2Cf30971ad8f2cbC36bd14Ac51156".toLowerCase()) return;
       address &&
-        promises.push(
-          contractLibrary
-            .getBalance(bondToken.id, address, providers[bondToken.network])
-            .then((result) => {
-              if (Number(result) > 0) {
-                // Now we have all the data required to make an OwnerBalances object
-                const balance = result;
-                ownerBalances.push({
-                  balance: balance,
-                  bondToken: bondToken,
-                  owner: address,
-                });
-              }
-            })
-        );
+      promises.push(
+        contractLibrary
+          .getBalance(bondToken.id, address, providers[bondToken.network])
+          .then((result) => {
+            if (Number(result) > 0) {
+              // Now we have all the data required to make an OwnerBalances object
+              const balance = result;
+              ownerBalances.push({
+                balance: balance,
+                bondToken: bondToken,
+                owner: address,
+              });
+            }
+          })
+      );
     });
 
     void Promise.allSettled(promises).then(() => {
@@ -132,16 +154,18 @@ export function useMyBonds() {
       // @ts-ignore
       setMainnetBonds(allTokens);
     }
-  }, [mainnetData, refetchRequest]);
+  }, [mainnetData, refetchRequest, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.ownerBalances) {
-      const allTokens = goerliData.ownerBalances;
+    if (goerliData && goerliData.ownerBalances && arbitrumGoerliData && arbitrumGoerliData.ownerBalances) {
+      const allTokens =
+        goerliData.ownerBalances
+          .concat(arbitrumGoerliData.ownerBalances);
       // @ts-ignore
       setTestnetBonds(allTokens);
     }
-  }, [goerliData, refetchRequest]);
+  }, [goerliData, arbitrumGoerliData, refetchRequest, testnet]);
 
   /*
   If the user switches between mainnet/testnet mode, update myBonds.
@@ -178,16 +202,25 @@ export function useMyBonds() {
       // @ts-ignore
       getBalances(bondTokens);
     }
-  }, [address, mainnetErc20Data]);
+  }, [address, mainnetErc20Data, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliErc20Data) {
-      const bondTokens = goerliErc20Data.bondTokens;
+    if (goerliErc20Data && arbitrumGoerliErc20Data) {
+      const bondTokens =
+        goerliErc20Data.bondTokens
+          .concat(arbitrumGoerliErc20Data.bondTokens);
       // @ts-ignore
       getBalances(bondTokens);
     }
-  }, [address, goerliErc20Data]);
+  }, [address, goerliErc20Data, arbitrumGoerliErc20Data, testnet]);
+
+  const isLoading = testnet
+    ? (
+      goerliQuery.isLoading || goerliERC20Query.isLoading ||
+      arbitrumGoerliQuery.isLoading || arbitrumGoerliERC20Query.isLoading
+    )
+    : mainnetQuery.isLoading || mainERC20Query.isLoading;
 
   /*
   myBonds: An array of bonds owned by the currently connected wallet
@@ -195,8 +228,6 @@ export function useMyBonds() {
   return {
     myBonds: myBonds,
     refetch: () => refetchQueries(),
-    isLoading: testnet
-      ? testnetQuery.isLoading || testnetERC20Query.isLoading
-      : mainnetQuery.isLoading || mainERC20Query.isLoading,
+    isLoading
   };
 }

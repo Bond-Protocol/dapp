@@ -3,7 +3,7 @@ import { calcLpPrice, LpPair } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { getSubgraphEndpoints } from "services/subgraph-endpoints";
 import {
-  Token,
+  Token, useListTokensArbitrumGoerliQuery,
   useListTokensGoerliQuery,
   useListTokensMainnetQuery,
 } from "../generated/graphql";
@@ -62,8 +62,14 @@ export const useTokens = () => {
     enabled: !testnet,
   });
 
-  const { data: goerliData, ...testnetQuery } = useListTokensGoerliQuery({
+  const { data: goerliData, ...goerliQuery } = useListTokensGoerliQuery({
     endpoint: endpoints[1],
+    // @ts-ignore
+    enabled: !!testnet,
+  });
+
+  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListTokensArbitrumGoerliQuery({
+    endpoint: endpoints[3],
     // @ts-ignore
     enabled: !!testnet,
   });
@@ -260,12 +266,13 @@ export const useTokens = () => {
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.tokens) {
-      const allTokens = goerliData.tokens;
+    if (goerliData && goerliData.tokens && arbitrumGoerliData && arbitrumGoerliData.tokens) {
+      const allTokens = goerliData.tokens
+        .concat(arbitrumGoerliData.tokens);
       // @ts-ignore
       setTestnetTokens(allTokens);
     }
-  }, [goerliData, testnet]);
+  }, [goerliData, arbitrumGoerliData, testnet]);
 
   /*
   If the user switches between mainnet/testnet mode, update selectedTokens.
@@ -342,6 +349,10 @@ export const useTokens = () => {
   },
   []);
 
+  const isLoading = testnet
+    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
+    : mainnetQuery.isLoading;
+
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
@@ -352,6 +363,6 @@ export const useTokens = () => {
     getPrice: (id: string) => getPrice(id),
     getTokenDetails: (token: any) => getTokenDetails(token),
     getTokenDetailsFromChain,
-    isLoading: testnet ? testnetQuery.isLoading : mainnetQuery.isLoading,
+    isLoading,
   };
 };
