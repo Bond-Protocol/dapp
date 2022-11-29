@@ -6,10 +6,12 @@ import { useMarkets } from "hooks";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
+import { useNavigate } from "react-router-dom";
 
 export const IssuerList = () => {
   const { marketsByIssuer, issuers } = useMarkets();
   const { protocolTbvs } = useOwnerTokenTbvs();
+  const navigate = useNavigate();
 
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [search, setSearch] = useState("");
@@ -88,6 +90,7 @@ export const IssuerList = () => {
                   issuer={issuer}
                   tbv={protocolTbvs?.get(issuer.id) || 0}
                   markets={markets}
+                  navigate={navigate}
                 />
               </div>
             );
