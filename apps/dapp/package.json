@@ -7,6 +7,7 @@
     "npm": ">=6.4.0"
   },
   "scripts": {
+    "clean": "rm -rf ./dist",
     "prepare": "husky install",
     "dev": "vite",
     "build": "tsc && vite build --emptyOutDir",
@@ -15,9 +16,7 @@
     "lint-staged": "lint-staged",
     "format": "prettier --write './**/*.{ts,tsx,json}'",
     "codegen": "graphql-codegen --config codegen.yml",
-    "postinstall": "yarn codegen",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "postinstall": "yarn codegen"
   },
   "dependencies": {
     "@bond-protocol/bond-library": "^0.1.6",

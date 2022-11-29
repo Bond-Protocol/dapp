@@ -1,3 +1,4 @@
+import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { TableHeading } from "components/atoms/TableHeading";
 
@@ -21,7 +22,7 @@ const Template: ComponentStory<typeof TableHeading> = (args) => (
 
 const Multiple: ComponentStory<typeof TableHeading> = (args) => (
   <table>
-    <tr>
+    <tr className="child:px-4">
       <TableHeading {...args} />
       <TableHeading {...args} />
       <TableHeading {...args} />

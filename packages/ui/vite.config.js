@@ -5,11 +5,12 @@ import path from "path";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import dts from 'vite-plugin-dts'
 
-export default defineConfig({
+export default defineConfig(({ command, mode }) => ({
   plugins: [react(), svgr(), dts({ skipDiagnostics: true })],
   root: ".",
   build: {
     outDir: "dist/src",
+    emptyOutDir: mode !== 'development',
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'ui',
@@ -43,4 +44,4 @@ export default defineConfig({
       utils: path.join(__dirname, "./src/utils"),
     },
   },
-});
+}));

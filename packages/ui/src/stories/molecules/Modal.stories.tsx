@@ -9,7 +9,7 @@ export default {
 const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />;
 
 const Background = (Story) => (
-  <div className="h-[100vh] bg-brand-texas-rose">
+  <div className="bg-brand-texas-rose h-[100vh]">
     <Story />
   </div>
 );
