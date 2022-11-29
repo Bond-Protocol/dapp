@@ -66,10 +66,7 @@ export const MyBondsList = () => {
 
   const switchChain = (e: Event, selectedChain: string) => {
     e.preventDefault();
-    const newChain = Number(
-      "0x" + providers[selectedChain].network.chainId.toString()
-    );
-    switchNetwork?.(newChain);
+    switchNetwork?.(providers[selectedChain].network.chainId);
   };
 
   async function redeemBond(bond: Partial<OwnerBalance>) {

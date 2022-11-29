@@ -3,6 +3,7 @@ import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import { useEffect, useState } from "react";
 import {
+  useListUniqueBondersArbitrumGoerliQuery,
   useListUniqueBondersGoerliQuery,
   useListUniqueBondersMainnetQuery,
 } from "../generated/graphql";
@@ -30,7 +31,12 @@ export function useUniqueBonders() {
     endpoint: endpoints[1],
   });
 
+  const { data: arbitrumGoerliData } = useListUniqueBondersArbitrumGoerliQuery({
+    endpoint: endpoints[3],
+  });
+
   useEffect(() => {
+    if (testnet) return;
     if (mainnetData && mainnetData.uniqueBonders) {
       const allBonders = mainnetData.uniqueBonders;
       const bonderMap = new Map();
@@ -47,11 +53,14 @@ export function useUniqueBonders() {
 
       setMainnetBonders(bonderMap);
     }
-  }, [mainnetData]);
+  }, [mainnetData, testnet]);
 
   useEffect(() => {
-    if (goerliData && goerliData.uniqueBonders) {
-      const allBonders = goerliData.uniqueBonders;
+    if (!testnet) return;
+    if (goerliData && goerliData.uniqueBonders && arbitrumGoerliData && arbitrumGoerliData.uniqueBonders) {
+      const allBonders =
+        goerliData.uniqueBonders
+          .concat(arbitrumGoerliData.uniqueBonders);
       const bonderMap = new Map();
 
       allBonders.forEach((bonder) => {
@@ -66,7 +75,7 @@ export function useUniqueBonders() {
 
       setTestnetBonders(bonderMap);
     }
-  }, [goerliData]);
+  }, [goerliData, arbitrumGoerliData, testnet]);
 
   useEffect(() => {
     if (testnet) {

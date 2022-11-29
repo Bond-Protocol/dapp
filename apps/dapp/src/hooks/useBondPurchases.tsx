@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import {
   BondPurchase,
   useListBondPurchasesMainnetQuery,
-  useListBondPurchasesTestnetQuery,
+  useListBondPurchasesGoerliQuery, useListBondPurchasesArbitrumGoerliQuery,
 } from "../generated/graphql";
 import { CHAIN_ID, getAddressesByChain } from "@bond-protocol/bond-library";
 
@@ -33,9 +33,15 @@ export function useBondPurchases() {
       { enabled: !testnet }
     );
 
-  const { data: goerliData, ...goerliQuery } = useListBondPurchasesTestnetQuery(
+  const { data: goerliData, ...goerliQuery } = useListBondPurchasesGoerliQuery(
     { endpoint: endpoints[1] },
     { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
+    { enabled: !!testnet }
+  );
+
+  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListBondPurchasesArbitrumGoerliQuery(
+    { endpoint: endpoints[3] },
+    { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET)},
     { enabled: !!testnet }
   );
 
@@ -50,12 +56,14 @@ export function useBondPurchases() {
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.bondPurchases) {
-      const allBondPurchases = goerliData.bondPurchases;
+    if (goerliData && goerliData.bondPurchases && arbitrumGoerliData && arbitrumGoerliData.bondPurchases) {
+      const allBondPurchases =
+        goerliData.bondPurchases
+          .concat(arbitrumGoerliData.bondPurchases);
       // @ts-ignore
       setTestnetBondPurchases(allBondPurchases);
     }
-  }, [goerliData, testnet]);
+  }, [goerliData, arbitrumGoerliData, testnet]);
 
   useEffect(() => {
     if (testnet) {

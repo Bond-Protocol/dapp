@@ -3,6 +3,7 @@ import {
   Market,
   useListMarketsGoerliQuery,
   useListMarketsMainnetQuery,
+  useListMarketsArbitrumGoerliQuery
 } from "../generated/graphql";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
@@ -18,15 +19,21 @@ export function useLoadMarkets() {
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
-  const { data: mainnetData, ...mainetQuery } = useListMarketsMainnetQuery(
+  const { data: mainnetData, ...mainnetQuery } = useListMarketsMainnetQuery(
     { endpoint: endpoints[0] },
     { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) },
     { enabled: !testnet }
   );
 
-  const { data: goerliData, ...testnetQuery } = useListMarketsGoerliQuery(
+  const { data: goerliData, ...goerliQuery } = useListMarketsGoerliQuery(
     { endpoint: endpoints[1] },
     { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
+    { enabled: !!testnet }
+  );
+
+  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListMarketsArbitrumGoerliQuery(
+    { endpoint: endpoints[3] },
+    { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET) },
     { enabled: !!testnet }
   );
 
@@ -41,12 +48,13 @@ export function useLoadMarkets() {
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.markets) {
-      const allMarkets = goerliData.markets;
+    if (goerliData && goerliData.markets && arbitrumGoerliData && arbitrumGoerliData.markets) {
+      const allMarkets = goerliData.markets
+        .concat(arbitrumGoerliData.markets);
       // @ts-ignore
       setTestnetMarkets(allMarkets);
     }
-  }, [goerliData, testnet]);
+  }, [goerliData, arbitrumGoerliData, testnet]);
 
   useEffect(() => {
     if (testnet) {
@@ -64,7 +72,9 @@ export function useLoadMarkets() {
     setMarketsMap(map);
   }, [selectedMarkets]);
 
-  const isLoading = testnet ? testnetQuery.isLoading : mainetQuery.isLoading;
+  const isLoading = testnet
+    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
+    : mainnetQuery.isLoading;
 
   return {
     markets: selectedMarkets,
