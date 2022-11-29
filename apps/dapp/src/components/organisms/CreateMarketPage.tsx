@@ -225,13 +225,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   }, [marketCapacity, capacityToken]);
 
   useEffect(() => {
-    console.log({
-      ptp: payoutTokenInfo?.price,
-      qtp: quoteTokenInfo?.price,
-    });
-  }, [payoutTokenInfo, quoteTokenInfo]);
-
-  useEffect(() => {
     let rate = Number(payoutTokenPrice) / Number(quoteTokenPrice);
     rate = trimAsNumber(rate, calculateTrimDigits(rate));
     if (rate != Infinity && !isNaN(rate)) {

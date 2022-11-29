@@ -34,6 +34,7 @@ export function useFetchMarkets(
         marketIds,
         tokenPrices,
         provider,
+        // @ts-ignore
         chainId as CHAIN_ID
       );
 
@@ -65,7 +66,6 @@ export function useFetchMarkets(
       void Promise.allSettled(promises).then((result) => {
         // @ts-ignore
         setCalculatedMarkets(result);
-        console.log(result);
       });
     }
   }, [marketData]);

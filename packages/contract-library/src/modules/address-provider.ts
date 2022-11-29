@@ -32,12 +32,24 @@ const goerliAddresses: ContractAddresses = {
   fixedTermAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222',
 };
 
+const arbitrumGoerliAddresses: ContractAddresses = {
+  authority: '0x007A0F48A4e3d74Ab4234adf9eA9EB32f87b4b14',
+  aggregator: '0x007A66A2a13415DB3613C1a4dd1C942A285902d1',
+  fixedExpirationTeller: '0x007FE70dc9797C4198528aE43d8195ffF82Bdc95',
+  fixedExpirationAuctioneer: '0x007FEA32545a39Ff558a1367BBbC1A22bc7ABEfD',
+  fixedTermTeller: '0x007F7735baF391e207E3aA380bb53c4Bd9a5Fed6',
+  fixedTermAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222',
+};
+
 const addressesByChain: { [key: string]: ContractAddresses } = {
   '1': mainnetAddresses,
   'mainnet': mainnetAddresses,
   'homestead': mainnetAddresses,
   '5': goerliAddresses,
   'goerli': goerliAddresses,
+  '421613': arbitrumGoerliAddresses,
+  'arbitrum-goerli': arbitrumGoerliAddresses,
+  'arbitrumGoerli': arbitrumGoerliAddresses,
 };
 
 export const getAddresses = (chainId: string): ContractAddresses => {

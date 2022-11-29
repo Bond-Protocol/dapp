@@ -92,7 +92,8 @@ export const BondDetails: FC<BondDetailsProps> = ({
   useEffect(() => {
     if (
       market.network === network?.chain?.network ||
-      (market.network === "mainnet" && network?.chain?.network === "homestead")
+      (market.network === "mainnet" && network?.chain?.network === "homestead") ||
+      (market.network === "arbitrum-goerli" && network?.chain?.network === "arbitrumGoerli")
     ) {
       setCorrectChain(true);
     }
@@ -131,8 +132,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
   }, [payout]);
 
   const switchChain = () => {
-    const newChain = Number("0x" + provider.network.chainId.toString());
-    switchNetwork?.(newChain);
+    switchNetwork?.(provider.network.chainId);
   };
 
   const approveSpending = () =>

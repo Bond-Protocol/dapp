@@ -27,10 +27,7 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
 
   const switchChain = (e: Event) => {
     e.preventDefault();
-    const newChain = Number(
-      "0x" + providers[props.market.network].network.chainId.toString()
-    );
-    switchNetwork?.(newChain);
+    switchNetwork?.(providers[props.market.network].network.chainId);
   };
 
   async function checkChain() {
