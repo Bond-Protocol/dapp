@@ -40,6 +40,7 @@ export default defineConfig(({ command, mode }) => ({
     alias: {
       src: path.join(__dirname, "./src"),
       components: path.join(__dirname, "./src/components"),
+      hooks: path.join(__dirname, "./src/hooks"),
       assets: path.join(__dirname, "./src/assets"),
       utils: path.join(__dirname, "./src/utils"),
     },

@@ -6,18 +6,8 @@ import { Button, Loading, Table, DiscountLabel, Column, Cell } from "ui";
 import { PageHeader } from "components/atoms/PageHeader";
 import { useMarkets } from "hooks";
 import { socials } from "..";
-
-type MarketListProps = {
-  markets?: Map<string, CalculatedMarket>;
-  allowManagement?: boolean;
-};
-
-const usdFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "usd",
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 2,
-});
+import { usdFormatter } from "src/utils/format";
+import { toTableData } from "src/utils/table";
 
 const tableColumns: Array<Column<CalculatedMarket>> = [
   {
@@ -115,10 +105,7 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
         size="sm"
         variant="ghost"
         className="mr-4"
-        onClick={() => {
-          console.log("from button", { props });
-          props.onClick("/market/" + props.value);
-        }}
+        onClick={() => props.onClick("/market/" + props.value)}
       >
         View
       </Button>
@@ -126,21 +113,15 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
   },
 ];
 
-const toValue = (v: any) => ({ value: v });
-
-const marketToTableData = (market: CalculatedMarket): Record<string, Cell> => {
-  return tableColumns.reduce((acc, { accessor, formatter }) => {
-    //@ts-ignore
-    const value = String(market[accessor]);
-    return {
-      ...acc,
-      [accessor]: formatter ? formatter(market) : toValue(value),
-    };
-  }, {});
+type MarketListProps = {
+  markets?: Map<string, CalculatedMarket>;
+  issuer?: string;
+  allowManagement?: boolean;
 };
 
 export const MarketList: FC<MarketListProps> = ({
   allowManagement,
+  issuer,
   ...props
 }) => {
   const navigate = useNavigate();
@@ -148,27 +129,28 @@ export const MarketList: FC<MarketListProps> = ({
 
   const markets = props.markets || allMarkets;
 
-  console.log({ markets });
   const tableMarkets = useMemo(
     () =>
       Array.from(markets.values())
-        .map(marketToTableData)
+        .map((m) => toTableData(tableColumns, m))
+        .filter((m) => {
+          return issuer ? issuer === m.issuer.value : true;
+        })
         .map((m) => {
           //@ts-ignore
-          m["view"].onClick = (v: string) => navigate(v);
+          m["view"].onClick = (path: string) => navigate(path);
           return m;
         }),
-    [markets]
+    [allMarkets, isLoading, issuer, tableColumns]
   );
 
   if (isLoading.market || isLoading.priceCalcs) {
     return <Loading content="markets" />;
   }
 
-  if (
-    Object.values(isLoading).some((loading) => loading) ||
-    allMarkets.size === 0
-  ) {
+  const isSomeLoading = Object.values(isLoading).some((loading) => loading);
+
+  if (isSomeLoading || allMarkets.size === 0) {
     return (
       <div className="flex flex-col">
         <div className="mt-20 text-center text-5xl uppercase leading-normal">

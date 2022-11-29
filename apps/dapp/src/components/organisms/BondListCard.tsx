@@ -52,7 +52,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           {protocol?.logoUrl && (
             <img src={protocol.logoUrl} className="my-auto h-[52px] w-[52px]" />
           )}
-          <p className="pl-1 font-faketion text-[48px]">
+          <p className="font-faketion pl-1 text-[48px]">
             {market.quoteToken?.symbol}
           </p>
         </div>
@@ -63,7 +63,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
           className="my-auto text-[12px]"
         >
           <div className="flex fill-inherit pl-2">
-            <div className="pt-[2px] font-faketion font-extrabold">
+            <div className="font-faketion pt-[2px] font-extrabold">
               {props.topRightLabel}
             </div>
 

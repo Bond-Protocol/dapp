@@ -7,7 +7,9 @@ export interface PageHeaderProps extends TokenLogoProps {
 
 export const PageHeader = (props: PageHeaderProps) => {
   return (
-    <div className="flex font-fraktion uppercase">
+    <div
+      className={`flex select-none font-fraktion uppercase ${props.className}`}
+    >
       {props.icon && (
         <TokenLogo {...props} width="lg" className="my-auto pl-0.5" />
       )}

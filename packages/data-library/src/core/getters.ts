@@ -12,10 +12,7 @@ export const getProtocol = (address: string): Protocol | undefined => {
     element.address.toLowerCase().includes(address.toLowerCase())
   )?.protocol;
 
-  const p = PROTOCOLS.get(key || "");
-
-  console.log({ key, p, ADDRESSES });
-  return p;
+  return PROTOCOLS.get(key || "");
 };
 
 export const getUniqueApiIds = function (): {

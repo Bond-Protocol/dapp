@@ -8,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
 import { ReactComponent as ArrowLeft } from "assets/icons/arrow-left.svg";
+import { PageNavigation } from "components/atoms";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -43,9 +44,8 @@ export const IssuerPage: FC = () => {
   }, [protocolTbvs]);
 
   return (
-    <div className="pb-12 font-jakarta">
-      <div className="flex justify-between">
-        <ArrowLeft onClick={() => navigate("/issuers")} />
+    <div className="pb-12">
+      <PageNavigation>
         {protocol?.links?.homepage && (
           <Link
             href={protocol.links.homepage}
@@ -57,7 +57,7 @@ export const IssuerPage: FC = () => {
             Visit website
           </Link>
         )}
-      </div>
+      </PageNavigation>
       <div className="mt-5 flex flex-col">
         <div className="flex flex-row ">
           <img className="my-auto mr-4 h-[64px] w-[64px]" src={logo()} />
@@ -103,9 +103,7 @@ export const IssuerPage: FC = () => {
           1%
         </InfoLabel>
       </div>
-
-      {/*@ts-ignore for now pls*/}
-      {markets && <MarketList markets={markets} allowManagement={false} />}
+      <MarketList issuer={protocol?.name} />
     </div>
   );
 };
