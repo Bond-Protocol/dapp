@@ -1,6 +1,6 @@
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {useTokens} from "hooks/useTokens";
-import {useAtom} from "jotai";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { useTokens } from "hooks/useTokens";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import {
   OwnerTokenTbv,
@@ -9,52 +9,60 @@ import {
   useListOwnerTokenTbvsGoerliQuery,
   useListOwnerTokenTbvsMainnetQuery,
 } from "../generated/graphql";
-import {useEffect, useState} from "react";
-import {getProtocolByAddress} from "@bond-protocol/bond-library";
+import { useEffect, useState } from "react";
+import { getProtocolByAddress } from "@bond-protocol/bond-library";
 
 export function useOwnerTokenTbvs() {
   const endpoints = getSubgraphEndpoints();
-  const {getPrice, currentPrices} = useTokens();
+  const { getPrice, currentPrices } = useTokens();
   const [testnet, setTestnet] = useAtom(testnetMode);
 
-  const [protocolTbvs, setProtocolTbvs] = useState<Map<string, number>>();
-  const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
-  const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
+  const [protocolTbvs, setProtocolTbvs] = useState([]);
+  const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<
+    OwnerTokenTbv[]
+  >([]);
+  const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<
+    OwnerTokenTbv[]
+  >([]);
 
-  const {data: mainnetData, ...mainnetQuery} =
+  const { data: mainnetData, ...mainnetQuery } =
     useListOwnerTokenTbvsMainnetQuery(
-      {endpoint: endpoints[0]},
+      { endpoint: endpoints[0] },
       {},
-      {enabled: !testnet}
+      { enabled: !testnet }
     );
 
-  const {data: goerliData, ...goerliQuery} =
-    useListOwnerTokenTbvsGoerliQuery(
-      {endpoint: endpoints[1]},
-      {},
-      {enabled: !!testnet}
-    );
+  const { data: goerliData, ...goerliQuery } = useListOwnerTokenTbvsGoerliQuery(
+    { endpoint: endpoints[1] },
+    {},
+    { enabled: !!testnet }
+  );
 
-  const {data: arbitrumMainnetData, ...arbitrumMainnetQuery} =
+  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
     useListOwnerTokenTbvsArbitrumMainnetQuery(
-      {endpoint: endpoints[2]},
+      { endpoint: endpoints[2] },
       {},
-      {enabled: !testnet}
+      { enabled: !testnet }
     );
 
-  const {data: arbitrumGoerliData, ...arbitrumGoerliQuery} =
+  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } =
     useListOwnerTokenTbvsArbitrumGoerliQuery(
-      {endpoint: endpoints[3]},
+      { endpoint: endpoints[3] },
       {},
-      {enabled: !!testnet}
+      { enabled: !!testnet }
     );
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.ownerTokenTbvs && arbitrumMainnetData && arbitrumMainnetData.ownerTokenTbvs) {
-      const allOwnerTokens =
-        mainnetData.ownerTokenTbvs
-          .concat(arbitrumMainnetData.ownerTokenTbvs);
+    if (
+      mainnetData &&
+      mainnetData.ownerTokenTbvs &&
+      arbitrumMainnetData &&
+      arbitrumMainnetData.ownerTokenTbvs
+    ) {
+      const allOwnerTokens = mainnetData.ownerTokenTbvs.concat(
+        arbitrumMainnetData.ownerTokenTbvs
+      );
       // @ts-ignore
       setMainnetOwnerTokenTbvs(allOwnerTokens);
     }
@@ -62,47 +70,57 @@ export function useOwnerTokenTbvs() {
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.ownerTokenTbvs && arbitrumGoerliData && arbitrumGoerliData.ownerTokenTbvs) {
-      const allOwnerTokens =
-        goerliData.ownerTokenTbvs
-          .concat(arbitrumGoerliData.ownerTokenTbvs);
+    if (
+      goerliData &&
+      goerliData.ownerTokenTbvs &&
+      arbitrumGoerliData &&
+      arbitrumGoerliData.ownerTokenTbvs
+    ) {
+      const allOwnerTokens = goerliData.ownerTokenTbvs.concat(
+        arbitrumGoerliData.ownerTokenTbvs
+      );
       // @ts-ignore
       setTestnetOwnerTokenTbvs(allOwnerTokens);
     }
   }, [goerliData, arbitrumGoerliData, testnet]);
 
   useEffect(() => {
-    const ownerTokenTbvMap: Map<string, number> = new Map();
-    let selected;
-    if (testnet) {
-      selected = testnetOwnerTokenTbvs;
-    } else {
-      selected = mainnetOwnerTokenTbvs;
-    }
+    let selected = testnet ? testnetOwnerTokenTbvs : mainnetOwnerTokenTbvs;
 
-    selected.forEach((ownerTokenTbv) => {
-      const network = ownerTokenTbv.network.replace("-one", "");
-      const protocol = getProtocolByAddress(
-        ownerTokenTbv.owner,
-        network
-      );
-      if (!protocol) return;
+    const updated = selected
+      .map((token) => {
+        const network = token.network.replace("-one", "");
+        const protocol = getProtocolByAddress(token.owner, network);
+        if (!protocol) return { id: "", tbv: 0 };
 
-      let value = ownerTokenTbvMap.get(protocol.id) || 0;
-      const price = getPrice(ownerTokenTbv.token);
-      value = value + ownerTokenTbv.tbv * price;
-      ownerTokenTbvMap.set(protocol.id, value);
-    });
+        const price = getPrice(token?.token);
+        let value = 0 + parseFloat(token?.tbv) * price;
+        console.log({ price, value, token });
+        return { id: protocol?.id, tbv: value };
+      })
+      .reduce((elements, current) => {
+        //@ts-ignore
+        const tbv = elements[current.id]?.tbv || 0;
 
-    setProtocolTbvs(ownerTokenTbvMap);
+        return {
+          ...elements,
+          [current.id]: {
+            id: current.id,
+            tbv: current.tbv + tbv,
+          },
+        };
+      }, {});
+
+    //@ts-ignore
+    setProtocolTbvs(updated);
   }, [testnet, mainnetOwnerTokenTbvs, testnetOwnerTokenTbvs, currentPrices]);
 
   const isLoading = testnet
-    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
-    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+    ? goerliQuery.isLoading || arbitrumGoerliQuery.isLoading
+    : mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading;
 
   return {
-    protocolTbvs: protocolTbvs,
     isLoading,
+    protocolTbvs,
   };
 }

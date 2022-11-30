@@ -7,7 +7,6 @@ import { InfoLabel, Link, SocialRow } from "ui";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
-import { ReactComponent as ArrowLeft } from "assets/icons/arrow-left.svg";
 import { PageNavigation } from "components/atoms";
 
 const placeholderProtocol = {
@@ -17,13 +16,11 @@ const placeholderProtocol = {
 };
 
 export const IssuerPage: FC = () => {
-  const navigate = useNavigate();
   const { marketsByIssuer } = useMarkets();
   const { getBondersForProtocol } = useUniqueBonders();
   const { protocolTbvs } = useOwnerTokenTbvs();
   const { name } = useParams();
 
-  const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
   const [protocol] = useState(PROTOCOLS.get(name || ""));
   const bonders = getBondersForProtocol(name || "");
 
@@ -36,11 +33,7 @@ export const IssuerPage: FC = () => {
   };
 
   useEffect(() => {
-    setMarkets(marketsByIssuer && marketsByIssuer.get(name));
-  }, [name, marketsByIssuer]);
-
-  useEffect(() => {
-    setTbv(protocolTbvs?.get(name || "") || 0);
+    setTbv(protocolTbvs[name]?.tbv || 0);
   }, [protocolTbvs]);
 
   return (

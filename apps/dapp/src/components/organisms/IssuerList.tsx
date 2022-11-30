@@ -1,74 +1,23 @@
-import { useEffect, useState } from "react";
-import { getProtocols, Protocol } from "@bond-protocol/bond-library";
+import { PROTOCOLS } from "@bond-protocol/bond-library";
 import { InfoLabel, IssuerCard } from "ui";
-import { alphabeticSort, numericSort } from "services/sort";
 import { useMarkets } from "hooks";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/atoms/PageHeader";
+import { socials } from "..";
 
 export const IssuerList = () => {
-  const { marketsByIssuer, issuers } = useMarkets();
+  const { marketsByIssuer } = useMarkets();
   const { protocolTbvs } = useOwnerTokenTbvs();
   const navigate = useNavigate();
+  const [testnet] = useAtom(testnetMode);
 
-  const [testnet, setTestnet] = useAtom(testnetMode);
-  const [search, setSearch] = useState("");
-  const [sortedIssuers, setSortedIssuers] = useState<Protocol[]>(issuers);
-  const [currentSort, setCurrentSort] = useState({
-    sortBy: sortByTbv,
-    ascending: false,
-  });
-
-  const sortIssuers = function (
-    compareFunction: (i1: Protocol, i2: Protocol) => number
-  ) {
-    const arr: Protocol[] = [];
-    getProtocols(testnet).forEach((issuer) => {
-      arr.push(issuer);
-    });
-    setSortedIssuers(arr.sort(compareFunction));
-  };
-
-  function sortByName() {
-    const ascending =
-      currentSort.sortBy.toString() === sortByName.toString()
-        ? !currentSort.ascending
-        : true;
-
-    sortIssuers((i1: Protocol, i2: Protocol) =>
-      alphabeticSort(i1.name, i2.name, ascending)
-    );
-    setCurrentSort({ sortBy: sortByName, ascending: ascending });
-  }
-
-  function sortByTbv() {
-    const ascending =
-      currentSort.sortBy.toString() === sortByTbv.toString()
-        ? !currentSort.ascending
-        : false;
-
-    sortIssuers((i1: Protocol, i2: Protocol) => {
-      return numericSort(
-        protocolTbvs?.get(i1.id) || 0,
-        protocolTbvs?.get(i2.id) || 0,
-        ascending
-      );
-    });
-    setCurrentSort({ sortBy: sortByTbv, ascending: ascending });
-  }
-
-  /*
-  const updateSearch = () => {
-    setSearch(event.target.value);
-  };
-   */
-
-  useEffect(() => {
-    currentSort.sortBy();
-  }, [issuers, marketsByIssuer, protocolTbvs, search]);
+  const allIssuers = Array.from(PROTOCOLS.values());
+  const issuers = testnet
+    ? allIssuers
+    : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
 
   return (
     <>
@@ -94,20 +43,20 @@ export const IssuerList = () => {
         </InfoLabel>
       </div>
       <div className="mx-auto flex flex-wrap justify-center gap-x-6 gap-y-10">
-        {sortedIssuers.map((issuer) => {
-          if (issuer.name && issuer.name.toLowerCase().indexOf(search) != -1) {
-            const markets = marketsByIssuer.get(issuer.id) || [];
-            return (
-              <div key={issuer.id} className="max-w-[169px] flex-1">
-                <IssuerCard
-                  issuer={issuer}
-                  tbv={protocolTbvs?.get(issuer.id) || 0}
-                  markets={markets}
-                  navigate={navigate}
-                />
-              </div>
-            );
-          }
+        {issuers.map((issuer) => {
+          const markets = marketsByIssuer.get(issuer.name) || [];
+          const protocolTbv = protocolTbvs[issuer.name];
+          console.log({ protocolTbv });
+          return (
+            <div key={issuer.id} className="max-w-[169px] flex-1">
+              <IssuerCard
+                issuer={issuer}
+                tbv={protocolTbv?.tbv || 0}
+                markets={markets}
+                navigate={navigate}
+              />
+            </div>
+          );
         })}
       </div>
     </>
