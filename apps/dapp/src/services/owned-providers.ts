@@ -44,8 +44,21 @@ const providerConfiguration: ProviderOptions[] = [
     ],
   },
   {
+    name: "arbitrum",
+    chainId: "42161",
+    rpcs: [
+      {
+        url: `https://arb-mainnet.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_ARBITRUM_MAINNET_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
+  {
     name: "arbitrum-goerli",
-    chainId: "5",
+    chainId: "421613",
     rpcs: [
       {
         url: `https://arb-goerli.g.alchemy.com/v2/${
