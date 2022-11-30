@@ -1,6 +1,6 @@
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {useTokens} from "hooks/useTokens";
-import {useAtom} from "jotai";
+import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { useTokens } from "hooks/useTokens";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import {
   OwnerTokenTbv,
@@ -8,37 +8,40 @@ import {
   useListOwnerTokenTbvsGoerliQuery,
   useListOwnerTokenTbvsMainnetQuery,
 } from "../generated/graphql";
-import {useEffect, useState} from "react";
-import {getProtocolByAddress} from "@bond-protocol/bond-library";
+import { useEffect, useState } from "react";
+import { getProtocolByAddress } from "@bond-protocol/bond-library";
 
 export function useOwnerTokenTbvs() {
   const endpoints = getSubgraphEndpoints();
-  const {getPrice, currentPrices} = useTokens();
+  const { getPrice, currentPrices } = useTokens();
   const [testnet, setTestnet] = useAtom(testnetMode);
 
-  const [protocolTbvs, setProtocolTbvs] = useState<Map<string, number>>();
-  const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
-  const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
+  const [protocolTbvs, setProtocolTbvs] = useState([]);
+  const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<
+    OwnerTokenTbv[]
+  >([]);
+  const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<
+    OwnerTokenTbv[]
+  >([]);
 
-  const {data: mainnetData, ...mainnetQuery} =
+  const { data: mainnetData, ...mainnetQuery } =
     useListOwnerTokenTbvsMainnetQuery(
-      {endpoint: endpoints[0]},
+      { endpoint: endpoints[0] },
       {},
-      {enabled: !testnet}
+      { enabled: !testnet }
     );
 
-  const {data: goerliData, ...goerliQuery} =
-    useListOwnerTokenTbvsGoerliQuery(
-      {endpoint: endpoints[1]},
-      {},
-      {enabled: !!testnet}
-    );
+  const { data: goerliData, ...goerliQuery } = useListOwnerTokenTbvsGoerliQuery(
+    { endpoint: endpoints[1] },
+    {},
+    { enabled: !!testnet }
+  );
 
-  const {data: arbitrumGoerliData, ...arbitrumGoerliQuery} =
+  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } =
     useListOwnerTokenTbvsArbitrumGoerliQuery(
-      {endpoint: endpoints[3]},
+      { endpoint: endpoints[3] },
       {},
-      {enabled: !!testnet}
+      { enabled: !!testnet }
     );
 
   useEffect(() => {
@@ -52,41 +55,49 @@ export function useOwnerTokenTbvs() {
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.ownerTokenTbvs && arbitrumGoerliData && arbitrumGoerliData.ownerTokenTbvs) {
-      const allOwnerTokens =
-        goerliData.ownerTokenTbvs
-          .concat(arbitrumGoerliData.ownerTokenTbvs);
+    if (
+      goerliData &&
+      goerliData.ownerTokenTbvs &&
+      arbitrumGoerliData &&
+      arbitrumGoerliData.ownerTokenTbvs
+    ) {
+      const allOwnerTokens = goerliData.ownerTokenTbvs.concat(
+        arbitrumGoerliData.ownerTokenTbvs
+      );
       // @ts-ignore
       setTestnetOwnerTokenTbvs(allOwnerTokens);
     }
   }, [goerliData, arbitrumGoerliData, testnet]);
 
   useEffect(() => {
-    const ownerTokenTbvMap: Map<string, number> = new Map();
-    let selected;
-    if (testnet) {
-      selected = testnetOwnerTokenTbvs;
-    } else {
-      selected = mainnetOwnerTokenTbvs;
-    }
+    let selected = testnet ? testnetOwnerTokenTbvs : mainnetOwnerTokenTbvs;
 
-    selected.forEach((ownerTokenTbv) => {
-      const protocol = getProtocolByAddress(
-        ownerTokenTbv.owner,
-        ownerTokenTbv.network
-      );
-      if (!protocol) return;
+    const updated = selected
+      .map((token) => {
+        const protocol = getProtocolByAddress(token.owner, token.network);
+        if (!protocol) return { id: "", tbv: 0 };
 
-      let value = ownerTokenTbvMap.get(protocol.id) || 0;
-      const price = getPrice(ownerTokenTbv.token);
-      value = value + ownerTokenTbv.tbv * price;
-      ownerTokenTbvMap.set(protocol.id, value);
-    });
+        const price = getPrice(token?.token);
+        let value = 0 + parseFloat(token?.tbv) * price;
+        console.log({ price, value, token });
+        return { id: protocol?.id, tbv: value };
+      })
+      .reduce((elements, current) => {
+        const tbv = elements[current.id]?.tbv || 0;
 
-    setProtocolTbvs(ownerTokenTbvMap);
+        return {
+          ...elements,
+          [current.id]: {
+            id: current.id,
+            tbv: current.tbv + tbv,
+          },
+        };
+      }, {});
+
+    setProtocolTbvs(updated);
   }, [testnet, mainnetOwnerTokenTbvs, testnetOwnerTokenTbvs, currentPrices]);
 
   return {
-    protocolTbvs: protocolTbvs,
+    protocolTbvs,
   };
 }
