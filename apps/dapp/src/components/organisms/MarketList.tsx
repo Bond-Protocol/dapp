@@ -169,10 +169,7 @@ export const MarketList: FC<MarketListProps> = ({
 
   return (
     <div>
-      <PageHeader title={"Live Markets"} />
-      <div className="pt-10">
-        <Table columns={tableColumns} data={tableMarkets} />
-      </div>
+      <Table columns={tableColumns} data={tableMarkets} />
     </div>
   );
 };

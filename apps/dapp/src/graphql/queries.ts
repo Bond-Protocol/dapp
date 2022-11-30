@@ -646,3 +646,31 @@ export const listBondPurchasesPerMarket = gql`
     }
   }
 `;
+
+export const listBondPurchasesByAddress = gql`
+  query ListBondPurchasesByAddress($recipient: String = "") {
+    bondPurchases(where: { recipient: $recipient }) {
+      id
+      recipient
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
+      recipient
+      network
+      quoteToken {
+        id
+        name
+        symbol
+        address
+      }
+      payoutToken {
+        id
+        name
+        symbol
+        address
+      }
+    }
+  }
+`;

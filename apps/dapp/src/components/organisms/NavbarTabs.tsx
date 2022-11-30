@@ -14,7 +14,7 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
   const tabs = [
     { label: "Markets", path: "/markets" },
     { label: "Issuers", path: "/issuers" },
-    { label: "My Bonds", path: "/my-bonds" },
+    { label: "Dashboard", path: "/dashboard" },
   ];
 
   const marketOwnerTab = { label: "My Markets", path: "/my-markets" };
