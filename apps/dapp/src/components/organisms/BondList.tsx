@@ -2,6 +2,7 @@ import { getToken } from "@bond-protocol/bond-library";
 import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { formatDistance } from "date-fns";
+import { usdFormatter } from "src/utils/format";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -22,11 +23,9 @@ export const tableColumns: Array<Column<any>> = [
     accessor: "usdPrice",
     alignEnd: true,
     formatter: (bond) => {
-      const price = bond.usdPrice;
-      console.log({ price, bond, balance: bond?.balance }, price);
       return {
         value: bond?.balance,
-        subtext: price,
+        subtext: usdFormatter.format(bond?.usdPrice),
       };
     },
   },

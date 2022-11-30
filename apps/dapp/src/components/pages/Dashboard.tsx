@@ -1,7 +1,7 @@
 import { ContractTransaction } from "ethers";
 import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { useMyBonds } from "hooks/useMyBonds";
-import { Button, Loading } from "ui";
+import { Button, InfoLabel, Loading } from "ui";
 import {
   OwnerBalance,
   useListBondPurchasesByAddressQuery,
@@ -20,11 +20,9 @@ import { PlaceholderChart } from "..";
 import { PageHeader } from "components/atoms";
 import { BondList, tableColumns } from "components/organisms/BondList";
 import { toTableData } from "src/utils/table";
-import {
-  getSubgraphEndpoints,
-  subgraphEndpoints,
-} from "services/subgraph-endpoints";
+import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { CHAIN_ID } from "@bond-protocol/bond-library";
+import { usdFormatter } from "src/utils/format";
 
 const isMainnet = (chain?: string) => {
   return chain === "mainnet" || chain === "homestead";
@@ -57,18 +55,15 @@ export const Dashboard = () => {
   const { myBonds, refetch } = useMyBonds();
   const { data: signer } = useSigner();
   const { switchNetwork } = useSwitchNetwork();
-  const account = useAccount();
   const { chain } = useNetwork();
   const { getTokenDetails, getPrice } = useTokens();
+  const account = useAccount();
   const endpoint = subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET];
-
   const purchases = useListBondPurchasesByAddressQuery(
     { endpoint },
     { recipient: account.address?.toLowerCase() }
   );
 
-  console.log({});
-  console.log({ purchases: purchases?.data?.bondPurchases, endpoint });
   const switchChain = (e: Event, selectedChain: string) => {
     e.preventDefault();
     const newChain = Number(
@@ -142,12 +137,39 @@ export const Dashboard = () => {
   });
 
   const tableData = data?.map((b) => toTableData(tableColumns, b));
+  const tbv = usdFormatter.format(
+    purchases?.data?.bondPurchases?.reduce((total, bond) => {
+      return total + bond.payout * bond.purchasePrice;
+    }, 0) as number
+  );
+
+  const claimable = usdFormatter.format(
+    data.reduce((total, bond) => {
+      const price = bond?.usdPrice || "0";
+      return total + parseFloat(price);
+    }, 0)
+  );
 
   return (
     <>
       <PageHeader title={"Dashboard"} />
-      <PlaceholderChart />
-      <BondList data={tableData} />
+      <div className="mt-10 flex gap-6">
+        <InfoLabel
+          label="Account TBV"
+          tooltip="Total amount bonded in by this address denominated in USD"
+        >
+          {tbv}
+        </InfoLabel>
+        <InfoLabel
+          label="Claimable"
+          tooltip="Total claimable value denominated in USD"
+        >
+          <div className="text-light-success">{claimable}</div>
+        </InfoLabel>
+      </div>
+      <div className="mt-10">
+        <BondList data={tableData} />
+      </div>
     </>
   );
 };
