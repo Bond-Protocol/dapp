@@ -21,7 +21,6 @@ export const tableColumns: Array<Column<any>> = [
   {
     label: "Amount",
     accessor: "usdPrice",
-    alignEnd: true,
     formatter: (bond) => {
       return {
         value: bond?.balance,

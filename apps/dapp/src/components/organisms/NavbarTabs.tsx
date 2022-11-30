@@ -27,7 +27,7 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
   const marketTabs = isMarketOwner ? [...tabs, marketOwnerTab] : tabs;
 
   return (
-    <div className={`flex justify-center gap-6 ${props.className}`}>
+    <div className={`flex select-none justify-center gap-6 ${props.className}`}>
       {marketTabs.map((tab) => (
         <div
           className={`font-fraktion uppercase hover:cursor-pointer ${

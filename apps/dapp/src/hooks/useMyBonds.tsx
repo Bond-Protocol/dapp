@@ -135,7 +135,6 @@ export function useMyBonds() {
     }
   };
 
-  console.log({ goerliErc20Data, goerliData });
   const getBalances = (bondTokens: BondToken[]) => {
     if (!address) return;
 

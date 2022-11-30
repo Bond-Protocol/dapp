@@ -15,9 +15,9 @@ import { getProtocolByAddress } from "@bond-protocol/bond-library";
 export function useOwnerTokenTbvs() {
   const endpoints = getSubgraphEndpoints();
   const { getPrice, currentPrices } = useTokens();
-  const [testnet, setTestnet] = useAtom(testnetMode);
+  const [testnet] = useAtom(testnetMode);
 
-  const [protocolTbvs, setProtocolTbvs] = useState([]);
+  const [protocolTbvs, setProtocolTbvs] = useState<Record<string, any>>([]);
   const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<
     OwnerTokenTbv[]
   >([]);
@@ -95,21 +95,21 @@ export function useOwnerTokenTbvs() {
 
         const price = getPrice(token?.token);
         let value = 0 + parseFloat(token?.tbv) * price;
-        console.log({ price, value, token });
         return { id: protocol?.id, tbv: value };
       })
-      .reduce((elements, current) => {
-        //@ts-ignore
-        const tbv = elements[current.id]?.tbv || 0;
-
-        return {
-          ...elements,
-          [current.id]: {
-            id: current.id,
-            tbv: current.tbv + tbv,
-          },
-        };
-      }, {});
+      .reduce(
+        (elements: Record<string, { id: string; tbv: number }>, current) => {
+          const tbv = elements[current.id]?.tbv || 0;
+          return {
+            ...elements,
+            [current.id]: {
+              id: current.id,
+              tbv: current.tbv + tbv,
+            },
+          };
+        },
+        {}
+      );
 
     //@ts-ignore
     setProtocolTbvs(updated);

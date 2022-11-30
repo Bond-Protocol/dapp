@@ -954,3 +954,31 @@ export const listBondPurchasesByAddress = gql`
     }
   }
 `;
+
+export const listBondPurchases = gql`
+  query ListBondPurchases {
+    bondPurchases(first: 1000) {
+      id
+      owner
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
+      recipient
+      network
+      quoteToken {
+        id
+        name
+        symbol
+        address
+      }
+      payoutToken {
+        id
+        name
+        symbol
+        address
+      }
+    }
+  }
+`;
