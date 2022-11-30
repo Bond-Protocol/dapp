@@ -19,7 +19,7 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
         <ProtocolLogo className="py-6" />
       </div>
       <NavbarTabs className="w-1/3" />
-      <div className="flex w-1/3 justify-end">
+      <div className="flex w-1/3 select-none justify-end">
         {showTestnetToggle && (
           <button
             className="font-faketion px-3 text-brand-yella"

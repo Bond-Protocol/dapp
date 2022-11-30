@@ -22,7 +22,7 @@ export const PageHeader = (props: PageHeaderProps) => {
         )}
       </div>
       {props.subtitle && (
-        <div className="py-2 font-sans text-[15px] font-extralight">
+        <div className="select-none py-2 font-sans text-[15px] font-extralight">
           {props.subtitle}
         </div>
       )}

@@ -3,21 +3,25 @@ import { InfoLabel, IssuerCard } from "ui";
 import { useMarkets } from "hooks";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
-import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/atoms/PageHeader";
 import { socials } from "..";
+import { useGlobalMetrics } from "hooks/useGlobalMetrics";
 
 export const IssuerList = () => {
   const { marketsByIssuer } = useMarkets();
-  const { protocolTbvs } = useOwnerTokenTbvs();
   const navigate = useNavigate();
   const [testnet] = useAtom(testnetMode);
+  const metrics = useGlobalMetrics();
 
   const allIssuers = Array.from(PROTOCOLS.values());
   const issuers = testnet
     ? allIssuers
     : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
+
+  const uniqueBondooors = testnet
+    ? metrics.uniqueBondersTestnet
+    : metrics.uniqueBonders;
 
   return (
     <>
@@ -27,13 +31,13 @@ export const IssuerList = () => {
           label="Total Value Bonded"
           tooltip="Total Value Bonded across all Issuers"
         >
-          $26.5M
+          {metrics.tbv}
         </InfoLabel>
         <InfoLabel
           label="Unique Bonders"
           tooltip="Total unique addresses that interacted with protocol markets"
         >
-          20K
+          {uniqueBondooors}
         </InfoLabel>
         <InfoLabel
           label="Average Discount Rate"
@@ -45,8 +49,7 @@ export const IssuerList = () => {
       <div className="mx-auto flex flex-wrap justify-center gap-x-6 gap-y-10">
         {issuers.map((issuer) => {
           const markets = marketsByIssuer.get(issuer.name) || [];
-          const protocolTbv = protocolTbvs[issuer.name];
-          console.log({ protocolTbv });
+          const protocolTbv = metrics.protocolTbvs[issuer.name];
           return (
             <div key={issuer.id} className="max-w-[169px] flex-1">
               <IssuerCard
