@@ -2,10 +2,9 @@ import * as contractLibrary from "@bond-protocol/contract-library";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { FC, useEffect, useState } from "react";
 import { Button } from "ui";
-import { useAccount, useConnect, useSigner, useSwitchNetwork } from "wagmi";
+import { useAccount, useSigner, useSwitchNetwork } from "wagmi";
 import { providers } from "services/owned-providers";
 import { ContractTransaction } from "ethers";
-import { InjectedConnector } from "wagmi/connectors/injected";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export type CloseMarketCardProps = {
@@ -16,7 +15,6 @@ export type CloseMarketCardProps = {
 export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
   const { data: signer } = useSigner();
   const { isConnected } = useAccount();
-  const { connect } = useConnect({ connector: new InjectedConnector() });
   const { switchNetwork } = useSwitchNetwork();
 
   const [correctChain, setCorrectChain] = useState<boolean>(false);

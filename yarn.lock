@@ -1522,6 +1522,16 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
+"@bond-protocol/bond-library@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.11.tgz#3b65d5a310fbde6058afb35c4f4ca80feaf2941f"
+  integrity sha512-tUEo8OJpcCh3qCkvwVrugFRkRvXpQU3l60rUo9/ckjdm7NB4AdQUKET/vnOhDoCPPy6vZhE44xrijGCB/TSMnQ==
+  dependencies:
+    axios "^0.27.2"
+    ethers "^5.6.8"
+    require-dir "^1.2.0"
+    ts-node "^10.9.1"
+
 "@bond-protocol/bond-library@^0.1.8":
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.8.tgz#0ed67388d040215f7dd818eef8d241aaefb71ad3"
@@ -3176,10 +3186,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@rainbow-me/rainbowkit@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-0.7.1.tgz#edf38dd512c1345624ab54b8ea5ac7d4aba444d0"
-  integrity sha512-8Q8uZ3ElrIjXhIiumc6s+8KlYzaN5HDTnpC5CjhnYcWkid7ZuKEzb/1uiNARmt0LTm0y7VGdOHRT74UBksxD0A==
+"@rainbow-me/rainbowkit@0.8":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@rainbow-me/rainbowkit/-/rainbowkit-0.8.0.tgz#e5f5a44431f32e5884c5d7eb5f5e253e81af4887"
+  integrity sha512-4nqH5OGcNzYMe/fYSBU7qM8H102UzZ6PwURMA5z6puDct0BGpeBk0dofqaGATSDam+4RdEmKaqOz5r/1Lc3/0g==
   dependencies:
     "@vanilla-extract/css" "1.9.1"
     "@vanilla-extract/dynamic" "2.0.2"
