@@ -116,8 +116,13 @@ export const useTokens = () => {
 
             // If this function hasn't been added already, add it to the requests Set
             if (tokenIds.length === 0) {
+              const provider =
+                priceSource.providerChainId != undefined
+                  ? providers[priceSource.providerChainId]
+                  : undefined;
+
               requests.add(
-                priceSource.customPriceFunction().then((result: string) => {
+                priceSource.customPriceFunction(provider).then((result: string) => {
                   // When the request resolves, store the price in the pricesMap,
                   // using the priceSource as the key and the result (price) as the value.
                   tokenIds.forEach((priceSource: string) => {
@@ -135,6 +140,7 @@ export const useTokens = () => {
         });
       });
     } catch (e: any) {
+      console.log(e)
       throw new Error("Error loading custom prices", e);
     }
 
@@ -327,27 +333,27 @@ export const useTokens = () => {
   }
 
   const getTokenDetailsFromChain = useCallback(async function (
-    address: string,
-    chain: string
-  ) {
-    const contract = contractLibrary.IERC20__factory.connect(
-      address,
-      providers[chain]
-    );
-    try {
-      const [name, symbol] = await Promise.all([
-        contract.name(),
-        contract.symbol(),
-      ]);
+      address: string,
+      chain: string
+    ) {
+      const contract = contractLibrary.IERC20__factory.connect(
+        address,
+        providers[chain]
+      );
+      try {
+        const [name, symbol] = await Promise.all([
+          contract.name(),
+          contract.symbol(),
+        ]);
 
-      return { name, symbol };
-    } catch (e: any) {
-      const error =
-        "Not an ERC-20 token, please double check the address and chain.";
-      throw Error(error);
-    }
-  },
-  []);
+        return { name, symbol };
+      } catch (e: any) {
+        const error =
+          "Not an ERC-20 token, please double check the address and chain.";
+        throw Error(error);
+      }
+    },
+    []);
 
   const isLoading = testnet
     ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
