@@ -13,6 +13,7 @@
     "lint": "turbo run lint",
     "dev": "turbo run dev --parallel",
     "preview": "turbo run preview",
+    "codegen": "turbo run codegen",
     "storybook": "turbo run storybook",
     "build:storybook": "turbo run build:storybook"
   },

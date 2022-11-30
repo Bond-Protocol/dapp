@@ -1,28 +1,16 @@
-import { Tabs } from "ui";
-import { useMarkets } from "hooks/useMarkets";
-import { Outlet, useNavigate } from "react-router-dom";
+import { MarketList } from "..";
+import { PageHeader } from "components/atoms";
 
-export const MarketTabs = () => {
-  const { isMarketOwner } = useMarkets();
-  const navigate = useNavigate();
-
-  const tabs = [
-    { label: "All Markets", handleClick: () => navigate("/") },
-    { label: "Bond Issuers", handleClick: () => navigate("/issuers") },
-    { label: "My Bonds", handleClick: () => navigate("/my-bonds") },
-  ];
-
-  const marketOwnerTab = {
-    label: "My Markets",
-    handleClick: () => navigate("my-markets"),
-  };
-
-  const marketTabs = isMarketOwner ? [...tabs, marketOwnerTab] : tabs;
-
+export const Markets = () => {
   return (
     <>
-      <Tabs tabs={marketTabs} />
-      <Outlet />
+      <PageHeader
+        title={"Live Markets"}
+        subtitle={"Instantly acquire governance tokens at a discount"}
+      />
+      <div className="pt-10">
+        <MarketList />
+      </div>
     </>
   );
 };
