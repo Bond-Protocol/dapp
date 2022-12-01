@@ -65,7 +65,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
       props.data.chain,
       // @ts-ignore
       signer,
-      {}
+      { gasLimit: 20000000 }
     );
     navigate("/create/" + tx.hash);
     props.onExecute(props.data);
@@ -100,7 +100,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         onReject={() => setIsMultisigModalOpen(false)}
       />
       <div className="mx-[15vw]">
-        <p className="mt-8 font-faketion font-bold tracking-widest">MARKET</p>
+        <p className="font-faketion mt-8 font-bold tracking-widest">MARKET</p>
 
         <SummaryCard fields={marketSummaryFields} className="my-8" />
 
@@ -111,27 +111,27 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         {!isConnected ? (
           <Button
             onClick={openConnectModal}
-            className="mt-5 w-full font-faketion"
+            className="font-faketion mt-5 w-full"
           >
             CONNECT WALLET
           </Button>
         ) : network.chain && selectedNetwork == props.data.chain ? (
           <Button
             onClick={() => setIsModalOpen(true)}
-            className="mt-5 w-full font-faketion"
+            className="font-faketion mt-5 w-full"
           >
             DEPLOY BOND USING WALLET
           </Button>
         ) : (
           // @ts-ignore
-          <Button onClick={switchChain} className="mt-5 w-full font-faketion">
+          <Button onClick={switchChain} className="font-faketion mt-5 w-full">
             Switch Chain
           </Button>
         )}
 
         <Button
           type="submit"
-          className="mt-5 w-full font-faketion"
+          className="font-faketion mt-5 w-full"
           onClick={() => {
             setTxnBytecode(
               contractLibrary.createMarketMultisig(props.data.marketParams)
@@ -144,7 +144,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
           CONFIGURE FOR MULTI-SIG
         </Button>
 
-        <Button onClick={props.onEdit} className="mt-5 w-full font-faketion">
+        <Button onClick={props.onEdit} className="font-faketion mt-5 w-full">
           EDIT
         </Button>
       </div>

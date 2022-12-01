@@ -61,7 +61,7 @@ export const BondDiscountChart = ({
   const allRanges = [...defaultRanges, ...ranges];
 
   return (
-    <>
+    <div className="flex w-full flex-col">
       <LineChart
         data={dataset}
         xAxisLabels={xAxisLabels}
@@ -80,6 +80,6 @@ export const BondDiscountChart = ({
           </button>
         ))}
       </div>
-    </>
+    </div>
   );
 };

@@ -96,10 +96,14 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
     { endpoint: subgraphEndpoints[props?.market?.network as CHAIN_ID] },
     { marketId: props.market.id }
   );
+  console.log({
+    creationDate: props?.market.creationDate,
+    market: props.market,
+  });
 
-  const tableData = data?.bondPurchases.map((p) =>
-    toTableData(marketTxsHistory, p)
-  );
+  const tableData = data?.bondPurchases
+    .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
+    .map((p) => toTableData(marketTxsHistory, p));
 
   return (
     <div className={props.className}>

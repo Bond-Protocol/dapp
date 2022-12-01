@@ -3,6 +3,7 @@ import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { formatDistance } from "date-fns";
 import { usdFormatter } from "src/utils/format";
+import { useState } from "react";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -51,6 +52,7 @@ export const tableColumns: Array<Column<any>> = [
     formatter: (bond) => {
       return {
         onClick: () => bond.handleClaim(),
+        data: bond,
       };
     },
     Component: (props: any) => (
@@ -58,10 +60,11 @@ export const tableColumns: Array<Column<any>> = [
         thin
         size="sm"
         variant="ghost"
-        className="mr-4"
+        disabled={!props?.data?.canClaim}
+        className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
         onClick={() => props.onClick()}
       >
-        Claim
+        {props?.data?.canClaim ? "Claim" : "Vesting"}
       </Button>
     ),
   },

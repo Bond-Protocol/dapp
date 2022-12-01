@@ -178,15 +178,9 @@ export function useMyBonds() {
     let bonds = testnet ? testnetBonds : mainnetBonds;
     const erc20Bonds = testnet ? testnetErc20Bonds : mainnetErc20Bonds;
 
-    bonds = bonds.concat(erc20Bonds);
+    const updatedBonds = [...bonds, ...erc20Bonds];
 
-    setMyBonds(
-      bonds.sort(
-        (n1: Partial<OwnerBalance>, n2: Partial<OwnerBalance>) =>
-          // @ts-ignore
-          n1.bondToken.expiry - n2.bondToken.expiry
-      )
-    );
+    setMyBonds(updatedBonds);
   }, [
     testnet,
     mainnetBonds,

@@ -17,18 +17,14 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
     { label: "Dashboard", path: "/dashboard" },
   ];
 
-  const marketOwnerTab = { label: "My Markets", path: "/my-markets" };
-
   const isSelected = (path: string) => {
     if (path === "/issuers" && location.pathname === "/") return true;
     return path.substring(1) === location.pathname.split("/")[1];
   };
 
-  const marketTabs = isMarketOwner ? [...tabs, marketOwnerTab] : tabs;
-
   return (
     <div className={`flex select-none justify-center gap-6 ${props.className}`}>
-      {marketTabs.map((tab) => (
+      {tabs.map((tab) => (
         <div
           className={`font-fraktion uppercase hover:cursor-pointer ${
             isSelected(tab.path) ? "text-light-secondary" : ""
