@@ -23,6 +23,7 @@ import { toTableData } from "src/utils/table";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { CHAIN_ID } from "@bond-protocol/bond-library";
 import { usdFormatter } from "src/utils/format";
+import { RequiresWallet } from "components/utility/RequiresWallet";
 
 const isMainnet = (chain?: string) => {
   return chain === "mainnet" || chain === "homestead";
@@ -91,46 +92,48 @@ export const Dashboard = () => {
       .catch((error) => console.log(error));
   }
 
-  const data = myBonds.map((bond: Partial<OwnerBalance>) => {
-    if (!bond.bondToken || !bond.bondToken.underlying) return;
+  const data = myBonds
+    .filter((b) => b.owner?.toLowerCase() === account?.address?.toLowerCase())
+    .map((bond: Partial<OwnerBalance>) => {
+      if (!bond.bondToken || !bond.bondToken.underlying) return;
 
-    const date = new Date(bond.bondToken.expiry * 1000);
-    const now = new Date(Date.now());
-    const canClaim = now >= date;
+      const date = new Date(bond.bondToken.expiry * 1000);
+      const now = new Date(Date.now());
+      const canClaim = now >= date;
 
-    //const purchase = purchases?.data?.bondPurchases.find();
+      //const purchase = purchases?.data?.bondPurchases.find();
 
-    let balance: number | string =
-      bond.balance / Math.pow(10, bond.bondToken.underlying.decimals);
-    balance = trim(balance, calculateTrimDigits(balance));
+      let balance: number | string =
+        bond.balance / Math.pow(10, bond.bondToken.underlying.decimals);
+      balance = trim(balance, calculateTrimDigits(balance));
 
-    let usdPrice: number | string =
-      Number(getPrice(bond.bondToken.underlying.id)) * Number(balance);
-    usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
+      let usdPrice: number | string =
+        Number(getPrice(bond.bondToken.underlying.id)) * Number(balance);
+      usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
 
-    const underlying: TokenDetails =
-      bond.bondToken && getTokenDetails(bond.bondToken.underlying);
+      const underlying: TokenDetails =
+        bond.bondToken && getTokenDetails(bond.bondToken.underlying);
 
-    const isCorrectNetwork =
-      (isMainnet(bond.bondToken.network) && isMainnet(chain?.network)) ||
-      bond.bondToken.network === chain?.network;
+      const isCorrectNetwork =
+        (isMainnet(bond.bondToken.network) && isMainnet(chain?.network)) ||
+        bond.bondToken.network === chain?.network;
 
-    const handleClaim = isCorrectNetwork
-      ? () => redeemBond(bond)
-      : (e: React.BaseSyntheticEvent) =>
-          // @ts-ignore
-          switchChain(e, bond.bondToken.network);
+      const handleClaim = isCorrectNetwork
+        ? () => redeemBond(bond)
+        : (e: React.BaseSyntheticEvent) =>
+            // @ts-ignore
+            switchChain(e, bond.bondToken.network);
 
-    return {
-      bond,
-      balance,
-      usdPrice,
-      underlying,
-      isCorrectNetwork,
-      canClaim,
-      handleClaim,
-    };
-  });
+      return {
+        bond,
+        balance,
+        usdPrice,
+        underlying,
+        isCorrectNetwork,
+        canClaim,
+        handleClaim,
+      };
+    });
 
   const tableData = data?.map((b) => toTableData(tableColumns, b));
   const tbv = usdFormatter.format(
@@ -148,27 +151,28 @@ export const Dashboard = () => {
     }, 0)
   );
 
-  console.log({ tableData, myBonds });
   return (
     <>
       <PageHeader title={"Dashboard"} />
-      <div className="mt-10 flex gap-6">
-        <InfoLabel
-          label="Account TBV"
-          tooltip="Total amount bonded in by this address denominated in USD"
-        >
-          {tbv}
-        </InfoLabel>
-        <InfoLabel
-          label="Claimable"
-          tooltip="Total claimable value denominated in USD"
-        >
-          <div className="text-light-success">{claimable}</div>
-        </InfoLabel>
-      </div>
-      <div className="mt-10">
-        <BondList data={tableData} />
-      </div>
+      <RequiresWallet>
+        <div className="mt-10 flex gap-6">
+          <InfoLabel
+            label="Account TBV"
+            tooltip="Total amount bonded in by this address denominated in USD"
+          >
+            {tbv}
+          </InfoLabel>
+          <InfoLabel
+            label="Claimable"
+            tooltip="Total claimable value denominated in USD"
+          >
+            <div className="text-light-success">{claimable}</div>
+          </InfoLabel>
+        </div>
+        <div className="mt-10">
+          <BondList data={account?.address && tableData} />
+        </div>
+      </RequiresWallet>
     </>
   );
 };

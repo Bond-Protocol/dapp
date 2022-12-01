@@ -7,6 +7,7 @@ import { useMarkets } from "hooks";
 import { socials } from "..";
 import { usdFormatter } from "src/utils/format";
 import { toTableData } from "src/utils/table";
+import { meme } from "src/utils/words";
 
 const tableColumns: Array<Column<CalculatedMarket>> = [
   {
@@ -144,7 +145,7 @@ export const MarketList: FC<MarketListProps> = ({
   );
 
   if (isLoading.market || isLoading.priceCalcs) {
-    return <Loading content="markets" />;
+    return <Loading content={meme()} />;
   }
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);

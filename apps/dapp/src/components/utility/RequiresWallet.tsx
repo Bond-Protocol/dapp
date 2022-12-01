@@ -18,12 +18,12 @@ export const RequiresWallet = ({ className, children }: RequireWalletProps) => {
     <>{children}</>
   ) : (
     <div className="mt-10 flex flex-col">
-      <h1 className="py-10 text-center font-faketion text-5xl leading-normal">
+      <h1 className="mt-24 text-center font-fraktion text-5xl leading-normal">
         CONNECT WALLET
         <br />
         TO CONTINUE
       </h1>
-      <Button className="mx-auto w-[20vw]" onClick={openConnectModal}>
+      <Button className="mx-auto mt-8 w-[18vw]" onClick={openConnectModal}>
         Connect
       </Button>
     </div>

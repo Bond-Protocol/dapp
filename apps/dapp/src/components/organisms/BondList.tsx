@@ -3,7 +3,6 @@ import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { formatDistance } from "date-fns";
 import { usdFormatter } from "src/utils/format";
-import { useState } from "react";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -59,7 +58,7 @@ export const tableColumns: Array<Column<any>> = [
       <Button
         thin
         size="sm"
-        variant="ghost"
+        variant={props?.data?.canClaim ? "primary" : "ghost"}
         disabled={!props?.data?.canClaim}
         className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
         onClick={() => props.onClick()}

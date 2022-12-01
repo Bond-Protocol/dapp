@@ -14,7 +14,12 @@ export const IssuerList = () => {
   const [testnet] = useAtom(testnetMode);
   const metrics = useGlobalMetrics();
 
-  const allIssuers = Array.from(PROTOCOLS.values());
+  const allIssuers = Array.from(PROTOCOLS.values()).filter(
+    (issuer) =>
+      Array.from(marketsByIssuer.keys()).includes(issuer.id) ||
+      metrics.protocolTbvs[issuer.name]?.tbv > 0
+  );
+
   const issuers = testnet
     ? allIssuers
     : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
@@ -22,6 +27,8 @@ export const IssuerList = () => {
   const uniqueBondooors = testnet
     ? metrics.uniqueBondersTestnet
     : metrics.uniqueBonders;
+
+  console.log({ marketsByIssuer, metrics });
 
   return (
     <>
@@ -51,7 +58,7 @@ export const IssuerList = () => {
           const markets = marketsByIssuer.get(issuer.name) || [];
           const protocolTbv = metrics.protocolTbvs[issuer.name];
           return (
-            <div key={issuer.id} className="max-w-[169px] flex-1">
+            <div key={issuer.id} className="w-[169px] max-w-[169px] flex-1">
               <IssuerCard
                 issuer={issuer}
                 tbv={protocolTbv?.tbv || 0}
