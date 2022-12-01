@@ -87,11 +87,7 @@ export const Dashboard = () => {
 
     await signer?.provider
       ?.waitForTransaction(redeemTx.hash)
-      .then((result) => {
-        timerRef.current = setInterval(() => {
-          void refetch();
-        }, 5 * 1000);
-      })
+      .then(() => {})
       .catch((error) => console.log(error));
   }
 

@@ -17,8 +17,10 @@ export default {
     [CHAIN_ID.ETHEREUM_MAINNET]: [
       "0x245cc372C84B3645Bf0Ffe6538620B04a217988B",
       "0x6369ce7668F9791fB80DD8E1932A945497D71e16",
+      "0xbb47C3FFf4eF85703907d3ffca30de278b85df3f",
     ],
     [CHAIN_ID.GOERLI_TESTNET]: ["0x19518E4D4E542f4b0Fc27366C23FaC7a0bA491Da"],
+    [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: ["0x19518E4D4E542f4b0Fc27366C23FaC7a0bA491Da"],
   },
   tokens: [
     {
@@ -29,10 +31,13 @@ export default {
       addresses: {
         [CHAIN_ID.ETHEREUM_MAINNET]: "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
         [CHAIN_ID.GOERLI_TESTNET]: "0x0595328847af962f951a4f8f8ee9a3bf261e4f6b",
+        [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0x6Cec0Ba158fd0C8BC48eafa11f8560318B32258D",
       },
       purchaseLinks: {
         [CHAIN_ID.ETHEREUM_MAINNET]: "https://app.balancer.fi/#/trade/ether/0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
         [CHAIN_ID.GOERLI_TESTNET]: "https://app.balancer.fi/#/trade/ether/0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
+        [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
+          "https://app.balancer.fi/#/trade/ether/0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
       },
     },
     {
