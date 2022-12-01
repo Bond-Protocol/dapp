@@ -31,6 +31,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf dist",
     "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "lint": "eslint --ignore-path .eslintignore --ext .js,.ts .",
     "lint-staged": "lint-staged",
