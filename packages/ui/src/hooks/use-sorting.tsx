@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 
 export const useSorting = (
   rawData?: Array<Record<string, any>>
-): [Array<Record<string, any>>, () => void] => {
+): [Array<Record<string, any>>, (field: string, order: string) => void] => {
   const [data, setData] = useState(rawData);
 
   useEffect(() => {
-    if (!data || !data?.length) {
+    if (!data || !rawData?.length || data?.length !== rawData?.length) {
       setData(rawData);
     }
   }, [rawData, rawData?.length]);
@@ -32,5 +32,6 @@ export const useSorting = (
     }
   };
 
+  //@ts-ignore
   return [data, handleSorting];
 };

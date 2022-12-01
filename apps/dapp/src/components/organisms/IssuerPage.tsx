@@ -33,27 +33,21 @@ export const IssuerPage: FC = () => {
   };
 
   useEffect(() => {
-    setTbv(protocolTbvs[name]?.tbv || 0);
+    setTbv(protocolTbvs[name as string]?.tbv || 0);
   }, [protocolTbvs]);
 
   return (
     <div className="pb-12">
-      <PageNavigation>
-        {protocol?.links?.homepage && (
-          <Link
-            href={protocol.links.homepage}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="my-auto font-bold text-light-secondary"
-            iconClassName="mt-1 ml-1"
-          >
-            Visit website
-          </Link>
-        )}
-      </PageNavigation>
+      <PageNavigation
+        link={protocol?.links.homepage}
+        rightText="Visit Website"
+      />
       <div className="mt-5 flex flex-col">
         <div className="flex flex-row ">
-          <img className="my-auto mr-4 h-[64px] w-[64px]" src={logo()} />
+          <img
+            className="my-auto mr-4 h-[64px] w-[64px] rounded-full"
+            src={logo()}
+          />
           <p className="my-auto font-fraktion text-[64px] font-bold leading-none">
             {protocol?.name || placeholderProtocol.name}
           </p>

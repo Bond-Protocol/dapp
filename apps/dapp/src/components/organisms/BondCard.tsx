@@ -37,7 +37,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
 
   return (
     <div className={`flex gap-4 ${props.className}`}>
-      <div className="w-1/2">
+      <div className="flex w-1/2">
         <BondDiscountChart market={market} />
       </div>
       <div className="w-1/2">

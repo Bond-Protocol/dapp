@@ -105,7 +105,7 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
     price: element[1],
   }));
 
-  const earliestDate = priceData?.[0]?.date;
+  const earliestDate = market.creationBlockTimestamp * 1000;
   const dataset: BondChartDataset[] = createBondPurchaseDataset({
     priceData: priceData,
     bondPurchases: purchaseData?.bondPurchases as BondPurchase[],
@@ -124,7 +124,6 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
     isLoading,
     purchases: purchaseData?.bondPurchases,
     dataset: interpolate(dataset)
-      .slice(0, dataset.length - 1)
       .filter((data) => data.date > earliestDate)
       .map((data) => ({
         ...data,

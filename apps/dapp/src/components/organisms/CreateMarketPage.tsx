@@ -45,6 +45,13 @@ export type CreateMarketPageProps = {
   onConfirm: (marketData: any) => void;
   initialValues?: any;
 };
+const StepLabel = (props: { text: string }) => {
+  return (
+    <p className="mt-16 mb-8 font-fraktion uppercase tracking-widest">
+      {props.text}
+    </p>
+  );
+};
 
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const { currentPrices, getPrice } = useTokens();
@@ -580,11 +587,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       <div className="mx-[15vw]">
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="flex-col">
-            <p className="font-faketion font-extrabold tracking-widest">
-              1 SET UP MARKET
-            </p>
+            <StepLabel text="1 Set Up Market" />
             <div>
-              <div className="flex w-full flex-col pt-5">
+              <div className="flex w-full flex-col">
                 <Controller
                   name="chain"
                   control={control}
@@ -956,11 +961,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               </div>
             </div>
 
-            <p className="mt-16 font-faketion font-bold tracking-widest">
-              2 SET UP VESTING TERMS
-            </p>
+            <StepLabel text="2 SET UP VESTING TERMS" />
 
-            <div className="mt-5">
+            <div className="">
               <Controller
                 name="marketExpiryDate"
                 control={control}
@@ -1120,9 +1123,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 </div>
               </Accordion>
             </div>
-            <p className="mt-16 font-faketion font-bold tracking-widest">
-              3 CONFIRMATION
-            </p>
+
+            <StepLabel text="3 CONFIRMATION" />
             <SummaryCard fields={summaryFields} className="mt-8" />
 
             {!isValid && isSubmitted && (
@@ -1132,7 +1134,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
               </div>
             )}
 
-            <Button type="submit" className="mt-5 w-full font-faketion">
+            <Button type="submit" className="font-faketion mt-5 w-full">
               CONFIRM INFORMATION
             </Button>
           </div>

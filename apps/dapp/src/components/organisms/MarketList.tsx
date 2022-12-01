@@ -2,8 +2,7 @@ import { FC, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { getProtocol, getToken } from "@bond-protocol/bond-library";
-import { Button, Loading, Table, DiscountLabel, Column, Cell } from "ui";
-import { PageHeader } from "components/atoms/PageHeader";
+import { Button, Loading, Table, DiscountLabel, Column } from "ui";
 import { useMarkets } from "hooks";
 import { socials } from "..";
 import { usdFormatter } from "src/utils/format";
@@ -13,7 +12,6 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
   {
     label: "Bond",
     accessor: "bond",
-    unsortable: true,
     width: "w-[13%]",
     formatter: (market) => {
       const quoteToken = getToken("goerli_" + market.quoteToken.address);
@@ -56,6 +54,7 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
       return {
         value: market.maxPayout,
         subtext: usdFormatter.format(market.maxPayoutUsd),
+        sortValue: market.maxPayoutUsd,
       };
     },
   },
@@ -167,9 +166,5 @@ export const MarketList: FC<MarketListProps> = ({
     );
   }
 
-  return (
-    <div>
-      <Table columns={tableColumns} data={tableMarkets} />
-    </div>
-  );
+  return <Table columns={tableColumns} data={tableMarkets} />;
 };

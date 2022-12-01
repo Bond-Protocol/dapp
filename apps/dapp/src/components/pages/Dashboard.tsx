@@ -145,11 +145,14 @@ export const Dashboard = () => {
 
   const claimable = usdFormatter.format(
     data.reduce((total, bond) => {
+      if (!bond?.canClaim) return total;
+
       const price = bond?.usdPrice || "0";
       return total + parseFloat(price);
     }, 0)
   );
 
+  console.log({ tableData, myBonds });
   return (
     <>
       <PageHeader title={"Dashboard"} />
