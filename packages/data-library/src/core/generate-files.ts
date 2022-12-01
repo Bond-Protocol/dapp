@@ -1,4 +1,3 @@
-//@ts-nocheck
 import fs from "fs";
 import requireDir from "require-dir";
 import { protocols as testProtocols } from "./internal/test-protocols";
@@ -15,9 +14,7 @@ const loadDir = (dir: string) =>
 const protocols = loadDir("../protocols").concat(testProtocols);
 
 //Get tokens defined in protocol files
-const protocolTokens = protocols
-  .flatMap(({ tokens }) => tokens)
-  .filter((t) => !!t);
+const protocolTokens = protocols.flatMap(({ tokens }) => tokens).filter((t) => !!t);
 
 //Load base tokens and merge with protocol tokens
 const tokens = loadDir("../tokens").concat(protocolTokens);
@@ -27,7 +24,4 @@ if (!fs.existsSync(__dirname + "/generated")) {
 }
 
 fs.writeFileSync(__dirname + "/generated/tokens.json", JSON.stringify(tokens));
-fs.writeFileSync(
-  __dirname + "/generated/protocols.json",
-  JSON.stringify(protocols)
-);
+fs.writeFileSync(__dirname + "/generated/protocols.json", JSON.stringify(protocols));
