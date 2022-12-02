@@ -7,6 +7,12 @@ export function getToken(address: string): Token | null {
   return TOKENS.get(address.toLowerCase()) || null;
 }
 
+export const getTokenByAddress = (address: string): Token | null => {
+  const ids = Array.from(TOKENS.keys()).map((t) => t.toLowerCase());
+  const tokenId = ids.find((k) => k.includes(address.toLowerCase())) || "";
+  return getToken(tokenId);
+};
+
 export const getProtocol = (address: string): Protocol | undefined => {
   const key = ADDRESSES.find((element: Address) =>
     element.address.toLowerCase().includes(address.toLowerCase())

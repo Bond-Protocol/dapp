@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { CHAIN_ID, getToken } from "@bond-protocol/bond-library";
+import { CHAIN_ID, getTokenByAddress } from "@bond-protocol/bond-library";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
@@ -12,8 +12,8 @@ const userTxsHistory: Column<any>[] = [
     accessor: "market",
     label: "Market",
     formatter: (market) => {
-      const quoteToken = getToken("goerli_" + market.quoteToken.address);
-      const payoutToken = getToken("goerli_" + market.payoutToken.address);
+      const quoteToken = getTokenByAddress(market.quoteToken.address);
+      const payoutToken = getTokenByAddress(market.payoutToken.address);
       return {
         value: market.quoteToken.symbol + "-" + market.payoutToken.symbol,
         icon: quoteToken?.logoUrl,

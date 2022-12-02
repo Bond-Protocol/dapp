@@ -1,7 +1,7 @@
 import { FC, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { getProtocol, getToken } from "@bond-protocol/bond-library";
+import { getProtocol, getTokenByAddress } from "@bond-protocol/bond-library";
 import { Button, Loading, Table, DiscountLabel, Column } from "ui";
 import { useMarkets } from "hooks";
 import { socials } from "..";
@@ -15,8 +15,8 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
     accessor: "bond",
     width: "w-[13%]",
     formatter: (market) => {
-      const quoteToken = getToken("goerli_" + market.quoteToken.address);
-      const payoutToken = getToken("goerli_" + market.payoutToken.address);
+      const quoteToken = getTokenByAddress(market.quoteToken.address);
+      const payoutToken = getTokenByAddress(market.payoutToken.address);
       return {
         value: market.quoteToken.symbol + "-" + market.payoutToken.symbol,
         icon: quoteToken?.logoUrl,
@@ -144,28 +144,12 @@ export const MarketList: FC<MarketListProps> = ({
     [allMarkets, isLoading, issuer, tableColumns]
   );
 
-  if (isLoading.market || isLoading.priceCalcs) {
+  const isSomeLoading = Object.values(isLoading).some((loading) => loading);
+  if (isSomeLoading) {
     return <Loading content={meme()} />;
   }
 
-  const isSomeLoading = Object.values(isLoading).some((loading) => loading);
-
-  if (isSomeLoading || allMarkets.size === 0) {
-    return (
-      <div className="flex flex-col">
-        <div className="mt-20 text-center text-5xl uppercase leading-normal">
-          No Bond Markets <br />
-          are currently open
-        </div>
-        <div className="flex flex-col items-center justify-center pt-8">
-          <a href={socials.discord} target="_blank">
-            <Button>Join our Discord</Button>
-          </a>
-          <p className="pt-2 text-sm uppercase">for the latest updates</p>
-        </div>
-      </div>
-    );
-  }
+  console.log({ tableMarkets, markets });
 
   return <Table columns={tableColumns} data={tableMarkets} />;
 };

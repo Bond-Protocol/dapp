@@ -83,7 +83,7 @@ export const MarketInsights = () => {
               : "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If the date is in the past, they will vest immediately upon purchase."
           }
         >
-          {vestingLabel}
+          {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
         </InfoLabel>
       </div>
 

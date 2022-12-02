@@ -1,4 +1,4 @@
-import { getToken } from "@bond-protocol/bond-library";
+import { getToken, getTokenByAddress } from "@bond-protocol/bond-library";
 import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { formatDistance } from "date-fns";
