@@ -7,7 +7,6 @@ import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
 import { useNavigate } from "react-router-dom";
-import { socials } from "..";
 
 export const IssuerList = () => {
   const { marketsByIssuer, issuers } = useMarkets();
@@ -70,7 +69,6 @@ export const IssuerList = () => {
     currentSort.sortBy();
   }, [issuers, marketsByIssuer, protocolTbvs, search]);
 
-  console.log({ sortedIssuers });
   return (
     <>
       {/* hiding search for now as there'll be little partners
@@ -83,26 +81,21 @@ export const IssuerList = () => {
       </p>
         */}
       <div className="mt-8 flex flex-wrap gap-x-12 gap-y-10">
-        {sortedIssuers
-          .filter((issuer) => issuer?.links?.twitter !== socials.twitter)
-          .map((issuer) => {
-            if (
-              issuer.name &&
-              issuer.name.toLowerCase().indexOf(search) != -1
-            ) {
-              const markets = marketsByIssuer.get(issuer.id) || [];
-              return (
-                <div key={issuer.id} className="w-full flex-1">
-                  <IssuerCard
-                    issuer={issuer}
-                    tbv={protocolTbvs?.get(issuer.id) || 0}
-                    markets={markets}
-                    navigate={navigate}
-                  />
-                </div>
-              );
-            }
-          })}
+        {sortedIssuers.map((issuer) => {
+          if (issuer.name && issuer.name.toLowerCase().indexOf(search) != -1) {
+            const markets = marketsByIssuer.get(issuer.id) || [];
+            return (
+              <div key={issuer.id} className="w-full flex-1">
+                <IssuerCard
+                  issuer={issuer}
+                  tbv={protocolTbvs?.get(issuer.id) || 0}
+                  markets={markets}
+                  navigate={navigate}
+                />
+              </div>
+            );
+          }
+        })}
       </div>
     </>
   );
