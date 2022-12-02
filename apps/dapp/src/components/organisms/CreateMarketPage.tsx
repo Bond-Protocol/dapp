@@ -1057,6 +1057,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         }
                       />
 
+                      <div className="mt-2 justify-self-start text-xs font-light text-yellow-500">
+                        NOTE: Vesting Date must be at least 1 day after Market End Date
+                      </div>
+
                       {errors.vesting?.type === "isSet" && (
                         <div className="mt-2 justify-self-start text-xs font-light text-red-500">
                           Date must be set
