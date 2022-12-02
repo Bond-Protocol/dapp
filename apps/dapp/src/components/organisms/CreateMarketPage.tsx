@@ -166,9 +166,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     name: "timeAmount",
   });
 
-  const bondExpiry = useWatch({
+  const bondVesting = useWatch({
     control,
-    name: "expiryDate",
+    name: "vesting",
   });
 
   const bondsPerWeek = useWatch({
@@ -310,7 +310,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const days =
       Number(
         (
-          Math.round(bondExpiry - new Date().getTime() / 1000) /
+          Math.round(bondVesting - new Date().getTime() / 1000) /
           (60 * 60 * 24)
         ).toFixed(0)
       ) + 1;
@@ -335,7 +335,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       }
     }
     setVestingString(string);
-  }, [bondExpiry, timeAmount && timeAmount.amount, vestingType]);
+  }, [bondVesting, timeAmount && timeAmount.amount, vestingType]);
 
   useEffect(() => {
     const days =
@@ -415,7 +415,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
     let vesting;
     if (data.vestingType === 0) {
-      vesting = data.expiryDate;
+      vesting = data.vesting;
     } else if (data.vestingType === 1) {
       vesting = data.timeAmount.amount * 24 * 60 * 60;
     }
@@ -1038,7 +1038,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 />
               ) : (
                 <Controller
-                  name="expiryDate"
+                  name="vesting"
                   control={control}
                   rules={{
                     validate: {
@@ -1053,11 +1053,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         label="Bond Vesting Date"
                         placeholder="Select a date"
                         defaultValue={
-                          new Date(props.initialValues?.expiryDate * 1000)
+                          new Date(props.initialValues?.vesting * 1000)
                         }
                       />
 
-                      {errors.expiryDate?.type === "isSet" && (
+                      {errors.vesting?.type === "isSet" && (
                         <div className="mt-2 justify-self-start text-xs font-light text-red-500">
                           Date must be set
                         </div>
