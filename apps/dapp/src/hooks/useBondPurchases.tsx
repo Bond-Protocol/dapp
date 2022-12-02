@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 import {
   BondPurchase,
   useListBondPurchasesMainnetQuery,
-  useListBondPurchasesGoerliQuery, useListBondPurchasesArbitrumGoerliQuery,
+  useListBondPurchasesGoerliQuery,
+  useListBondPurchasesArbitrumGoerliQuery,
+  useListBondPurchasesArbitrumMainnetQuery,
 } from "../generated/graphql";
 import { CHAIN_ID, getAddressesByChain } from "@bond-protocol/bond-library";
 
@@ -39,6 +41,13 @@ export function useBondPurchases() {
     { enabled: !!testnet }
   );
 
+  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
+    useListBondPurchasesArbitrumMainnetQuery(
+      { endpoint: endpoints[2] },
+      { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_MAINNET) },
+      { enabled: !testnet }
+    );
+
   const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListBondPurchasesArbitrumGoerliQuery(
     { endpoint: endpoints[3] },
     { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET)},
@@ -47,12 +56,14 @@ export function useBondPurchases() {
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.bondPurchases) {
-      const allBondPurchases = mainnetData.bondPurchases;
+    if (mainnetData && mainnetData.bondPurchases && arbitrumMainnetData && arbitrumMainnetData.bondPurchases) {
+      const allBondPurchases =
+        mainnetData.bondPurchases
+          .concat(arbitrumMainnetData.bondPurchases);
       // @ts-ignore
       setMainnetBondPurchases(allBondPurchases);
     }
-  }, [mainnetData, testnet]);
+  }, [mainnetData, arbitrumMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
@@ -85,8 +96,13 @@ export function useBondPurchases() {
     setBondPurchasesByMarket(bondPurchasesByMarketMap);
   }, [selectedBondPurchases]);
 
+  const isLoading = testnet
+    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
+    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+
   return {
     bondPurchases: selectedBondPurchases,
     purchasesByMarket: bondPurchasesByMarket,
+    isLoading,
   };
 }

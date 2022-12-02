@@ -3,7 +3,8 @@ import {
   Market,
   useListMarketsGoerliQuery,
   useListMarketsMainnetQuery,
-  useListMarketsArbitrumGoerliQuery
+  useListMarketsArbitrumGoerliQuery,
+  useListMarketsArbitrumMainnetQuery
 } from "../generated/graphql";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
@@ -31,6 +32,12 @@ export function useLoadMarkets() {
     { enabled: !!testnet }
   );
 
+  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } = useListMarketsArbitrumMainnetQuery(
+    { endpoint: endpoints[2] },
+    { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_MAINNET) },
+    { enabled: !testnet }
+  );
+
   const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListMarketsArbitrumGoerliQuery(
     { endpoint: endpoints[3] },
     { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET) },
@@ -39,12 +46,14 @@ export function useLoadMarkets() {
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.markets) {
-      const allMarkets = mainnetData.markets;
+    if (mainnetData && mainnetData.markets && arbitrumMainnetData && arbitrumMainnetData.markets) {
+      const allMarkets =
+        mainnetData.markets
+          .concat(arbitrumMainnetData.markets);
       // @ts-ignore
       setMainnetMarkets(allMarkets);
     }
-  }, [mainnetData, testnet]);
+  }, [mainnetData, arbitrumMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
@@ -74,7 +83,7 @@ export function useLoadMarkets() {
 
   const isLoading = testnet
     ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
-    : mainnetQuery.isLoading;
+    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
 
   return {
     markets: selectedMarkets,

@@ -5,6 +5,7 @@ import testnetMode from "../atoms/testnetMode.atom";
 import {
   OwnerTokenTbv,
   useListOwnerTokenTbvsArbitrumGoerliQuery,
+  useListOwnerTokenTbvsArbitrumMainnetQuery,
   useListOwnerTokenTbvsGoerliQuery,
   useListOwnerTokenTbvsMainnetQuery,
 } from "../generated/graphql";
@@ -34,6 +35,13 @@ export function useOwnerTokenTbvs() {
       {enabled: !!testnet}
     );
 
+  const {data: arbitrumMainnetData, ...arbitrumMainnetQuery} =
+    useListOwnerTokenTbvsArbitrumMainnetQuery(
+      {endpoint: endpoints[2]},
+      {},
+      {enabled: !testnet}
+    );
+
   const {data: arbitrumGoerliData, ...arbitrumGoerliQuery} =
     useListOwnerTokenTbvsArbitrumGoerliQuery(
       {endpoint: endpoints[3]},
@@ -43,12 +51,14 @@ export function useOwnerTokenTbvs() {
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.ownerTokenTbvs) {
-      const allOwnerTokens = mainnetData.ownerTokenTbvs;
+    if (mainnetData && mainnetData.ownerTokenTbvs && arbitrumMainnetData && arbitrumMainnetData.ownerTokenTbvs) {
+      const allOwnerTokens =
+        mainnetData.ownerTokenTbvs
+          .concat(arbitrumMainnetData.ownerTokenTbvs);
       // @ts-ignore
       setMainnetOwnerTokenTbvs(allOwnerTokens);
     }
-  }, [mainnetData, testnet]);
+  }, [mainnetData, arbitrumMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
@@ -86,7 +96,12 @@ export function useOwnerTokenTbvs() {
     setProtocolTbvs(ownerTokenTbvMap);
   }, [testnet, mainnetOwnerTokenTbvs, testnetOwnerTokenTbvs, currentPrices]);
 
+  const isLoading = testnet
+    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
+    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+
   return {
     protocolTbvs: protocolTbvs,
+    isLoading,
   };
 }
