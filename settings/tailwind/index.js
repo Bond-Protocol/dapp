@@ -33,6 +33,7 @@ module.exports = withMT({
             900: "#14182D",
           },
           secondary: { DEFAULT: "#E7AC5C", 30: "#F4DFAC" },
+          alert: "#FF759A",
           success: "#88F6D7",
           neutral: "#A8A8A8",
           grey: "#737373",

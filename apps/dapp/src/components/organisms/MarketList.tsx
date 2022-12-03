@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { getProtocol, getTokenByAddress } from "@bond-protocol/bond-library";
 import { Button, Loading, Table, DiscountLabel, Column } from "ui";
+import { add } from "date-fns";
 import { useMarkets } from "hooks";
-import { socials } from "..";
 import { usdFormatter } from "src/utils/format";
 import { toTableData } from "src/utils/table";
 import { meme } from "src/utils/words";
@@ -63,13 +63,26 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
     label: "Vesting",
     accessor: "vesting",
     formatter: (market) => {
+      const isTerm = market.vestingType === "fixed-term";
+      const sort = isTerm
+        ? add(Date.now(), { seconds: market.vesting })
+        : market.vesting;
+
       return {
         value: market.formattedLongVesting,
-        sortValue: market.vesting.toString(),
+        subtext: isTerm ? "Term" : "Expiry",
+        sortValue: sort.toString(),
       };
     },
   },
-  { label: "Creation Date", accessor: "creationDate", width: "w-[15%]" },
+  {
+    label: "Creation Date",
+    accessor: "creationDate",
+    width: "w-[15%]",
+    formatter: (market) => ({
+      value: market.creationDate.replaceAll("-", "."),
+    }),
+  },
   {
     label: "TBV",
     accessor: "tbvUsd",
@@ -78,6 +91,7 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
     formatter: (market) => {
       return {
         value: usdFormatter.format(market.tbvUsd),
+        sortValue: market.tbvUsd.toString(),
       };
     },
   },
@@ -144,7 +158,7 @@ export const MarketList: FC<MarketListProps> = ({
     [allMarkets, isLoading, issuer, tableColumns]
   );
 
-  const isSomeLoading = Object.values(isLoading).some((loading) => loading);
+  const isSomeLoading = isLoading.market; //Object.values(isLoading).some((loading) => loading);
   if (isSomeLoading) {
     return <Loading content={meme()} />;
   }

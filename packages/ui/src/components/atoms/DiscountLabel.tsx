@@ -12,7 +12,7 @@ export const DiscountLabel = ({ value = "" }: DiscountLabelProps) => {
           ? ""
           : isPositive
           ? "text-light-success"
-          : "text-red-400"
+          : "text-light-alert"
       } text-[15px] font-extralight`}
     >
       {value}

@@ -1,4 +1,5 @@
 import { CHAIN_ID, SUPPORTED_LP_TYPES } from "../../constants";
+import { ProtocolDefinition } from "../../types";
 const links = {
   governanceVote: "",
   twitter: "https://twitter.com/bond_protocol",
@@ -7,7 +8,7 @@ const links = {
   homepage: "https://bondprotocol.finance/",
 };
 
-export const protocols = [
+export const protocols: ProtocolDefinition[] = [
   {
     name: "AphexProtocol",
     description: "We help aphex own his liquidity",
@@ -16,6 +17,21 @@ export const protocols = [
     issuerAddresses: {
       [CHAIN_ID.GOERLI_TESTNET]: "0x62A665d3f9fc9a968dC35a789122981d9109349a",
     },
+    tokens: [
+      {
+        name: "ETH-DAI SLP",
+        symbol: "ETH-DAI SLP",
+        //@ts-ignore
+        lpType: SUPPORTED_LP_TYPES.SUSHISWAP,
+        addresses: {
+          [CHAIN_ID.GOERLI_TESTNET]:
+            "0x46cE18B119D0EB454CDBD37545bBCa791bF325B3",
+        },
+        token0Address: "0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844",
+        token1Address: "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
+        priceSources: [],
+      },
+    ],
   },
   {
     name: "BigfishjoeProtocol",

@@ -110,8 +110,8 @@ export const useTokens = () => {
     const pricesMap = new Map();
 
     try {
-      bondLibrary.TOKENS.forEach((token: bondLibrary.Token, key: string) => {
-        token.priceSources.forEach((priceSource: any | CustomPriceSource) => {
+      bondLibrary.TOKENS?.forEach((token: bondLibrary.Token, key: string) => {
+        token.priceSources?.forEach((priceSource: any | CustomPriceSource) => {
           if (priceSource.source === "custom") {
             /*
             Tokens can be present on multiple chains, and thus have differing ids in our library and subgraph.
@@ -121,7 +121,7 @@ export const useTokens = () => {
             First, we get an array of Token IDs which use this function, or an empty array if there are none.
            */
             const tokenIds =
-              functions.get(priceSource.customPriceFunction) || [];
+              functions.get(priceSource?.customPriceFunction) || [];
 
             // If this function hasn't been added already, add it to the requests Set
             if (tokenIds.length === 0) {
@@ -136,7 +136,7 @@ export const useTokens = () => {
                   .then((result: string) => {
                     // When the request resolves, store the price in the pricesMap,
                     // using the priceSource as the key and the result (price) as the value.
-                    tokenIds.forEach((priceSource: string) => {
+                    tokenIds?.forEach((priceSource: string) => {
                       pricesMap.set(priceSource, result);
                     });
                     return result;
@@ -180,7 +180,7 @@ export const useTokens = () => {
             lpTokens.push({ value: value, key: tokenKey });
           } else {
             const prices: PriceDetails[] = [];
-            value.priceSources.forEach(
+            value.priceSources?.forEach(
               (
                 priceSource: SupportedPriceSource | CustomPriceSource,
                 priority: number
@@ -229,14 +229,18 @@ export const useTokens = () => {
           token1Address = network + "_" + token1Address;
 
         //@ts-ignore
-        token.value["token0"] = bondLibrary.TOKENS.get(token0Address);
-        //@ts-ignore
-        token.value["token1"] = bondLibrary.TOKENS.get(token1Address);
+        token.value["token0"] = bondLibrary.getTokenByAddress(token0Address);
 
         //@ts-ignore
-        token.value["token0"].price = currentPricesMap[token0Address][0].price;
-        // @ts-ignore
-        token.value["token1"].price = currentPricesMap[token1Address][0].price;
+        token.value["token1"] = bondLibrary.getTokenByAddress(token1Address);
+
+        const t0 = currentPricesMap[token0Address];
+        const t1 = currentPricesMap[token1Address];
+
+        //@ts-ignore
+        token.value["token0"].price = t0 && t0[0]?.price;
+        //@ts-ignore
+        token.value["token1"].price = t1 && t1[0]?.price;
 
         promises.push(
           calcLpPrice(

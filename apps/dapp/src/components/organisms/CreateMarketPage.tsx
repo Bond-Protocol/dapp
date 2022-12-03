@@ -584,7 +584,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   return (
     <div className="my-8">
-      <div className="mx-[15vw]">
+      <div className="">
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
           <div className="flex-col">
             <StepLabel text="1 Set Up Market" />
