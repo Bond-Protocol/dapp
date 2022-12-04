@@ -500,7 +500,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         debtBuffer: ~~(data.debtBuffer * Math.pow(10, 3)), // Account for 3 decimal places, truncate anything else
         vesting: vesting,
         conclusion: data.marketExpiryDate,
-        depositInterval: (24 * 60 * 60) / (data.bondsPerWeek / 7),
+        depositInterval: Math.trunc((24 * 60 * 60) / (data.bondsPerWeek / 7)),
         scaleAdjustment: scaleAdjustment,
       },
       bondType:
