@@ -117,7 +117,7 @@ export const InformationArea = (props: InformationAreaProps) => {
         props.open ? "-translate-x-0" : "-translate-x-full"
       }`}
     >
-      <div className="h-[88vh] bg-white font-jakarta">
+      <div className="h-[90vh] bg-white font-jakarta">
         <div className="mx-[5vw] flex h-[88px] items-center justify-between ">
           <ProtocolLogo
             black
@@ -151,7 +151,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           ))}
         </div>
       </div>
-      <Footer closeInfoArea={props.onClose} className="bg-brand-turtle-blue" />
+      <Footer closeInfoArea={props.onClose} />
     </div>
   );
 };

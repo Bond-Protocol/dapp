@@ -27,7 +27,7 @@ export const App: FC = () => {
         <Providers>
           <div className="h-full">
             <AppStatusCard />
-            <div className="relative min-h-[87vh] overflow-x-hidden pb-16 font-jakarta antialiased">
+            <div className="relative min-h-[90vh] overflow-x-hidden pb-16 font-jakarta antialiased">
               <Navbar onHamburgerClick={() => setShowInfoArea(true)} />
               <AppBackground />
               <InformationArea open={showInfoArea} onClose={closeInfoArea} />
