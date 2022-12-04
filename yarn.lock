@@ -1522,10 +1522,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@bond-protocol/bond-library@^0.1.14":
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.14.tgz#1a43b9ac59b5fd2623ef5eeedfbd51f94d244120"
-  integrity sha512-rQroLhndTqt20A3WVWhjx7qtaRgp+NnAqwobtvMon2ZVytW7env0J5KsItSpEl3t1tIBrNhzINc2Jl8y7r9hVA==
+"@bond-protocol/bond-library@^0.1.15":
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.15.tgz#db8105abc529d90f876672040db1fcafa7e8ae99"
+  integrity sha512-f5/BV+gt6kZmE0BUrYp+Ynrrogjidp64kDu4/YHkUg+Xs2+RdJNnFOLwmljSIC6R+qN7XwpoZvglkFO6nt0vLg==
   dependencies:
     axios "^0.27.2"
     ethers "^5.6.8"
