@@ -17,7 +17,7 @@ const FooterLink = ({
 }) => {
   return (
     <p
-      className="text-[12px] text-white/80 hover:cursor-pointer hover:text-light-secondary hover:underline"
+      className="font-mono text-xs text-white/80 hover:cursor-pointer hover:text-light-secondary hover:underline"
       onClick={onClick}
     >
       {children}

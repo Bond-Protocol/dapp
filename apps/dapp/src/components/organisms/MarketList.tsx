@@ -131,6 +131,7 @@ type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
   issuer?: string;
   allowManagement?: boolean;
+  filter?: string[];
 };
 
 export const MarketList: FC<MarketListProps> = ({
@@ -141,29 +142,34 @@ export const MarketList: FC<MarketListProps> = ({
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
 
+  const columns = tableColumns;
+  //(props.filter && tableColumns.filter((f) => !props.filter?.includes(f.accessor))) ||
+
   const markets = props.markets || allMarkets;
+
+  //const filteredMarkets = Array.from(markets.values()).filter()
+  //console.log({ markets });
 
   const tableMarkets = useMemo(
     () =>
       Array.from(markets.values())
-        .map((m) => toTableData(tableColumns, m))
+        .map((m) => toTableData(columns, m))
         .filter((m) => {
-          return issuer ? issuer === m.issuer.value : true;
+          return issuer ? issuer === m?.issuer?.value : true;
         })
         .map((m) => {
           //@ts-ignore
           m["view"].onClick = (path: string) => navigate(path);
           return m;
         }),
-    [allMarkets, isLoading, issuer, tableColumns]
+    [allMarkets, isLoading, issuer, columns]
   );
 
   const isSomeLoading = isLoading.market; //Object.values(isLoading).some((loading) => loading);
+
   if (isSomeLoading) {
     return <Loading content={meme()} />;
   }
 
-  console.log({ tableMarkets, markets });
-
-  return <Table columns={tableColumns} data={tableMarkets} />;
+  return <Table columns={columns} data={tableMarkets} />;
 };

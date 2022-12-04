@@ -1,8 +1,5 @@
-import { getTokenDetails } from "utils";
-import { Label } from "..";
 import { Chip } from "../atoms/Chip";
 import { Input } from "../atoms/Input";
-import { TokenLabel } from "../atoms/TokenLabel";
 
 export type InputCardProps = {
   balance?: string;
@@ -56,7 +53,7 @@ export const InputCard = ({
     onChange && onChange(amount);
   };
 
-  const token = getTokenDetails(market.quoteToken);
+  //const token = getTokenDetails(market.quoteToken);
 
   return (
     <>
@@ -73,9 +70,6 @@ export const InputCard = ({
       </div>
 
       <div className="flex w-full gap-2">
-        <div className="my-auto rounded-md border px-2 py-[7px] pr-4">
-          <Label icon={token.logoUrl} value={market.quoteToken.symbol} />
-        </div>
         <Input
           value={value}
           placeholder="Enter Amount to Bond"

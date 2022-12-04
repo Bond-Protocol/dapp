@@ -1,10 +1,8 @@
 import { FC, useEffect, useState } from "react";
-import { useMarkets } from "hooks";
 import { PROTOCOLS } from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { InfoLabel, Link, SocialRow } from "ui";
-import { useNavigate, useParams } from "react-router-dom";
+import { InfoLabel, SocialRow } from "ui";
+import { useParams } from "react-router-dom";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
 import { PageNavigation } from "components/atoms";
@@ -16,7 +14,6 @@ const placeholderProtocol = {
 };
 
 export const IssuerPage: FC = () => {
-  const { marketsByIssuer } = useMarkets();
   const { getBondersForProtocol } = useUniqueBonders();
   const { protocolTbvs } = useOwnerTokenTbvs();
   const { name } = useParams();
@@ -90,7 +87,7 @@ export const IssuerPage: FC = () => {
           1%
         </InfoLabel>
       </div>
-      <MarketList issuer={protocol?.name} />
+      <MarketList issuer={protocol?.name} filter={["issuer"]} />
     </div>
   );
 };

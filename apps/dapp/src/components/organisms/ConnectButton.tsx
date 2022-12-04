@@ -1,10 +1,11 @@
 import { ConnectButton as ConnectButtonUnstyled } from "@rainbow-me/rainbowkit";
-import { useState } from "react";
 import { Button } from "ui";
-import { ReactComponent as WalletIcon } from "../../assets/icons/wallet.svg";
 
-export const ConnectButton = () => {
-  const [hovering, setHovering] = useState(false);
+export interface ConnectButtonProps {
+  full?: boolean;
+}
+
+export const ConnectButton = (props: ConnectButtonProps) => {
   return (
     <ConnectButtonUnstyled.Custom>
       {({
@@ -22,6 +23,7 @@ export const ConnectButton = () => {
 
         return (
           <div
+            className={props.full ? "w-full" : ""}
             {...(!ready && {
               "aria-hidden": true,
               style: {
@@ -35,21 +37,17 @@ export const ConnectButton = () => {
               if (!connected) {
                 return (
                   <Button
-                    className="flex justify-center p-3"
-                    variant="ghost"
                     onClick={openConnectModal}
+                    className="w-full px-4 align-top font-fraktion"
                   >
-                    <WalletIcon className="hover:color-light-secondary my-auto h-[20px] w-[20px] fill-white hover:fill-light-secondary" />
-                    <p className="pl-2 text-sm font-light capitalize">
-                      Connect
-                    </p>
+                    Connect Wallet
                   </Button>
                 );
               }
               if (chain.unsupported) {
                 return (
                   <Button
-                    className="border-red-400 px-2.5 text-red-400"
+                    className="w-full border-light-alert px-4 font-fraktion text-light-alert"
                     variant="secondary"
                     onClick={openChainModal}
                   >
@@ -58,13 +56,13 @@ export const ConnectButton = () => {
                 );
               }
               return (
-                <div className="flex">
+                <div className="flex gap-4">
                   {chain.hasIcon && (
-                    <div onClick={openChainModal} className="my-auto mr-3 ">
+                    <div onClick={openChainModal} className="my-auto">
                       {chain.iconUrl && (
-                        <div className="max-h-[40px] w-10 rounded border p-1">
+                        <div className="max-h-[40px]">
                           <img
-                            className="mx-auto hover:cursor-pointer"
+                            className="hover:cursor-pointer"
                             alt={chain.name ?? "Chain icon"}
                             src={chain.iconUrl}
                           />
@@ -76,8 +74,7 @@ export const ConnectButton = () => {
                     variant="ghost"
                     onClick={openAccountModal}
                     type="button"
-                    thin
-                    className="p-3 font-mono font-medium hover:cursor-pointer"
+                    className="my-auto w-full px-4 font-mono font-light hover:cursor-pointer"
                   >
                     {account.displayName}
                   </Button>

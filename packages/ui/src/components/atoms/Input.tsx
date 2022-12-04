@@ -23,7 +23,7 @@ export const Input = forwardRef(function Input(
           },
           input: {
             className:
-              "w-full pl-4 h-10 bg-transparent font-jakarta placeholder:text-white placeholder:font-faketion focus:outline-none",
+              "w-full pl-4 h-10 text-[15px] bg-transparent placeholder:text-white focus:outline-none",
           },
         }}
       />

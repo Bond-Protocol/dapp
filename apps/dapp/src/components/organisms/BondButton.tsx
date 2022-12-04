@@ -16,7 +16,7 @@ export const BondButton = (props: BondButtonProps) => {
   if (props.showConnect)
     return (
       <div className="flex w-full justify-center py-4">
-        <ConnectButton />
+        <ConnectButton full />
       </div>
     );
 
