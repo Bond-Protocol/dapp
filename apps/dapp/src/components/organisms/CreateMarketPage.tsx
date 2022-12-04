@@ -43,7 +43,6 @@ const formDefaults = {
   vestingType: 0,
   bondsPerWeek: 7,
   debtBuffer: 30,
-  chain: "mainnet",
 };
 
 export type TokenInfo = {
@@ -189,7 +188,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   useEffect(() => {
     if (marketOwnerAddress) {
-      const protocol = getProtocolByAddress(marketOwnerAddress, selectedChain);
+      const protocol = getProtocolByAddress(marketOwnerAddress, selectedChain.id || selectedChain);
       setProtocol(protocol);
       setShowOwnerWarning(protocol === null);
     } else {
@@ -469,6 +468,14 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       .toLocaleString()
       .replaceAll(",", "");
 
+    const formValues = getValues();
+    formValues.chain = {
+      // @ts-ignore
+      id: bondLibrary.CHAINS.get(selectedChain.id || selectedChain).chainName,
+      // @ts-ignore
+      label: bondLibrary.CHAINS.get(selectedChain.id || selectedChain).displayName
+    }
+
     const params = {
       summaryData: {
         capacity: capacityString,
@@ -505,8 +512,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       },
       bondType:
         data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
-      chain: selectedChain,
-      formValues: getValues(),
+      chain: selectedChain.id || selectedChain,
+      formValues: formValues,
       payoutToken: payoutTokenInfo,
       quoteToken: quoteTokenInfo,
     };
@@ -515,8 +522,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   };
 
   const getTokenInfo = async (address: string, isPayout: boolean) => {
-    const token: any = bondLibrary.getToken(selectedChain + "_" + address);
-    if (token) token.id = selectedChain + "_" + address;
+    const token: any = bondLibrary.getToken((selectedChain.id || selectedChain) + "_" + address);
+    if (token) token.id = (selectedChain.id || selectedChain) + "_" + address;
 
     if (isPayout) {
       setLibraryPayoutToken(token);
@@ -534,7 +541,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
     const contract = contractLibrary.IERC20__factory.connect(
       address,
-      providers[selectedChain]
+      providers[selectedChain.id || selectedChain]
     );
     try {
       const [name, symbol, decimals] = await Promise.all([
@@ -542,7 +549,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         contract.symbol(),
         contract.decimals(),
       ]);
-      const price: number = getPrice(selectedChain + "_" + address) || -1;
+
+      const price: number = getPrice((selectedChain.id || selectedChain) + "_" + address) || -1;
       let formattedPrice = "0";
 
       if (price != -1) {
@@ -556,9 +564,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       }
 
       const blockExplorerName: string =
-        bondLibrary.CHAINS.get(selectedChain)?.blockExplorerName || "";
+        bondLibrary.CHAINS.get(selectedChain.id || selectedChain)?.blockExplorerName || "";
       let link: string =
-        bondLibrary.CHAINS.get(selectedChain)?.blockExplorerUrls[0] || "";
+        bondLibrary.CHAINS.get(selectedChain.id || selectedChain)?.blockExplorerUrls[0] || "";
       link = link.replace("#", "address");
       link = link.concat(address);
 
