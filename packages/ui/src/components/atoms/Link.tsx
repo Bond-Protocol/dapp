@@ -7,9 +7,9 @@ import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg
 
 const styles = {
   base: "text-white fill-white",
-  hover: "hover:text-brand-yella hover:fill-brand-yella",
+  hover: "hover:text-light-secondary hover:fill-light-secondary",
   disabled: "pointer-events-none text-grey-500 fill-grey-500 ",
-  active: "active:text-brand-yella active:fill-brand-yella",
+  active: "active:text-light-secondary active:fill-light-secondary",
 };
 export type LinkProps = ButtonUnstyledProps &
   AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -32,7 +32,7 @@ export const Link = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `leading-[11px] flex transition-all ease-in-out ${style} ${props.className}`,
+          className: `leading-[11px] flex transition-all duration-300 ${style} ${props.className}`,
         }),
       }}
     >

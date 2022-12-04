@@ -33,7 +33,7 @@ const NoBondsView = ({ loading }: { loading: boolean }) => {
 
   return (
     <div className="mt-10 flex flex-col">
-      <h1 className="py-10 text-center font-faketion text-5xl leading-normal">
+      <h1 className="font-faketion py-10 text-center text-5xl leading-normal">
         YOU DONT
         <br />
         HAVE A BOND YET
@@ -159,7 +159,7 @@ export const MyBondsList = () => {
                           <div>
                             <button>
                               <WalletIcon
-                                className="my-auto mt-[2px] h-[20px] w-[20px] fill-white hover:text-brand-yella"
+                                className="my-auto mt-[2px] h-[20px] w-[20px] fill-white hover:text-light-secondary"
                                 onClick={() => {
                                   if (
                                     bond.bondToken?.decimals == undefined ||

@@ -1,12 +1,7 @@
 import { FC } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import {
-  CHAINS,
-  getProtocolByAddress,
-  NativeCurrency,
-} from "@bond-protocol/bond-library";
+import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import { BondDiscountChart } from "components/organisms/BondDiscountChart";
-import { useTokens } from "hooks";
 import { providers } from "services/owned-providers";
 import { useSigner } from "wagmi";
 import { BondPurchaseCard } from "components/organisms";

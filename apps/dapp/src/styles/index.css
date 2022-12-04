@@ -10,7 +10,7 @@
 
 @layer components {
   .bond-chip {
-    @apply rounded-full border border-transparent bg-white/10 px-3 py-0.5 hover:border-gray-600;
+    @apply rounded-full border border-transparent bg-white/10;
   }
 
   .bg-base {

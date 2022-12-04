@@ -113,7 +113,7 @@ export const InformationArea = (props: InformationAreaProps) => {
 
   return (
     <div
-      className={`fixed inset-0 z-10 h-[100vh] bg-brand-turtle-blue transition-transform duration-500 ${
+      className={`fixed inset-0 z-10 h-[100vh] bg-light-base transition-transform duration-500 ${
         props.open ? "-translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -133,7 +133,7 @@ export const InformationArea = (props: InformationAreaProps) => {
         <div className="mx-[15vw] mt-20 mb-10 flex justify-end">
           <Button
             onClick={goToCreateMarket}
-            className="hover:bg-brand-turtle-blue hover:text-brand-yella"
+            className="hover:bg-light-base hover:text-light-secondary"
           >
             Issue Bond Market
           </Button>

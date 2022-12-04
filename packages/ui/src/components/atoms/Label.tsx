@@ -3,6 +3,7 @@ import { TokenLogo, TokenLogoProps } from "../atoms";
 export interface LabelProps extends TokenLogoProps {
   value?: string | React.ReactNode;
   subtext?: string;
+  textClassName?: string;
 }
 
 export const Label = (props: LabelProps) => {
@@ -23,7 +24,7 @@ export const Label = (props: LabelProps) => {
         <p
           className={`text-[15px] font-extralight ${
             props.subtext && "leading-none"
-          }`}
+          } ${props.textClassName}`}
         >
           {props.value}
         </p>

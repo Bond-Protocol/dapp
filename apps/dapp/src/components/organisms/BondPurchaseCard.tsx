@@ -7,7 +7,7 @@ import {
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import { useGasPrice, usePurchaseBond, useTokenAllowance } from "hooks";
-import { Button, InfoLabel, InputCard, Link, SummaryCard } from "ui";
+import { Button, InputCard, ActionInfoList } from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
@@ -148,33 +148,24 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
 
   const summaryFields = [
     {
-      label: "You will get",
-      value: `${payout} ${market.payoutToken.symbol}`,
+      leftLabel: "You will get",
+      rightLabel: `${payout} ${market.payoutToken.symbol}`,
     },
     {
-      label: "Max Bondable",
-      value: `${market.maxAmountAccepted} ${market.quoteToken.symbol}`,
+      leftLabel: "Max Bondable",
+      rightLabel: `${market.maxAmountAccepted} ${market.quoteToken.symbol}`,
       tooltip: `The maximum amount of ${market.quoteToken.symbol} accepted in a single transaction.`,
     },
     {
-      label: "Estimated Gas Fee",
-      value: `${networkFee} ${nativeCurrency.symbol} ($${networkFeeUsd})`,
+      leftLabel: "Estimated Gas Fee",
+      rightLabel: `${networkFee} ${nativeCurrency.symbol} ($${networkFeeUsd})`,
       tooltip:
         "Estimated gas fee for this transaction. NOTE: gas fees fluctuate and the price displayed may not be the price you pay.",
     },
     {
-      label: "Bond Contract",
-      value: (
-        <Link
-          href={blockExplorerUrl + market.auctioneer}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-fit"
-          labelClassname="mb-1"
-        >
-          View on {blockExplorerName}
-        </Link>
-      ),
+      leftLabel: "Bond Contract",
+      rightLabel: `View on ${blockExplorerName}`,
+      link: blockExplorerUrl + market.auctioneer,
     },
   ];
 
@@ -257,7 +248,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
             </div>
           )}
         </div>
-        <SummaryCard fields={summaryFields} />
+        <ActionInfoList fields={summaryFields} />
         <BondButton
           showConnect={!isConnected}
           showSwitcher={!correctChain}

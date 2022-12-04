@@ -1,4 +1,4 @@
-import { SocialRow, ProtocolLogo } from "ui";
+import { SocialRow } from "ui";
 import { useNavigate } from "react-router-dom";
 
 export const socials = {
@@ -40,7 +40,7 @@ export const Footer = ({
   };
 
   return (
-    <div className={`flex h-24 w-full justify-center ${className} antialiased`}>
+    <div className={`mx-auto h-24 w-full ${className} antialiased`}>
       <div className="flex h-full flex-col items-center ">
         <SocialRow {...socials} className="mt-8 justify-center" />
         <div className="mb-3 flex font-fraktion text-[12px] uppercase child:mx-2 child:select-none">

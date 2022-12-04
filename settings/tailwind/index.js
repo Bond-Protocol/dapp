@@ -2,15 +2,6 @@
 const plugin = require("tailwindcss/plugin");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const withMT = require("@material-tailwind/react/utils/withMT");
-const { colors } = require("./contants.json");
-
-const brandColors = colors.reduce(
-  (acc, c) => ({
-    ...acc,
-    ["brand-" + c.name]: c.value,
-  }),
-  {}
-);
 
 module.exports = withMT({
   content: ["./src/**/*.{ts,tsx}", "../../packages/**/*.{ts,tsx}"],
@@ -21,7 +12,6 @@ module.exports = withMT({
         fml: "600px",
       },
       colors: {
-        ...brandColors,
         light: {
           base: "#14182D",
           primary: {
@@ -32,7 +22,7 @@ module.exports = withMT({
             500: "#40749B",
             900: "#14182D",
           },
-          secondary: { DEFAULT: "#E7AC5C", 30: "#F4DFAC" },
+          secondary: { DEFAULT: "#E7AC5C", 30: "#F4DFAC", 600: "#73562E" },
           alert: "#FF759A",
           success: "#88F6D7",
           neutral: "#A8A8A8",

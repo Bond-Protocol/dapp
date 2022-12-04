@@ -1,3 +1,4 @@
+import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Modal } from "../../components/molecules/Modal";
 
@@ -9,14 +10,14 @@ export default {
 const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />;
 
 const Background = (Story) => (
-  <div className="bg-brand-texas-rose h-[100vh]">
+  <div className="h-[100vh]">
     <Story />
   </div>
 );
 
 const Children = (
   <div>
-    <p>haiii</p>
+    <p className="text-center">many confirmation, such tx</p>
   </div>
 );
 

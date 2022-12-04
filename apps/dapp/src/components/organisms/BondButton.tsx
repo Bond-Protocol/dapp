@@ -31,7 +31,7 @@ export const BondButton = (props: BondButtonProps) => {
   if (props.showPurchaseLink) {
     return (
       <Link
-        className="color-black hover:color-black mx-auto mt-4 flex w-full justify-center rounded-lg bg-brand-yella px-5 py-3 font-faketion font-extrabold font-bold text-black hover:bg-white hover:text-black"
+        className="color-black hover:color-black font-faketion mx-auto mt-4 flex w-full justify-center rounded-lg bg-light-secondary px-5 py-3 font-extrabold font-bold text-black hover:bg-white hover:text-black"
         href={props.purchaseLink}
         target="_blank"
         rel="noopener noreferrer"

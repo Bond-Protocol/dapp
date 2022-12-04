@@ -1,25 +1,29 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { ActionInfo } from "../../components/atoms/ActionInfo";
-import logo from "../../assets/icon-logo.png";
+import { Chip } from "../../components/atoms/Chip";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Atoms/ActionInfo",
-  component: ActionInfo,
+  title: "Components/Atoms/Chip",
+  component: Chip,
   argTypes: {},
-  args: {
-    leftLabel: "Label",
-    rightLabel: "Label",
-  },
-} as ComponentMeta<typeof ActionInfo>;
+} as ComponentMeta<typeof Chip>;
 
-const Template: ComponentStory<typeof ActionInfo> = (args) => (
-  <ActionInfo {...args} />
+const values = ["25%", "50%", "75%", "MAX"];
+
+const Template: ComponentStory<typeof Chip> = (args) => <Chip {...args} />;
+
+const Multi: ComponentStory<typeof Chip> = (args) => (
+  <div className="child:mx-1">
+    {values.map((v) => (
+      <Chip>{v}</Chip>
+    ))}
+  </div>
 );
 
 export const Primary = Template.bind({});
 Primary.args = {
-  tooltip: "im a tooltip",
-  link: "null",
+  children: "33%",
 };
+
+export const Multiple = Multi.bind({});

@@ -1,5 +1,6 @@
 import { add, format, isFuture, isBefore } from "date-fns";
 import { useState } from "react";
+import { Chip } from "ui";
 import { LineChart, generateTicks } from "components/organisms/LineChart";
 import { useBondChartData } from "hooks/useBondChartData";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
@@ -79,12 +80,14 @@ export const BondDiscountChart = ({
       />
       <div className="mt-1 flex justify-end gap-2 text-xs">
         {allRanges.map((element) => (
-          <button
-            className={`bond-chip ${days === element && "border-white/40"}`}
+          <Chip
+            className={`bond-chip ${
+              days === element ? "border-white/90" : "text-white/50"
+            }`}
             onClick={() => setDays(element)}
           >
             {element + "D"}
-          </button>
+          </Chip>
         ))}
       </div>
     </div>
