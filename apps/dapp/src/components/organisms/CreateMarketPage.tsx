@@ -93,7 +93,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     name: "marketOwnerAddress",
   });
 
-  const payoutTokenAddress = useWatch({
+  const payoutToken = useWatch({
     control,
     name: "payoutToken",
     defaultValue: props.initialValues?.payoutToken || {
@@ -102,7 +102,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     },
   });
 
-  const quoteTokenAddress = useWatch({
+  const quoteToken = useWatch({
     control,
     name: "quoteToken",
     defaultValue: props.initialValues?.quoteToken || {
@@ -124,7 +124,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const minExchangeRate = useWatch({
     control,
     name: "minExchangeRate",
-    defaultValue: minimumExchangeRate,
   });
 
   const payoutTokenPrice = useWatch({
@@ -181,15 +180,15 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   useEffect(() => {
     setShowTokenWarning(
-      (ethers.utils.isAddress(payoutTokenAddress.address) &&
+      (ethers.utils.isAddress(payoutToken.address) &&
         libraryPayoutToken === undefined) ||
-      (ethers.utils.isAddress(quoteTokenAddress.address) &&
+      (ethers.utils.isAddress(quoteToken.address) &&
         libraryQuoteToken === undefined)
     );
   }, [
-    payoutTokenAddress,
+    payoutToken,
     libraryPayoutToken,
-    quoteTokenAddress,
+    quoteToken,
     libraryQuoteToken,
   ]);
 
@@ -562,22 +561,17 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   };
 
   useEffect(() => {
-    if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(payoutTokenAddress.address)) {
-      void getTokenInfo(payoutTokenAddress.address, true);
+    if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(payoutToken.address)) {
+      void getTokenInfo(payoutToken.address, true);
     }
-  }, [payoutTokenAddress.address, selectedChain, currentPrices]);
+  }, [payoutToken.address, selectedChain, currentPrices]);
 
   useEffect(() => {
-    if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(quoteTokenAddress.address)) {
-      void getTokenInfo(quoteTokenAddress.address, false);
+    if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(quoteToken.address)) {
+      void getTokenInfo(quoteToken.address, false);
     }
-  }, [quoteTokenAddress.address, selectedChain, currentPrices]);
-  /*
-    useEffect(() => {
-      setQuotePriceInitialized(false);
-      void getTokenInfo(quoteTokenAddress.address, false);
-    }, [quoteTokenAddress.address]);
-  */
+  }, [quoteToken.address, selectedChain, currentPrices]);
+
   return (
     <div className="my-8">
       <div className="mx-[15vw]">
