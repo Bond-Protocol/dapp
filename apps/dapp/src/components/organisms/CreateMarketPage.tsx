@@ -1,28 +1,14 @@
-import { useEffect, useState } from "react";
-import { Controller, useForm, useWatch } from "react-hook-form";
+import {useEffect, useState} from "react";
+import {Controller, useForm, useWatch} from "react-hook-form";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { BOND_TYPE } from "@bond-protocol/contract-library";
+import {BOND_TYPE, calculateTrimDigits, trim, trimAsNumber} from "@bond-protocol/contract-library";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
-import { providers } from "services/owned-providers";
-import { ethers } from "ethers";
-import {
-  Button,
-  FlatSelect,
-  Input,
-  Accordion,
-  SummaryCard,
-  DatePicker,
-  TermPicker,
-  ChainPicker,
-} from "ui";
-import { useTokens } from "hooks";
-import {
-  calculateTrimDigits,
-  trim,
-  trimAsNumber,
-} from "@bond-protocol/contract-library";
-import { TokenPickerCard } from "./TokenPickerCard";
+import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
+import {providers} from "services/owned-providers";
+import {ethers} from "ethers";
+import {Accordion, Button, ChainPicker, DatePicker, FlatSelect, Input, SummaryCard, TermPicker,} from "ui";
+import {useTokens} from "hooks";
+import {TokenPickerCard} from "./TokenPickerCard";
 
 const vestingOptions = [
   { label: "FIXED EXPIRY", value: 0 },
@@ -60,16 +46,16 @@ export type CreateMarketPageProps = {
 };
 
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
-  const { getPrice } = useTokens();
+  const { currentPrices, getPrice } = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] = useState<TokenInfo>();
   const [quoteTokenInfo, setQuoteTokenInfo] = useState<TokenInfo>();
 
   const [libraryPayoutToken, setLibraryPayoutToken] = useState<
     bondLibrary.Token | undefined
-  >(undefined);
+    >(undefined);
   const [libraryQuoteToken, setLibraryQuoteToken] = useState<
     bondLibrary.Token | undefined
-  >(undefined);
+    >(undefined);
   const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
   const [protocol, setProtocol] = useState<Protocol | null>(null);
@@ -86,8 +72,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const [exchangeRateString, setExchangeRateString] = useState("");
   const [minExchangeRateString, setMinExchangeRateString] = useState("");
   const [estimatedBondCadence, setEstimatedBondCadence] = useState("");
-  const [payoutPriceInitialized, setPayoutPriceInitialized] = useState(false);
-  const [quotePriceInitialized, setQuotePriceInitialized] = useState(false);
 
   const {
     control,
@@ -146,13 +130,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const payoutTokenPrice = useWatch({
     control,
     name: "payoutTokenPrice",
-    defaultValue: payoutTokenInfo?.price,
   });
 
   const quoteTokenPrice = useWatch({
     control,
     name: "quoteTokenPrice",
-    defaultValue: quoteTokenInfo?.price,
   });
 
   const marketExpiry = useWatch({
@@ -201,8 +183,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     setShowTokenWarning(
       (ethers.utils.isAddress(payoutTokenAddress.address) &&
         libraryPayoutToken === undefined) ||
-        (ethers.utils.isAddress(quoteTokenAddress.address) &&
-          libraryQuoteToken === undefined)
+      (ethers.utils.isAddress(quoteTokenAddress.address) &&
+        libraryQuoteToken === undefined)
     );
   }, [
     payoutTokenAddress,
@@ -525,20 +507,6 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const token: any = bondLibrary.getToken((selectedChain.id || selectedChain) + "_" + address);
     if (token) token.id = (selectedChain.id || selectedChain) + "_" + address;
 
-    if (isPayout) {
-      setLibraryPayoutToken(token);
-      if (!payoutPriceInitialized) {
-        setValue("payoutTokenPrice", token.price);
-        setPayoutPriceInitialized(true);
-      }
-    } else {
-      setLibraryQuoteToken(token);
-      if (!quotePriceInitialized) {
-        setValue("quoteTokenPrice", token.price);
-        setQuotePriceInitialized(true);
-      }
-    }
-
     const contract = contractLibrary.IERC20__factory.connect(
       address,
       providers[selectedChain.id || selectedChain]
@@ -561,6 +529,14 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
           maximumFractionDigits: digits,
           minimumFractionDigits: digits,
         }).format(price);
+      }
+
+      if (isPayout) {
+        setLibraryPayoutToken(token);
+        setValue("payoutTokenPrice", price);
+      } else {
+        setLibraryQuoteToken(token);
+        setValue("quoteTokenPrice", price);
       }
 
       const blockExplorerName: string =
@@ -586,21 +562,22 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   };
 
   useEffect(() => {
-    if (ethers.utils.isAddress(payoutTokenAddress.address)) {
+    if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(payoutTokenAddress.address)) {
       void getTokenInfo(payoutTokenAddress.address, true);
-    } else {
-      setPayoutTokenInfo(undefined);
     }
-  }, [payoutTokenAddress, selectedChain]);
+  }, [payoutTokenAddress.address, selectedChain, currentPrices]);
 
   useEffect(() => {
-    if (ethers.utils.isAddress(quoteTokenAddress.address)) {
+    if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(quoteTokenAddress.address)) {
       void getTokenInfo(quoteTokenAddress.address, false);
-    } else {
-      setQuoteTokenInfo(undefined);
     }
-  }, [quoteTokenAddress, selectedChain]);
-
+  }, [quoteTokenAddress.address, selectedChain, currentPrices]);
+  /*
+    useEffect(() => {
+      setQuotePriceInitialized(false);
+      void getTokenInfo(quoteTokenAddress.address, false);
+    }, [quoteTokenAddress.address]);
+  */
   return (
     <div className="my-8">
       <div className="mx-[15vw]">
