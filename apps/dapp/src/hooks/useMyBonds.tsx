@@ -6,9 +6,11 @@ import {
   BondToken,
   OwnerBalance,
   useGetOwnerBalancesByOwnerArbitrumGoerliQuery,
+  useGetOwnerBalancesByOwnerArbitrumMainnetQuery,
   useGetOwnerBalancesByOwnerGoerliQuery,
   useGetOwnerBalancesByOwnerMainnetQuery,
   useListErc20BondTokensArbitrumGoerliQuery,
+  useListErc20BondTokensArbitrumMainnetQuery,
   useListErc20BondTokensGoerliQuery,
   useListErc20BondTokensMainnetQuery,
 } from "../generated/graphql";
@@ -51,6 +53,15 @@ export function useMyBonds() {
     {owner: address || ""},
     {enabled: !!testnet}
   );
+  const {
+    data: arbitrumMainnetData,
+    refetch: arbitrumMainnetRefetch,
+    ...arbitrumMainnetQuery
+  } = useGetOwnerBalancesByOwnerArbitrumMainnetQuery(
+    {endpoint: endpoints[2]},
+    {owner: address || ""},
+    {enabled: !testnet}
+  );
 
   const {
     data: arbitrumGoerliData,
@@ -65,7 +76,7 @@ export function useMyBonds() {
   const {
     data: mainnetErc20Data,
     refetch: mainnetErc20Refetch,
-    ...mainERC20Query
+    ...mainnetErc20Query
   } = useListErc20BondTokensMainnetQuery(
     {endpoint: endpoints[0]},
     // @ts-ignore
@@ -75,7 +86,7 @@ export function useMyBonds() {
   const {
     data: goerliErc20Data,
     refetch: goerliErc20Refetch,
-    ...goerliERC20Query
+    ...goerliErc20Query
   } = useListErc20BondTokensGoerliQuery(
     {endpoint: endpoints[1]},
     // @ts-ignore
@@ -83,9 +94,19 @@ export function useMyBonds() {
   );
 
   const {
+    data: arbitrumMainnetErc20Data,
+    refetch: arbitrumMainnetErc20Refetch,
+    ...arbitrumMainnetErc20Query
+  } = useListErc20BondTokensArbitrumMainnetQuery(
+    {endpoint: endpoints[2]},
+    // @ts-ignore
+    {enabled: !testnet}
+  );
+
+  const {
     data: arbitrumGoerliErc20Data,
     refetch: arbitrumGoerliErc20Refetch,
-    ...arbitrumGoerliERC20Query
+    ...arbitrumGoerliErc20Query
   } = useListErc20BondTokensArbitrumGoerliQuery(
     {endpoint: endpoints[3]},
     // @ts-ignore
@@ -105,6 +126,10 @@ export function useMyBonds() {
     } else {
       void mainnetRefetch().then(() => setRefetchRequest(refetchRequest + 1));
       void mainnetErc20Refetch().then(() =>
+        setRefetchRequest(refetchRequest + 1)
+      );
+      void arbitrumMainnetRefetch().then(() => setRefetchRequest(refetchRequest + 1));
+      void arbitrumMainnetErc20Refetch().then(() =>
         setRefetchRequest(refetchRequest + 1)
       );
     }
@@ -149,12 +174,14 @@ export function useMyBonds() {
    */
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.ownerBalances) {
-      const allTokens = mainnetData.ownerBalances;
+    if (mainnetData && mainnetData.ownerBalances && arbitrumMainnetData && arbitrumMainnetData.ownerBalances) {
+      const allTokens =
+        mainnetData.ownerBalances
+          .concat(arbitrumMainnetData.ownerBalances);
       // @ts-ignore
       setMainnetBonds(allTokens);
     }
-  }, [mainnetData, refetchRequest, testnet]);
+  }, [mainnetData, arbitrumMainnetData, refetchRequest, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
@@ -197,12 +224,14 @@ export function useMyBonds() {
    */
   useEffect(() => {
     if (testnet) return;
-    if (mainnetErc20Data) {
-      const bondTokens = mainnetErc20Data.bondTokens;
+    if (mainnetErc20Data && arbitrumMainnetErc20Data) {
+      const bondTokens =
+        mainnetErc20Data.bondTokens
+          .concat(arbitrumMainnetErc20Data.bondTokens);
       // @ts-ignore
       getBalances(bondTokens);
     }
-  }, [address, mainnetErc20Data, testnet]);
+  }, [address, mainnetErc20Data, arbitrumMainnetErc20Data, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
@@ -217,10 +246,13 @@ export function useMyBonds() {
 
   const isLoading = testnet
     ? (
-      goerliQuery.isLoading || goerliERC20Query.isLoading ||
-      arbitrumGoerliQuery.isLoading || arbitrumGoerliERC20Query.isLoading
+      goerliQuery.isLoading || goerliErc20Query.isLoading ||
+      arbitrumGoerliQuery.isLoading || arbitrumGoerliErc20Query.isLoading
     )
-    : mainnetQuery.isLoading || mainERC20Query.isLoading;
+    : (
+      mainnetQuery.isLoading || mainnetErc20Query.isLoading ||
+      arbitrumMainnetQuery.isLoading || arbitrumMainnetErc20Query.isLoading
+    );
 
   /*
   myBonds: An array of bonds owned by the currently connected wallet

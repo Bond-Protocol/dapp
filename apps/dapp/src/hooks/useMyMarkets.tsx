@@ -1,6 +1,8 @@
 import { getSubgraphEndpoints } from "services/subgraph-endpoints";
 import {
-  Market, useListOwnedMarketsArbitrumGoerliQuery,
+  Market,
+  useListOwnedMarketsArbitrumGoerliQuery,
+  useListOwnedMarketsArbitrumMainnetQuery,
   useListOwnedMarketsGoerliQuery,
   useListOwnedMarketsMainnetQuery,
 } from "../generated/graphql";
@@ -31,6 +33,13 @@ export function useMyMarkets() {
     { enabled: !!testnet }
   );
 
+  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
+    useListOwnedMarketsArbitrumMainnetQuery(
+      { endpoint: endpoints[2] },
+      { owner: address || "0x0000000000000000" },
+      { enabled: !testnet }
+    );
+
   const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListOwnedMarketsArbitrumGoerliQuery(
     { endpoint: endpoints[3] },
     { owner: address || "0x0000000000000000" },
@@ -39,12 +48,14 @@ export function useMyMarkets() {
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.markets) {
-      const allMarkets = mainnetData.markets;
+    if (mainnetData && mainnetData.markets && arbitrumMainnetData && arbitrumMainnetData.markets) {
+      const allMarkets =
+        mainnetData.markets
+          .concat(arbitrumMainnetData.markets);
       // @ts-ignore
       setMainnetMarkets(allMarkets);
     }
-  }, [mainnetData, testnet]);
+  }, [mainnetData, arbitrumMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
@@ -66,8 +77,8 @@ export function useMyMarkets() {
   }, [testnet, mainnetMarkets, testnetMarkets]);
 
   const isLoading = testnet
-    ? goerliQuery.isLoading || arbitrumGoerliQuery.isLoading
-    : mainnetQuery.isLoading;
+    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
+    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
 
   return {
     markets: selectedMarkets,

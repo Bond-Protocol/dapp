@@ -4,6 +4,7 @@ import testnetMode from "../atoms/testnetMode.atom";
 import { useEffect, useState } from "react";
 import {
   useListUniqueBondersArbitrumGoerliQuery,
+  useListUniqueBondersArbitrumMainnetQuery,
   useListUniqueBondersGoerliQuery,
   useListUniqueBondersMainnetQuery,
 } from "../generated/graphql";
@@ -23,22 +24,28 @@ export function useUniqueBonders() {
     new Map<string, number>()
   );
 
-  const { data: mainnetData } = useListUniqueBondersMainnetQuery({
+  const { data: mainnetData, ...mainnetQuery } = useListUniqueBondersMainnetQuery({
     endpoint: endpoints[0],
   });
 
-  const { data: goerliData } = useListUniqueBondersGoerliQuery({
+  const { data: goerliData, ...goerliQuery } = useListUniqueBondersGoerliQuery({
     endpoint: endpoints[1],
   });
 
-  const { data: arbitrumGoerliData } = useListUniqueBondersArbitrumGoerliQuery({
+  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } = useListUniqueBondersArbitrumMainnetQuery({
+    endpoint: endpoints[2],
+  });
+
+  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListUniqueBondersArbitrumGoerliQuery({
     endpoint: endpoints[3],
   });
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.uniqueBonders) {
-      const allBonders = mainnetData.uniqueBonders;
+    if (mainnetData && mainnetData.uniqueBonders && arbitrumMainnetData && arbitrumMainnetData.uniqueBonders) {
+      const allBonders =
+        mainnetData.uniqueBonders
+          .concat(arbitrumMainnetData.uniqueBonders);
       const bonderMap = new Map();
 
       allBonders.forEach((bonder) => {
@@ -53,7 +60,7 @@ export function useUniqueBonders() {
 
       setMainnetBonders(bonderMap);
     }
-  }, [mainnetData, testnet]);
+  }, [mainnetData, arbitrumMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
@@ -98,8 +105,13 @@ export function useUniqueBonders() {
     return count;
   }
 
+  const isLoading = testnet
+    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
+    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+
   return {
     bonders: selectedBonders,
     getBondersForProtocol: (name: string) => getBondersForProtocol(name),
+    isLoading,
   };
 }

@@ -3,9 +3,11 @@ import { calcLpPrice, LpPair } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { getSubgraphEndpoints } from "services/subgraph-endpoints";
 import {
-  Token, useListTokensArbitrumGoerliQuery,
+  Token,
   useListTokensGoerliQuery,
   useListTokensMainnetQuery,
+  useListTokensArbitrumMainnetQuery,
+  useListTokensArbitrumGoerliQuery
 } from "../generated/graphql";
 import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
@@ -66,6 +68,11 @@ export const useTokens = () => {
     endpoint: endpoints[1],
     // @ts-ignore
     enabled: !!testnet,
+  });
+  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } = useListTokensArbitrumMainnetQuery({
+    endpoint: endpoints[2],
+    // @ts-ignore
+    enabled: !testnet,
   });
 
   const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListTokensArbitrumGoerliQuery({
@@ -263,12 +270,14 @@ export const useTokens = () => {
    */
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.tokens) {
-      const allTokens = mainnetData.tokens;
+    if (mainnetData && mainnetData.tokens && arbitrumMainnetData && arbitrumMainnetData.tokens) {
+      const allTokens =
+        mainnetData.tokens
+          .concat(arbitrumMainnetData.tokens);
       // @ts-ignore
       setMainnetTokens(allTokens);
     }
-  }, [mainnetData, testnet]);
+  }, [mainnetData, arbitrumMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
@@ -357,7 +366,7 @@ export const useTokens = () => {
 
   const isLoading = testnet
     ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
-    : mainnetQuery.isLoading;
+    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
 
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
