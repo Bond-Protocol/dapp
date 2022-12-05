@@ -169,7 +169,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   useEffect(() => {
     if (marketOwnerAddress) {
-      const protocol = getProtocolByAddress(marketOwnerAddress, selectedChain.id || selectedChain);
+      const protocol = getProtocolByAddress(marketOwnerAddress, selectedChain?.id || selectedChain);
       setProtocol(protocol);
       setShowOwnerWarning(protocol === null);
     } else {
