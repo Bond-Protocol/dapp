@@ -17,7 +17,10 @@ const Background = (Story) => (
 
 const Children = (
   <div>
-    <p className="text-center">many confirmation, such tx</p>
+    <p className="h-8 text-center">many confirmation, such tx</p>
+    <p className="h-8 text-center">many confirmation, such tx</p>
+    <p className="h-8 text-center">many confirmation, such tx</p>
+    <p className="h-8 text-center">many confirmation, such tx</p>
   </div>
 );
 
@@ -26,7 +29,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   open: true,
   children: Children,
-  title: "Transaction",
+  title: "Transaction Confirmation",
 };
 
 export const OverElements = Primary;

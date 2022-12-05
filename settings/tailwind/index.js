@@ -14,6 +14,7 @@ module.exports = withMT({
       colors: {
         light: {
           base: "#14182D",
+          black: "#090B15",
           primary: {
             DEFAULT: "#40749B",
             50: "#9DBBC4",
@@ -31,9 +32,9 @@ module.exports = withMT({
         },
       },
       fontFamily: {
-        jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
         sans: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
         mono: ["PPFraktionMono", ...defaultTheme.fontFamily.mono],
+        jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
         fraktion: ["PPFraktionSans", ...defaultTheme.fontFamily.sans],
       },
       opacity: {
