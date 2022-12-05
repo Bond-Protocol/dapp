@@ -55,7 +55,7 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
       return {
         value: market.maxPayout,
         subtext: usdFormatter.format(market.maxPayoutUsd),
-        sortValue: market.maxPayoutUsd,
+        sortValue: market.maxPayoutUsd.toString(),
       };
     },
   },
