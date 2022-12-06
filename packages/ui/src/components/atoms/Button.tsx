@@ -28,14 +28,14 @@ const styles = {
   variant: {
     primary: {
       base: "bg-light-secondary text-light-base border-light-secondary",
-      hover: "hover:bg-white hover:border-white",
+      hover: "hover:bg-light-secondary-10 hover:border-light-secondary-10",
       disabled:
         "disabled:bg-light-secondary-600 disabled:border-light-secondary-600 disabled:cursor-not-allowed",
-      active: "active:bg-white active:border-white",
+      active: "active:bg-light-secondary-10 active:border-light-secondary-10",
     },
     secondary: {
-      base: "text-white border border-light-secondary",
-      hover: "hover:border-white hover:text-light-secondary",
+      base: "text-light-secondary border border-light-secondary-10",
+      hover: "hover:border-light-secondary hover:text-light-secondary-10",
       disabled:
         "disabled:bg-none disabled:border-light-secondary-600 disabled:text-grey-500 disabled:cursor-not-allowed",
       active:
@@ -72,7 +72,7 @@ export const Button = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `select-none uppercase outline-none font-bold tracking-widest border rounded transition-all duration-300 ${style} ${props.className}`,
+          className: `select-none uppercase outline-none font-mono font-bold tracking-widest border rounded transition-all duration-300 ${style} ${props.className}`,
         }),
       }}
     />

@@ -1,4 +1,4 @@
-import { ModalTitle, Link } from "ui";
+import { ModalTitle, Link } from "components/atoms";
 
 export type TransactionHashDialogProps = {
   hash: string;
@@ -14,7 +14,7 @@ export const TransactionHashDialog = (props: TransactionHashDialogProps) => {
       <div className="flex justify-center ">
         <Link
           href={`${props.blockExplorerUrl}${props.hash}`}
-          className="fill-light-secondary font-faketion text-xs uppercase text-light-secondary hover:fill-white hover:text-white"
+          className="font-faketion fill-light-secondary text-xs uppercase text-light-secondary hover:fill-white hover:text-white"
           target="_blank"
           rel="noopener noreferrer"
         >

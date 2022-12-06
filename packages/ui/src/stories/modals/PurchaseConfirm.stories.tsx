@@ -1,26 +1,27 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Modal } from "../../components/molecules/Modal";
-import { PurchaseConfirmDialog } from "../../components/modals/PurchaseConfirmDialog";
+import { PurchaseConfirmDialog } from "../../components/modals";
+
+import { ModalDecorator } from "../decorators";
 
 export default {
   title: "Components/Modals/PurchaseConfirm",
-  component: Modal,
+  component: PurchaseConfirmDialog,
+  decorators: [ModalDecorator],
 } as ComponentMeta<typeof Modal>;
 
-const Template: ComponentStory<any> = ({ title, ...args }) => (
-  <Modal title={title} open={true} onClickClose={() => {}}>
-    <PurchaseConfirmDialog {...args} />
-  </Modal>
+const Template: ComponentStory<typeof PurchaseConfirmDialog> = (args) => (
+  <PurchaseConfirmDialog {...args} />
 );
 
 export const Primary = Template.bind({});
 
 Primary.args = {
   title: "Transaction Confirmation",
-  issuer: "Bond Protocol",
-  amount: "$333,333",
+  issuer: "OlympusDAO",
+  amount: "333,333 DAI",
   payout: "333 GOHM",
-  vestingTime: "2022-12-31",
+  vestingTime: "12 months",
   contract: "0x12312312312312312312312311414",
 };

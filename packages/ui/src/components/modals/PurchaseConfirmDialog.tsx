@@ -1,4 +1,5 @@
-import { Button } from "ui";
+import { ButtonGroup } from "components/molecules/ButtonGroup";
+import { Link } from "components/atoms";
 
 export type PurchaseConfirmDialogProps = {
   issuer?: string;
@@ -15,6 +16,7 @@ export const PurchaseConfirmDialog = ({
   vestingTime = "?",
   amount = "0",
   payout = "0",
+  contract = "",
   onCancel,
   onSubmit,
 }: PurchaseConfirmDialogProps) => {
@@ -35,17 +37,25 @@ export const PurchaseConfirmDialog = ({
           </div>
         </div>
         <div>The vesting period lasts {vestingTime} </div>
-        <p className="text-light-secondary-30 mt-8 text-xs">
+        <p className="text-light-secondary-30 mt-2 text-xs">
           {"This transaction can not be undone"}
         </p>
       </div>
-      <div className="mt-10 flex h-[40px] justify-between gap-2">
-        <Button variant="secondary" className="w-1/2" onClick={onCancel}>
-          {"Cancel"}
-        </Button>
-        <Button thin className="w-1/2" onClick={onSubmit}>
-          {"Confirm Bond"}
-        </Button>
+      <ButtonGroup
+        className="mt-10"
+        leftLabel="Cancel"
+        rightLabel="Confirm Bond"
+        onClickLeft={onCancel}
+        onClickRight={onSubmit}
+      />
+
+      <div className="mx-auto mt-1 flex w-full justify-center">
+        <Link
+          className="text-light-secondary mx-auto mt-4 font-mono uppercase"
+          href={contract}
+        >
+          View Bond Contract
+        </Link>
       </div>
     </div>
   );

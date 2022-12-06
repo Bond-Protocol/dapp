@@ -1,4 +1,4 @@
-import { Button, ModalTitle } from "ui";
+import { ButtonGroup } from "components/molecules/ButtonGroup";
 
 export type PurchaseSuccessDialogProps = {
   issuer?: string;
@@ -9,21 +9,14 @@ export type PurchaseSuccessDialogProps = {
 export const PurchaseSuccessDialog = (props: PurchaseSuccessDialogProps) => {
   return (
     <div className="text-center">
-      <ModalTitle>Transaction Done!</ModalTitle>
-      <p className="mt-5">Thanks for bonding at</p>
-      <p>{props.issuer}</p>
+      <p className="mt-5">Thanks for bonding at {props.issuer}</p>
       <div className="mt-8 flex h-[40px] justify-between gap-2">
-        <Button
-          onClick={props.goToMarkets}
-          variant="secondary"
-          long
-          className="w-1/2 px-0"
-        >
-          Go to Markets
-        </Button>
-        <Button onClick={props.goToBondDetails} long className="w-1/2 px-0">
-          View My Bond
-        </Button>
+        <ButtonGroup
+          leftLabel="View Mktplace"
+          rightLabel="View My Bond"
+          onClickLeft={props.goToMarkets}
+          onClickRight={props.goToBondDetails}
+        />
       </div>
     </div>
   );

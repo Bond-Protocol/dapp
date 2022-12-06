@@ -67,7 +67,9 @@ export const Modal = ({ title, ...props }: ModalProps) => {
               topLeftContent={title}
               onClickClose={props.onClickClose}
             />
-            <div className="px-5 pb-8 transition-all">{props.children}</div>
+            <div className="text-light-secondary-10 px-5 pb-6 transition-all duration-300">
+              {props.children}
+            </div>
           </div>
         </ModalBackground>
       </ModalBackdrop>

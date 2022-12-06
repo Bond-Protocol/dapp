@@ -1,4 +1,4 @@
-import { ModalTitle, Link } from "ui";
+import { Link } from "components/atoms";
 
 export type TransactionHashDialogProps = {
   hash: string;
@@ -9,12 +9,11 @@ export type TransactionHashDialogProps = {
 export const TransactionHashDialog = (props: TransactionHashDialogProps) => {
   return (
     <div className="text-center">
-      <ModalTitle>{"Transaction Submitted"}</ModalTitle>
-      <p className="my-5">{"Waiting for confirmation..."}</p>
+      <p className="mb-5 mt-2">{"Waiting for confirmation..."}</p>
       <div className="flex justify-center ">
         <Link
           href={`${props.blockExplorerUrl}${props.hash}`}
-          className="fill-light-secondary font-faketion text-xs uppercase text-light-secondary hover:fill-white hover:text-white"
+          className="fill-light-secondary font-fraktion text-light-secondary hover:text-light-secondary-10 text-xs uppercase"
           target="_blank"
           rel="noopener noreferrer"
         >

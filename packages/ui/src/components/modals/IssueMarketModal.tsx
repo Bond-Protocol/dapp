@@ -1,5 +1,5 @@
-import { Modal, ModalProps } from "ui";
-import { CreateMarketConfirmDialog } from "components/modals/index";
+import { Modal, ModalProps } from "components/molecules";
+import { CreateMarketConfirmDialog } from "components/modals";
 
 export type IssueMarketModalProps = Partial<ModalProps> & {
   onAccept: () => void;

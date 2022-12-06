@@ -1,4 +1,4 @@
-import { Button, ModalTitle } from "ui";
+import { ButtonGroup } from "components/molecules/ButtonGroup";
 //import useBrowserStorage from "../../hooks/useBrowserStorage";
 
 const tcLink = (
@@ -33,20 +33,18 @@ export const GeneralTermsDialog = (props: { onAccept: () => void }) => {
 
   return (
     <div className="text-center">
-      <ModalTitle>Terms of Use</ModalTitle>
       <div className="mt-5 px-10">
         {tcTop}
         {tcMid}
         {tcBottom}
       </div>
-      <div className="mt-8 flex h-[40px] justify-between gap-2">
-        <Button onClick={rejectTC} variant="secondary" long className="w-1/2">
-          Decline
-        </Button>
-        <Button onClick={acceptTC} long className="w-1/2">
-          Accept
-        </Button>
-      </div>
+      <ButtonGroup
+        className="mt-4"
+        onClickLeft={rejectTC}
+        leftLabel="Decline"
+        onClickRight={acceptTC}
+        rightLabel="Accept"
+      />
     </div>
   );
 };
