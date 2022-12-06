@@ -167,16 +167,18 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     defaultValue: props.initialValues?.vestingType || 0,
   });
 
+  const chainSelection = selectedChain?.id || selectedChain || "mainnet";
+
   useEffect(() => {
     if (marketOwnerAddress) {
-      const protocol = getProtocolByAddress(marketOwnerAddress, selectedChain?.id || selectedChain);
+      const protocol = getProtocolByAddress(marketOwnerAddress, chainSelection);
       setProtocol(protocol);
       setShowOwnerWarning(protocol === null);
     } else {
       setProtocol(null);
       setShowOwnerWarning(false);
     }
-  }, [marketOwnerAddress, selectedChain]);
+  }, [marketOwnerAddress, chainSelection]);
 
   useEffect(() => {
     setShowTokenWarning(
@@ -452,9 +454,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const formValues = getValues();
     formValues.chain = {
       // @ts-ignore
-      id: bondLibrary.CHAINS.get(selectedChain.id || selectedChain).chainName,
+      id: bondLibrary.CHAINS.get(chainSelection).chainName,
       // @ts-ignore
-      label: bondLibrary.CHAINS.get(selectedChain.id || selectedChain).displayName
+      label: bondLibrary.CHAINS.get(chainSelection).displayName
     }
 
     const params = {
@@ -493,7 +495,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       },
       bondType:
         data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
-      chain: selectedChain.id || selectedChain,
+      chain: chainSelection,
       formValues: formValues,
       payoutToken: payoutTokenInfo,
       quoteToken: quoteTokenInfo,
@@ -503,12 +505,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   };
 
   const getTokenInfo = async (address: string, isPayout: boolean) => {
-    const token: any = bondLibrary.getToken((selectedChain.id || selectedChain) + "_" + address);
-    if (token) token.id = (selectedChain.id || selectedChain) + "_" + address;
+    const token: any = bondLibrary.getToken(chainSelection + "_" + address);
+    if (token) token.id = chainSelection + "_" + address;
 
     const contract = contractLibrary.IERC20__factory.connect(
       address,
-      providers[selectedChain.id || selectedChain]
+      providers[chainSelection]
     );
     try {
       const [name, symbol, decimals] = await Promise.all([
@@ -517,7 +519,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         contract.decimals(),
       ]);
 
-      const price: number = getPrice((selectedChain.id || selectedChain) + "_" + address) || -1;
+      const price: number = getPrice(chainSelection + "_" + address) || -1;
       let formattedPrice = "0";
 
       if (price != -1) {
@@ -539,9 +541,9 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       }
 
       const blockExplorerName: string =
-        bondLibrary.CHAINS.get(selectedChain.id || selectedChain)?.blockExplorerName || "";
+        bondLibrary.CHAINS.get(chainSelection)?.blockExplorerName || "";
       let link: string =
-        bondLibrary.CHAINS.get(selectedChain.id || selectedChain)?.blockExplorerUrls[0] || "";
+        bondLibrary.CHAINS.get(chainSelection)?.blockExplorerUrls[0] || "";
       link = link.replace("#", "address");
       link = link.concat(address);
 
@@ -564,13 +566,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(payoutToken.address)) {
       void getTokenInfo(payoutToken.address, true);
     }
-  }, [payoutToken.address, selectedChain, currentPrices]);
+  }, [payoutToken.address, chainSelection, currentPrices]);
 
   useEffect(() => {
     if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(quoteToken.address)) {
       void getTokenInfo(quoteToken.address, false);
     }
-  }, [quoteToken.address, selectedChain, currentPrices]);
+  }, [quoteToken.address, chainSelection, currentPrices]);
 
   return (
     <div className="my-8">
