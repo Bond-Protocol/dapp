@@ -1,5 +1,5 @@
 import { PROTOCOLS } from "@bond-protocol/bond-library";
-import { InfoLabel, IssuerCard } from "ui";
+import { ActionCard, InfoLabel, IssuerCard } from "ui";
 import { useMarkets } from "hooks";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
@@ -27,8 +27,6 @@ export const IssuerList = () => {
   const uniqueBondooors = testnet
     ? metrics.uniqueBondersTestnet
     : metrics.uniqueBonders;
-
-  console.log({ marketsByIssuer, metrics });
 
   return (
     <>
@@ -69,6 +67,12 @@ export const IssuerList = () => {
           );
         })}
       </div>
+      <ActionCard
+        className="mt-6"
+        title="Do you wanna issue a bond?"
+        leftLabel="Why Bond"
+        rightLabel="Issue a bond"
+      />
     </>
   );
 };

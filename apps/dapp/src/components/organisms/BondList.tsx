@@ -1,4 +1,4 @@
-import { getToken, getTokenByAddress } from "@bond-protocol/bond-library";
+import { getToken } from "@bond-protocol/bond-library";
 import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { formatDistance } from "date-fns";
@@ -72,7 +72,7 @@ export const tableColumns: Array<Column<any>> = [
 export const BondList = (props: any) => {
   return (
     <div>
-      <Table columns={tableColumns} data={props.data} />
+      <Table defaultSort="vesting" columns={tableColumns} data={props.data} />
     </div>
   );
 };

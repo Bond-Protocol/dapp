@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { PROTOCOLS } from "@bond-protocol/bond-library";
 import { MarketList } from "components/organisms/MarketList";
-import { InfoLabel, SocialRow } from "ui";
+import { ActionCard, InfoLabel, SocialRow } from "ui";
 import { useParams } from "react-router-dom";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
@@ -88,6 +88,12 @@ export const IssuerPage: FC = () => {
         </InfoLabel>
       </div>
       <MarketList issuer={protocol?.name} filter={["issuer"]} />
+      <ActionCard
+        className="mt-6"
+        title="Have a question?"
+        leftLabel="Why Bond"
+        rightLabel="Join Discord"
+      />
     </div>
   );
 };

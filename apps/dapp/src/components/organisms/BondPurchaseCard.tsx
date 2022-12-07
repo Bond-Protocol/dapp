@@ -200,7 +200,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
           value={amount}
           balance={balance}
           market={market}
-          className="mt-5"
         />
         <div className="my-1 justify-self-start pt-2 text-xs font-light text-red-500">
           {showOwnerBalanceWarning && (

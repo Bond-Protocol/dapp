@@ -171,5 +171,7 @@ export const MarketList: FC<MarketListProps> = ({
     return <Loading content={meme()} />;
   }
 
-  return <Table columns={columns} data={tableMarkets} />;
+  return (
+    <Table defaultSort="creationDate" columns={columns} data={tableMarkets} />
+  );
 };

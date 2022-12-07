@@ -56,4 +56,5 @@ export const Primary = Base.bind({});
 Primary.args = {
   data,
   columns: cols,
+  defaultSort: "creationDate",
 };

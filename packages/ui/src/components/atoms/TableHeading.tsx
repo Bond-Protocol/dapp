@@ -20,8 +20,6 @@ export const TableHeading = ({
   isSorting,
   ...props
 }: TableHeadingProps) => {
-  const [sorting, setSorting] = useState(false);
-
   return (
     <TableCell
       {...props}
@@ -31,13 +29,6 @@ export const TableHeading = ({
       } w-2 select-none pb-2 pt-1.5 leading-none tracking-wide ${
         props.className
       }`}
-      onClick={(e) => {
-        if (!props.onClick) return;
-
-        setSorting(true);
-        setMarketSort && setMarketSort(props.sortName ? props.sortName : "");
-        props.onClick(e);
-      }}
     >
       {isSorting && (
         <div
@@ -47,7 +38,7 @@ export const TableHeading = ({
           <ArrowDownIcon
             width="16"
             className={`${props.ascending ? "rotate-180" : ""} ${
-              sorting ? "opacity-100" : "opacity-0"
+              isSorting ? "opacity-100" : "opacity-0"
             } mt-[1px] fill-white`}
           />
         </div>

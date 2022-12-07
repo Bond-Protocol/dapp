@@ -111,6 +111,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         Transaction History
       </p>
       <Table
+        defaultSort="time"
         loading={query.isLoading}
         columns={marketTxsHistory}
         data={tableData}
