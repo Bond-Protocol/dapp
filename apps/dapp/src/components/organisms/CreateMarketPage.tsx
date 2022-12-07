@@ -25,6 +25,7 @@ const getCustomCapacityLabel = (quote?: string, payout?: string) => {
 };
 
 const formDefaults = {
+  minExchangeRate: 0,
   capacityToken: 0,
   vestingType: 0,
   bondsPerWeek: 7,
