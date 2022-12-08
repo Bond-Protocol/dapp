@@ -6,9 +6,7 @@ export const PageContainer = ({
   className?: string;
 }) => {
   return (
-    <div
-      className={`min-height-[90vh] z-10 mx-auto max-w-[1440px] ${className}`}
-    >
+    <div className={`z-10 mx-auto h-full max-w-[1440px] ${className}`}>
       {children}
     </div>
   );
