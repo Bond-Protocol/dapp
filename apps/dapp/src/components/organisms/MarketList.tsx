@@ -342,7 +342,9 @@ export const MarketList: FC<MarketListProps> = ({
                         market={market}
                         topRightLabel={"VIEW INSIGHTS"}
                         onClickTopRight={() => {
-                          navigate("/market/" + market.marketId);
+                          navigate(
+                            "/market/" + market.network + "/" + market.marketId
+                          );
                         }}
                       />
                     )

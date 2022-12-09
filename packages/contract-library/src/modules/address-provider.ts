@@ -58,6 +58,7 @@ const addressesByChain: { [key: string]: ContractAddresses } = {
   'goerli': goerliAddresses,
   '42161': arbitrumMainnetAddresses,
   'arbitrum': arbitrumMainnetAddresses,
+  'arbitrum-one': arbitrumMainnetAddresses,
   '421613': arbitrumGoerliAddresses,
   'arbitrum-goerli': arbitrumGoerliAddresses,
   'arbitrumGoerli': arbitrumGoerliAddresses,

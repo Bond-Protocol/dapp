@@ -238,7 +238,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
                 market.currentCapacity,
                 calculateTrimDigits(market.currentCapacity)
               )}
-              &nbsp;{market.payoutToken.symbol}
+              &nbsp;{market.capacityToken}
             </p>
           </InfoLabel>
         </div>

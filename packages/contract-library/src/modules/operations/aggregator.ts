@@ -92,7 +92,7 @@ export async function marketScale(
 
 export async function marketCounter(
   provider: Provider,
-  chainId: string
+  chainId: string,
 ): Promise<BigNumberish> {
   const aggregator = getAggregator(provider, chainId);
 

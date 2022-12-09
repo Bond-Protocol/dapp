@@ -74,6 +74,7 @@ export interface CalculatedMarket {
   formattedShortVesting: string;
   formattedLongVesting: string;
   currentCapacity: number;
+  capacityToken: string;
   owner: string;
   quoteToken: Token | LpToken;
   payoutToken: Token;

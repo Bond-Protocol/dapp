@@ -7,10 +7,13 @@ import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
-  const { id } = useParams();
+  const { id, network } = useParams();
   const navigate = useNavigate();
   const markets = Array.from(allMarkets.values());
-  const market = markets.find(({ marketId }) => marketId === Number(id));
+  const market = markets.find(
+    ({ marketId, network: marketNetwork }) =>
+      marketId === Number(id) && marketNetwork === network
+  );
 
   if (!market) return <div>Unsupported Market</div>;
 

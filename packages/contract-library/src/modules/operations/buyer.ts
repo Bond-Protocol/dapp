@@ -16,20 +16,20 @@ import {
 import {
   Auctioneer__factory,
   CalculatedMarket,
-  ERC1155__factory, FixedExpirationTeller__factory, FixedTermTeller__factory,
+  ERC1155__factory,
+  FixedExpirationTeller__factory,
+  FixedTermTeller__factory,
   IERC20__factory,
   PrecalculatedMarket,
 } from 'types';
 import {
   calcLpPrice,
   calculateTrimDigits,
-  compactVestingPeriod,
   longVestingPeriod,
   trim,
   trimAsNumber,
 } from 'core/utils';
 import { format } from 'date-fns';
-import {getAddresses} from "src/modules";
 
 export async function purchase(
   recipientAddress: string,
@@ -112,16 +112,10 @@ export async function redeem(
   if (tellerAddress) {
     switch (bondType) {
       case BOND_TYPE.FIXED_EXPIRY:
-        console.log("yes")
-        teller = FixedExpirationTeller__factory.connect(
-          tellerAddress,
-          signer,
-        );
+        console.log('yes');
+        teller = FixedExpirationTeller__factory.connect(tellerAddress, signer);
       case BOND_TYPE.FIXED_TERM:
-        teller = FixedTermTeller__factory.connect(
-          tellerAddress,
-          signer,
-        );
+        teller = FixedTermTeller__factory.connect(tellerAddress, signer);
     }
   } else {
     teller = getTellerContract(signer, bondType, chainId);
@@ -236,6 +230,7 @@ export async function calcMarket(
     formattedLongVesting: '',
     formattedShortVesting: '',
     currentCapacity: 0,
+    capacityToken: '',
     owner: market.owner,
     quoteToken: market.quoteToken,
     payoutToken: market.payoutToken,
@@ -264,6 +259,7 @@ export async function calcMarket(
     maxAmountAccepted,
     marketInfo,
     isLive,
+    markets,
     ownerPayoutBalance,
     ownerPayoutAllowance,
   ] = await Promise.all([
@@ -276,6 +272,7 @@ export async function calcMarket(
     ),
     auctioneerContract.getMarketInfoForPurchase(calculatedMarket.marketId),
     auctioneerContract.isLive(calculatedMarket.marketId),
+    auctioneerContract.markets(calculatedMarket.marketId),
     payoutTokenContract.balanceOf(calculatedMarket.owner),
     payoutTokenContract.allowance(
       calculatedMarket.owner,
@@ -340,8 +337,11 @@ export async function calcMarket(
     minimumFractionDigits: digits,
   }).format(calculatedMarket.maxPayoutUsd);
 
+  const decimals = markets.capacityInQuote ? market.quoteToken.decimals : market.payoutToken.decimals;
   calculatedMarket.currentCapacity =
-    Number(currentCapacity) / Math.pow(10, market.payoutToken.decimals);
+    Number(currentCapacity) / Math.pow(10, decimals);
+
+  calculatedMarket.capacityToken = markets.capacityInQuote ? market.quoteToken.symbol : market.payoutToken.symbol;
 
   // @ts-ignore
   if (market.quoteToken.lpPair != undefined && lpType != undefined) {
