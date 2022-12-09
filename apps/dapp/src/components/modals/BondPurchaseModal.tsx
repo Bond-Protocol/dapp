@@ -42,7 +42,9 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    const provider = providers[props.network];
+    const network =
+      props.network === "arbitrum-one" ? "arbitrum" : props.network;
+    const provider = providers[network];
     try {
       const purchaseTx = await props.onSubmit();
       setIndex(1);

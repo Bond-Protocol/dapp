@@ -74,8 +74,8 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
       </div>
       <div className="mt-12 mb-6 flex gap-4 font-jakarta">
         <div className="flex w-1/2 flex-col justify-between ">
-          {/* <BondDiscountChart market={market} /> */}
-          <PlaceholderChart message={"Market Analytics under maintenance"} />
+          <BondDiscountChart market={market} />
+          {/*<PlaceholderChart message={"Market Analytics under maintenance"} />*/}
         </div>
 
         <div className="flex w-1/2 flex-col">
@@ -85,7 +85,11 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
             nativeCurrencyPrice={nativeCurrencyPrice}
             referralAddress={referralAddress}
             issuerName={protocol?.name || "BondProtocol"}
-            provider={providers[market.network === "arbitrum-one" ? "arbitrum" : market.network]}
+            provider={
+              providers[
+                market.network === "arbitrum-one" ? "arbitrum" : market.network
+              ]
+            }
             // @ts-ignore
             signer={signer}
           />
