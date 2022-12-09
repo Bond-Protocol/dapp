@@ -216,7 +216,7 @@ export const useTokens = () => {
       lpTokens.forEach((token) => {
         if (token.value.lpType === undefined) return;
         const split: string[] = token.key.split("_");
-        const network = split[0];
+        let network = split[0];
         const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
 
         //TODO: (aphex) patched this manually due to library fixes, should be made consistent
@@ -312,6 +312,7 @@ export const useTokens = () => {
   }, [testnet, mainnetTokens, testnetTokens]);
 
   function getPrice(id: string): number {
+    id = id.replace("arbitrum-one", "arbitrum");
     const sources = currentPrices[id.toLowerCase()];
     if (!sources) return 0;
     // @ts-ignore
@@ -325,6 +326,7 @@ export const useTokens = () => {
   }
 
   function getTokenDetails(token: any): TokenDetails {
+    token.id = token.id.replace("arbitrum-one", "arbitrum");
     const bondLibraryToken = bondLibrary.TOKENS.get(token.id);
 
     let pair: LpPair;

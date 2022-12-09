@@ -3,6 +3,328 @@
     {
       "inputs": [
         {
+          "internalType": "contract IBondTeller",
+          "name": "teller_",
+          "type": "address"
+        },
+        {
+          "internalType": "contract IBondAggregator",
+          "name": "aggregator_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "guardian_",
+          "type": "address"
+        },
+        {
+          "internalType": "contract Authority",
+          "name": "authority_",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_AmountLessThanMinimum",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_BadExpiry",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_InitialPriceLessThanMin",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_InvalidCallback",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_InvalidParams",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "conclusion_",
+          "type": "uint256"
+        }
+      ],
+      "name": "Auctioneer_MarketConcluded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_MaxPayoutExceeded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_NewMarketsNotAllowed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_NotAuthorized",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_NotEnoughCapacity",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Auctioneer_OnlyMarketOwner",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "contract Authority",
+          "name": "newAuthority",
+          "type": "address"
+        }
+      ],
+      "name": "AuthorityUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "defaultTuneInterval",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "defaultTuneAdjustment",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "minDebtDecayInterval",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "minDepositInterval",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "minMarketDuration",
+          "type": "uint32"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint32",
+          "name": "minDebtBuffer",
+          "type": "uint32"
+        }
+      ],
+      "name": "DefaultsUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "MarketClosed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "payoutToken",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "quoteToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint48",
+          "name": "vesting",
+          "type": "uint48"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "initialPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "MarketCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnerUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "oldControlVariable",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newControlVariable",
+          "type": "uint256"
+        }
+      ],
+      "name": "Tuned",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "adjustments",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "change",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint48",
+          "name": "lastAdjustment",
+          "type": "uint48"
+        },
+        {
+          "internalType": "uint48",
+          "name": "timeToAdjusted",
+          "type": "uint48"
+        },
+        {
+          "internalType": "bool",
+          "name": "active",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "allowNewMarkets",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "authority",
+      "outputs": [
+        {
+          "internalType": "contract Authority",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "callbackAuthorized",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "uint256",
           "name": "id_",
           "type": "uint256"
@@ -46,6 +368,70 @@
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id_",
+          "type": "uint256"
+        }
+      ],
+      "name": "currentControlVariable",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id_",
+          "type": "uint256"
+        }
+      ],
+      "name": "currentDebt",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "defaultTuneAdjustment",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "defaultTuneInterval",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
         }
       ],
       "stateMutability": "view",
@@ -201,6 +587,80 @@
       "inputs": [
         {
           "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "markets",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "internalType": "contract ERC20",
+          "name": "payoutToken",
+          "type": "address"
+        },
+        {
+          "internalType": "contract ERC20",
+          "name": "quoteToken",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "callbackAddr",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "capacityInQuote",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "capacity",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "totalDebt",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "minPrice",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxPayout",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "sold",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "purchased",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "scale",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
           "name": "id_",
           "type": "uint256"
         },
@@ -216,6 +676,154 @@
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "metadata",
+      "outputs": [
+        {
+          "internalType": "uint48",
+          "name": "lastTune",
+          "type": "uint48"
+        },
+        {
+          "internalType": "uint48",
+          "name": "lastDecay",
+          "type": "uint48"
+        },
+        {
+          "internalType": "uint32",
+          "name": "length",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "depositInterval",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "tuneInterval",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "tuneAdjustmentDelay",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "debtDecayInterval",
+          "type": "uint32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tuneIntervalCapacity",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "tuneBelowCapacity",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "lastTuneDebt",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minDebtBuffer",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minDebtDecayInterval",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minDepositInterval",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "minMarketDuration",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "newOwners",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -345,6 +953,19 @@
     {
       "inputs": [
         {
+          "internalType": "contract Authority",
+          "name": "newAuthority",
+          "type": "address"
+        }
+      ],
+      "name": "setAuthority",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "creator_",
           "type": "address"
@@ -390,38 +1011,53 @@
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "setOwner",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "terms",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "controlVariable",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxDebt",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint48",
+          "name": "vesting",
+          "type": "uint48"
+        },
+        {
+          "internalType": "uint48",
+          "name": "conclusion",
+          "type": "uint48"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
     }
-  ],
-  "bytecode": {
-    "object": "0x",
-    "sourceMap": "",
-    "linkReferences": {}
-  },
-  "deployedBytecode": {
-    "object": "0x",
-    "sourceMap": "",
-    "linkReferences": {}
-  },
-  "methodIdentifiers": {
-    "closeMarket(uint256)": "ae418095",
-    "createMarket(bytes)": "53c7f8e0",
-    "currentCapacity(uint256)": "1c063a6c",
-    "getAggregator()": "3ad59dbc",
-    "getMarketInfoForPurchase(uint256)": "acc5570c",
-    "getTeller()": "9787d107",
-    "isInstantSwap(uint256)": "8b098db3",
-    "isLive(uint256)": "27507458",
-    "marketPrice(uint256)": "3adec5a7",
-    "marketScale(uint256)": "946824cd",
-    "maxAmountAccepted(uint256,address)": "c7bf8ca0",
-    "ownerOf(uint256)": "6352211e",
-    "payoutFor(uint256,uint256,address)": "bf48582b",
-    "pullOwnership(uint256)": "10b05317",
-    "purchaseBond(uint256,uint256,uint256)": "e007fa97",
-    "pushOwnership(uint256,address)": "bcf6cde8",
-    "setAllowNewMarkets(bool)": "5f77274e",
-    "setCallbackAuthStatus(address,bool)": "bbbdd95a",
-    "setDefaults(uint32[6])": "bd1f3a5e",
-    "setIntervals(uint256,uint32[3])": "699e17d9"
-  }
+  ]
 }

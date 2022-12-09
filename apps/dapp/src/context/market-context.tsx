@@ -28,7 +28,6 @@ export const useMarkets = () => {
 
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
   const calculatedMarkets = useCalculatedMarkets();
-  console.log({ calculatedMarkets });
 
   return (
     // @ts-ignore

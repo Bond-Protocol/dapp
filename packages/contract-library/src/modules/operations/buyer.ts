@@ -232,6 +232,7 @@ export async function calcMarket(
     formattedLongVesting: '',
     formattedShortVesting: '',
     currentCapacity: 0,
+    capacityToken: '',
     owner: market.owner,
     quoteToken: market.quoteToken,
     payoutToken: market.payoutToken,
@@ -260,6 +261,7 @@ export async function calcMarket(
     maxAmountAccepted,
     marketInfo,
     isLive,
+    markets,
     ownerPayoutBalance,
     ownerPayoutAllowance,
   ] = await Promise.all([
@@ -272,6 +274,7 @@ export async function calcMarket(
     ),
     auctioneerContract.getMarketInfoForPurchase(calculatedMarket.marketId),
     auctioneerContract.isLive(calculatedMarket.marketId),
+    auctioneerContract.markets(calculatedMarket.marketId),
     payoutTokenContract.balanceOf(calculatedMarket.owner),
     payoutTokenContract.allowance(
       calculatedMarket.owner,
@@ -336,8 +339,11 @@ export async function calcMarket(
     minimumFractionDigits: digits,
   }).format(calculatedMarket.maxPayoutUsd);
 
+  const decimals = markets.capacityInQuote ? market.quoteToken.decimals : market.payoutToken.decimals;
   calculatedMarket.currentCapacity =
-    Number(currentCapacity) / Math.pow(10, market.payoutToken.decimals);
+    Number(currentCapacity) / Math.pow(10, decimals);
+
+  calculatedMarket.capacityToken = markets.capacityInQuote ? market.quoteToken.symbol : market.payoutToken.symbol;
 
   // @ts-ignore
   if (market.quoteToken.lpPair != undefined && lpType != undefined) {

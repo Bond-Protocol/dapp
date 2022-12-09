@@ -67,6 +67,9 @@ export function useCalculatedMarkets() {
     const quoteToken = getTokenDetails(market.quoteToken);
     const payoutToken = getTokenDetails(market.payoutToken);
 
+    getPrice(quoteToken.id)
+    getPrice(payoutToken.id)
+
     const lpPair = quoteToken.lpPair;
     if (lpPair != undefined) {
       lpPair.token0.price = getPrice(lpPair.token0.id);
@@ -153,7 +156,6 @@ export function useCalculatedMarkets() {
     void market?.refetch();
   };
 
-  console.log({ calculatedMarkets });
   const refetchAllMarkets = () => {
     calculateAllMarkets.forEach((result) => result.refetch());
   };
@@ -177,12 +179,6 @@ export function useCalculatedMarkets() {
               : result.data.network;
 
           const protocol = getProtocolByAddress(result.data.owner, network);
-
-          console.log({
-            protocol,
-            owner: result.data.owner,
-            network: result.data.network,
-          });
 
           const id = protocol?.id;
           const value = issuerMarkets.get(protocol?.id) || [];
