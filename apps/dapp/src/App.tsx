@@ -1,13 +1,15 @@
 import { FC, useState } from "react";
 import { Providers } from "context/app-providers";
-import { Footer, Navbar } from "components/organisms";
 import { PageContainer, AppBackground } from "ui";
-import { InformationArea } from "components/pages/InformationArea";
-import { CoverUpScreen } from "components/pages/CoverUpScreen";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
-import { MobileCover } from "components/utility/MobileCover";
-import { AppStatusCard } from "components/organisms/AppStatusCard";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
+import {
+  AppStatusCard,
+  CoverUpScreen,
+  InformationArea,
+  Footer,
+  MobileCover,
+  Navbar,
+} from "components";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 

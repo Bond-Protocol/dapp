@@ -2,10 +2,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
 import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
-import { PageHeader } from "components/atoms/PageHeader";
+import { PageHeader, PageNavigation } from "components/common";
 import { InfoLabel, getTokenDetails, Loading } from "ui";
-import { TransactionHistory } from "components/organisms/TransactionHistory";
-import { PageNavigation } from "components/atoms";
+import { TransactionHistory } from "components/lists";
 import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
 

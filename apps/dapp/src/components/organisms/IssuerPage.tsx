@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
-import { PROTOCOLS } from "@bond-protocol/bond-library";
-import { MarketList } from "components/organisms/MarketList";
-import { ActionCard, InfoLabel, SocialRow } from "ui";
 import { useParams } from "react-router-dom";
+import { ActionCard, InfoLabel, SocialRow } from "ui";
+import { PROTOCOLS } from "@bond-protocol/bond-library";
+import { MarketList } from "components/lists";
+import { PageHeader, PageNavigation } from "components/common";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
-import { PageNavigation } from "components/atoms";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -39,17 +39,12 @@ export const IssuerPage: FC = () => {
         link={protocol?.links.homepage}
         rightText="Visit Website"
       />
-      <div className="mt-5 flex flex-col">
-        <div className="flex flex-row ">
-          <img
-            className="my-auto mr-4 h-[64px] w-[64px] rounded-full"
-            src={logo()}
-          />
-          <p className="my-auto font-fraktion text-[64px] font-bold leading-none">
-            {protocol?.name || placeholderProtocol.name}
-          </p>
-        </div>
-
+      <PageHeader
+        className="mt-4"
+        icon={logo()}
+        title={protocol?.name || placeholderProtocol.name}
+      />
+      <div className="flex flex-col">
         {protocol && (
           <>
             <SocialRow
@@ -61,7 +56,9 @@ export const IssuerPage: FC = () => {
         )}
 
         <div className="mt-5">
-          <p>{protocol?.description || placeholderProtocol.description}</p>
+          <p className="text-neutral-400 ">
+            {protocol?.description || placeholderProtocol.description}
+          </p>
         </div>
       </div>
 

@@ -98,15 +98,19 @@ export interface TableBodyProps {
 export const TableBody = ({ rows, columns }: TableBodyProps) => {
   return (
     <tbody>
-      {rows?.map((field) => {
+      {rows?.map((row) => {
         return (
-          <tr className="child:pl-5 border-white/15 h-20 border-b">
+          <tr
+            className={`child:pl-5 border-white/15 h-20 border-b hover:cursor-pointer hover:bg-white/5`}
+            //@ts-ignore
+            onClick={row.onClick}
+          >
             {columns.map(({ accessor, alignEnd, Component }) => (
               <TableCell alignEnd={alignEnd}>
                 {Component ? (
-                  <Component {...field[accessor]} />
+                  <Component {...row[accessor]} />
                 ) : (
-                  <Label {...field[accessor]} />
+                  <Label {...row[accessor]} />
                 )}
               </TableCell>
             ))}

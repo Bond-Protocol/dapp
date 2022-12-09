@@ -1,4 +1,4 @@
-import { ConnectButton } from "../organisms/ConnectButton";
+import { ConnectButton } from "components/common";
 import { ProtocolLogo } from "ui";
 import { ReactComponent as HamburgerIcon } from "../../assets/icons/hamburger-icon.svg";
 import { useTestnet } from "hooks/useTestnet";

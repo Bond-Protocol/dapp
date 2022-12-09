@@ -6,7 +6,6 @@ import {
   OwnerBalance,
   useListBondPurchasesByAddressQuery,
 } from "src/generated/graphql";
-import { useEffect, useRef, useState } from "react";
 import { providers } from "services/owned-providers";
 import { TokenDetails, useTokens } from "hooks";
 import { useNavigate } from "react-router-dom";
@@ -17,8 +16,8 @@ import {
   redeem,
 } from "@bond-protocol/contract-library";
 import { PlaceholderChart } from "..";
-import { PageHeader } from "components/atoms";
-import { BondList, tableColumns } from "components/organisms/BondList";
+import { PageHeader } from "components/common";
+import { BondList, tableColumns } from "components/lists";
 import { toTableData } from "src/utils/table";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { CHAIN_ID } from "@bond-protocol/bond-library";

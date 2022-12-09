@@ -119,7 +119,11 @@ const tableColumns: Array<Column<CalculatedMarket>> = [
         size="sm"
         variant="ghost"
         className="mr-4"
-        onClick={() => props.onClick("/market/" + props.value)}
+        onClick={(e: React.BaseSyntheticEvent) => {
+          e.stopPropagation();
+          e.preventDefault();
+          props.onClick("/market/" + props.value);
+        }}
       >
         View
       </Button>
@@ -154,13 +158,20 @@ export const MarketList: FC<MarketListProps> = ({
     () =>
       Array.from(markets.values())
         .map((m) => toTableData(columns, m))
-        .filter((m) => {
-          return issuer ? issuer === m?.issuer?.value : true;
+        .filter((market) => {
+          return issuer ? issuer === market?.issuer?.value : true;
         })
-        .map((m) => {
+        .map((row) => {
           //@ts-ignore
-          m["view"].onClick = (path: string) => navigate(path);
-          return m;
+          row["view"].onClick = (path: string) => {
+            navigate(path);
+          };
+          //@ts-ignore
+          row.onClick = (e: React.BaseSyntheticEvent) => {
+            e.preventDefault();
+            navigate("/market/" + row?.view.value);
+          };
+          return row;
         }),
     [allMarkets, isLoading, issuer, columns]
   );

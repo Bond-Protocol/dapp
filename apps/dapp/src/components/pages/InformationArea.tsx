@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Accordion, Button, ProtocolLogo } from "ui";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
-import { Footer } from "components/organisms";
+import { Footer } from "components/common";
 
 export type InformationAreaProps = {
   onClose: () => void;

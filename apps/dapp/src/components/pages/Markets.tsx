@@ -1,5 +1,5 @@
 import { MarketList } from "..";
-import { PageHeader } from "components/atoms";
+import { PageHeader } from "components/common";
 import { ActionCard } from "ui";
 
 export const Markets = () => {

@@ -4,7 +4,7 @@ import { useMarkets } from "hooks";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 import { useNavigate } from "react-router-dom";
-import { PageHeader } from "components/atoms/PageHeader";
+import { PageHeader } from "components/common";
 import { socials } from "..";
 import { useGlobalMetrics } from "hooks/useGlobalMetrics";
 

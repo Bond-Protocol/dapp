@@ -2,13 +2,16 @@ import type { FC } from "react";
 import { Route, Routes as Switch } from "react-router-dom";
 import {
   CreateMarket,
+  Dashboard,
+  IssuerPage,
+  IssuerList,
   MarketInsights,
   Markets,
   MarketCreated,
-} from "components/pages";
-import { IssuerPage, IssuerList, MyMarkets } from "components/organisms";
+  MyMarkets,
+  PolicyPage,
+} from "./components";
 import { useState } from "react";
-import { PolicyPage, Dashboard } from "components/pages";
 import { terms, privacyPolicy, cookiePolicy } from "./content";
 
 export const RouteMap: FC = () => {

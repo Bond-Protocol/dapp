@@ -1,18 +1,14 @@
 import { useState } from "react";
-import {
-  CreateMarketPage,
-  IssueMarketPage,
-  socials,
-} from "components/organisms";
-import { PageHeader, PageNavigation } from "components/atoms";
+import { CreateMarketPage, IssueMarketPage } from "components/organisms";
+import { socials, PageHeader, PageNavigation } from "components/common";
 
 const docsSublink = "/bond-marketplace/deploy-a-bond-market";
 
-export type CreateMarketPageProps = {
+export type CreateMarketProps = {
   onExecute: (marketData: any) => void;
 };
 
-export const CreateMarket = (props: CreateMarketPageProps) => {
+export const CreateMarket = (props: CreateMarketProps) => {
   const [initialValues, setInitialValues] = useState<unknown>(null);
   const [marketData, setMarketData] = useState<unknown>(null);
   const [selected, setSelected] = useState(0);

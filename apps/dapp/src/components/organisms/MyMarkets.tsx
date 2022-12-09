@@ -1,4 +1,4 @@
-import { MarketList } from "components/organisms/MarketList";
+import { MarketList } from "components/lists";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { useMarkets } from "context/market-context";
 

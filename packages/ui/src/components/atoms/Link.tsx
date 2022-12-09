@@ -15,6 +15,7 @@ export type LinkProps = ButtonUnstyledProps &
   AnchorHTMLAttributes<HTMLAnchorElement> & {
     iconClassName?: string;
     labelClassname?: string;
+    disableIcon?: boolean;
   };
 
 export const Link = forwardRef(function Button(
@@ -39,7 +40,9 @@ export const Link = forwardRef(function Button(
       {children && (
         <p className={`my-auto mr-1.5 ${props.labelClassname}`}>{children}</p>
       )}
-      <LinkIcon className={`color-inherit my-auto ${props.iconClassName}`} />
+      {!props.disableIcon && (
+        <LinkIcon className={`color-inherit my-auto ${props.iconClassName}`} />
+      )}
     </ButtonUnstyled>
   );
 });

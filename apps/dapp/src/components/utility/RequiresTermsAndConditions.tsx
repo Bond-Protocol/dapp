@@ -1,4 +1,4 @@
-import { GeneralTermsDialog } from "components/modals";
+import { GeneralTermsDialog } from "ui";
 import { useState } from "react";
 import { Modal } from "ui";
 import useBrowserStorage from "../../hooks/useBrowserStorage";

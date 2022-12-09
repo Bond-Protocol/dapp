@@ -1,6 +1,6 @@
 import { useAccount } from "wagmi";
 import { Button } from "ui";
-import { ConnectButton } from "../organisms/ConnectButton";
+import { ConnectButton } from "components/common";
 
 export type BondButtonProps = {
   showConnect: boolean;

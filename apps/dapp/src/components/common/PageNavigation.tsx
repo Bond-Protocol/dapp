@@ -25,7 +25,7 @@ export const PageNavigation = (props: PageNavigationProps) => {
 
       {props.rightText && !props.link && (
         <div
-          className="flex font-mono text-sm uppercase hover:cursor-pointer hover:underline"
+          className="flex font-mono text-sm uppercase text-light-secondary hover:cursor-pointer hover:underline"
           onClick={props.onClickRight}
         >
           <p className="my-auto mr-1">{props.rightText}</p>

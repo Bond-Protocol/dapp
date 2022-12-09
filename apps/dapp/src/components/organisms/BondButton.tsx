@@ -1,5 +1,5 @@
 import { Button, Link } from "ui";
-import { ConnectButton } from "../organisms/ConnectButton";
+import { ConnectButton } from "components/common";
 
 export type BondButtonProps = {
   showConnect: boolean;
