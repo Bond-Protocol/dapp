@@ -25,13 +25,11 @@ import {
 import {
   calcLpPrice,
   calculateTrimDigits,
-  compactVestingPeriod,
   longVestingPeriod,
   trim,
   trimAsNumber,
 } from 'core/utils';
 import { format } from 'date-fns';
-import { getAddresses } from 'src/modules';
 
 export async function purchase(
   recipientAddress: string,
