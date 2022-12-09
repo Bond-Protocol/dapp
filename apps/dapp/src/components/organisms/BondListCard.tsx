@@ -85,7 +85,7 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
             nativeCurrencyPrice={nativeCurrencyPrice}
             referralAddress={referralAddress}
             issuerName={protocol?.name || "BondProtocol"}
-            provider={providers[market.network]}
+            provider={providers[market.network === "arbitrum-one" ? "arbitrum" : market.network]}
             // @ts-ignore
             signer={signer}
           />
