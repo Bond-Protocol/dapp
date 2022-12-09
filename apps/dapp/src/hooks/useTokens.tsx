@@ -7,7 +7,7 @@ import {
   useListTokensGoerliQuery,
   useListTokensMainnetQuery,
   useListTokensArbitrumMainnetQuery,
-  useListTokensArbitrumGoerliQuery
+  useListTokensArbitrumGoerliQuery,
 } from "../generated/graphql";
 import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
@@ -69,17 +69,19 @@ export const useTokens = () => {
     // @ts-ignore
     enabled: !!testnet,
   });
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } = useListTokensArbitrumMainnetQuery({
-    endpoint: endpoints[2],
-    // @ts-ignore
-    enabled: !testnet,
-  });
+  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
+    useListTokensArbitrumMainnetQuery({
+      endpoint: endpoints[2],
+      // @ts-ignore
+      enabled: !testnet,
+    });
 
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListTokensArbitrumGoerliQuery({
-    endpoint: endpoints[3],
-    // @ts-ignore
-    enabled: !!testnet,
-  });
+  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } =
+    useListTokensArbitrumGoerliQuery({
+      endpoint: endpoints[3],
+      // @ts-ignore
+      enabled: !!testnet,
+    });
 
   /*
   Loads token price data from Coingecko.
@@ -129,14 +131,16 @@ export const useTokens = () => {
                   : undefined;
 
               requests.add(
-                priceSource.customPriceFunction(provider).then((result: string) => {
-                  // When the request resolves, store the price in the pricesMap,
-                  // using the priceSource as the key and the result (price) as the value.
-                  tokenIds.forEach((priceSource: string) => {
-                    pricesMap.set(priceSource, result);
-                  });
-                  return result;
-                })
+                priceSource
+                  .customPriceFunction(provider)
+                  .then((result: string) => {
+                    // When the request resolves, store the price in the pricesMap,
+                    // using the priceSource as the key and the result (price) as the value.
+                    tokenIds.forEach((priceSource: string) => {
+                      pricesMap.set(priceSource, result);
+                    });
+                    return result;
+                  })
               );
             }
 
@@ -147,7 +151,7 @@ export const useTokens = () => {
         });
       });
     } catch (e: any) {
-      console.log(e)
+      console.log(e);
       throw new Error("Error loading custom prices", e);
     }
 
@@ -270,10 +274,13 @@ export const useTokens = () => {
    */
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.tokens && arbitrumMainnetData && arbitrumMainnetData.tokens) {
-      const allTokens =
-        mainnetData.tokens
-          .concat(arbitrumMainnetData.tokens);
+    if (
+      mainnetData &&
+      mainnetData.tokens &&
+      arbitrumMainnetData &&
+      arbitrumMainnetData.tokens
+    ) {
+      const allTokens = mainnetData.tokens.concat(arbitrumMainnetData.tokens);
       // @ts-ignore
       setMainnetTokens(allTokens);
     }
@@ -281,9 +288,13 @@ export const useTokens = () => {
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.tokens && arbitrumGoerliData && arbitrumGoerliData.tokens) {
-      const allTokens = goerliData.tokens
-        .concat(arbitrumGoerliData.tokens);
+    if (
+      goerliData &&
+      goerliData.tokens &&
+      arbitrumGoerliData &&
+      arbitrumGoerliData.tokens
+    ) {
+      const allTokens = goerliData.tokens.concat(arbitrumGoerliData.tokens);
       // @ts-ignore
       setTestnetTokens(allTokens);
     }
@@ -342,31 +353,31 @@ export const useTokens = () => {
   }
 
   const getTokenDetailsFromChain = useCallback(async function (
-      address: string,
-      chain: string
-    ) {
-      const contract = contractLibrary.IERC20__factory.connect(
-        address,
-        providers[chain]
-      );
-      try {
-        const [name, symbol] = await Promise.all([
-          contract.name(),
-          contract.symbol(),
-        ]);
+    address: string,
+    chain: string
+  ) {
+    const contract = contractLibrary.IERC20__factory.connect(
+      address,
+      providers[chain]
+    );
+    try {
+      const [name, symbol] = await Promise.all([
+        contract.name(),
+        contract.symbol(),
+      ]);
 
-        return { name, symbol };
-      } catch (e: any) {
-        const error =
-          "Not an ERC-20 token, please double check the address and chain.";
-        throw Error(error);
-      }
-    },
-    []);
+      return { name, symbol };
+    } catch (e: any) {
+      const error =
+        "Not an ERC-20 token, please double check the address and chain.";
+      throw Error(error);
+    }
+  },
+  []);
 
   const isLoading = testnet
-    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
-    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+    ? goerliQuery.isLoading || arbitrumGoerliQuery.isLoading
+    : mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading;
 
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks

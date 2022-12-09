@@ -2,7 +2,11 @@ import { useTokens } from "hooks/useTokens";
 import { useQueries } from "react-query";
 import { useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import { CHAIN_ID, getProtocolByAddress } from "@bond-protocol/bond-library";
+import {
+  ADDRESSES,
+  CHAIN_ID,
+  getProtocolByAddress,
+} from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
@@ -13,6 +17,7 @@ import { useMyMarkets } from "hooks/useMyMarkets";
 
 export function useCalculatedMarkets() {
   const { markets: markets, isLoading: isMarketLoading } = useLoadMarkets();
+
   const { markets: myMarkets, isLoading: isMyMarketLoading } = useMyMarkets();
   const {
     getPrice,
@@ -33,13 +38,15 @@ export function useCalculatedMarkets() {
       no event, so the subgraph is not updated. Thus, we check here and return early if
       the market is not live.
     */
-    const requestProvider = providers[market.network];
+    const network =
+      market.network === "arbitrum-one" ? "arbitrum" : market.network;
+    const requestProvider = providers[network];
     const obsoleteAuctioneers = [
       "0x007f7a58103a31109f848df1a14f7020e1f1b28a",
       "0x007f7a6012a5e03f6f388dd9f19fd1d754cfc128",
       "0x007fea7a23da99f3ce7ea34f976f32bf79a09c43",
-      "0x007fea2a31644f20b0fe18f69643890b6f878aa6"
-    ]
+      "0x007fea2a31644f20b0fe18f69643890b6f878aa6",
+    ];
     if (obsoleteAuctioneers.includes(market.auctioneer)) return;
 
     const isLive = await contractLibrary.isLive(
@@ -108,7 +115,10 @@ export function useCalculatedMarkets() {
             )
           : undefined
       )
-      .then((result: CalculatedMarket) => result);
+      .then((result: CalculatedMarket) => result)
+      .catch((e) => {
+        console.log("catch", e);
+      });
   };
 
   const calculateAllMarkets = useQueries(
@@ -143,6 +153,7 @@ export function useCalculatedMarkets() {
     void market?.refetch();
   };
 
+  console.log({ calculatedMarkets });
   const refetchAllMarkets = () => {
     calculateAllMarkets.forEach((result) => result.refetch());
   };
@@ -160,12 +171,22 @@ export function useCalculatedMarkets() {
         if (result && result.data) {
           calculatedMarketsMap.set(result.data.id, result.data);
 
-          const protocol = getProtocolByAddress(
-            result.data.owner,
-            result.data.network
-          );
+          const network =
+            result?.data.network === "arbitrum-one"
+              ? "arbitrum"
+              : result.data.network;
+
+          const protocol = getProtocolByAddress(result.data.owner, network);
+
+          console.log({
+            protocol,
+            owner: result.data.owner,
+            network: result.data.network,
+          });
+
           const id = protocol?.id;
           const value = issuerMarkets.get(protocol?.id) || [];
+
           value.push(result.data);
           issuerMarkets.set(id, value);
         }

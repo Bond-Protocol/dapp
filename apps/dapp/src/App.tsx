@@ -7,6 +7,7 @@ import { CoverUpScreen } from "components/pages/CoverUpScreen";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
 import { MobileCover } from "components/utility/MobileCover";
 import { AppStatusCard } from "components/organisms/AppStatusCard";
+import { CHAIN_ID } from "@bond-protocol/bond-library";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 

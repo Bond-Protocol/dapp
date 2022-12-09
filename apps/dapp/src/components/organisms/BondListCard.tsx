@@ -12,6 +12,7 @@ import { providers } from "services/owned-providers";
 import { useSigner } from "wagmi";
 import { Button } from "ui";
 import { BondDetails } from "components/organisms";
+import { PlaceholderChart } from "components/organisms";
 
 export type BondListCardProps = {
   market: CalculatedMarket;
@@ -73,7 +74,8 @@ export const BondListCard: FC<BondListCardProps> = ({ market, ...props }) => {
       </div>
       <div className="mt-12 mb-6 flex gap-4 font-jakarta">
         <div className="flex w-1/2 flex-col justify-between ">
-          <BondDiscountChart market={market} />
+          {/* <BondDiscountChart market={market} /> */}
+          <PlaceholderChart message={"Market Analytics under maintenance"} />
         </div>
 
         <div className="flex w-1/2 flex-col">

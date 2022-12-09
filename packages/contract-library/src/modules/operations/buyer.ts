@@ -16,7 +16,9 @@ import {
 import {
   Auctioneer__factory,
   CalculatedMarket,
-  ERC1155__factory, FixedExpirationTeller__factory, FixedTermTeller__factory,
+  ERC1155__factory,
+  FixedExpirationTeller__factory,
+  FixedTermTeller__factory,
   IERC20__factory,
   PrecalculatedMarket,
 } from 'types';
@@ -29,7 +31,7 @@ import {
   trimAsNumber,
 } from 'core/utils';
 import { format } from 'date-fns';
-import {getAddresses} from "src/modules";
+import { getAddresses } from 'src/modules';
 
 export async function purchase(
   recipientAddress: string,
@@ -112,16 +114,10 @@ export async function redeem(
   if (tellerAddress) {
     switch (bondType) {
       case BOND_TYPE.FIXED_EXPIRY:
-        console.log("yes")
-        teller = FixedExpirationTeller__factory.connect(
-          tellerAddress,
-          signer,
-        );
+        console.log('yes');
+        teller = FixedExpirationTeller__factory.connect(tellerAddress, signer);
       case BOND_TYPE.FIXED_TERM:
-        teller = FixedTermTeller__factory.connect(
-          tellerAddress,
-          signer,
-        );
+        teller = FixedTermTeller__factory.connect(tellerAddress, signer);
     }
   } else {
     teller = getTellerContract(signer, bondType, chainId);
