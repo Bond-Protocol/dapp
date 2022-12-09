@@ -92,9 +92,12 @@ export const BondDetails: FC<BondDetailsProps> = ({
   useEffect(() => {
     if (
       market.network === network?.chain?.network ||
-      (market.network === "mainnet" && network?.chain?.network === "homestead") ||
-      (market.network === "arbitrum-one" && network?.chain?.network === "arbitrum") ||
-      (market.network === "arbitrum-goerli" && network?.chain?.network === "arbitrumGoerli")
+      (market.network === "mainnet" &&
+        network?.chain?.network === "homestead") ||
+      (market.network === "arbitrum-one" &&
+        network?.chain?.network === "arbitrum") ||
+      (market.network === "arbitrum-goerli" &&
+        network?.chain?.network === "arbitrumGoerli")
     ) {
       setCorrectChain(true);
     }
