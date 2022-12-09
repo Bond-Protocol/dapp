@@ -82,6 +82,13 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
   //@ts-ignore
   const tokenApiId = priceSources[0]?.apiId;
 
+  if (!tokenApiId) {
+    return {
+      isLoading: false,
+      dataset: null,
+    };
+  }
+
   const { data: tokenHistory, ...tokenHistoryQuery } = useQuery(
     `token-price-history-${market.payoutToken.symbol}-${dayRange}-days`,
     getTokenPriceHistory(tokenApiId, { days: dayRange }, Date.now())
