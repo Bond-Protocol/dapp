@@ -11,7 +11,7 @@ import { Button, InfoLabel, InputCard, Link, SummaryCard } from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
 import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { NativeCurrency } from "@bond-protocol/bond-library";
+import { CHAINS, NativeCurrency } from "@bond-protocol/bond-library";
 import { Signer } from "ethers";
 import { Provider } from "@wagmi/core";
 
@@ -301,7 +301,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
           showSwitcher={!correctChain}
           showPurchaseLink={!hasSufficientBalance}
           onSwitchChain={switchChain}
-          network={market.network}
+          network={CHAINS.get(market.network)?.displayName || market.network}
           quoteTokenSymbol={market.quoteToken.symbol}
           purchaseLink={
             market.quoteToken.purchaseLink
