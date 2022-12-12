@@ -43,7 +43,6 @@ export const MarketInsights = () => {
         }
         icon={quoteToken.logoUrl}
         pairIcon={payoutToken.logoUrl}
-        even={true}
       />
       <div className="my-16 flex justify-between gap-4 child:w-full">
         <InfoLabel

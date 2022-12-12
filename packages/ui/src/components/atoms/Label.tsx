@@ -17,7 +17,6 @@ export const Label = (props: LabelProps) => {
           className={props.pairIcon ? "mr-1 w-10" : "mr-1"}
           icon={props.icon}
           pairIcon={props.pairIcon}
-          even={props.even}
         />
       )}
       <div className="flex flex-col gap-0.5">

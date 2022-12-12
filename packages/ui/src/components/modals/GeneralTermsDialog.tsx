@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { ButtonGroup } from "components/molecules/ButtonGroup";
 //import useBrowserStorage from "../../hooks/useBrowserStorage";
 
