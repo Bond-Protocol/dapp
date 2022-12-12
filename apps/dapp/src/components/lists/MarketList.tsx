@@ -41,14 +41,9 @@ export const MarketList: FC<MarketListProps> = ({
         .map((m) => toTableData(columns, m))
         .map((row) => {
           //@ts-ignore
-          row["view"].onClick = (path: string) => {
-            navigate(path);
-          };
+          row["view"].onClick = (path: string) => navigate(path);
           //@ts-ignore
-          row.onClick = (e: React.BaseSyntheticEvent) => {
-            e.preventDefault();
-            navigate("/market/" + row?.view.value);
-          };
+          row.onClick = () => navigate("/market/" + row?.view.value);
           return row;
         }),
     [allMarkets, isLoading, issuer, columns]

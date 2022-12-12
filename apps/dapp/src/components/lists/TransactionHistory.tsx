@@ -1,10 +1,13 @@
 import { format } from "date-fns";
 import { CHAIN_ID, getTokenByAddress } from "@bond-protocol/bond-library";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  getBlockExplorer,
+} from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
-import { Column, Table } from "ui";
+import { Link, Column, Table } from "ui";
 import { usdFormatter } from "src/utils/format";
 
 const userTxsHistory: Column<any>[] = [
@@ -77,11 +80,32 @@ const marketTxsHistory: Column<any>[] = [
     label: "Address",
     formatter: (purchase) => {
       const address = purchase.recipient;
-      const start = address.substring(0, 6);
+      const start = address.substring(0, 4);
       const end = address.substring(address.length - 4);
       return {
         value: `${start}...${end}`,
+        subtext: purchase.addressUrl,
       };
+    },
+    Component: (props) => {
+      return <Link href={props.subtext}>{props.value}</Link>;
+    },
+  },
+  {
+    accessor: "blockExplorerUrl",
+    label: "Tx Hash",
+    unsortable: true,
+    formatter: (purchase) => {
+      const txHash = purchase.id;
+      const start = txHash.substring(0, 4);
+      const end = txHash.substring(txHash.length - 4);
+      return {
+        value: `${start}...${end}`,
+        subtext: purchase.blockExplorerUrl,
+      };
+    },
+    Component: (props) => {
+      return <Link href={props.subtext}>{props.value}</Link>;
     },
   },
 ];
@@ -96,12 +120,30 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
     { endpoint: subgraphEndpoints[props?.market?.network as CHAIN_ID] },
     { marketId: props.market.id }
   );
+
+  const { blockExplorerUrl: blockExplorerTxUrl } = getBlockExplorer(
+    props.market.network,
+    "tx"
+  );
+  const { blockExplorerUrl: blockExplorerAddressUrl } = getBlockExplorer(
+    props.market.network,
+    "address"
+  );
+
   console.log({
     creationDate: props?.market.creationDate,
     market: props.market,
+    data: data?.bondPurchases,
   });
 
   const tableData = data?.bondPurchases
+    .map((p) => {
+      //@ts-ignore
+      p.txUrl = blockExplorerTxUrl + p.id;
+      //@ts-ignore
+      p.addressUrl = blockExplorerAddressUrl + p.recipient;
+      return p;
+    })
     .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
     .map((p) => toTableData(marketTxsHistory, p));
 

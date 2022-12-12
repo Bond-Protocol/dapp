@@ -2,7 +2,7 @@ export interface TokenLogoProps
   extends React.HtmlHTMLAttributes<HTMLDivElement> {
   icon?: string;
   pairIcon?: string;
-  even?: boolean;
+  lpPairIcon?: string;
   width?: "sm" | "lg";
 }
 
@@ -21,10 +21,13 @@ export const TokenLogo = (props: TokenLogoProps) => {
       <img className={`${base} rounded-full`} src={props.icon} />
       <img
         className={`ml-[-8px] flex self-end rounded-full ${
-          props.even ? base : uneven
+          !props.lpPairIcon && uneven
         }`}
-        src={props.pairIcon}
+        src={props.lpPairIcon ? props.lpPairIcon : props.pairIcon}
       />
+      {props.lpPairIcon && (
+        <img className={`ml-[-8px] flex self-end rounded-full ${uneven}`} />
+      )}
     </div>
   ) : (
     <img

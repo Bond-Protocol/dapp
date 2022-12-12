@@ -33,6 +33,7 @@ const bondPrice: Column<CalculatedMarket> = {
     };
   },
 };
+
 const discount: Column<CalculatedMarket> = {
   label: "Discount",
   accessor: "discount",
@@ -43,6 +44,7 @@ const discount: Column<CalculatedMarket> = {
     return { value: market.discount + "%" };
   },
 };
+
 const maxPayout: Column<CalculatedMarket> = {
   label: "Max Payout",
   accessor: "maxPayout",
@@ -56,6 +58,7 @@ const maxPayout: Column<CalculatedMarket> = {
     };
   },
 };
+
 const vesting: Column<CalculatedMarket> = {
   label: "Vesting",
   accessor: "vesting",
@@ -72,6 +75,7 @@ const vesting: Column<CalculatedMarket> = {
     };
   },
 };
+
 const creationDate: Column<CalculatedMarket> = {
   label: "Creation Date",
   accessor: "creationDate",
@@ -81,6 +85,7 @@ const creationDate: Column<CalculatedMarket> = {
     sortValue: market.creationBlockTimestamp.toString(),
   }),
 };
+
 const tbv: Column<CalculatedMarket> = {
   label: "TBV",
   accessor: "tbvUsd",
@@ -93,6 +98,7 @@ const tbv: Column<CalculatedMarket> = {
     };
   },
 };
+
 const issuer: Column<CalculatedMarket> = {
   label: "Issuer",
   accessor: "issuer",
@@ -105,6 +111,7 @@ const issuer: Column<CalculatedMarket> = {
     };
   },
 };
+
 const view: Column<CalculatedMarket> = {
   label: "",
   accessor: "view",
@@ -133,6 +140,5 @@ const view: Column<CalculatedMarket> = {
 };
 
 export const base = [bond, bondPrice, discount, maxPayout, vesting];
-
 export const marketList = [...base, tbv, issuer, view];
 export const issuerMarketList = [...base, creationDate, tbv, view];

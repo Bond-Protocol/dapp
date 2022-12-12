@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { TokenLogo } from "../../components/atoms/TokenLogo";
-import logo24 from "../../assets/logo-24.svg";
+import logo24 from "../../assets/logo.svg";
 
 export default {
   title: "Components/Atoms/TokenLogo",
