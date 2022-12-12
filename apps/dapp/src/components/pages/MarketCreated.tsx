@@ -27,6 +27,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
   const [createTx, setCreateTx] = useState<any>();
   const [allowanceIsLoading, setAllowanceIsLoading] = useState(false);
   const [allowance, setAllowance] = useState(-1);
+  const [recommendedAllowance, setRecommendedAllowance] = useState("");
   const [isAllowanceSufficient, setIsAllowanceSufficient] = useState(false);
   const [ownerAddress, setOwnerAddress] = useState(
     props.marketData.formValues.marketOwnerAddress
@@ -64,8 +65,30 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       providers[props.marketData.chain]
     ).then((result) => {
       setAllowance(Number(result));
+
+      const decimals =
+        props.marketData.marketParams.capacityInQuote
+          ? props.marketData.quoteToken.decimals
+          : props.marketData.payoutToken.decimals
+
+      const capacity = props.marketData.marketParams.capacity / Math.pow(10, decimals);
+      const payoutTokenPrice = Number(props.marketData.payoutToken.price.replace("$", ""));
+      const quoteTokenPrice = Number(props.marketData.quoteToken.price.replace("$", ""));
+
+      let recommendedAllowance =
+        props.marketData.marketParams.capacityInQuote
+          ? capacity / (payoutTokenPrice / quoteTokenPrice)
+          : capacity;
+
+      let recommendedAllowanceString =
+        (Number(recommendedAllowance) * Math.pow(10, props.marketData.payoutToken.decimals))
+          .toString();
+
+      recommendedAllowanceString = recommendedAllowanceString.split(".")[0];
+
+      setRecommendedAllowance(recommendedAllowanceString);
       setIsAllowanceSufficient(
-        Number(props.marketData.formValues.marketCapacity) <= Number(result)
+        Number(recommendedAllowanceString) / Math.pow(10, props.marketData.payoutToken.decimals) <= Number(result)
       );
       setAllowanceIsLoading(false);
     });
@@ -77,11 +100,19 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       props.marketData.bondType
     ).auctioneer;
 
+    let amount =
+      (Number(data.amount) * Math.pow(10, props.marketData.payoutToken.decimals))
+        .toString();
+
+    amount = amount.split(".")[0];
+
+    amount = (Number(amount) / Math.pow(10, props.marketData.payoutToken.decimals)).toString();
+
     const tx = await contractLibrary.changeApproval(
       props.marketData.marketParams.payoutToken,
       props.marketData.payoutToken.decimals,
       auctioneer,
-      data.amount,
+      amount,
       // @ts-ignore
       signer
     );
@@ -115,6 +146,9 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                   {props.marketData.summaryData.payoutToken}
                   <br/>
                   Capacity: {props.marketData.formValues.marketCapacity}{" "}
+                  {props.marketData.marketParams.capacityInQuote ? props.marketData.summaryData.quoteToken : props.marketData.summaryData.payoutToken}
+                  <br/>
+                  Recommended Min Allowance: {Number(recommendedAllowance) / Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
                   {props.marketData.summaryData.payoutToken}
                 </div>
                 <div className="pb-8 text-center leading-normal">
@@ -147,6 +181,9 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                   {props.marketData.summaryData.payoutToken}
                   <br/>
                   Capacity: {props.marketData.formValues.marketCapacity}{" "}
+                  {props.marketData.marketParams.capacityInQuote ? props.marketData.summaryData.quoteToken : props.marketData.summaryData.payoutToken}
+                  <br/>
+                  Recommended Min Allowance: {Number(recommendedAllowance) / Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
                   {props.marketData.summaryData.payoutToken}
                 </div>
                 {isAllowanceSufficient && (
@@ -155,6 +192,13 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                       You have set a sufficient allowance for the capacity of
                       your market.
                     </p>
+                    {props.marketData.marketParams.capacityInQuote &&
+                      <p className="pb-8">
+                        As your market capacity is determined by quantity of Quote Tokens received,
+                        you may need to increase the allowance for the spender ({teller}) if your
+                        Payout Token price declines in the future.
+                      </p>
+                    }
                     <p className="pb-8">
                       If you have multiple markets paying out{" "}
                       {props.marketData.summaryData.payoutToken} from this
@@ -171,6 +215,13 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                       your market. We recommend setting the allowance high
                       enough to cover the full market capacity.
                     </p>
+                    {props.marketData.marketParams.capacityInQuote &&
+                      <p className="pb-8">
+                        As your market capacity is determined by quantity of Quote Tokens received,
+                        you may wish to set the allowance higher than the recommended minimum, in case
+                        your Payout Token price declines in the future.
+                      </p>
+                    }
                     <p className="pb-8">
                       If you have multiple markets paying out{" "}
                       {props.marketData.summaryData.payoutToken} from this
@@ -199,7 +250,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
               {...register("amount")}
-              defaultValue={props.marketData.formValues.marketCapacity}
+              defaultValue={Number(recommendedAllowance) / Math.pow(10, props.marketData.payoutToken.decimals)}
               label={`Allowance in ${props.marketData.summaryData.payoutToken}`}
               className="mb-2"
             />
@@ -255,24 +306,12 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 <tr>
                   <td className="pr-4 text-left">amount</td>
                   <td className="pr-4 text-xs">
-                    {ethers.utils
-                      .parseUnits(
-                        props.marketData.formValues.marketCapacity,
-                        props.marketData.payoutToken.decimals
-                      )
-                      .toString()}
+                    {recommendedAllowance}
                   </td>
                   <td>
                     <img
                       onClick={() =>
-                        navigator.clipboard.writeText(
-                          ethers.utils
-                            .parseUnits(
-                              props.marketData.formValues.marketCapacity,
-                              props.marketData.payoutToken.decimals
-                            )
-                            .toString()
-                        )
+                        navigator.clipboard.writeText(recommendedAllowance)
                       }
                       src={copyIcon}
                       className="stroke-current"
