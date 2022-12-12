@@ -2,7 +2,7 @@ import { format, formatDistanceToNow } from "date-fns";
 
 export const short = (date: Date) => {
   try {
-    return format(date, "MM.dd.yyyy");
+    return format(date, "yyyy.MM.dd");
   } catch (error) {
     console.error(error);
     return "Invalid";

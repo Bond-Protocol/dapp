@@ -33,8 +33,8 @@ export const IssuerList = () => {
       <PageHeader title="Bond Issuers" />
       <div className="flex gap-x-5 py-10">
         <InfoLabel
-          label="Total Value Bonded"
-          tooltip="Total Value Bonded across all Issuers"
+          label="Total Bonded Value"
+          tooltip="Total Bonded Value across all Issuers"
         >
           {metrics.tbv}
         </InfoLabel>

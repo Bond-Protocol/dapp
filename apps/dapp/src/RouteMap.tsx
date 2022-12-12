@@ -44,8 +44,6 @@ export const PolicyRoutes = () => {
   return (
     <Switch>
       <Route path="/terms" element={<PolicyPage {...terms} />} />
-      <Route path="/policy" element={<PolicyPage {...privacyPolicy} />} />
-      <Route path="/cookies" element={<PolicyPage {...cookiePolicy} />} />
     </Switch>
   );
 };

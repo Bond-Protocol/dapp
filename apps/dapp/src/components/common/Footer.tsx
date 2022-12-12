@@ -45,14 +45,6 @@ export const Footer = ({
         <SocialRow {...socials} className="mt-8 justify-center" />
         <div className="mb-3 flex font-fraktion text-[12px] uppercase child:mx-2 child:select-none">
           <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
-          <p>-</p>
-          <FooterLink onClick={() => goTo("/policy")}>
-            Privacy Policy
-          </FooterLink>
-          <p>-</p>
-          <FooterLink onClick={() => goTo("/cookies")}>
-            Cookie Policy
-          </FooterLink>
         </div>
       </div>
     </div>

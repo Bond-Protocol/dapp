@@ -5,7 +5,7 @@ import { usdFormatter } from "src/utils/format";
 
 export const tableColumns: Array<Column<any>> = [
   {
-    label: "Asset",
+    label: "Bond",
     accessor: "asset",
     unsortable: true,
     formatter: (bond) => {
@@ -14,6 +14,15 @@ export const tableColumns: Array<Column<any>> = [
         value: `${bond?.balance} ${asset?.symbol}`,
         subtext: usdFormatter.format(bond?.usdPrice),
         icon: asset?.logoUrl,
+      };
+    },
+  },
+  {
+    label: "Market Price",
+    accessor: "price",
+    formatter: (bond) => {
+      return {
+        value: usdFormatter.format(bond?.usdPrice),
       };
     },
   },

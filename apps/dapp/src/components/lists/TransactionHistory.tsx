@@ -101,7 +101,7 @@ const marketTxsHistory: Column<any>[] = [
       const end = txHash.substring(txHash.length - 4);
       return {
         value: `${start}...${end}`,
-        subtext: purchase.blockExplorerUrl,
+        subtext: purchase.txUrl,
       };
     },
     Component: (props) => {
