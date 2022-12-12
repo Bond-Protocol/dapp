@@ -81,9 +81,10 @@ export function useOwnerTokenTbvs() {
     }
 
     selected.forEach((ownerTokenTbv) => {
+      const network = ownerTokenTbv.network.replace("-one", "");
       const protocol = getProtocolByAddress(
         ownerTokenTbv.owner,
-        ownerTokenTbv.network
+        network
       );
       if (!protocol) return;
 
