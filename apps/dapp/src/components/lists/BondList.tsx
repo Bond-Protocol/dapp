@@ -1,7 +1,6 @@
 import { getToken } from "@bond-protocol/bond-library";
 import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
-import { formatDistance } from "date-fns";
 import { usdFormatter } from "src/utils/format";
 
 export const tableColumns: Array<Column<any>> = [
@@ -12,19 +11,9 @@ export const tableColumns: Array<Column<any>> = [
     formatter: (bond) => {
       const asset = getToken(bond?.underlying?.id);
       return {
-        value: asset?.symbol, //market.quoteToken.symbol + "-" + market.payoutToken.symbol,
-        icon: asset?.logoUrl,
-      };
-    },
-  },
-
-  {
-    label: "Amount",
-    accessor: "usdPrice",
-    formatter: (bond) => {
-      return {
-        value: bond?.balance,
+        value: `${bond?.balance} ${asset?.symbol}`,
         subtext: usdFormatter.format(bond?.usdPrice),
+        icon: asset?.logoUrl,
       };
     },
   },
@@ -34,8 +23,8 @@ export const tableColumns: Array<Column<any>> = [
     formatter: (bond) => {
       const expiry = bond?.bond?.bondToken?.expiry;
       const date = new Date(expiry * 1000);
-      const formatted = formatDate(date);
-      const timeLeft = formatDistance(Date.now(), date);
+      const formatted = formatDate.short(date);
+      const timeLeft = formatDate.distanceToNow(date);
 
       return {
         value: bond.canClaim ? "Vested" : formatted,

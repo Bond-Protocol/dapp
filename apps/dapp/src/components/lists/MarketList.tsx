@@ -1,135 +1,15 @@
 import { FC, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { getProtocol, getTokenByAddress } from "@bond-protocol/bond-library";
-import { Button, Loading, Table, DiscountLabel, Column } from "ui";
-import { add } from "date-fns";
+import { Loading, Table } from "ui";
 import { useMarkets } from "hooks";
-import { usdFormatter } from "src/utils/format";
 import { toTableData } from "src/utils/table";
 import { meme } from "src/utils/words";
-
-const tableColumns: Array<Column<CalculatedMarket>> = [
-  {
-    label: "Bond",
-    accessor: "bond",
-    width: "w-[13%]",
-    formatter: (market) => {
-      const quoteToken = getTokenByAddress(market.quoteToken.address);
-      const payoutToken = getTokenByAddress(market.payoutToken.address);
-      return {
-        value: market.quoteToken.symbol + "-" + market.payoutToken.symbol,
-        icon: quoteToken?.logoUrl,
-        pairIcon: payoutToken?.logoUrl,
-        even: true,
-      };
-    },
-  },
-  {
-    label: "Bond Price",
-    accessor: "bondPrice",
-    width: "w-[13%]",
-    formatter: (market) => {
-      return {
-        value: usdFormatter.format(market.discountedPrice),
-        subtext: usdFormatter.format(market.fullPrice) + " Market",
-      };
-    },
-  },
-  {
-    label: "Discount",
-    accessor: "discount",
-    alignEnd: true,
-    width: "w-[8%]",
-    Component: DiscountLabel,
-    formatter: (market) => {
-      return { value: market.discount + "%" };
-    },
-  },
-  {
-    label: "Max Payout",
-    accessor: "maxPayout",
-    alignEnd: true,
-    width: "w-[13%]",
-    formatter: (market) => {
-      return {
-        value: market.maxPayout,
-        subtext: usdFormatter.format(market.maxPayoutUsd),
-        sortValue: market.maxPayoutUsd.toString(),
-      };
-    },
-  },
-  {
-    label: "Vesting",
-    accessor: "vesting",
-    formatter: (market) => {
-      const isTerm = market.vestingType === "fixed-term";
-      const sort = isTerm
-        ? add(Date.now(), { seconds: market.vesting })
-        : market.vesting;
-
-      return {
-        value: market.formattedLongVesting,
-        subtext: isTerm ? "Term" : "Expiry",
-        sortValue: sort.toString(),
-      };
-    },
-  },
-  {
-    label: "Creation Date",
-    accessor: "creationDate",
-    width: "w-[15%]",
-    formatter: (market) => ({
-      value: market.creationDate.replaceAll("-", "."),
-    }),
-  },
-  {
-    label: "TBV",
-    accessor: "tbvUsd",
-    alignEnd: true,
-    width: "w-[7%]",
-    formatter: (market) => {
-      return {
-        value: usdFormatter.format(market.tbvUsd),
-        sortValue: market.tbvUsd.toString(),
-      };
-    },
-  },
-  {
-    label: "Issuer",
-    accessor: "issuer",
-    width: "w-[12%]",
-    formatter: (market) => {
-      const protocol = getProtocol(market.owner);
-      return {
-        value: protocol?.name,
-        icon: protocol?.logoUrl,
-      };
-    },
-  },
-  {
-    label: "",
-    accessor: "view",
-    alignEnd: true,
-    unsortable: true,
-    formatter: (market) => ({ value: market.marketId }),
-    Component: (props: any) => (
-      <Button
-        thin
-        size="sm"
-        variant="ghost"
-        className="mr-4"
-        onClick={(e: React.BaseSyntheticEvent) => {
-          e.stopPropagation();
-          e.preventDefault();
-          props.onClick("/market/" + props.value);
-        }}
-      >
-        View
-      </Button>
-    ),
-  },
-];
+import {
+  marketList as tableColumns,
+  issuerMarketList as issuerColumns,
+} from "./columns";
+import { getProtocol } from "@bond-protocol/bond-library";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -146,21 +26,19 @@ export const MarketList: FC<MarketListProps> = ({
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
 
-  const columns = tableColumns;
+  const columns = issuer ? issuerColumns : tableColumns;
   //(props.filter && tableColumns.filter((f) => !props.filter?.includes(f.accessor))) ||
 
   const markets = props.markets || allMarkets;
 
-  //const filteredMarkets = Array.from(markets.values()).filter()
-  //console.log({ markets });
+  const filteredMarkets = Array.from(markets.values()).filter((m) =>
+    issuer ? getProtocol(m.owner)?.id === issuer : true
+  );
 
   const tableMarkets = useMemo(
     () =>
-      Array.from(markets.values())
+      filteredMarkets
         .map((m) => toTableData(columns, m))
-        .filter((market) => {
-          return issuer ? issuer === market?.issuer?.value : true;
-        })
         .map((row) => {
           //@ts-ignore
           row["view"].onClick = (path: string) => {
@@ -182,7 +60,5 @@ export const MarketList: FC<MarketListProps> = ({
     return <Loading content={meme()} />;
   }
 
-  return (
-    <Table defaultSort="creationDate" columns={columns} data={tableMarkets} />
-  );
+  return <Table defaultSort="discount" columns={columns} data={tableMarkets} />;
 };

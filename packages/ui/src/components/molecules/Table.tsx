@@ -101,7 +101,9 @@ export const TableBody = ({ rows, columns }: TableBodyProps) => {
       {rows?.map((row) => {
         return (
           <tr
-            className={`child:pl-5 border-white/15 h-20 border-b hover:cursor-pointer hover:bg-white/5`}
+            className={`child:pl-5 border-white/15 h-20 border-b ${
+              row.onClick && "hover:cursor-pointer hover:bg-white/5"
+            }`}
             //@ts-ignore
             onClick={row.onClick}
           >

@@ -1,4 +1,4 @@
-import { add, format, isFuture, isBefore } from "date-fns";
+import { add, isFuture, isBefore } from "date-fns";
 import { useState } from "react";
 import { Chip } from "ui";
 import { LineChart, generateTicks } from "components/organisms/LineChart";
@@ -6,6 +6,7 @@ import { useBondChartData } from "hooks/useBondChartData";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondDiscountTooltip } from "./BondDiscountTooltip";
 import { PlaceholderChart } from "../PlaceholderChart";
+import { formatDate } from "src/utils";
 
 export type BondDiscountChartProps = {
   market: CalculatedMarket;
@@ -54,19 +55,12 @@ export const BondDiscountChart = ({
   const xAxisLabels = generateTicks(
     dataset.map((d) => d.date as number),
     4
-  ).map((x) => {
-    try {
-      return format(x, "MM/dd p");
-    } catch (error) {
-      console.log(error);
-      return "";
-    }
-  });
+  ).map((x) => formatDate.chartAxis(x));
 
-  // const ranges = extraRanges.filter(
-  //   (days: number) => !isFuture(add(marketCreationDate, { days }))
-  // );
-  const allRanges = [...defaultRanges];
+  const ranges = extraRanges.filter(
+    (days: number) => !isFuture(add(marketCreationDate, { days }))
+  );
+  const allRanges = [...defaultRanges, ...ranges];
 
   return (
     <div className="flex w-full flex-col">

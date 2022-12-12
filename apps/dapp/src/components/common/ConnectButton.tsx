@@ -47,7 +47,7 @@ export const ConnectButton = (props: ConnectButtonProps) => {
               if (chain.unsupported) {
                 return (
                   <Button
-                    className="w-full border-light-alert px-4 font-fraktion text-light-alert"
+                    className="w-full border-light-danger px-4 font-fraktion text-light-secondary-10"
                     variant="secondary"
                     onClick={openChainModal}
                   >

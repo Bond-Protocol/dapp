@@ -15,7 +15,6 @@ import {
   BOND_TYPE,
   redeem,
 } from "@bond-protocol/contract-library";
-import { PlaceholderChart } from "..";
 import { PageHeader } from "components/common";
 import { BondList, tableColumns } from "components/lists";
 import { toTableData } from "src/utils/table";
@@ -59,6 +58,7 @@ export const Dashboard = () => {
   const { getTokenDetails, getPrice } = useTokens();
   const account = useAccount();
   const endpoint = subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET];
+
   const purchases = useListBondPurchasesByAddressQuery(
     { endpoint },
     { recipient: account.address?.toLowerCase() }
@@ -87,7 +87,6 @@ export const Dashboard = () => {
 
     await signer?.provider
       ?.waitForTransaction(redeemTx.hash)
-      .then(() => {})
       .catch((error) => console.log(error));
   }
 
@@ -135,6 +134,7 @@ export const Dashboard = () => {
     });
 
   const tableData = data?.map((b) => toTableData(tableColumns, b));
+
   const tbv = usdFormatter.format(
     purchases?.data?.bondPurchases?.reduce((total, bond) => {
       return total + bond.payout * bond.purchasePrice;

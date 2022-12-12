@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Tooltip } from "@material-tailwind/react";
 import { TableCell, TableCellProps } from "./TableCell";
 import TooltipIcon from "../../assets/icons/tooltip-icon";
