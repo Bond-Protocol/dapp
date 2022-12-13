@@ -1532,10 +1532,10 @@
     require-dir "^1.2.0"
     ts-node "^10.9.1"
 
-"@bond-protocol/bond-library@^0.1.23":
-  version "0.1.23"
-  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.23.tgz#9314133aa5214fa3d63d9d64fc6fd3ab6ce4c51b"
-  integrity sha512-4EJc4e4DU74MV+pW7I9cS9JSfM0t/h5V3r2hCdU3Fyi3Mu2VXtd3dGb/+bk+4sTd64N69nxkAqo/fGqAi4hMbg==
+"@bond-protocol/bond-library@^0.1.24":
+  version "0.1.24"
+  resolved "https://registry.yarnpkg.com/@bond-protocol/bond-library/-/bond-library-0.1.24.tgz#513ed6867eb9397586e99a692ab9b93e120f75e6"
+  integrity sha512-T5dTRHbA0U9MdLrI1To+WIV5pc18ymMgUYErvaTLP/vNV3w+cshaMb5RgWsUBkJH5POs44HcwJSq6KhXICGGgg==
   dependencies:
     axios "^0.27.2"
     ethers "^5.6.8"
