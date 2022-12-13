@@ -57,6 +57,8 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
   const onConfirm = async () => {
     setIsModalOpen(false);
 
+    console.log(props.data);
+
     props.data.isMultisig = false;
 
     const tx = await contractLibrary.createMarket(
