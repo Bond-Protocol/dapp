@@ -41,9 +41,9 @@ export const MarketInsights = () => {
         title={
           market?.quoteToken.symbol + "-" + market.payoutToken.symbol + " Bond"
         }
-        icon={quote.logoUrl}
-        lpPairIcon={lpPair.logoUrl}
-        pairIcon={payout.logoUrl}
+        icon={quote?.logoUrl}
+        lpPairIcon={lpPair?.logoUrl}
+        pairIcon={payout?.logoUrl}
       />
       <div className="my-16 flex justify-between gap-4 child:w-full">
         <InfoLabel

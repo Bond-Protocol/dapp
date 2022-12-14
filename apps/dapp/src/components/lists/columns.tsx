@@ -131,7 +131,7 @@ const view: Column<CalculatedMarket> = {
   accessor: "view",
   alignEnd: true,
   unsortable: true,
-  formatter: (market) => ({ value: market.marketId }),
+  formatter: (market) => ({ value: market.marketId, subtext: market.network }),
   Component: (props: any) => (
     <Button
       thin
@@ -142,7 +142,9 @@ const view: Column<CalculatedMarket> = {
       onClick={(e: React.BaseSyntheticEvent) => {
         e.stopPropagation();
         e.preventDefault();
-        props.onClick("/market/" + props.value);
+        const network = props.subtext;
+        const marketId = props.value; //TODO: (afx) improve
+        props.onClick(`/market/${network}/${marketId}`);
       }}
     >
       <div className="flex place-items-center">

@@ -218,6 +218,7 @@ export const useTokens = () => {
         const split: string[] = token.key.split("_");
         let network = split[0];
         const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
+        console.log({ token });
 
         //TODO: (aphex) patched this manually due to library fixes, should be made consistent
         let token0Address = token.value.token0Address;

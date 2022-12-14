@@ -130,12 +130,6 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
     "address"
   );
 
-  console.log({
-    creationDate: props?.market.creationDate,
-    market: props.market,
-    data: data?.bondPurchases,
-  });
-
   const tableData = data?.bondPurchases
     .map((p) => {
       //@ts-ignore
@@ -153,7 +147,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         Transaction History
       </p>
       <Table
-        defaultSort="time"
+        defaultSort="timestamp"
         loading={query.isLoading}
         columns={marketTxsHistory}
         data={tableData}

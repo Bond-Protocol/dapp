@@ -982,3 +982,30 @@ export const listBondPurchases = gql`
     }
   }
 `;
+
+export const listBondPurchasesPerMarket = gql`
+  query ListBondPurchasesPerMarket($marketId: String) {
+    bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
+      id
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
+      recipient
+      network
+      quoteToken {
+        id
+        name
+        symbol
+        address
+      }
+      payoutToken {
+        id
+        name
+        symbol
+        address
+      }
+    }
+  }
+`;

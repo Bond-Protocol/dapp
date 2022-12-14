@@ -14,7 +14,7 @@ export const Label = (props: LabelProps) => {
     >
       {props.icon && (
         <TokenLogo
-          className={props.pairIcon && "mr-1 w-12"}
+          className={"mr-2"}
           icon={props.icon}
           pairIcon={props.pairIcon}
           lpPairIcon={props.lpPairIcon}

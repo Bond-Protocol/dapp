@@ -10,8 +10,12 @@ export interface LogoProps extends React.HtmlHTMLAttributes<HTMLImageElement> {
 }
 
 export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
+  if (!props.pairIcon && !props.lpPairIcon) {
+    return <Logo className={className} icon={icon} {...props} />;
+  }
+
   return props.pairIcon || props.lpPairIcon ? (
-    <div className={`flex justify-end ${className}`}>
+    <div className={`flex justify-center ${className}`}>
       <Logo icon={icon} {...props} />
       {props.lpPairIcon && (
         <Logo className="-ml-2" icon={props.lpPairIcon} {...props} />
@@ -26,7 +30,7 @@ export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
       )}
     </div>
   ) : (
-    <Logo icon={icon} {...props} />
+    <Logo className={className} icon={icon} {...props} />
   );
 };
 
