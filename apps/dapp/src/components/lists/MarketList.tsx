@@ -10,7 +10,6 @@ import {
   issuerMarketList as issuerColumns,
 } from "./columns";
 import { getProtocol } from "@bond-protocol/bond-library";
-import { MarketsFallback } from "..";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -28,7 +27,6 @@ export const MarketList: FC<MarketListProps> = ({
   const { allMarkets, isLoading } = useMarkets();
 
   const columns = issuer ? issuerColumns : tableColumns;
-  //(props.filter && tableColumns.filter((f) => !props.filter?.includes(f.accessor))) ||
 
   const markets = props.markets || allMarkets;
 
@@ -43,8 +41,9 @@ export const MarketList: FC<MarketListProps> = ({
         .map((row) => {
           //@ts-ignore
           row["view"].onClick = (path: string) => navigate(path);
-          //@ts-ignore
-          row.onClick = () => navigate("/market/" + row?.view.value);
+          //@ts-ignore (TODO): Improve this
+          row.onClick = () =>
+            navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
           return row;
         }),
     [allMarkets, isLoading, issuer, columns]
