@@ -1,5 +1,5 @@
 import { CHAIN_ID } from "../constants";
-import { ProtocolDefinition } from "../index";
+import { ProtocolDefinition } from "../public-types";
 
 export default {
   name: "InverseFinance",

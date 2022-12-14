@@ -169,11 +169,7 @@ export const Dashboard = () => {
           </InfoLabel>
         </div>
         <div className="mt-10">
-          <BondList
-            data={account?.address && tableData}
-            Fallback={() => <MarketsFallback title="fuck" subtext="me" />}
-            loading={true}
-          />
+          <BondList data={account?.address && tableData} />
         </div>
       </RequiresWallet>
     </>

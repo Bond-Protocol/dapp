@@ -1,5 +1,5 @@
 import { CHAIN_ID, CUSTOM_PRICE_FEEDS } from "../constants";
-import { ProtocolDefinition } from "../index";
+import { ProtocolDefinition } from "../public-types";
 
 /* Protocol Template */
 export default {

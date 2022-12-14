@@ -1,5 +1,5 @@
 import { CHAIN_ID, CUSTOM_PRICE_FEEDS } from "../constants";
-import { ProtocolDefinition } from "../types";
+import { ProtocolDefinition } from "../public-types";
 
 // @ts-ignore
 export default {

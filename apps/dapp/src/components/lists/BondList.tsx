@@ -66,7 +66,7 @@ export const tableColumns: Array<Column<any>> = [
   },
 ];
 
-export const BondList = (props) => {
+export const BondList = (props: any) => {
   return (
     <div>
       <Table

@@ -1,14 +1,15 @@
 import { CHAIN_ID, CUSTOM_PRICE_FEEDS } from "../constants";
-import { ProtocolDefinition } from "../index";
+import { ProtocolDefinition } from "../public-types";
 
 /* Protocol Template */
 export default {
   name: "Redacted",
-  description: "Empowering on-chain liquidity, governance and cash-flow for DeFi protocols.", 
+  description: "Empowering on-chain liquidity, governance and cash-flow for DeFi protocols.",
   logoUrl: "https://app.redacted.finance/assets/images/tokens/Redacted-TokenIcon-BTRFLY-TransBG-72dpi.png", // 1:1 square logo
   links: {
     // Links to landing page, socials and docs
-    governanceVote: "https://commonwealth.im/redacted-cartel/snapshot/redactedcartel.eth/0xa1049118915c1a53ad72cc650b7adfb4f4310ac84cde8d8e93aa7daf18dea441", // A governance proposal related to bonds
+    governanceVote:
+      "https://commonwealth.im/redacted-cartel/snapshot/redactedcartel.eth/0xa1049118915c1a53ad72cc650b7adfb4f4310ac84cde8d8e93aa7daf18dea441", // A governance proposal related to bonds
     homepage: "https://redacted.finance/",
     twitter: "redactedcartel",
     github: "redacted-cartel",
@@ -38,11 +39,9 @@ export default {
         [CHAIN_ID.GOERLI_TESTNET]: "0x4bc4bba990fe31d529d987f7b8ccf79f1626e559",
       },
       purchaseLinks: {
-        [CHAIN_ID.ETHEREUM_MAINNET]: "https://curve.fi/#/ethereum/pools/factory-crypto-85/swap"
+        [CHAIN_ID.ETHEREUM_MAINNET]: "https://curve.fi/#/ethereum/pools/factory-crypto-85/swap",
       },
-      priceSources: [
-        { source: "coingecko", apiId: "redacted" },
-      ],
+      priceSources: [{ source: "coingecko", apiId: "redacted" }],
     },
   ],
 } as ProtocolDefinition;

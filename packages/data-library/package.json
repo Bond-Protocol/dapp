@@ -25,9 +25,9 @@
     "jest": "^28.1.0",
     "lint-staged": "^13.0.3",
     "prettier": "2.7.1",
+    "require-dir": "^1.2.0",
     "typechain": "^8.1.0",
-    "typescript": "^4.7.2",
-    "require-dir": "^1.2.0"
+    "typescript": "^4.7.2"
   },
   "scripts": {
     "build": "tsc",
@@ -39,9 +39,11 @@
     "protocol": "node ./src/duplicate.js",
     "token": "node ./src/duplicate.js -t",
     "generate": "ts-node ./src/core/generate-files.ts && prettier --write ./src/core/generated",
-    "prepare": "yarn generate && yarn build"
+    "prepare": "yarn generate && yarn build",
+    "sync": "degit --force Bond-Protocol/bond-library/src#experimental-v2 ./src"
   },
   "dependencies": {
+    "degit": "^2.8.4",
     "tsconfig": "*"
   },
   "types": "./dist/index.d.ts",

@@ -1,5 +1,4 @@
-//@ts-nocheck
-import { ProtocolDefinition } from "../types";
+import { ProtocolDefinition } from "../public-types";
 import { CHAIN_ID } from "../constants";
 
 export default {

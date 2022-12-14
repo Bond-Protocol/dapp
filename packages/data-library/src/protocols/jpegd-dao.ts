@@ -1,5 +1,5 @@
 import { CHAIN_ID, SUPPORTED_LP_TYPES } from "../constants";
-import { ProtocolDefinition } from "../types";
+import { ProtocolDefinition } from "../public-types";
 
 export default {
   name: "JPEG'd DAO",

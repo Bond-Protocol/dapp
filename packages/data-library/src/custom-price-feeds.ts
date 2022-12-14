@@ -1,7 +1,8 @@
 import { ethers } from "ethers";
 import { formatUnits } from "ethers/lib/utils";
-import { CustomPriceFunction } from "./types";
 import { Provider } from "@ethersproject/providers";
+
+export type CustomPriceFunction = (provider?: Provider) => Promise<number>;
 
 // Add a name for your custom feed to this enum
 export enum CUSTOM_PRICE_FEEDS {

@@ -1,6 +1,8 @@
 declare enum CHAIN_ID {
   ETHEREUM_MAINNET = "mainnet",
   GOERLI_TESTNET = "goerli",
+  ARBITRUM_MAINNET = "arbitrum",
+  ARBITRUM_GOERLI_TESTNET = "arbitrum-goerli",
 }
 
 declare enum CUSTOM_PRICE_FEEDS {

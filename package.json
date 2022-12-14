@@ -8,6 +8,8 @@
     "settings/*"
   ],
   "scripts": {
+    "prepare": "turbo run sync",
+    "sync": "turbo run sync",
     "clean": "turbo run clean",
     "build": "turbo run build",
     "lint": "turbo run lint",

@@ -1,17 +1,18 @@
 import { CHAIN_ID, CUSTOM_PRICE_FEEDS } from "../constants";
-import { ProtocolDefinition } from "../index";
+import { ProtocolDefinition } from "../public-types";
 
 /* Protocol Template */
 export default {
   name: "Sperax", // Your protocol's display name, formatted as it will appear in the BondProtocol dApp
-  description: "Sperax is an Arbitrum DeFi protocol featuring a yield-aggregator stablecoin, Sperax USD (USDs), and a Uniswap V3 one-click farm launcher, Demeter protocol.", // A short protocol description
+  description:
+    "Sperax is an Arbitrum DeFi protocol featuring a yield-aggregator stablecoin, Sperax USD (USDs), and a Uniswap V3 one-click farm launcher, Demeter protocol.", // A short protocol description
   logoUrl: "https://drive.google.com/drive/folders/1wbmS719X_OdOdg2AzPno4Ow9WAbmgYpu", // svg file
   // Links to landing page, socials and docs
   links: {
     governanceVote: "https://snapshot.org/#/speraxdao.eth", // A governance proposal related to bonds
     homepage: "https://www.sperax.io/",
     USDs: "https://app.sperax.io/",
-    demeter: "https://demeter.sperax.io/", 
+    demeter: "https://demeter.sperax.io/",
     twitter: "https://twitter.com/SperaxUSD",
     github: "https://github.com/Sperax",
     medium: "https://medium.com/sperax",
@@ -50,7 +51,7 @@ export default {
            Although custom price feeds are supported, some features such as bond price history charts
            do not currently support custom price feeds.
         */
-        { source: "coingecko", apiId: "sperax"},
+        { source: "coingecko", apiId: "sperax" },
         /*
           If you need to add a custom price function please add it in ../custom-price-feeds.ts
           then uncomment the following line and refer to it using the name you set in the
