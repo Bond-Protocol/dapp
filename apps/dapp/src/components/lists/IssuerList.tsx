@@ -24,7 +24,7 @@ export const IssuerList = () => {
     ? allIssuers
     : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
 
-  const uniqueBondooors = testnet
+  const uniqueBonders = testnet
     ? metrics.uniqueBondersTestnet
     : metrics.uniqueBonders;
 
@@ -42,7 +42,7 @@ export const IssuerList = () => {
           label="Unique Bonders"
           tooltip="Total unique addresses that interacted with protocol markets"
         >
-          {uniqueBondooors}
+          {uniqueBonders}
         </InfoLabel>
         <InfoLabel
           label="Average Discount Rate"

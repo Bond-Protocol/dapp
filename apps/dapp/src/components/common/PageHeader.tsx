@@ -13,10 +13,12 @@ export const PageHeader = (props: PageHeaderProps) => {
         className={`flex select-none font-fraktion uppercase ${props.className}`}
       >
         {props.icon && (
-          <TokenLogo {...props} width="lg" className="my-auto pl-0.5" />
+          <TokenLogo {...props} size="lg" className="my-auto pl-0.5" />
         )}
         {props.title && (
-          <div className={`text-5xl ${props.icon && "pl-3"} leading-10`}>
+          <div
+            className={`my-auto text-5xl ${props.icon && "pl-1"} leading-10`}
+          >
             {props.title}
           </div>
         )}

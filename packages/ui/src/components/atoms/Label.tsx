@@ -10,13 +10,14 @@ export const Label = (props: LabelProps) => {
   return (
     <div
       onClick={props.onClick}
-      className={`child:my-auto flex ${props.className}`}
+      className={`child:my-auto ${props.className} flex`}
     >
       {props.icon && (
         <TokenLogo
-          className={props.pairIcon ? "mr-1 w-10" : "mr-1"}
+          className={props.pairIcon && "mr-1 w-12"}
           icon={props.icon}
           pairIcon={props.pairIcon}
+          lpPairIcon={props.lpPairIcon}
         />
       )}
       <div className="flex flex-col gap-0.5">

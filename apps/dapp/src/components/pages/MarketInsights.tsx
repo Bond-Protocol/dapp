@@ -7,6 +7,7 @@ import { InfoLabel, getTokenDetails, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
+import { fetchTokenDetailsForMarket } from "components/lists/columns";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
@@ -18,11 +19,10 @@ export const MarketInsights = () => {
       marketId === Number(id) && marketNetwork === network
   );
 
+  const { quote, payout, lpPair } = fetchTokenDetailsForMarket(market);
   if (!market) return <Loading content={meme()} />;
 
   const protocol = getProtocol(market.owner);
-  const quoteToken = getTokenDetails(market.quoteToken);
-  const payoutToken = getTokenDetails(market.payoutToken);
 
   const vestingLabel =
     market.vestingType === "fixed-term"
@@ -41,8 +41,9 @@ export const MarketInsights = () => {
         title={
           market?.quoteToken.symbol + "-" + market.payoutToken.symbol + " Bond"
         }
-        icon={quoteToken.logoUrl}
-        pairIcon={payoutToken.logoUrl}
+        icon={quote.logoUrl}
+        lpPairIcon={lpPair.logoUrl}
+        pairIcon={payout.logoUrl}
       />
       <div className="my-16 flex justify-between gap-4 child:w-full">
         <InfoLabel

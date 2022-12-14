@@ -19,7 +19,7 @@ export const PageNavigation = (props: PageNavigationProps) => {
     <div className={`mx-3 flex justify-between uppercase ${props.className}`}>
       <ArrowLeft
         onClick={props.onClickLeft || goBack}
-        className="my-auto hover:cursor-pointer"
+        className="my-auto hover:cursor-pointer hover:text-light-secondary"
       />
       {props.children}
 

@@ -51,7 +51,8 @@ const sample3 = {
   bond: {
     icon: logo,
     pairIcon: logo,
-    value: "OHM-DAI",
+    lpPairIcon: logo,
+    value: "OHM-DAI SLP-WETH",
     even: true,
   },
   price: {

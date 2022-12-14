@@ -1,66 +1,45 @@
-export interface TokenLogoProps
-  extends React.HtmlHTMLAttributes<HTMLDivElement> {
-  icon?: string;
+export interface TokenLogoProps extends LogoProps {
   pairIcon?: string;
   lpPairIcon?: string;
-  even?: boolean;
-  width?: "sm" | "lg";
 }
 
-export const TokenLogo = (props: TokenLogoProps) => {
-  //const baseSize = props.width === "lg" ? "44" : "24";
-  //const unevenSize = props.width === "lg" ? "36" : "20";
-  const base = props.width === "lg" ? "h-[44px] w-[44px]" : "h-[24px] w-[24px]";
-  const uneven =
-    props.width === "lg" ? "h-[36px] w-[36px]" : "h-[20px] w-[20px]";
+export interface LogoProps extends React.HtmlHTMLAttributes<HTMLImageElement> {
+  size?: "sm" | "lg";
+  icon?: string;
+  uneven?: boolean;
+}
 
-  //const base = `h-[${baseSize}px] w-[${baseSize}]px`;
-  //const uneven = `h-[${unevenSize}px] w-[${unevenSize}]px`;
-
-  return props.pairIcon ? (
-    <div className={`flex flex-row ${props.className}`}>
-      <img className={`${base} rounded-full`} src={props.icon} />
-      <img
-        className={`ml-[-8px] flex self-end rounded-full ${
-          props.even ? base : uneven
-        }`}
-        src={props.pairIcon}
-      />
-    </div>
-  ) : (
-    <img
-      className={`${base} rounded-full ${props.className}`}
-      src={props.icon}
-    />
-  );
-};
-
-export const TokenLogoV2 = (props: TokenLogoProps) => {
-  //const baseSize = props.width === "lg" ? "44" : "24";
-  //const unevenSize = props.width === "lg" ? "36" : "20";
-  const base = props.width === "lg" ? "h-[44px] w-[44px]" : "h-[24px] w-[24px]";
-  const uneven =
-    props.width === "lg" ? "h-[36px] w-[36px]" : "h-[20px] w-[20px]";
-
-  //const base = `h-[${baseSize}px] w-[${baseSize}]px`;
-  //const uneven = `h-[${unevenSize}px] w-[${unevenSize}]px`;
-
-  return props.pairIcon ? (
-    <div className={`flex flex-row ${props.className}`}>
-      <img className={`${base} rounded-full`} src={props.icon} />
-      <img
-        className={`ml-[-8px] flex self-end rounded-full ${
-          !props.lpPairIcon && uneven
-        }`}
-        src={props.lpPairIcon ? props.lpPairIcon : props.pairIcon}
-      />
+export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
+  return props.pairIcon || props.lpPairIcon ? (
+    <div className={`flex justify-end ${className}`}>
+      <Logo icon={icon} {...props} />
       {props.lpPairIcon && (
-        <img className={`ml-[-8px] flex self-end rounded-full ${uneven}`} />
+        <Logo className="-ml-2" icon={props.lpPairIcon} {...props} />
+      )}
+      {props.pairIcon && (
+        <Logo
+          className="-ml-2 self-end"
+          uneven
+          icon={props.pairIcon}
+          {...props}
+        />
       )}
     </div>
   ) : (
+    <Logo icon={icon} {...props} />
+  );
+};
+
+export const Logo = (props: LogoProps) => {
+  const base = props.size === "lg" ? "h-[44px] w-[44px]" : "h-[24px] w-[24px]";
+  const uneven =
+    props.size === "lg" ? "h-[36px] w-[36px]" : "h-[16px] w-[16px]";
+
+  const style = props.uneven ? uneven : base;
+
+  return (
     <img
-      className={`${base} rounded-full ${props.className}`}
+      className={`${style} rounded-full ${props.className}`}
       src={props.icon}
     />
   );

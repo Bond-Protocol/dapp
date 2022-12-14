@@ -12,13 +12,12 @@ export const tableColumns: Array<Column<any>> = [
       const asset = getToken(bond?.underlying?.id);
       return {
         value: `${bond?.balance} ${asset?.symbol}`,
-        subtext: usdFormatter.format(bond?.usdPrice),
         icon: asset?.logoUrl,
       };
     },
   },
   {
-    label: "Market Price",
+    label: "Market Value",
     accessor: "price",
     formatter: (bond) => {
       return {

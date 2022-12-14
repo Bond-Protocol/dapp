@@ -10,6 +10,7 @@ import {
   issuerMarketList as issuerColumns,
 } from "./columns";
 import { getProtocol } from "@bond-protocol/bond-library";
+import { MarketsFallback } from "..";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
@@ -49,7 +50,7 @@ export const MarketList: FC<MarketListProps> = ({
     [allMarkets, isLoading, issuer, columns]
   );
 
-  const isSomeLoading = isLoading.market; //Object.values(isLoading).some((loading) => loading);
+  const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
   if (isSomeLoading) {
     return <Loading content={meme()} />;

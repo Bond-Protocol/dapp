@@ -1,8 +1,11 @@
 import { MarketList } from "..";
 import { PageHeader } from "components/common";
 import { ActionCard } from "ui";
+import { useNavigate } from "react-router-dom";
 
 export const Markets = () => {
+  const navigate = useNavigate();
+  const scrollUp = () => window.scrollTo(0, 0);
   return (
     <>
       <PageHeader
@@ -17,6 +20,10 @@ export const Markets = () => {
         title="Don't see a bond?"
         leftLabel="Why Bond"
         rightLabel="Issue a bond"
+        onClickRight={() => {
+          navigate("/create");
+          scrollUp();
+        }}
       />
     </>
   );

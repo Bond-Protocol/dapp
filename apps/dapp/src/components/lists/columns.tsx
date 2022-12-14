@@ -6,18 +6,32 @@ import { formatDate } from "src/utils";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 
+export const fetchTokenDetailsForMarket = (market: CalculatedMarket) => {
+  const tokens: any = {};
+
+  if (market?.quoteToken?.lpPair) {
+    tokens.quote = getTokenByAddress(market?.quoteToken.lpPair.token0.address);
+    tokens.lpPair = getTokenByAddress(market?.quoteToken.lpPair.token1.address);
+  } else {
+    tokens.quote = getTokenByAddress(market?.quoteToken.address);
+  }
+  tokens.payout = getTokenByAddress(market?.payoutToken.address);
+
+  return tokens;
+};
+
 const bond: Column<CalculatedMarket> = {
   label: "Bond",
   accessor: "bond",
-  width: "w-[13%]",
+  width: "w-[18%]",
   formatter: (market) => {
-    const quoteToken = getTokenByAddress(market.quoteToken.address);
-    const payoutToken = getTokenByAddress(market.payoutToken.address);
+    const { quote, payout, lpPair } = fetchTokenDetailsForMarket(market);
+
     return {
       value: market.quoteToken.symbol + "-" + market.payoutToken.symbol,
-      icon: quoteToken?.logoUrl,
-      pairIcon: payoutToken?.logoUrl,
-      even: true,
+      icon: quote?.logoUrl,
+      pairIcon: payout?.logoUrl,
+      lpPairIcon: lpPair?.logoUrl,
     };
   },
 };
@@ -77,7 +91,7 @@ const vesting: Column<CalculatedMarket> = {
 };
 
 const creationDate: Column<CalculatedMarket> = {
-  label: "Creation Date",
+  label: "Deployed on",
   accessor: "creationDate",
   width: "w-[15%]",
   formatter: (market) => ({

@@ -40,7 +40,7 @@ export const IssuerPage: FC = () => {
         rightText="Visit Website"
       />
       <PageHeader
-        className="mt-4"
+        className="mt-4 normal-case"
         icon={logo()}
         title={protocol?.name || placeholderProtocol.name}
       />
@@ -55,7 +55,7 @@ export const IssuerPage: FC = () => {
           </>
         )}
 
-        <div className="mt-5">
+        <div className="mt-2">
           <p className="text-neutral-400 ">
             {protocol?.description || placeholderProtocol.description}
           </p>

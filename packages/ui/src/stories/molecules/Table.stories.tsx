@@ -5,7 +5,12 @@ import { data } from "../mock-data/table";
 import { DiscountLabel, Button } from "../../components";
 
 const cols = [
-  { label: "Bond", accessor: "bond", unsortable: true },
+  {
+    label: "Bond",
+    width: "w-[18%]",
+    accessor: "bond",
+    unsortable: true,
+  },
   { label: "Bond Price", accessor: "price" },
   {
     label: "Discount",

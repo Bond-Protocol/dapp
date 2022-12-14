@@ -95,7 +95,8 @@ export function useOwnerTokenTbvs() {
 
         const price = getPrice(token?.token);
         let value = 0 + parseFloat(token?.tbv) * price;
-        return { id: protocol?.id, tbv: value };
+        let tbv = isNaN(value) ? 0 : value;
+        return { id: protocol?.id, tbv };
       })
       .reduce(
         (elements: Record<string, { id: string; tbv: number }>, current) => {
@@ -104,7 +105,7 @@ export function useOwnerTokenTbvs() {
             ...elements,
             [current.id]: {
               id: current.id,
-              tbv: current.tbv + tbv,
+              tbv: isNaN(tbv) ? current.tbv : current.tbv + tbv,
             },
           };
         },

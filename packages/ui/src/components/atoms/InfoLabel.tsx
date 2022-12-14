@@ -13,7 +13,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
       className={`flex h-[104px] max-h-[104px] w-full flex-col justify-center overflow-hidden bg-white/[.05] text-center ${props.className}`}
     >
       <div className="text-light-primary-500 ml-1.5 flex justify-center uppercase">
-        <div className="font-fraktion my-auto mr-1 font-bold">
+        <div className="font-fraktion my-auto mr-1 select-none font-bold">
           {props.label}
         </div>
         <Tooltip
