@@ -53,12 +53,19 @@ export const BondDiscountChart = ({
   const xAxisLabels = generateTicks(
     dataset.map((d) => d.date as number),
     4
-  ).map((x) => format(x, "MM/dd p"));
+  ).map((x) => {
+    try {
+      return format(x, "MM/dd p");
+    } catch (error) {
+      console.log(error);
+      return "";
+    }
+  });
 
-  const ranges = extraRanges.filter(
-    (days: number) => !isFuture(add(marketCreationDate, { days }))
-  );
-  const allRanges = [...defaultRanges, ...ranges];
+  // const ranges = extraRanges.filter(
+  //   (days: number) => !isFuture(add(marketCreationDate, { days }))
+  // );
+  const allRanges = [...defaultRanges];
 
   return (
     <>
