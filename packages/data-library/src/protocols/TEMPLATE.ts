@@ -3,11 +3,11 @@ import { ProtocolDefinition } from "../index";
 
 /* Protocol Template */
 export default {
-  name: "", // Your display name, formatted just how you like it
+  name: "", // Your protocol's display name, formatted as it will appear in the BondProtocol dApp
   description: "", // A short protocol description
-  logoUrl: "https://your-dao.defi/your-logo.png",
+  logoUrl: "https://your-dao.defi/your-protocol-logo.png",
+  // Links to landing page, socials and docs
   links: {
-    // Links to landing page, socials and docs
     governanceVote: "", // A governance proposal related to bonds
     homepage: "",
     twitter: "",
@@ -18,32 +18,42 @@ export default {
     staking: "",
   },
   /*
-    The address that should be allowed to spend your payout tokens
-    and you'll deploy the market from like a multisig or other contract, or a wallet
+    The address that you will use to execute the create market transaction, and which will be allowed
+    to spend your payout tokens. This can be a multisig or other contract, or a wallet.
   */
   issuerAddresses: {
-    [CHAIN_ID.ETHEREUM_MAINNET]: ["0x007000000000000000000000000000007405C0D3"],
+    [CHAIN_ID.ETHEREUM_MAINNET]: ["YOUR_DEPLOYMENT_ADDRESS"],
   },
-  // Tokens specific to your protocol like your governance token or LPs
-  // If you're looking to add a strategic asset, stablecoin or an otherwise common base please check the tokens directory
+  /*
+   Tokens specific to your protocol like your governance token or LPs can be added here.
+
+   If you're looking to add a strategic asset, stablecoin or an otherwise common base please check the
+   tokens directory to see if it exists already, if not, add it there rather than here.
+  */
   tokens: [
     {
-      // why use many word wen example do trick
-      name: "Wrapped Ether",
-      symbol: "WETH",
-      logoUrl: "https://storageapi.fleek.co/fc635ae1-c8aa-4181-b7db-801a533b8fa9-bucket/WETH.png",
+      name: "",
+      symbol: "",
+      logoUrl: "https://your-dao.defi/your-token-logo.png",
       // Token contract addresses
       addresses: {
-        [CHAIN_ID.ETHEREUM_MAINNET]: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-        [CHAIN_ID.GOERLI_TESTNET]: "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
+        [CHAIN_ID.ETHEREUM_MAINNET]: "",
+        [CHAIN_ID.GOERLI_TESTNET]: "",
       },
       purchaseLinks: { [CHAIN_ID.ETHEREUM_MAINNET]: "https://app.uniswap.org/#/swap" }, // Where to acquire your token
       priceSources: [
-        // Check out our docs for supported price sources and their usage
-        { source: "coingecko", apiId: "ethereum" }, // Lower number, higher priority
-        // If you need to add a custom price function please check ../custom-price-feeds.ts
-        // and refer it here by the name you choose...
-        { source: "custom", customPriceFunction: CUSTOM_PRICE_FEEDS.US_STABLE },
+        /*
+           Check out our docs for supported price sources and their usage.
+           Although custom price feeds are supported, some features such as bond price history charts
+           do not currently support custom price feeds.
+        */
+        { source: "coingecko", apiId: "" },
+        /*
+          If you need to add a custom price function please add it in ../custom-price-feeds.ts
+          then uncomment the following line and refer to it using the name you set in the
+          CUSTOM_PRICE_FEEDS enum
+        */
+        // { source: "custom", customPriceFunction: CUSTOM_PRICE_FEEDS.US_STABLE },
       ],
     },
   ],
