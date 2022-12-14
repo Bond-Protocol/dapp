@@ -1,5 +1,5 @@
 import { getToken } from "@bond-protocol/bond-library";
-import { Button, Table, Column } from "ui";
+import { Button, Table, Column, TableProps } from "ui";
 import { formatDate } from "src/utils/date";
 import { usdFormatter } from "src/utils/format";
 
@@ -66,10 +66,15 @@ export const tableColumns: Array<Column<any>> = [
   },
 ];
 
-export const BondList = (props: any) => {
+export const BondList = (props) => {
   return (
     <div>
-      <Table defaultSort="vesting" columns={tableColumns} data={props.data} />
+      <Table
+        defaultSort="vesting"
+        columns={tableColumns}
+        data={props.data}
+        Fallback={props.Fallback}
+      />
     </div>
   );
 };
