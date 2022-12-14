@@ -19,7 +19,7 @@
     "postinstall": "yarn codegen"
   },
   "dependencies": {
-    "@bond-protocol/bond-library": "^0.1.25",
+    "@bond-protocol/bond-library": "^0.1.26",
     "@bond-protocol/contract-library": "*",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@material-tailwind/react": "^1.0.6",
