@@ -1,7 +1,7 @@
 import { getProtocol, getTokenByAddress } from "@bond-protocol/bond-library";
 import { Button, Column, DiscountLabel } from "ui";
 import { add } from "date-fns";
-import { usdFormatter } from "src/utils/format";
+import { longFormatter, usdFormatter } from "src/utils/format";
 import { formatDate, getTokenDetailsForMarket } from "src/utils";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
@@ -28,8 +28,8 @@ const bondPrice: Column<CalculatedMarket> = {
   width: "w-[14%]",
   formatter: (market) => {
     return {
-      value: usdFormatter.format(market.discountedPrice),
-      subtext: usdFormatter.format(market.fullPrice) + " Market",
+      value: market.formattedDiscountedPrice,
+      subtext: market.formattedFullPrice + " Market",
     };
   },
 };
@@ -52,7 +52,7 @@ const maxPayout: Column<CalculatedMarket> = {
   width: "w-[14%]",
   formatter: (market) => {
     return {
-      value: market.maxPayout,
+      value: longFormatter.format(parseFloat(market.maxPayout)),
       subtext: usdFormatter.format(market.maxPayoutUsd),
       sortValue: market.maxPayoutUsd.toString(),
     };

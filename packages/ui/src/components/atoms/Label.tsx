@@ -14,7 +14,7 @@ export const Label = (props: LabelProps) => {
     >
       {props.icon && (
         <TokenLogo
-          className={"mr-2"}
+          className={!props.pairIcon && !props.lpPairIcon ? "mr-1" : "mr-3"}
           icon={props.icon}
           pairIcon={props.pairIcon}
           lpPairIcon={props.lpPairIcon}
@@ -22,9 +22,9 @@ export const Label = (props: LabelProps) => {
       )}
       <div className="flex flex-col gap-0.5">
         <p
-          className={`text-[15px] font-extralight ${
-            props.subtext && "leading-none"
-          } ${props.textClassName}`}
+          className={`text-[15px] ${props.subtext && "leading-none"} ${
+            props.textClassName
+          }`}
         >
           {props.value}
         </p>

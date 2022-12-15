@@ -8,6 +8,7 @@ import { TransactionHistory } from "components/lists";
 import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
 import { getTokenDetailsForMarket } from "src/utils";
+import { longFormatter } from "src/utils/format";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
@@ -28,6 +29,11 @@ export const MarketInsights = () => {
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
       : market.formattedShortVesting;
+
+  const formattedPayout = longFormatter.format(
+    //@ts-ignore
+    trim(market.maxPayout, calculateTrimDigits(parseFloat(market.maxPayout)))
+  );
 
   return (
     <div>
@@ -50,11 +56,7 @@ export const MarketInsights = () => {
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {trim(
-            market.maxPayout,
-            calculateTrimDigits(parseFloat(market.maxPayout))
-          )}
-          {market.payoutToken.symbol}
+          {formattedPayout} {market.payoutToken.symbol}
         </InfoLabel>
 
         <InfoLabel

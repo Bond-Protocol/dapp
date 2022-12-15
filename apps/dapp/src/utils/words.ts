@@ -6,6 +6,8 @@ const words = [
   " magic",
   " dreams",
   " memes",
+  " pepes",
+  " bullrun",
   " line 577",
   " hopium",
   " it back turbo",

@@ -21,7 +21,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
           iconClassname="fill-light-primary-500 text-light-primary-500"
         />
       </div>
-      <h2 className="font-fraktion text-[48px] leading-none">
+      <h2 className="font-fraktion select-none text-[48px] leading-none">
         {props.children}
       </h2>
     </div>

@@ -8,7 +8,7 @@ import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
 import { Link, Column, Table } from "ui";
-import { usdFormatter } from "src/utils/format";
+import { longFormatter, usdFormatter } from "src/utils/format";
 import { getTokenDetailsForMarket } from "src/utils";
 
 const userTxsHistory: Column<any>[] = [
@@ -46,7 +46,7 @@ const userTxsHistory: Column<any>[] = [
     alignEnd: true,
     formatter: (purchase) => {
       return {
-        value: `${parseFloat(purchase.amount).toFixed(2)} ${
+        value: `${longFormatter.format(purchase.amount)} ${
           purchase.quoteToken.symbol
         }`,
       };
@@ -58,7 +58,7 @@ const userTxsHistory: Column<any>[] = [
     alignEnd: true,
     formatter: (purchase) => {
       return {
-        value: `${parseFloat(purchase.payout).toFixed(2)} ${
+        value: `${longFormatter.format(purchase.payout)} ${
           purchase.payoutToken.symbol
         }`,
       };
