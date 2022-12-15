@@ -94,9 +94,11 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
     getTokenPriceHistory(tokenApiId, { days: dayRange }, Date.now())
   );
 
+  const network =
+    market.network === "arbitrum-one" ? "arbitrum" : market.network;
   const { data: purchaseData, ...purchasesQuery } =
     useListBondPurchasesPerMarketMainnetQuery(
-      { endpoint: subgraphEndpoints[market.network as CHAIN_ID] },
+      { endpoint: subgraphEndpoints[network as CHAIN_ID] },
       { marketId: market.id }
     );
 

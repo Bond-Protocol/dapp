@@ -1,3 +1,4 @@
+export * from "./get-token-details";
 export * from "./createTweet";
 export * from "./date";
 export * from "./formatSymbolForWallet";

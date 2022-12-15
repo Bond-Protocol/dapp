@@ -57,6 +57,7 @@ export const Dashboard = () => {
   const { chain } = useNetwork();
   const { getTokenDetails, getPrice } = useTokens();
   const account = useAccount();
+
   const endpoint = subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET];
 
   const purchases = useListBondPurchasesByAddressQuery(

@@ -24,28 +24,36 @@ export function useUniqueBonders() {
     new Map<string, number>()
   );
 
-  const { data: mainnetData, ...mainnetQuery } = useListUniqueBondersMainnetQuery({
-    endpoint: endpoints[0],
-  });
+  const { data: mainnetData, ...mainnetQuery } =
+    useListUniqueBondersMainnetQuery({
+      endpoint: endpoints[0],
+    });
 
   const { data: goerliData, ...goerliQuery } = useListUniqueBondersGoerliQuery({
     endpoint: endpoints[1],
   });
 
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } = useListUniqueBondersArbitrumMainnetQuery({
-    endpoint: endpoints[2],
-  });
+  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
+    useListUniqueBondersArbitrumMainnetQuery({
+      endpoint: endpoints[2],
+    });
 
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListUniqueBondersArbitrumGoerliQuery({
-    endpoint: endpoints[3],
-  });
+  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } =
+    useListUniqueBondersArbitrumGoerliQuery({
+      endpoint: endpoints[3],
+    });
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.uniqueBonders && arbitrumMainnetData && arbitrumMainnetData.uniqueBonders) {
-      const allBonders =
-        mainnetData.uniqueBonders
-          .concat(arbitrumMainnetData.uniqueBonders);
+    if (
+      mainnetData &&
+      mainnetData.uniqueBonders &&
+      arbitrumMainnetData &&
+      arbitrumMainnetData.uniqueBonders
+    ) {
+      const allBonders = mainnetData.uniqueBonders.concat(
+        arbitrumMainnetData.uniqueBonders
+      );
       const bonderMap = new Map();
 
       allBonders.forEach((bonder) => {
@@ -64,10 +72,15 @@ export function useUniqueBonders() {
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.uniqueBonders && arbitrumGoerliData && arbitrumGoerliData.uniqueBonders) {
-      const allBonders =
-        goerliData.uniqueBonders
-          .concat(arbitrumGoerliData.uniqueBonders);
+    if (
+      goerliData &&
+      goerliData.uniqueBonders &&
+      arbitrumGoerliData &&
+      arbitrumGoerliData.uniqueBonders
+    ) {
+      const allBonders = goerliData.uniqueBonders.concat(
+        arbitrumGoerliData.uniqueBonders
+      );
       const bonderMap = new Map();
 
       allBonders.forEach((bonder) => {
@@ -96,8 +109,11 @@ export function useUniqueBonders() {
     const addresses = getAddressesByProtocol(name);
     let count = 0;
 
+    console.log({ addresses });
     addresses.forEach((address) => {
-      const id = (address.chainId + "_" + address.address).toLowerCase();
+      const chainId =
+        address.chainId === "arbitrum-one" ? "arbitrum" : address.chainId;
+      const id = (chainId + "_" + address.address).toLowerCase();
       const bonders = selectedBonders.get(id);
       if (bonders) count = count + bonders;
     });
@@ -106,8 +122,8 @@ export function useUniqueBonders() {
   }
 
   const isLoading = testnet
-    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
-    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+    ? goerliQuery.isLoading || arbitrumGoerliQuery.isLoading
+    : mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading;
 
   return {
     bonders: selectedBonders,

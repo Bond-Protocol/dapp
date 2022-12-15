@@ -38,7 +38,7 @@ module.exports = withMT({
       },
       fontFamily: {
         sans: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
-        mono: ["PPFraktionMono", ...defaultTheme.fontFamily.mono],
+        mono: ["PPFraktionMono", "ComicSans", ...defaultTheme.fontFamily.mono],
         jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
         fraktion: ["PPFraktionSans", ...defaultTheme.fontFamily.sans],
       },
@@ -111,7 +111,7 @@ module.exports = withMT({
         "@font-face": {
           fontFamily: "PPFraktionMono",
           fontWeight: "700",
-          src: "url(/fonts/PPFraktionMono-Bold.woff) format('woff2')",
+          src: "url(/fonts/PPFraktionMono-Bold.woff2) format('woff2')",
         },
       });
       addBase({

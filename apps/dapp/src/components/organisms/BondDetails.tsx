@@ -312,7 +312,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
               : "https://app.sushi.com/swap"
           }
         >
-          <Button className="mt-4 w-full" onClick={onClickBond}>
+          <Button disabled className="mt-4 w-full" onClick={onClickBond}>
             {!hasSufficientAllowance ? "APPROVE" : "BOND"}
           </Button>
         </BondButton>

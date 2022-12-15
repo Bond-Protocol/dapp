@@ -90,9 +90,10 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
       : market.formattedShortVesting;
 
   useEffect(() => {
+    const marketNetwork = "arbitrum-one" ? "arbitrum" : market.network;
     if (
-      market.network === network?.chain?.network ||
-      (market.network === "mainnet" && network?.chain?.network === "homestead")
+      marketNetwork === network?.chain?.network ||
+      (marketNetwork === "mainnet" && network?.chain?.network === "homestead")
     ) {
       setCorrectChain(true);
     }
@@ -261,8 +262,14 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
               : "https://app.sushi.com/swap"
           }
         >
-          <Button className="mt-4 w-full" onClick={onClickBond}>
-            {!hasSufficientAllowance ? "APPROVE" : "BOND"}
+          <Button
+            disabled={!hasSufficientBalance}
+            className="mt-4 w-full"
+            onClick={onClickBond}
+          >
+            {!hasSufficientAllowance && hasSufficientBalance
+              ? "APPROVE"
+              : "BOND"}
           </Button>
         </BondButton>
       </div>

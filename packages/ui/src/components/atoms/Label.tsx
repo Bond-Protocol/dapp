@@ -29,7 +29,7 @@ export const Label = (props: LabelProps) => {
           {props.value}
         </p>
         {props.subtext && (
-          <p className="text-light-primary-100 font-mono text-[10px] leading-none">
+          <p className="text-light-primary-100 font-mono text-sm leading-none">
             {props.subtext}
           </p>
         )}

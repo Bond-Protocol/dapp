@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { CHAIN_ID, getTokenByAddress } from "@bond-protocol/bond-library";
+import { CHAIN_ID } from "@bond-protocol/bond-library";
 import {
   CalculatedMarket,
   getBlockExplorer,
@@ -9,19 +9,22 @@ import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
 import { Link, Column, Table } from "ui";
 import { usdFormatter } from "src/utils/format";
+import { getTokenDetailsForMarket } from "src/utils";
 
 const userTxsHistory: Column<any>[] = [
   {
     accessor: "market",
     label: "Market",
-    formatter: (market) => {
-      const quoteToken = getTokenByAddress(market.quoteToken.address);
-      const payoutToken = getTokenByAddress(market.payoutToken.address);
+    formatter: (purchase) => {
+      const { quote, payout, lpPair } = getTokenDetailsForMarket(
+        purchase?.market
+      );
+
       return {
-        value: market.quoteToken.symbol + "-" + market.payoutToken.symbol,
-        icon: quoteToken?.logoUrl,
-        pairIcon: payoutToken?.logoUrl,
-        even: true,
+        value: purchase.quoteToken.symbol + "-" + purchase.payoutToken.symbol,
+        icon: quote?.logoUrl,
+        pairIcon: payout?.logoUrl,
+        lpPairIcon: lpPair?.logoUrl,
       };
     },
   },
@@ -68,7 +71,7 @@ const userTxsHistory: Column<any>[] = [
       const timestamp = new Date(purchase.timestamp * 1000);
       const date = format(timestamp, "MM.dd.yyyy");
       const time = format(timestamp, "kk:mm zzz");
-      return { value: date, subtext: time };
+      return { sortValue: timestamp, value: date, subtext: time };
     },
   },
 ];
@@ -116,8 +119,11 @@ export interface TransactionHistoryProps {
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
+  const network =
+    props.market.network === "arbitrum-one" ? "arbitrum" : props.market.network;
+
   const { data, ...query } = useListBondPurchasesPerMarketQuery(
-    { endpoint: subgraphEndpoints[props?.market?.network as CHAIN_ID] },
+    { endpoint: subgraphEndpoints[network as CHAIN_ID] },
     { marketId: props.market.id }
   );
 
@@ -134,8 +140,10 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
     .map((p) => {
       //@ts-ignore
       p.txUrl = blockExplorerTxUrl + p.id;
-      //@ts-ignore
+      //@ts-ignore (TODO: IMPROVE)
       p.addressUrl = blockExplorerAddressUrl + p.recipient;
+      //@ts-ignore (TODO: IMPROVE)
+      p.market = props.market;
       return p;
     })
     .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts

@@ -37,8 +37,8 @@ export const PageNavigation = (props: PageNavigationProps) => {
           href={props.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="my-auto font-fraktion font-bold tracking-wide text-light-secondary hover:opacity-80"
-          iconClassName="mt-1 ml-1"
+          className="my-auto font-mono text-sm font-light text-light-secondary hover:cursor-pointer hover:underline"
+          iconClassName="mt-0.5 ml-1 my-auto"
         >
           {props.rightText}
         </Link>

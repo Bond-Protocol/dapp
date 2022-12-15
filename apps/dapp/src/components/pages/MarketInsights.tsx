@@ -3,11 +3,11 @@ import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
 import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
-import { InfoLabel, getTokenDetails, Loading } from "ui";
+import { InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
-import { fetchTokenDetailsForMarket } from "components/lists/columns";
+import { getTokenDetailsForMarket } from "src/utils";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
@@ -19,9 +19,9 @@ export const MarketInsights = () => {
       marketId === Number(id) && marketNetwork === network
   );
 
-  const { quote, payout, lpPair } = fetchTokenDetailsForMarket(market);
   if (!market) return <Loading content={meme()} />;
 
+  const { quote, payout, lpPair } = getTokenDetailsForMarket(market);
   const protocol = getProtocol(market.owner);
 
   const vestingLabel =
