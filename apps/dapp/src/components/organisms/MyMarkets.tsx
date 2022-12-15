@@ -1,12 +1,16 @@
-import { MarketList } from "components/organisms/MarketList";
+import { MarketList } from "components/lists";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { useMarkets } from "context/market-context";
 
 export const MyMarkets = () => {
-  const { myMarkets } = useMarkets();
+  const { myMarkets, isMarketOwner } = useMarkets();
   return (
     <RequiresWallet className="mt-20">
-      <MarketList markets={myMarkets} allowManagement={true} />
+      {isMarketOwner ? (
+        <MarketList markets={myMarkets} allowManagement={true} />
+      ) : (
+        <div />
+      )}
     </RequiresWallet>
   );
 };

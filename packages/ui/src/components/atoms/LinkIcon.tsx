@@ -4,7 +4,7 @@ export const LinkIcon = (
   return (
     <a
       href={props.href}
-      className={`hover:text-light-secondary ${props.className}`}
+      className={`hover:text-light-secondary transition-all duration-300 ${props.className}`}
       target="_blank"
       rel="noopener noreferrer"
     >

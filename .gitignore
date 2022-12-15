@@ -18,6 +18,11 @@ dist-ssr
 *.local
 src/generated/*
 
+### PROJECT
+
+packages/**/src/**/contracts
+###
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

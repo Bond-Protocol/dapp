@@ -30,11 +30,13 @@ const ModalBackdrop = forwardRef(function ModalContainer(
 
 const ModalHeader = (props: ModalHeaderProps) => {
   return (
-    <div className="flex justify-between p-5">
-      <p className="font-light tracking-wider">{props?.topLeftContent}</p>
+    <div className="text-light-secondary fill-light-secondary flex select-none justify-between p-2 pt-1">
+      <p className="font-fraktion my-auto p-2 font-bold uppercase tracking-wide">
+        {props?.topLeftContent}
+      </p>
       {props.onClickClose && (
-        <div onClick={props.onClickClose}>
-          <CloseIcon className="my-auto h-[14px] w-[14px] fill-white hover:cursor-pointer" />
+        <div onClick={props.onClickClose} className="my-auto pr-1">
+          <CloseIcon className="my-auto h-[14px] w-[14px] hover:cursor-pointer" />
         </div>
       )}
     </div>
@@ -43,12 +45,8 @@ const ModalHeader = (props: ModalHeaderProps) => {
 
 const ModalBackground = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="bg-light-primary-900 rounded-lg border-transparent">
-      <div id="grad-1" className="rounded-lg border-transparent">
-        <div id="grad-2" className="rounded-lg border-transparent">
-          {children}
-        </div>
-      </div>
+    <div className="bg-light-black rounded-lg border-transparent">
+      {children}
     </div>
   );
 };
@@ -66,10 +64,12 @@ export const Modal = ({ title, ...props }: ModalProps) => {
         <ModalBackground>
           <div className={`${props.large ? "w-[576px] pb-20" : "w-[405px]"} `}>
             <ModalHeader
-              topLeftContent={props.topLeftContent}
+              topLeftContent={title}
               onClickClose={props.onClickClose}
             />
-            <div className="px-5 pb-8 transition-all">{props.children}</div>
+            <div className="text-light-secondary-10 px-5 pb-6 transition-all duration-300">
+              {props.children}
+            </div>
           </div>
         </ModalBackground>
       </ModalBackdrop>

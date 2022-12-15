@@ -27,26 +27,26 @@ const styles = {
   },
   variant: {
     primary: {
-      base: "bg-brand-yella text-brand-covenant border-brand-yella",
-      hover: "hover:bg-white hover:border-white",
+      base: "bg-light-secondary text-light-base border-light-secondary",
+      hover: "hover:bg-light-secondary-10 hover:border-light-secondary-10",
       disabled:
-        "disabled:bg-brand-not-gold disabled:border-brand-not-gold disabled:cursor-not-allowed",
-      active: "active:bg-white active:border-white",
+        "disabled:bg-light-secondary-600 disabled:border-light-secondary-600 disabled:cursor-not-allowed",
+      active: "active:bg-light-secondary-10 active:border-light-secondary-10",
     },
     secondary: {
-      base: "text-white border border-brand-yella",
-      hover: "hover:border-white hover:text-brand-yella",
+      base: "text-light-secondary border border-light-secondary-10",
+      hover: "hover:border-light-secondary hover:text-light-secondary-10",
       disabled:
-        "disabled:bg-none disabled:border-brand-not-gold disabled:text-grey-500 disabled:cursor-not-allowed",
+        "disabled:bg-none disabled:border-light-secondary-600 disabled:text-grey-500 disabled:cursor-not-allowed",
       active:
-        "active:bg-brand-yella active:border-brand-yella active:text-brand-covenant",
+        "active:bg-light-secondary active:border-light-secondary active:text-light-base",
     },
     ghost: {
       base: "border text-white",
       hover:
-        "hover:text-brand-yella hover:border-brand-yella hover:fill-brand-yella",
+        "hover:text-light-secondary hover:border-light-secondary hover:fill-light-secondary",
       disabled: "disabled:text-grey-500 disabled:cursor-not-allowed",
-      active: "active:text-brand-yella",
+      active: "active:text-light-secondary",
     },
   },
 };
@@ -72,7 +72,7 @@ export const Button = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `select-none uppercase outline-none font-faketion font-extrabold tracking-widest border rounded transition-all ease-in-out ${style} ${props.className}`,
+          className: `select-none uppercase outline-none font-mono font-extrabold tracking-widest border rounded transition-all duration-300 ${style} ${props.className}`,
         }),
       }}
     />

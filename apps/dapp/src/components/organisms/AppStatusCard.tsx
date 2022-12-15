@@ -38,7 +38,7 @@ const WarningMessage = ({ toggleTestnet }: { toggleTestnet: () => void }) => (
 
 export const AppStatusCard = () => {
   const { isTestnet, toggleTestnet } = useTestnet();
-  const showInfo = environment.isStaging || environment.isTesting;
+  const showInfo = false; //environment.isStaging || environment.isTesting;
   const showWarning = showInfo && !isTestnet;
 
   return (

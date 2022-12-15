@@ -27,7 +27,9 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <ThemeProvider>
-      <Story />
+      <div className='font-sans'>
+        <Story />
+      </div>
     </ThemeProvider>
   ),
 ];

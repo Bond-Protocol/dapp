@@ -33,7 +33,7 @@ export interface LpPair {
 }
 
 export interface LpToken extends Token {
-  lpPair: LpPair;
+  lpPair?: LpPair;
 }
 
 export interface PrecalculatedMarket {
@@ -45,7 +45,7 @@ export interface PrecalculatedMarket {
   vesting: number;
   vestingType: string;
   payoutToken: Token;
-  quoteToken: Token | LpToken;
+  quoteToken: LpToken;
   isInstantSwap: boolean;
   totalBondedAmount: number;
   totalPayoutAmount: number;
@@ -76,7 +76,7 @@ export interface CalculatedMarket {
   currentCapacity: number;
   capacityToken: string;
   owner: string;
-  quoteToken: Token | LpToken;
+  quoteToken: LpToken;
   payoutToken: Token;
   isLive: boolean;
   isInstantSwap: boolean;

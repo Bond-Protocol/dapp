@@ -14,7 +14,7 @@ export const PolicyPage = (props: TermsPage) => {
   return (
     <div className="pt-10 pb-10 font-jakarta">
       <div className="mx-[10vw]">
-        <p className="text-3xl text-brand-yella">
+        <p className="text-3xl text-light-secondary">
           Effective: {props.updateDate}
         </p>
         <p className="pt-2 text-5xl font-bold">{props.title}</p>

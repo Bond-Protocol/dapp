@@ -2,31 +2,25 @@
 const plugin = require("tailwindcss/plugin");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const withMT = require("@material-tailwind/react/utils/withMT");
-const { colors } = require("./contants.json");
-
-const brandColors = colors.reduce(
-  (acc, c) => ({
-    ...acc,
-    ["brand-" + c.name]: c.value,
-  }),
-  {}
-);
 
 module.exports = withMT({
-  content: [
-    "./src/**/*.{ts,tsx}",
-    "../../packages/**/*.{ts,tsx}",
-  ],
+  content: ["./src/**/*.{ts,tsx}", "../../packages/**/*.{ts,tsx}"],
   theme: {
+    colors: {
+      grey: {
+        DEFAULT: "#A3A3A3",
+        400: "#A3A3A3",
+        500: "#737373",
+      },
+    },
     extend: {
       screens: {
         xs: "100px",
         fml: "600px",
       },
       colors: {
-        ...brandColors,
         light: {
-          base: '#14182D',
+          base: "#14182D",
           primary: {
             DEFAULT: "#40749B",
             50: "#9DBBC4",
@@ -35,17 +29,35 @@ module.exports = withMT({
             500: "#40749B",
             900: "#14182D",
           },
-          secondary: { DEFAULT: "#E7AC5C", 30: "#F4DFAC" },
+          secondary: {
+            DEFAULT: "#E7AC5C",
+            10: "#FCFAEC",
+            30: "#F4DFAC",
+            600: "#73562E",
+          },
+          black: "#090B15",
+          danger: "#FF0606",
+          alert: "#FF759A",
           success: "#88F6D7",
-          neutral: "#A8A8A8",
-          grey: "#737373",
+          grey: {
+            DEFAULT: "#A3A3A3",
+            400: "#A3A3A3",
+            500: "#737373",
+          },
+          tutti: {
+            DEFAULT: "#A3A3A3",
+            400: "#A3A3A3",
+            500: "#737373",
+          },
+
           tooltip: "#090B15",
         },
       },
       fontFamily: {
+        sans: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
+        mono: ["PPFraktionMono", "ComicSans", ...defaultTheme.fontFamily.mono],
         jakarta: ["PlusJakartaSans", ...defaultTheme.fontFamily.sans],
-        faketion: ["PlusJakartaSans", ...defaultTheme.fontFamily.mono],
-        inter: ["Inter", ...defaultTheme.fontFamily.mono],
+        fraktion: ["PPFraktionSans", ...defaultTheme.fontFamily.sans],
       },
       opacity: {
         15: ".15",
@@ -54,7 +66,7 @@ module.exports = withMT({
     },
   },
   plugins: [
-    plugin(function({ addBase }) {
+    plugin(function ({ addBase }) {
       //JAKARTA
       addBase({
         "@font-face": {
@@ -105,42 +117,30 @@ module.exports = withMT({
           src: "url(/fonts/PlusJakartaSans-ExtraBold.woff2) format('woff2')",
         },
       });
-
-      //INTER
       addBase({
         "@font-face": {
-          fontFamily: "Inter",
-          fontWeight: "500",
-          src: "url(/fonts/Inter-Regular.woff2) format('woff2')",
+          fontFamily: "PPFraktionMono",
+          fontWeight: "400",
+          src: "url(/fonts/PPFraktionMono-Regular.woff2) format('woff2')",
         },
       });
       addBase({
         "@font-face": {
-          fontFamily: "Inter",
-          fontWeight: "800",
-          src: "url(/fonts/Inter-Bold.woff2) format('woff2')",
-        },
-      });
-
-      //FAKE Fraktion
-      addBase({
-        "@font-face": {
-          fontFamily: "POEVetica",
+          fontFamily: "PPFraktionMono",
           fontWeight: "700",
-          src: "url(/fonts/POE-Vetica-Mono.woff) format('woff')",
+          src: "url(/fonts/PPFraktionMono-Bold.woff2) format('woff2')",
         },
       });
-
       addBase({
         "@font-face": {
-          fontFamily: "POEVetica",
-          fontWeight: "800",
-          src: "url(/fonts/POE-Vetica-Mono-Bold.woff) format('woff')",
+          fontFamily: "PPFraktionSans",
+          fontWeight: "700",
+          src: "url(/fonts/PPFraktionSans-Bold.woff2) format('woff2')",
         },
       });
     }),
 
-    function({ addVariant }) {
+    function ({ addVariant }) {
       addVariant("child", "& > *");
       addVariant("child-hover", "& > *:hover");
     },

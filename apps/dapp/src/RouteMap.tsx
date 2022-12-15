@@ -1,36 +1,29 @@
 import type { FC } from "react";
 import { Route, Routes as Switch } from "react-router-dom";
-import { useMarkets } from "hooks";
 import {
   CreateMarket,
-  MarketInsights,
-  MarketTabs,
-  MarketCreated,
-} from "components/pages";
-import {
+  Dashboard,
   IssuerPage,
   IssuerList,
-  MarketList,
-  MyBondsList,
+  MarketInsights,
+  Markets,
+  MarketCreated,
   MyMarkets,
-} from "components/organisms";
+  PolicyPage,
+} from "./components";
 import { useState } from "react";
-import { PolicyPage } from "components/pages/PolicyPage";
 import { terms, privacyPolicy, cookiePolicy } from "./content";
 
 export const RouteMap: FC = () => {
-  const { isMarketOwner } = useMarkets();
   const [newMarket, setNewMarket] = useState<unknown>();
 
   return (
     <Switch>
-      <Route path="/" element={<MarketTabs />}>
-        <Route index element={<MarketList />} />
-        <Route path="/markets" element={<MarketList />} />
-        <Route path="/issuers" element={<IssuerList />} />
-        <Route path="/my-bonds" element={<MyBondsList />} />
-        {isMarketOwner && <Route path="/my-markets" element={<MyMarkets />} />}
-      </Route>
+      <Route path="/" element={<IssuerList />} />
+      <Route path="/markets" element={<Markets />} />
+      <Route path="/issuers" element={<IssuerList />} />
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/my-markets" element={<MyMarkets />} />
       <Route
         path="/create"
         element={
@@ -51,8 +44,6 @@ export const PolicyRoutes = () => {
   return (
     <Switch>
       <Route path="/terms" element={<PolicyPage {...terms} />} />
-      <Route path="/policy" element={<PolicyPage {...privacyPolicy} />} />
-      <Route path="/cookies" element={<PolicyPage {...cookiePolicy} />} />
     </Switch>
   );
 };

@@ -7,14 +7,15 @@ import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg
 
 const styles = {
   base: "text-white fill-white",
-  hover: "hover:text-brand-yella hover:fill-brand-yella",
+  hover: "hover:text-light-secondary hover:fill-light-secondary",
   disabled: "pointer-events-none text-grey-500 fill-grey-500 ",
-  active: "active:text-brand-yella active:fill-brand-yella",
+  active: "active:text-light-secondary active:fill-light-secondary",
 };
 export type LinkProps = ButtonUnstyledProps &
   AnchorHTMLAttributes<HTMLAnchorElement> & {
     iconClassName?: string;
     labelClassname?: string;
+    disableIcon?: boolean;
   };
 
 export const Link = forwardRef(function Button(
@@ -32,16 +33,18 @@ export const Link = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `leading-[11px] flex transition-all ease-in-out ${style} ${props.className}`,
+          className: `leading-[11px] select-none flex transition-all duration-300 ease-in-out ${style} ${props.className}`,
         }),
       }}
     >
-      <p className={`pt-[2px] ${props.labelClassname}`}>{children}</p>
-      <LinkIcon
-        className={`color-inherit my-auto ml-1.5 mr-0.5 ${props.iconClassName}`}
-      />
+      {children && (
+        <p className={`my-auto mr-1.5 select-none ${props.labelClassname}`}>
+          {children}
+        </p>
+      )}
+      {!props.disableIcon && (
+        <LinkIcon className={`color-inherit my-auto ${props.iconClassName}`} />
+      )}
     </ButtonUnstyled>
   );
 });
-
-export default Link;

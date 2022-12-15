@@ -1,28 +1,31 @@
-import { Tabs } from "ui";
-import { useMarkets } from "hooks/useMarkets";
-import { Outlet, useNavigate } from "react-router-dom";
+import { MarketList } from "..";
+import { PageHeader } from "components/common";
+import { ActionCard } from "ui";
+import { useNavigate } from "react-router-dom";
 
-export const MarketTabs = () => {
-  const { isMarketOwner } = useMarkets();
+export const Markets = () => {
   const navigate = useNavigate();
-
-  const tabs = [
-    { label: "All Markets", handleClick: () => navigate("/") },
-    { label: "Bond Issuers", handleClick: () => navigate("/issuers") },
-    { label: "My Bonds", handleClick: () => navigate("/my-bonds") },
-  ];
-
-  const marketOwnerTab = {
-    label: "My Markets",
-    handleClick: () => navigate("my-markets"),
-  };
-
-  const marketTabs = isMarketOwner ? [...tabs, marketOwnerTab] : tabs;
-
+  const scrollUp = () => window.scrollTo(0, 0);
   return (
     <>
-      <Tabs tabs={marketTabs} />
-      <Outlet />
+      <PageHeader
+        title={"Live Markets"}
+        subtitle={"Instantly acquire governance tokens at a discount"}
+      />
+      <div className="pt-10">
+        <MarketList />
+      </div>
+      <ActionCard
+        className="mt-8"
+        title="Don't see a bond?"
+        leftLabel="Why Bond"
+        rightLabel="Issue a bond"
+        url="https://docs.bondprotocol.finance/basics/bonding"
+        onClickRight={() => {
+          navigate("/create");
+          scrollUp();
+        }}
+      />
     </>
   );
 };

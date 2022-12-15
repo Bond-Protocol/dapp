@@ -13,12 +13,12 @@ export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
   return (
     <MaterialTooltip
       content={props.content}
-      className={`bg-light-tooltip font-jakarta text-light-primary max-w-[320px] p-2 text-center text-xs ${props.className}`}
+      className={`bg-light-tooltip font-jakarta text-grey-400 max-w-[320px] p-2 text-center text-xs ${props.className}`}
     >
-      <div className="cursor-help">
+      <div className="my-auto cursor-help">
         {props.children || (
           <TooltipIcon
-            className={`fill-light-primary-500 ${props.iconClassname}`}
+            className={`my-auto ${props.iconClassname}`}
             width={iconWidth}
           />
         )}

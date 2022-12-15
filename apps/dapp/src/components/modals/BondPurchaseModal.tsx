@@ -3,17 +3,14 @@ import { Modal } from "ui";
 import {
   TransactionHashDialog,
   TransactionHashDialogProps,
-} from "./TransactionHashDialog";
-import {
   PurchaseSuccessDialog,
   PurchaseSuccessDialogProps,
-} from "./PurchaseSuccessDialog";
-import {
   PurchaseConfirmDialog,
   PurchaseConfirmDialogProps,
-} from "components/modals/index";
+  TransactionErrorDialog,
+} from "ui";
+
 import { ContractTransaction } from "ethers";
-import { TransactionErrorDialog } from "components/modals/TransactionErrorDialog";
 import { useNavigate } from "react-router-dom";
 import { providers } from "services/owned-providers";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
@@ -30,6 +27,13 @@ export type PurchaseBondModalProps = {
     PurchaseSuccessDialogProps &
     TransactionHashDialogProps
 >;
+
+const titles = [
+  "Confirm Transaction",
+  "Transaction Pending",
+  "Successful Transaction!",
+  "Failed Transaction",
+];
 
 export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
   const [index, setIndex] = useState(0);
@@ -73,7 +77,7 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
 
   const goToBondDetails = () => {
     closeModal();
-    navigate("/my-bonds");
+    navigate("/dashboard");
   };
 
   const dialogs = [
@@ -99,11 +103,11 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
       goToMarkets={goToMarkets}
       goToBondDetails={goToBondDetails}
     />,
-    <TransactionErrorDialog key={3} error={txError} />,
+    <TransactionErrorDialog key={3} hash={hash} error={txError} />,
   ];
 
   return (
-    <Modal open={props.open} onClickClose={closeModal}>
+    <Modal title={titles[index]} open={props.open} onClickClose={closeModal}>
       {dialogs[index]}
     </Modal>
   );

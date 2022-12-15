@@ -1,6 +1,9 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
+    "sync": {
+      "cache": false
+    },
     "clean": {
       "cache": false
     },
@@ -14,14 +17,18 @@
       "outputs": ["dist/**", "build/**"]
     },
     "build": {
-      "dependsOn": ["^build", "codegen", "typechain"],
+      "dependsOn": ["^build", "codegen", "typechain", "generate"],
       "outputs": ["dist/**", "build/**"]
     },
     "typechain": {
-      "outputs": ["src/types/contracts"]
+      "inputs": ["src/core/abis/**/*.json"],
+      "outputs": ["src/**/contracts", "src/"]
     },
     "codegen": {
       "outputs": ["src/genearted/graphql.ts"]
+    },
+    "generate": {
+      "inputs": ["src/protocols", "src/tokens"]
     },
     "storybook": {
       "dependsOn": [],

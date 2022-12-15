@@ -1,5 +1,11 @@
-import { Button, Input, Modal, ModalProps, ModalTitle } from "ui";
-import { CreateMarketTermsDialog } from "components/modals/index";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalProps,
+  ModalTitle,
+  CreateMarketTermsDialog,
+} from "ui";
 import { useState } from "react";
 import { CHAINS } from "@bond-protocol/bond-library";
 import copyIcon from "assets/icons/copy-icon.svg";
@@ -88,7 +94,7 @@ export const IssueMarketMultisigModal = (
                 </div>
 
                 <div className="flex flex-row justify-center gap-2">
-                  <Button type="submit" className="mt-5 w-1/2 font-faketion">
+                  <Button type="submit" className="font-faketion mt-5 w-1/2">
                     SUBMIT
                   </Button>
 
@@ -96,7 +102,7 @@ export const IssueMarketMultisigModal = (
                     onClick={props.onReject}
                     variant="secondary"
                     long
-                    className="mt-5 w-1/2 font-faketion"
+                    className="font-faketion mt-5 w-1/2"
                   >
                     Cancel
                   </Button>

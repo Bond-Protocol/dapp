@@ -141,7 +141,11 @@ export function useMyBonds() {
     const ownerBalances: Partial<OwnerBalance>[] = [];
     const promises: Promise<any>[] = [];
     bondTokens.forEach((bondToken) => {
-      if (bondToken.teller.toLowerCase() === "0x007FE7c498A2Cf30971ad8f2cbC36bd14Ac51156".toLowerCase()) return;
+      if (
+        bondToken.teller.toLowerCase() ===
+        "0x007FE7c498A2Cf30971ad8f2cbC36bd14Ac51156".toLowerCase()
+      )
+        return;
       address &&
       promises.push(
         contractLibrary
@@ -201,15 +205,9 @@ export function useMyBonds() {
     let bonds = testnet ? testnetBonds : mainnetBonds;
     const erc20Bonds = testnet ? testnetErc20Bonds : mainnetErc20Bonds;
 
-    bonds = bonds.concat(erc20Bonds);
+    const updatedBonds = [...bonds, ...erc20Bonds];
 
-    setMyBonds(
-      bonds.sort(
-        (n1: Partial<OwnerBalance>, n2: Partial<OwnerBalance>) =>
-          // @ts-ignore
-          n1.bondToken.expiry - n2.bondToken.expiry
-      )
-    );
+    setMyBonds(updatedBonds);
   }, [
     testnet,
     mainnetBonds,
