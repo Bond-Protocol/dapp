@@ -43,7 +43,7 @@ export const MarketInsights = () => {
         rightText="View Issuer"
       />
       <PageHeader
-        className="mt-8"
+        className="mt-5"
         title={
           market?.quoteToken.symbol + "-" + market.payoutToken.symbol + " Bond"
         }
@@ -51,7 +51,7 @@ export const MarketInsights = () => {
         lpPairIcon={lpPair?.logoUrl}
         pairIcon={payout?.logoUrl}
       />
-      <div className="my-16 flex justify-between gap-4 child:w-full">
+      <div className="mt-8 mb-16 flex justify-between gap-4 child:w-full">
         <InfoLabel
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."

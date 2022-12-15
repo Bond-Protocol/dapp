@@ -30,6 +30,9 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
     ? NO_REFERRAL_ADDRESS
     : REFERRAL_ADDRESS;
 
+  const network =
+    market.network === "arbitrum-one" ? "arbitrum" : market.network;
+
   return (
     <div className={`flex gap-4 ${props.className}`}>
       <div className="flex w-1/2">
@@ -42,7 +45,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
           nativeCurrencyPrice={nativeCurrencyPrice}
           referralAddress={referralAddress}
           issuerName={protocol?.name || "BondProtocol"}
-          provider={providers[market.network]}
+          provider={providers[network]}
           // @ts-ignore
           signer={signer}
         />

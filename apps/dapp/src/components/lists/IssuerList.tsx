@@ -42,16 +42,16 @@ export const IssuerList = () => {
           {metrics.tbv}
         </InfoLabel>
         <InfoLabel
-          label="Unique Bonders"
-          tooltip="Total unique addresses that interacted with protocol markets"
-        >
-          {uniqueBonders}
-        </InfoLabel>
-        <InfoLabel
           label="Total Bonds"
           tooltip="Total bonds acquired through our smart contracts"
         >
           {totalPurchases}
+        </InfoLabel>
+        <InfoLabel
+          label="Unique Bonders"
+          tooltip="Total unique addresses that interacted with protocol markets"
+        >
+          {uniqueBonders}
         </InfoLabel>
       </div>
       <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">

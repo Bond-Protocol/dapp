@@ -133,8 +133,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
   }, [payout]);
 
   const switchChain = () => {
-    const newChain = Number("0x" + provider.network.chainId.toString());
-    console.log({newChain})
+    const newChain = Number(provider.network.chainId.toString());
     switchNetwork?.(newChain);
   };
 
