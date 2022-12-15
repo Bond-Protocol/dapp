@@ -69,9 +69,10 @@ const userTxsHistory: Column<any>[] = [
     label: "Time",
     formatter: (purchase) => {
       const timestamp = new Date(purchase.timestamp * 1000);
+
       const date = format(timestamp, "MM.dd.yyyy");
       const time = format(timestamp, "kk:mm zzz");
-      return { sortValue: timestamp, value: date, subtext: time };
+      return { sortValue: timestamp.toString(), value: date, subtext: time };
     },
   },
 ];
