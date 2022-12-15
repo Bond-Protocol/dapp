@@ -155,7 +155,7 @@ export const Dashboard = () => {
     <>
       <PageHeader title={"Dashboard"} />
       <RequiresWallet>
-        <div className="mt-10 flex gap-6">
+        <div className="mt-10 flex gap-4">
           <InfoLabel
             label="Account TBV"
             tooltip="Total amount bonded in by this address denominated in USD"

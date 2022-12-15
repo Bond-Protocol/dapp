@@ -31,7 +31,7 @@ export const IssuerList = () => {
   return (
     <>
       <PageHeader title="Bond Issuers" />
-      <div className="flex gap-x-5 py-10">
+      <div className="flex gap-x-4 py-10">
         <InfoLabel
           label="Total Bonded Value"
           tooltip="Total Bonded Value across all Issuers"
@@ -51,12 +51,12 @@ export const IssuerList = () => {
           4%
         </InfoLabel>
       </div>
-      <div className="mx-auto flex flex-wrap justify-center gap-x-6 gap-y-10">
+      <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">
         {issuers.map((issuer) => {
           const markets = marketsByIssuer.get(issuer.name) || [];
           const protocolTbv = metrics.protocolTbvs[issuer.name];
           return (
-            <div key={issuer.id} className="w-[169px] max-w-[169px] flex-1">
+            <div key={issuer.id} className="min-w-[169px] max-w-[178px] flex-1">
               <IssuerCard
                 issuer={issuer}
                 tbv={protocolTbv?.tbv || 0}

@@ -15,13 +15,13 @@ export const ActionCard = (props: ActionCardProps) => {
       <div className="tracking-wide">{props.title}</div>
       <div className="mt-2 flex justify-center gap-6">
         <Link
-          className="font-mono text-sm uppercase"
+          className="font-mono text-sm font-bold uppercase"
           onClick={props.onClickLeft}
         >
           {props.leftLabel}
         </Link>
         <Button
-          className="text-sm font-light"
+          className="text-sm"
           variant="ghost"
           size="sm"
           thin

@@ -21,7 +21,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({
 
   return (
     <div
-      className="flex w-[169px] flex-col items-center justify-between rounded-lg border border-transparent bg-white/[.05] p-5 transition-all duration-300 hover:cursor-pointer hover:bg-white/10"
+      className="flex flex-col items-center justify-between rounded-lg border border-transparent bg-white/[.05] p-5 transition-all duration-300 hover:cursor-pointer hover:bg-white/10"
       onClick={() => handleClick(issuer.id)}
     >
       <div className="overflow-hidden rounded-full">

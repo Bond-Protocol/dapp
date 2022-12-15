@@ -17,7 +17,7 @@ export const PageHeader = (props: PageHeaderProps) => {
         )}
         {props.title && (
           <div
-            className={`my-auto text-5xl ${props.icon && "pl-1"} leading-10`}
+            className={`my-auto text-5xl ${props.icon && "pl-4"} leading-10`}
           >
             {props.title}
           </div>

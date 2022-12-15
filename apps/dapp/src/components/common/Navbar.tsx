@@ -1,6 +1,5 @@
 import { ConnectButton } from "components/common";
 import { ProtocolLogo } from "ui";
-import { ReactComponent as HamburgerIcon } from "../../assets/icons/hamburger-icon.svg";
 import { useTestnet } from "hooks/useTestnet";
 import { environment } from "src/env-state";
 import { NavbarTabs } from "./NavbarTabs";
@@ -12,10 +11,6 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
   return (
     <div className="mx-auto flex h-[96px] max-w-[1440px] items-center justify-between">
       <div className="flex w-1/3">
-        <HamburgerIcon
-          onClick={props.onHamburgerClick}
-          className="my-auto mr-3 hover:cursor-pointer"
-        />
         <ProtocolLogo className="py-6" />
       </div>
       <NavbarTabs className="w-1/3" />

@@ -29,7 +29,7 @@ export const TableHeading = ({
         props.className
       }`}
     >
-      {isSorting && (
+      {isSorting && props.alignEnd && (
         <div
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}
@@ -38,11 +38,24 @@ export const TableHeading = ({
             width="16"
             className={`${props.ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"
-            } mt-[1px] fill-white`}
+            } fill-white`}
           />
         </div>
       )}
       {props.children}
+      {isSorting && !props.alignEnd && (
+        <div
+          className="my-auto mr-1 cursor-pointer "
+          onClick={props.onClickIcon}
+        >
+          <ArrowDownIcon
+            width="16"
+            className={`${props.ascending ? "rotate-180" : ""} ${
+              isSorting ? "opacity-100" : "opacity-0"
+            } fill-white`}
+          />
+        </div>
+      )}
       {props.tooltip && (
         <Tooltip content={props.tooltip}>
           <div className="ml-0.5 cursor-help">

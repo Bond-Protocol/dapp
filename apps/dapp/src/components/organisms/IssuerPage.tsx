@@ -49,20 +49,20 @@ export const IssuerPage: FC = () => {
           <>
             <SocialRow
               {...protocol.links}
-              width={14}
+              width={18}
               className="mt-3 ml-2.5 justify-start gap-4"
             />
           </>
         )}
 
         <div className="mt-2">
-          <p className="text-neutral-400 ">
+          <p className="w-1/2 text-light-grey-400">
             {protocol?.description || placeholderProtocol.description}
           </p>
         </div>
       </div>
 
-      <div className="mt-10 mb-16 flex justify-between gap-10 child:w-full">
+      <div className="mt-10 mb-16 flex justify-between gap-4 child:w-full">
         <InfoLabel
           label="Total Bonded Value"
           tooltip={`Estimated total value in USD of all purchases from ${protocol?.name} markets.`}

@@ -74,7 +74,7 @@ export const ConnectButton = (props: ConnectButtonProps) => {
                     variant="ghost"
                     onClick={openAccountModal}
                     type="button"
-                    className="my-auto w-full px-4 font-mono font-light hover:cursor-pointer"
+                    className="my-auto w-full px-4 font-mono hover:cursor-pointer"
                   >
                     {account.displayName}
                   </Button>

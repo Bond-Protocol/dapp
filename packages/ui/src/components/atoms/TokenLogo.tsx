@@ -35,7 +35,7 @@ export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
 };
 
 export const Logo = (props: LogoProps) => {
-  const base = props.size === "lg" ? "h-[44px] w-[44px]" : "h-[24px] w-[24px]";
+  const base = props.size === "lg" ? "h-[48px] w-[48px]" : "h-[24px] w-[24px]";
   const uneven =
     props.size === "lg" ? "h-[36px] w-[36px]" : "h-[16px] w-[16px]";
 
