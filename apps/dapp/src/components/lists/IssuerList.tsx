@@ -7,13 +7,16 @@ import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
 import { socials } from "..";
 import { useGlobalMetrics } from "hooks/useGlobalMetrics";
+import { useListAllMarkets } from "hooks/useListAllMarkets";
 
 export const IssuerList = () => {
   const { marketsByIssuer } = useMarkets();
   const navigate = useNavigate();
   const [testnet] = useAtom(testnetMode);
   const metrics = useGlobalMetrics();
+  const scrollUp = () => window.scrollTo(0, 0);
 
+  const { totalPurchases } = useListAllMarkets();
   const allIssuers = Array.from(PROTOCOLS.values()).filter(
     (issuer) =>
       Array.from(marketsByIssuer.keys()).includes(issuer.id) ||
@@ -45,10 +48,10 @@ export const IssuerList = () => {
           {uniqueBonders}
         </InfoLabel>
         <InfoLabel
-          label="Average Discount Rate"
-          tooltip="Average discount at what bonds are acquired"
+          label="Total Bonds"
+          tooltip="Total bonds acquired through our smart contracts"
         >
-          4%
+          {totalPurchases}
         </InfoLabel>
       </div>
       <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">
@@ -72,6 +75,11 @@ export const IssuerList = () => {
         title="Do you wanna issue a bond?"
         leftLabel="Why Bond"
         rightLabel="Issue a bond"
+        url="https://docs.bondprotocol.finance/basics/bonding"
+        onClickRight={() => {
+          navigate("/create");
+          scrollUp();
+        }}
       />
     </>
   );

@@ -33,12 +33,14 @@ export const Link = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `leading-[11px] flex transition-all duration-300 ease-in-out ${style} ${props.className}`,
+          className: `leading-[11px] select-none flex transition-all duration-300 ease-in-out ${style} ${props.className}`,
         }),
       }}
     >
       {children && (
-        <p className={`my-auto mr-1.5 ${props.labelClassname}`}>{children}</p>
+        <p className={`my-auto mr-1.5 select-none ${props.labelClassname}`}>
+          {children}
+        </p>
       )}
       {!props.disableIcon && (
         <LinkIcon className={`color-inherit my-auto ${props.iconClassName}`} />

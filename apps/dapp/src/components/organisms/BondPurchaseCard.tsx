@@ -90,7 +90,8 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
       : market.formattedShortVesting;
 
   useEffect(() => {
-    const marketNetwork = "arbitrum-one" ? "arbitrum" : market.network;
+    const marketNetwork =
+      market.network === "arbitrum-one" ? "arbitrum" : market.network;
     if (
       marketNetwork === network?.chain?.network ||
       (marketNetwork === "mainnet" && network?.chain?.network === "homestead")

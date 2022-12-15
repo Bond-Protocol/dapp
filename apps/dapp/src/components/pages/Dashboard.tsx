@@ -65,8 +65,7 @@ export const Dashboard = () => {
     { recipient: account.address?.toLowerCase() }
   );
 
-  const switchChain = (e: Event, selectedChain: string) => {
-    e.preventDefault();
+  const switchChain = (selectedChain: string) => {
     const newChain = Number(
       "0x" + providers[selectedChain].network.chainId.toString()
     );
@@ -113,15 +112,22 @@ export const Dashboard = () => {
       const underlying: TokenDetails =
         bond.bondToken && getTokenDetails(bond.bondToken.underlying);
 
+      const network =
+        bond.bondToken.network === "arbitrum-one"
+          ? "arbitrum"
+          : bond.bondToken.network;
+
       const isCorrectNetwork =
         (isMainnet(bond.bondToken.network) && isMainnet(chain?.network)) ||
-        bond.bondToken.network === chain?.network;
+        network === chain?.network;
 
       const handleClaim = isCorrectNetwork
         ? () => redeemBond(bond)
-        : (e: React.BaseSyntheticEvent) =>
+        : (e: React.BaseSyntheticEvent) => {
             // @ts-ignore
-            switchChain(e, bond.bondToken.network);
+            switchChain(network);
+            console.log("clicking");
+          };
 
       return {
         bond,

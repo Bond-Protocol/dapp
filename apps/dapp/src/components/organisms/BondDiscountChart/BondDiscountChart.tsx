@@ -22,7 +22,7 @@ export const BondDiscountChart = ({
   const marketCreationDate = new Date(market.creationBlockTimestamp * 1000);
   const isFirstDay = isBefore(Date.now(), add(marketCreationDate, { days: 1 }));
 
-  const [days, setDays] = useState(isFirstDay ? 1 : 3);
+  const [days, setDays] = useState(isFirstDay ? 1 : 30);
 
   const { dataset, isLoading, purchases } = useBondChartData(market, days);
 
@@ -72,18 +72,18 @@ export const BondDiscountChart = ({
           <BondDiscountTooltip tokenSymbol={market?.payoutToken?.symbol} />
         }
       />
-      <div className="mt-1 flex justify-end gap-2 text-xs">
-        {allRanges.map((element) => (
-          <Chip
-            className={`bond-chip ${
-              days === element ? "border-white/90" : "text-white/50"
-            }`}
-            onClick={() => setDays(element)}
-          >
-            {element + "D"}
-          </Chip>
-        ))}
-      </div>
+      {/* <div className="mt-1 flex justify-end gap-2 text-xs"> */}
+      {/*   {allRanges.map((element) => ( */}
+      {/*     <Chip */}
+      {/*       className={`bond-chip ${ */}
+      {/*         days === element ? "border-white/90" : "text-white/50" */}
+      {/*       }`} */}
+      {/*       onClick={() => setDays(element)} */}
+      {/*     > */}
+      {/*       {element + "D"} */}
+      {/*     </Chip> */}
+      {/*   ))} */}
+      {/* </div> */}
     </div>
   );
 };

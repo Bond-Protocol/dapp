@@ -109,11 +109,10 @@ export function useUniqueBonders() {
     const addresses = getAddressesByProtocol(name);
     let count = 0;
 
-    console.log({ addresses });
     addresses.forEach((address) => {
-      const chainId =
-        address.chainId === "arbitrum-one" ? "arbitrum" : address.chainId;
-      const id = (chainId + "_" + address.address).toLowerCase();
+      const network =
+        address.chainId === "arbitrum" ? "arbitrum-one" : address.chainId;
+      const id = (network + "_" + address.address).toLowerCase();
       const bonders = selectedBonders.get(id);
       if (bonders) count = count + bonders;
     });

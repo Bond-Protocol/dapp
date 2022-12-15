@@ -1,11 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ActionCard, InfoLabel, SocialRow } from "ui";
-import { PROTOCOLS } from "@bond-protocol/bond-library";
+import { getAddressesByProtocol, PROTOCOLS } from "@bond-protocol/bond-library";
 import { MarketList } from "components/lists";
-import { PageHeader, PageNavigation } from "components/common";
+import { PageHeader, PageNavigation, socials } from "components/common";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
+import { useNavigate } from "react-router-dom";
+import { useListAllMarkets } from "hooks/useListAllMarkets";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -14,14 +16,24 @@ const placeholderProtocol = {
 };
 
 export const IssuerPage: FC = () => {
+  const navigate = useNavigate();
   const { getBondersForProtocol } = useUniqueBonders();
   const { protocolTbvs } = useOwnerTokenTbvs();
   const { name } = useParams();
+  const { allPurchases } = useListAllMarkets();
 
   const [protocol] = useState(PROTOCOLS.get(name || ""));
   const bonders = getBondersForProtocol(name || "");
+  const addresses =
+    getAddressesByProtocol(protocol?.id!).map((a) => a.address.toLowerCase()) ||
+    [];
+
+  const total = allPurchases?.filter((p) =>
+    addresses.includes(p.owner.toLowerCase())
+  );
 
   const [tbv, setTbv] = useState(0);
+  const scrollUp = () => window.scrollTo(0, 0);
 
   const logo = () => {
     return protocol?.logoUrl
@@ -69,19 +81,18 @@ export const IssuerPage: FC = () => {
         >
           ${new Intl.NumberFormat().format(Math.trunc(tbv))}
         </InfoLabel>
+        <InfoLabel
+          label="Total Bonds"
+          tooltip={`The number of bonds acquired from ${protocol?.name}`}
+        >
+          {total.length}
+        </InfoLabel>
 
         <InfoLabel
           label="Unique Bonders"
           tooltip={`The number of unique addresses which have purchased ${protocol?.name} bonds.`}
         >
           {bonders}
-        </InfoLabel>
-
-        <InfoLabel
-          label="Average Discount Rate"
-          tooltip={`The estimated average discount of all bond purchases from ${protocol?.name} markets.`}
-        >
-          1%
         </InfoLabel>
       </div>
       <MarketList issuer={protocol?.name} filter={["issuer"]} />
@@ -90,6 +101,11 @@ export const IssuerPage: FC = () => {
         title="Have a question?"
         leftLabel="Why Bond"
         rightLabel="Join Discord"
+        url={socials.discord}
+        onClickRight={() => {
+          navigate("/create");
+          scrollUp();
+        }}
       />
     </div>
   );

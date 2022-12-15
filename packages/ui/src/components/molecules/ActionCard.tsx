@@ -5,7 +5,7 @@ export interface ActionCardProps {
   title?: string;
   leftLabel?: string;
   rightLabel?: string;
-  onClickLeft?: () => void;
+  url?: string;
   onClickRight?: () => void;
 }
 
@@ -16,7 +16,7 @@ export const ActionCard = (props: ActionCardProps) => {
       <div className="mt-2 flex justify-center gap-6">
         <Link
           className="font-mono text-sm font-bold uppercase"
-          onClick={props.onClickLeft}
+          href={props.url}
         >
           {props.leftLabel}
         </Link>

@@ -76,7 +76,7 @@ const createBondPurchaseDataset = ({
   ];
 };
 
-export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
+export const useBondChartData = (market: CalculatedMarket, dayRange = 30) => {
   //@ts-ignore (TODO): fix bond-library types (again)
   const priceSources = TOKENS.get(market.payoutToken.id)?.priceSources || [];
   //@ts-ignore
@@ -108,6 +108,7 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
   }));
 
   const earliestDate = market.creationBlockTimestamp * 1000;
+
   const dataset: BondChartDataset[] = createBondPurchaseDataset({
     priceData: priceData,
     bondPurchases: purchaseData?.bondPurchases as BondPurchase[],

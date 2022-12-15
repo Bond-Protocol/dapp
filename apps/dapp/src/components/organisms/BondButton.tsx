@@ -53,9 +53,13 @@ export const BondButton = (props: BondButtonProps) => {
           href={props.purchaseLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-1/2"
+          className="w-full"
         >
-          <Button variant="ghost" className="mt-4 flex w-full justify-center">
+          <Button
+            thin
+            variant="ghost"
+            className="mt-4 flex w-full justify-center"
+          >
             GET{" "}
             {props.quoteTokenSymbol.length > 6
               ? props.quoteTokenSymbol.split(" ")[1]
@@ -64,7 +68,7 @@ export const BondButton = (props: BondButtonProps) => {
           </Button>
         </a>
       )}
-      <div className="w-1/2">{props.children}</div>
+      <div className="w-full">{props.children}</div>
     </div>
   );
 };

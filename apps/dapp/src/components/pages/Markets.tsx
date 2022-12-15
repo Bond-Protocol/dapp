@@ -20,6 +20,7 @@ export const Markets = () => {
         title="Don't see a bond?"
         leftLabel="Why Bond"
         rightLabel="Issue a bond"
+        url="https://docs.bondprotocol.finance/basics/bonding"
         onClickRight={() => {
           navigate("/create");
           scrollUp();

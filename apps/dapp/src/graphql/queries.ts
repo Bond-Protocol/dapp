@@ -1009,3 +1009,12 @@ export const listBondPurchasesPerMarket = gql`
     }
   }
 `;
+
+export const listAllPurchases = gql`
+  query ListAllPurchases {
+    bondPurchases(first: 1000) {
+      id
+      owner
+    }
+  }
+`;
