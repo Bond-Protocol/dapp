@@ -40,7 +40,7 @@
     "token": "node ./src/duplicate.js -t",
     "generate": "ts-node ./src/core/generate-files.ts && prettier --write ./src/core/generated",
     "prepare": "yarn generate && yarn build",
-    "degit": "degit --force Bond-Protocol/bond-library/src#experimental-v2 ./src",
+    "degit": "degit --force Bond-Protocol/bond-library/src ./src",
     "sync": "yarn degit && yarn prepare"
   },
   "dependencies": {

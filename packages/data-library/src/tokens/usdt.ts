@@ -6,10 +6,12 @@ export default {
   priceSources: [{ source: "coingecko", apiId: "tether" }],
   purchaseLinks: {
     [CHAIN_ID.ETHEREUM_MAINNET]: "https://curve.fi/",
+    [CHAIN_ID.ARBITRUM_MAINNET]: "https://saddle.exchange/#/",
     [CHAIN_ID.GOERLI_TESTNET]: "https://app.compound.finance/",
   },
   addresses: {
     [CHAIN_ID.ETHEREUM_MAINNET]: "0xdac17f958d2ee523a2206206994597c13d831ec7",
+    [CHAIN_ID.ARBITRUM_MAINNET]: "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
     [CHAIN_ID.GOERLI_TESTNET]: "0x79C950C7446B234a6Ad53B908fBF342b01c4d446",
   },
 };
