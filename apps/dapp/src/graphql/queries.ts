@@ -954,7 +954,33 @@ export const listBondPurchasesByAddress = gql`
     }
   }
 `;
-
+export const listBondPurchasesByAddressArbitrum = gql`
+  query listBondPurchasesByAddressArbitrum($recipient: String = "") {
+    bondPurchases(where: { recipient: $recipient }) {
+      id
+      recipient
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
+      recipient
+      network
+      quoteToken {
+        id
+        name
+        symbol
+        address
+      }
+      payoutToken {
+        id
+        name
+        symbol
+        address
+      }
+    }
+  }
+`;
 export const listBondPurchases = gql`
   query ListBondPurchases {
     bondPurchases(first: 1000) {

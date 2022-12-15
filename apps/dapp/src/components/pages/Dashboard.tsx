@@ -1,14 +1,10 @@
 import { ContractTransaction } from "ethers";
 import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { useMyBonds } from "hooks/useMyBonds";
-import { Button, InfoLabel, Loading } from "ui";
-import {
-  OwnerBalance,
-  useListBondPurchasesByAddressQuery,
-} from "src/generated/graphql";
+import { InfoLabel } from "ui";
+import { OwnerBalance } from "src/generated/graphql";
 import { providers } from "services/owned-providers";
 import { TokenDetails, useTokens } from "hooks";
-import { useNavigate } from "react-router-dom";
 import {
   calculateTrimDigits,
   trim,
@@ -18,52 +14,23 @@ import {
 import { PageHeader } from "components/common";
 import { BondList, tableColumns } from "components/lists";
 import { toTableData } from "src/utils/table";
-import { subgraphEndpoints } from "services/subgraph-endpoints";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
 import { usdFormatter } from "src/utils/format";
 import { RequiresWallet } from "components/utility/RequiresWallet";
+import { useAccountStats } from "hooks/useAccountStats";
 
 const isMainnet = (chain?: string) => {
   return chain === "mainnet" || chain === "homestead";
 };
 
-const NoBondsView = ({ loading }: { loading: boolean }) => {
-  const navigate = useNavigate();
-
-  const goToMarkets = () => navigate("/markets");
-
-  if (loading) {
-    return <Loading content="your bonds" />;
-  }
-
-  return (
-    <div className="mt-10 flex flex-col">
-      <h1 className="font-faketion py-10 text-center text-5xl leading-normal">
-        YOU DONT
-        <br />
-        HAVE A BOND YET
-      </h1>
-      <Button className="mx-auto" onClick={goToMarkets}>
-        Explore the Market to bond
-      </Button>
-    </div>
-  );
-};
-
 export const Dashboard = () => {
-  const { myBonds, refetch } = useMyBonds();
+  const { myBonds } = useMyBonds();
   const { data: signer } = useSigner();
   const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
   const { getTokenDetails, getPrice } = useTokens();
   const account = useAccount();
 
-  const endpoint = subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET];
-
-  const purchases = useListBondPurchasesByAddressQuery(
-    { endpoint },
-    { recipient: account.address?.toLowerCase() }
-  );
+  const { purchases } = useAccountStats();
 
   const switchChain = (selectedChain: string) => {
     const newChain = Number(
@@ -123,11 +90,7 @@ export const Dashboard = () => {
 
       const handleClaim = isCorrectNetwork
         ? () => redeemBond(bond)
-        : (e: React.BaseSyntheticEvent) => {
-            // @ts-ignore
-            switchChain(network);
-            console.log("clicking");
-          };
+        : () => switchChain(network);
 
       return {
         bond,
@@ -143,7 +106,7 @@ export const Dashboard = () => {
   const tableData = data?.map((b) => toTableData(tableColumns, b));
 
   const tbv = usdFormatter.format(
-    purchases?.data?.bondPurchases?.reduce((total, bond) => {
+    purchases?.reduce((total, bond) => {
       return total + bond.payout * bond.purchasePrice;
     }, 0) as number
   );
