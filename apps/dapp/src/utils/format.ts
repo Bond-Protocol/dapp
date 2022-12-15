@@ -14,6 +14,17 @@ export const formatVestingTerm = (market: CalculatedMarket) => {
     : market.formattedShortVesting;
 };
 
+export const usdFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "usd",
+  minimumFractionDigits: 0,
+  maximumFractionDigits: 2,
+});
+
+export const longFormatter = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 2,
+});
+
 export default {
   formatLongNumber,
   formatVestingTerm,

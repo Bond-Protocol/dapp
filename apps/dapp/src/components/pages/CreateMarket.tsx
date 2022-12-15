@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Tabs } from "ui";
 import { CreateMarketPage, IssueMarketPage } from "components/organisms";
+import { socials, PageHeader, PageNavigation } from "components/common";
 
-export type CreateMarketPageProps = {
+const docsSublink = "/bond-marketplace/deploy-a-bond-market";
+
+export type CreateMarketProps = {
   onExecute: (marketData: any) => void;
 };
 
-export const CreateMarket = (props: CreateMarketPageProps) => {
+export const CreateMarket = (props: CreateMarketProps) => {
   const [initialValues, setInitialValues] = useState<unknown>(null);
   const [marketData, setMarketData] = useState<unknown>(null);
   const [selected, setSelected] = useState(0);
@@ -18,25 +20,35 @@ export const CreateMarket = (props: CreateMarketPageProps) => {
     setInitialValues(marketData.formValues);
   };
 
-  const createMarketTabs = [
-    {
-      label: "Issue Bond Market",
-    },
-  ];
+  const isPreview = selected === 1;
+  const title = !isPreview ? "Deploy Market" : "Setup Bond Market";
+  const subtitle = isPreview
+    ? "Confirm and deploy your bond market"
+    : "Setup your market and launch it on Bond Protocol";
 
   return (
-    <Tabs largeTab value={0} tabs={createMarketTabs}>
-      {selected === 0 ? (
-        <CreateMarketPage initialValues={initialValues} onConfirm={onPreview} />
-      ) : (
-        <IssueMarketPage
-          data={marketData}
-          onEdit={() => setSelected(0)}
-          onExecute={(marketData) => {
-            props.onExecute(marketData);
-          }}
-        />
-      )}
-    </Tabs>
+    <div>
+      <PageNavigation
+        link={socials.gitbook + docsSublink}
+        rightText="READ DOCS"
+      />
+      <PageHeader className="mt-8" title={title} subtitle={subtitle} />
+      <div className="mt-14">
+        {!isPreview ? (
+          <CreateMarketPage
+            initialValues={initialValues}
+            onConfirm={onPreview}
+          />
+        ) : (
+          <IssueMarketPage
+            data={marketData}
+            onEdit={() => setSelected(0)}
+            onExecute={(marketData) => {
+              props.onExecute(marketData);
+            }}
+          />
+        )}
+      </div>
+    </div>
   );
 };

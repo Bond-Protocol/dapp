@@ -8,11 +8,13 @@
     "settings/*"
   ],
   "scripts": {
+    "sync": "turbo run sync",
     "clean": "turbo run clean",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "dev": "turbo run dev --parallel",
     "preview": "turbo run preview",
+    "codegen": "turbo run codegen",
     "storybook": "turbo run storybook",
     "build:storybook": "turbo run build:storybook"
   },

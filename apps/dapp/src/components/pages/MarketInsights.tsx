@@ -1,9 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { BondListCard } from "..";
-import { InfoLabel, TableHeading } from "ui";
-import receiptIcon from "../../assets/icons/receipt-icon.svg";
+import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
 import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
+import { PageHeader, PageNavigation } from "components/common";
+import { InfoLabel, Loading } from "ui";
+import { TransactionHistory } from "components/lists";
+import { getProtocol } from "@bond-protocol/bond-library";
+import { meme } from "src/utils/words";
+import { getTokenDetailsForMarket } from "src/utils";
+import { longFormatter } from "src/utils/format";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
@@ -15,27 +20,43 @@ export const MarketInsights = () => {
       marketId === Number(id) && marketNetwork === network
   );
 
-  if (!market) return <div>Unsupported Market</div>;
+  if (!market) return <Loading content={meme()} />;
+
+  const { quote, payout, lpPair } = getTokenDetailsForMarket(market);
+  const protocol = getProtocol(market.owner);
 
   const vestingLabel =
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
       : market.formattedShortVesting;
 
+  const formattedPayout = longFormatter.format(
+    //@ts-ignore
+    trim(market.maxPayout, calculateTrimDigits(parseFloat(market.maxPayout)))
+  );
+
   return (
     <div>
-      <BondListCard
-        market={market}
-        onClickTopRight={() => navigate("/")}
-        topRightLabel="Go to Markets"
+      <PageNavigation
+        onClickLeft={() => navigate(-1)}
+        onClickRight={() => navigate("/issuers/" + protocol?.id)}
+        rightText="View Issuer"
       />
-      <div className="my-16 flex justify-between gap-4 child:w-full">
+      <PageHeader
+        className="mt-5"
+        title={
+          market?.quoteToken.symbol + "-" + market.payoutToken.symbol + " Bond"
+        }
+        icon={quote?.logoUrl}
+        lpPairIcon={lpPair?.logoUrl}
+        pairIcon={payout?.logoUrl}
+      />
+      <div className="mt-8 mb-16 flex justify-between gap-4 child:w-full">
         <InfoLabel
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {trim(market.maxPayout, calculateTrimDigits(market.maxPayout))}{" "}
-          {market.payoutToken.symbol}
+          {formattedPayout} {market.payoutToken.symbol}
         </InfoLabel>
 
         <InfoLabel
@@ -63,28 +84,12 @@ export const MarketInsights = () => {
               : "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If the date is in the past, they will vest immediately upon purchase."
           }
         >
-          {vestingLabel}
+          {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
         </InfoLabel>
       </div>
-      <div className="border-y">
-        <div className="flex">
-          <img src={receiptIcon} />
-          <p className="ml-2 py-4 font-faketion uppercase"> Transactions</p>
-        </div>
-        <table className="mt-6 w-full table-fixed">
-          <thead>
-            <tr className="child:px-6">
-              <TableHeading>TIME</TableHeading>
-              <TableHeading alignEnd>TOTAL VALUE</TableHeading>
-              <TableHeading alignEnd>BOND AMOUNT</TableHeading>
-              <TableHeading alignEnd>PAYOUT AMOUNT</TableHeading>
-              <TableHeading>ADDRESS</TableHeading>
-              <TableHeading>TX ID</TableHeading>
-            </tr>
-          </thead>
-          <tbody>{/*tx.map(() => { })*/}</tbody>
-        </table>
-      </div>
+
+      <BondCard market={market} />
+      <TransactionHistory market={market} />
     </div>
   );
 };

@@ -909,6 +909,8 @@ export const listBondPurchasesPerMarketArbitrumGoerli = gql`
       timestamp
       purchasePrice
       postPurchasePrice
+      recipient
+      network
       quoteToken {
         id
         name
@@ -921,6 +923,98 @@ export const listBondPurchasesPerMarketArbitrumGoerli = gql`
         symbol
         address
       }
+    }
+  }
+`;
+
+export const listBondPurchasesByAddress = gql`
+  query ListBondPurchasesByAddress($recipient: String = "") {
+    bondPurchases(where: { recipient: $recipient }) {
+      id
+      recipient
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
+      recipient
+      network
+      quoteToken {
+        id
+        name
+        symbol
+        address
+      }
+      payoutToken {
+        id
+        name
+        symbol
+        address
+      }
+    }
+  }
+`;
+
+export const listBondPurchases = gql`
+  query ListBondPurchases {
+    bondPurchases(first: 1000) {
+      id
+      owner
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
+      recipient
+      network
+      quoteToken {
+        id
+        name
+        symbol
+        address
+      }
+      payoutToken {
+        id
+        name
+        symbol
+        address
+      }
+    }
+  }
+`;
+
+export const listBondPurchasesPerMarket = gql`
+  query ListBondPurchasesPerMarket($marketId: String) {
+    bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
+      id
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
+      recipient
+      network
+      quoteToken {
+        id
+        name
+        symbol
+        address
+      }
+      payoutToken {
+        id
+        name
+        symbol
+        address
+      }
+    }
+  }
+`;
+
+export const listAllPurchases = gql`
+  query ListAllPurchases {
+    bondPurchases(first: 1000) {
+      id
+      owner
     }
   }
 `;

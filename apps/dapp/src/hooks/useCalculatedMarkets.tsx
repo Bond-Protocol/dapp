@@ -56,19 +56,21 @@ export function useCalculatedMarkets() {
     );
     if (!isLive) return;
 
+    const _network =
+      market.network === "arbitrum-one" ? "arbitrum" : market.network;
     const purchaseLink = bondLibrary.TOKENS.get(
       market.quoteToken.id
-    )?.purchaseLinks.get(market.network as CHAIN_ID)
+    )?.purchaseLinks.get(_network as CHAIN_ID)
       ? bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(
-          market.network as CHAIN_ID
+          _network as CHAIN_ID
         )
       : "https://app.sushi.com/swap";
 
     const quoteToken = getTokenDetails(market.quoteToken);
     const payoutToken = getTokenDetails(market.payoutToken);
 
-    getPrice(quoteToken.id)
-    getPrice(payoutToken.id)
+    getPrice(quoteToken.id);
+    getPrice(payoutToken.id);
 
     const lpPair = quoteToken.lpPair;
     if (lpPair != undefined) {

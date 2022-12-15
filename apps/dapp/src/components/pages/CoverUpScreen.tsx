@@ -4,7 +4,7 @@ import { HashRouter as Router } from "react-router-dom";
 export const CoverUpScreen = () => {
   return (
     <Router>
-      <div className="absolute inset-0 z-50 h-[100vh] w-full overflow-y-hidden bg-brand-turtle-blue">
+      <div className="absolute inset-0 z-50 h-[100vh] w-full overflow-y-hidden bg-light-base">
         <AppBackground />
         <div className="flex h-full items-center justify-center ">
           <div>

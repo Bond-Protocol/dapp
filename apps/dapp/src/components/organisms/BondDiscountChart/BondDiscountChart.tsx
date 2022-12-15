@@ -1,10 +1,12 @@
-import { add, format, isFuture, isBefore } from "date-fns";
+import { add, isFuture, isBefore } from "date-fns";
 import { useState } from "react";
+import { Chip } from "ui";
 import { LineChart, generateTicks } from "components/organisms/LineChart";
 import { useBondChartData } from "hooks/useBondChartData";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondDiscountTooltip } from "./BondDiscountTooltip";
 import { PlaceholderChart } from "../PlaceholderChart";
+import { formatDate } from "src/utils";
 
 export type BondDiscountChartProps = {
   market: CalculatedMarket;
@@ -20,7 +22,7 @@ export const BondDiscountChart = ({
   const marketCreationDate = new Date(market.creationBlockTimestamp * 1000);
   const isFirstDay = isBefore(Date.now(), add(marketCreationDate, { days: 1 }));
 
-  const [days, setDays] = useState(isFirstDay ? 1 : 3);
+  const [days, setDays] = useState(isFirstDay ? 1 : 30);
 
   const { dataset, isLoading, purchases } = useBondChartData(market, days);
 
@@ -53,22 +55,15 @@ export const BondDiscountChart = ({
   const xAxisLabels = generateTicks(
     dataset.map((d) => d.date as number),
     4
-  ).map((x) => {
-    try {
-      return format(x, "MM/dd p");
-    } catch (error) {
-      console.log(error);
-      return "";
-    }
-  });
+  ).map((x) => formatDate.chartAxis(x));
 
-  // const ranges = extraRanges.filter(
-  //   (days: number) => !isFuture(add(marketCreationDate, { days }))
-  // );
-  const allRanges = [...defaultRanges];
+  const ranges = extraRanges.filter(
+    (days: number) => !isFuture(add(marketCreationDate, { days }))
+  );
+  const allRanges = [...defaultRanges, ...ranges];
 
   return (
-    <>
+    <div className="flex w-full flex-col">
       <LineChart
         data={dataset}
         xAxisLabels={xAxisLabels}
@@ -77,16 +72,18 @@ export const BondDiscountChart = ({
           <BondDiscountTooltip tokenSymbol={market?.payoutToken?.symbol} />
         }
       />
-      <div className="mt-1 flex justify-end gap-2 text-xs">
-        {allRanges.map((element) => (
-          <button
-            className={`bond-chip ${days === element && "border-white/40"}`}
-            onClick={() => setDays(element)}
-          >
-            {element + "D"}
-          </button>
-        ))}
-      </div>
-    </>
+      {/* <div className="mt-1 flex justify-end gap-2 text-xs"> */}
+      {/*   {allRanges.map((element) => ( */}
+      {/*     <Chip */}
+      {/*       className={`bond-chip ${ */}
+      {/*         days === element ? "border-white/90" : "text-white/50" */}
+      {/*       }`} */}
+      {/*       onClick={() => setDays(element)} */}
+      {/*     > */}
+      {/*       {element + "D"} */}
+      {/*     </Chip> */}
+      {/*   ))} */}
+      {/* </div> */}
+    </div>
   );
 };

@@ -1,12 +1,13 @@
 import { FC, useEffect, useState } from "react";
-import { useMarkets } from "hooks";
-import { PROTOCOLS } from "@bond-protocol/bond-library";
-import { MarketList } from "components/organisms/MarketList";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { InfoLabel, Link, Button, SocialRow } from "ui";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { ActionCard, InfoLabel, SocialRow } from "ui";
+import { getAddressesByProtocol, PROTOCOLS } from "@bond-protocol/bond-library";
+import { MarketList } from "components/lists";
+import { PageHeader, PageNavigation, socials } from "components/common";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
+import { useNavigate } from "react-router-dom";
+import { useListAllMarkets } from "hooks/useListAllMarkets";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -16,16 +17,23 @@ const placeholderProtocol = {
 
 export const IssuerPage: FC = () => {
   const navigate = useNavigate();
-  const { marketsByIssuer } = useMarkets();
   const { getBondersForProtocol } = useUniqueBonders();
   const { protocolTbvs } = useOwnerTokenTbvs();
   const { name } = useParams();
+  const { allPurchases } = useListAllMarkets();
 
-  const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
   const [protocol] = useState(PROTOCOLS.get(name || ""));
   const bonders = getBondersForProtocol(name || "");
+  const addresses =
+    getAddressesByProtocol(protocol?.id!).map((a) => a.address.toLowerCase()) ||
+    [];
+
+  const total = allPurchases?.filter((p) =>
+    addresses.includes(p.owner.toLowerCase())
+  );
 
   const [tbv, setTbv] = useState(0);
+  const scrollUp = () => window.scrollTo(0, 0);
 
   const logo = () => {
     return protocol?.logoUrl
@@ -34,58 +42,50 @@ export const IssuerPage: FC = () => {
   };
 
   useEffect(() => {
-    setMarkets(marketsByIssuer && marketsByIssuer.get(name));
-  }, [name, marketsByIssuer]);
-
-  useEffect(() => {
-    setTbv(protocolTbvs?.get(name || "") || 0);
+    setTbv(protocolTbvs[name as string]?.tbv || 0);
   }, [protocolTbvs]);
 
   return (
-    <div className="pb-12 font-jakarta">
-      <div className="mt-6 flex">
-        <Button variant="ghost" onClick={() => navigate("/issuers")}>
-          Back to list
-        </Button>
-      </div>
-      <div className="mt-10 flex flex-col content-center">
-        <div className="flex flex-row items-center justify-center">
-          <img className="mr-4 h-[64px] w-[64px]" src={logo()} />
-          <p className="text-5xl font-bold">
-            {protocol?.name || placeholderProtocol.name}
-          </p>
-        </div>
-
-        <div className="mt-3 flex flex-row justify-center">
-          <p>{protocol?.description || placeholderProtocol.description}</p>
-        </div>
-
+    <div className="pb-12">
+      <PageNavigation
+        link={protocol?.links.homepage}
+        rightText="Visit Website"
+      />
+      <PageHeader
+        className="mt-4 normal-case"
+        icon={logo()}
+        title={protocol?.name || placeholderProtocol.name}
+      />
+      <div className="flex flex-col">
         {protocol && (
           <>
-            <SocialRow {...protocol.links} className="my-5" />
-            {protocol.links?.homepage && (
-              <div className="flex flex-row justify-center">
-                <Link
-                  href={protocol.links.homepage}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[15px]"
-                  iconClassName="mt-1"
-                >
-                  {protocol.links.homepage}
-                </Link>
-              </div>
-            )}
+            <SocialRow
+              {...protocol.links}
+              width={18}
+              className="mt-3 ml-2.5 justify-start gap-4"
+            />
           </>
         )}
+
+        <div className="mt-2">
+          <p className="w-1/2 text-light-grey-400">
+            {protocol?.description || placeholderProtocol.description}
+          </p>
+        </div>
       </div>
 
-      <div className="my-16 flex justify-between gap-16 child:w-full">
+      <div className="mt-10 mb-16 flex justify-between gap-4 child:w-full">
         <InfoLabel
           label="Total Bonded Value"
           tooltip={`Estimated total value in USD of all purchases from ${protocol?.name} markets.`}
         >
-          ${Math.trunc(tbv)}
+          ${new Intl.NumberFormat().format(Math.trunc(tbv))}
+        </InfoLabel>
+        <InfoLabel
+          label="Total Bonds"
+          tooltip={`The number of bonds acquired from ${protocol?.name}`}
+        >
+          {total.length}
         </InfoLabel>
 
         <InfoLabel
@@ -94,16 +94,19 @@ export const IssuerPage: FC = () => {
         >
           {bonders}
         </InfoLabel>
-
-        {/*  //TODO add back in when data is ready
-        <InfoLabel label="Average Discount Rate" tooltip={`The estimated average discount of all bond purchases from ${protocol?.name} markets.`}>
-          ?
-        </InfoLabel>
-        */}
       </div>
-
-      {/*@ts-ignore for now pls*/}
-      {markets && <MarketList markets={markets} allowManagement={false} />}
+      <MarketList issuer={protocol?.name} filter={["issuer"]} />
+      <ActionCard
+        className="mt-6"
+        title="Have a question?"
+        leftLabel="Why Bond"
+        rightLabel="Join Discord"
+        url={socials.discord}
+        onClickRight={() => {
+          navigate("/create");
+          scrollUp();
+        }}
+      />
     </div>
   );
 };

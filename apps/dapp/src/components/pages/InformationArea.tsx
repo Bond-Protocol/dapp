@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Accordion, Button, ProtocolLogo } from "ui";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
-import { Footer } from "components/organisms";
+import { Footer } from "components/common";
 
 export type InformationAreaProps = {
   onClose: () => void;
@@ -113,11 +113,11 @@ export const InformationArea = (props: InformationAreaProps) => {
 
   return (
     <div
-      className={`fixed inset-0 z-10 h-[100vh] bg-brand-turtle-blue transition-transform duration-500 ${
+      className={`fixed inset-0 z-10 h-[100vh] bg-light-base transition-transform duration-500 ${
         props.open ? "-translate-x-0" : "-translate-x-full"
       }`}
     >
-      <div className="h-[88vh] bg-white font-jakarta">
+      <div className="h-[90vh] bg-white font-jakarta">
         <div className="mx-[5vw] flex h-[88px] items-center justify-between ">
           <ProtocolLogo
             black
@@ -133,7 +133,7 @@ export const InformationArea = (props: InformationAreaProps) => {
         <div className="mx-[15vw] mt-20 mb-10 flex justify-end">
           <Button
             onClick={goToCreateMarket}
-            className="hover:bg-brand-turtle-blue hover:text-brand-yella"
+            className="hover:bg-light-base hover:text-light-secondary"
           >
             Issue Bond Market
           </Button>
@@ -151,7 +151,7 @@ export const InformationArea = (props: InformationAreaProps) => {
           ))}
         </div>
       </div>
-      <Footer closeInfoArea={props.onClose} className="bg-brand-turtle-blue" />
+      <Footer closeInfoArea={props.onClose} />
     </div>
   );
 };

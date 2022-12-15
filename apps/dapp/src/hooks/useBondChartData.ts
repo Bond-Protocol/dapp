@@ -76,7 +76,7 @@ const createBondPurchaseDataset = ({
   ];
 };
 
-export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
+export const useBondChartData = (market: CalculatedMarket, dayRange = 30) => {
   //@ts-ignore (TODO): fix bond-library types (again)
   const priceSources = TOKENS.get(market.payoutToken.id)?.priceSources || [];
   //@ts-ignore
@@ -94,9 +94,11 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
     getTokenPriceHistory(tokenApiId, { days: dayRange }, Date.now())
   );
 
+  const network =
+    market.network === "arbitrum-one" ? "arbitrum" : market.network;
   const { data: purchaseData, ...purchasesQuery } =
     useListBondPurchasesPerMarketMainnetQuery(
-      { endpoint: subgraphEndpoints[market.network as CHAIN_ID] },
+      { endpoint: subgraphEndpoints[network as CHAIN_ID] },
       { marketId: market.id }
     );
 
@@ -105,7 +107,8 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
     price: element[1],
   }));
 
-  const earliestDate = priceData?.[0]?.date;
+  const earliestDate = market.creationBlockTimestamp * 1000;
+
   const dataset: BondChartDataset[] = createBondPurchaseDataset({
     priceData: priceData,
     bondPurchases: purchaseData?.bondPurchases as BondPurchase[],
@@ -124,7 +127,6 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
     isLoading,
     purchases: purchaseData?.bondPurchases,
     dataset: interpolate(dataset)
-      .slice(0, dataset.length - 1)
       .filter((data) => data.date > earliestDate)
       .map((data) => ({
         ...data,
