@@ -1,7 +1,7 @@
 import { getToken } from "@bond-protocol/bond-library";
-import { Button, Table, Column, TableProps } from "ui";
+import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
-import { usdFormatter } from "src/utils/format";
+import { longFormatter, usdFormatter } from "src/utils/format";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -10,8 +10,9 @@ export const tableColumns: Array<Column<any>> = [
     unsortable: true,
     formatter: (bond) => {
       const asset = getToken(bond?.underlying?.id);
+      const balance = longFormatter.format(bond?.balance);
       return {
-        value: `${bond?.balance} ${asset?.symbol}`,
+        value: `${balance} ${asset?.symbol}`,
         icon: asset?.logoUrl,
       };
     },

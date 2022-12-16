@@ -21,6 +21,12 @@ export const usdFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
+export const usdLongFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "usd",
+  maximumFractionDigits: 0,
+});
+
 export const longFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });

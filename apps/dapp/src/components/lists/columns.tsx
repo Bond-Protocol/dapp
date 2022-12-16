@@ -1,7 +1,11 @@
 import { getProtocol, getTokenByAddress } from "@bond-protocol/bond-library";
 import { Button, Column, DiscountLabel } from "ui";
 import { add } from "date-fns";
-import { longFormatter, usdFormatter } from "src/utils/format";
+import {
+  longFormatter,
+  usdLongFormatter,
+  usdFormatter,
+} from "src/utils/format";
 import { formatDate, getTokenDetailsForMarket } from "src/utils";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
@@ -9,14 +13,13 @@ import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 const bond: Column<CalculatedMarket> = {
   label: "Bond",
   accessor: "bond",
-  width: "w-[18%]",
+  width: "w-[13%]",
   formatter: (market) => {
-    const { quote, payout, lpPair } = getTokenDetailsForMarket(market);
+    const { quote, lpPair } = getTokenDetailsForMarket(market);
 
     return {
-      value: market.quoteToken.symbol + "-" + market.payoutToken.symbol,
+      value: market.quoteToken.symbol,
       icon: quote?.logoUrl,
-      pairIcon: payout?.logoUrl,
       lpPairIcon: lpPair?.logoUrl,
     };
   },
@@ -25,10 +28,14 @@ const bond: Column<CalculatedMarket> = {
 const bondPrice: Column<CalculatedMarket> = {
   label: "Bond Price",
   accessor: "bondPrice",
-  width: "w-[14%]",
+  width: "w-[18%]",
   formatter: (market) => {
+    const { payout } = getTokenDetailsForMarket(market);
+
     return {
+      icon: payout?.logoUrl,
       value: market.formattedDiscountedPrice,
+      iconSubtext: market.payoutToken.symbol,
       subtext: market.formattedFullPrice + " Market",
     };
   },
@@ -52,7 +59,10 @@ const maxPayout: Column<CalculatedMarket> = {
   width: "w-[14%]",
   formatter: (market) => {
     return {
-      value: longFormatter.format(parseFloat(market.maxPayout)),
+      value:
+        longFormatter.format(parseFloat(market.maxPayout)) +
+        " " +
+        market.payoutToken.symbol,
       subtext: usdFormatter.format(market.maxPayoutUsd),
       sortValue: market.maxPayoutUsd.toString(),
     };
@@ -68,9 +78,13 @@ const vesting: Column<CalculatedMarket> = {
       ? add(Date.now(), { seconds: market.vesting })
       : market.vesting * 1000;
 
+    const term = market.formattedShortVesting.includes("Immediate")
+      ? " Instant Swap"
+      : market.formattedShortVesting + " Term";
+
     return {
       value: formatDate.short(new Date(sort)),
-      subtext: isTerm ? market.formattedShortVesting + " Term" : "Fixed Expiry",
+      subtext: isTerm ? term : "Fixed Expiry",
       sortValue: sort.toString(),
     };
   },
@@ -93,7 +107,7 @@ const tbv: Column<CalculatedMarket> = {
   width: "w-[7%]",
   formatter: (market) => {
     return {
-      value: usdFormatter.format(market.tbvUsd),
+      value: usdLongFormatter.format(market.tbvUsd),
       sortValue: market.tbvUsd.toString(),
     };
   },
