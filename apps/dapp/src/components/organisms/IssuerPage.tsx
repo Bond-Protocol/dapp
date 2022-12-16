@@ -96,7 +96,7 @@ export const IssuerPage: FC = () => {
         </InfoLabel>
       </div>
       <MarketList issuer={protocol?.name} filter={["issuer"]} />
-      <ActionCard
+      {/*<ActionCard
         className="mt-6"
         title="Have a question?"
         leftLabel="Why Bond"
@@ -107,6 +107,7 @@ export const IssuerPage: FC = () => {
           scrollUp();
         }}
       />
+      */}
     </div>
   );
 };
