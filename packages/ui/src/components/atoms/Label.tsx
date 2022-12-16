@@ -4,6 +4,7 @@ export interface LabelProps extends TokenLogoProps {
   value?: string | React.ReactNode;
   subtext?: string;
   textClassName?: string;
+  iconSubtext?: string;
 }
 
 export const Label = (props: LabelProps) => {

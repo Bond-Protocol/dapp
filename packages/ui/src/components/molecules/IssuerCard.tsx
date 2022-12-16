@@ -19,6 +19,15 @@ export const IssuerCard: FC<IssuerCardProps> = ({
   const logo = issuer?.logoUrl || "/placeholders/token-placeholder.png";
   const _tbv = new Intl.NumberFormat("en-US").format(Math.floor(tbv));
 
+  const length = markets.length;
+
+  const marketSize =
+    markets.length < 1
+      ? "No Open Markets"
+      : markets.length === 1
+      ? `${length} Market`
+      : `${length} Markets`;
+
   return (
     <div
       className="flex flex-col items-center justify-between rounded-lg border border-transparent bg-white/[.05] p-5 transition-all duration-300 hover:cursor-pointer hover:bg-white/10"
@@ -30,9 +39,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({
       <p className="my-2 text-center font-bold tracking-wide">
         {issuer.name + ""}
       </p>
-      <p className="text-light-primary-50 text-xs font-bold">
-        {markets.length} Markets
-      </p>
+      <p className="text-light-primary-50 text-xs font-bold">{marketSize}</p>
       <p className="text-light-primary-300 font-mono text-[10px]">
         TBV ${_tbv}
       </p>
