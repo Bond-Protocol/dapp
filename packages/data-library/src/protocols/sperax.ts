@@ -38,7 +38,7 @@ export default {
     {
       name: "Sperax",
       symbol: "SPA",
-      logoUrl: "https://drive.google.com/drive/folders/1wbmS719X_OdOdg2AzPno4Ow9WAbmgYpu", // svg file
+      logoUrl: "https://storageapi.fleek.one/fc635ae1-c8aa-4181-b7db-801a533b8fa9-bucket/SPA.png", // svg file
       // Token contract addresses
       addresses: {
         [CHAIN_ID.ETHEREUM_MAINNET]: "0xB4A3B0Faf0Ab53df58001804DdA5Bfc6a3D59008",

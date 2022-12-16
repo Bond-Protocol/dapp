@@ -32,7 +32,7 @@ export default {
     {
       // why use many word wen example do trick
       name: "Layer2DAO",
-      symbol: "l2dao",
+      symbol: "L2DAO",
       logoUrl: "https://assets.coingecko.com/coins/images/23699/large/Khp7Y4Sn.png?1645081048",
       // Token contract addresses
       addresses: {
