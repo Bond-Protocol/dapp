@@ -113,7 +113,7 @@ export const tableColumns: Array<Column<any>> = [
         className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
         onClick={() => handleClaim()}
       >
-        {props?.data?.canClaim ? (isCorrectNetwork ? "Claim" : "Switch") : "Vesting"}
+        {props?.data?.canClaim ? "Claim" : "Vesting"}
       </Button>
     )},
   },
