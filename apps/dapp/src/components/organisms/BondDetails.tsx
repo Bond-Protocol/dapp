@@ -10,8 +10,8 @@ import { useGasPrice, usePurchaseBond, useTokenAllowance } from "hooks";
 import { Button, InfoLabel, InputCard, Link, SummaryCard } from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import { CHAINS, NativeCurrency } from "@bond-protocol/bond-library";
+import { useAccount } from "wagmi";
+import { NativeCurrency } from "@bond-protocol/bond-library";
 import { Signer } from "ethers";
 import { Provider } from "@wagmi/core";
 
@@ -34,7 +34,6 @@ export const BondDetails: FC<BondDetailsProps> = ({
   provider,
   signer,
 }) => {
-  const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
   const [payout, setPayout] = useState<string>("0");
@@ -47,8 +46,6 @@ export const BondDetails: FC<BondDetailsProps> = ({
   });
 
   const { address, isConnected } = useAccount();
-  const { switchNetwork } = useSwitchNetwork();
-  const network = useNetwork();
 
   const { getGasPrice } = useGasPrice();
   const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
@@ -90,20 +87,6 @@ export const BondDetails: FC<BondDetailsProps> = ({
       : market.formattedShortVesting;
 
   useEffect(() => {
-    if (
-      market.network === network?.chain?.network ||
-      (market.network === "mainnet" &&
-        network?.chain?.network === "homestead") ||
-      (market.network === "arbitrum-one" &&
-        network?.chain?.network === "arbitrum") ||
-      (market.network === "arbitrum-goerli" &&
-        network?.chain?.network === "arbitrumGoerli")
-    ) {
-      setCorrectChain(true);
-    }
-  }, [network, market.network]);
-
-  useEffect(() => {
     const updatePayout = async () => {
       let payout = Number(
         await getPayoutFor(
@@ -134,10 +117,6 @@ export const BondDetails: FC<BondDetailsProps> = ({
       }
     );
   }, [payout]);
-
-  const switchChain = () => {
-    switchNetwork?.(provider.network.chainId);
-  };
 
   const approveSpending = () =>
     approve(
@@ -301,10 +280,8 @@ export const BondDetails: FC<BondDetailsProps> = ({
         <SummaryCard fields={summaryFields} />
         <BondButton
           showConnect={!isConnected}
-          showSwitcher={!correctChain}
           showPurchaseLink={!hasSufficientBalance}
-          onSwitchChain={switchChain}
-          network={CHAINS.get(market.network)?.displayName || market.network}
+          network={market.network}
           quoteTokenSymbol={market.quoteToken.symbol}
           purchaseLink={
             market.quoteToken.purchaseLink

@@ -75,11 +75,8 @@ export const tableColumns: Array<Column<any>> = [
         (isMainnet(props?.data?.bond.bondToken.network) && isMainnet(chain?.network)) ||
         network === chain?.network;
 
-      const switchChain = (selectedChain: string) => {
-        const newChain = Number(
-          "0x" + providers[selectedChain].network.chainId.toString()
-        );
-        switchNetwork?.(newChain);
+      const switchChain = () => {
+        switchNetwork?.(providers[network].network.chainId);
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {
@@ -102,7 +99,7 @@ export const tableColumns: Array<Column<any>> = [
 
       const handleClaim = isCorrectNetwork
         ? () => redeemBond(props?.data?.bond)
-        : () => switchChain(network);
+        : () => switchChain();
 
       return (
       <Button
