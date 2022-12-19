@@ -10,7 +10,7 @@ import { useGasPrice, usePurchaseBond, useTokenAllowance } from "hooks";
 import { Button, InputCard, ActionInfoList } from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import { NativeCurrency } from "@bond-protocol/bond-library";
 import { Signer } from "ethers";
 import { Provider } from "@wagmi/core";
@@ -34,7 +34,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
   provider,
   signer,
 }) => {
-  const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
   const [payout, setPayout] = useState<string>("0");
@@ -47,8 +46,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
   });
 
   const { address, isConnected } = useAccount();
-  const { switchNetwork } = useSwitchNetwork();
-  const network = useNetwork();
 
   const { getGasPrice } = useGasPrice();
   const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
@@ -90,17 +87,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
       : market.formattedShortVesting;
 
   useEffect(() => {
-    const marketNetwork =
-      market.network === "arbitrum-one" ? "arbitrum" : market.network;
-    if (
-      marketNetwork === network?.chain?.network ||
-      (marketNetwork === "mainnet" && network?.chain?.network === "homestead")
-    ) {
-      setCorrectChain(true);
-    }
-  }, [network, market.network]);
-
-  useEffect(() => {
     const updatePayout = async () => {
       let payout = Number(
         await getPayoutFor(
@@ -131,11 +117,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
       }
     );
   }, [payout]);
-
-  const switchChain = () => {
-    const newChain = Number(provider.network.chainId.toString());
-    switchNetwork?.(newChain);
-  };
 
   const approveSpending = () =>
     approve(
@@ -252,9 +233,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
         <ActionInfoList fields={summaryFields} />
         <BondButton
           showConnect={!isConnected}
-          showSwitcher={!correctChain}
           showPurchaseLink={!hasSufficientBalance}
-          onSwitchChain={switchChain}
           network={market.network}
           quoteTokenSymbol={market.quoteToken.symbol}
           purchaseLink={
