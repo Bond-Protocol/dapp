@@ -2,6 +2,11 @@ import { getToken } from "@bond-protocol/bond-library";
 import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { longFormatter, usdFormatter } from "src/utils/format";
+import {useNetwork, useSigner, useSwitchNetwork} from "wagmi";
+import {providers} from "services/owned-providers";
+import {OwnerBalance} from "../../generated/graphql";
+import {ContractTransaction} from "ethers";
+import {BOND_TYPE, redeem} from "@bond-protocol/contract-library";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -52,18 +57,65 @@ export const tableColumns: Array<Column<any>> = [
         data: bond,
       };
     },
-    Component: (props: any) => (
+    Component: (props: any) => {
+      const { chain } = useNetwork();
+      const { switchNetwork } = useSwitchNetwork();
+      const { data: signer } = useSigner();
+
+      const isMainnet = (chain?: string) => {
+        return chain === "mainnet" || chain === "homestead";
+      };
+
+      const network =
+        props?.data?.bond.bondToken.network === "arbitrum-one"
+          ? "arbitrum"
+          : props?.data?.bond.bondToken.network;
+
+      const isCorrectNetwork =
+        (isMainnet(props?.data?.bond.bondToken.network) && isMainnet(chain?.network)) ||
+        network === chain?.network;
+
+      const switchChain = (selectedChain: string) => {
+        const newChain = Number(
+          "0x" + providers[selectedChain].network.chainId.toString()
+        );
+        switchNetwork?.(newChain);
+      };
+
+      async function redeemBond(bond: Partial<OwnerBalance>) {
+        if (!bond.bondToken) return;
+        const redeemTx: ContractTransaction = await redeem(
+          bond.bondToken.id,
+          bond.bondToken.network,
+          bond.bondToken.type as BOND_TYPE,
+          bond.balance.toString(),
+          // @ts-ignore
+          signer,
+          bond.bondToken.teller,
+          {}
+        );
+
+        await signer?.provider
+          ?.waitForTransaction(redeemTx.hash)
+          .catch((error) => console.log(error));
+      }
+
+      const handleClaim = isCorrectNetwork
+        ? () => redeemBond(props?.data?.bond)
+        : () => switchChain(network);
+
+      return (
       <Button
         thin
         size="sm"
         variant={props?.data?.canClaim ? "primary" : "ghost"}
         disabled={!props?.data?.canClaim}
         className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
-        onClick={() => props.onClick()}
+        onClick={() => handleClaim()}
       >
-        {props?.data?.canClaim ? "Claim" : "Vesting"}
+        {props?.data?.canClaim ? (isCorrectNetwork ? "Claim" : "Switch") : "Vesting"}
       </Button>
-    ),
+    )},
   },
 ];
 
