@@ -112,10 +112,11 @@ export async function redeem(
   if (tellerAddress) {
     switch (bondType) {
       case BOND_TYPE.FIXED_EXPIRY:
-        console.log('yes');
         teller = FixedExpirationTeller__factory.connect(tellerAddress, signer);
+        break;
       case BOND_TYPE.FIXED_TERM:
         teller = FixedTermTeller__factory.connect(tellerAddress, signer);
+        break;
     }
   } else {
     teller = getTellerContract(signer, bondType, chainId);
