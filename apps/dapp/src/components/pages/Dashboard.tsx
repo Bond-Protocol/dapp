@@ -1,15 +1,11 @@
-import { ContractTransaction } from "ethers";
-import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 import { useMyBonds } from "hooks/useMyBonds";
 import { InfoLabel } from "ui";
 import { OwnerBalance } from "src/generated/graphql";
-import { providers } from "services/owned-providers";
 import { TokenDetails, useTokens } from "hooks";
 import {
   calculateTrimDigits,
   trim,
-  BOND_TYPE,
-  redeem,
 } from "@bond-protocol/contract-library";
 import { PageHeader } from "components/common";
 import { BondList, tableColumns } from "components/lists";
@@ -24,38 +20,11 @@ const isMainnet = (chain?: string) => {
 
 export const Dashboard = () => {
   const { myBonds } = useMyBonds();
-  const { data: signer } = useSigner();
-  const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
   const { getTokenDetails, getPrice } = useTokens();
   const account = useAccount();
 
   const { purchases } = useAccountStats();
-
-  const switchChain = (selectedChain: string) => {
-    const newChain = Number(
-      "0x" + providers[selectedChain].network.chainId.toString()
-    );
-    switchNetwork?.(newChain);
-  };
-
-  async function redeemBond(bond: Partial<OwnerBalance>) {
-    if (!bond.bondToken) return;
-    const redeemTx: ContractTransaction = await redeem(
-      bond.bondToken.id,
-      bond.bondToken.network,
-      bond.bondToken.type as BOND_TYPE,
-      bond.balance.toString(),
-      // @ts-ignore
-      signer,
-      bond.bondToken.teller,
-      {}
-    );
-
-    await signer?.provider
-      ?.waitForTransaction(redeemTx.hash)
-      .catch((error) => console.log(error));
-  }
 
   const data = myBonds
     .filter((b) => b.owner?.toLowerCase() === account?.address?.toLowerCase())
@@ -88,10 +57,6 @@ export const Dashboard = () => {
         (isMainnet(bond.bondToken.network) && isMainnet(chain?.network)) ||
         network === chain?.network;
 
-      const handleClaim = isCorrectNetwork
-        ? () => redeemBond(bond)
-        : () => switchChain(network);
-
       return {
         bond,
         balance,
@@ -99,7 +64,6 @@ export const Dashboard = () => {
         underlying,
         isCorrectNetwork,
         canClaim,
-        handleClaim,
       };
     });
 
