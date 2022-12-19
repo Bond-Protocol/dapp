@@ -17,34 +17,33 @@ export type BondButtonProps = {
 };
 
 export const BondButton = (props: BondButtonProps) => {
-  const [correctChain, setCorrectChain] = useState<boolean>(false);
   const [networkDisplayName, setNetworkDisplayName] = useState(
     CHAINS.get(props.network)?.displayName || props.network
   );
 
-  const { switchNetwork } = useSwitchNetwork();
   const { chain } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
 
-  useEffect(() => {
-    if (
-      props.network === chain?.network ||
-      (props.network === "mainnet" &&
-        chain?.network === "homestead") ||
-      (props.network === "arbitrum-one" &&
-        chain?.network === "arbitrum") ||
-      (props.network === "arbitrum-goerli" &&
-        chain?.network === "arbitrumGoerli")
-    ) {
-      setCorrectChain(true);
-    } else {
-      setCorrectChain(false);
-    }
-    setNetworkDisplayName(CHAINS.get(props.network)?.displayName || props.network);
-  }, [chain, props.network]);
+  const isMainnet = (chain?: string) => {
+    return chain === "mainnet" || chain === "homestead";
+  };
+
+  const network =
+    props?.network === "arbitrum-one"
+      ? "arbitrum"
+      : props?.network;
+
+  const isCorrectNetwork =
+    (isMainnet(props?.network) && isMainnet(chain?.network)) ||
+    network === chain?.network;
 
   const switchChain = () => {
-    switchNetwork?.(providers[props.network].network.chainId);
+    switchNetwork?.(providers[network].network.chainId);
   };
+
+  useEffect(() => {
+    setNetworkDisplayName(CHAINS.get(props.network)?.displayName || props.network);
+  }, [chain, props.network]);
 
   if (props.showConnect)
     return (
@@ -53,7 +52,7 @@ export const BondButton = (props: BondButtonProps) => {
       </div>
     );
 
-  if (!correctChain) {
+  if (!isCorrectNetwork) {
     return (
       <Tooltip content="You need to switch to the correct network in order to bond">
         <Button className="mt-4 w-full" onClick={switchChain}>
