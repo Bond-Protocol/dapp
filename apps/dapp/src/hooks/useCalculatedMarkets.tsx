@@ -3,7 +3,6 @@ import { useQueries } from "react-query";
 import { useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
 import {
-  ADDRESSES,
   CHAIN_ID,
   getProtocolByAddress,
 } from "@bond-protocol/bond-library";

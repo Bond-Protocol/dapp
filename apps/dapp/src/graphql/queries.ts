@@ -30,6 +30,7 @@ export const listMarketsMainnet = gql`
             symbol
             decimals
             name
+            typeName
           }
           token1 {
             id
@@ -37,7 +38,21 @@ export const listMarketsMainnet = gql`
             symbol
             decimals
             name
+            typeName
           }
+        }
+        balancerPool {
+          id
+          vaultAddress
+          poolId
+          constituentTokens {
+            id
+            address
+            symbol
+            decimals
+            name
+            typeName
+          }  
         }
       }
       vesting
@@ -81,6 +96,7 @@ export const listMarketsGoerli = gql`
             symbol
             decimals
             name
+            typeName
           }
           token1 {
             id
@@ -88,6 +104,20 @@ export const listMarketsGoerli = gql`
             symbol
             decimals
             name
+            typeName
+          }
+        }
+        balancerPool {
+          id
+          vaultAddress
+          poolId
+          constituentTokens {
+            id
+            address
+            symbol
+            decimals
+            name
+            typeName
           }
         }
       }
@@ -132,6 +162,7 @@ export const listMarketsArbitrumMainnet = gql`
             symbol
             decimals
             name
+            typeName
           }
           token1 {
             id
@@ -139,8 +170,22 @@ export const listMarketsArbitrumMainnet = gql`
             symbol
             decimals
             name
+            typeName
           }
         }
+        balancerPool {
+          id
+          vaultAddress
+          poolId
+          constituentTokens {
+            id
+            address
+            symbol
+            decimals
+            name
+            typeName
+          }
+        }          
       }
       vesting
       vestingType
@@ -183,6 +228,7 @@ export const listMarketsArbitrumGoerli = gql`
             symbol
             decimals
             name
+            typeName
           }
           token1 {
             id
@@ -190,6 +236,20 @@ export const listMarketsArbitrumGoerli = gql`
             symbol
             decimals
             name
+            typeName
+          }
+        }
+        balancerPool {
+          id
+          vaultAddress
+          poolId
+          constituentTokens {
+            id
+            address
+            symbol
+            decimals
+            name
+            typeName
           }
         }
       }
@@ -221,6 +281,11 @@ export const listTokensMainnet = gql`
           id
         }
       }
+      balancerPool {
+        constituentTokens {
+          id
+        }
+      }  
     }
   }
 `;
@@ -239,6 +304,11 @@ export const listTokensGoerli = gql`
           id
         }
         token1 {
+          id
+        }
+      }
+      balancerPool {
+        constituentTokens {
           id
         }
       }
@@ -263,6 +333,11 @@ export const listTokensArbitrumMainnet = gql`
           id
         }
       }
+      balancerPool {
+        constituentTokens {
+          id
+        }
+      }
     }
   }
 `;
@@ -281,6 +356,11 @@ export const listTokensArbitrumGoerli = gql`
           id
         }
         token1 {
+          id
+        }
+      }
+      balancerPool {
+        constituentTokens {
           id
         }
       }
@@ -422,6 +502,7 @@ export const listOwnedMarketsMainnet = gql`
             symbol
             decimals
             name
+            typeName
           }
           token1 {
             id
@@ -429,6 +510,20 @@ export const listOwnedMarketsMainnet = gql`
             symbol
             decimals
             name
+            typeName
+          }
+        }
+        balancerPool {
+          id
+          vaultAddress
+          poolId
+          constituentTokens {
+            id
+            address
+            symbol
+            decimals
+            name
+            typeName
           }
         }
       }
@@ -473,6 +568,7 @@ export const listOwnedMarketsGoerli = gql`
             symbol
             decimals
             name
+            typeName
           }
           token1 {
             id
@@ -480,6 +576,20 @@ export const listOwnedMarketsGoerli = gql`
             symbol
             decimals
             name
+            typeName
+          }
+        }
+        balancerPool {
+          id
+          vaultAddress
+          poolId
+          constituentTokens {
+            id
+            address
+            symbol
+            decimals
+            name
+            typeName
           }
         }
       }
@@ -524,6 +634,7 @@ export const listOwnedMarketsArbitrumMainnet = gql`
             symbol
             decimals
             name
+            typeName
           }
           token1 {
             id
@@ -531,6 +642,20 @@ export const listOwnedMarketsArbitrumMainnet = gql`
             symbol
             decimals
             name
+            typeName
+          }
+        }
+        balancerPool {
+          id
+          vaultAddress
+          poolId
+          constituentTokens {
+            id
+            address
+            symbol
+            decimals
+            name
+            typeName
           }
         }
       }
@@ -575,6 +700,7 @@ export const listOwnedMarketsArbitrumGoerli = gql`
             symbol
             decimals
             name
+            typeName
           }
           token1 {
             id
@@ -582,6 +708,20 @@ export const listOwnedMarketsArbitrumGoerli = gql`
             symbol
             decimals
             name
+            typeName
+          }
+        }
+        balancerPool {
+          id
+          vaultAddress
+          poolId
+          constituentTokens {
+            id
+            address
+            symbol
+            decimals
+            name
+            typeName
           }
         }
       }
