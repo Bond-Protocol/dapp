@@ -36,6 +36,18 @@ export interface LpToken extends Token {
   lpPair?: LpPair;
 }
 
+export interface BalancerWeightedPoolConstituent {
+  address: string;
+  decimals: number;
+  price: number;
+}
+
+export interface BalancerWeightedPoolToken extends Token {
+  poolAddress: string;
+  vaultAddress: string;
+  constituentTokens: BalancerWeightedPoolConstituent[];
+}
+
 export interface PrecalculatedMarket {
   id: string;
   network: string;
@@ -45,7 +57,7 @@ export interface PrecalculatedMarket {
   vesting: number;
   vestingType: string;
   payoutToken: Token;
-  quoteToken: LpToken;
+  quoteToken: LpToken | BalancerWeightedPoolToken;
   isInstantSwap: boolean;
   totalBondedAmount: number;
   totalPayoutAmount: number;

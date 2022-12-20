@@ -87,6 +87,40 @@ export const protocols: ProtocolDefinition[] = [
           "0x79C950C7446B234a6Ad53B908fBF342b01c4d446".toLowerCase(),
         priceSources: [],
       },
+      {
+        name: "Balancer 50 WETH 50 USDC",
+        symbol: "50WETH-50USDC",
+        //@ts-ignore
+        lpType: SUPPORTED_LP_TYPES.BALANCER_WEIGHTED_POOL,
+        addresses: {
+          [CHAIN_ID.GOERLI_TESTNET]:
+            "0x9F1F16B025F703eE985B58cEd48dAf93daD2f7EF",
+        },
+        poolAddress: "0x9F1F16B025F703eE985B58cEd48dAf93daD2f7EF",
+        vaultAddress: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+        constituentTokens: [
+          { address: "0xdFCeA9088c8A88A76FF74892C1457C17dfeef9C1", decimals: 18 },
+          { address: "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb", decimals: 6 },
+        ],
+        priceSources: [],
+      },
+      {
+        name: "Balancer 50 TEMPLE 50 FRAX",
+        symbol: "50TEMPLE-50FRAX",
+        //@ts-ignore
+        lpType: SUPPORTED_LP_TYPES.BALANCER_WEIGHTED_POOL,
+        addresses: {
+          [CHAIN_ID.GOERLI_TESTNET]:
+            "0x89EA4363Bd541d27d9811E4Df1209dAa73154472",
+        },
+        poolAddress: "0x89EA4363Bd541d27d9811E4Df1209dAa73154472",
+        vaultAddress: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
+        constituentTokens: [
+          { address: "0x73651AD693531F9937528009cC204a4d9b696a68", decimals: 18 },
+          { address: "0x5631d8eA427129e15bDa68F0F9227C149bD29Dcf", decimals: 18 },
+        ],
+        priceSources: [],
+      },
     ],
   },
   {

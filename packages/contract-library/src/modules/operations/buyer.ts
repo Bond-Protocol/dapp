@@ -1,5 +1,5 @@
 import { BigNumberish } from '@ethersproject/bignumber';
-import { LpType } from '@bond-protocol/bond-library';
+import { LpType, SUPPORTED_LP_TYPES } from '@bond-protocol/bond-library';
 import {
   BigNumber,
   ContractTransaction,
@@ -23,6 +23,7 @@ import {
   PrecalculatedMarket,
 } from 'types';
 import {
+  calcBalancerPoolPrice,
   calcLpPrice,
   calculateTrimDigits,
   longVestingPeriod,
@@ -346,12 +347,21 @@ export async function calcMarket(
 
   // @ts-ignore
   if (market.quoteToken.lpPair != undefined && lpType != undefined) {
-    const lpMarketPrice = await calcLpPrice(
-      // @ts-ignore
-      market.quoteToken,
-      lpType,
-      provider,
-    );
+    let lpMarketPrice;
+    if ("poolAddress" in market.quoteToken) {
+      lpMarketPrice = await calcBalancerPoolPrice(
+        // @ts-ignore
+        market.quoteToken,
+        provider
+      );
+    } else {
+      lpMarketPrice = await calcLpPrice(
+        // @ts-ignore
+        market.quoteToken,
+        lpType,
+        provider,
+      );
+    }
     calculatedMarket.discountedPrice =
       quoteTokensPerPayoutToken * lpMarketPrice;
   }
