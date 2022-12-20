@@ -48,7 +48,7 @@ export const dynamicFormatter = (num: string) => {
     maximumFractionDigits = 2;
   }
 
-  if (single > 100) {
+  if (single > 1000) {
     maximumFractionDigits = 0;
   }
 
