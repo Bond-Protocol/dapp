@@ -7,6 +7,7 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondDiscountTooltip } from "./BondDiscountTooltip";
 import { PlaceholderChart } from "../PlaceholderChart";
 import { formatDate } from "src/utils";
+import { dynamicFormatter } from "src/utils/format";
 
 export type BondDiscountChartProps = {
   market: CalculatedMarket;
@@ -50,7 +51,7 @@ export const BondDiscountChart = ({
     2
   )
     .sort((a, b) => b - a)
-    .map((e) => "$" + e.toFixed(0)); //TODO: Fix fox different values
+    .map((e) => dynamicFormatter(e.toString())); //TODO: Fix fox different values
 
   const xAxisLabels = generateTicks(
     dataset.map((d) => d.date as number),

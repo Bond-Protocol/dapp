@@ -18,6 +18,7 @@ export const useSorting = (
         [...data].sort((a, b) => {
           const current = a[sortField]?.sortValue || a[sortField].value;
           const next = b[sortField]?.sortValue || b[sortField].value;
+          console.log({ current, next });
           if (!current) return 1;
           if (!next) return -1;
           if (!current && !next) return 0;
@@ -28,6 +29,7 @@ export const useSorting = (
             }) * (sortOrder === "asc" ? 1 : -1)
           );
         });
+      console.log({ sorted });
       setData(sorted);
     }
   };

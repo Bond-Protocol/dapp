@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { TableHeading, TableCell, Label, LabelProps } from "..";
 import { useSorting } from "hooks";
 
+export type SortOrder = "asc" | "desc";
+
 export interface Cell extends LabelProps {
   sortValue?: string;
 }
@@ -14,6 +16,7 @@ export interface Column<T> {
   width?: string;
   Component?: (props: any) => JSX.Element;
   formatter?: (element: T) => Cell;
+  defaultSortOrder?: SortOrder;
 }
 
 export interface TableProps {
@@ -26,6 +29,8 @@ export interface TableProps {
 
 export const Table = (props: TableProps) => {
   const [data, handleSorting] = useSorting(props.data);
+  const defaultSortOrder =
+    props.columns.find((c) => c.defaultSortOrder)?.defaultSortOrder || "desc";
 
   return (
     <table className="w-full table-fixed">
@@ -35,7 +40,9 @@ export const Table = (props: TableProps) => {
       <TableHead
         columns={props.columns}
         handleSorting={handleSorting}
-        defaultSort={props.defaultSort}
+        defaultSortField={props.defaultSort}
+        defaultSortOrder={defaultSortOrder}
+        hasData={!!data}
       />
       {props.loading && props.Fallback && <props.Fallback />}
       {!props.loading && <TableBody columns={props.columns} rows={data} />}
@@ -46,7 +53,9 @@ export const Table = (props: TableProps) => {
 export interface TableHeadProps {
   columns: Column<unknown>[];
   handleSorting: (field: string, sortOrder: string) => void;
-  defaultSort?: string;
+  defaultSortField?: string;
+  defaultSortOrder: SortOrder;
+  hasData?: boolean;
 }
 
 export const TableHead = (props: TableHeadProps) => {
@@ -62,10 +71,12 @@ export const TableHead = (props: TableHeadProps) => {
   };
 
   useEffect(() => {
-    if (props.defaultSort) {
-      handleSortingChange(props.defaultSort);
+    if (props.defaultSortField && props.hasData) {
+      props.handleSorting(props.defaultSortField, props.defaultSortOrder);
+      setOrder(props.defaultSortOrder);
+      setSortField(props.defaultSortField);
     }
-  }, [props.defaultSort]);
+  }, [props.defaultSortField, props.hasData]);
 
   return (
     <thead className="">
@@ -102,7 +113,8 @@ export const TableBody = ({ rows, columns }: TableBodyProps) => {
         return (
           <tr
             className={`child:pl-5 border-white/15 h-20 border-b ${
-              row.onClick && "duration-300 ease-in-out hover:cursor-pointer hover:bg-white/5 transition-all"
+              row.onClick &&
+              "transition-all duration-300 ease-in-out hover:cursor-pointer hover:bg-white/5"
             }`}
             //@ts-ignore
             onClick={row.onClick}

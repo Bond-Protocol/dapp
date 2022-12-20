@@ -35,7 +35,6 @@ const bondPrice: Column<CalculatedMarket> = {
     return {
       icon: payout?.logoUrl,
       value: market.formattedDiscountedPrice,
-      iconSubtext: market.payoutToken.symbol,
       subtext: market.formattedFullPrice + " Market",
     };
   },
