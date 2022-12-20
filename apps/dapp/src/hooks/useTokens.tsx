@@ -1,5 +1,5 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { calcLpPrice, LpPair } from "@bond-protocol/contract-library";
+import { calcBalancerPoolPrice, calcLpPrice, LpPair } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { getSubgraphEndpoints } from "services/subgraph-endpoints";
 import {
@@ -172,10 +172,11 @@ export const useTokens = () => {
   useEffect(() => {
     if (coingeckoQuery.data && customPriceQuery.data) {
       const currentPricesMap: Price = {};
-      const lpTokens: { value: bondLibrary.LpToken; key: string }[] = [];
+      const lpTokens: { value: bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken; key: string }[] = [];
+
       bondLibrary.TOKENS.forEach(
-        (value: bondLibrary.Token | bondLibrary.LpToken, tokenKey: string) => {
-          // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
+        (value: bondLibrary.Token | bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken, tokenKey: string) => {
+        // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
           if ("lpType" in value && value.lpType !== undefined) {
             lpTokens.push({ value: value, key: tokenKey });
           } else {
@@ -217,54 +218,90 @@ export const useTokens = () => {
         if (token.value.lpType === undefined) return;
         const split: string[] = token.key.split("_");
         let network = split[0];
-        const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
 
-        //TODO: (aphex) patched this manually due to library fixes, should be made consistent
-        let token0Address = token.value.token0Address;
-        let token1Address = token.value.token1Address;
-
-        if (token0Address.indexOf("_") === -1)
-          token0Address = network + "_" + token0Address;
-        if (token1Address.indexOf("_") === -1)
-          token1Address = network + "_" + token1Address;
-
-        //@ts-ignore
-        token.value["token0"] = bondLibrary.getTokenByAddress(token0Address);
-
-        //@ts-ignore
-        token.value["token1"] = bondLibrary.getTokenByAddress(token1Address);
-
-        const t0 = currentPricesMap[token0Address];
-        const t1 = currentPricesMap[token1Address];
-
-        //@ts-ignore
-        token.value["token0"].price = t0 && t0[0]?.price;
-        //@ts-ignore
-        token.value["token1"].price = t1 && t1[0]?.price;
-
-        promises.push(
-          calcLpPrice(
-            {
+        if ("poolAddress" in token.value) {
+          token.value.constituentTokens.forEach(token => {
+            token.price = currentPricesMap[network + "_" + token.address.toLowerCase()]
               // @ts-ignore
-              lpPair: { ...token.value, address: split[1] },
-              address: split[1],
-            },
-            lpType,
-            providers[network]
-          )
-            .then((result) => {
-              const prices: PriceDetails[] = [];
-              prices[0] = {
+              ? Number(currentPricesMap[network + "_" + token.address.toLowerCase()][0].price)
+              : undefined;
+          });
+
+          const balancerToken = {
+            poolAddress: token.value.poolAddress,
+            vaultAddress: token.value.vaultAddress,
+            constituentTokens: token.value.constituentTokens,
+          }
+
+          promises.push(
+            calcBalancerPoolPrice(
+              // @ts-ignore
+              balancerToken,
+              providers[network]
+            )
+              .then((result) => {
+                const prices: PriceDetails[] = [];
+                prices[0] = {
+                  // @ts-ignore
+                  price: result,
+                  source: "custom",
+                };
+
                 // @ts-ignore
-                price: result,
-                source: "custom",
-              };
+                currentPricesMap[token.key] = prices;
+              })
+              .catch((error) => console.log(error))
+          );
+        } else {
+          const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
 
-              // @ts-ignore
-              currentPricesMap[token.key] = prices;
-            })
-            .catch((error) => console.log(error))
-        );
+          //TODO: (aphex) patched this manually due to library fixes, should be made consistent
+          let token0Address = token.value.token0Address;
+          let token1Address = token.value.token1Address;
+
+          if (token0Address.indexOf("_") === -1)
+            token0Address = network + "_" + token0Address;
+          if (token1Address.indexOf("_") === -1)
+            token1Address = network + "_" + token1Address;
+
+          //@ts-ignore
+          token.value["token0"] = bondLibrary.getTokenByAddress(token0Address);
+
+          //@ts-ignore
+          token.value["token1"] = bondLibrary.getTokenByAddress(token1Address);
+
+          const t0 = currentPricesMap[token0Address];
+          const t1 = currentPricesMap[token1Address];
+
+          //@ts-ignore
+          token.value["token0"].price = t0 && t0[0]?.price;
+          //@ts-ignore
+          token.value["token1"].price = t1 && t1[0]?.price;
+
+          promises.push(
+            calcLpPrice(
+              {
+                // @ts-ignore
+                lpPair: {...token.value, address: split[1]},
+                address: split[1],
+              },
+              lpType,
+              providers[network]
+            )
+              .then((result) => {
+                const prices: PriceDetails[] = [];
+                prices[0] = {
+                  // @ts-ignore
+                  price: result,
+                  source: "custom",
+                };
+
+                // @ts-ignore
+                currentPricesMap[token.key] = prices;
+              })
+              .catch((error) => console.log(error))
+          );
+        }
       });
 
       Promise.allSettled(promises).then(() => {

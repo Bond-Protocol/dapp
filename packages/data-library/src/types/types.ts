@@ -1,5 +1,5 @@
 import { Provider } from "@ethersproject/providers";
-import { CHAIN_ID } from "../constants";
+import {CHAIN_ID, SUPPORTED_LP_TYPES} from "../constants";
 
 export interface Address {
   chainId: string; // e.g. CHAIN_ID.ETHEREUM_MAINNET - See src/chains/chains.ts CHAIN_ID enum for a list of chain IDs.
@@ -27,6 +27,25 @@ export interface LpToken extends Token {
   lpType?: SUPPORTED_LP_TYPES;
   token0Address: string;
   token1Address: string;
+}
+
+export interface BalancerWeightedPoolConstituent {
+  address: string;
+  decimals: number;
+  price?: number;
+}
+
+/*
+  The value of a BalancerWeightedPoolToken can be calculated from any known constituent token.
+  A minimum of one constituent token must have a price feed defined in this library.
+  Other tokens do not need to be defined at all, although doing so will mean decimals don't need
+  to be loaded from on chain data.
+*/
+export interface BalancerWeightedPoolToken extends Token {
+  lpType: SUPPORTED_LP_TYPES.BALANCER_WEIGHTED_POOL;
+  poolAddress: string;
+  vaultAddress: string;
+  constituentTokens: BalancerWeightedPoolConstituent[];
 }
 
 export interface NativeCurrency {
