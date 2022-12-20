@@ -22,9 +22,9 @@ export const IssuerCard: FC<IssuerCardProps> = ({
   const length = markets.length;
 
   const marketSize =
-    markets.length < 1
+    length < 1
       ? "No Open Markets"
-      : markets.length === 1
+      : length === 1
       ? `${length} Market`
       : `${length} Markets`;
 

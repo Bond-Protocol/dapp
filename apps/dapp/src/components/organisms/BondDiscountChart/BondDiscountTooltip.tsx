@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import { BondChartDataset } from "components/organisms/LineChart";
+import { dynamicFormatter } from "src/utils/format";
 
 const getDiscountColor = (price: number, discount: number) => {
   if (price === discount) return "text-white";
@@ -36,13 +37,13 @@ export const BondDiscountTooltip = (props: ChartTooltipProps) => {
   return (
     <div className="min-w-[150px] rounded-lg border border-transparent bg-light-tooltip p-2 py-1 font-jakarta text-xs font-extralight">
       <TooltipLabel
-        value={"$" + price.toFixed(2)}
+        value={dynamicFormatter(price.toString())}
         label={`${props.tokenSymbol} Price: `}
         className="mt-2 text-light-primary"
         valueClassName=""
       />
       <TooltipLabel
-        value={"$" + discountedPrice.toFixed(2)}
+        value={dynamicFormatter(discountedPrice.toString())}
         label="Bond Price: "
         className="text-light-secondary"
       />
