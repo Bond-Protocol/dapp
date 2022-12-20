@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
+import { CHAIN_ID, getTokenByAddress } from "@bond-protocol/bond-library";
 import {
   CalculatedMarket,
   getBlockExplorer,
@@ -9,23 +9,18 @@ import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
 import { Link, Column, Table } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
-import { getTokenDetailsForMarket } from "src/utils";
 
 const userTxsHistory: Column<any>[] = [
   {
-    accessor: "market",
-    label: "Market",
+    accessor: "timestamp",
+    label: "Time",
+    defaultSortOrder: "desc",
     formatter: (purchase) => {
-      const { quote, payout, lpPair } = getTokenDetailsForMarket(
-        purchase?.market
-      );
+      const timestamp = new Date(purchase.timestamp * 1000);
 
-      return {
-        value: purchase.quoteToken.symbol + "-" + purchase.payoutToken.symbol,
-        icon: quote?.logoUrl,
-        pairIcon: payout?.logoUrl,
-        lpPairIcon: lpPair?.logoUrl,
-      };
+      const date = format(timestamp, "yyyy.MM.dd");
+      const time = format(timestamp, "kk:mm zzz");
+      return { sortValue: purchase.timestamp, value: date, subtext: time };
     },
   },
   {
@@ -64,17 +59,6 @@ const userTxsHistory: Column<any>[] = [
       };
     },
   },
-  {
-    accessor: "timestamp",
-    label: "Time",
-    formatter: (purchase) => {
-      const timestamp = new Date(purchase.timestamp * 1000);
-
-      const date = format(timestamp, "MM.dd.yyyy");
-      const time = format(timestamp, "kk:mm zzz");
-      return { sortValue: timestamp.toString(), value: date, subtext: time };
-    },
-  },
 ];
 
 const marketTxsHistory: Column<any>[] = [
@@ -92,7 +76,11 @@ const marketTxsHistory: Column<any>[] = [
       };
     },
     Component: (props) => {
-      return <Link href={props.subtext}>{props.value}</Link>;
+      return (
+        <Link target="_blank" href={props.subtext}>
+          {props.value}
+        </Link>
+      );
     },
   },
   {
