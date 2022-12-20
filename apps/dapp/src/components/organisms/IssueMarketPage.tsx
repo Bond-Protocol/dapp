@@ -65,7 +65,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
       props.data.chain,
       // @ts-ignore
       signer,
-      { gasLimit: 80000000 }
+      { gasLimit: 1000000 }
     );
     navigate("/create/" + tx.hash);
     props.onExecute(props.data);
