@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { CHAIN_ID, getTokenByAddress } from "@bond-protocol/bond-library";
+import { CHAIN_ID } from "@bond-protocol/bond-library";
 import {
   CalculatedMarket,
   getBlockExplorer,
@@ -9,6 +9,8 @@ import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
 import { Link, Column, Table } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
+import { useTokens } from "hooks";
+import { useMemo } from "react";
 
 const userTxsHistory: Column<any>[] = [
   {
@@ -28,11 +30,11 @@ const userTxsHistory: Column<any>[] = [
     label: "Total Value",
     alignEnd: true,
     formatter: (purchase) => {
-      return {
-        value: usdFormatter.format(
-          parseFloat(purchase.payout) * parseFloat(purchase.purchasePrice)
-        ),
-      };
+      const value = usdFormatter.format(
+        parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice)
+      );
+
+      return { value };
     },
   },
   {
@@ -108,6 +110,8 @@ export interface TransactionHistoryProps {
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
+  const { currentPrices } = useTokens();
+
   const network =
     props.market.network === "arbitrum-one" ? "arbitrum" : props.market.network;
 
@@ -125,18 +129,28 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
     "address"
   );
 
-  const tableData = data?.bondPurchases
-    .map((p) => {
-      //@ts-ignore
-      p.txUrl = blockExplorerTxUrl + p.id;
-      //@ts-ignore (TODO: IMPROVE)
-      p.addressUrl = blockExplorerAddressUrl + p.recipient;
-      //@ts-ignore (TODO: IMPROVE)
-      p.market = props.market;
-      return p;
-    })
-    .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
-    .map((p) => toTableData(marketTxsHistory, p));
+  const tableData = useMemo(
+    () =>
+      data?.bondPurchases
+        .map((p) => {
+          //@ts-ignore
+          p.payoutPrice = currentPrices[p.payoutToken.id]
+            ? //@ts-ignore
+              currentPrices[p.payoutToken.id][0].price
+            : 0;
+
+          //@ts-ignore
+          p.txUrl = blockExplorerTxUrl + p.id;
+          //@ts-ignore (TODO: IMPROVE)
+          p.addressUrl = blockExplorerAddressUrl + p.recipient;
+          //@ts-ignore (TODO: IMPROVE)
+          p.market = props.market;
+          return p;
+        })
+        .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
+        .map((p) => toTableData(marketTxsHistory, p)),
+    [currentPrices]
+  );
 
   return (
     <div className={props.className}>
