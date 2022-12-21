@@ -9,6 +9,8 @@ import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
 import { Link, Column, Table } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
+import {useBondChartData} from "hooks/useBondChartData";
+import {useTokens} from "hooks";
 
 const userTxsHistory: Column<any>[] = [
   {
@@ -28,10 +30,10 @@ const userTxsHistory: Column<any>[] = [
     label: "Total Value",
     alignEnd: true,
     formatter: (purchase) => {
+      const value = usdFormatter.format(parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice));
+      console.log(value)
       return {
-        value: usdFormatter.format(
-          parseFloat(purchase.payout) * parseFloat(purchase.purchasePrice)
-        ),
+        value: value,
       };
     },
   },
@@ -108,6 +110,8 @@ export interface TransactionHistoryProps {
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
+  const { currentPrices } = useTokens();
+
   const network =
     props.market.network === "arbitrum-one" ? "arbitrum" : props.market.network;
 
@@ -127,6 +131,12 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
 
   const tableData = data?.bondPurchases
     .map((p) => {
+      //@ts-ignore
+      p.payoutPrice = currentPrices[p.payoutToken.id]
+        //@ts-ignore
+        ? currentPrices[p.payoutToken.id][0].price
+        : 0;
+
       //@ts-ignore
       p.txUrl = blockExplorerTxUrl + p.id;
       //@ts-ignore (TODO: IMPROVE)
