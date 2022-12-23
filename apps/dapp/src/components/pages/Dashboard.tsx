@@ -13,6 +13,7 @@ import { toTableData } from "src/utils/table";
 import { usdFormatter } from "src/utils/format";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { useAccountStats } from "hooks/useAccountStats";
+import {useMemo} from "react";
 
 const isMainnet = (chain?: string) => {
   return chain === "mainnet" || chain === "homestead";
@@ -21,12 +22,12 @@ const isMainnet = (chain?: string) => {
 export const Dashboard = () => {
   const { myBonds } = useMyBonds();
   const { chain } = useNetwork();
-  const { getTokenDetails, getPrice } = useTokens();
+  const { getTokenDetails, getPrice, currentPrices } = useTokens();
   const account = useAccount();
 
   const { purchases } = useAccountStats();
 
-  const data = myBonds
+  const data = useMemo(() => myBonds
     .filter((b) => b.owner?.toLowerCase() === account?.address?.toLowerCase())
     .map((bond: Partial<OwnerBalance>) => {
       if (!bond.bondToken || !bond.bondToken.underlying) return;
@@ -65,9 +66,9 @@ export const Dashboard = () => {
         isCorrectNetwork,
         canClaim,
       };
-    });
+    }), [currentPrices]);
 
-  const tableData = data?.map((b) => toTableData(tableColumns, b));
+  const tableData = useMemo(() => data?.map((b) => toTableData(tableColumns, b)), [data]);
 
   const tbv = usdFormatter.format(
     purchases?.reduce((total, bond) => {
