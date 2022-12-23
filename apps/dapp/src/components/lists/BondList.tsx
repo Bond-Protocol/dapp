@@ -28,7 +28,7 @@ export const tableColumns: Array<Column<any>> = [
     accessor: "price",
     formatter: (bond) => {
       return {
-        value: usdFormatter.format(bond?.usdPrice),
+        value: usdFormatter.format(bond?.usdPriceString),
       };
     },
   },
