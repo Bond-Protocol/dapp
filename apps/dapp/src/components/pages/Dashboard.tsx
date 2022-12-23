@@ -12,7 +12,6 @@ import { BondList, tableColumns } from "components/lists";
 import { toTableData } from "src/utils/table";
 import { usdFormatter } from "src/utils/format";
 import { RequiresWallet } from "components/utility/RequiresWallet";
-import { useAccountStats } from "hooks/useAccountStats";
 import {useMemo} from "react";
 
 const isMainnet = (chain?: string) => {
@@ -25,54 +24,53 @@ export const Dashboard = () => {
   const { getTokenDetails, getPrice, currentPrices } = useTokens();
   const account = useAccount();
 
-  const { purchases } = useAccountStats();
+  const data = useMemo(() => {return myBonds
+      .filter((b) => b.owner?.toLowerCase() === account?.address?.toLowerCase())
+      .map((bond: Partial<OwnerBalance>) => {
+        if (!bond.bondToken || !bond.bondToken.underlying) return;
+        const date = new Date(bond.bondToken.expiry * 1000);
+        const now = new Date(Date.now());
+        const canClaim = now >= date;
 
-  const data = useMemo(() => myBonds
-    .filter((b) => b.owner?.toLowerCase() === account?.address?.toLowerCase())
-    .map((bond: Partial<OwnerBalance>) => {
-      if (!bond.bondToken || !bond.bondToken.underlying) return;
+        //const purchase = purchases?.data?.bondPurchases.find();
 
-      const date = new Date(bond.bondToken.expiry * 1000);
-      const now = new Date(Date.now());
-      const canClaim = now >= date;
+        let balance: number | string =
+          bond.balance / Math.pow(10, bond.bondToken.underlying.decimals);
+        balance = trim(balance, calculateTrimDigits(balance));
 
-      //const purchase = purchases?.data?.bondPurchases.find();
+        const usdPriceNumber: number = Number(getPrice(bond.bondToken.underlying.id)) * Number(balance);
+        const usdPriceString: string = trim(usdPriceNumber, calculateTrimDigits(usdPriceNumber));
 
-      let balance: number | string =
-        bond.balance / Math.pow(10, bond.bondToken.underlying.decimals);
-      balance = trim(balance, calculateTrimDigits(balance));
+        const underlying: TokenDetails =
+          bond.bondToken && getTokenDetails(bond.bondToken.underlying);
 
-      let usdPrice: number | string =
-        Number(getPrice(bond.bondToken.underlying.id)) * Number(balance);
-      usdPrice = trim(usdPrice, calculateTrimDigits(usdPrice));
+        const network =
+          bond.bondToken.network === "arbitrum-one"
+            ? "arbitrum"
+            : bond.bondToken.network;
 
-      const underlying: TokenDetails =
-        bond.bondToken && getTokenDetails(bond.bondToken.underlying);
+        const isCorrectNetwork =
+          (isMainnet(bond.bondToken.network) && isMainnet(chain?.network)) ||
+          network === chain?.network;
 
-      const network =
-        bond.bondToken.network === "arbitrum-one"
-          ? "arbitrum"
-          : bond.bondToken.network;
-
-      const isCorrectNetwork =
-        (isMainnet(bond.bondToken.network) && isMainnet(chain?.network)) ||
-        network === chain?.network;
-
-      return {
-        bond,
-        balance,
-        usdPrice,
-        underlying,
-        isCorrectNetwork,
-        canClaim,
-      };
-    }), [currentPrices]);
+        return {
+          bond,
+          balance,
+          usdPriceString,
+          usdPriceNumber,
+          underlying,
+          isCorrectNetwork,
+          canClaim,
+        };
+      });
+  }, [currentPrices]);
 
   const tableData = useMemo(() => data?.map((b) => toTableData(tableColumns, b)), [data]);
 
   const tbv = usdFormatter.format(
-    purchases?.reduce((total, bond) => {
-      return total + bond.payout * bond.purchasePrice;
+    data?.reduce((total, bond) => {
+      //@ts-ignore
+      return total + bond.usdPriceNumber;
     }, 0) as number
   );
 
@@ -80,7 +78,7 @@ export const Dashboard = () => {
     data.reduce((total, bond) => {
       if (!bond?.canClaim) return total;
 
-      const price = bond?.usdPrice || "0";
+      const price = bond?.usdPriceString || "0";
       return total + parseFloat(price);
     }, 0)
   );
