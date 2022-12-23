@@ -7,6 +7,7 @@ import {providers} from "services/owned-providers";
 import {OwnerBalance} from "../../generated/graphql";
 import {ContractTransaction} from "ethers";
 import {BOND_TYPE, redeem} from "@bond-protocol/contract-library";
+import {useMemo} from "react";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -117,12 +118,14 @@ export const tableColumns: Array<Column<any>> = [
 ];
 
 export const BondList = (props: any) => {
+  const tableData = useMemo(() => props.data, [props.data[0]?.price]);
+
   return (
     <div>
       <Table
         defaultSort="vesting"
         columns={tableColumns}
-        data={props.data}
+        data={tableData}
         Fallback={props.Fallback}
       />
     </div>
