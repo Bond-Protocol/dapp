@@ -10,6 +10,12 @@ export const listMarketsMainnet = gql`
       teller
       marketId
       owner
+      callbackAddress
+      capacity
+      capacityInQuote
+      chainId
+      minPrice
+      scale
       payoutToken {
         id
         address
@@ -76,6 +82,12 @@ export const listMarketsGoerli = gql`
       teller
       marketId
       owner
+      callbackAddress
+      capacity
+      capacityInQuote
+      chainId
+      minPrice
+      scale
       payoutToken {
         id
         address
@@ -142,6 +154,12 @@ export const listMarketsArbitrumMainnet = gql`
       teller
       marketId
       owner
+      callbackAddress
+      capacity
+      capacityInQuote
+      chainId
+      minPrice
+      scale
       payoutToken {
         id
         address
@@ -208,6 +226,12 @@ export const listMarketsArbitrumGoerli = gql`
       teller
       marketId
       owner
+      callbackAddress
+      capacity
+      capacityInQuote
+      chainId
+      minPrice
+      scale
       payoutToken {
         id
         address
@@ -482,6 +506,12 @@ export const listOwnedMarketsMainnet = gql`
       teller
       marketId
       owner
+      callbackAddress
+      capacity
+      capacityInQuote
+      chainId
+      minPrice
+      scale
       payoutToken {
         id
         address
@@ -548,6 +578,12 @@ export const listOwnedMarketsGoerli = gql`
       teller
       marketId
       owner
+      callbackAddress
+      capacity
+      capacityInQuote
+      chainId
+      minPrice
+      scale
       payoutToken {
         id
         address
@@ -614,6 +650,12 @@ export const listOwnedMarketsArbitrumMainnet = gql`
       teller
       marketId
       owner
+      callbackAddress
+      capacity
+      capacityInQuote
+      chainId
+      minPrice
+      scale
       payoutToken {
         id
         address
@@ -680,6 +722,12 @@ export const listOwnedMarketsArbitrumGoerli = gql`
       teller
       marketId
       owner
+      callbackAddress
+      capacity
+      capacityInQuote
+      chainId
+      minPrice
+      scale
       payoutToken {
         id
         address
