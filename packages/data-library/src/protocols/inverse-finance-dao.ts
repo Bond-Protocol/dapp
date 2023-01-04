@@ -1,4 +1,4 @@
-import { CHAIN_ID } from "../constants";
+import { CHAIN_ID, SUPPORTED_LP_TYPES } from "../constants";
 import { ProtocolDefinition } from "../public-types";
 
 export default {
@@ -41,6 +41,22 @@ export default {
       priceSources: [
         { source: "coingecko", apiId: "inverse-finance", priority: 0 }, //Lower number, higher priority
       ],
+    },
+    {
+      name: "Balancer INV-DOLA LP",
+      symbol: "50INV-50DOLA",
+      lpType: SUPPORTED_LP_TYPES.BALANCER_WEIGHTED_POOL,
+      addresses: {
+        [CHAIN_ID.ETHEREUM_MAINNET]: "0x441b8a1980f2F2E43A9397099d15CC2Fe6D36250",
+      },
+      poolAddress: '0x441b8a1980f2F2E43A9397099d15CC2Fe6D36250',
+      vaultAddress: '0xBA12222222228d8Ba445958a75a0704d566BF2C8',
+      constituentTokens: [
+        { address: "0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68", decimals: 18 },
+        { address: "0x865377367054516e17014CcdED1e7d814EDC9ce4", decimals: 18 },
+      ],
+      purchaseLinks: { [CHAIN_ID.ETHEREUM_MAINNET]: "https://app.balancer.fi/#/ethereum/pool/0x441b8a1980f2f2e43a9397099d15cc2fe6d3625000020000000000000000035f" }, // Where to acquire your token
+      priceSources: [],
     },
   ],
 } as ProtocolDefinition;
