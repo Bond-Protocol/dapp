@@ -71,11 +71,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
     props.onExecute(props.data);
   };
 
-  //(TODO: (aphex) wagmi displays mainnet as homestead :(
-  const selectedNetwork =
-    network.chain?.network === "homestead"
-      ? "mainnet"
-      : network?.chain?.network;
+  const selectedNetwork = network.chain?.id;
   return (
     <>
       <IssueMarketModal

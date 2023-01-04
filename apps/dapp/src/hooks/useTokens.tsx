@@ -32,7 +32,7 @@ export interface Price {
 export interface TokenDetails {
   id: string;
   address: string;
-  network: string;
+  chainId: string;
   logoUrl: string;
   name: string;
   symbol: string;
@@ -152,7 +152,7 @@ export const useTokens = () => {
       });
     } catch (e: any) {
       console.log(e);
-      throw new Error("Error loading custom prices", e);
+      throw new Error("Error loading custom prices");
     }
 
     // When all the Promises have settled, return the pricesMap, which was populated by each request's 'then' callback.
@@ -217,13 +217,13 @@ export const useTokens = () => {
       lpTokens.forEach((token) => {
         if (token.value.lpType === undefined) return;
         const split: string[] = token.key.split("_");
-        let network = split[0];
+        let chainId = split[0];
 
         if ("poolAddress" in token.value) {
           token.value.constituentTokens.forEach(token => {
-            token.price = currentPricesMap[network + "_" + token.address.toLowerCase()]
+            token.price = currentPricesMap[chainId + "_" + token.address.toLowerCase()]
               // @ts-ignore
-              ? Number(currentPricesMap[network + "_" + token.address.toLowerCase()][0].price)
+              ? Number(currentPricesMap[chainId + "_" + token.address.toLowerCase()][0].price)
               : undefined;
           });
 
@@ -237,7 +237,7 @@ export const useTokens = () => {
             calcBalancerPoolPrice(
               // @ts-ignore
               balancerToken,
-              providers[network]
+              providers[chainId]
             )
               .then((result) => {
                 const prices: PriceDetails[] = [];
@@ -260,9 +260,9 @@ export const useTokens = () => {
           let token1Address = token.value.token1Address;
 
           if (token0Address.indexOf("_") === -1)
-            token0Address = network + "_" + token0Address;
+            token0Address = chainId + "_" + token0Address;
           if (token1Address.indexOf("_") === -1)
-            token1Address = network + "_" + token1Address;
+            token1Address = chainId + "_" + token1Address;
 
           //@ts-ignore
           token.value["token0"] = bondLibrary.getTokenByAddress(token0Address);
@@ -286,7 +286,7 @@ export const useTokens = () => {
                 address: split[1],
               },
               lpType,
-              providers[network]
+              providers[chainId]
             )
               .then((result) => {
                 const prices: PriceDetails[] = [];
@@ -383,7 +383,7 @@ export const useTokens = () => {
     return {
       id: token.id,
       address: token.address,
-      network: token.id.split("_")[0],
+      chainId: token.id.split("_")[0],
       logoUrl: bondLibraryToken?.logoUrl
         ? bondLibraryToken.logoUrl
         : "/placeholders/token-placeholder.png",

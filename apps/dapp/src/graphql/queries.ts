@@ -293,6 +293,7 @@ export const listTokensMainnet = gql`
     tokens {
       id
       network
+      chainId
       address
       decimals
       symbol
@@ -319,6 +320,7 @@ export const listTokensGoerli = gql`
     tokens {
       id
       network
+      chainId
       address
       decimals
       symbol
@@ -345,6 +347,7 @@ export const listTokensArbitrumMainnet = gql`
     tokens {
       id
       network
+      chainId
       address
       decimals
       symbol
@@ -371,6 +374,7 @@ export const listTokensArbitrumGoerli = gql`
     tokens {
       id
       network
+      chainId
       address
       decimals
       symbol
@@ -400,12 +404,14 @@ export const getOwnerBalancesByOwnerMainnet = gql`
       owner
       balance
       network
+      chainId
       bondToken {
         id
         symbol
         decimals
         expiry
         network
+        chainId
         type
         teller
         underlying {
@@ -426,11 +432,13 @@ export const getOwnerBalancesByOwnerGoerli = gql`
       owner
       balance
       network
+      chainId
       bondToken {
         id
         symbol
         decimals
         expiry
+        chainId
         network
         type
         teller
@@ -452,12 +460,14 @@ export const getOwnerBalancesByOwnerArbitrumMainnet = gql`
       owner
       balance
       network
+      chainId
       bondToken {
         id
         symbol
         decimals
         expiry
         network
+        chainId
         type
         teller
         underlying {
@@ -478,12 +488,14 @@ export const getOwnerBalancesByOwnerArbitrumGoerli = gql`
       owner
       balance
       network
+      chainId
       bondToken {
         id
         symbol
         decimals
         expiry
         network
+        chainId
         type
         teller
         underlying {
@@ -502,6 +514,7 @@ export const listOwnedMarketsMainnet = gql`
       id
       name
       network
+      chainId
       auctioneer
       teller
       marketId
@@ -574,6 +587,7 @@ export const listOwnedMarketsGoerli = gql`
       id
       name
       network
+      chainId
       auctioneer
       teller
       marketId
@@ -646,6 +660,7 @@ export const listOwnedMarketsArbitrumMainnet = gql`
       id
       name
       network
+      chainId
       auctioneer
       teller
       marketId
@@ -718,6 +733,7 @@ export const listOwnedMarketsArbitrumGoerli = gql`
       id
       name
       network
+      chainId
       auctioneer
       teller
       marketId
@@ -803,6 +819,7 @@ export const listErc20BondTokensMainnet = gql`
       expiry
       teller
       network
+      chainId
       type
     }
   }
@@ -822,6 +839,7 @@ export const listErc20BondTokensGoerli = gql`
       expiry
       teller
       network
+      chainId
       type
     }
   }
@@ -841,6 +859,7 @@ export const listErc20BondTokensArbitrumMainnet = gql`
       expiry
       teller
       network
+      chainId
       type
     }
   }
@@ -860,6 +879,7 @@ export const listErc20BondTokensArbitrumGoerli = gql`
       expiry
       teller
       network
+      chainId
       type
     }
   }
@@ -908,6 +928,7 @@ export const listBondPurchasesMainnet = gql`
       recipient
       timestamp
       network
+      chainId
       quoteToken {
         id
       }
@@ -926,6 +947,7 @@ export const listBondPurchasesGoerli = gql`
       recipient
       timestamp
       network
+      chainId
       quoteToken {
         id
       }
@@ -944,6 +966,7 @@ export const listBondPurchasesArbitrumMainnet = gql`
       recipient
       timestamp
       network
+      chainId
       quoteToken {
         id
       }
@@ -962,6 +985,7 @@ export const listBondPurchasesArbitrumGoerli = gql`
       recipient
       timestamp
       network
+      chainId
       quoteToken {
         id
       }
@@ -976,6 +1000,7 @@ export const listOwnerTokenTbvsMainnet = gql`
       token
       tbv
       network
+      chainId
     }
   }
 `;
@@ -987,6 +1012,7 @@ export const listOwnerTokenTbvsGoerli = gql`
       token
       tbv
       network
+      chainId
     }
   }
 `;
@@ -998,6 +1024,7 @@ export const listOwnerTokenTbvsArbitrumMainnet = gql`
       token
       tbv
       network
+      chainId
     }
   }
 `;
@@ -1009,6 +1036,7 @@ export const listOwnerTokenTbvsArbitrumGoerli = gql`
       token
       tbv
       network
+      chainId
     }
   }
 `;
@@ -1099,6 +1127,7 @@ export const listBondPurchasesPerMarketArbitrumGoerli = gql`
       postPurchasePrice
       recipient
       network
+      chainId
       quoteToken {
         id
         name
@@ -1127,6 +1156,7 @@ export const listBondPurchasesByAddress = gql`
       postPurchasePrice
       recipient
       network
+      chainId
       quoteToken {
         id
         name
@@ -1154,6 +1184,7 @@ export const listBondPurchasesByAddressArbitrum = gql`
       postPurchasePrice
       recipient
       network
+      chainId
       quoteToken {
         id
         name
@@ -1181,6 +1212,7 @@ export const listBondPurchases = gql`
       postPurchasePrice
       recipient
       network
+      chainId
       quoteToken {
         id
         name
@@ -1208,6 +1240,7 @@ export const listBondPurchasesPerMarket = gql`
       postPurchasePrice
       recipient
       network
+      chainId
       quoteToken {
         id
         name

@@ -55,7 +55,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
       address,
       market.quoteToken.address,
       market.quoteToken.decimals,
-      market.network,
+      market.chainId,
       market.auctioneer,
       amount,
       provider,
@@ -63,7 +63,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
     );
 
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
-    market.network,
+    market.chainId,
     "address"
   );
 
@@ -93,7 +93,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
           amount,
           market.quoteToken.decimals,
           market.marketId,
-          market.network,
+          market.chainId,
           referralAddress,
           provider
         )
@@ -234,7 +234,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
         <BondButton
           showConnect={!isConnected}
           showPurchaseLink={!hasSufficientBalance}
-          network={market.network}
+          chainId={market.chainId}
           quoteTokenSymbol={market.quoteToken.symbol}
           purchaseLink={
             market.quoteToken.purchaseLink
@@ -255,7 +255,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
       </div>
       <BondPurchaseModal
         onSubmit={submitTx}
-        network={market.network}
+        chainId={market.chainId}
         open={showModal}
         closeModal={() => setShowModal(false)}
         amount={`${amount} ${market.quoteToken.symbol}`}

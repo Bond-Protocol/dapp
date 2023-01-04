@@ -63,28 +63,18 @@ export const tableColumns: Array<Column<any>> = [
       const { switchNetwork } = useSwitchNetwork();
       const { data: signer } = useSigner();
 
-      const isMainnet = (chain?: string) => {
-        return chain === "mainnet" || chain === "homestead";
-      };
 
-      const network =
-        props?.data?.bond.bondToken.network === "arbitrum-one"
-          ? "arbitrum"
-          : props?.data?.bond.bondToken.network;
-
-      const isCorrectNetwork =
-        (isMainnet(props?.data?.bond.bondToken.network) && isMainnet(chain?.network)) ||
-        network === chain?.network;
+      const isCorrectNetwork = Number(props?.data?.bond.bondToken.chainId) === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(providers[network].network.chainId);
+        switchNetwork?.(Number(props?.data?.bond.bondToken.chainId));
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {
         if (!bond.bondToken) return;
         const redeemTx: ContractTransaction = await redeem(
           bond.bondToken.id,
-          bond.bondToken.network,
+          bond.bondToken.chainId,
           bond.bondToken.type as BOND_TYPE,
           bond.balance.toString(),
           // @ts-ignore

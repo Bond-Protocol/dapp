@@ -474,7 +474,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const formValues = getValues();
     formValues.chain = {
       // @ts-ignore
-      id: bondLibrary.CHAINS.get(chainSelection).chainName,
+      id: bondLibrary.CHAINS.get(chainSelection).chainId,
       // @ts-ignore
       label: bondLibrary.CHAINS.get(chainSelection).displayName,
     };

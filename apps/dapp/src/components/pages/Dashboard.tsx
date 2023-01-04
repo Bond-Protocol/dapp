@@ -44,14 +44,7 @@ export const Dashboard = () => {
         const underlying: TokenDetails =
           bond.bondToken && getTokenDetails(bond.bondToken.underlying);
 
-        const network =
-          bond.bondToken.network === "arbitrum-one"
-            ? "arbitrum"
-            : bond.bondToken.network;
-
-        const isCorrectNetwork =
-          (isMainnet(bond.bondToken.network) && isMainnet(chain?.network)) ||
-          network === chain?.network;
+        const isCorrectNetwork = Number(bond.bondToken.chainId) === chain?.id;
 
         return {
           bond,

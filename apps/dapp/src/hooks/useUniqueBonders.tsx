@@ -110,9 +110,7 @@ export function useUniqueBonders() {
     let count = 0;
 
     addresses.forEach((address) => {
-      const network =
-        address.chainId === "arbitrum" ? "arbitrum-one" : address.chainId;
-      const id = (network + "_" + address.address).toLowerCase();
+      const id = (address.chainId + "_" + address.address).toLowerCase();
       const bonders = selectedBonders.get(id);
       if (bonders) count = count + bonders;
     });

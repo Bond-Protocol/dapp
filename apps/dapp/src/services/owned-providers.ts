@@ -101,6 +101,6 @@ export const providers: { [key: string]: Provider } =
 
     return {
       ...acc,
-      [config.name]: provider,
+      [config.chainId]: provider,
     };
   }, {});

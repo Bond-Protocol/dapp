@@ -149,7 +149,7 @@ export function useMyBonds() {
       address &&
       promises.push(
         contractLibrary
-          .getBalance(bondToken.id, address, providers[bondToken.network])
+          .getBalance(bondToken.id, address, providers[bondToken.chainId])
           .then((result) => {
             if (Number(result) > 0) {
               // Now we have all the data required to make an OwnerBalances object

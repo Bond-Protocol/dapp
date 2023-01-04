@@ -30,10 +30,10 @@ export const usePurchaseBond = () => {
     tokenAddress: string,
     address: string,
     auctioneer: string,
-    network: string,
+    chainId: string,
     decimals: number
   ) => {
-    const requestProvider = providers[network];
+    const requestProvider = providers[chainId];
     const allowance: BigNumberish = await contractLibrary.getAllowance(
       tokenAddress,
       address,
@@ -85,7 +85,7 @@ export const usePurchaseBond = () => {
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
       const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
-        market.network.concat("_").concat(market.owner)
+        market.chainId.concat("_").concat(market.owner)
       )
         ? NO_REFERRAL_ADDRESS
         : REFERRAL_ADDRESS;
@@ -120,7 +120,7 @@ export const usePurchaseBond = () => {
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
       const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
-        market.network.concat("_").concat(market.owner)
+        market.chainId.concat("_").concat(market.owner)
       )
         ? NO_REFERRAL_ADDRESS
         : REFERRAL_ADDRESS;

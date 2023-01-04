@@ -89,8 +89,7 @@ export function useOwnerTokenTbvs() {
 
     const updated = selected
       .map((token) => {
-        const network = token.network.replace("-one", "");
-        const protocol = getProtocolByAddress(token.owner, network);
+        const protocol = getProtocolByAddress(token.owner, token.chainId);
         if (!protocol) return { id: "", tbv: 0 };
 
         const price = getPrice(token?.token);

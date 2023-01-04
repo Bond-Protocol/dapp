@@ -30,16 +30,7 @@ export function useCalculatedMarkets() {
   const [marketsByIssuer, setMarketsByIssuer] = useState(new Map());
 
   const calculateMarket = async (market: Market) => {
-    /*
-      We cannot rely on the value of isLive from the subgraph, it only updates on events.
-      If a market is manually closed, or closes after hitting capacity, the subgraph will
-      be updated, and isLive will be false. However, if it hits its expiry date, there is
-      no event, so the subgraph is not updated. Thus, we check here and return early if
-      the market is not live.
-    */
-    const network =
-      market.network === "arbitrum-one" ? "arbitrum" : market.network;
-    const requestProvider = providers[network];
+    const requestProvider = providers[market.chainId];
     const obsoleteAuctioneers = [
       "0x007f7a58103a31109f848df1a14f7020e1f1b28a",
       "0x007f7a6012a5e03f6f388dd9f19fd1d754cfc128",
@@ -48,20 +39,25 @@ export function useCalculatedMarkets() {
     ];
     if (obsoleteAuctioneers.includes(market.auctioneer)) return;
 
+    /*
+      We cannot rely on the value of isLive from the subgraph, it only updates on events.
+      If a market is manually closed, or closes after hitting capacity, the subgraph will
+      be updated, and isLive will be false. However, if it hits its expiry date, there is
+      no event, so the subgraph is not updated. Thus, we check here and return early if
+      the market is not live.
+    */
     const isLive = await contractLibrary.isLive(
       market.marketId,
       requestProvider,
-      market.network
+      market.chainId
     );
     if (!isLive) return;
 
-    const _network =
-      market.network === "arbitrum-one" ? "arbitrum" : market.network;
     const purchaseLink = bondLibrary.TOKENS.get(
       market.quoteToken.id
-    )?.purchaseLinks.get(_network as CHAIN_ID)
+    )?.purchaseLinks.get(market.chainId as CHAIN_ID)
       ? bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(
-          _network as CHAIN_ID
+          market.chainId as CHAIN_ID
         )
       : "https://app.sushi.com/swap";
 
@@ -83,7 +79,7 @@ export function useCalculatedMarkets() {
         import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
         {
           id: market.id,
-          network: market.network,
+          chainId: market.chainId,
           auctioneer: market.auctioneer,
           teller: market.teller,
           owner: market.owner,
@@ -174,13 +170,7 @@ export function useCalculatedMarkets() {
         if (result && result.data) {
           calculatedMarketsMap.set(result.data.id, result.data);
 
-          const network =
-            result?.data.network === "arbitrum-one"
-              ? "arbitrum"
-              : result.data.network;
-
-          const protocol = getProtocolByAddress(result.data.owner, network);
-
+          const protocol = getProtocolByAddress(result.data.owner, result?.data.chainId);
           const id = protocol?.id;
           const value = issuerMarkets.get(protocol?.id) || [];
 
