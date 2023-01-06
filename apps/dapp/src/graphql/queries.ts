@@ -227,7 +227,7 @@ export const listErc20BondTokens = gql`
 
 export const listUniqueBonders = gql`
   query ListUniqueBonders($queryKey: String! = "") {
-    uniqueBonders {
+    uniqueBonders(first: 1000) {
       id
     }
   }
