@@ -1,88 +1,78 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useTokens } from "hooks/useTokens";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {
-  OwnerTokenTbv,
-  useListOwnerTokenTbvsArbitrumGoerliQuery,
-  useListOwnerTokenTbvsArbitrumMainnetQuery,
-  useListOwnerTokenTbvsGoerliQuery,
-  useListOwnerTokenTbvsMainnetQuery,
-} from "../generated/graphql";
+import { OwnerTokenTbv, useListOwnerTokenTbvsQuery } from "../generated/graphql";
 import { useEffect, useState } from "react";
-import { getProtocolByAddress } from "@bond-protocol/bond-library";
+import { getProtocolByAddress, CHAIN_ID } from "@bond-protocol/bond-library";
 
 export function useOwnerTokenTbvs() {
-  const endpoints = getSubgraphEndpoints();
   const { getPrice, currentPrices } = useTokens();
   const [testnet] = useAtom(testnetMode);
 
   const [protocolTbvs, setProtocolTbvs] = useState<Record<string, any>>([]);
   const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<
     OwnerTokenTbv[]
-  >([]);
+    >([]);
   const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<
     OwnerTokenTbv[]
-  >([]);
+    >([]);
 
-  const { data: mainnetData, ...mainnetQuery } =
-    useListOwnerTokenTbvsMainnetQuery(
-      { endpoint: endpoints[0] },
-      {},
-      { enabled: !testnet }
-    );
+  const { data: ethMainnetData, ...ethMainnetQuery } = useListOwnerTokenTbvsQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET] },
+    { queryKey: CHAIN_ID.ETHEREUM_MAINNET + "-list-owner-token-tbvs" },
+    { enabled: !testnet }
+  );
 
-  const { data: goerliData, ...goerliQuery } = useListOwnerTokenTbvsGoerliQuery(
-    { endpoint: endpoints[1] },
-    {},
+  const { data: ethTestnetData, ...ethTestnetQuery } = useListOwnerTokenTbvsQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET] },
+    { queryKey: CHAIN_ID.GOERLI_TESTNET + "-list-owner-token-tbvs" },
     { enabled: !!testnet }
   );
 
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
-    useListOwnerTokenTbvsArbitrumMainnetQuery(
-      { endpoint: endpoints[2] },
-      {},
-      { enabled: !testnet }
-    );
+  const { data: arbMainnetData, ...arbMainnetQuery } = useListOwnerTokenTbvsQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET] },
+    { queryKey: CHAIN_ID.ARBITRUM_MAINNET + "-list-owner-token-tbvs" },
+    { enabled: !testnet }
+  );
 
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } =
-    useListOwnerTokenTbvsArbitrumGoerliQuery(
-      { endpoint: endpoints[3] },
-      {},
-      { enabled: !!testnet }
-    );
+  const { data: arbTestnetData, ...arbTestnetQuery } = useListOwnerTokenTbvsQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET] },
+    { queryKey: CHAIN_ID.ARBITRUM_GOERLI_TESTNET + "-list-owner-token-tbvs" },
+    { enabled: !!testnet }
+  );
 
   useEffect(() => {
     if (testnet) return;
     if (
-      mainnetData &&
-      mainnetData.ownerTokenTbvs &&
-      arbitrumMainnetData &&
-      arbitrumMainnetData.ownerTokenTbvs
+      ethMainnetData &&
+      ethMainnetData.ownerTokenTbvs &&
+      arbMainnetData &&
+      arbMainnetData.ownerTokenTbvs
     ) {
-      const allOwnerTokens = mainnetData.ownerTokenTbvs.concat(
-        arbitrumMainnetData.ownerTokenTbvs
+      const allOwnerTokens = ethMainnetData.ownerTokenTbvs.concat(
+        arbMainnetData.ownerTokenTbvs
       );
       // @ts-ignore
       setMainnetOwnerTokenTbvs(allOwnerTokens);
     }
-  }, [mainnetData, arbitrumMainnetData, testnet]);
+  }, [ethMainnetData, arbMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
     if (
-      goerliData &&
-      goerliData.ownerTokenTbvs &&
-      arbitrumGoerliData &&
-      arbitrumGoerliData.ownerTokenTbvs
+      ethTestnetData &&
+      ethTestnetData.ownerTokenTbvs &&
+      arbTestnetData &&
+      arbTestnetData.ownerTokenTbvs
     ) {
-      const allOwnerTokens = goerliData.ownerTokenTbvs.concat(
-        arbitrumGoerliData.ownerTokenTbvs
+      const allOwnerTokens = ethTestnetData.ownerTokenTbvs.concat(
+        arbTestnetData.ownerTokenTbvs
       );
       // @ts-ignore
       setTestnetOwnerTokenTbvs(allOwnerTokens);
     }
-  }, [goerliData, arbitrumGoerliData, testnet]);
+  }, [ethTestnetData, arbTestnetData, testnet]);
 
   useEffect(() => {
     let selected = testnet ? testnetOwnerTokenTbvs : mainnetOwnerTokenTbvs;
@@ -116,8 +106,8 @@ export function useOwnerTokenTbvs() {
   }, [testnet, mainnetOwnerTokenTbvs, testnetOwnerTokenTbvs, currentPrices]);
 
   const isLoading = testnet
-    ? goerliQuery.isLoading || arbitrumGoerliQuery.isLoading
-    : mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading;
+    ? ethTestnetQuery.isLoading || arbTestnetQuery.isLoading
+    : ethMainnetQuery.isLoading || arbMainnetQuery.isLoading;
 
   return {
     isLoading,

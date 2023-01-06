@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 import {
   BondPurchase,
-  ListBondPurchasesPerMarketMainnetQuery,
-  useListBondPurchasesPerMarketMainnetQuery,
+  ListBondPurchasesPerMarketQuery,
+  useListBondPurchasesPerMarketQuery,
 } from "../generated/graphql";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
@@ -17,7 +17,7 @@ type PriceDataArray = Array<{ date: number; price: number }>;
 
 type CreateBondPurchaseDatasetArgs = {
   priceData: PriceDataArray;
-} & Pick<ListBondPurchasesPerMarketMainnetQuery, "bondPurchases">;
+} & Pick<ListBondPurchasesPerMarketQuery, "bondPurchases">;
 
 const getMarketPriceAtPurchaseTime = (
   timestamp: number,
@@ -95,7 +95,7 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 30) => {
   );
 
   const { data: purchaseData, ...purchasesQuery } =
-    useListBondPurchasesPerMarketMainnetQuery(
+    useListBondPurchasesPerMarketQuery(
       // @ts-ignore
       { endpoint: subgraphEndpoints[market.chainId as CHAIN_ID] },
       { marketId: market.id }

@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 
-export const listMarketsMainnet = gql`
-  query ListMarketsMainnet($addresses: [String!]!) {
+export const listMarkets = gql`
+  query ListMarkets($addresses: [String!]!, $queryKey: String! = "") {
     markets(where: { isLive: true, owner_in: $addresses }) {
       id
       name
@@ -72,224 +72,8 @@ export const listMarketsMainnet = gql`
   }
 `;
 
-export const listMarketsGoerli = gql`
-  query ListMarketsGoerli($addresses: [String!]!) {
-    markets(where: { isLive: true, owner_in: $addresses }) {
-      id
-      name
-      network
-      auctioneer
-      teller
-      marketId
-      owner
-      callbackAddress
-      capacity
-      capacityInQuote
-      chainId
-      minPrice
-      scale
-      payoutToken {
-        id
-        address
-        symbol
-        decimals
-        name
-      }
-      quoteToken {
-        id
-        address
-        symbol
-        decimals
-        name
-        lpPair {
-          token0 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-          token1 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-        balancerPool {
-          id
-          vaultAddress
-          poolId
-          constituentTokens {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-      }
-      vesting
-      vestingType
-      isInstantSwap
-      isLive
-      totalBondedAmount
-      totalPayoutAmount
-      creationBlockTimestamp
-    }
-  }
-`;
-
-export const listMarketsArbitrumMainnet = gql`
-  query ListMarketsArbitrumMainnet($addresses: [String!]!) {
-    markets(where: { isLive: true, owner_in: $addresses }) {
-      id
-      name
-      network
-      auctioneer
-      teller
-      marketId
-      owner
-      callbackAddress
-      capacity
-      capacityInQuote
-      chainId
-      minPrice
-      scale
-      payoutToken {
-        id
-        address
-        symbol
-        decimals
-        name
-      }
-      quoteToken {
-        id
-        address
-        symbol
-        decimals
-        name
-        lpPair {
-          token0 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-          token1 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-        balancerPool {
-          id
-          vaultAddress
-          poolId
-          constituentTokens {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }          
-      }
-      vesting
-      vestingType
-      isInstantSwap
-      isLive
-      totalBondedAmount
-      totalPayoutAmount
-      creationBlockTimestamp
-    }
-  }
-`;
-
-export const listMarketsArbitrumGoerli = gql`
-  query ListMarketsArbitrumGoerli($addresses: [String!]!) {
-    markets(where: { isLive: true, owner_in: $addresses }) {
-      id
-      name
-      network
-      auctioneer
-      teller
-      marketId
-      owner
-      callbackAddress
-      capacity
-      capacityInQuote
-      chainId
-      minPrice
-      scale
-      payoutToken {
-        id
-        address
-        symbol
-        decimals
-        name
-      }
-      quoteToken {
-        id
-        address
-        symbol
-        decimals
-        name
-        lpPair {
-          token0 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-          token1 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-        balancerPool {
-          id
-          vaultAddress
-          poolId
-          constituentTokens {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-      }
-      vesting
-      vestingType
-      isInstantSwap
-      isLive
-      totalBondedAmount
-      totalPayoutAmount
-      creationBlockTimestamp
-    }
-  }
-`;
-
-export const listTokensMainnet = gql`
-  query ListTokensMainnet {
+export const listTokens = gql`
+  query ListTokens($queryKey: String! = "") {
     tokens {
       id
       network
@@ -315,89 +99,8 @@ export const listTokensMainnet = gql`
   }
 `;
 
-export const listTokensGoerli = gql`
-  query ListTokensGoerli {
-    tokens {
-      id
-      network
-      chainId
-      address
-      decimals
-      symbol
-      name
-      lpPair {
-        token0 {
-          id
-        }
-        token1 {
-          id
-        }
-      }
-      balancerPool {
-        constituentTokens {
-          id
-        }
-      }
-    }
-  }
-`;
-
-export const listTokensArbitrumMainnet = gql`
-  query ListTokensArbitrumMainnet {
-    tokens {
-      id
-      network
-      chainId
-      address
-      decimals
-      symbol
-      name
-      lpPair {
-        token0 {
-          id
-        }
-        token1 {
-          id
-        }
-      }
-      balancerPool {
-        constituentTokens {
-          id
-        }
-      }
-    }
-  }
-`;
-
-export const listTokensArbitrumGoerli = gql`
-  query ListTokensArbitrumGoerli {
-    tokens {
-      id
-      network
-      chainId
-      address
-      decimals
-      symbol
-      name
-      lpPair {
-        token0 {
-          id
-        }
-        token1 {
-          id
-        }
-      }
-      balancerPool {
-        constituentTokens {
-          id
-        }
-      }
-    }
-  }
-`;
-
-export const getOwnerBalancesByOwnerMainnet = gql`
-  query GetOwnerBalancesByOwnerMainnet($owner: String!) {
+export const getOwnerBalancesByOwner = gql`
+  query GetOwnerBalancesByOwner($owner: String!, $queryKey: String! = "") {
     ownerBalances(where: { owner_contains_nocase: $owner, balance_gt: 0 }) {
       id
       tokenId
@@ -424,92 +127,8 @@ export const getOwnerBalancesByOwnerMainnet = gql`
   }
 `;
 
-export const getOwnerBalancesByOwnerGoerli = gql`
-  query GetOwnerBalancesByOwnerGoerli($owner: String!) {
-    ownerBalances(where: { owner_contains_nocase: $owner, balance_gt: 0 }) {
-      id
-      tokenId
-      owner
-      balance
-      network
-      chainId
-      bondToken {
-        id
-        symbol
-        decimals
-        expiry
-        chainId
-        network
-        type
-        teller
-        underlying {
-          id
-          symbol
-          decimals
-        }
-      }
-    }
-  }
-`;
-
-export const getOwnerBalancesByOwnerArbitrumMainnet = gql`
-  query GetOwnerBalancesByOwnerArbitrumMainnet($owner: String!) {
-    ownerBalances(where: { owner_contains_nocase: $owner, balance_gt: 0 }) {
-      id
-      tokenId
-      owner
-      balance
-      network
-      chainId
-      bondToken {
-        id
-        symbol
-        decimals
-        expiry
-        network
-        chainId
-        type
-        teller
-        underlying {
-          id
-          symbol
-          decimals
-        }
-      }
-    }
-  }
-`;
-
-export const getOwnerBalancesByOwnerArbitrumGoerli = gql`
-  query GetOwnerBalancesByOwnerArbitrumGoerli($owner: String!) {
-    ownerBalances(where: { owner_contains_nocase: $owner, balance_gt: 0 }) {
-      id
-      tokenId
-      owner
-      balance
-      network
-      chainId
-      bondToken {
-        id
-        symbol
-        decimals
-        expiry
-        network
-        chainId
-        type
-        teller
-        underlying {
-          id
-          symbol
-          decimals
-        }
-      }
-    }
-  }
-`;
-
-export const listOwnedMarketsMainnet = gql`
-  query ListOwnedMarketsMainnet($owner: String!) {
+export const listOwnedMarkets = gql`
+  query ListOwnedMarkets($owner: String!, $queryKey: String! = "") {
     markets(where: { owner_contains_nocase: $owner }) {
       id
       name
@@ -581,227 +200,8 @@ export const listOwnedMarketsMainnet = gql`
   }
 `;
 
-export const listOwnedMarketsGoerli = gql`
-  query ListOwnedMarketsGoerli($owner: String!) {
-    markets(where: { owner_contains_nocase: $owner }) {
-      id
-      name
-      network
-      chainId
-      auctioneer
-      teller
-      marketId
-      owner
-      callbackAddress
-      capacity
-      capacityInQuote
-      chainId
-      minPrice
-      scale
-      payoutToken {
-        id
-        address
-        symbol
-        decimals
-        name
-      }
-      quoteToken {
-        id
-        address
-        symbol
-        decimals
-        name
-        lpPair {
-          token0 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-          token1 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-        balancerPool {
-          id
-          vaultAddress
-          poolId
-          constituentTokens {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-      }
-      vesting
-      vestingType
-      isInstantSwap
-      isLive
-      totalBondedAmount
-      totalPayoutAmount
-      creationBlockTimestamp
-    }
-  }
-`;
-
-export const listOwnedMarketsArbitrumMainnet = gql`
-  query ListOwnedMarketsArbitrumMainnet($owner: String!) {
-    markets(where: { owner_contains_nocase: $owner }) {
-      id
-      name
-      network
-      chainId
-      auctioneer
-      teller
-      marketId
-      owner
-      callbackAddress
-      capacity
-      capacityInQuote
-      chainId
-      minPrice
-      scale
-      payoutToken {
-        id
-        address
-        symbol
-        decimals
-        name
-      }
-      quoteToken {
-        id
-        address
-        symbol
-        decimals
-        name
-        lpPair {
-          token0 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-          token1 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-        balancerPool {
-          id
-          vaultAddress
-          poolId
-          constituentTokens {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-      }
-      vesting
-      vestingType
-      isInstantSwap
-      isLive
-      totalBondedAmount
-      totalPayoutAmount
-      creationBlockTimestamp
-    }
-  }
-`;
-
-export const listOwnedMarketsArbitrumGoerli = gql`
-  query ListOwnedMarketsArbitrumGoerli($owner: String!) {
-    markets(where: { owner_contains_nocase: $owner }) {
-      id
-      name
-      network
-      chainId
-      auctioneer
-      teller
-      marketId
-      owner
-      callbackAddress
-      capacity
-      capacityInQuote
-      chainId
-      minPrice
-      scale
-      payoutToken {
-        id
-        address
-        symbol
-        decimals
-        name
-      }
-      quoteToken {
-        id
-        address
-        symbol
-        decimals
-        name
-        lpPair {
-          token0 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-          token1 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-        balancerPool {
-          id
-          vaultAddress
-          poolId
-          constituentTokens {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-      }
-      vesting
-      vestingType
-      isInstantSwap
-      isLive
-      totalBondedAmount
-      totalPayoutAmount
-      creationBlockTimestamp
-    }
-  }
-`;
-
-export const listErc20BondTokensMainnet = gql`
-  query ListErc20BondTokensMainnet {
+export const listErc20BondTokens = gql`
+  query ListErc20BondTokens($queryKey: String! = "") {
     bondTokens(
       where: {
         type: "fixed-expiration"
@@ -825,100 +225,16 @@ export const listErc20BondTokensMainnet = gql`
   }
 `;
 
-export const listErc20BondTokensGoerli = gql`
-  query ListErc20BondTokensGoerli {
-    bondTokens(where: { type: "fixed-expiration" }) {
-      id
-      symbol
-      decimals
-      underlying {
-        id
-        symbol
-        decimals
-      }
-      expiry
-      teller
-      network
-      chainId
-      type
-    }
-  }
-`;
-
-export const listErc20BondTokensArbitrumMainnet = gql`
-  query ListErc20BondTokensArbitrumMainnet {
-    bondTokens(where: { type: "fixed-expiration" }) {
-      id
-      symbol
-      decimals
-      underlying {
-        id
-        symbol
-        decimals
-      }
-      expiry
-      teller
-      network
-      chainId
-      type
-    }
-  }
-`;
-
-export const listErc20BondTokensArbitrumGoerli = gql`
-  query ListErc20BondTokensArbitrumGoerli {
-    bondTokens(where: { type: "fixed-expiration" }) {
-      id
-      symbol
-      decimals
-      underlying {
-        id
-        symbol
-        decimals
-      }
-      expiry
-      teller
-      network
-      chainId
-      type
-    }
-  }
-`;
-
-export const listUniqueBondersMainnet = gql`
-  query ListUniqueBondersMainnet {
-    uniqueBonders(first: 1000) {
+export const listUniqueBonders = gql`
+  query ListUniqueBonders($queryKey: String! = "") {
+    uniqueBonders {
       id
     }
   }
 `;
 
-export const listUniqueBondersGoerli = gql`
-  query ListUniqueBondersGoerli {
-    uniqueBonders(first: 1000) {
-      id
-    }
-  }
-`;
-
-export const listUniqueBondersArbitrumMainnet = gql`
-  query ListUniqueBondersArbitrumMainnet {
-    uniqueBonders(first: 1000) {
-      id
-    }
-  }
-`;
-
-export const listUniqueBondersArbitrumGoerli = gql`
-  query ListUniqueBondersArbitrumGoerli {
-    uniqueBonders(first: 1000) {
-      id
-    }
-  }
-`;
-
-export const listBondPurchasesMainnet = gql`
-  query ListBondPurchasesMainnet($addresses: [String!]!) {
+export const listBondPurchases = gql`
+  query ListBondPurchases($addresses: [String!]!, $queryKey: String! = "") {
     bondPurchases(first: 1000, where: { owner_in: $addresses }) {
       id
       marketId
@@ -936,65 +252,8 @@ export const listBondPurchasesMainnet = gql`
   }
 `;
 
-export const listBondPurchasesGoerli = gql`
-  query ListBondPurchasesGoerli($addresses: [String!]!) {
-    bondPurchases(first: 1000, where: { owner_in: $addresses }) {
-      id
-      marketId
-      owner
-      amount
-      payout
-      recipient
-      timestamp
-      network
-      chainId
-      quoteToken {
-        id
-      }
-    }
-  }
-`;
-
-export const listBondPurchasesArbitrumMainnet = gql`
-  query ListBondPurchasesArbitrumMainnet($addresses: [String!]!) {
-    bondPurchases(first: 1000, where: { owner_in: $addresses }) {
-      id
-      marketId
-      owner
-      amount
-      payout
-      recipient
-      timestamp
-      network
-      chainId
-      quoteToken {
-        id
-      }
-    }
-  }
-`;
-
-export const listBondPurchasesArbitrumGoerli = gql`
-  query ListBondPurchasesArbitrumGoerli($addresses: [String!]!) {
-    bondPurchases(first: 1000, where: { owner_in: $addresses }) {
-      id
-      marketId
-      owner
-      amount
-      payout
-      recipient
-      timestamp
-      network
-      chainId
-      quoteToken {
-        id
-      }
-    }
-  }
-`;
-
-export const listOwnerTokenTbvsMainnet = gql`
-  query ListOwnerTokenTbvsMainnet {
+export const listOwnerTokenTbvs = gql`
+  query ListOwnerTokenTbvs($queryKey: String! = "") {
     ownerTokenTbvs(first: 1000) {
       owner
       token
@@ -1005,129 +264,16 @@ export const listOwnerTokenTbvsMainnet = gql`
   }
 `;
 
-export const listOwnerTokenTbvsGoerli = gql`
-  query ListOwnerTokenTbvsGoerli {
-    ownerTokenTbvs(first: 1000) {
-      owner
-      token
-      tbv
-      network
-      chainId
-    }
-  }
-`;
-
-export const listOwnerTokenTbvsArbitrumMainnet = gql`
-  query ListOwnerTokenTbvsArbitrumMainnet {
-    ownerTokenTbvs(first: 1000) {
-      owner
-      token
-      tbv
-      network
-      chainId
-    }
-  }
-`;
-
-export const listOwnerTokenTbvsArbitrumGoerli = gql`
-  query ListOwnerTokenTbvsArbitrumGoerli {
-    ownerTokenTbvs(first: 1000) {
-      owner
-      token
-      tbv
-      network
-      chainId
-    }
-  }
-`;
-
-export const listBondPurchasesPerMarketMainnet = gql`
-  query ListBondPurchasesPerMarketMainnet($marketId: String) {
+export const listBondPurchasesPerMarket = gql`
+  query ListBondPurchasesPerMarket($marketId: String, $queryKey: String! = "") {
     bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
       id
-      payout
-      amount
-      timestamp
-      purchasePrice
-      postPurchasePrice
-      quoteToken {
-        id
-        name
-        symbol
-        address
-      }
-      payoutToken {
-        id
-        name
-        symbol
-        address
-      }
-    }
-  }
-`;
-
-export const listBondPurchasesPerMarketGoerli = gql`
-  query ListBondPurchasesPerMarketGoerli($marketId: String) {
-    bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
-      id
-      payout
-      amount
-      timestamp
-      purchasePrice
-      postPurchasePrice
-      quoteToken {
-        id
-        name
-        symbol
-        address
-      }
-      payoutToken {
-        id
-        name
-        symbol
-        address
-      }
-    }
-  }
-`;
-
-export const listBondPurchasesPerMarketArbitrumMainnet = gql`
-  query ListBondPurchasesPerMarketArbitrumMainnet($marketId: String) {
-    bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
-      id
-      payout
-      amount
-      timestamp
-      purchasePrice
-      postPurchasePrice
-      quoteToken {
-        id
-        name
-        symbol
-        address
-      }
-      payoutToken {
-        id
-        name
-        symbol
-        address
-      }
-    }
-  }
-`;
-
-export const listBondPurchasesPerMarketArbitrumGoerli = gql`
-  query ListBondPurchasesPerMarketArbitrumGoerli($marketId: String) {
-    bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
-      id
-      payout
-      amount
-      timestamp
-      purchasePrice
-      postPurchasePrice
       recipient
-      network
-      chainId
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
       quoteToken {
         id
         name
@@ -1145,7 +291,7 @@ export const listBondPurchasesPerMarketArbitrumGoerli = gql`
 `;
 
 export const listBondPurchasesByAddress = gql`
-  query ListBondPurchasesByAddress($recipient: String = "") {
+  query ListBondPurchasesByAddress($recipient: String = "", $queryKey: String! = "") {
     bondPurchases(where: { recipient: $recipient }) {
       id
       recipient
@@ -1154,7 +300,6 @@ export const listBondPurchasesByAddress = gql`
       timestamp
       purchasePrice
       postPurchasePrice
-      recipient
       network
       chainId
       quoteToken {
@@ -1172,34 +317,17 @@ export const listBondPurchasesByAddress = gql`
     }
   }
 `;
-export const listBondPurchasesByAddressArbitrum = gql`
-  query listBondPurchasesByAddressArbitrum($recipient: String = "") {
-    bondPurchases(where: { recipient: $recipient }) {
+
+export const listAllPurchases = gql`
+  query ListAllPurchases($queryKey: String! = "") {
+    bondPurchases(first: 1000) {
       id
-      recipient
-      payout
-      amount
-      timestamp
-      purchasePrice
-      postPurchasePrice
-      recipient
-      network
-      chainId
-      quoteToken {
-        id
-        name
-        symbol
-        address
-      }
-      payoutToken {
-        id
-        name
-        symbol
-        address
-      }
+      owner
     }
   }
 `;
+
+/*
 export const listBondPurchases = gql`
   query ListBondPurchases {
     bondPurchases(first: 1000) {
@@ -1228,40 +356,4 @@ export const listBondPurchases = gql`
     }
   }
 `;
-
-export const listBondPurchasesPerMarket = gql`
-  query ListBondPurchasesPerMarket($marketId: String) {
-    bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
-      id
-      payout
-      amount
-      timestamp
-      purchasePrice
-      postPurchasePrice
-      recipient
-      network
-      chainId
-      quoteToken {
-        id
-        name
-        symbol
-        address
-      }
-      payoutToken {
-        id
-        name
-        symbol
-        address
-      }
-    }
-  }
-`;
-
-export const listAllPurchases = gql`
-  query ListAllPurchases {
-    bondPurchases(first: 1000) {
-      id
-      owner
-    }
-  }
-`;
+*/

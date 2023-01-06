@@ -1,80 +1,82 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import { useEffect, useState } from "react";
-import {
-  BondPurchase,
-  useListBondPurchasesMainnetQuery,
-  useListBondPurchasesGoerliQuery,
-  useListBondPurchasesArbitrumGoerliQuery,
-  useListBondPurchasesArbitrumMainnetQuery,
-} from "../generated/graphql";
+import { BondPurchase, useListBondPurchasesQuery } from "../generated/graphql";
 import { CHAIN_ID, getAddressesByChain } from "@bond-protocol/bond-library";
 
 export function useBondPurchases() {
-  const endpoints = getSubgraphEndpoints();
-
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [selectedBondPurchases, setSelectedBondPurchases] = useState<
     BondPurchase[]
-  >([]);
+    >([]);
   const [bondPurchasesByMarket, setBondPurchasesByMarket] = useState<
     Map<string, BondPurchase[]>
-  >(new Map());
+    >(new Map());
   const [mainnetBondPurchases, setMainnetBondPurchases] = useState<
     BondPurchase[]
-  >([]);
+    >([]);
   const [testnetBondPurchases, setTestnetBondPurchases] = useState<
     BondPurchase[]
-  >([]);
+    >([]);
 
-  const { data: mainnetData, ...mainnetQuery } =
-    useListBondPurchasesMainnetQuery(
-      { endpoint: endpoints[0] },
-      { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) },
-      { enabled: !testnet }
-    );
+  const { data: ethMainnetData, ...ethMainnetQuery } = useListBondPurchasesQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET] },
+    {
+      addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET),
+      queryKey:CHAIN_ID.ETHEREUM_MAINNET + "-list-bond-purchases"
+    },
+    { enabled: !testnet }
+  );
 
-  const { data: goerliData, ...goerliQuery } = useListBondPurchasesGoerliQuery(
-    { endpoint: endpoints[1] },
-    { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
+  const { data: ethTestnetData, ...ethTestnetQuery } = useListBondPurchasesQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET] },
+    {
+      addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET),
+      queryKey:CHAIN_ID.GOERLI_TESTNET + "-list-bond-purchases"
+    },
     { enabled: !!testnet }
   );
 
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
-    useListBondPurchasesArbitrumMainnetQuery(
-      { endpoint: endpoints[2] },
-      { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_MAINNET) },
-      { enabled: !testnet }
-    );
+  const { data: arbMainnetData, ...arbMainnetQuery } = useListBondPurchasesQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET] },
+    {
+      addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_MAINNET),
+      queryKey:CHAIN_ID.ARBITRUM_MAINNET + "-list-bond-purchases"
+    },
+    { enabled: !testnet }
+  );
 
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListBondPurchasesArbitrumGoerliQuery(
-    { endpoint: endpoints[3] },
-    { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET)},
+  const { data: arbTestnetData, ...arbTestnetQuery } = useListBondPurchasesQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET] },
+    {
+      addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET),
+      queryKey:CHAIN_ID.ARBITRUM_GOERLI_TESTNET + "-list-bond-purchases"
+    },
     { enabled: !!testnet }
   );
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.bondPurchases && arbitrumMainnetData && arbitrumMainnetData.bondPurchases) {
+    if (ethMainnetData && ethMainnetData.bondPurchases && arbMainnetData && arbMainnetData.bondPurchases) {
       const allBondPurchases =
-        mainnetData.bondPurchases
-          .concat(arbitrumMainnetData.bondPurchases);
+        ethMainnetData.bondPurchases
+          .concat(arbMainnetData.bondPurchases);
       // @ts-ignore
       setMainnetBondPurchases(allBondPurchases);
     }
-  }, [mainnetData, arbitrumMainnetData, testnet]);
+  }, [ethMainnetData, arbMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.bondPurchases && arbitrumGoerliData && arbitrumGoerliData.bondPurchases) {
+    if (ethTestnetData && ethTestnetData.bondPurchases && arbTestnetData && arbTestnetData.bondPurchases) {
       const allBondPurchases =
-        goerliData.bondPurchases
-          .concat(arbitrumGoerliData.bondPurchases);
+        ethTestnetData.bondPurchases
+          .concat(arbTestnetData.bondPurchases);
       // @ts-ignore
       setTestnetBondPurchases(allBondPurchases);
     }
-  }, [goerliData, arbitrumGoerliData, testnet]);
+  }, [ethTestnetData, arbTestnetData, testnet]);
 
   useEffect(() => {
     if (testnet) {
@@ -97,8 +99,8 @@ export function useBondPurchases() {
   }, [selectedBondPurchases]);
 
   const isLoading = testnet
-    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
-    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+    ? (ethTestnetQuery.isLoading || arbTestnetQuery.isLoading)
+    : (ethMainnetQuery.isLoading || arbMainnetQuery.isLoading);
 
   return {
     bondPurchases: selectedBondPurchases,

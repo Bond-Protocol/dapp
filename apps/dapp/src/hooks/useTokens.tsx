@@ -1,14 +1,8 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { calcBalancerPoolPrice, calcLpPrice, LpPair } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import {
-  Token,
-  useListTokensGoerliQuery,
-  useListTokensMainnetQuery,
-  useListTokensArbitrumMainnetQuery,
-  useListTokensArbitrumGoerliQuery,
-} from "../generated/graphql";
+import {getSubgraphEndpoints, subgraphEndpoints} from "services/subgraph-endpoints";
+import { Token, useListTokensQuery } from "../generated/graphql";
 import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
 import {
@@ -19,6 +13,7 @@ import axios, { AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { CHAIN_ID } from "@bond-protocol/bond-library";
 
 export interface PriceDetails {
   price: string;
@@ -41,7 +36,6 @@ export interface TokenDetails {
 }
 
 export const useTokens = () => {
-  const endpoints = getSubgraphEndpoints();
   const [testnet] = useAtom(testnetMode);
   const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
   const [mainnetTokens, setMainnetTokens] = useState<Token[]>([]);
@@ -54,34 +48,29 @@ export const useTokens = () => {
    */
   const apiIds = bondLibrary.getUniqueApiIds();
 
-  /*
-  Load the data from the subgraph.
-  Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
-   */
-  const { data: mainnetData, ...mainnetQuery } = useListTokensMainnetQuery({
-    endpoint: endpoints[0],
-    // @ts-ignore
-    enabled: !testnet,
-  });
+  const { data: ethMainnetData, ...ethMainnetQuery } = useListTokensQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET] },
+    { queryKey: CHAIN_ID.ETHEREUM_MAINNET + "-list-tokens" },
+    { enabled: !testnet }
+  );
 
-  const { data: goerliData, ...goerliQuery } = useListTokensGoerliQuery({
-    endpoint: endpoints[1],
-    // @ts-ignore
-    enabled: !!testnet,
-  });
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
-    useListTokensArbitrumMainnetQuery({
-      endpoint: endpoints[2],
-      // @ts-ignore
-      enabled: !testnet,
-    });
+  const { data: ethTestnetData, ...ethTestnetQuery } = useListTokensQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET] },
+    { queryKey: CHAIN_ID.GOERLI_TESTNET + "-list-tokens" },
+    { enabled: !!testnet }
+  );
 
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } =
-    useListTokensArbitrumGoerliQuery({
-      endpoint: endpoints[3],
-      // @ts-ignore
-      enabled: !!testnet,
-    });
+  const { data: arbMainnetData, ...arbMainnetQuery } = useListTokensQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET] },
+    { queryKey: CHAIN_ID.ARBITRUM_MAINNET + "-list-tokens" },
+    { enabled: !testnet }
+  );
+
+  const { data: arbTestnetData, ...arbTestnetQuery } = useListTokensQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET] },
+    { queryKey: CHAIN_ID.ARBITRUM_GOERLI_TESTNET + "-list-tokens" },
+    { enabled: !!testnet }
+  );
 
   /*
   Loads token price data from Coingecko.
@@ -176,7 +165,7 @@ export const useTokens = () => {
 
       bondLibrary.TOKENS.forEach(
         (value: bondLibrary.Token | bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken, tokenKey: string) => {
-        // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
+          // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
           if ("lpType" in value && value.lpType !== undefined) {
             lpTokens.push({ value: value, key: tokenKey });
           } else {
@@ -316,30 +305,30 @@ export const useTokens = () => {
   useEffect(() => {
     if (testnet) return;
     if (
-      mainnetData &&
-      mainnetData.tokens &&
-      arbitrumMainnetData &&
-      arbitrumMainnetData.tokens
+      ethMainnetData &&
+      ethMainnetData.tokens &&
+      arbMainnetData &&
+      arbMainnetData.tokens
     ) {
-      const allTokens = mainnetData.tokens.concat(arbitrumMainnetData.tokens);
+      const allTokens = ethMainnetData.tokens.concat(arbMainnetData.tokens);
       // @ts-ignore
       setMainnetTokens(allTokens);
     }
-  }, [mainnetData, arbitrumMainnetData, testnet]);
+  }, [ethMainnetData, arbMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
     if (
-      goerliData &&
-      goerliData.tokens &&
-      arbitrumGoerliData &&
-      arbitrumGoerliData.tokens
+      ethTestnetData &&
+      ethTestnetData.tokens &&
+      arbTestnetData &&
+      arbTestnetData.tokens
     ) {
-      const allTokens = goerliData.tokens.concat(arbitrumGoerliData.tokens);
+      const allTokens = ethTestnetData.tokens.concat(arbTestnetData.tokens);
       // @ts-ignore
       setTestnetTokens(allTokens);
     }
-  }, [goerliData, arbitrumGoerliData, testnet]);
+  }, [ethTestnetData, arbTestnetData, testnet]);
 
   /*
   If the user switches between mainnet/testnet mode, update selectedTokens.
@@ -396,31 +385,31 @@ export const useTokens = () => {
   }
 
   const getTokenDetailsFromChain = useCallback(async function (
-    address: string,
-    chain: string
-  ) {
-    const contract = contractLibrary.IERC20__factory.connect(
-      address,
-      providers[chain]
-    );
-    try {
-      const [name, symbol] = await Promise.all([
-        contract.name(),
-        contract.symbol(),
-      ]);
+      address: string,
+      chain: string
+    ) {
+      const contract = contractLibrary.IERC20__factory.connect(
+        address,
+        providers[chain]
+      );
+      try {
+        const [name, symbol] = await Promise.all([
+          contract.name(),
+          contract.symbol(),
+        ]);
 
-      return { name, symbol };
-    } catch (e: any) {
-      const error =
-        "Not an ERC-20 token, please double check the address and chain.";
-      throw Error(error);
-    }
-  },
-  []);
+        return { name, symbol };
+      } catch (e: any) {
+        const error =
+          "Not an ERC-20 token, please double check the address and chain.";
+        throw Error(error);
+      }
+    },
+    []);
 
   const isLoading = testnet
-    ? goerliQuery.isLoading || arbitrumGoerliQuery.isLoading
-    : mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading;
+    ? ethTestnetQuery.isLoading || arbTestnetQuery.isLoading
+    : ethMainnetQuery.isLoading || arbMainnetQuery.isLoading;
 
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks

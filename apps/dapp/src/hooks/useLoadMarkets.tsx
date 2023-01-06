@@ -1,69 +1,73 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import {
-  Market,
-  useListMarketsGoerliQuery,
-  useListMarketsMainnetQuery,
-  useListMarketsArbitrumGoerliQuery,
-  useListMarketsArbitrumMainnetQuery
-} from "../generated/graphql";
+import { subgraphEndpoints } from "services/subgraph-endpoints";
+import { Market, useListMarketsQuery } from "../generated/graphql";
 import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import { CHAIN_ID, getAddressesByChain } from "@bond-protocol/bond-library";
 
 export function useLoadMarkets() {
-  const endpoints = getSubgraphEndpoints();
-
   const [testnet, setTestnet] = useAtom(testnetMode);
   const [selectedMarkets, setSelectedMarkets] = useState<Market[]>([]);
   const [marketsMap, setMarketsMap] = useState<Map<string, Market>>(new Map());
   const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
   const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
-  const { data: mainnetData, ...mainnetQuery } = useListMarketsMainnetQuery(
-    { endpoint: endpoints[0] },
-    { addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET) },
+  const { data: ethMainnetData, ...ethMainnetQuery } = useListMarketsQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET] },
+    {
+      addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET),
+      queryKey:CHAIN_ID.ETHEREUM_MAINNET + "-list-markets"
+    },
     { enabled: !testnet }
   );
 
-  const { data: goerliData, ...goerliQuery } = useListMarketsGoerliQuery(
-    { endpoint: endpoints[1] },
-    { addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET) },
+  const { data: ethTestnetData, ...ethTestnetQuery } = useListMarketsQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET] },
+    {
+      addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET),
+      queryKey:CHAIN_ID.GOERLI_TESTNET + "-list-markets"
+    },
     { enabled: !!testnet }
   );
 
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } = useListMarketsArbitrumMainnetQuery(
-    { endpoint: endpoints[2] },
-    { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_MAINNET) },
+  const { data: arbMainnetData, ...arbMainnetQuery } = useListMarketsQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET] },
+    {
+      addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_MAINNET),
+      queryKey:CHAIN_ID.ARBITRUM_MAINNET + "-list-markets"
+    },
     { enabled: !testnet }
   );
 
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListMarketsArbitrumGoerliQuery(
-    { endpoint: endpoints[3] },
-    { addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET) },
+  const { data: arbTestnetData, ...arbTestnetQuery } = useListMarketsQuery(
+    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET] },
+    {
+      addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET),
+      queryKey:CHAIN_ID.ARBITRUM_GOERLI_TESTNET + "-list-markets"
+    },
     { enabled: !!testnet }
   );
 
   useEffect(() => {
     if (testnet) return;
-    if (mainnetData && mainnetData.markets && arbitrumMainnetData && arbitrumMainnetData.markets) {
+    if (ethMainnetData && ethMainnetData.markets && arbMainnetData && arbMainnetData.markets) {
       const allMarkets =
-        mainnetData.markets
-          .concat(arbitrumMainnetData.markets);
+        ethMainnetData.markets
+          .concat(arbMainnetData.markets);
       // @ts-ignore
       setMainnetMarkets(allMarkets);
     }
-  }, [mainnetData, arbitrumMainnetData, testnet]);
+  }, [ethMainnetData, arbMainnetData, testnet]);
 
   useEffect(() => {
     if (!testnet) return;
-    if (goerliData && goerliData.markets && arbitrumGoerliData && arbitrumGoerliData.markets) {
-      const allMarkets = goerliData.markets
-        .concat(arbitrumGoerliData.markets);
+    if (ethTestnetData && ethTestnetData.markets && arbTestnetData && arbTestnetData.markets) {
+      const allMarkets = ethTestnetData.markets
+        .concat(arbTestnetData.markets);
       // @ts-ignore
       setTestnetMarkets(allMarkets);
     }
-  }, [goerliData, arbitrumGoerliData, testnet]);
+  }, [ethTestnetData, arbTestnetData, testnet]);
 
   useEffect(() => {
     if (testnet) {
@@ -82,8 +86,8 @@ export function useLoadMarkets() {
   }, [selectedMarkets]);
 
   const isLoading = testnet
-    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
-    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+    ? (ethTestnetQuery.isLoading || arbTestnetQuery.isLoading)
+    : (ethMainnetQuery.isLoading || arbMainnetQuery.isLoading);
 
   return {
     markets: selectedMarkets,
