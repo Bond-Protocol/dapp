@@ -1,5 +1,4 @@
 import { LinkButton } from "./LinkButton";
-import { Button } from "ui";
 export type HeroProps = {
   className?: string;
 };

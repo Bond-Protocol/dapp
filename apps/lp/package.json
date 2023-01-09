@@ -4,12 +4,10 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build:lp": "tsc && vite build",
+    "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.13",
-    "postcss": "^8.4.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tailwindconfig": "*",
@@ -19,6 +17,8 @@
     "@bond-protocol/bond-library": "*"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "postcss": "^8.4.21",
     "@babel/core": "^7.20.12",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@types/react": "^18.0.26",

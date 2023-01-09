@@ -11,6 +11,7 @@
     "sync": "turbo run sync",
     "clean": "turbo run clean",
     "build": "turbo run build",
+    "lp": "turbo run build --filter=ui --filter=@bond-protocol/bond-library --filter=lp ",
     "lint": "turbo run lint",
     "dev": "turbo run dev --parallel",
     "preview": "turbo run preview",

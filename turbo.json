@@ -20,6 +20,10 @@
       "dependsOn": ["^build", "codegen", "typechain", "generate"],
       "outputs": ["dist/**", "build/**"]
     },
+    "lp": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "build/**"]
+    },
     "typechain": {
       "inputs": ["src/core/abis/**/*.json"],
       "outputs": ["src/**/contracts", "src/"]

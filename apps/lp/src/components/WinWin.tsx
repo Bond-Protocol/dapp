@@ -1,6 +1,6 @@
 import { LinkButton } from "./LinkButton";
 
-export const WinWin = (props: { className: string }) => {
+export const WinWin = (props: { className?: string }) => {
   return (
     <div className={props.className}>
       <div className="font-fraktion text-center text-5xl uppercase">

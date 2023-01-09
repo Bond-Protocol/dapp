@@ -1,4 +1,3 @@
-import { Button } from "ui";
 import { LinkButton } from "./LinkButton";
 
 export const Navbar = () => {
