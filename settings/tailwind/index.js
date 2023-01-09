@@ -40,18 +40,12 @@ module.exports = withMT({
           danger: "#FF0606",
           alert: "#FF759A",
           success: "#88F6D7",
+          tooltip: "#090B15",
           grey: {
             DEFAULT: "#A3A3A3",
             400: "#A3A3A3",
             500: "#737373",
           },
-          tutti: {
-            DEFAULT: "#A3A3A3",
-            400: "#A3A3A3",
-            500: "#737373",
-          },
-
-          tooltip: "#090B15",
         },
       },
       fontFamily: {

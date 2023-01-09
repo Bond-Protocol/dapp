@@ -48,7 +48,7 @@
     background: radial-gradient(
       circle at 330% 50%,
       rgba(101, 137, 167, 1) 0%,
-      rgba(20, 24, 45, 1) 50%
+      rgba(20, 24, 45, 0) 50%
     );
   }
 
