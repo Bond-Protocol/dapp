@@ -2,7 +2,7 @@ import { Tooltip } from ".";
 
 export type InfoLabelProps = {
   label: string;
-  tooltip: string;
+  tooltip?: string;
   children: React.ReactNode;
   className?: string;
 };
@@ -16,12 +16,14 @@ export const InfoLabel = (props: InfoLabelProps) => {
         <div className="font-fraktion my-auto mr-1 select-none font-bold">
           {props.label}
         </div>
-        <Tooltip
-          content={props.tooltip}
-          iconClassname="fill-light-primary-500 text-light-primary-500"
-        />
+        {props.tooltip && (
+          <Tooltip
+            content={props.tooltip}
+            iconClassname="fill-light-primary-500 text-light-primary-500"
+          />
+        )}
       </div>
-      <h2 className="font-fraktion select-none text-[48px] leading-none">
+      <h2 className="font-fraktion select-none text-[48px] font-bold leading-none">
         {props.children}
       </h2>
     </div>

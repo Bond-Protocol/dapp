@@ -25,6 +25,7 @@ module.exports = withMT({
             DEFAULT: "#40749B",
             50: "#9DBBC4",
             100: "#8CACBC",
+            200: "#7799B0",
             300: "#6589A7",
             500: "#40749B",
             900: "#14182D",
@@ -136,6 +137,13 @@ module.exports = withMT({
           fontFamily: "PPFraktionSans",
           fontWeight: "700",
           src: "url(/fonts/PPFraktionSans-Bold.woff2) format('woff2')",
+        },
+      });
+      addBase({
+        "@font-face": {
+          fontFamily: "PPFraktionSans",
+          fontWeight: "400",
+          src: "url(/fonts/PPFraktionSans-Light.woff2) format('woff2')",
         },
       });
     }),
