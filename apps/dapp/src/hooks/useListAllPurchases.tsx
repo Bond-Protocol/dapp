@@ -1,4 +1,4 @@
-import {useState, useEffect, useMemo} from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { BondPurchase, useListAllPurchasesQuery } from "src/generated/graphql";
 
@@ -9,8 +9,8 @@ export const useListAllPurchases = () => {
 
   const isLoading = useMemo(() => {
     return subgraphQueries
-      .map(value => value.isLoading)
-      .reduce((previous, current) => previous || current)
+      .map((value) => value.isLoading)
+      .reduce((previous, current) => previous || current);
   }, [subgraphQueries]);
 
   useEffect(() => {
@@ -18,13 +18,13 @@ export const useListAllPurchases = () => {
 
     setAllPurchases(
       subgraphQueries
-        .map(value => value.data.bondPurchases)
+        .map((value) => value.data.bondPurchases)
         .reduce((previous, current) => previous.concat(current))
     );
   }, [isLoading]);
 
   return {
     allPurchases: allPurchases,
-    totalPurchases: allPurchases.length
+    totalPurchases: allPurchases.length,
   };
 };

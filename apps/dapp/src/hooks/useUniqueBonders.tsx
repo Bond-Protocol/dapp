@@ -1,8 +1,15 @@
-import {getSubgraphQueries, subgraphEndpoints} from "services/subgraph-endpoints";
+import {
+  getSubgraphQueries,
+  subgraphEndpoints,
+} from "services/subgraph-endpoints";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {useEffect, useMemo, useState} from "react";
-import {UniqueBonder, useListOwnerTokenTbvsQuery, useListUniqueBondersQuery} from "../generated/graphql";
+import { useEffect, useMemo, useState } from "react";
+import {
+  UniqueBonder,
+  useListOwnerTokenTbvsQuery,
+  useListUniqueBondersQuery,
+} from "../generated/graphql";
 import { getAddressesByProtocol, CHAIN_ID } from "@bond-protocol/bond-library";
 
 export function useUniqueBonders() {
@@ -12,15 +19,15 @@ export function useUniqueBonders() {
 
   const isLoading = useMemo(() => {
     return subgraphQueries
-      .map(value => value.isLoading)
-      .reduce((previous, current) => previous || current)
+      .map((value) => value.isLoading)
+      .reduce((previous, current) => previous || current);
   }, [subgraphQueries]);
 
   useEffect(() => {
     if (isLoading) return;
 
     const allBonders = subgraphQueries
-      .map(value => value.data.uniqueBonders)
+      .map((value) => value.data.uniqueBonders)
       .reduce((previous, current) => previous.concat(current));
 
     const bonderMap = new Map();
@@ -37,7 +44,6 @@ export function useUniqueBonders() {
 
     setBonders(bonderMap);
   }, [isLoading]);
-
 
   function getBondersForProtocol(name: string): number {
     const addresses = getAddressesByProtocol(name);

@@ -2,10 +2,7 @@ import { useTokens } from "hooks/useTokens";
 import { useQueries } from "react-query";
 import { useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {
-  CHAIN_ID,
-  getProtocolByAddress,
-} from "@bond-protocol/bond-library";
+import { CHAIN_ID, getProtocolByAddress } from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
@@ -170,7 +167,10 @@ export function useCalculatedMarkets() {
         if (result && result.data) {
           calculatedMarketsMap.set(result.data.id, result.data);
 
-          const protocol = getProtocolByAddress(result.data.owner, result?.data.chainId);
+          const protocol = getProtocolByAddress(
+            result.data.owner,
+            result?.data.chainId
+          );
           const id = protocol?.id;
           const value = issuerMarkets.get(protocol?.id) || [];
 

@@ -58,7 +58,7 @@ export const listMarkets = gql`
             decimals
             name
             typeName
-          }  
+          }
         }
       }
       vesting
@@ -94,7 +94,7 @@ export const listTokens = gql`
         constituentTokens {
           id
         }
-      }  
+      }
     }
   }
 `;
@@ -291,7 +291,10 @@ export const listBondPurchasesPerMarket = gql`
 `;
 
 export const listBondPurchasesByAddress = gql`
-  query ListBondPurchasesByAddress($recipient: String = "", $queryKey: String! = "") {
+  query ListBondPurchasesByAddress(
+    $recipient: String = ""
+    $queryKey: String! = ""
+  ) {
     bondPurchases(where: { recipient: $recipient }) {
       id
       recipient

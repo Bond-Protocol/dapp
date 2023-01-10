@@ -3,16 +3,13 @@ import { useMyBonds } from "hooks/useMyBonds";
 import { InfoLabel } from "ui";
 import { OwnerBalance } from "src/generated/graphql";
 import { TokenDetails, useTokens } from "hooks";
-import {
-  calculateTrimDigits,
-  trim,
-} from "@bond-protocol/contract-library";
+import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 import { PageHeader } from "components/common";
 import { BondList, tableColumns } from "components/lists";
 import { toTableData } from "src/utils/table";
 import { usdFormatter } from "src/utils/format";
 import { RequiresWallet } from "components/utility/RequiresWallet";
-import {useMemo} from "react";
+import { useMemo } from "react";
 
 const isMainnet = (chain?: string) => {
   return chain === "mainnet" || chain === "homestead";
@@ -39,8 +36,12 @@ export const Dashboard = () => {
           bond.balance / Math.pow(10, bond.bondToken.underlying.decimals);
         balance = trim(balance, calculateTrimDigits(balance));
 
-        const usdPriceNumber: number = Number(getPrice(bond.bondToken.underlying.id)) * Number(balance);
-        const usdPriceString: string = trim(usdPriceNumber, calculateTrimDigits(usdPriceNumber));
+        const usdPriceNumber: number =
+          Number(getPrice(bond.bondToken.underlying.id)) * Number(balance);
+        const usdPriceString: string = trim(
+          usdPriceNumber,
+          calculateTrimDigits(usdPriceNumber)
+        );
 
         const underlying: TokenDetails =
           bond.bondToken && getTokenDetails(bond.bondToken.underlying);
@@ -59,7 +60,10 @@ export const Dashboard = () => {
       });
   }, [currentPrices, myBonds]);
 
-  const tableData = useMemo(() => data?.map((b) => toTableData(tableColumns, b)), [data]);
+  const tableData = useMemo(
+    () => data?.map((b) => toTableData(tableColumns, b)),
+    [data]
+  );
 
   const tbv = usdFormatter.format(
     data?.reduce((total, bond) => {

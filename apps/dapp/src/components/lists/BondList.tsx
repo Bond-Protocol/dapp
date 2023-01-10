@@ -2,12 +2,12 @@ import { getToken } from "@bond-protocol/bond-library";
 import { Button, Table, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { longFormatter, usdFormatter } from "src/utils/format";
-import {useNetwork, useSigner, useSwitchNetwork} from "wagmi";
-import {providers} from "services/owned-providers";
-import {OwnerBalance} from "../../generated/graphql";
-import {ContractTransaction} from "ethers";
-import {BOND_TYPE, redeem} from "@bond-protocol/contract-library";
-import {useMemo} from "react";
+import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { providers } from "services/owned-providers";
+import { OwnerBalance } from "../../generated/graphql";
+import { ContractTransaction } from "ethers";
+import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
+import { useMemo } from "react";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -63,8 +63,8 @@ export const tableColumns: Array<Column<any>> = [
       const { switchNetwork } = useSwitchNetwork();
       const { data: signer } = useSigner();
 
-
-      const isCorrectNetwork = Number(props?.data?.bond.bondToken.chainId) === chain?.id;
+      const isCorrectNetwork =
+        Number(props?.data?.bond.bondToken.chainId) === chain?.id;
 
       const switchChain = () => {
         switchNetwork?.(Number(props?.data?.bond.bondToken.chainId));
@@ -93,17 +93,18 @@ export const tableColumns: Array<Column<any>> = [
         : () => switchChain();
 
       return (
-      <Button
-        thin
-        size="sm"
-        variant={props?.data?.canClaim ? "primary" : "ghost"}
-        disabled={!props?.data?.canClaim}
-        className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
-        onClick={() => handleClaim()}
-      >
-        {props?.data?.canClaim ? "Claim" : "Vesting"}
-      </Button>
-    )},
+        <Button
+          thin
+          size="sm"
+          variant={props?.data?.canClaim ? "primary" : "ghost"}
+          disabled={!props?.data?.canClaim}
+          className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
+          onClick={() => handleClaim()}
+        >
+          {props?.data?.canClaim ? "Claim" : "Vesting"}
+        </Button>
+      );
+    },
   },
 ];
 

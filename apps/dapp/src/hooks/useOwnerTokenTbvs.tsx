@@ -1,7 +1,10 @@
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useTokens } from "hooks/useTokens";
-import { OwnerTokenTbv, useListOwnerTokenTbvsQuery } from "../generated/graphql";
-import {useEffect, useMemo, useState} from "react";
+import {
+  OwnerTokenTbv,
+  useListOwnerTokenTbvsQuery,
+} from "../generated/graphql";
+import { useEffect, useMemo, useState } from "react";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
 
 export function useOwnerTokenTbvs() {
@@ -14,8 +17,8 @@ export function useOwnerTokenTbvs() {
 
   const isLoading = useMemo(() => {
     return subgraphQueries
-      .map(value => value.isLoading)
-      .reduce((previous, current) => previous || current)
+      .map((value) => value.isLoading)
+      .reduce((previous, current) => previous || current);
   }, [subgraphQueries]);
 
   useEffect(() => {
@@ -23,13 +26,14 @@ export function useOwnerTokenTbvs() {
 
     setOwnerTokenTbvs(
       subgraphQueries
-        .map(value => value.data.ownerTokenTbvs)
+        .map((value) => value.data.ownerTokenTbvs)
         .reduce((previous, current) => previous.concat(current))
     );
   }, [isLoading]);
 
   useEffect(() => {
-    const updated = ownerTokenTbvs.map((token) => {
+    const updated = ownerTokenTbvs
+      .map((token) => {
         const protocol = getProtocolByAddress(token.owner, token.chainId);
         if (!protocol) return { id: "", tbv: 0 };
 

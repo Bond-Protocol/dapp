@@ -3,7 +3,7 @@ import { ConnectButton } from "components/common";
 import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg";
 import { Tooltip } from "ui";
 import { useEffect, useState } from "react";
-import {chainId, useNetwork, useSwitchNetwork} from "wagmi";
+import { chainId, useNetwork, useSwitchNetwork } from "wagmi";
 import { providers } from "services/owned-providers";
 import { CHAINS } from "@bond-protocol/bond-library";
 
@@ -31,7 +31,9 @@ export const BondButton = (props: BondButtonProps) => {
   };
 
   useEffect(() => {
-    setNetworkDisplayName(CHAINS.get(props.chainId)?.displayName || props.chainId);
+    setNetworkDisplayName(
+      CHAINS.get(props.chainId)?.displayName || props.chainId
+    );
   }, [chain, props.chainId]);
 
   if (props.showConnect)

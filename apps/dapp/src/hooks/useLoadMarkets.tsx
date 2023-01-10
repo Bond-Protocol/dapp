@@ -1,18 +1,22 @@
-import {getSubgraphQueriesPerChainFn} from "services/subgraph-endpoints";
-import {Market, useListMarketsQuery} from "../generated/graphql";
-import {useEffect, useMemo, useState} from "react";
-import {getAddressesByChain} from "@bond-protocol/bond-library";
+import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
+import { Market, useListMarketsQuery } from "../generated/graphql";
+import { useEffect, useMemo, useState } from "react";
+import { getAddressesByChain } from "@bond-protocol/bond-library";
 
 export function useLoadMarkets() {
-  const subgraphQueries = getSubgraphQueriesPerChainFn(useListMarketsQuery, getAddressesByChain, "addresses");
+  const subgraphQueries = getSubgraphQueriesPerChainFn(
+    useListMarketsQuery,
+    getAddressesByChain,
+    "addresses"
+  );
 
   const [markets, setMarkets] = useState<Market[]>([]);
   const [marketsMap, setMarketsMap] = useState<Map<string, Market>>(new Map());
 
   const isLoading = useMemo(() => {
     return subgraphQueries
-      .map(value => value.isLoading)
-      .reduce((previous, current) => previous || current)
+      .map((value) => value.isLoading)
+      .reduce((previous, current) => previous || current);
   }, [subgraphQueries]);
 
   useEffect(() => {
@@ -20,7 +24,7 @@ export function useLoadMarkets() {
 
     setMarkets(
       subgraphQueries
-        .map(value => value.data.markets)
+        .map((value) => value.data.markets)
         .reduce((previous, current) => previous.concat(current))
     );
   }, [isLoading]);

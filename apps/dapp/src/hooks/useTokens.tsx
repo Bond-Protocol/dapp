@@ -1,13 +1,20 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {calcBalancerPoolPrice, calcLpPrice, LpPair} from "@bond-protocol/contract-library";
-import {providers} from "services/owned-providers";
-import {getSubgraphQueries} from "services/subgraph-endpoints";
-import {Token, useListTokensQuery} from "../generated/graphql";
-import {useCallback, useEffect, useMemo, useState} from "react";
+import {
+  calcBalancerPoolPrice,
+  calcLpPrice,
+  LpPair,
+} from "@bond-protocol/contract-library";
+import { providers } from "services/owned-providers";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { Token, useListTokensQuery } from "../generated/graphql";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {CustomPriceSource, SupportedPriceSource} from "@bond-protocol/bond-library";
-import axios, {AxiosResponse} from "axios";
-import {useQuery} from "react-query";
+import {
+  CustomPriceSource,
+  SupportedPriceSource,
+} from "@bond-protocol/bond-library";
+import axios, { AxiosResponse } from "axios";
+import { useQuery } from "react-query";
 
 export interface PriceDetails {
   price: string;
@@ -42,8 +49,8 @@ export const useTokens = () => {
 
   const isLoading = useMemo(() => {
     return subgraphQueries
-      .map(value => value.isLoading)
-      .reduce((previous, current) => previous || current)
+      .map((value) => value.isLoading)
+      .reduce((previous, current) => previous || current);
   }, [subgraphQueries]);
 
   /*
@@ -135,10 +142,19 @@ export const useTokens = () => {
   useEffect(() => {
     if (coingeckoQuery.data && customPriceQuery.data) {
       const currentPricesMap: Price = {};
-      const lpTokens: { value: bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken; key: string }[] = [];
+      const lpTokens: {
+        value: bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken;
+        key: string;
+      }[] = [];
 
       bondLibrary.TOKENS.forEach(
-        (value: bondLibrary.Token | bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken, tokenKey: string) => {
+        (
+          value:
+            | bondLibrary.Token
+            | bondLibrary.LpToken
+            | bondLibrary.BalancerWeightedPoolToken,
+          tokenKey: string
+        ) => {
           // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
           if ("lpType" in value && value.lpType !== undefined) {
             lpTokens.push({ value: value, key: tokenKey });
@@ -183,10 +199,16 @@ export const useTokens = () => {
         let chainId = split[0];
 
         if ("poolAddress" in token.value) {
-          token.value.constituentTokens.forEach(token => {
-            token.price = currentPricesMap[chainId + "_" + token.address.toLowerCase()]
-              // @ts-ignore
-              ? Number(currentPricesMap[chainId + "_" + token.address.toLowerCase()][0].price)
+          token.value.constituentTokens.forEach((token) => {
+            token.price = currentPricesMap[
+              chainId + "_" + token.address.toLowerCase()
+            ]
+              ? // @ts-ignore
+                Number(
+                  currentPricesMap[
+                    chainId + "_" + token.address.toLowerCase()
+                  ][0].price
+                )
               : undefined;
           });
 
@@ -194,7 +216,7 @@ export const useTokens = () => {
             poolAddress: token.value.poolAddress,
             vaultAddress: token.value.vaultAddress,
             constituentTokens: token.value.constituentTokens,
-          }
+          };
 
           promises.push(
             calcBalancerPoolPrice(
@@ -245,7 +267,7 @@ export const useTokens = () => {
             calcLpPrice(
               {
                 // @ts-ignore
-                lpPair: {...token.value, address: split[1]},
+                lpPair: { ...token.value, address: split[1] },
                 address: split[1],
               },
               lpType,
@@ -281,7 +303,7 @@ export const useTokens = () => {
 
     setSelectedTokens(
       subgraphQueries
-        .map(value => value.data.tokens)
+        .map((value) => value.data.tokens)
         .reduce((previous, current) => previous.concat(current))
     );
   }, [isLoading]);
@@ -328,27 +350,27 @@ export const useTokens = () => {
   }
 
   const getTokenDetailsFromChain = useCallback(async function (
-      address: string,
-      chain: string
-    ) {
-      const contract = contractLibrary.IERC20__factory.connect(
-        address,
-        providers[chain]
-      );
-      try {
-        const [name, symbol] = await Promise.all([
-          contract.name(),
-          contract.symbol(),
-        ]);
+    address: string,
+    chain: string
+  ) {
+    const contract = contractLibrary.IERC20__factory.connect(
+      address,
+      providers[chain]
+    );
+    try {
+      const [name, symbol] = await Promise.all([
+        contract.name(),
+        contract.symbol(),
+      ]);
 
-        return { name, symbol };
-      } catch (e: any) {
-        const error =
-          "Not an ERC-20 token, please double check the address and chain.";
-        throw Error(error);
-      }
-    },
-    []);
+      return { name, symbol };
+    } catch (e: any) {
+      const error =
+        "Not an ERC-20 token, please double check the address and chain.";
+      throw Error(error);
+    }
+  },
+  []);
 
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
