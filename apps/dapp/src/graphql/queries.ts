@@ -819,7 +819,7 @@ export const listErc20BondTokensArbitrumGoerli = gql`
 
 export const listUniqueBondersMainnet = gql`
   query ListUniqueBondersMainnet {
-    uniqueBonders {
+    uniqueBonders(first: 1000) {
       id
     }
   }
@@ -827,7 +827,7 @@ export const listUniqueBondersMainnet = gql`
 
 export const listUniqueBondersGoerli = gql`
   query ListUniqueBondersGoerli {
-    uniqueBonders {
+    uniqueBonders(first: 1000) {
       id
     }
   }
@@ -835,7 +835,7 @@ export const listUniqueBondersGoerli = gql`
 
 export const listUniqueBondersArbitrumMainnet = gql`
   query ListUniqueBondersArbitrumMainnet {
-    uniqueBonders {
+    uniqueBonders(first: 1000) {
       id
     }
   }
@@ -843,7 +843,7 @@ export const listUniqueBondersArbitrumMainnet = gql`
 
 export const listUniqueBondersArbitrumGoerli = gql`
   query ListUniqueBondersArbitrumGoerli {
-    uniqueBonders {
+    uniqueBonders(first: 1000) {
       id
     }
   }
