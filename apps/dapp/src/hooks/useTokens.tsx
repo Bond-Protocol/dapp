@@ -1,19 +1,13 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { calcBalancerPoolPrice, calcLpPrice, LpPair } from "@bond-protocol/contract-library";
-import { providers } from "services/owned-providers";
-import {getSubgraphEndpoints, subgraphEndpoints} from "services/subgraph-endpoints";
-import { Token, useListTokensQuery } from "../generated/graphql";
-import { useCallback, useEffect, useState } from "react";
+import {calcBalancerPoolPrice, calcLpPrice, LpPair} from "@bond-protocol/contract-library";
+import {providers} from "services/owned-providers";
+import {getSubgraphQueries} from "services/subgraph-endpoints";
+import {Token, useListTokensQuery} from "../generated/graphql";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {
-  CustomPriceSource,
-  SupportedPriceSource,
-} from "@bond-protocol/bond-library";
-import axios, { AxiosResponse } from "axios";
-import { useQuery } from "react-query";
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
+import {CustomPriceSource, SupportedPriceSource} from "@bond-protocol/bond-library";
+import axios, {AxiosResponse} from "axios";
+import {useQuery} from "react-query";
 
 export interface PriceDetails {
   price: string;
@@ -36,10 +30,8 @@ export interface TokenDetails {
 }
 
 export const useTokens = () => {
-  const [testnet] = useAtom(testnetMode);
+  const subgraphQueries = getSubgraphQueries(useListTokensQuery);
   const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
-  const [mainnetTokens, setMainnetTokens] = useState<Token[]>([]);
-  const [testnetTokens, setTestnetTokens] = useState<Token[]>([]);
   const [currentPrices, setCurrentPrices] = useState<Price>({});
 
   /*
@@ -48,29 +40,11 @@ export const useTokens = () => {
    */
   const apiIds = bondLibrary.getUniqueApiIds();
 
-  const { data: ethMainnetData, ...ethMainnetQuery } = useListTokensQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET] },
-    { queryKey: CHAIN_ID.ETHEREUM_MAINNET + "-list-tokens" },
-    { enabled: !testnet }
-  );
-
-  const { data: ethTestnetData, ...ethTestnetQuery } = useListTokensQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET] },
-    { queryKey: CHAIN_ID.GOERLI_TESTNET + "-list-tokens" },
-    { enabled: !!testnet }
-  );
-
-  const { data: arbMainnetData, ...arbMainnetQuery } = useListTokensQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET] },
-    { queryKey: CHAIN_ID.ARBITRUM_MAINNET + "-list-tokens" },
-    { enabled: !testnet }
-  );
-
-  const { data: arbTestnetData, ...arbTestnetQuery } = useListTokensQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET] },
-    { queryKey: CHAIN_ID.ARBITRUM_GOERLI_TESTNET + "-list-tokens" },
-    { enabled: !!testnet }
-  );
+  const isLoading = useMemo(() => {
+    return subgraphQueries
+      .map(value => value.isLoading)
+      .reduce((previous, current) => previous || current)
+  }, [subgraphQueries]);
 
   /*
   Loads token price data from Coingecko.
@@ -297,52 +271,22 @@ export const useTokens = () => {
         setCurrentPrices(currentPricesMap);
       });
     }
-  }, [coingeckoQuery.data, customPriceQuery.data]);
+  }, [selectedTokens, coingeckoQuery.data, customPriceQuery.data]);
 
   /*
   We get a list of all tokens being used in the app by concatenating the .tokens data from each Subgraph request.
    */
   useEffect(() => {
-    if (testnet) return;
-    if (
-      ethMainnetData &&
-      ethMainnetData.tokens &&
-      arbMainnetData &&
-      arbMainnetData.tokens
-    ) {
-      const allTokens = ethMainnetData.tokens.concat(arbMainnetData.tokens);
-      // @ts-ignore
-      setMainnetTokens(allTokens);
-    }
-  }, [ethMainnetData, arbMainnetData, testnet]);
+    if (isLoading) return;
 
-  useEffect(() => {
-    if (!testnet) return;
-    if (
-      ethTestnetData &&
-      ethTestnetData.tokens &&
-      arbTestnetData &&
-      arbTestnetData.tokens
-    ) {
-      const allTokens = ethTestnetData.tokens.concat(arbTestnetData.tokens);
-      // @ts-ignore
-      setTestnetTokens(allTokens);
-    }
-  }, [ethTestnetData, arbTestnetData, testnet]);
-
-  /*
-  If the user switches between mainnet/testnet mode, update selectedTokens.
-   */
-  useEffect(() => {
-    if (testnet) {
-      setSelectedTokens(testnetTokens);
-    } else {
-      setSelectedTokens(mainnetTokens);
-    }
-  }, [testnet, mainnetTokens, testnetTokens]);
+    setSelectedTokens(
+      subgraphQueries
+        .map(value => value.data.tokens)
+        .reduce((previous, current) => previous.concat(current))
+    );
+  }, [isLoading]);
 
   function getPrice(id: string): number {
-    id = id.replace("arbitrum-one", "arbitrum");
     const sources = currentPrices[id.toLowerCase()];
     if (!sources) return 0;
     // @ts-ignore
@@ -356,7 +300,6 @@ export const useTokens = () => {
   }
 
   function getTokenDetails(token: any): TokenDetails {
-    token.id = token.id.replace("arbitrum-one", "arbitrum");
     const bondLibraryToken = bondLibrary.TOKENS.get(token.id);
 
     let pair: LpPair;
@@ -406,10 +349,6 @@ export const useTokens = () => {
       }
     },
     []);
-
-  const isLoading = testnet
-    ? ethTestnetQuery.isLoading || arbTestnetQuery.isLoading
-    : ethMainnetQuery.isLoading || arbMainnetQuery.isLoading;
 
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks

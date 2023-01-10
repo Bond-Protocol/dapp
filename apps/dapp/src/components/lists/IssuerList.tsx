@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
 import { socials } from "..";
 import { useGlobalMetrics } from "hooks/useGlobalMetrics";
-import { useListAllMarkets } from "hooks/useListAllMarkets";
+import { useListAllPurchases } from "hooks/useListAllPurchases";
 
 export const IssuerList = () => {
   const { marketsByIssuer } = useMarkets();
@@ -16,7 +16,7 @@ export const IssuerList = () => {
   const metrics = useGlobalMetrics();
   const scrollUp = () => window.scrollTo(0, 0);
 
-  const { totalPurchases } = useListAllMarkets();
+  const { totalPurchases } = useListAllPurchases();
   const allIssuers = Array.from(PROTOCOLS.values()).filter(
     (issuer) =>
       Array.from(marketsByIssuer.keys()).includes(issuer.id) ||
@@ -26,10 +26,6 @@ export const IssuerList = () => {
   const issuers = testnet
     ? allIssuers
     : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
-
-  const uniqueBonders = testnet
-    ? metrics.uniqueBondersTestnet
-    : metrics.uniqueBonders;
 
   return (
     <>
@@ -51,7 +47,7 @@ export const IssuerList = () => {
           label="Unique Bonders"
           tooltip="Total unique addresses that interacted with protocol markets"
         >
-          {uniqueBonders}
+          {metrics.uniqueBonders}
         </InfoLabel>
       </div>
       <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">

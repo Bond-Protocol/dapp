@@ -1,84 +1,35 @@
-import { subgraphEndpoints } from "services/subgraph-endpoints";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useTokens } from "hooks/useTokens";
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 import { OwnerTokenTbv, useListOwnerTokenTbvsQuery } from "../generated/graphql";
-import { useEffect, useState } from "react";
-import { getProtocolByAddress, CHAIN_ID } from "@bond-protocol/bond-library";
+import {useEffect, useMemo, useState} from "react";
+import { getProtocolByAddress } from "@bond-protocol/bond-library";
 
 export function useOwnerTokenTbvs() {
-  const { getPrice, currentPrices } = useTokens();
-  const [testnet] = useAtom(testnetMode);
+  const subgraphQueries = getSubgraphQueries(useListOwnerTokenTbvsQuery);
+
+  const { currentPrices, getPrice } = useTokens();
 
   const [protocolTbvs, setProtocolTbvs] = useState<Record<string, any>>([]);
-  const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<
-    OwnerTokenTbv[]
-    >([]);
-  const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<
-    OwnerTokenTbv[]
-    >([]);
+  const [ownerTokenTbvs, setOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
 
-  const { data: ethMainnetData, ...ethMainnetQuery } = useListOwnerTokenTbvsQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET] },
-    { queryKey: CHAIN_ID.ETHEREUM_MAINNET + "-list-owner-token-tbvs" },
-    { enabled: !testnet }
-  );
-
-  const { data: ethTestnetData, ...ethTestnetQuery } = useListOwnerTokenTbvsQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET] },
-    { queryKey: CHAIN_ID.GOERLI_TESTNET + "-list-owner-token-tbvs" },
-    { enabled: !!testnet }
-  );
-
-  const { data: arbMainnetData, ...arbMainnetQuery } = useListOwnerTokenTbvsQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET] },
-    { queryKey: CHAIN_ID.ARBITRUM_MAINNET + "-list-owner-token-tbvs" },
-    { enabled: !testnet }
-  );
-
-  const { data: arbTestnetData, ...arbTestnetQuery } = useListOwnerTokenTbvsQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET] },
-    { queryKey: CHAIN_ID.ARBITRUM_GOERLI_TESTNET + "-list-owner-token-tbvs" },
-    { enabled: !!testnet }
-  );
+  const isLoading = useMemo(() => {
+    return subgraphQueries
+      .map(value => value.isLoading)
+      .reduce((previous, current) => previous || current)
+  }, [subgraphQueries]);
 
   useEffect(() => {
-    if (testnet) return;
-    if (
-      ethMainnetData &&
-      ethMainnetData.ownerTokenTbvs &&
-      arbMainnetData &&
-      arbMainnetData.ownerTokenTbvs
-    ) {
-      const allOwnerTokens = ethMainnetData.ownerTokenTbvs.concat(
-        arbMainnetData.ownerTokenTbvs
-      );
-      // @ts-ignore
-      setMainnetOwnerTokenTbvs(allOwnerTokens);
-    }
-  }, [ethMainnetData, arbMainnetData, testnet]);
+    if (isLoading) return;
+
+    setOwnerTokenTbvs(
+      subgraphQueries
+        .map(value => value.data.ownerTokenTbvs)
+        .reduce((previous, current) => previous.concat(current))
+    );
+  }, [isLoading]);
 
   useEffect(() => {
-    if (!testnet) return;
-    if (
-      ethTestnetData &&
-      ethTestnetData.ownerTokenTbvs &&
-      arbTestnetData &&
-      arbTestnetData.ownerTokenTbvs
-    ) {
-      const allOwnerTokens = ethTestnetData.ownerTokenTbvs.concat(
-        arbTestnetData.ownerTokenTbvs
-      );
-      // @ts-ignore
-      setTestnetOwnerTokenTbvs(allOwnerTokens);
-    }
-  }, [ethTestnetData, arbTestnetData, testnet]);
-
-  useEffect(() => {
-    let selected = testnet ? testnetOwnerTokenTbvs : mainnetOwnerTokenTbvs;
-
-    const updated = selected
-      .map((token) => {
+    const updated = ownerTokenTbvs.map((token) => {
         const protocol = getProtocolByAddress(token.owner, token.chainId);
         if (!protocol) return { id: "", tbv: 0 };
 
@@ -101,13 +52,8 @@ export function useOwnerTokenTbvs() {
         {}
       );
 
-    //@ts-ignore
     setProtocolTbvs(updated);
-  }, [testnet, mainnetOwnerTokenTbvs, testnetOwnerTokenTbvs, currentPrices]);
-
-  const isLoading = testnet
-    ? ethTestnetQuery.isLoading || arbTestnetQuery.isLoading
-    : ethMainnetQuery.isLoading || arbMainnetQuery.isLoading;
+  }, [ownerTokenTbvs, currentPrices]);
 
   return {
     isLoading,

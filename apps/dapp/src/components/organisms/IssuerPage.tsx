@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { ActionCard, InfoLabel, SocialRow } from "ui";
+import { InfoLabel, SocialRow } from "ui";
 import { getAddressesByProtocol, PROTOCOLS } from "@bond-protocol/bond-library";
 import { MarketList } from "components/lists";
-import { PageHeader, PageNavigation, socials } from "components/common";
+import { PageHeader, PageNavigation } from "components/common";
 import { useUniqueBonders } from "hooks/useUniqueBonders";
 import { useOwnerTokenTbvs } from "hooks/useOwnerTokenTbvs";
 import { useNavigate } from "react-router-dom";
-import { useListAllMarkets } from "hooks/useListAllMarkets";
+import { useListAllPurchases } from "hooks/useListAllPurchases";
 
 const placeholderProtocol = {
   name: "PlaceholderDAO",
@@ -20,7 +20,7 @@ export const IssuerPage: FC = () => {
   const { getBondersForProtocol } = useUniqueBonders();
   const { protocolTbvs } = useOwnerTokenTbvs();
   const { name } = useParams();
-  const { allPurchases } = useListAllMarkets();
+  const { allPurchases } = useListAllPurchases();
 
   const [protocol] = useState(PROTOCOLS.get(name || ""));
   const bonders = getBondersForProtocol(name || "");

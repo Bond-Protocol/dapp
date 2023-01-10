@@ -24,7 +24,8 @@ export const Dashboard = () => {
   const { getTokenDetails, getPrice, currentPrices } = useTokens();
   const account = useAccount();
 
-  const data = useMemo(() => {return myBonds
+  const data = useMemo(() => {
+    return myBonds
       .filter((b) => b.owner?.toLowerCase() === account?.address?.toLowerCase())
       .map((bond: Partial<OwnerBalance>) => {
         if (!bond.bondToken || !bond.bondToken.underlying) return;
@@ -56,7 +57,7 @@ export const Dashboard = () => {
           canClaim,
         };
       });
-  }, [currentPrices]);
+  }, [currentPrices, myBonds]);
 
   const tableData = useMemo(() => data?.map((b) => toTableData(tableColumns, b)), [data]);
 

@@ -1,96 +1,41 @@
-import { subgraphEndpoints } from "services/subgraph-endpoints";
-import { Market, useListMarketsQuery } from "../generated/graphql";
-import { useEffect, useState } from "react";
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
-import { CHAIN_ID, getAddressesByChain } from "@bond-protocol/bond-library";
+import {getSubgraphQueriesPerChainFn} from "services/subgraph-endpoints";
+import {Market, useListMarketsQuery} from "../generated/graphql";
+import {useEffect, useMemo, useState} from "react";
+import {getAddressesByChain} from "@bond-protocol/bond-library";
 
 export function useLoadMarkets() {
-  const [testnet, setTestnet] = useAtom(testnetMode);
-  const [selectedMarkets, setSelectedMarkets] = useState<Market[]>([]);
+  const subgraphQueries = getSubgraphQueriesPerChainFn(useListMarketsQuery, getAddressesByChain, "addresses");
+
+  const [markets, setMarkets] = useState<Market[]>([]);
   const [marketsMap, setMarketsMap] = useState<Map<string, Market>>(new Map());
-  const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
-  const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
 
-  const { data: ethMainnetData, ...ethMainnetQuery } = useListMarketsQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET] },
-    {
-      addresses: getAddressesByChain(CHAIN_ID.ETHEREUM_MAINNET),
-      queryKey:CHAIN_ID.ETHEREUM_MAINNET + "-list-markets"
-    },
-    { enabled: !testnet }
-  );
-
-  const { data: ethTestnetData, ...ethTestnetQuery } = useListMarketsQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET] },
-    {
-      addresses: getAddressesByChain(CHAIN_ID.GOERLI_TESTNET),
-      queryKey:CHAIN_ID.GOERLI_TESTNET + "-list-markets"
-    },
-    { enabled: !!testnet }
-  );
-
-  const { data: arbMainnetData, ...arbMainnetQuery } = useListMarketsQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET] },
-    {
-      addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_MAINNET),
-      queryKey:CHAIN_ID.ARBITRUM_MAINNET + "-list-markets"
-    },
-    { enabled: !testnet }
-  );
-
-  const { data: arbTestnetData, ...arbTestnetQuery } = useListMarketsQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET] },
-    {
-      addresses: getAddressesByChain(CHAIN_ID.ARBITRUM_GOERLI_TESTNET),
-      queryKey:CHAIN_ID.ARBITRUM_GOERLI_TESTNET + "-list-markets"
-    },
-    { enabled: !!testnet }
-  );
+  const isLoading = useMemo(() => {
+    return subgraphQueries
+      .map(value => value.isLoading)
+      .reduce((previous, current) => previous || current)
+  }, [subgraphQueries]);
 
   useEffect(() => {
-    if (testnet) return;
-    if (ethMainnetData && ethMainnetData.markets && arbMainnetData && arbMainnetData.markets) {
-      const allMarkets =
-        ethMainnetData.markets
-          .concat(arbMainnetData.markets);
-      // @ts-ignore
-      setMainnetMarkets(allMarkets);
-    }
-  }, [ethMainnetData, arbMainnetData, testnet]);
+    if (isLoading) return;
 
-  useEffect(() => {
-    if (!testnet) return;
-    if (ethTestnetData && ethTestnetData.markets && arbTestnetData && arbTestnetData.markets) {
-      const allMarkets = ethTestnetData.markets
-        .concat(arbTestnetData.markets);
-      // @ts-ignore
-      setTestnetMarkets(allMarkets);
-    }
-  }, [ethTestnetData, arbTestnetData, testnet]);
-
-  useEffect(() => {
-    if (testnet) {
-      setSelectedMarkets(testnetMarkets);
-    } else {
-      setSelectedMarkets(mainnetMarkets);
-    }
-  }, [testnet, mainnetMarkets, testnetMarkets]);
+    setMarkets(
+      subgraphQueries
+        .map(value => value.data.markets)
+        .reduce((previous, current) => previous.concat(current))
+    );
+  }, [isLoading]);
 
   useEffect(() => {
     const map: Map<string, Market> = new Map();
-    selectedMarkets.forEach((market) => {
+    markets.forEach((market) => {
       map.set(market.id, market);
     });
-    setMarketsMap(map);
-  }, [selectedMarkets]);
 
-  const isLoading = testnet
-    ? (ethTestnetQuery.isLoading || arbTestnetQuery.isLoading)
-    : (ethMainnetQuery.isLoading || arbMainnetQuery.isLoading);
+    setMarketsMap(map);
+  }, [markets]);
 
   return {
-    markets: selectedMarkets,
+    markets: markets,
     marketsMap: marketsMap,
     isLoading,
   };

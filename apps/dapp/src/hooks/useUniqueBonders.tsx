@@ -1,108 +1,43 @@
-import { subgraphEndpoints } from "services/subgraph-endpoints";
+import {getSubgraphQueries, subgraphEndpoints} from "services/subgraph-endpoints";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import { useEffect, useState } from "react";
-import { useListUniqueBondersQuery } from "../generated/graphql";
+import {useEffect, useMemo, useState} from "react";
+import {UniqueBonder, useListOwnerTokenTbvsQuery, useListUniqueBondersQuery} from "../generated/graphql";
 import { getAddressesByProtocol, CHAIN_ID } from "@bond-protocol/bond-library";
 
 export function useUniqueBonders() {
-  const [testnet, setTestnet] = useAtom(testnetMode);
+  const subgraphQueries = getSubgraphQueries(useListUniqueBondersQuery);
 
-  const [selectedBonders, setSelectedBonders] = useState(
-    new Map<string, number>()
-  );
-  const [mainnetBonders, setMainnetBonders] = useState(
-    new Map<string, number>()
-  );
-  const [testnetBonders, setTestnetBonders] = useState(
-    new Map<string, number>()
-  );
+  const [bonders, setBonders] = useState(new Map<string, number>());
 
-  const { data: ethMainnetData, ...ethMainnetQuery } = useListUniqueBondersQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET] },
-    { queryKey: CHAIN_ID.ETHEREUM_MAINNET + "-list-unique-bonders" },
-    { enabled: !testnet }
-  );
-
-  const { data: ethTestnetData, ...ethTestnetQuery } = useListUniqueBondersQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET] },
-    { queryKey: CHAIN_ID.GOERLI_TESTNET + "-list-unique-bonders" },
-    { enabled: !!testnet }
-  );
-
-  const { data: arbMainnetData, ...arbMainnetQuery } = useListUniqueBondersQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET] },
-    { queryKey: CHAIN_ID.ARBITRUM_MAINNET + "-list-unique-bonders" },
-    { enabled: !testnet }
-  );
-
-  const { data: arbTestnetData, ...arbTestnetQuery } = useListUniqueBondersQuery(
-    { endpoint: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET] },
-    { queryKey: CHAIN_ID.ARBITRUM_GOERLI_TESTNET + "-list-unique-bonders" },
-    { enabled: !!testnet }
-  );
+  const isLoading = useMemo(() => {
+    return subgraphQueries
+      .map(value => value.isLoading)
+      .reduce((previous, current) => previous || current)
+  }, [subgraphQueries]);
 
   useEffect(() => {
-    if (testnet) return;
-    if (
-      ethMainnetData &&
-      ethMainnetData.uniqueBonders &&
-      arbMainnetData &&
-      arbMainnetData.uniqueBonders
-    ) {
-      const allBonders = ethMainnetData.uniqueBonders.concat(
-        arbMainnetData.uniqueBonders
-      );
-      const bonderMap = new Map();
+    if (isLoading) return;
 
-      allBonders.forEach((bonder) => {
-        const split = bonder.id.split("__");
-        const current = bonderMap.get(split[0]);
-        if (current) {
-          bonderMap.set(split[0], current + 1);
-        } else {
-          bonderMap.set(split[0], 1);
-        }
-      });
+    const allBonders = subgraphQueries
+      .map(value => value.data.uniqueBonders)
+      .reduce((previous, current) => previous.concat(current));
 
-      setMainnetBonders(bonderMap);
-    }
-  }, [ethMainnetData, arbMainnetData, testnet]);
+    const bonderMap = new Map();
 
-  useEffect(() => {
-    if (!testnet) return;
-    if (
-      ethTestnetData &&
-      ethTestnetData.uniqueBonders &&
-      arbTestnetData &&
-      arbTestnetData.uniqueBonders
-    ) {
-      const allBonders = ethTestnetData.uniqueBonders.concat(
-        arbTestnetData.uniqueBonders
-      );
-      const bonderMap = new Map();
+    allBonders.forEach((bonder: UniqueBonder) => {
+      const split = bonder.id.split("__");
+      const current = bonderMap.get(split[0]);
+      if (current) {
+        bonderMap.set(split[0], current + 1);
+      } else {
+        bonderMap.set(split[0], 1);
+      }
+    });
 
-      allBonders.forEach((bonder) => {
-        const split = bonder.id.split("__");
-        const current = bonderMap.get(split[0]);
-        if (current) {
-          bonderMap.set(split[0], current + 1);
-        } else {
-          bonderMap.set(split[0], 1);
-        }
-      });
+    setBonders(bonderMap);
+  }, [isLoading]);
 
-      setTestnetBonders(bonderMap);
-    }
-  }, [ethTestnetData, arbTestnetData, testnet]);
-
-  useEffect(() => {
-    if (testnet) {
-      setSelectedBonders(testnetBonders);
-    } else {
-      setSelectedBonders(mainnetBonders);
-    }
-  }, [testnet, mainnetBonders, testnetBonders]);
 
   function getBondersForProtocol(name: string): number {
     const addresses = getAddressesByProtocol(name);
@@ -110,19 +45,15 @@ export function useUniqueBonders() {
 
     addresses.forEach((address) => {
       const id = (address.chainId + "_" + address.address).toLowerCase();
-      const bonders = selectedBonders.get(id);
-      if (bonders) count = count + bonders;
+      const bondersForAddress = bonders.get(id);
+      if (bondersForAddress) count = count + bondersForAddress;
     });
 
     return count;
   }
 
-  const isLoading = testnet
-    ? ethTestnetQuery.isLoading || arbTestnetQuery.isLoading
-    : ethMainnetQuery.isLoading || arbMainnetQuery.isLoading;
-
   return {
-    bonders: selectedBonders,
+    bonders: bonders,
     getBondersForProtocol: (name: string) => getBondersForProtocol(name),
     isLoading,
   };
