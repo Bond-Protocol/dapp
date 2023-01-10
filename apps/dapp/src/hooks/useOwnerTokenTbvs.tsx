@@ -6,7 +6,7 @@ import {
 } from "../generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export function useOwnerTokenTbvs() {

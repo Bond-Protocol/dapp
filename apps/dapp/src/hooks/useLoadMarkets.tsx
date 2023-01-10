@@ -2,7 +2,7 @@ import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
 import { Market, useListMarketsQuery } from "../generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { getAddressesByChain } from "@bond-protocol/bond-library";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export function useLoadMarkets() {
@@ -17,9 +17,12 @@ export function useLoadMarkets() {
   const [marketsMap, setMarketsMap] = useState<Map<string, Market>>(new Map());
 
   const isLoading = useMemo(() => {
-    return subgraphQueries.length > 0 && subgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
+    return (
+      subgraphQueries.length > 0 &&
+      subgraphQueries
+        .map((value) => value.isLoading)
+        .reduce((previous, current) => previous || current)
+    );
   }, [subgraphQueries]);
 
   useEffect(() => {

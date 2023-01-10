@@ -15,7 +15,7 @@ import {
 } from "@bond-protocol/bond-library";
 import axios, { AxiosResponse } from "axios";
 import { useQuery } from "react-query";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export interface PriceDetails {
@@ -207,8 +207,7 @@ export const useTokens = () => {
             token.price = currentPricesMap[
               chainId + "_" + token.address.toLowerCase()
             ]
-              ?
-                Number(
+              ? Number(
                   // @ts-ignore
                   currentPricesMap[
                     chainId + "_" + token.address.toLowerCase()

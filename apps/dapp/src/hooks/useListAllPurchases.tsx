@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { BondPurchase, useListAllPurchasesQuery } from "src/generated/graphql";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export const useListAllPurchases = () => {

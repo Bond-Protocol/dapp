@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
 import { useGlobalMetrics } from "hooks/useGlobalMetrics";
 import { useListAllPurchases } from "hooks/useListAllPurchases";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { socials } from "..";
-import {Protocol} from "@bond-protocol/bond-library";
+import { Protocol } from "@bond-protocol/bond-library";
 
 export const IssuerList = () => {
   const { marketsByIssuer } = useMarkets();

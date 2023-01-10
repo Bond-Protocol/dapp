@@ -3,7 +3,7 @@ import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useOwnerTokenTbvs } from "./useOwnerTokenTbvs";
 import { usdFormatter } from "src/utils/format";
 import { useEffect, useMemo, useState } from "react";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export const useGlobalMetrics = () => {

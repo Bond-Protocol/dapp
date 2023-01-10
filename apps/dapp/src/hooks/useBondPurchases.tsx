@@ -2,7 +2,7 @@ import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
 import { useEffect, useMemo, useState } from "react";
 import { BondPurchase, useListBondPurchasesQuery } from "../generated/graphql";
 import { getAddressesByChain } from "@bond-protocol/bond-library";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export function useBondPurchases() {

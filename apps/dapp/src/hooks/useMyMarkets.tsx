@@ -2,7 +2,7 @@ import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { Market, useListOwnedMarketsQuery } from "../generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export function useMyMarkets() {

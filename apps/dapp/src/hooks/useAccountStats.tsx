@@ -5,7 +5,7 @@ import {
   useListBondPurchasesByAddressQuery,
 } from "src/generated/graphql";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 
 export const useAccountStats = () => {
