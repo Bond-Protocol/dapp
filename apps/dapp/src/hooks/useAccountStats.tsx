@@ -5,15 +5,19 @@ import {
   useListBondPurchasesByAddressQuery,
 } from "src/generated/graphql";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export const useAccountStats = () => {
   const account = useAccount();
   const recipient = account?.address?.toLowerCase();
+
   const subgraphQueries = getSubgraphQueries(
     useListBondPurchasesByAddressQuery,
     { recipient: recipient }
   );
 
+  const [isTestnet] = useAtom(testnetMode);
   const [accountPurchases, setAllAccountPurchases] = useState<BondPurchase[]>(
     []
   );
@@ -32,7 +36,7 @@ export const useAccountStats = () => {
         .map((value) => value.data.bondPurchases)
         .reduce((previous, current) => previous.concat(current))
     );
-  }, [isLoading]);
+  }, [isLoading, isTestnet]);
 
   return { purchases: accountPurchases };
 };

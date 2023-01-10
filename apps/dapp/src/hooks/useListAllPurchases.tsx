@@ -1,10 +1,13 @@
 import { useState, useEffect, useMemo } from "react";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { BondPurchase, useListAllPurchasesQuery } from "src/generated/graphql";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export const useListAllPurchases = () => {
   const subgraphQueries = getSubgraphQueries(useListAllPurchasesQuery);
 
+  const [isTestnet] = useAtom(testnetMode);
   const [allPurchases, setAllPurchases] = useState<BondPurchase[]>([]);
 
   const isLoading = useMemo(() => {
@@ -21,7 +24,7 @@ export const useListAllPurchases = () => {
         .map((value) => value.data.bondPurchases)
         .reduce((previous, current) => previous.concat(current))
     );
-  }, [isLoading]);
+  }, [isLoading, isTestnet]);
 
   return {
     allPurchases: allPurchases,

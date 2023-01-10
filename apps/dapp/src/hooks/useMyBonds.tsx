@@ -26,6 +26,7 @@ export function useMyBonds() {
   );
   const erc20SubgraphQueries = getSubgraphQueries(useListErc20BondTokensQuery);
 
+  const [isTestnet] = useAtom(testnetMode);
   const [ownerBalances, setOwnerBalances] = useState<Partial<OwnerBalance>[]>(
     []
   );
@@ -92,7 +93,7 @@ export function useMyBonds() {
         .map((value) => value.data.ownerBalances)
         .reduce((previous, current) => previous.concat(current))
     );
-  }, [ownerBalanceIsLoading]);
+  }, [ownerBalanceIsLoading, isTestnet]);
 
   /*
   For bonds with ERC-20 rather than ERC-1155 bond tokens, we can't get the balances
@@ -101,7 +102,7 @@ export function useMyBonds() {
   useEffect(() => {
     if (erc20BalanceIsLoading) return;
     getErc20Balances();
-  }, [erc20BalanceIsLoading, address]);
+  }, [erc20BalanceIsLoading, isTestnet, address]);
 
   useEffect(() => {
     if (ownerBalanceIsLoading || erc20BalanceIsLoading) return;
@@ -109,7 +110,7 @@ export function useMyBonds() {
     ownerBalanceSubgraphQueries.forEach((query) => query.refetch());
     setOwnerBalances([]);
     getErc20Balances();
-  }, [address]);
+  }, [address, isTestnet]);
 
   useEffect(() => {
     const updatedBonds = [...ownerBalances, ...erc20OwnerBalances];

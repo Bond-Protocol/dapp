@@ -2,6 +2,8 @@ import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { Market, useListOwnedMarketsQuery } from "../generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export function useMyMarkets() {
   const { address } = useAccount();
@@ -9,6 +11,7 @@ export function useMyMarkets() {
     owner: address,
   });
 
+  const [isTestnet] = useAtom(testnetMode);
   const [myMarkets, setMyMarkets] = useState<Market[]>([]);
 
   const isLoading = useMemo(() => {
@@ -25,7 +28,7 @@ export function useMyMarkets() {
         .map((value) => value.data.markets)
         .reduce((previous, current) => previous.concat(current))
     );
-  }, [isLoading]);
+  }, [isLoading, isTestnet]);
 
   return {
     markets: myMarkets,

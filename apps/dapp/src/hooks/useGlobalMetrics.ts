@@ -3,10 +3,13 @@ import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useOwnerTokenTbvs } from "./useOwnerTokenTbvs";
 import { usdFormatter } from "src/utils/format";
 import { useEffect, useMemo, useState } from "react";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export const useGlobalMetrics = () => {
   const subgraphQueries = getSubgraphQueries(useListUniqueBondersQuery);
 
+  const [isTestnet] = useAtom(testnetMode);
   const [uniqueBonders, setUniqueBonders] = useState(0);
 
   const isLoading = useMemo(() => {
@@ -28,7 +31,7 @@ export const useGlobalMetrics = () => {
         .map((value) => value.data.uniqueBonders.length)
         .reduce((previous, current) => previous + current)
     );
-  }, [isLoading]);
+  }, [isLoading, isTestnet]);
 
   const { protocolTbvs } = useOwnerTokenTbvs();
   const tbv = Object.values(protocolTbvs).reduce(

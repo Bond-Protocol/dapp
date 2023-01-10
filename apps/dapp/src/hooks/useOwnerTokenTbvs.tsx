@@ -6,12 +6,15 @@ import {
 } from "../generated/graphql";
 import { useEffect, useMemo, useState } from "react";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export function useOwnerTokenTbvs() {
   const subgraphQueries = getSubgraphQueries(useListOwnerTokenTbvsQuery);
 
   const { currentPrices, getPrice } = useTokens();
 
+  const [isTestnet] = useAtom(testnetMode);
   const [protocolTbvs, setProtocolTbvs] = useState<Record<string, any>>([]);
   const [ownerTokenTbvs, setOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
 
@@ -29,7 +32,7 @@ export function useOwnerTokenTbvs() {
         .map((value) => value.data.ownerTokenTbvs)
         .reduce((previous, current) => previous.concat(current))
     );
-  }, [isLoading]);
+  }, [isLoading, isTestnet]);
 
   useEffect(() => {
     const updated = ownerTokenTbvs

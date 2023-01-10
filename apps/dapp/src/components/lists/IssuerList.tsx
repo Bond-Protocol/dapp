@@ -5,27 +5,36 @@ import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
-import { socials } from "..";
 import { useGlobalMetrics } from "hooks/useGlobalMetrics";
 import { useListAllPurchases } from "hooks/useListAllPurchases";
+import {useEffect, useState} from "react";
+import { socials } from "..";
+import {Protocol} from "@bond-protocol/bond-library";
 
 export const IssuerList = () => {
   const { marketsByIssuer } = useMarkets();
+  const { totalPurchases } = useListAllPurchases();
   const navigate = useNavigate();
-  const [testnet] = useAtom(testnetMode);
   const metrics = useGlobalMetrics();
+
   const scrollUp = () => window.scrollTo(0, 0);
 
-  const { totalPurchases } = useListAllPurchases();
-  const allIssuers = Array.from(PROTOCOLS.values()).filter(
-    (issuer) =>
-      Array.from(marketsByIssuer.keys()).includes(issuer.id) ||
-      metrics.protocolTbvs[issuer.name]?.tbv > 0
-  );
+  const [testnet] = useAtom(testnetMode);
+  const [issuers, setIssuers] = useState<Protocol[]>([]);
 
-  const issuers = testnet
-    ? allIssuers
-    : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
+  useEffect(() => {
+    const allIssuers = Array.from(PROTOCOLS.values()).filter(
+      (issuer) =>
+        Array.from(marketsByIssuer.keys()).includes(issuer.id) ||
+        metrics.protocolTbvs[issuer.name]?.tbv > 0
+    );
+
+    const issuers = testnet
+      ? allIssuers
+      : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
+
+    setIssuers(issuers);
+  }, [marketsByIssuer, metrics.protocolTbvs]);
 
   return (
     <>

@@ -2,6 +2,8 @@ import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
 import { useEffect, useMemo, useState } from "react";
 import { BondPurchase, useListBondPurchasesQuery } from "../generated/graphql";
 import { getAddressesByChain } from "@bond-protocol/bond-library";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export function useBondPurchases() {
   const subgraphQueries = getSubgraphQueriesPerChainFn(
@@ -10,6 +12,7 @@ export function useBondPurchases() {
     "addresses"
   );
 
+  const [isTestnet] = useAtom(testnetMode);
   const [bondPurchases, setBondPurchases] = useState<BondPurchase[]>([]);
   const [bondPurchasesByMarket, setBondPurchasesByMarket] = useState<
     Map<string, BondPurchase[]>
@@ -29,7 +32,7 @@ export function useBondPurchases() {
         .map((value) => value.data.bondPurchases)
         .reduce((previous, current) => previous.concat(current))
     );
-  }, [isLoading]);
+  }, [isLoading, isTestnet]);
 
   useEffect(() => {
     const bondPurchasesByMarketMap: Map<string, BondPurchase[]> = new Map();

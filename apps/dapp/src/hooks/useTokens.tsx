@@ -15,6 +15,8 @@ import {
 } from "@bond-protocol/bond-library";
 import axios, { AxiosResponse } from "axios";
 import { useQuery } from "react-query";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 export interface PriceDetails {
   price: string;
@@ -38,6 +40,8 @@ export interface TokenDetails {
 
 export const useTokens = () => {
   const subgraphQueries = getSubgraphQueries(useListTokensQuery);
+
+  const [isTestnet] = useAtom(testnetMode);
   const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
   const [currentPrices, setCurrentPrices] = useState<Price>({});
 
@@ -203,8 +207,9 @@ export const useTokens = () => {
             token.price = currentPricesMap[
               chainId + "_" + token.address.toLowerCase()
             ]
-              ? // @ts-ignore
+              ?
                 Number(
+                  // @ts-ignore
                   currentPricesMap[
                     chainId + "_" + token.address.toLowerCase()
                   ][0].price
@@ -306,7 +311,7 @@ export const useTokens = () => {
         .map((value) => value.data.tokens)
         .reduce((previous, current) => previous.concat(current))
     );
-  }, [isLoading]);
+  }, [isLoading, isTestnet]);
 
   function getPrice(id: string): number {
     const sources = currentPrices[id.toLowerCase()];
