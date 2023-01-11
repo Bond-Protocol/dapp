@@ -44,7 +44,7 @@ export default defineConfig({
       services: path.join(__dirname, "./src/services"),
       hooks: path.join(__dirname, "./src/hooks"),
       assets: path.join(__dirname, "./src/assets"),
-      utils: path.join(__dirname, './src/utils')
+      utils: path.join(__dirname, "./src/utils"),
     },
   },
 });

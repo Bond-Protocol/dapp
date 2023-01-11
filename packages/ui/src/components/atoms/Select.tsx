@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SelectUnstyled, { SelectUnstyledProps } from "@mui/base/SelectUnstyled";
 import OptionUnstyled from "@mui/base/OptionUnstyled";
-import { SelectArrowDown } from "../../assets/icons/select-arrow-down";
+import { ReactComponent as SelectArrowDown } from "../../assets/icons/select-arrow-down.svg";
 import { TokenLabelProps } from "./TokenLabel";
 
 export type SelectOptions = TokenLabelProps & {
