@@ -12,6 +12,7 @@ import { useAccount } from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
+import {concatSubgraphQueryResultArrays} from "../utils/concatSubgraphQueryResultArrays";
 
 export function useMyBonds() {
   const { address } = useAccount();
@@ -44,9 +45,7 @@ export function useMyBonds() {
   const getErc20Balances = () => {
     if (!address) return;
 
-    const bondTokens: BondToken[] = erc20SubgraphQueries
-      .map((value) => value.data.bondTokens)
-      .reduce((previous, current) => previous.concat(current));
+    const bondTokens: BondToken[] = concatSubgraphQueryResultArrays(erc20SubgraphQueries, "bondTokens");
 
     const ownerBalances: Partial<OwnerBalance>[] = [];
     const promises: Promise<any>[] = [];
@@ -83,9 +82,7 @@ export function useMyBonds() {
     if (ownerBalanceIsLoading) return;
 
     setOwnerBalances(
-      ownerBalanceSubgraphQueries
-        .map((value) => value.data.ownerBalances)
-        .reduce((previous, current) => previous.concat(current))
+      concatSubgraphQueryResultArrays(ownerBalanceSubgraphQueries, "ownerBalances")
     );
   }, [ownerBalanceIsLoading, isTestnet]);
 
@@ -101,8 +98,7 @@ export function useMyBonds() {
   useEffect(() => {
     if (ownerBalanceIsLoading || erc20BalanceIsLoading) return;
 
-    ownerBalanceSubgraphQueries.forEach((query) => query.refetch());
-    setOwnerBalances([]);
+    setOwnerBalances(concatSubgraphQueryResultArrays(ownerBalanceSubgraphQueries, "ownerBalances"));
     getErc20Balances();
   }, [address, isTestnet]);
 
