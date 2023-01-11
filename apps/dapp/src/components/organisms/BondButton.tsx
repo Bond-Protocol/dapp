@@ -1,6 +1,6 @@
 import { Button } from "ui";
 import { ConnectButton } from "components/common";
-import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg";
+import { ReactComponent as LinkIcon } from "ui/assets/icons/external-link.svg";
 import { Tooltip } from "ui";
 import { useEffect, useState } from "react";
 import { useNetwork, useSwitchNetwork} from "wagmi";
