@@ -1,7 +1,7 @@
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BondToken,
   OwnerBalance,
@@ -11,6 +11,7 @@ import {
 import { useAccount } from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export function useMyBonds() {
   const { address } = useAccount();
@@ -28,19 +29,17 @@ export function useMyBonds() {
   const [erc20OwnerBalances, setErc20OwnerBalances] = useState<
     Partial<OwnerBalance>[]
   >([]);
+
+  const { isLoading: ownerBalanceIsLoading } = useSubgraphLoadingCheck(
+    ownerBalanceSubgraphQueries,
+    [ownerBalances]
+  );
+  const { isLoading: erc20BalanceIsLoading } = useSubgraphLoadingCheck(
+    erc20SubgraphQueries,
+    [erc20OwnerBalances]
+  );
+
   const [myBonds, setMyBonds] = useState<Partial<OwnerBalance>[]>([]);
-
-  const ownerBalanceIsLoading = useMemo(() => {
-    return ownerBalanceSubgraphQueries
-      .map((value) => value.isLoading || value.isRefetching)
-      .reduce((previous, current) => previous || current);
-  }, [ownerBalanceSubgraphQueries, ownerBalances]);
-
-  const erc20BalanceIsLoading = useMemo(() => {
-    return erc20SubgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
-  }, [erc20SubgraphQueries, erc20OwnerBalances]);
 
   const getErc20Balances = () => {
     if (!address) return;

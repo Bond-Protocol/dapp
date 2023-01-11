@@ -1,25 +1,22 @@
 import { getSubgraphQueries } from "services/subgraph-endpoints";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { UniqueBonder, useListUniqueBondersQuery } from "../generated/graphql";
 import { getAddressesByProtocol } from "@bond-protocol/bond-library";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export function useUniqueBonders() {
   const subgraphQueries = getSubgraphQueries(useListUniqueBondersQuery);
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   const [bonders, setBonders] = useState(new Map<string, number>());
 
-  const isLoading = useMemo(() => {
-    return subgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
-  }, [subgraphQueries]);
-
   useEffect(() => {
     if (isLoading) return;
-
-    const allBonders = subgraphQueries
-      .map((value) => value.data.uniqueBonders)
-      .reduce((previous, current) => previous.concat(current));
+    const allBonders = concatSubgraphQueryResultArrays(
+      subgraphQueries,
+      "uniqueBonders"
+    );
 
     const bonderMap = new Map();
 

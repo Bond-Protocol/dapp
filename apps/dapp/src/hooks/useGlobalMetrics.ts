@@ -2,21 +2,17 @@ import { useListUniqueBondersQuery } from "src/generated/graphql";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useOwnerTokenTbvs } from "./useOwnerTokenTbvs";
 import { usdFormatter } from "src/utils/format";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export const useGlobalMetrics = () => {
   const subgraphQueries = getSubgraphQueries(useListUniqueBondersQuery);
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   const [isTestnet] = useAtom(testnetMode);
   const [uniqueBonders, setUniqueBonders] = useState(0);
-
-  const isLoading = useMemo(() => {
-    return subgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
-  }, [subgraphQueries]);
 
   useEffect(() => {
     if (isLoading) return;

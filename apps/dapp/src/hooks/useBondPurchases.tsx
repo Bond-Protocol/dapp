@@ -1,9 +1,11 @@
 import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { BondPurchase, useListBondPurchasesQuery } from "../generated/graphql";
 import { getAddressesByChain } from "@bond-protocol/bond-library";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export function useBondPurchases() {
   const subgraphQueries = getSubgraphQueriesPerChainFn(
@@ -11,6 +13,7 @@ export function useBondPurchases() {
     getAddressesByChain,
     "addresses"
   );
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   const [isTestnet] = useAtom(testnetMode);
   const [bondPurchases, setBondPurchases] = useState<BondPurchase[]>([]);
@@ -18,19 +21,10 @@ export function useBondPurchases() {
     Map<string, BondPurchase[]>
   >(new Map());
 
-  const isLoading = useMemo(() => {
-    return subgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
-  }, [subgraphQueries]);
-
   useEffect(() => {
     if (isLoading) return;
-
     setBondPurchases(
-      subgraphQueries
-        .map((value) => value.data.bondPurchases)
-        .reduce((previous, current) => previous.concat(current))
+      concatSubgraphQueryResultArrays(subgraphQueries, "bondPurchases")
     );
   }, [isLoading, isTestnet]);
 

@@ -1,9 +1,11 @@
 import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
 import { Market, useListMarketsQuery } from "../generated/graphql";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getAddressesByChain } from "@bond-protocol/bond-library";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export function useLoadMarkets() {
   const subgraphQueries = getSubgraphQueriesPerChainFn(
@@ -11,28 +13,15 @@ export function useLoadMarkets() {
     getAddressesByChain,
     "addresses"
   );
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   const [isTestnet] = useAtom(testnetMode);
   const [markets, setMarkets] = useState<Market[]>([]);
   const [marketsMap, setMarketsMap] = useState<Map<string, Market>>(new Map());
 
-  const isLoading = useMemo(() => {
-    return (
-      subgraphQueries.length > 0 &&
-      subgraphQueries
-        .map((value) => value.isLoading)
-        .reduce((previous, current) => previous || current)
-    );
-  }, [subgraphQueries]);
-
   useEffect(() => {
     if (isLoading) return;
-
-    setMarkets(
-      subgraphQueries
-        .map((value) => value.data.markets)
-        .reduce((previous, current) => previous.concat(current))
-    );
+    setMarkets(concatSubgraphQueryResultArrays(subgraphQueries, "markets"));
   }, [isLoading, isTestnet]);
 
   useEffect(() => {

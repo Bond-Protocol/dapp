@@ -7,7 +7,7 @@ import {
 import { providers } from "services/owned-providers";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { Token, useListTokensQuery } from "../generated/graphql";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
 import {
   CustomPriceSource,
@@ -17,6 +17,8 @@ import axios, { AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export interface PriceDetails {
   price: string;
@@ -42,7 +44,7 @@ export const useTokens = () => {
   const subgraphQueries = getSubgraphQueries(useListTokensQuery);
 
   const [isTestnet] = useAtom(testnetMode);
-  const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
+  const [tokens, setTokens] = useState<Token[]>([]);
   const [currentPrices, setCurrentPrices] = useState<Price>({});
 
   /*
@@ -51,11 +53,7 @@ export const useTokens = () => {
    */
   const apiIds = bondLibrary.getUniqueApiIds();
 
-  const isLoading = useMemo(() => {
-    return subgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
-  }, [subgraphQueries]);
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   /*
   Loads token price data from Coingecko.
@@ -297,19 +295,14 @@ export const useTokens = () => {
         setCurrentPrices(currentPricesMap);
       });
     }
-  }, [selectedTokens, coingeckoQuery.data, customPriceQuery.data]);
+  }, [tokens, coingeckoQuery.data, customPriceQuery.data]);
 
   /*
   We get a list of all tokens being used in the app by concatenating the .tokens data from each Subgraph request.
    */
   useEffect(() => {
     if (isLoading) return;
-
-    setSelectedTokens(
-      subgraphQueries
-        .map((value) => value.data.tokens)
-        .reduce((previous, current) => previous.concat(current))
-    );
+    setTokens(concatSubgraphQueryResultArrays(subgraphQueries, "tokens"));
   }, [isLoading, isTestnet]);
 
   function getPrice(id: string): number {
@@ -381,7 +374,7 @@ export const useTokens = () => {
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
    */
   return {
-    tokens: selectedTokens,
+    tokens: tokens,
     currentPrices: currentPrices,
     getPrice: (id: string) => getPrice(id),
     getTokenDetails: (token: any) => getTokenDetails(token),

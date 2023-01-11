@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import {
   BondPurchase,
@@ -7,6 +7,8 @@ import {
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export const useAccountStats = () => {
   const account = useAccount();
@@ -16,25 +18,17 @@ export const useAccountStats = () => {
     useListBondPurchasesByAddressQuery,
     { recipient: recipient }
   );
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   const [isTestnet] = useAtom(testnetMode);
   const [accountPurchases, setAllAccountPurchases] = useState<BondPurchase[]>(
     []
   );
 
-  const isLoading = useMemo(() => {
-    return subgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
-  }, [subgraphQueries]);
-
   useEffect(() => {
     if (isLoading) return;
-
     setAllAccountPurchases(
-      subgraphQueries
-        .map((value) => value.data.bondPurchases)
-        .reduce((previous, current) => previous.concat(current))
+      concatSubgraphQueryResultArrays(subgraphQueries, "bondPurchases")
     );
   }, [isLoading, isTestnet]);
 

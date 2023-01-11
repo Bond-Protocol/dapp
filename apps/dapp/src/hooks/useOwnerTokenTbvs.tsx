@@ -4,33 +4,26 @@ import {
   OwnerTokenTbv,
   useListOwnerTokenTbvsQuery,
 } from "../generated/graphql";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export function useOwnerTokenTbvs() {
   const subgraphQueries = getSubgraphQueries(useListOwnerTokenTbvsQuery);
-
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
   const { currentPrices, getPrice } = useTokens();
 
   const [isTestnet] = useAtom(testnetMode);
   const [protocolTbvs, setProtocolTbvs] = useState<Record<string, any>>([]);
   const [ownerTokenTbvs, setOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
 
-  const isLoading = useMemo(() => {
-    return subgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
-  }, [subgraphQueries]);
-
   useEffect(() => {
     if (isLoading) return;
-
     setOwnerTokenTbvs(
-      subgraphQueries
-        .map((value) => value.data.ownerTokenTbvs)
-        .reduce((previous, current) => previous.concat(current))
+      concatSubgraphQueryResultArrays(subgraphQueries, "ownerTokenTbvs")
     );
   }, [isLoading, isTestnet]);
 

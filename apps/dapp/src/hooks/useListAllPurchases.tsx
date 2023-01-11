@@ -1,28 +1,22 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { BondPurchase, useListAllPurchasesQuery } from "src/generated/graphql";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export const useListAllPurchases = () => {
   const subgraphQueries = getSubgraphQueries(useListAllPurchasesQuery);
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   const [isTestnet] = useAtom(testnetMode);
   const [allPurchases, setAllPurchases] = useState<BondPurchase[]>([]);
 
-  const isLoading = useMemo(() => {
-    return subgraphQueries
-      .map((value) => value.isLoading)
-      .reduce((previous, current) => previous || current);
-  }, [subgraphQueries]);
-
   useEffect(() => {
     if (isLoading) return;
-
     setAllPurchases(
-      subgraphQueries
-        .map((value) => value.data.bondPurchases)
-        .reduce((previous, current) => previous.concat(current))
+      concatSubgraphQueryResultArrays(subgraphQueries, "bondPurchases")
     );
   }, [isLoading, isTestnet]);
 
