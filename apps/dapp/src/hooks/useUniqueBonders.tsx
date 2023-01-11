@@ -1,16 +1,7 @@
-import {
-  getSubgraphQueries,
-  subgraphEndpoints,
-} from "services/subgraph-endpoints";
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useEffect, useMemo, useState } from "react";
-import {
-  UniqueBonder,
-  useListOwnerTokenTbvsQuery,
-  useListUniqueBondersQuery,
-} from "../generated/graphql";
-import { getAddressesByProtocol, CHAIN_ID } from "@bond-protocol/bond-library";
+import { UniqueBonder, useListUniqueBondersQuery } from "../generated/graphql";
+import { getAddressesByProtocol } from "@bond-protocol/bond-library";
 
 export function useUniqueBonders() {
   const subgraphQueries = getSubgraphQueries(useListUniqueBondersQuery);

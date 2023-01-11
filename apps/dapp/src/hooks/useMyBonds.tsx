@@ -1,7 +1,4 @@
-import {
-  getSubgraphQueries,
-  subgraphEndpoints,
-} from "services/subgraph-endpoints";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import { useEffect, useMemo, useState } from "react";
@@ -10,12 +7,10 @@ import {
   OwnerBalance,
   useGetOwnerBalancesByOwnerQuery,
   useListErc20BondTokensQuery,
-  useListUniqueBondersQuery,
 } from "../generated/graphql";
 import { useAccount } from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
 
 export function useMyBonds() {
   const { address } = useAccount();

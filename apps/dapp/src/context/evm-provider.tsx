@@ -21,7 +21,7 @@ const isTestnet = !environment.isProduction;
 
 const { chains, provider } = configureChains(
   isTestnet
-    ? [chain.goerli, chain.arbitrumGoerli]
+    ? [chain.goerli, chain.arbitrumGoerli, chain.optimismGoerli]
     : [chain.mainnet, chain.arbitrum],
   [publicProvider()]
 );

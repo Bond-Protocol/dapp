@@ -69,6 +69,19 @@ const providerConfiguration: ProviderOptions[] = [
       },
     ],
   },
+  {
+    name: "optimism-goerli",
+    chainId: "420",
+    rpcs: [
+      {
+        url: `https://opt-goerli.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_OPTIMISM_GOERLI_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
 ];
 
 export const providers: { [key: string]: Provider } =

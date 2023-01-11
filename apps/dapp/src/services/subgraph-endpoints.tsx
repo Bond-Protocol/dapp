@@ -13,6 +13,8 @@ export const subgraphEndpoints = {
     "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-arbitrum-testing",
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli-arbitrum",
+  [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
+    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-optimism-goerli",
 };
 
 export const getSubgraphEndpoints = (): string[] => {
@@ -22,6 +24,7 @@ export const getSubgraphEndpoints = (): string[] => {
     return [
       subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET],
       subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET],
+      subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
     ];
   }
 
@@ -64,6 +67,10 @@ export const getSubgraphEndpoints2 = (): { url: string; chain: CHAIN_ID }[] => {
       {
         url: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET],
         chain: CHAIN_ID.ARBITRUM_GOERLI_TESTNET,
+      },
+      {
+        url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
+        chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
       },
     ];
   }
