@@ -1,9 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require("tailwindcss/plugin");
 const defaultTheme = require("tailwindcss/defaultTheme");
-const withMT = require("@material-tailwind/react/utils/withMT");
 
-module.exports = withMT({
+module.exports = {
   content: ["./src/**/*.{ts,tsx}", "../../packages/**/*.{ts,tsx}"],
   theme: {
     colors: {
@@ -145,4 +144,4 @@ module.exports = withMT({
       addVariant("child-hover", "& > *:hover");
     },
   ],
-});
+};

@@ -1,5 +1,4 @@
-import TooltipIcon from "../../assets/icons/tooltip-icon";
-import { Tooltip as MaterialTooltip } from "@material-tailwind/react";
+import { ReactComponent as TooltipIcon } from "../../assets/icons/tooltip-icon.svg";
 
 export type TooltipProps = {
   content: string;
@@ -11,11 +10,15 @@ export type TooltipProps = {
 
 export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
   return (
-    <MaterialTooltip
-      content={props.content}
-      className={`bg-light-tooltip font-jakarta text-grey-400 max-w-[320px] p-2 text-center text-xs ${props.className}`}
-    >
-      <div className="my-auto cursor-help">
+    <div className="group relative my-auto cursor-help">
+      <div
+        className={`bg-light-tooltip text-grey-400 absolute top-[10px] hidden w-max rounded p-2 py-4 text-center text-xs transition-all duration-700 group-hover:flex ${props.className}`}
+      >
+        <div className="max-w-[200px] select-none normal-case">
+          {props.content}
+        </div>
+      </div>
+      <div>
         {props.children || (
           <TooltipIcon
             className={`my-auto ${props.iconClassname}`}
@@ -23,6 +26,6 @@ export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
           />
         )}
       </div>
-    </MaterialTooltip>
+    </div>
   );
 };

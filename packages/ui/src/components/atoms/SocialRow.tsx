@@ -4,6 +4,7 @@ import { ReactComponent as MediumIcon } from "../../assets/icons/socials/medium.
 import { ReactComponent as TwitterIcon } from "../../assets/icons/socials/twitter.svg";
 import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discord.svg";
 import { ReactComponent as TelegramIcon } from "../../assets/icons/socials/telegram.svg";
+
 import { LinkIcon } from "../../components/atoms/LinkIcon";
 
 export type SocialRowProps = {

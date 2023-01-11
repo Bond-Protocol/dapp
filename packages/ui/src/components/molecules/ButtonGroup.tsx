@@ -1,4 +1,4 @@
-import { Button } from "components/atoms";
+import Button from "components/atoms/Button";
 
 export interface ButtonGroupProps {
   className?: string;
