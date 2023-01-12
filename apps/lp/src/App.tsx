@@ -8,8 +8,8 @@ import {
   Hero,
   LinkButton,
 } from "./components";
-import { InfoLabel, Button } from "ui";
-import "./index.css";
+
+import { Button, InfoLabel } from "ui";
 import { TextBlock } from "components/TextBlock";
 import { PROTOCOLS } from "@bond-protocol/bond-library";
 

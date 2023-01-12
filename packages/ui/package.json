@@ -11,12 +11,15 @@
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.umd.js"
+      "require": "./dist/index.js"
     },
+    "./Button": {
+      "import": "./dist/button.mjs",
+      "require": "./dist/Button.js"
+    },
+    "./InfoLabel": "./dist/InfoLabel.mjs",
     "./style.css": "./src/style.css",
-    "./assets/*": "./src/assets/*",
-    "./Button": "./dist/Button.mjs",
-    "./InfoLabel": "./dist/InfoLabel.mjs"
+    "./assets/*": "./src/assets/*"
   },
   "scripts": {
     "clean": "rm -rf ./dist",
@@ -64,8 +67,5 @@
     "typescript": "^4.5.2",
     "vite-plugin-dts": "^1.7.1",
     "viteconfig": "*"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0"
   }
 }
