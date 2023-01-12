@@ -38,6 +38,10 @@ export const mainnetEndpoints = [
     url: "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-ethereum-testing",
     chain: CHAIN_ID.ETHEREUM_MAINNET,
   },
+  {
+    url: "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-ethereum-testing",
+    chain: CHAIN_ID.ETHEREUM_MAINNET,
+  },
 ];
 
 export const testnetEndpoints = [
@@ -52,6 +56,10 @@ export const testnetEndpoints = [
   {
     url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
     chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
+  },
+  {
+    url: "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-polygon-mumbai",
+    chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
   },
 ];
 

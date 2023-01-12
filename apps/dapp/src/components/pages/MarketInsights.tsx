@@ -12,12 +12,12 @@ import { longFormatter } from "src/utils/format";
 
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
-  const { id, network } = useParams();
+  const { id, chainId } = useParams();
   const navigate = useNavigate();
   const markets = Array.from(allMarkets.values());
   const market = markets.find(
-    ({ marketId, network: marketNetwork }) =>
-      marketId === Number(id) && marketNetwork === network
+    ({ marketId, chainId: marketChainId }) =>
+      marketId === Number(id) && marketChainId === chainId
   );
 
   if (!market) return <Loading content={meme()} />;

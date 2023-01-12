@@ -82,6 +82,19 @@ const providerConfiguration: ProviderOptions[] = [
       },
     ],
   },
+  {
+    name: "maticmum",
+    chainId: "80001",
+    rpcs: [
+      {
+        url: `https:/polygon-mumbai.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_POLYGON_MUMBAI_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
 ];
 
 export const providers: { [key: string]: Provider } =
