@@ -87,7 +87,7 @@ const providerConfiguration: ProviderOptions[] = [
     chainId: "80001",
     rpcs: [
       {
-        url: `https:/polygon-mumbai.g.alchemy.com/v2/${
+        url: `https://polygon-mumbai.g.alchemy.com/v2/${
           import.meta.env.VITE_ALCHEMY_POLYGON_MUMBAI_KEY
         }`,
         weight: 1,
