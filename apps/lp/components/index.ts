@@ -6,3 +6,4 @@ export * from "./Metrics";
 export * from "./Values";
 export * from "./WinWin";
 export * from "./Grid";
+export * from "./TextBlock";

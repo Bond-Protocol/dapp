@@ -2,7 +2,8 @@ import "react-day-picker/dist/style.css";
 import { DayPicker } from "react-day-picker";
 import { useEffect, useState } from "react";
 import { ClickAwayListener } from "@mui/base";
-import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
+import calendarIcon from "../../assets/icons/calendar.svg";
+import { Icon } from "components/Icon";
 
 export type DatePickerProps = {
   onChange?: (date?: number) => void;
@@ -69,7 +70,7 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
             >
               {date ? formattedDate : props.placeholder}
             </p>
-            <CalendarIcon className="color-white my-auto" />
+            <Icon src={calendarIcon} className="color-white my-auto" />
           </div>
         </div>
         {open && (

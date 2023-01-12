@@ -35,8 +35,8 @@ export const Grid = (props: GridProps) => {
       </div>
       <div className="text-grey-400 pt-2 text-center">{props.description}</div>
       <div className={"grid gap-4 pt-10 " + props.gridClassName}>
-        {props.content?.map((c) => (
-          <Card {...c} />
+        {props.content?.map((c, i) => (
+          <Card {...c} key={i} />
         ))}
       </div>
     </div>

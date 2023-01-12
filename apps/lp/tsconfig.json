@@ -42,7 +42,9 @@
       "assets/*": [
         "src/assets/*"
       ]
-    }
+    },
+    "incremental": true,
+    "jsx": "preserve"
   },
   "include": [
     "src"

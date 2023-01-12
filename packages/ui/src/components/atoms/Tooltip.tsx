@@ -1,4 +1,5 @@
-import { ReactComponent as TooltipIcon } from "../../assets/icons/tooltip-icon.svg";
+import { Icon } from "components/Icon";
+import tooltipIcon from "../../assets/icons/tooltip-icon.svg";
 
 export type TooltipProps = {
   content: string;
@@ -20,7 +21,8 @@ export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
       </div>
       <div>
         {props.children || (
-          <TooltipIcon
+          <Icon
+            src={tooltipIcon}
             className={`my-auto ${props.iconClassname}`}
             width={iconWidth}
           />

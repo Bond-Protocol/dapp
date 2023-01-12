@@ -29,7 +29,7 @@
       "outputs": ["src/**/contracts", "src/"]
     },
     "codegen": {
-      "outputs": ["src/genearted/graphql.ts"]
+      "outputs": ["src/generated/graphql.ts"]
     },
     "generate": {
       "inputs": ["src/protocols", "src/tokens"]

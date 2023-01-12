@@ -1,12 +1,11 @@
 import { defineConfig } from "vite";
-import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import dts from "vite-plugin-dts";
 
-export default defineConfig(({ command, mode }) => ({
-  plugins: [react(), svgr(), dts({ skipDiagnostics: true })],
+export default defineConfig(({ mode }) => ({
+  plugins: [dts(), react()],
   root: ".",
   build: {
     outDir: "dist",

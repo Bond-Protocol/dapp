@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { TableCell } from "..";
-import { ReactComponent as ArrowIcon } from "assets/icons/arrow-icon.svg";
+import arrowIcon from "assets/icons/arrow-icon.svg";
+import { Icon } from "components/Icon";
 
 export const ExpandableRow: FC<{
   children: React.ReactNode;
@@ -27,7 +28,8 @@ export const ExpandableRow: FC<{
       >
         {children}
         <TableCell>
-          <ArrowIcon
+          <Icon
+            src={arrowIcon}
             className={`${
               open ? "" : "-rotate-180"
             } my-auto transition-all hover:cursor-pointer`}
