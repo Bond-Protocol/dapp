@@ -1,28 +1,34 @@
 import { defineConfig } from "vite";
-import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import dts from "vite-plugin-dts";
 
-export default defineConfig(({ command, mode }) => ({
-  plugins: [react(), svgr(), dts({ skipDiagnostics: true })],
+export default defineConfig(({ mode }) => ({
+  plugins: [dts(), react()],
   root: ".",
   build: {
-    outDir: "dist/src",
+    outDir: "dist",
     emptyOutDir: mode !== "development",
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      name: "ui",
-      fileName: "index",
+      formats: ["es", "cjs"],
+      name: "[name]",
+      fileName: "[name]",
     },
     rollupOptions: {
+      input: [
+        path.resolve(__dirname, "src/index.ts"),
+        path.resolve(__dirname, "src/components/atoms/Button.tsx"),
+        path.resolve(__dirname, "src/components/atoms/InfoLabel.tsx"),
+      ],
       external: ["react", "react-dom"],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
         },
+        inlineDynamicImports: false,
       },
     },
   },

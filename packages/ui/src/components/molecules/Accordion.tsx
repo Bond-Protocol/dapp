@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
+import { Icon } from "components/Icon";
+import arrowIcon from "../../assets/icons/arrow-icon.svg";
 
 export const Accordion: FC<{
   children: React.ReactNode;
@@ -28,7 +29,8 @@ export const Accordion: FC<{
         <div className="w-full select-none font-bold hover:cursor-pointer">
           {label}
         </div>
-        <ArrowIcon
+        <Icon
+          src={arrowIcon}
           className={`${
             open ? "" : "-rotate-180"
           } my-auto transition-all hover:cursor-pointer ${iconClassname}`}

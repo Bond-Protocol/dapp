@@ -14,6 +14,6 @@ const Template: ComponentStory<typeof InfoLabel> = (args) => (
 export const Primary = Template.bind({});
 Primary.args = {
   label: "Total Value Bonded",
-  tooltip: "2) h",
+  tooltip: "Lorem ipsum etc stuff this a long tooltip wagmi oke",
   children: "$26.5M",
 };

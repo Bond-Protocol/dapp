@@ -1,9 +1,9 @@
 module.exports = {
-  "env": {
-    "browser": true,
-    "es2021": true
+  env: {
+    browser: true,
+    es2021: true,
   },
-  "extends": [
+  extends: [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:react/jsx-runtime",
@@ -11,23 +11,23 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "prettier"
+    "prettier",
   ],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
     },
-    "ecmaVersion": "latest",
-    "sourceType": "module",
-    "tsconfigRootDir": ".",
-    "project": "./tsconfig.json"
+    ecmaVersion: "latest",
+    sourceType: "module",
+    tsconfigRootDir: ".",
+    project: "./tsconfig.json",
   },
-  "plugins": ["react", "@typescript-eslint"],
-  "overrides": [
+  plugins: ["react", "@typescript-eslint"],
+  overrides: [
     {
-      "files": ["*.ts", "*.tsx"],
-      "rules": {
+      files: ["*.ts", "*.tsx"],
+      rules: {
         "react/prop-types": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
@@ -45,10 +45,10 @@ module.exports = {
         "@typescript-eslint/no-misused-promises": [
           "error",
           {
-            "checksVoidReturn": false
-          }
-        ]
-      }
-    }
-  ]
-}
+            checksVoidReturn: false,
+          },
+        ],
+      },
+    },
+  ],
+};
