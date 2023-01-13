@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-light-base font-jakarta text-white;
+    @apply font-jakarta text-white;
   }
 }
 

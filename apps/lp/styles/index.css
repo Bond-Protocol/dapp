@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-jakarta bg-black text-white;
+  }
+}
+
+@layer components {
+  .navbar-bg {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    backdrop-filter: blur(16px);
+    @apply fixed w-full;
+  }
+
+  .main-bg {
+    background-image: url("/sphere.svg");
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+}
