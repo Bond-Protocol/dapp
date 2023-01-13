@@ -24,7 +24,8 @@
     "ui": "*",
     "tailwindconfig": "*",
     "tsconfig": "*",
-    "@bond-protocol/bond-library": "*"
+    "@bond-protocol/bond-library": "*",
+    "eslint-custom-config": "*"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.13",
