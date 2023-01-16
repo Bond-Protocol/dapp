@@ -1,14 +1,28 @@
-import {useEffect, useState} from "react";
-import {Controller, useForm, useWatch} from "react-hook-form";
+import { useEffect, useState } from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {BOND_TYPE, calculateTrimDigits, trim, trimAsNumber} from "@bond-protocol/contract-library";
+import {
+  BOND_TYPE,
+  calculateTrimDigits,
+  trim,
+  trimAsNumber,
+} from "@bond-protocol/contract-library";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
-import {providers} from "services/owned-providers";
-import {ethers} from "ethers";
-import {Accordion, Button, ChainPicker, DatePicker, FlatSelect, Input, SummaryCard, TermPicker,} from "ui";
-import {useTokens} from "hooks";
-import {TokenPickerCard} from "./TokenPickerCard";
+import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
+import { providers } from "services/owned-providers";
+import { ethers } from "ethers";
+import {
+  Accordion,
+  Button,
+  ChainPicker,
+  DatePicker,
+  FlatSelect,
+  Input,
+  SummaryCard,
+  TermPicker,
+} from "ui";
+import { useTokens } from "hooks";
+import { TokenPickerCard } from "./TokenPickerCard";
 
 const vestingOptions = [
   { label: "FIXED EXPIRY", value: 0 },
@@ -31,6 +45,8 @@ const formDefaults = {
   bondsPerWeek: 7,
   debtBuffer: 30,
 };
+
+const priceFormatter = new Intl.NumberFormat("en-US");
 
 export type TokenInfo = {
   name: string;
@@ -60,10 +76,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   const [libraryPayoutToken, setLibraryPayoutToken] = useState<
     bondLibrary.Token | undefined
-    >(undefined);
+  >(undefined);
   const [libraryQuoteToken, setLibraryQuoteToken] = useState<
     bondLibrary.Token | undefined
-    >(undefined);
+  >(undefined);
   const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
   const [protocol, setProtocol] = useState<Protocol | null>(null);
@@ -192,15 +208,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     setShowTokenWarning(
       (ethers.utils.isAddress(payoutToken.address) &&
         libraryPayoutToken === undefined) ||
-      (ethers.utils.isAddress(quoteToken.address) &&
-        libraryQuoteToken === undefined)
+        (ethers.utils.isAddress(quoteToken.address) &&
+          libraryQuoteToken === undefined)
     );
-  }, [
-    payoutToken,
-    libraryPayoutToken,
-    quoteToken,
-    libraryQuoteToken,
-  ]);
+  }, [payoutToken, libraryPayoutToken, quoteToken, libraryQuoteToken]);
 
   useEffect(() => {
     if (marketCapacity === undefined) {
@@ -450,22 +461,23 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
     const minExp = exp + minPriceOffset;
 
+    const matcher = /\.|,/g;
     // Compile prices into strings for market creation
     const formattedInitialPrice = (priceCoefficient * Math.pow(10, exp))
       .toLocaleString()
-      .replaceAll(",", "");
+      .replaceAll(matcher, "");
 
     const formattedMinimumPrice = (minPriceCoefficient * Math.pow(10, minExp))
       .toLocaleString()
-      .replaceAll(",", "");
+      .replaceAll(matcher, "");
 
     const formValues = getValues();
     formValues.chain = {
       // @ts-ignore
       id: bondLibrary.CHAINS.get(chainSelection).chainName,
       // @ts-ignore
-      label: bondLibrary.CHAINS.get(chainSelection).displayName
-    }
+      label: bondLibrary.CHAINS.get(chainSelection).displayName,
+    };
 
     const params = {
       summaryData: {
@@ -571,13 +583,19 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   };
 
   useEffect(() => {
-    if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(payoutToken.address)) {
+    if (
+      Object.keys(currentPrices).length > 0 &&
+      ethers.utils.isAddress(payoutToken.address)
+    ) {
       void getTokenInfo(payoutToken.address, true);
     }
   }, [payoutToken.address, chainSelection, currentPrices]);
 
   useEffect(() => {
-    if (Object.keys(currentPrices).length > 0 && ethers.utils.isAddress(quoteToken.address)) {
+    if (
+      Object.keys(currentPrices).length > 0 &&
+      ethers.utils.isAddress(quoteToken.address)
+    ) {
       void getTokenInfo(quoteToken.address, false);
     }
   }, [quoteToken.address, chainSelection, currentPrices]);
@@ -1043,7 +1061,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       />
 
                       <div className="mt-2 justify-self-start text-xs font-light text-yellow-500">
-                        NOTE: Vesting Date must be at least 1 day after Market End Date
+                        NOTE: Vesting Date must be at least 1 day after Market
+                        End Date
                       </div>
 
                       {errors.vesting?.type === "isSet" && (
