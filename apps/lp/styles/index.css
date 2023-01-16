@@ -20,7 +20,7 @@
   }
 
   .main-bg {
-    background-image: url("/sphere.svg");
+    background-image: url("/sphere.png");
     background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;

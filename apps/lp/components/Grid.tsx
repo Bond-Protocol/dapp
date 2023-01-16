@@ -13,7 +13,7 @@ export type GridProps = {
 
 export const Card = ({ logoUrl, name }: CardProps) => {
   return (
-    <div className="flex min-h-[76px] w-full flex-col items-center justify-center bg-white/5">
+    <div className="flex min-h-[76px] w-full flex-col items-center justify-center bg-white/5 backdrop-blur-lg">
       <div className="h-8">
         <img
           className="mx-auto my-auto h-full rounded-full"

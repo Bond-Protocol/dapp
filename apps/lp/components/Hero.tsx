@@ -6,11 +6,11 @@ export type HeroProps = {
 export const Hero = (props: HeroProps) => {
   return (
     <div className={props.className}>
-      <div className="flex flex-col rounded-xl bg-black/40 p-6 pb-10 xl:p-12">
+      <div className="flex flex-col rounded-xl bg-black/40 p-6 pb-10 backdrop-blur-xl xl:p-12">
         <div>
           <img height={88} width={88} src="/logo.svg" />
         </div>
-        <div className="font-fraktion max-w-[450px] pt-6 text-[25px] font-bold uppercase ">
+        <div className="font-fraktion max-w-[700px] pt-6 text-5xl font-bold uppercase ">
           {
             "Acquire assets, own liquidity and diversify your treasury on the permissionless bond marketplace"
           }
