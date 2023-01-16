@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import InputUnstyled, { InputUnstyledProps } from "@mui/base/InputUnstyled";
+import { InputUnstyled, InputUnstyledProps } from "@mui/base";
 
 export type InputProps = InputUnstyledProps & {
   label?: string | React.ReactNode;

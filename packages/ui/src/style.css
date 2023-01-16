@@ -26,32 +26,6 @@
     );
   }
 
-  .bg-grad-top-2 {
-    z-index: -70;
-    background: radial-gradient(
-      circle at 180% 00%,
-      rgb(101, 137, 167, 1) 0%,
-      rgba(255, 255, 255, 0) 50%
-    );
-  }
-
-  .bg-grad-top-xs {
-    z-index: -60;
-    background: radial-gradient(
-      circle at 380% 0%,
-      rgb(101, 137, 167, 1) 0%,
-      rgba(255, 255, 255, 0) 50%
-    );
-  }
-
-  .bg-grad-mid-xs {
-    background: radial-gradient(
-      circle at 330% 50%,
-      rgba(101, 137, 167, 1) 0%,
-      rgba(20, 24, 45, 0) 50%
-    );
-  }
-
   .bg-grad-bottom-r {
     background: radial-gradient(
       circle at 150% 230%,

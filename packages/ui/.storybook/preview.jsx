@@ -1,5 +1,6 @@
 import "../src/style.css";
 import theme, { colors } from "./theme";
+import { ThemeProvider } from "@material-tailwind/react";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -25,8 +26,10 @@ export const parameters = {
 
 export const decorators = [
   (Story) => (
-    <div className='font-sans'>
-      <Story />
-    </div>
+    <ThemeProvider>
+      <div className='font-sans'>
+        <Story />
+      </div>
+    </ThemeProvider>
   ),
 ];

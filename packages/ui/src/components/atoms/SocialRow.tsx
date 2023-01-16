@@ -1,12 +1,10 @@
-import gitbook from "../../assets/icons/socials/gitbook.svg";
-import github from "../../assets/icons/socials/github.svg";
-import medium from "../../assets/icons/socials/medium.svg";
-import twitter from "../../assets/icons/socials/twitter.svg";
-import discord from "../../assets/icons/socials/discord.svg";
-import telegram from "../../assets/icons/socials/telegram.svg";
-
+import { ReactComponent as GitbookIcon } from "../../assets/icons/socials/gitbook.svg";
+import { ReactComponent as GithubIcon } from "../../assets/icons/socials/github.svg";
+import { ReactComponent as MediumIcon } from "../../assets/icons/socials/medium.svg";
+import { ReactComponent as TwitterIcon } from "../../assets/icons/socials/twitter.svg";
+import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discord.svg";
+import { ReactComponent as TelegramIcon } from "../../assets/icons/socials/telegram.svg";
 import { LinkIcon } from "../../components/atoms/LinkIcon";
-import { Icon } from "../../components/Icon";
 
 export type SocialRowProps = {
   gitbook?: string;
@@ -28,41 +26,37 @@ export const SocialRow = (props: SocialRowProps) => {
     >
       {props.gitbook && (
         <LinkIcon href={props.gitbook}>
-          <Icon src={gitbook} width={props.width} />
+          <GitbookIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.github && (
         <LinkIcon href={props.github}>
-          <Icon src={github} width={props.width} />
+          <GithubIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.medium && (
         <LinkIcon href={props.medium}>
-          <Icon src={medium} width={props.width} />
+          <MediumIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.twitter && (
         <LinkIcon href={props.twitter} className="hover:text-[#1DA1F2]">
-          <Icon src={twitter} width={props.width} />
+          <TwitterIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.discord && (
         <LinkIcon href={props.discord}>
-          <Icon
-            src={discord}
-            className="hover:text-[#7289da]"
-            width={props.width}
-          />
+          <DiscordIcon className="hover:text-[#7289da]" width={props.width} />
         </LinkIcon>
       )}
 
       {props.telegram && (
         <LinkIcon href={props.telegram}>
-          <Icon src={telegram} width={props.width} />
+          <TelegramIcon width={props.width} />
         </LinkIcon>
       )}
     </div>

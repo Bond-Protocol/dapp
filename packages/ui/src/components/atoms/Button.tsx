@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-
 import ButtonUnstyled, {
   ButtonUnstyledOwnerState,
   ButtonUnstyledProps,
@@ -52,7 +51,7 @@ const styles = {
   },
 };
 
-const Button = forwardRef(function Button(
+export const Button = forwardRef(function Button(
   props: ButtonProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {

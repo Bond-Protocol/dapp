@@ -1,4 +1,4 @@
-import ButtonUnstyled, { ButtonUnstyledProps } from "@mui/base/ButtonUnstyled";
+import { ButtonUnstyled, ButtonUnstyledProps } from "@mui/base";
 
 export type ChipProps = ButtonUnstyledProps & {
   value: "25" | "50" | "75" | "MAX";

@@ -3,7 +3,7 @@ import { Children, FC, useState } from "react";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import TabsListUnstyled from "@mui/base/TabsListUnstyled";
 import TabUnstyled from "@mui/base/TabUnstyled";
-import TabPanelUnstyled from "@mui/base/TabPanelUnstyled";
+import { TabPanelUnstyled } from "@mui/base";
 
 type TabProps = {
   children?: React.ReactNode;

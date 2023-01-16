@@ -20,16 +20,12 @@
       "dependsOn": ["^build", "codegen", "typechain", "generate"],
       "outputs": ["dist/**", "build/**"]
     },
-    "lp": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"]
-    },
     "typechain": {
       "inputs": ["src/core/abis/**/*.json"],
       "outputs": ["src/**/contracts", "src/"]
     },
     "codegen": {
-      "outputs": ["src/generated/graphql.ts"]
+      "outputs": ["src/genearted/graphql.ts"]
     },
     "generate": {
       "inputs": ["src/protocols", "src/tokens"]

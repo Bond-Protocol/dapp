@@ -1,7 +1,7 @@
 {
   "name": "frontend-monorepo",
   "private": true,
-  "version": "0.0.7",
+  "version": "1.0.0",
   "workspaces": [
     "apps/*",
     "packages/*",
@@ -11,7 +11,6 @@
     "sync": "turbo run sync",
     "clean": "turbo run clean",
     "build": "turbo run build",
-    "lp": "turbo run build --filter=lp",
     "lint": "turbo run lint",
     "dev": "turbo run dev --parallel",
     "preview": "turbo run preview",

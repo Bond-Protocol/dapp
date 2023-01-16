@@ -1,4 +1,4 @@
-import logo from "../../assets/logo-24.svg";
+import logo from "../../assets/icon-logo.png";
 
 const sample = {
   bond: {

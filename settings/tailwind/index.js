@@ -1,10 +1,18 @@
 /** @type {import('tailwindcss').Config} */
 const plugin = require("tailwindcss/plugin");
 const defaultTheme = require("tailwindcss/defaultTheme");
+const withMT = require("@material-tailwind/react/utils/withMT");
 
-module.exports = {
+module.exports = withMT({
   content: ["./src/**/*.{ts,tsx}", "../../packages/**/*.{ts,tsx}"],
   theme: {
+    colors: {
+      grey: {
+        DEFAULT: "#A3A3A3",
+        400: "#A3A3A3",
+        500: "#737373",
+      },
+    },
     extend: {
       screens: {
         xs: "100px",
@@ -17,7 +25,6 @@ module.exports = {
             DEFAULT: "#40749B",
             50: "#9DBBC4",
             100: "#8CACBC",
-            200: "#7799B0",
             300: "#6589A7",
             500: "#40749B",
             900: "#14182D",
@@ -32,12 +39,18 @@ module.exports = {
           danger: "#FF0606",
           alert: "#FF759A",
           success: "#88F6D7",
-          tooltip: "#090B15",
           grey: {
             DEFAULT: "#A3A3A3",
             400: "#A3A3A3",
             500: "#737373",
           },
+          tutti: {
+            DEFAULT: "#A3A3A3",
+            400: "#A3A3A3",
+            500: "#737373",
+          },
+
+          tooltip: "#090B15",
         },
       },
       fontFamily: {
@@ -125,13 +138,6 @@ module.exports = {
           src: "url(/fonts/PPFraktionSans-Bold.woff2) format('woff2')",
         },
       });
-      addBase({
-        "@font-face": {
-          fontFamily: "PPFraktionSans",
-          fontWeight: "400",
-          src: "url(/fonts/PPFraktionSans-Light.woff2) format('woff2')",
-        },
-      });
     }),
 
     function ({ addVariant }) {
@@ -139,4 +145,4 @@ module.exports = {
       addVariant("child-hover", "& > *:hover");
     },
   ],
-};
+});
