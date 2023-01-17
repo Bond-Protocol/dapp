@@ -15,15 +15,17 @@ export const subgraphEndpoints = {
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli-arbitrum",
   [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-optimism-goerli",
+  [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
+    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-polygon-mumbai",
 };
 
 export const mainnetEndpoints = [
   {
-    url: "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-ethereum-testing",
+    url: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET],
     chain: CHAIN_ID.ETHEREUM_MAINNET,
   },
   {
-    url: "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-arbitrum-testing",
+    url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
     chain: CHAIN_ID.ARBITRUM_MAINNET,
   },
   /**
@@ -35,11 +37,11 @@ export const mainnetEndpoints = [
    * Not ideal but can come back and look at improvements later.
    */
   {
-    url: "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-ethereum-testing",
+    url: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET],
     chain: CHAIN_ID.ETHEREUM_MAINNET,
   },
   {
-    url: "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-ethereum-testing",
+    url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
     chain: CHAIN_ID.ETHEREUM_MAINNET,
   },
 ];
@@ -58,7 +60,7 @@ export const testnetEndpoints = [
     chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
   },
   {
-    url: "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-polygon-mumbai",
+    url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
     chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
   },
 ];
