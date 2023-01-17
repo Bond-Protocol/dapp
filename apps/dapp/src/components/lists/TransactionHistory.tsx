@@ -116,6 +116,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
     props.market.network === "arbitrum-one" ? "arbitrum" : props.market.network;
 
   const { data, ...query } = useListBondPurchasesPerMarketQuery(
+    // @ts-ignore
     { endpoint: subgraphEndpoints[network as CHAIN_ID] },
     { marketId: props.market.id }
   );

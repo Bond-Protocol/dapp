@@ -98,6 +98,7 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 30) => {
     market.network === "arbitrum-one" ? "arbitrum" : market.network;
   const { data: purchaseData, ...purchasesQuery } =
     useListBondPurchasesPerMarketMainnetQuery(
+      // @ts-ignore
       { endpoint: subgraphEndpoints[network as CHAIN_ID] },
       { marketId: market.id }
     );
