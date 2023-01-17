@@ -17,7 +17,7 @@ export default {
     staking: "https://iq.braindao.org/dashboard/stake",
   },
   issuerAddresses: {
-    [CHAIN_ID.ETHEREUM_MAINNET]: ["0x8aCc50345921b4A635705Ec7f3AC042B3407BD58"],
+    [CHAIN_ID.ETHEREUM_MAINNET]: ["0x56398b89d53e8731bca8c1b06886cfb14bd6b654"],
   },
   tokens: [
     {
