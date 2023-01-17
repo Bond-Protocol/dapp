@@ -5,7 +5,11 @@ export const concatSubgraphQueryResultArrays = (
   fieldName: string
 ) => {
   return queries
-    .filter((value) => !value.isError)
+    .filter((value, index, self) => {
+      return !value.isError
+        && (index === self.findIndex((v) =>
+          JSON.stringify(v.data) === JSON.stringify(value.data)))
+    })
     .map((value) => value.data[fieldName])
     .reduce((previous, current) => previous.concat(current), []);
 };
