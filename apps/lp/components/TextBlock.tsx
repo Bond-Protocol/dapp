@@ -6,7 +6,7 @@ type TextBlockProps = {
 
 export const TextBlock = (props: TextBlockProps) => {
   return (
-    <div className={"pr-2" + props.className}>
+    <div className={`pr-2 ${props.className}`}>
       <div className="font-fraktion text-[25px] font-bold uppercase">
         {props.title}
       </div>

@@ -24,5 +24,35 @@
     background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;
+    mix-blend-mode: luminosity;
+  }
+
+  .main-bg-fill {
+    background: linear-gradient(
+        0deg,
+        rgba(231, 172, 92, 1) 0%,
+        rgba(0, 0, 0, 0) 100%
+      ),
+      linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    position: relative;
+  }
+
+  .main-bg-fill::before {
+    content: "";
+    display: block;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .hero-bg {
+    background-size: cover;
+    background-image: url("/hero-bg.png");
+  }
+
+  .clear-bg {
+    position: relative;
   }
 }

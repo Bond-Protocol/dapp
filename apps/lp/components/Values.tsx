@@ -10,7 +10,7 @@ const content =
 export const Values = (props: ValuesProps) => {
   return (
     <div
-      className={`grid grid-cols-2 gap-y-4 md:pt-8 lg:flex lg:gap-8 ${props.className}`}
+      className={`child:bg-black child:p-4 grid grid-cols-2 gap-y-4 md:pt-8 lg:flex lg:gap-8 ${props.className}`}
     >
       <TextBlock title="Bond" content={content} />
       <TextBlock title="Own" content={content} />

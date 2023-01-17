@@ -1,5 +1,5 @@
-export const Background = () => (
-  <div id="bg" className="bg-base h-screen w-full">
-    <div className="bg-base main-bg" />
+export const Background = ({ children }: { children: React.ReactNode }) => (
+  <div className="">
+    <div className="">{children}</div>
   </div>
 );
