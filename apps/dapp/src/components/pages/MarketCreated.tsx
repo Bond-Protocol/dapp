@@ -1,26 +1,26 @@
-import {useSigner} from "wagmi";
-import {useNavigate, useParams} from "react-router-dom";
-import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
-import {useEffect, useState} from "react";
+import { useSigner } from "wagmi";
+import { useNavigate, useParams } from "react-router-dom";
+import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
+import { useEffect, useState } from "react";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {getBlockExplorer} from "@bond-protocol/contract-library";
-import {Button, Input} from "ui";
-import {useForm} from "react-hook-form";
-import {ethers} from "ethers";
+import { getBlockExplorer } from "@bond-protocol/contract-library";
+import { Button, Input } from "ui";
+import { useForm } from "react-hook-form";
+import { ethers } from "ethers";
 import copyIcon from "assets/icons/copy-icon.svg";
-import {providers} from "services/owned-providers";
-import {usePurchaseBond} from "hooks/usePurchaseBond";
+import { providers } from "services/owned-providers";
+import { usePurchaseBond } from "hooks/usePurchaseBond";
 
 export type MarketCreatedParams = {
   marketData: any;
 };
 
 export const MarketCreated = (props: MarketCreatedParams) => {
-  const {hash} = useParams();
+  const { hash } = useParams();
   const navigate = useNavigate();
-  const {getTokenAllowance} = usePurchaseBond();
-  const {register, handleSubmit} = useForm();
-  const {data: signer} = useSigner();
+  const { getTokenAllowance } = usePurchaseBond();
+  const { register, handleSubmit } = useForm();
+  const { data: signer } = useSigner();
 
   const [protocol, setProtocol] = useState<Protocol | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,8 +33,9 @@ export const MarketCreated = (props: MarketCreatedParams) => {
     props.marketData.formValues.marketOwnerAddress
   );
 
-  providers[props.marketData.chain].waitForTransaction(hash || "")
-    .then(result => {
+  providers[props.marketData.chain]
+    .waitForTransaction(hash || "")
+    .then((result) => {
       if (result.status === 1) {
         setCreateTx(result);
       }
@@ -66,29 +67,35 @@ export const MarketCreated = (props: MarketCreatedParams) => {
     ).then((result) => {
       setAllowance(Number(result));
 
-      const decimals =
-        props.marketData.marketParams.capacityInQuote
-          ? props.marketData.quoteToken.decimals
-          : props.marketData.payoutToken.decimals
+      const decimals = props.marketData.marketParams.capacityInQuote
+        ? props.marketData.quoteToken.decimals
+        : props.marketData.payoutToken.decimals;
 
-      const capacity = props.marketData.marketParams.capacity / Math.pow(10, decimals);
-      const payoutTokenPrice = Number(props.marketData.payoutToken.price.replace("$", ""));
-      const quoteTokenPrice = Number(props.marketData.quoteToken.price.replace("$", ""));
+      const capacity =
+        props.marketData.marketParams.capacity / Math.pow(10, decimals);
+      const payoutTokenPrice = Number(
+        props.marketData.payoutToken.price.replace("$", "")
+      );
+      const quoteTokenPrice = Number(
+        props.marketData.quoteToken.price.replace("$", "")
+      );
 
-      let recommendedAllowance =
-        props.marketData.marketParams.capacityInQuote
-          ? capacity / (payoutTokenPrice / quoteTokenPrice)
-          : capacity;
+      let recommendedAllowance = props.marketData.marketParams.capacityInQuote
+        ? capacity / (payoutTokenPrice / quoteTokenPrice)
+        : capacity;
 
-      let recommendedAllowanceString =
-        (Number(recommendedAllowance) * Math.pow(10, props.marketData.payoutToken.decimals))
-          .toString();
+      let recommendedAllowanceString = (
+        Number(recommendedAllowance) *
+        Math.pow(10, props.marketData.payoutToken.decimals)
+      ).toString();
 
       recommendedAllowanceString = recommendedAllowanceString.split(".")[0];
 
       setRecommendedAllowance(recommendedAllowanceString);
       setIsAllowanceSufficient(
-        Number(recommendedAllowanceString) / Math.pow(10, props.marketData.payoutToken.decimals) <= Number(result)
+        Number(recommendedAllowanceString) /
+          Math.pow(10, props.marketData.payoutToken.decimals) <=
+          Number(result)
       );
       setAllowanceIsLoading(false);
     });
@@ -100,13 +107,15 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       props.marketData.bondType
     ).auctioneer;
 
-    let amount =
-      (Number(data.amount) * Math.pow(10, props.marketData.payoutToken.decimals))
-        .toString();
+    let amount = (
+      Number(data.amount) * Math.pow(10, props.marketData.payoutToken.decimals)
+    ).toString();
 
     amount = amount.split(".")[0];
 
-    amount = (Number(amount) / Math.pow(10, props.marketData.payoutToken.decimals)).toString();
+    amount = (
+      Number(amount) / Math.pow(10, props.marketData.payoutToken.decimals)
+    ).toString();
 
     const tx = await contractLibrary.changeApproval(
       props.marketData.marketParams.payoutToken,
@@ -117,16 +126,17 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       signer
     );
 
-    providers[props.marketData.chain].waitForTransaction(tx.hash)
-      .then(() => {
-        loadAllowance();
-      });
+    providers[props.marketData.chain].waitForTransaction(tx.hash).then(() => {
+      loadAllowance();
+    });
   };
 
   useEffect(() => {
     if (createTx && !(createTx.status === 0) && isLoading) {
       setProtocol(getProtocolByAddress(ownerAddress, props.marketData.chain));
-      setOwnerAddress(props.marketData.isMultisig ? createTx.to : createTx.from);
+      setOwnerAddress(
+        props.marketData.isMultisig ? createTx.to : createTx.from
+      );
       setIsLoading(false);
       loadAllowance();
     }
@@ -144,11 +154,15 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 <div className="pb-8 text-center leading-normal text-red-500">
                   Allowance: {allowance}{" "}
                   {props.marketData.summaryData.payoutToken}
-                  <br/>
+                  <br />
                   Capacity: {props.marketData.formValues.marketCapacity}{" "}
-                  {props.marketData.marketParams.capacityInQuote ? props.marketData.summaryData.quoteToken : props.marketData.summaryData.payoutToken}
-                  <br/>
-                  Recommended Min Allowance: {Number(recommendedAllowance) / Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
+                  {props.marketData.marketParams.capacityInQuote
+                    ? props.marketData.summaryData.quoteToken
+                    : props.marketData.summaryData.payoutToken}
+                  <br />
+                  Recommended Min Allowance:{" "}
+                  {Number(recommendedAllowance) /
+                    Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
                   {props.marketData.summaryData.payoutToken}
                 </div>
                 <div className="pb-8 text-center leading-normal">
@@ -179,11 +193,15 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 >
                   Allowance: {allowance}{" "}
                   {props.marketData.summaryData.payoutToken}
-                  <br/>
+                  <br />
                   Capacity: {props.marketData.formValues.marketCapacity}{" "}
-                  {props.marketData.marketParams.capacityInQuote ? props.marketData.summaryData.quoteToken : props.marketData.summaryData.payoutToken}
-                  <br/>
-                  Recommended Min Allowance: {Number(recommendedAllowance) / Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
+                  {props.marketData.marketParams.capacityInQuote
+                    ? props.marketData.summaryData.quoteToken
+                    : props.marketData.summaryData.payoutToken}
+                  <br />
+                  Recommended Min Allowance:{" "}
+                  {Number(recommendedAllowance) /
+                    Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
                   {props.marketData.summaryData.payoutToken}
                 </div>
                 {isAllowanceSufficient && (
@@ -192,13 +210,14 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                       You have set a sufficient allowance for the capacity of
                       your market.
                     </p>
-                    {props.marketData.marketParams.capacityInQuote &&
+                    {props.marketData.marketParams.capacityInQuote && (
                       <p className="pb-8">
-                        As your market capacity is determined by quantity of Quote Tokens received,
-                        you may need to increase the allowance for the spender ({teller}) if your
-                        Payout Token price declines in the future.
+                        As your market capacity is determined by quantity of
+                        Quote Tokens received, you may need to increase the
+                        allowance for the spender ({teller}) if your Payout
+                        Token price declines in the future.
                       </p>
-                    }
+                    )}
                     <p className="pb-8">
                       If you have multiple markets paying out{" "}
                       {props.marketData.summaryData.payoutToken} from this
@@ -215,13 +234,14 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                       your market. We recommend setting the allowance high
                       enough to cover the full market capacity.
                     </p>
-                    {props.marketData.marketParams.capacityInQuote &&
+                    {props.marketData.marketParams.capacityInQuote && (
                       <p className="pb-8">
-                        As your market capacity is determined by quantity of Quote Tokens received,
-                        you may wish to set the allowance higher than the recommended minimum, in case
-                        your Payout Token price declines in the future.
+                        As your market capacity is determined by quantity of
+                        Quote Tokens received, you may wish to set the allowance
+                        higher than the recommended minimum, in case your Payout
+                        Token price declines in the future.
                       </p>
-                    }
+                    )}
                     <p className="pb-8">
                       If you have multiple markets paying out{" "}
                       {props.marketData.summaryData.payoutToken} from this
@@ -250,12 +270,15 @@ export const MarketCreated = (props: MarketCreatedParams) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
               {...register("amount")}
-              defaultValue={Number(recommendedAllowance) / Math.pow(10, props.marketData.payoutToken.decimals)}
+              defaultValue={
+                Number(recommendedAllowance) /
+                Math.pow(10, props.marketData.payoutToken.decimals)
+              }
               label={`Allowance in ${props.marketData.summaryData.payoutToken}`}
               className="mb-2"
             />
 
-            <Button type="submit" className="mt-5 w-full font-faketion">
+            <Button type="submit" className="font-faketion mt-5 w-full">
               UPDATE ALLOWANCE
             </Button>
           </form>
@@ -305,9 +328,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 </tr>
                 <tr>
                   <td className="pr-4 text-left">amount</td>
-                  <td className="pr-4 text-xs">
-                    {recommendedAllowance}
-                  </td>
+                  <td className="pr-4 text-xs">{recommendedAllowance}</td>
                   <td>
                     <img
                       onClick={() =>
@@ -324,7 +345,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
             <Button
               onClick={() => loadAllowance()}
-              className="mt-5 w-full font-faketion"
+              className="font-faketion mt-5 w-full"
             >
               REFRESH ALLOWANCE
             </Button>
@@ -343,11 +364,11 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       )}
       {!isLoading && createTx && !(createTx.status === 0) && (
         <div>
-          <h1 className="py-10 text-center font-faketion text-5xl leading-normal">
+          <h1 className="font-faketion py-10 text-center text-5xl leading-normal">
             ALL SET!
-            <br/>
+            <br />
             YOUR BOND MARKET
-            <br/>
+            <br />
             HAS BEEN DEPLOYED
           </h1>
 
@@ -369,7 +390,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
               <div className="pb-8">{displayAllowance()}</div>
 
               <Button
-                className="mt-5 w-full font-faketion"
+                className="font-faketion mt-5 w-full"
                 onClick={() => navigate("/issuers/" + protocol.name)}
               >
                 {`Go to ${protocol.name} page`}
@@ -403,7 +424,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
         <div className="py-8 text-center leading-normal">Error!</div>
       )}
       <Button
-        className="mt-5 w-full font-faketion"
+        className="font-faketion mt-5 w-full"
         onClick={() =>
           window.open(blockExplorerUrl + "/" + hash, "_blank", "noreferrer")
         }

@@ -96,7 +96,7 @@ export function getMarketData(
 
     return {
       id: marketId.toString(),
-      network: chainId,
+      chainId: chainId,
       auctioneer: auctioneer,
       teller: teller,
       owner: marketInfo.owner,

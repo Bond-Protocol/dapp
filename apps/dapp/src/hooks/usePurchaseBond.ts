@@ -86,7 +86,7 @@ export const usePurchaseBond = () => {
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
       /*
       const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
-        market.network.concat("_").concat(market.owner)
+        market.chainId.concat("_").concat(market.owner)
       )
         ? NO_REFERRAL_ADDRESS
         : REFERRAL_ADDRESS;
@@ -120,7 +120,7 @@ export const usePurchaseBond = () => {
       const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
       /*
       const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
-        market.network.concat("_").concat(market.owner)
+        market.chainId.concat("_").concat(market.owner)
       )
         ? NO_REFERRAL_ADDRESS
         : REFERRAL_ADDRESS;

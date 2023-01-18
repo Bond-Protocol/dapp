@@ -1,14 +1,12 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { calcBalancerPoolPrice, calcLpPrice, LpPair } from "@bond-protocol/contract-library";
-import { providers } from "services/owned-providers";
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
 import {
-  Token,
-  useListTokensGoerliQuery,
-  useListTokensMainnetQuery,
-  useListTokensArbitrumMainnetQuery,
-  useListTokensArbitrumGoerliQuery,
-} from "../generated/graphql";
+  calcBalancerPoolPrice,
+  calcLpPrice,
+  LpPair,
+} from "@bond-protocol/contract-library";
+import { providers } from "services/owned-providers";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { Token, useListTokensQuery } from "../generated/graphql";
 import { useCallback, useEffect, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
 import {
@@ -19,6 +17,8 @@ import axios, { AxiosResponse } from "axios";
 import { useQuery } from "react-query";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export interface PriceDetails {
   price: string;
@@ -32,7 +32,7 @@ export interface Price {
 export interface TokenDetails {
   id: string;
   address: string;
-  network: string;
+  chainId: string;
   logoUrl: string;
   name: string;
   symbol: string;
@@ -41,11 +41,10 @@ export interface TokenDetails {
 }
 
 export const useTokens = () => {
-  const endpoints = getSubgraphEndpoints();
-  const [testnet] = useAtom(testnetMode);
-  const [selectedTokens, setSelectedTokens] = useState<Token[]>([]);
-  const [mainnetTokens, setMainnetTokens] = useState<Token[]>([]);
-  const [testnetTokens, setTestnetTokens] = useState<Token[]>([]);
+  const subgraphQueries = getSubgraphQueries(useListTokensQuery);
+
+  const [isTestnet] = useAtom(testnetMode);
+  const [tokens, setTokens] = useState<Token[]>([]);
   const [currentPrices, setCurrentPrices] = useState<Price>({});
 
   /*
@@ -54,34 +53,7 @@ export const useTokens = () => {
    */
   const apiIds = bondLibrary.getUniqueApiIds();
 
-  /*
-  Load the data from the subgraph.
-  Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
-   */
-  const { data: mainnetData, ...mainnetQuery } = useListTokensMainnetQuery({
-    endpoint: endpoints[0],
-    // @ts-ignore
-    enabled: !testnet,
-  });
-
-  const { data: goerliData, ...goerliQuery } = useListTokensGoerliQuery({
-    endpoint: endpoints[1],
-    // @ts-ignore
-    enabled: !!testnet,
-  });
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
-    useListTokensArbitrumMainnetQuery({
-      endpoint: endpoints[2],
-      // @ts-ignore
-      enabled: !testnet,
-    });
-
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } =
-    useListTokensArbitrumGoerliQuery({
-      endpoint: endpoints[3],
-      // @ts-ignore
-      enabled: !!testnet,
-    });
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   /*
   Loads token price data from Coingecko.
@@ -152,7 +124,7 @@ export const useTokens = () => {
       });
     } catch (e: any) {
       console.log(e);
-      throw new Error("Error loading custom prices", e);
+      throw new Error("Error loading custom prices");
     }
 
     // When all the Promises have settled, return the pricesMap, which was populated by each request's 'then' callback.
@@ -172,11 +144,20 @@ export const useTokens = () => {
   useEffect(() => {
     if (coingeckoQuery.data && customPriceQuery.data) {
       const currentPricesMap: Price = {};
-      const lpTokens: { value: bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken; key: string }[] = [];
+      const lpTokens: {
+        value: bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken;
+        key: string;
+      }[] = [];
 
       bondLibrary.TOKENS.forEach(
-        (value: bondLibrary.Token | bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken, tokenKey: string) => {
-        // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
+        (
+          value:
+            | bondLibrary.Token
+            | bondLibrary.LpToken
+            | bondLibrary.BalancerWeightedPoolToken,
+          tokenKey: string
+        ) => {
+          // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
           if ("lpType" in value && value.lpType !== undefined) {
             lpTokens.push({ value: value, key: tokenKey });
           } else {
@@ -217,13 +198,19 @@ export const useTokens = () => {
       lpTokens.forEach((token) => {
         if (token.value.lpType === undefined) return;
         const split: string[] = token.key.split("_");
-        let network = split[0];
+        let chainId = split[0];
 
         if ("poolAddress" in token.value) {
-          token.value.constituentTokens.forEach(token => {
-            token.price = currentPricesMap[network + "_" + token.address.toLowerCase()]
-              // @ts-ignore
-              ? Number(currentPricesMap[network + "_" + token.address.toLowerCase()][0].price)
+          token.value.constituentTokens.forEach((token) => {
+            token.price = currentPricesMap[
+              chainId + "_" + token.address.toLowerCase()
+            ]
+              ? Number(
+                  // @ts-ignore
+                  currentPricesMap[
+                    chainId + "_" + token.address.toLowerCase()
+                  ][0].price
+                )
               : undefined;
           });
 
@@ -231,13 +218,13 @@ export const useTokens = () => {
             poolAddress: token.value.poolAddress,
             vaultAddress: token.value.vaultAddress,
             constituentTokens: token.value.constituentTokens,
-          }
+          };
 
           promises.push(
             calcBalancerPoolPrice(
               // @ts-ignore
               balancerToken,
-              providers[network]
+              providers[chainId]
             )
               .then((result) => {
                 const prices: PriceDetails[] = [];
@@ -260,9 +247,9 @@ export const useTokens = () => {
           let token1Address = token.value.token1Address;
 
           if (token0Address.indexOf("_") === -1)
-            token0Address = network + "_" + token0Address;
+            token0Address = chainId + "_" + token0Address;
           if (token1Address.indexOf("_") === -1)
-            token1Address = network + "_" + token1Address;
+            token1Address = chainId + "_" + token1Address;
 
           //@ts-ignore
           token.value["token0"] = bondLibrary.getTokenByAddress(token0Address);
@@ -282,11 +269,11 @@ export const useTokens = () => {
             calcLpPrice(
               {
                 // @ts-ignore
-                lpPair: {...token.value, address: split[1]},
+                lpPair: { ...token.value, address: split[1] },
                 address: split[1],
               },
               lpType,
-              providers[network]
+              providers[chainId]
             )
               .then((result) => {
                 const prices: PriceDetails[] = [];
@@ -308,52 +295,17 @@ export const useTokens = () => {
         setCurrentPrices(currentPricesMap);
       });
     }
-  }, [coingeckoQuery.data, customPriceQuery.data]);
+  }, [tokens, coingeckoQuery.data, customPriceQuery.data]);
 
   /*
   We get a list of all tokens being used in the app by concatenating the .tokens data from each Subgraph request.
    */
   useEffect(() => {
-    if (testnet) return;
-    if (
-      mainnetData &&
-      mainnetData.tokens &&
-      arbitrumMainnetData &&
-      arbitrumMainnetData.tokens
-    ) {
-      const allTokens = mainnetData.tokens.concat(arbitrumMainnetData.tokens);
-      // @ts-ignore
-      setMainnetTokens(allTokens);
-    }
-  }, [mainnetData, arbitrumMainnetData, testnet]);
-
-  useEffect(() => {
-    if (!testnet) return;
-    if (
-      goerliData &&
-      goerliData.tokens &&
-      arbitrumGoerliData &&
-      arbitrumGoerliData.tokens
-    ) {
-      const allTokens = goerliData.tokens.concat(arbitrumGoerliData.tokens);
-      // @ts-ignore
-      setTestnetTokens(allTokens);
-    }
-  }, [goerliData, arbitrumGoerliData, testnet]);
-
-  /*
-  If the user switches between mainnet/testnet mode, update selectedTokens.
-   */
-  useEffect(() => {
-    if (testnet) {
-      setSelectedTokens(testnetTokens);
-    } else {
-      setSelectedTokens(mainnetTokens);
-    }
-  }, [testnet, mainnetTokens, testnetTokens]);
+    if (isLoading) return;
+    setTokens(concatSubgraphQueryResultArrays(subgraphQueries, "tokens"));
+  }, [isLoading, isTestnet]);
 
   function getPrice(id: string): number {
-    id = id.replace("arbitrum-one", "arbitrum");
     const sources = currentPrices[id.toLowerCase()];
     if (!sources) return 0;
     // @ts-ignore
@@ -367,7 +319,6 @@ export const useTokens = () => {
   }
 
   function getTokenDetails(token: any): TokenDetails {
-    token.id = token.id.replace("arbitrum-one", "arbitrum");
     const bondLibraryToken = bondLibrary.TOKENS.get(token.id);
 
     let pair: LpPair;
@@ -383,7 +334,7 @@ export const useTokens = () => {
     return {
       id: token.id,
       address: token.address,
-      network: token.id.split("_")[0],
+      chainId: token.id.split("_")[0],
       logoUrl: bondLibraryToken?.logoUrl
         ? bondLibraryToken.logoUrl
         : "/placeholders/token-placeholder.png",
@@ -418,16 +369,12 @@ export const useTokens = () => {
   },
   []);
 
-  const isLoading = testnet
-    ? goerliQuery.isLoading || arbitrumGoerliQuery.isLoading
-    : mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading;
-
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
    */
   return {
-    tokens: selectedTokens,
+    tokens: tokens,
     currentPrices: currentPrices,
     getPrice: (id: string) => getPrice(id),
     getTokenDetails: (token: any) => getTokenDetails(token),

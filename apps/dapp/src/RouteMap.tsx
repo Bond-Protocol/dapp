@@ -35,7 +35,7 @@ export const RouteMap: FC = () => {
         element={<MarketCreated marketData={newMarket} />}
       />
       <Route path="/issuers/:name" element={<IssuerPage />} />
-      <Route path="/market/:network/:id" element={<MarketInsights />} />
+      <Route path="/market/:chainId/:id" element={<MarketInsights />} />
     </Switch>
   );
 };

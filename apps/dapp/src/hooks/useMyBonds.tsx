@@ -1,142 +1,51 @@
-import {getSubgraphEndpoints} from "services/subgraph-endpoints";
-import {useAtom} from "jotai";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
   BondToken,
   OwnerBalance,
-  useGetOwnerBalancesByOwnerArbitrumGoerliQuery,
-  useGetOwnerBalancesByOwnerArbitrumMainnetQuery,
-  useGetOwnerBalancesByOwnerGoerliQuery,
-  useGetOwnerBalancesByOwnerMainnetQuery,
-  useListErc20BondTokensArbitrumGoerliQuery,
-  useListErc20BondTokensArbitrumMainnetQuery,
-  useListErc20BondTokensGoerliQuery,
-  useListErc20BondTokensMainnetQuery,
+  useGetOwnerBalancesByOwnerQuery,
+  useListErc20BondTokensQuery,
 } from "../generated/graphql";
-import {useAccount} from "wagmi";
+import { useAccount } from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import {providers} from "services/owned-providers";
+import { providers } from "services/owned-providers";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
+import {concatSubgraphQueryResultArrays} from "../utils/concatSubgraphQueryResultArrays";
 
 export function useMyBonds() {
-  const endpoints = getSubgraphEndpoints();
+  const { address } = useAccount();
 
-  const {address} = useAccount();
-  const [testnet, setTestnet] = useAtom(testnetMode);
-  const [testnetBonds, setTestnetBonds] = useState<Partial<OwnerBalance>[]>([]);
-  const [mainnetBonds, setMainnetBonds] = useState<Partial<OwnerBalance>[]>([]);
-  const [testnetErc20Bonds, setTestnetErc20Bonds] = useState<Partial<OwnerBalance>[]>([]);
-  const [mainnetErc20Bonds, setMainnetErc20Bonds] = useState<Partial<OwnerBalance>[]>([]);
+  const ownerBalanceSubgraphQueries = getSubgraphQueries(
+    useGetOwnerBalancesByOwnerQuery,
+    { owner: address || "" }
+  );
+  const erc20SubgraphQueries = getSubgraphQueries(useListErc20BondTokensQuery);
+
+  const [isTestnet] = useAtom(testnetMode);
+  const [ownerBalances, setOwnerBalances] = useState<Partial<OwnerBalance>[]>(
+    []
+  );
+  const [erc20OwnerBalances, setErc20OwnerBalances] = useState<
+    Partial<OwnerBalance>[]
+  >([]);
+
+  const { isLoading: ownerBalanceIsLoading } = useSubgraphLoadingCheck(
+    ownerBalanceSubgraphQueries,
+    [ownerBalances]
+  );
+  const { isLoading: erc20BalanceIsLoading } = useSubgraphLoadingCheck(
+    erc20SubgraphQueries,
+    [erc20OwnerBalances]
+  );
+
   const [myBonds, setMyBonds] = useState<Partial<OwnerBalance>[]>([]);
-  const [refetchRequest, setRefetchRequest] = useState(0);
 
-  /*
-  Load the data from the subgraph.
-  Unfortunately we currently need a separate endpoint for each chain, and a separate set of GraphQL queries for each chain.
-   */
-  const {
-    data: mainnetData,
-    refetch: mainnetRefetch,
-    ...mainnetQuery
-  } = useGetOwnerBalancesByOwnerMainnetQuery(
-    {endpoint: endpoints[0]},
-    {owner: address || ""},
-    {enabled: !testnet}
-  );
-
-  const {
-    data: goerliData,
-    refetch: goerliRefetch,
-    ...goerliQuery
-  } = useGetOwnerBalancesByOwnerGoerliQuery(
-    {endpoint: endpoints[1]},
-    {owner: address || ""},
-    {enabled: !!testnet}
-  );
-  const {
-    data: arbitrumMainnetData,
-    refetch: arbitrumMainnetRefetch,
-    ...arbitrumMainnetQuery
-  } = useGetOwnerBalancesByOwnerArbitrumMainnetQuery(
-    {endpoint: endpoints[2]},
-    {owner: address || ""},
-    {enabled: !testnet}
-  );
-
-  const {
-    data: arbitrumGoerliData,
-    refetch: arbitrumGoerliRefetch,
-    ...arbitrumGoerliQuery
-  } = useGetOwnerBalancesByOwnerArbitrumGoerliQuery(
-    {endpoint: endpoints[3]},
-    {owner: address || ""},
-    {enabled: !!testnet}
-  );
-
-  const {
-    data: mainnetErc20Data,
-    refetch: mainnetErc20Refetch,
-    ...mainnetErc20Query
-  } = useListErc20BondTokensMainnetQuery(
-    {endpoint: endpoints[0]},
-    // @ts-ignore
-    {enabled: !testnet}
-  );
-
-  const {
-    data: goerliErc20Data,
-    refetch: goerliErc20Refetch,
-    ...goerliErc20Query
-  } = useListErc20BondTokensGoerliQuery(
-    {endpoint: endpoints[1]},
-    // @ts-ignore
-    {enabled: !!testnet}
-  );
-
-  const {
-    data: arbitrumMainnetErc20Data,
-    refetch: arbitrumMainnetErc20Refetch,
-    ...arbitrumMainnetErc20Query
-  } = useListErc20BondTokensArbitrumMainnetQuery(
-    {endpoint: endpoints[2]},
-    // @ts-ignore
-    {enabled: !testnet}
-  );
-
-  const {
-    data: arbitrumGoerliErc20Data,
-    refetch: arbitrumGoerliErc20Refetch,
-    ...arbitrumGoerliErc20Query
-  } = useListErc20BondTokensArbitrumGoerliQuery(
-    {endpoint: endpoints[3]},
-    // @ts-ignore
-    {enabled: !!testnet}
-  );
-
-  const refetchQueries = () => {
-    if (testnet) {
-      void goerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
-      void goerliErc20Refetch().then(() =>
-        setRefetchRequest(refetchRequest + 1)
-      );
-      void arbitrumGoerliRefetch().then(() => setRefetchRequest(refetchRequest + 1));
-      void arbitrumGoerliErc20Refetch().then(() =>
-        setRefetchRequest(refetchRequest + 1)
-      );
-    } else {
-      void mainnetRefetch().then(() => setRefetchRequest(refetchRequest + 1));
-      void mainnetErc20Refetch().then(() =>
-        setRefetchRequest(refetchRequest + 1)
-      );
-      void arbitrumMainnetRefetch().then(() => setRefetchRequest(refetchRequest + 1));
-      void arbitrumMainnetErc20Refetch().then(() =>
-        setRefetchRequest(refetchRequest + 1)
-      );
-    }
-  };
-
-  const getBalances = (bondTokens: BondToken[]) => {
+  const getErc20Balances = () => {
     if (!address) return;
+
+    const bondTokens: BondToken[] = concatSubgraphQueryResultArrays(erc20SubgraphQueries, "bondTokens");
 
     const ownerBalances: Partial<OwnerBalance>[] = [];
     const promises: Promise<any>[] = [];
@@ -147,117 +56,59 @@ export function useMyBonds() {
       )
         return;
       address &&
-      promises.push(
-        contractLibrary
-          .getBalance(bondToken.id, address, providers[bondToken.network])
-          .then((result) => {
-            if (Number(result) > 0) {
-              // Now we have all the data required to make an OwnerBalances object
-              const balance = result;
-              ownerBalances.push({
-                balance: balance,
-                bondToken: bondToken,
-                owner: address,
-              });
-            }
-          })
-      );
+        promises.push(
+          contractLibrary
+            .getBalance(bondToken.id, address, providers[bondToken.chainId])
+            .then((result) => {
+              if (Number(result) > 0) {
+                // Now we have all the data required to make an OwnerBalances object
+                const balance = result;
+                ownerBalances.push({
+                  balance: balance,
+                  bondToken: bondToken,
+                  owner: address,
+                });
+              }
+            })
+        );
     });
 
     void Promise.allSettled(promises).then(() => {
-      if (testnet) {
-        setTestnetErc20Bonds(ownerBalances);
-      } else {
-        setMainnetErc20Bonds(ownerBalances);
-      }
+      setErc20OwnerBalances(ownerBalances);
     });
   };
 
-  /*
-  We get a list of all user bonds by concatenating the .bondTokens data from each Subgraph request.
-   */
   useEffect(() => {
-    if (testnet) return;
-    if (mainnetData && mainnetData.ownerBalances && arbitrumMainnetData && arbitrumMainnetData.ownerBalances) {
-      const allTokens =
-        mainnetData.ownerBalances
-          .concat(arbitrumMainnetData.ownerBalances);
-      // @ts-ignore
-      setMainnetBonds(allTokens);
-    }
-  }, [mainnetData, arbitrumMainnetData, refetchRequest, testnet]);
+    if (ownerBalanceIsLoading) return;
 
-  useEffect(() => {
-    if (!testnet) return;
-    if (goerliData && goerliData.ownerBalances && arbitrumGoerliData && arbitrumGoerliData.ownerBalances) {
-      const allTokens =
-        goerliData.ownerBalances
-          .concat(arbitrumGoerliData.ownerBalances);
-      // @ts-ignore
-      setTestnetBonds(allTokens);
-    }
-  }, [goerliData, arbitrumGoerliData, refetchRequest, testnet]);
-
-  /*
-  If the user switches between mainnet/testnet mode, update myBonds.
-   */
-  useEffect(() => {
-    let bonds = testnet ? testnetBonds : mainnetBonds;
-    const erc20Bonds = testnet ? testnetErc20Bonds : mainnetErc20Bonds;
-
-    const updatedBonds = [...bonds, ...erc20Bonds];
-
-    setMyBonds(updatedBonds);
-  }, [
-    testnet,
-    mainnetBonds,
-    testnetBonds,
-    mainnetErc20Bonds,
-    testnetErc20Bonds,
-  ]);
+    setOwnerBalances(
+      concatSubgraphQueryResultArrays(ownerBalanceSubgraphQueries, "ownerBalances")
+    );
+  }, [ownerBalanceIsLoading, isTestnet]);
 
   /*
   For bonds with ERC-20 rather than ERC-1155 bond tokens, we can't get the balances
   from the subgraph and need to check them manually.
    */
   useEffect(() => {
-    if (testnet) return;
-    if (mainnetErc20Data && arbitrumMainnetErc20Data) {
-      const bondTokens =
-        mainnetErc20Data.bondTokens
-          .concat(arbitrumMainnetErc20Data.bondTokens);
-      // @ts-ignore
-      getBalances(bondTokens);
-    }
-  }, [address, mainnetErc20Data, arbitrumMainnetErc20Data, testnet]);
+    if (erc20BalanceIsLoading) return;
+    getErc20Balances();
+  }, [erc20BalanceIsLoading, isTestnet, address]);
 
   useEffect(() => {
-    if (!testnet) return;
-    if (goerliErc20Data && arbitrumGoerliErc20Data) {
-      const bondTokens =
-        goerliErc20Data.bondTokens
-          .concat(arbitrumGoerliErc20Data.bondTokens);
-      // @ts-ignore
-      getBalances(bondTokens);
-    }
-  }, [address, goerliErc20Data, arbitrumGoerliErc20Data, testnet]);
+    if (ownerBalanceIsLoading || erc20BalanceIsLoading) return;
 
-  const isLoading = testnet
-    ? (
-      goerliQuery.isLoading || goerliErc20Query.isLoading ||
-      arbitrumGoerliQuery.isLoading || arbitrumGoerliErc20Query.isLoading
-    )
-    : (
-      mainnetQuery.isLoading || mainnetErc20Query.isLoading ||
-      arbitrumMainnetQuery.isLoading || arbitrumMainnetErc20Query.isLoading
-    );
+    setOwnerBalances(concatSubgraphQueryResultArrays(ownerBalanceSubgraphQueries, "ownerBalances"));
+    getErc20Balances();
+  }, [address, isTestnet]);
 
-  /*
-  myBonds: An array of bonds owned by the currently connected wallet
-   */
+  useEffect(() => {
+    const updatedBonds = [...ownerBalances, ...erc20OwnerBalances];
+    setMyBonds(updatedBonds);
+  }, [ownerBalances, erc20OwnerBalances]);
+
   return {
     myBonds: myBonds,
-    refetch: () => refetchQueries(),
-    isLoading
+    isLoading: ownerBalanceIsLoading || erc20BalanceIsLoading,
   };
 }

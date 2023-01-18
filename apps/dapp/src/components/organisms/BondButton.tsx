@@ -3,7 +3,7 @@ import { ConnectButton } from "components/common";
 import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg";
 import { Tooltip } from "ui";
 import { useEffect, useState } from "react";
-import { useNetwork, useSwitchNetwork} from "wagmi";
+import { chainId, useNetwork, useSwitchNetwork } from "wagmi";
 import { providers } from "services/owned-providers";
 import { CHAINS } from "@bond-protocol/bond-library";
 
@@ -12,38 +12,29 @@ export type BondButtonProps = {
   showPurchaseLink: boolean;
   quoteTokenSymbol: string;
   purchaseLink: string;
-  network: string;
+  chainId: string;
   children: React.ReactNode;
 };
 
 export const BondButton = (props: BondButtonProps) => {
   const [networkDisplayName, setNetworkDisplayName] = useState(
-    CHAINS.get(props.network)?.displayName || props.network
+    CHAINS.get(props.chainId)?.displayName || props.chainId
   );
 
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
 
-  const isMainnet = (chain?: string) => {
-    return chain === "mainnet" || chain === "homestead";
-  };
-
-  const network =
-    props?.network === "arbitrum-one"
-      ? "arbitrum"
-      : props?.network;
-
-  const isCorrectNetwork =
-    (isMainnet(props?.network) && isMainnet(chain?.network)) ||
-    network === chain?.network;
+  const isCorrectNetwork = Number(props.chainId) === chain?.id;
 
   const switchChain = () => {
-    switchNetwork?.(providers[network].network.chainId);
+    switchNetwork?.(Number(props.chainId));
   };
 
   useEffect(() => {
-    setNetworkDisplayName(CHAINS.get(props.network)?.displayName || props.network);
-  }, [chain, props.network]);
+    setNetworkDisplayName(
+      CHAINS.get(props.chainId)?.displayName || props.chainId
+    );
+  }, [chain, props.chainId]);
 
   if (props.showConnect)
     return (

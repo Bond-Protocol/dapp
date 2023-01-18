@@ -6,6 +6,7 @@ import { useAccount, useSigner, useSwitchNetwork } from "wagmi";
 import { providers } from "services/owned-providers";
 import { ContractTransaction } from "ethers";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { CHAINS } from "@bond-protocol/bond-library";
 
 export type CloseMarketCardProps = {
   market: CalculatedMarket;
@@ -18,6 +19,7 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
   const { switchNetwork } = useSwitchNetwork();
 
   const [correctChain, setCorrectChain] = useState<boolean>(false);
+  const [chainName, setChainName] = useState("");
 
   useEffect(() => {
     void checkChain();
@@ -25,21 +27,22 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
 
   const switchChain = (e: Event) => {
     e.preventDefault();
-    switchNetwork?.(providers[props.market.network].network.chainId);
+    switchNetwork?.(Number(props.market.chainId));
   };
 
   async function checkChain() {
     const network = await signer?.provider?.getNetwork();
     setCorrectChain(
-      (network && network.name === props.market.network) || false
+      (network && network.chainId === Number(props.market.chainId)) || false
     );
+    setChainName(CHAINS.get(props.market.chainId)?.displayName || "");
   }
 
   async function closeMarket() {
     const closeMarketTx: ContractTransaction =
       await contractLibrary.closeMarket(
         props.market.marketId,
-        providers[props.market.network].network.chainId.toString(),
+        props.market.chainId,
         // @ts-ignore
         signer,
         {}
@@ -55,7 +58,7 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
           {isConnected && !correctChain && (
             //@ts-ignore
             <Button className="" onClick={switchChain}>
-              Switch to {props.market.network}
+              Switch to {chainName}
             </Button>
           )}
 

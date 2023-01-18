@@ -19,7 +19,7 @@ export type PurchaseBondModalProps = {
   open: boolean;
   onSubmit: () => Promise<ContractTransaction>;
   closeModal: () => void;
-  network: string;
+  chainId: string;
   issuer?: string;
   amount?: string;
 } & Partial<
@@ -40,15 +40,13 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
   const [hash, setHash] = useState("");
   const [txError, setTxError] = useState<Error>();
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
-    props.network,
+    props.chainId,
     "tx"
   );
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    const network =
-      props.network === "arbitrum-one" ? "arbitrum" : props.network;
-    const provider = providers[network];
+    const provider = providers[props.chainId];
     try {
       const purchaseTx = await props.onSubmit();
       setIndex(1);

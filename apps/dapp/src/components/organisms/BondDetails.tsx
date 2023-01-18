@@ -55,7 +55,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
       address,
       market.quoteToken.address,
       market.quoteToken.decimals,
-      market.network,
+      market.chainId,
       market.auctioneer,
       amount,
       provider,
@@ -63,7 +63,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
     );
 
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
-    market.network,
+    market.chainId,
     "address"
   );
 
@@ -93,7 +93,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
           amount,
           market.quoteToken.decimals,
           market.marketId,
-          market.network,
+          market.chainId,
           referralAddress,
           provider
         )
@@ -281,7 +281,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
         <BondButton
           showConnect={!isConnected}
           showPurchaseLink={!hasSufficientBalance}
-          network={market.network}
+          chainId={market.chainId}
           quoteTokenSymbol={market.quoteToken.symbol}
           purchaseLink={
             market.quoteToken.purchaseLink
@@ -296,7 +296,7 @@ export const BondDetails: FC<BondDetailsProps> = ({
       </div>
       <BondPurchaseModal
         onSubmit={submitTx}
-        network={market.network}
+        chainId={market.chainId}
         open={showModal}
         closeModal={() => setShowModal(false)}
         amount={`${amount} ${market.quoteToken.symbol}`}

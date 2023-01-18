@@ -221,9 +221,9 @@ export const SimpleMarketList: FC<SimpleMarketListProps> = ({ ...props }) => {
 
         <tbody>
           {sortedMarkets.map((market: CalculatedMarket) => {
-            const protocol = getProtocolByAddress(market.owner, market.network);
+            const protocol = getProtocolByAddress(market.owner, market.chainId);
 
-            const nativeCurrency: NativeCurrency = CHAINS.get(market.network)
+            const nativeCurrency: NativeCurrency = CHAINS.get(market.chainId)
               ?.nativeCurrency || {
               decimals: 18,
               name: "Ethereum",
@@ -233,7 +233,7 @@ export const SimpleMarketList: FC<SimpleMarketListProps> = ({ ...props }) => {
             const nativeCurrencyPrice = getPrice(nativeCurrency.symbol);
 
             const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
-              market.network.concat("_").concat(market.owner)
+              market.chainId.concat("_").concat(market.owner)
             )
               ? NO_REFERRAL_ADDRESS
               : REFERRAL_ADDRESS;
@@ -256,7 +256,7 @@ export const SimpleMarketList: FC<SimpleMarketListProps> = ({ ...props }) => {
                       nativeCurrencyPrice={nativeCurrencyPrice}
                       referralAddress={referralAddress}
                       issuerName={protocol?.name || "BondProtocol"}
-                      provider={providers[market.network]}
+                      provider={providers[market.chainId]}
                       // @ts-ignore
                       signer={signer}
                     />

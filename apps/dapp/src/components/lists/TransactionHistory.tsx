@@ -112,21 +112,18 @@ export interface TransactionHistoryProps {
 export const TransactionHistory = (props: TransactionHistoryProps) => {
   const { currentPrices } = useTokens();
 
-  const network =
-    props.market.network === "arbitrum-one" ? "arbitrum" : props.market.network;
-
   const { data, ...query } = useListBondPurchasesPerMarketQuery(
     // @ts-ignore
-    { endpoint: subgraphEndpoints[network as CHAIN_ID] },
+    { endpoint: subgraphEndpoints[props.market.chainId as CHAIN_ID] },
     { marketId: props.market.id }
   );
 
   const { blockExplorerUrl: blockExplorerTxUrl } = getBlockExplorer(
-    props.market.network,
+    props.market.chainId,
     "tx"
   );
   const { blockExplorerUrl: blockExplorerAddressUrl } = getBlockExplorer(
-    props.market.network,
+    props.market.chainId,
     "address"
   );
 
