@@ -20,7 +20,9 @@ import { environment } from "src/env-state";
 const isTestnet = !environment.isProduction;
 
 const { chains, provider } = configureChains(
-  isTestnet ? [chain.goerli, chain.arbitrumGoerli] : [chain.mainnet, chain.arbitrum],
+  isTestnet
+    ? [chain.goerli, chain.arbitrumGoerli, chain.optimismGoerli, chain.polygonMumbai]
+    : [chain.mainnet, chain.arbitrum],
   [publicProvider()]
 );
 

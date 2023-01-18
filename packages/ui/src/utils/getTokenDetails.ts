@@ -3,7 +3,7 @@ import * as bondLibrary from "@bond-protocol/bond-library";
 export interface TokenDetails {
   id: string;
   address: string;
-  network: string;
+  chainId: string;
   logoUrl: string;
   name: string;
   symbol: string;
@@ -27,7 +27,7 @@ export const getTokenDetails = (token: any): TokenDetails => {
   return {
     id: token.id,
     address: token.address,
-    network: token.id.split("_")[0],
+    chainId: token.id.split("_")[0],
     logoUrl: bondLibraryToken?.logoUrl
       ? bondLibraryToken.logoUrl
       : "/placeholders/token-placeholder.png",

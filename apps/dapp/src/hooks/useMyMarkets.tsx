@@ -1,87 +1,29 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
-import {
-  Market,
-  useListOwnedMarketsArbitrumGoerliQuery,
-  useListOwnedMarketsArbitrumMainnetQuery,
-  useListOwnedMarketsGoerliQuery,
-  useListOwnedMarketsMainnetQuery,
-} from "../generated/graphql";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { Market, useListOwnedMarketsQuery } from "../generated/graphql";
 import { useEffect, useState } from "react";
+import { useAccount } from "wagmi";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import { useAccount } from "wagmi";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export function useMyMarkets() {
-  const endpoints = getSubgraphEndpoints();
-
   const { address } = useAccount();
-  const [testnet, setTestnet] = useAtom(testnetMode);
-  const [selectedMarkets, setSelectedMarkets] = useState<Market[]>([]);
-  const [mainnetMarkets, setMainnetMarkets] = useState<Market[]>([]);
-  const [testnetMarkets, setTestnetMarkets] = useState<Market[]>([]);
+  const subgraphQueries = getSubgraphQueries(useListOwnedMarketsQuery, {
+    owner: address,
+  });
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
-  const { data: mainnetData, ...mainnetQuery } =
-    useListOwnedMarketsMainnetQuery(
-      { endpoint: endpoints[0] },
-      { owner: address || "0x0000000000000000" },
-      { enabled: !testnet }
-    );
-
-  const { data: goerliData, ...goerliQuery } = useListOwnedMarketsGoerliQuery(
-    { endpoint: endpoints[1] },
-    { owner: address || "0x0000000000000000" },
-    { enabled: !!testnet }
-  );
-
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
-    useListOwnedMarketsArbitrumMainnetQuery(
-      { endpoint: endpoints[2] },
-      { owner: address || "0x0000000000000000" },
-      { enabled: !testnet }
-    );
-
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } = useListOwnedMarketsArbitrumGoerliQuery(
-    { endpoint: endpoints[3] },
-    { owner: address || "0x0000000000000000" },
-    { enabled: !!testnet }
-  );
+  const [isTestnet] = useAtom(testnetMode);
+  const [myMarkets, setMyMarkets] = useState<Market[]>([]);
 
   useEffect(() => {
-    if (testnet) return;
-    if (mainnetData && mainnetData.markets && arbitrumMainnetData && arbitrumMainnetData.markets) {
-      const allMarkets =
-        mainnetData.markets
-          .concat(arbitrumMainnetData.markets);
-      // @ts-ignore
-      setMainnetMarkets(allMarkets);
-    }
-  }, [mainnetData, arbitrumMainnetData, testnet]);
-
-  useEffect(() => {
-    if (!testnet) return;
-    if (goerliData && goerliData.markets && arbitrumGoerliData && arbitrumGoerliData.markets) {
-      const allMarkets =
-        goerliData.markets
-          .concat(arbitrumGoerliData.markets);
-      // @ts-ignore
-      setTestnetMarkets(allMarkets);
-    }
-  }, [goerliData, arbitrumGoerliData, testnet]);
-
-  useEffect(() => {
-    if (testnet) {
-      setSelectedMarkets(testnetMarkets);
-    } else {
-      setSelectedMarkets(mainnetMarkets);
-    }
-  }, [testnet, mainnetMarkets, testnetMarkets]);
-
-  const isLoading = testnet
-    ? (goerliQuery.isLoading || arbitrumGoerliQuery.isLoading)
-    : (mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading);
+    if (isLoading) return;
+    setMyMarkets(concatSubgraphQueryResultArrays(subgraphQueries, "markets"));
+  }, [isLoading, isTestnet]);
 
   return {
-    markets: selectedMarkets,
+    markets: myMarkets,
     isLoading,
   };
 }

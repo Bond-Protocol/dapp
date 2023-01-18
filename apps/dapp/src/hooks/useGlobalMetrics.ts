@@ -1,25 +1,33 @@
-import {
-  //useListBondPurchasesQuery,
-  useListUniqueBondersGoerliQuery,
-  useListUniqueBondersMainnetQuery,
-} from "src/generated/graphql";
-import { subgraphEndpoints } from "services/subgraph-endpoints";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
+import { useListUniqueBondersQuery } from "src/generated/graphql";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useOwnerTokenTbvs } from "./useOwnerTokenTbvs";
 import { usdFormatter } from "src/utils/format";
+import { useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export const useGlobalMetrics = () => {
-  const uniqueMainnet = useListUniqueBondersMainnetQuery({
-    endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET],
-  });
+  const subgraphQueries = getSubgraphQueries(useListUniqueBondersQuery);
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
-  const uniqueTestnet = useListUniqueBondersGoerliQuery({
-    endpoint: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET],
-  });
+  const [isTestnet] = useAtom(testnetMode);
+  const [uniqueBonders, setUniqueBonders] = useState(0);
 
-  // const purchases = useListBondPurchasesQuery({
-  //   endpoint: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET],
-  // });
+  useEffect(() => {
+    if (isLoading) return;
+
+    let bonders = 0;
+    subgraphQueries.forEach((result) => {
+      if (result.data) bonders += result.data.uniqueBonders.length;
+    });
+
+    setUniqueBonders(
+      subgraphQueries
+        .map((value) => value.data.uniqueBonders.length)
+        .reduce((previous, current) => previous + current)
+    );
+  }, [isLoading, isTestnet]);
 
   const { protocolTbvs } = useOwnerTokenTbvs();
   const tbv = Object.values(protocolTbvs).reduce(
@@ -29,8 +37,7 @@ export const useGlobalMetrics = () => {
 
   return {
     tbv: usdFormatter.format(Math.trunc(tbv)),
-    protocolTbvs,
-    uniqueBonders: uniqueMainnet.data?.uniqueBonders.length,
-    uniqueBondersTestnet: uniqueTestnet.data?.uniqueBonders.length,
+    protocolTbvs: protocolTbvs,
+    uniqueBonders: uniqueBonders,
   };
 };

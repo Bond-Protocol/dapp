@@ -69,6 +69,32 @@ const providerConfiguration: ProviderOptions[] = [
       },
     ],
   },
+  {
+    name: "optimism-goerli",
+    chainId: "420",
+    rpcs: [
+      {
+        url: `https://opt-goerli.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_OPTIMISM_GOERLI_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
+  {
+    name: "maticmum",
+    chainId: "80001",
+    rpcs: [
+      {
+        url: `https://polygon-mumbai.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_POLYGON_MUMBAI_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
 ];
 
 export const providers: { [key: string]: Provider } =
@@ -101,6 +127,6 @@ export const providers: { [key: string]: Provider } =
 
     return {
       ...acc,
-      [config.name]: provider,
+      [config.chainId]: provider,
     };
   }, {});

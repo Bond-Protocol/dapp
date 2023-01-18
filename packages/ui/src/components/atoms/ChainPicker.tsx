@@ -10,7 +10,7 @@ export type ChainPickerProps = {
 };
 
 const options = bondLibrary.SUPPORTED_CHAINS.map((supportedChain) => ({
-  id: supportedChain.chainName,
+  id: supportedChain.chainId,
   label: supportedChain.displayName,
 }));
 

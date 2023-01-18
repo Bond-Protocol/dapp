@@ -1,5 +1,5 @@
 export * from "./useBrowserStorage";
-export * from "./useListAllMarkets";
+export * from "./useListAllPurchases";
 export * from "./useCalculatedMarkets";
 export * from "./useFetchMarkets";
 export * from "./useGasPrice";

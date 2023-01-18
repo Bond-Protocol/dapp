@@ -1,4 +1,4 @@
-import { getProtocol, getTokenByAddress } from "@bond-protocol/bond-library";
+import { getProtocol } from "@bond-protocol/bond-library";
 import { Button, Column, DiscountLabel } from "ui";
 import { add } from "date-fns";
 import {
@@ -9,6 +9,7 @@ import {
 import { formatDate, getTokenDetailsForMarket } from "src/utils";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
+import { CHAINS } from "@bond-protocol/bond-library";
 
 const bond: Column<CalculatedMarket> = {
   label: "Bond",
@@ -130,7 +131,7 @@ const view: Column<CalculatedMarket> = {
   accessor: "view",
   alignEnd: true,
   unsortable: true,
-  formatter: (market) => ({ value: market.marketId, subtext: market.network }),
+  formatter: (market) => ({ value: market.marketId, subtext: market.chainId }),
   Component: (props: any) => (
     <Button
       thin
@@ -141,9 +142,9 @@ const view: Column<CalculatedMarket> = {
       onClick={(e: React.BaseSyntheticEvent) => {
         e.stopPropagation();
         e.preventDefault();
-        const network = props.subtext;
+        const chainId = CHAINS.get(props.subtext)?.chainId;
         const marketId = props.value; //TODO: (afx) improve
-        props.onClick(`/market/${network}/${marketId}`);
+        props.onClick(`/market/${chainId}/${marketId}`);
       }}
     >
       <div className="flex place-items-center">

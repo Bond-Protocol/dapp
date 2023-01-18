@@ -1,96 +1,36 @@
-import { getSubgraphEndpoints } from "services/subgraph-endpoints";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { useTokens } from "hooks/useTokens";
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 import {
   OwnerTokenTbv,
-  useListOwnerTokenTbvsArbitrumGoerliQuery,
-  useListOwnerTokenTbvsArbitrumMainnetQuery,
-  useListOwnerTokenTbvsGoerliQuery,
-  useListOwnerTokenTbvsMainnetQuery,
+  useListOwnerTokenTbvsQuery,
 } from "../generated/graphql";
 import { useEffect, useState } from "react";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
+import { useAtom } from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export function useOwnerTokenTbvs() {
-  const endpoints = getSubgraphEndpoints();
-  const { getPrice, currentPrices } = useTokens();
-  const [testnet] = useAtom(testnetMode);
+  const subgraphQueries = getSubgraphQueries(useListOwnerTokenTbvsQuery);
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
+  const { currentPrices, getPrice } = useTokens();
 
+  const [isTestnet] = useAtom(testnetMode);
   const [protocolTbvs, setProtocolTbvs] = useState<Record<string, any>>([]);
-  const [mainnetOwnerTokenTbvs, setMainnetOwnerTokenTbvs] = useState<
-    OwnerTokenTbv[]
-  >([]);
-  const [testnetOwnerTokenTbvs, setTestnetOwnerTokenTbvs] = useState<
-    OwnerTokenTbv[]
-  >([]);
-
-  const { data: mainnetData, ...mainnetQuery } =
-    useListOwnerTokenTbvsMainnetQuery(
-      { endpoint: endpoints[0] },
-      {},
-      { enabled: !testnet }
-    );
-
-  const { data: goerliData, ...goerliQuery } = useListOwnerTokenTbvsGoerliQuery(
-    { endpoint: endpoints[1] },
-    {},
-    { enabled: !!testnet }
-  );
-
-  const { data: arbitrumMainnetData, ...arbitrumMainnetQuery } =
-    useListOwnerTokenTbvsArbitrumMainnetQuery(
-      { endpoint: endpoints[2] },
-      {},
-      { enabled: !testnet }
-    );
-
-  const { data: arbitrumGoerliData, ...arbitrumGoerliQuery } =
-    useListOwnerTokenTbvsArbitrumGoerliQuery(
-      { endpoint: endpoints[3] },
-      {},
-      { enabled: !!testnet }
-    );
+  const [ownerTokenTbvs, setOwnerTokenTbvs] = useState<OwnerTokenTbv[]>([]);
 
   useEffect(() => {
-    if (testnet) return;
-    if (
-      mainnetData &&
-      mainnetData.ownerTokenTbvs &&
-      arbitrumMainnetData &&
-      arbitrumMainnetData.ownerTokenTbvs
-    ) {
-      const allOwnerTokens = mainnetData.ownerTokenTbvs.concat(
-        arbitrumMainnetData.ownerTokenTbvs
-      );
-      // @ts-ignore
-      setMainnetOwnerTokenTbvs(allOwnerTokens);
-    }
-  }, [mainnetData, arbitrumMainnetData, testnet]);
+    if (isLoading) return;
+    setOwnerTokenTbvs(
+      concatSubgraphQueryResultArrays(subgraphQueries, "ownerTokenTbvs")
+    );
+  }, [isLoading, isTestnet]);
 
   useEffect(() => {
-    if (!testnet) return;
-    if (
-      goerliData &&
-      goerliData.ownerTokenTbvs &&
-      arbitrumGoerliData &&
-      arbitrumGoerliData.ownerTokenTbvs
-    ) {
-      const allOwnerTokens = goerliData.ownerTokenTbvs.concat(
-        arbitrumGoerliData.ownerTokenTbvs
-      );
-      // @ts-ignore
-      setTestnetOwnerTokenTbvs(allOwnerTokens);
-    }
-  }, [goerliData, arbitrumGoerliData, testnet]);
-
-  useEffect(() => {
-    let selected = testnet ? testnetOwnerTokenTbvs : mainnetOwnerTokenTbvs;
-
-    const updated = selected
+    const updated = ownerTokenTbvs
       .map((token) => {
-        const network = token.network.replace("-one", "");
-        const protocol = getProtocolByAddress(token.owner, network);
+        const protocol = getProtocolByAddress(token.owner, token.chainId);
         if (!protocol) return { id: "", tbv: 0 };
 
         const price = getPrice(token?.token);
@@ -112,13 +52,8 @@ export function useOwnerTokenTbvs() {
         {}
       );
 
-    //@ts-ignore
     setProtocolTbvs(updated);
-  }, [testnet, mainnetOwnerTokenTbvs, testnetOwnerTokenTbvs, currentPrices]);
-
-  const isLoading = testnet
-    ? goerliQuery.isLoading || arbitrumGoerliQuery.isLoading
-    : mainnetQuery.isLoading || arbitrumMainnetQuery.isLoading;
+  }, [ownerTokenTbvs, currentPrices]);
 
   return {
     isLoading,

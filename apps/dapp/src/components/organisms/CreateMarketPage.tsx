@@ -474,7 +474,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const formValues = getValues();
     formValues.chain = {
       // @ts-ignore
-      id: bondLibrary.CHAINS.get(chainSelection).chainName,
+      id: bondLibrary.CHAINS.get(chainSelection).chainId,
       // @ts-ignore
       label: bondLibrary.CHAINS.get(chainSelection).displayName,
     };
@@ -539,10 +539,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         contract.decimals(),
       ]);
 
-      const price: number = getPrice(chainSelection + "_" + address) || -1;
+      const price: number | undefined = getPrice(chainSelection + "_" + address) || undefined;
       let formattedPrice = "0";
 
-      if (price != -1) {
+      if (price != undefined) {
         const digits = price > 1 ? 2 : price > 0.001 ? 4 : 6;
         formattedPrice = new Intl.NumberFormat("en-US", {
           style: "currency",
@@ -775,7 +775,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         checkboxLabel="I confirm this is the token"
                         token={quoteTokenInfo}
                         verifiedToken={libraryQuoteToken}
-                        verified={libraryQuoteToken !== undefined}
+                        verified={libraryQuoteToken !== null}
                         defaultValue={props.initialValues?.quoteToken}
                         errorMessage={errors.quoteToken}
                       />
