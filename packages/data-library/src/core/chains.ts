@@ -198,7 +198,7 @@ const optimismGoerliTestnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://goerli.optimism.io"],
-  blockExplorerUrls: ["https://blockscout.com/optimism/goerli/#/"],
+  blockExplorerUrls: ["https://goerli-optimism.etherscan.io/#/"],
   blockExplorerName: "Optimism Goerli Explorer",
   image: "",
   imageAltText: "Optimism Logo",
