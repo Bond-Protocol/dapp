@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Select } from "components/atoms/Select";
-import baseLogo from "assets/icons/eth-icon.svg";
+import baseLogo from "../../assets/logo-24.svg";
 
 export default {
   title: "Components/Atoms/Select",

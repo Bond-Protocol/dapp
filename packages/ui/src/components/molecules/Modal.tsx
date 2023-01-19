@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import ModalUnstyled from "@mui/base/ModalUnstyled";
-import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
+import { Icon } from "components/Icon";
+import closeIcon from "../../assets/icons/close-icon.svg";
 
 type ModalHeaderProps = {
   onClickClose?: () => void;
@@ -36,7 +37,10 @@ const ModalHeader = (props: ModalHeaderProps) => {
       </p>
       {props.onClickClose && (
         <div onClick={props.onClickClose} className="my-auto pr-1">
-          <CloseIcon className="my-auto h-[14px] w-[14px] hover:cursor-pointer" />
+          <Icon
+            src={closeIcon}
+            className="my-auto h-[14px] w-[14px] hover:cursor-pointer"
+          />
         </div>
       )}
     </div>

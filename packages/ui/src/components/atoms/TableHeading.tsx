@@ -1,7 +1,8 @@
-import { Tooltip } from "@material-tailwind/react";
 import { TableCell, TableCellProps } from "./TableCell";
-import TooltipIcon from "../../assets/icons/tooltip-icon";
-import ArrowDownIcon from "../../assets/icons/arrow-down-icon";
+import { Icon } from "components/Icon";
+import arrowDownIcon from "../../assets/icons/arrow-down-icon.svg";
+
+import { Tooltip } from "./Tooltip";
 
 export type TableHeadingProps = TableCellProps & {
   tooltip?: string;
@@ -34,7 +35,8 @@ export const TableHeading = ({
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}
         >
-          <ArrowDownIcon
+          <Icon
+            src={arrowDownIcon}
             width="16"
             className={`${props.ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"
@@ -48,7 +50,8 @@ export const TableHeading = ({
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}
         >
-          <ArrowDownIcon
+          <Icon
+            src={arrowDownIcon}
             width="16"
             className={`${props.ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"
@@ -56,13 +59,7 @@ export const TableHeading = ({
           />
         </div>
       )}
-      {props.tooltip && (
-        <Tooltip content={props.tooltip}>
-          <div className="ml-0.5 cursor-help">
-            <TooltipIcon className="fill-white" width="16" />
-          </div>
-        </Tooltip>
-      )}
+      {props.tooltip && <Tooltip content={props.tooltip} />}
     </TableCell>
   );
 };

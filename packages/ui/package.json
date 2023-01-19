@@ -2,17 +2,22 @@
   "name": "ui",
   "version": "0.1.0",
   "license": "MIT",
-  "main": "./dist/src/index.mjs",
-  "module": "./dist/src/index.mjs",
-  "types": "./dist/src/index.d.ts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
-      "import": "./dist/src/index.mjs",
-      "require": "./dist/src/index.umd.js"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
+    "./Button": {
+      "import": "./dist/button.mjs",
+      "require": "./dist/Button.js"
+    },
+    "./InfoLabel": "./dist/InfoLabel.mjs",
     "./style.css": "./src/style.css",
     "./assets/*": "./src/assets/*"
   },
@@ -23,6 +28,9 @@
     "lint": "prettier --write ./**/*.{js,json,ts,tsx}",
     "storybook": "start-storybook -p 6006",
     "build:storybook": "build-storybook"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@bond-protocol/bond-library": "*",
@@ -46,7 +54,6 @@
     "eslint-config-custom": "*",
     "eslint-plugin-storybook": "^0.6.7",
     "postcss": "^8.4.19",
-    "react": "^18.2.0",
     "rollup": "^3.3.0",
     "rollup-plugin-dts": "^5.0.0",
     "rollup-plugin-image": "^1.0.2",

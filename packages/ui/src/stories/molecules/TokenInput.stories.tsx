@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { TokenInput } from "components/atoms/TokenInput";
-import baseIcon from "assets/icons/eth-icon.svg";
+import baseIcon from "../../assets/logo-24.svg";
 
 export default {
   title: "Components/Molecules/TokenInput",

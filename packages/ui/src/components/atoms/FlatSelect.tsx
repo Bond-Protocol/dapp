@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ButtonUnstyled } from "@mui/base";
+import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 
 type FlatSelectProps = {
   options: Array<{ label: string; value: string | number }>;

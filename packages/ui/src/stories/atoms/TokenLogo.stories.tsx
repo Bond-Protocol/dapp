@@ -1,7 +1,7 @@
 //@ts-nocheck
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { TokenLogoV2 } from "../../components/atoms/TokenLogo";
-import logo24 from "../../assets/icon-logo.png";
+import { TokenLogo } from "../../components/atoms/TokenLogo";
+import logo24 from "../../assets/logo-24.svg";
 
 const usdcLogo =
   "https://storageapi.fleek.co/fc635ae1-c8aa-4181-b7db-801a533b8fa9-bucket/USDC.png";

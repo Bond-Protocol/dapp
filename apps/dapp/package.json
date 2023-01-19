@@ -22,7 +22,6 @@
     "@bond-protocol/bond-library": "*",
     "@bond-protocol/contract-library": "*",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
-    "@material-tailwind/react": "^1.0.6",
     "@mui/base": "^5.0.0-alpha.88",
     "@rainbow-me/rainbowkit": "0.8.1",
     "axios": "^0.27.2",
@@ -46,7 +45,8 @@
     "ui": "*",
     "tsconfig": "*",
     "tailwindconfig": "*",
-    "viteconfig": "*"
+    "viteconfig": "*",
+    "tailwindcss": "^3.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
@@ -82,7 +82,6 @@
     "prettier": "^2.7.0",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "storybook-addon-pseudo-states": "^1.15.1",
-    "tailwindcss": "^3.1.4",
     "typescript": "^4.6.3",
     "vite": "^3.0.4",
     "vite-plugin-svgr": "^2.2.1"
