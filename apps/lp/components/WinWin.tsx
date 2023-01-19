@@ -63,12 +63,14 @@ export const WinWin = (props: { className?: string }) => {
             alt="win-win"
             src="/winwin-long.svg"
             className="xs:hidden lg:block"
+            fill
           />
         </div>
         <div className="bp-absolute-center h-full w-full ">
           <Image
             alt="win-win"
             src="/winwin.svg"
+            fill
             className="h-full w-full lg:hidden"
           />
         </div>

@@ -40,11 +40,21 @@ export const Footer = () => {
   return (
     <div className="justify-center bg-black px-8 pt-4 pb-6 font-sans md:pb-12">
       <div className="xs:block w-full pt-8 md:hidden">
-        <Image alt="bondprotocol_logo" src="/logo-long.svg" />
+        <Image
+          height={56}
+          width={115}
+          alt="bondprotocol_logo"
+          src="/logo-long.svg"
+        />
       </div>
       <div className="mx-auto grid grid-cols-2 gap-4 pt-10 md:max-w-[1136px] md:grid-cols-4 md:justify-items-center">
         <div className="xs:hidden w-full md:block">
-          <Image alt="bondprotocol_logo" src="/logo-long.svg" />
+          <Image
+            height={56}
+            width={115}
+            alt="bondprotocol_logo"
+            src="/logo-long.svg"
+          />
         </div>
         {/*<List title="Terms" items={terms} /> */}
         <List title="Resources" items={resources} />

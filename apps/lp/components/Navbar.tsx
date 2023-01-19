@@ -3,9 +3,14 @@ import Image from "next/image";
 
 export const Navbar = () => {
   return (
-    <div className="navbar-bg bg-black/40 p-4 px-4 md:py-8">
+    <div className="navbar-bg z-40 bg-black/40 p-4 px-4 md:py-8">
       <div className="mx-auto flex max-w-[400px] justify-between md:max-w-[1440px]">
-        <Image alt="bondprotocol_logo" src="/logo-long.svg" />
+        <Image
+          width={115}
+          height={56}
+          alt="bondprotocol_logo"
+          src="/logo-long.svg"
+        />
         <div>
           <LinkButton
             className="xs:text-[10px] mx-0 md:text-[14px]"

@@ -38,8 +38,8 @@ export default function Home() {
     <>
       <Head {...headConfig} />
       <main>
-        <Navbar />
         <Background>
+          <Navbar />
           <div className="child:px-4 isolate mx-auto max-w-[400px] pt-4 font-sans antialiased md:max-w-[1440px] md:pt-12 lg:pt-16">
             <Hero className="p-4 md:py-8 lg:py-12" />
             <div className="mx-auto md:max-w-[1136px] lg:max-w-[1336px]">
