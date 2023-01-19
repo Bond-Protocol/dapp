@@ -33,7 +33,7 @@ export const Card_old = ({ logoUrl, name, className }: CardProps) => {
 export const Card = ({ logoUrl, name, className }: CardProps) => {
   return (
     <div
-      className={`flex h-[76px] w-[200px] max-w-[200px] flex-col items-center justify-center bg-white/5 backdrop-blur-lg lg:flex-row ${className}`}
+      className={`flex h-[76px] w-[160px] max-w-[160px] flex-col items-center justify-center bg-white/5 backdrop-blur-lg lg:w-[200px] lg:max-w-[200px] lg:flex-row ${className}`}
     >
       <div className="h-8 md:w-1/3">
         <img

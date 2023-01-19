@@ -6,7 +6,7 @@ export type HeroProps = {
 export const Hero = (props: HeroProps) => {
   return (
     <div className={props.className}>
-      <div className="hero-bg mt-12 flex select-none flex-col rounded-xl bg-black/40 p-6 pb-10 backdrop-blur-xl lg:mt-0 xl:p-12">
+      <div className="hero-bg mt-12 flex select-none flex-col rounded-xl bg-black/40 p-6 pb-10 backdrop-blur-md lg:mt-0 xl:p-12">
         <div>
           <img height={88} width={88} src="/logo.svg" />
         </div>

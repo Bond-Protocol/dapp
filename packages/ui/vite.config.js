@@ -3,9 +3,10 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import dts from "vite-plugin-dts";
+import svgr from "vite-plugin-svgr";
 
 export default defineConfig(({ mode }) => ({
-  plugins: [dts(), react()],
+  plugins: [dts(), react(), svgr()],
   root: ".",
   build: {
     outDir: "dist",
