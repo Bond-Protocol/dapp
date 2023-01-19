@@ -6,11 +6,11 @@ import { UseQueryResult } from "react-query";
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
   [CHAIN_ID.ETHEREUM_MAINNET]:
-    "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-ethereum-testing",
+    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-mainnet",
   [CHAIN_ID.GOERLI_TESTNET]:
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli",
   [CHAIN_ID.ARBITRUM_MAINNET]:
-    "https://api.thegraph.com/subgraphs/name/spaceturtleship/bp-arbitrum-testing",
+    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-arbitrum-mainnet",
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli-arbitrum",
   [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
