@@ -1,4 +1,5 @@
 import { LinkButton } from "./LinkButton";
+import Image from "next/image";
 
 export type InfoLabelProps = {
   title: string;
@@ -40,8 +41,8 @@ export const InvertedInfoLabel = (props: InfoLabelProps) => {
 export const WinWinGrid = () => {
   return (
     <div className="mx-auto grid grid-cols-2 gap-y-[100px] gap-x-4 lg:gap-x-[370px] lg:gap-y-12">
-      {content.map((c) => (
-        <InvertedInfoLabel {...c} />
+      {content.map((c, i) => (
+        <InvertedInfoLabel {...c} key={i} />
       ))}
     </div>
   );
@@ -58,10 +59,18 @@ export const WinWin = (props: { className?: string }) => {
       </div>
       <div className="relative">
         <div className="bp-absolute-center">
-          <img src="/winwin-long.svg" className="xs:hidden lg:block" />
+          <Image
+            alt="win-win"
+            src="/winwin-long.svg"
+            className="xs:hidden lg:block"
+          />
         </div>
         <div className="bp-absolute-center h-full w-full ">
-          <img src="/winwin.svg" className="h-full w-full lg:hidden" />
+          <Image
+            alt="win-win"
+            src="/winwin.svg"
+            className="h-full w-full lg:hidden"
+          />
         </div>
         <WinWinGrid />
       </div>

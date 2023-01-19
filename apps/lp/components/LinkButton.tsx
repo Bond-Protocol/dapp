@@ -5,7 +5,7 @@ export const LinkButton = (
 ) => {
   return (
     <div className={`bp-btn-lg mx-auto ${props.className}`}>
-      <a href={props.href} target="_blank">
+      <a href={props.href} rel="noreferrer" target="_blank">
         <Button
           size="lg"
           thin

@@ -1,4 +1,4 @@
-export const Background = ({ children }: { children: React.ReactNode }) => {
+export const Background = ({ children }: { children?: React.ReactNode }) => {
   return (
     <div className="main-bg-fill">
       <div className="main-bg">

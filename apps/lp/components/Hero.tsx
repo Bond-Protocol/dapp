@@ -1,4 +1,6 @@
 import { LinkButton } from "./LinkButton";
+import Image from "next/image";
+
 export type HeroProps = {
   className?: string;
 };
@@ -8,7 +10,12 @@ export const Hero = (props: HeroProps) => {
     <div className={props.className}>
       <div className="hero-bg mt-12 flex select-none flex-col rounded-xl bg-black/40 p-6 pb-10 backdrop-blur-md lg:mt-0 xl:p-12">
         <div>
-          <img height={88} width={88} src="/logo.svg" />
+          <Image
+            alt="bondprotocol_logo"
+            height={88}
+            width={88}
+            src="/logo.svg"
+          />
         </div>
         <div className="font-fraktion max-w-[700px] pt-6 text-[25px] font-bold uppercase md:text-3xl lg:text-5xl">
           {

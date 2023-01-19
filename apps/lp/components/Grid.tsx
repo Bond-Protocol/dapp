@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export type CardProps = {
   logoUrl: string;
   name?: string;
@@ -12,31 +14,14 @@ export type GridProps = {
   content?: Array<CardProps>;
 };
 
-export const Card_old = ({ logoUrl, name, className }: CardProps) => {
-  return (
-    <div
-      className={`flex min-h-[76px] w-full max-w-[120px] flex-col items-center justify-center bg-white/5 text-center backdrop-blur-lg lg:min-w-[200px] lg:max-w-[200px] lg:flex-row lg:text-left ${className}`}
-    >
-      <div className="h-8 w-1/3">
-        <img
-          className="mx-auto my-auto mr-2 h-full rounded-full"
-          width={32}
-          height={32}
-          src={logoUrl}
-        />
-      </div>
-      <div className="text-light-primary-200 w-2/3 text-left">{name}</div>
-    </div>
-  );
-};
-
 export const Card = ({ logoUrl, name, className }: CardProps) => {
   return (
     <div
       className={`flex h-[76px] w-[160px] max-w-[160px] flex-col items-center justify-center bg-white/5 backdrop-blur-lg lg:w-[200px] lg:max-w-[200px] lg:flex-row ${className}`}
     >
       <div className="h-8 md:w-1/3">
-        <img
+        <Image
+          alt={`${name}_logo`}
           className="mx-auto my-auto h-full rounded-full"
           width={32}
           height={32}
