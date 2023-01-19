@@ -36,12 +36,12 @@ const List = (props: {
 
 export const Footer = () => {
   return (
-    <div className="fml:pb-12 justify-center bg-black px-8 pt-4 pb-6 font-sans">
-      <div className="xs:block fml:hidden w-full pt-8">
+    <div className="justify-center bg-black px-8 pt-4 pb-6 font-sans md:pb-12">
+      <div className="xs:block w-full pt-8 md:hidden">
         <img src="/logo-long.svg" />
       </div>
-      <div className="fml:grid-cols-4 fml:max-w-[1136px] fml:justify-items-center mx-auto grid grid-cols-2 gap-4 pt-10">
-        <div className="xs:hidden fml:block w-full">
+      <div className="mx-auto grid grid-cols-2 gap-4 pt-10 md:max-w-[1136px] md:grid-cols-4 md:justify-items-center">
+        <div className="xs:hidden w-full md:block">
           <img src="/logo-long.svg" />
         </div>
         {/*<List title="Terms" items={terms} /> */}

@@ -1,31 +1,79 @@
 import { LinkButton } from "./LinkButton";
 
+export type InfoLabelProps = {
+  title: string;
+  tooltip?: string;
+  content: React.ReactNode;
+  className?: string;
+};
+
+const content = [
+  { title: "Better Price", content: "Opportunity to buy discounted tokens" },
+  {
+    title: "Permanent Liquidity",
+    content: "Own liquidity and earn trading fees",
+  },
+  { title: "Vested Tokens", content: "Long-term alignment with protocol" },
+  {
+    title: "Diversified Treasury",
+    content: "Acquire strategic assets",
+  },
+];
+
+export const InvertedInfoLabel = (props: InfoLabelProps) => {
+  return (
+    <div
+      className={`flex h-[120px] w-full flex-col justify-evenly overflow-hidden bg-white/[.05] text-center backdrop-blur-lg lg:items-center ${props.className}`}
+    >
+      <div className="flex justify-center uppercase">
+        <div className="max-w-[64%] select-none text-center font-mono font-bold md:max-w-[50%] md:text-[25px] lg:max-w-full">
+          {props.title}
+        </div>
+      </div>
+      <p className="text-light-primary-500 font-regular mx-auto max-w-[90%] select-none font-sans text-[14px] leading-none md:text-base">
+        {props.content}
+      </p>
+    </div>
+  );
+};
+
+export const WinWinGrid = () => {
+  return (
+    <div className="mx-auto grid grid-cols-2 gap-y-[100px] gap-x-4 lg:gap-x-[370px] lg:gap-y-12">
+      {content.map((c) => (
+        <InvertedInfoLabel {...c} />
+      ))}
+    </div>
+  );
+};
+
 export const WinWin = (props: { className?: string }) => {
   return (
     <div className={props.className}>
-      <div className="font-fraktion text-center text-5xl uppercase">
+      <div className="font-fraktion text-center text-5xl font-semibold uppercase">
         {"A Win-Win for All"}
       </div>
       <div className="text-grey-500 pt-2 pb-8 text-center">
         {"Bond protocol allows all parties to win and create stronger products"}
       </div>
-      <img src="/winwin.svg" className="fml:hidden mx-auto" />
-      <img src="/winwin-long.svg" className="xs:hidden fml:block" />
-      <div className="mx-auto flex flex-col justify-center gap-2 pt-12 lg:flex-row">
-        <LinkButton
-          href="https://app.bondprotocol.finance/#/create"
-          size="lg"
-          thin={false}
-        >
-          {"Issue Bonds"}
-        </LinkButton>
+      <div className="relative">
+        <div className="bp-absolute-center">
+          <img src="/winwin-long.svg" className="xs:hidden lg:block" />
+        </div>
+        <div className="bp-absolute-center h-full w-full ">
+          <img src="/winwin.svg" className="h-full w-full lg:hidden" />
+        </div>
+        <WinWinGrid />
+      </div>
+      <div className="bp-btn-group bp-btn-lg">
         <LinkButton
           href="https://app.bondprotocol.finance/#/markets"
-          size="lg"
-          thin={false}
           variant="ghost"
         >
-          {"Find Bonds"}
+          {"View Bonds"}
+        </LinkButton>
+        <LinkButton href="https://app.bondprotocol.finance/#/create">
+          {"Issue Bonds"}
         </LinkButton>
       </div>
     </div>

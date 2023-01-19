@@ -1,5 +1,11 @@
-export const Background = ({ children }: { children: React.ReactNode }) => (
-  <div className="">
-    <div className="">{children}</div>
-  </div>
-);
+export const Background = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="">
+      <div className="">
+        <div className="">
+          <div className="isolate">{children}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
