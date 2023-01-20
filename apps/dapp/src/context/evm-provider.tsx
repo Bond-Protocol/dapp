@@ -13,7 +13,8 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 
 import type { FC, ReactNode } from "react";
-import { chain, configureChains, createClient, WagmiConfig } from "wagmi";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { mainnet, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, avalancheFuji } from 'wagmi/chains';
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/env-state";
 
@@ -21,8 +22,8 @@ const isTestnet = !environment.isProduction;
 
 const { chains, provider } = configureChains(
   isTestnet
-    ? [chain.goerli, chain.arbitrumGoerli, chain.optimismGoerli, chain.polygonMumbai]
-    : [chain.mainnet, chain.arbitrum],
+    ? [goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, avalancheFuji]
+    : [mainnet, arbitrum],
   [publicProvider()]
 );
 
