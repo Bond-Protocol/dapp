@@ -28,7 +28,9 @@ const List = (props: {
       <div className="px-4 pt-2">
         {props.items.map(({ url, label }, i) => (
           <a href={url} target="_blank" rel="noreferrer" key={i}>
-            <div className="pt-1 font-light hover:underline">{label}</div>
+            <div className="hover:text-light-secondary pt-1 font-light hover:underline">
+              {label}
+            </div>
           </a>
         ))}
       </div>
