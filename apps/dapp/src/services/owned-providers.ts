@@ -95,6 +95,17 @@ const providerConfiguration: ProviderOptions[] = [
       },
     ],
   },
+  {
+    name: "fuji",
+    chainId: "43113",
+    rpcs: [
+      {
+        url: "https://api.avax-test.network/ext/bc/C/rpc",
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
 ];
 
 export const providers: { [key: string]: Provider } =
@@ -105,7 +116,10 @@ export const providers: { [key: string]: Provider } =
       return {
         priority,
         weight,
-        provider: new ethers.providers.StaticJsonRpcProvider(url, config.name),
+        provider: new ethers.providers.StaticJsonRpcProvider(url, {
+          name: config.name,
+          chainId: Number(config.chainId)
+        }),
       };
     });
     /*

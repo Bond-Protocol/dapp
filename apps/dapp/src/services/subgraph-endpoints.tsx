@@ -17,6 +17,8 @@ export const subgraphEndpoints = {
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-optimism-goerli",
   [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-polygon-mumbai",
+  [CHAIN_ID.AVALANCHE_FUJI_TESTNET]:
+    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-avalanche-fuji",
 };
 
 export const mainnetEndpoints = [
@@ -44,6 +46,10 @@ export const mainnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
     chain: CHAIN_ID.ETHEREUM_MAINNET,
   },
+  {
+    url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
+    chain: CHAIN_ID.ETHEREUM_MAINNET,
+  },
 ];
 
 export const testnetEndpoints = [
@@ -62,6 +68,10 @@ export const testnetEndpoints = [
   {
     url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
     chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
+  },
+  {
+    url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],
+    chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,
   },
 ];
 
