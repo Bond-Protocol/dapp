@@ -194,10 +194,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const chainSelection = selectedChain?.id || selectedChain || "1";
 
   useEffect(() => {
-    console.log({ marketOwnerAddress, chainSelection });
     if (marketOwnerAddress) {
       const protocol = getProtocolByAddress(marketOwnerAddress, chainSelection);
-      console.log({ protocol, chainSelection, marketOwnerAddress });
       setProtocol(protocol);
       setShowOwnerWarning(protocol === null);
     } else {

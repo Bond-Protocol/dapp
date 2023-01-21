@@ -31,6 +31,14 @@ export const Card = ({ logoUrl, name, className }: CardProps) => {
       <div className="text-light-primary-200 select-none text-center md:w-2/3 lg:text-left">
         {name}
       </div>
+      <a
+        className="text-light-secondary cursor-pointer hover:block"
+        href=""
+        target="_blank"
+        rel="noreferrer"
+      >
+        {"Go to Markets"}
+      </a>
     </div>
   );
 };

@@ -38,8 +38,8 @@ export const Navbar = () => {
             className="xs:text-[10px] mx-0 md:text-[14px]"
             href="https://app.bondprotocol.finance"
             target="_blank"
-            small
             variant="ghost"
+            small
           >
             <div className="flex">
               <span className="my-auto">Launch dApp</span>
@@ -48,7 +48,7 @@ export const Navbar = () => {
                 width={24}
                 src="/arrow-right.svg"
                 alt="external_link_icon"
-                className="fill-white text-white"
+                className="my-auto"
               />
             </div>
           </LinkButton>

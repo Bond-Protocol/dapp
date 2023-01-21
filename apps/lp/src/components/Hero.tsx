@@ -5,6 +5,29 @@ export type HeroProps = {
   className?: string;
 };
 
+const LinkButtonContent = ({
+  label,
+  icon,
+  iconClassName = "",
+}: {
+  label: string;
+  icon: string;
+  iconClassName?: string;
+}) => {
+  return (
+    <div className="flex">
+      <span className="my-auto">{label}</span>
+      <Image
+        height={24}
+        width={24}
+        src={icon}
+        alt={label + "_icon"}
+        className={`my-auto ${iconClassName}`}
+      />
+    </div>
+  );
+};
+
 export const Hero = (props: HeroProps) => {
   return (
     <div className={props.className}>
@@ -29,10 +52,17 @@ export const Hero = (props: HeroProps) => {
               variant="ghost"
               small
             >
-              {"Read Docs"}
+              <LinkButtonContent
+                icon="/arrow-right.svg"
+                iconClassName="-rotate-45"
+                label="Read Docs"
+              />
             </LinkButton>
             <LinkButton href="https://app.bondprotocol.finance" small>
-              {"Bond Now"}
+              <LinkButtonContent
+                icon="/arrow-right-black.svg"
+                label="Bond Now"
+              />
             </LinkButton>
           </div>
         </div>
