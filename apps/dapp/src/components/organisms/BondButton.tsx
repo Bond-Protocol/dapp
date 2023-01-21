@@ -3,8 +3,7 @@ import { ConnectButton } from "components/common";
 import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg";
 import { Tooltip } from "ui";
 import { useEffect, useState } from "react";
-import { chainId, useNetwork, useSwitchNetwork } from "wagmi";
-import { providers } from "services/owned-providers";
+import {  useNetwork, useSwitchNetwork } from "wagmi";
 import { CHAINS } from "@bond-protocol/bond-library";
 
 export type BondButtonProps = {
