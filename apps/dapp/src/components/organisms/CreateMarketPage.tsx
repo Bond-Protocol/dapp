@@ -191,11 +191,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     defaultValue: props.initialValues?.vestingType || 0,
   });
 
-  const chainSelection = selectedChain?.id || selectedChain || "mainnet";
+  const chainSelection = selectedChain?.id || selectedChain || "1";
 
   useEffect(() => {
+    console.log({ marketOwnerAddress, chainSelection });
     if (marketOwnerAddress) {
       const protocol = getProtocolByAddress(marketOwnerAddress, chainSelection);
+      console.log({ protocol, chainSelection, marketOwnerAddress });
       setProtocol(protocol);
       setShowOwnerWarning(protocol === null);
     } else {
@@ -539,7 +541,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         contract.decimals(),
       ]);
 
-      const price: number | undefined = getPrice(chainSelection + "_" + address) || undefined;
+      const price: number | undefined =
+        getPrice(chainSelection + "_" + address) || undefined;
       let formattedPrice = "0";
 
       if (price != undefined) {
