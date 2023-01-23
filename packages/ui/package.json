@@ -33,8 +33,8 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@bond-protocol/bond-library": "*",
     "@babel/core": "^7.20.2",
+    "@bond-protocol/bond-library": "*",
     "@rollup/plugin-commonjs": "^23.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^9.0.2",
@@ -67,5 +67,8 @@
     "typescript": "^4.5.2",
     "vite-plugin-dts": "^1.7.1",
     "viteconfig": "*"
+  },
+  "dependencies": {
+    "@material-tailwind/react": "^1.2.5"
   }
 }

@@ -10,9 +10,9 @@ export type InfoLabelProps = {
 export const InfoLabel = (props: InfoLabelProps) => {
   return (
     <div
-      className={`flex h-[104px] max-h-[104px] w-full flex-col justify-center overflow-hidden bg-white/[.05] text-center backdrop-blur-lg ${props.className}`}
+      className={`flex h-[104px] max-h-[104px] w-full flex-col justify-center bg-white/[.05] text-center backdrop-blur-lg ${props.className}`}
     >
-      <div className="text-light-primary-500 ml-1.5 flex justify-center uppercase">
+      <div className="text-light-primary-500 -10 ml-1.5 flex justify-center uppercase">
         <div className="font-fraktion my-auto mr-1 select-none font-bold">
           {props.label}
         </div>
