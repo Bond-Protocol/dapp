@@ -30,26 +30,6 @@ export const mainnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
     chain: CHAIN_ID.ARBITRUM_MAINNET,
   },
-  /**
-   * This is a hacky fix - mainnetEndpoints and testnetEndpoints arrays need to be the same
-   * length or React complains we are breaking the Rules of Hooks.
-   *
-   * So adding a duplicate entry for one of the existing chains here to balance the numbers out.
-   *
-   * Not ideal but can come back and look at improvements later.
-   */
-  {
-    url: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET],
-    chain: CHAIN_ID.ETHEREUM_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
-    chain: CHAIN_ID.ETHEREUM_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
-    chain: CHAIN_ID.ETHEREUM_MAINNET,
-  },
 ];
 
 export const testnetEndpoints = [

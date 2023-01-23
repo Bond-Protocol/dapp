@@ -1,4 +1,5 @@
 const env = import.meta.env.VITE_ENVIRONMENT;
+const testnet = import.meta.env.VITE_TESTNET;
 
 export enum ENVIRONMENT {
   PRODUCTION = "production",
@@ -12,5 +13,6 @@ export const environment = {
   isStaging: env === ENVIRONMENT.STAGING,
   isTesting: env === ENVIRONMENT.TESTING,
   isDevelopment: env === ENVIRONMENT.DEVELOPMENT,
+  isTestnet: testnet === "true",
   current: env as ENVIRONMENT,
 };

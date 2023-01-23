@@ -1,13 +1,11 @@
 import { ConnectButton } from "components/common";
 import { ProtocolLogo } from "ui";
 import { useTestnet } from "hooks/useTestnet";
-import { environment } from "src/env-state";
 import { NavbarTabs } from "./NavbarTabs";
 import { useNavigate } from "react-router-dom";
 
-export const Navbar = (props: { onHamburgerClick: () => void }) => {
-  const { isTestnet, toggleTestnet } = useTestnet();
-  const showTestnetToggle = environment.isStaging || environment.isDevelopment;
+export const Navbar = () => {
+  const { isTestnet } = useTestnet();
   const navigate = useNavigate();
 
   return (
@@ -17,14 +15,9 @@ export const Navbar = (props: { onHamburgerClick: () => void }) => {
       </div>
       <NavbarTabs className="w-1/3" />
       <div className="flex w-1/3 select-none justify-end">
-        {showTestnetToggle && (
-          <button
-            className="font-faketion px-3 text-light-secondary"
-            onClick={toggleTestnet}
-          >
-            {isTestnet ? "T" : "M"}
-          </button>
-        )}
+        <div className=" font-faketion px-3 text-light-secondary" >
+            {isTestnet && "TESTNET MODE"}
+        </div>
         <ConnectButton />
       </div>
     </div>
