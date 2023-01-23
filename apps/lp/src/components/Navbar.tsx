@@ -13,7 +13,7 @@ const Navlink = (props: { url: string; label: string }) => {
 };
 
 const links = [
-  { url: "", label: "Docs" },
+  { url: "https://docs.bondprotocol.finance", label: "Docs" },
   { url: "", label: "Security" },
   { url: "", label: "Faqs" },
 ];

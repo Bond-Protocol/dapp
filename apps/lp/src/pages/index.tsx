@@ -14,16 +14,7 @@ import {
   Background,
 } from "../components";
 
-import { PROTOCOLS } from "@bond-protocol/bond-library";
-
-const protocols = Array.from(PROTOCOLS.values()).filter(
-  (p) => !p.links.twitter?.includes("bond_protocol") //remove our test protocols
-);
-
-const auditors = [
-  { name: "Zellic", logoUrl: "/zellic.svg" },
-  { name: "yAcademy", logoUrl: "/yacademy.png" },
-];
+import data from "../data";
 
 const headConfig = {
   title: "Bond Protocol",
@@ -46,17 +37,17 @@ export default function Home() {
               <div className="flex flex-wrap justify-center gap-4 py-4 lg:flex-nowrap">
                 <div className="w-full grow lg:w-1/3 lg:grow-0">
                   <InfoLabel label="Total Value Bonded">
-                    $16M<span className="text-[32px]">+</span>
+                    $20M<span className="text-[32px]">+</span>
                   </InfoLabel>
                 </div>
                 <div className="grow lg:w-1/3">
                   <InfoLabel label="Bonds Issued">
-                    600<span className="text-[32px]">+</span>
+                    1K<span className="text-[32px]">+</span>
                   </InfoLabel>
                 </div>
                 <div className="grow lg:w-1/3">
                   <InfoLabel label="Bonds Markets">
-                    15<span className="text-[32px]">+</span>
+                    20<span className="text-[32px]">+</span>
                   </InfoLabel>
                 </div>
               </div>
@@ -95,20 +86,18 @@ export default function Home() {
                 <LinkButton size="lg" variant="ghost">
                   {"Why Bond?"}
                 </LinkButton>
-                <LinkButton size="lg">{"Be a Bondor"}</LinkButton>
+                <LinkButton href={data.links.dapp} size="lg">
+                  {"Be a Bondor"}
+                </LinkButton>
               </div>
               <div className="pt-32">
                 <Grid
                   title="Partners"
                   description="Solidifying their treasuries with Bond Protocol"
-                  content={protocols as CardProps[]}
+                  content={data.protocols as CardProps[]}
                 />
                 <div className="pt-20">
-                  <LinkButton
-                    href="https://docs.bondprotocol.finance"
-                    size="lg"
-                    variant="ghost"
-                  >
+                  <LinkButton size="lg" variant="ghost">
                     {"Become a Partner"}
                   </LinkButton>
                 </div>
@@ -117,13 +106,10 @@ export default function Home() {
                 <Grid
                   title="Audited By"
                   gridClassName="child:max-w-[360px] child:w-[360px] child:child:md:w-full"
-                  content={auditors as CardProps[]}
+                  content={data.auditors as CardProps[]}
                 />
                 <div className="pt-8">
-                  <LinkButton
-                    href="https://docs..com/Bond-Protocol/bonds/tree/master/audits"
-                    variant="ghost"
-                  >
+                  <LinkButton href={data.links.audits} variant="ghost">
                     {"Study Audits"}
                   </LinkButton>
                 </div>
@@ -133,7 +119,7 @@ export default function Home() {
                   {"Find bonds in the marketplace"}
                 </div>
                 <div className="py-10">
-                  <LinkButton href="https://app.bondprotocol.finance">
+                  <LinkButton href={data.links.dapp}>
                     {"Browse the Bond Market"}
                   </LinkButton>
                 </div>

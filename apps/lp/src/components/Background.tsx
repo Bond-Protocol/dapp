@@ -1,7 +1,7 @@
 export const Background = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <div className="main-bg-fill">
-      <div className="main-bg">
+    <div className="">
+      <div className="">
         <div className="isolate">{children}</div>
       </div>
     </div>

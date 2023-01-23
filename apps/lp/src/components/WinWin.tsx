@@ -1,5 +1,6 @@
 import { LinkButton } from "./LinkButton";
 import Image from "next/image";
+import data from "../data";
 
 export type InfoLabelProps = {
   title: string;
@@ -58,13 +59,8 @@ export const WinWin = (props: { className?: string }) => {
         {"Bond protocol allows all parties to win and create stronger products"}
       </div>
       <div className="relative">
-        <div className="bp-absolute-center">
-          <Image
-            alt="win-win"
-            src="/winwin-long.svg"
-            className="xs:hidden lg:block"
-            fill
-          />
+        <div className="hidden lg:block">
+          <Image alt="win-win-long" src="/winwin-long.svg" fill />
         </div>
         <div className="bp-absolute-center h-full w-full ">
           <Image
@@ -77,13 +73,10 @@ export const WinWin = (props: { className?: string }) => {
         <WinWinGrid />
       </div>
       <div className="bp-btn-group bp-btn-lg">
-        <LinkButton
-          href="https://app.bondprotocol.finance/#/markets"
-          variant="ghost"
-        >
+        <LinkButton href={`${data.links.dapp}/#/markets`} variant="ghost">
           {"View Bonds"}
         </LinkButton>
-        <LinkButton href="https://app.bondprotocol.finance/#/create">
+        <LinkButton href={`${data.links.dapp}/#/create`}>
           {"Issue Bonds"}
         </LinkButton>
       </div>

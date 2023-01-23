@@ -4,7 +4,6 @@ export * from "./Grid";
 export * from "./Head";
 export * from "./Hero";
 export * from "./LinkButton";
-export * from "./Metrics";
 export * from "./Navbar";
 export * from "./TextBlock";
 export * from "./Values";
