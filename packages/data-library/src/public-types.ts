@@ -17,13 +17,14 @@ export interface LpToken extends Token {
 
 export interface Links {
   governanceVote: string; // REQUIRED: Link to a governance vote allowing your protocol to run a BondProtocol market\
+  homepage?: string;
+  staking?: string;
   twitter?: string; // OPTIONAL links to social media, protocol websites etc
   discord?: string;
   github?: string;
   medium?: string;
   telegram?: string;
-  homepage?: string;
-  staking?: string;
+  everipedia?: string;
 }
 
 export interface Protocol {

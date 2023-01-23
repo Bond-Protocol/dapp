@@ -4,12 +4,14 @@ import { ReactComponent as MediumIcon } from "../../assets/icons/socials/medium.
 import { ReactComponent as TwitterIcon } from "../../assets/icons/socials/twitter.svg";
 import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discord.svg";
 import { ReactComponent as TelegramIcon } from "../../assets/icons/socials/telegram.svg";
+import { ReactComponent as IqIcon } from "../../assets/icons/socials/iq.svg";
 import { LinkIcon } from "../../components/atoms/LinkIcon";
 
 export type SocialRowProps = {
   gitbook?: string;
   github?: string;
   medium?: string;
+  everipedia?: string;
   twitter?: string;
   discord?: string;
   telegram?: string;
@@ -57,6 +59,11 @@ export const SocialRow = (props: SocialRowProps) => {
       {props.telegram && (
         <LinkIcon href={props.telegram}>
           <TelegramIcon width={props.width} />
+        </LinkIcon>
+      )}
+      {props.everipedia && (
+        <LinkIcon href={props.everipedia}>
+          <IqIcon width={props.width} />
         </LinkIcon>
       )}
     </div>

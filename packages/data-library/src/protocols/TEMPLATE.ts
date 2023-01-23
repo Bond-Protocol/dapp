@@ -10,12 +10,13 @@ export default {
   links: {
     governanceVote: "", // A governance proposal related to bonds
     homepage: "",
+    staking: "",
     twitter: "",
     github: "",
     medium: "",
     discord: "",
     telegram: "",
-    staking: "",
+    everipedia: "",
   },
   /*
     The address that you will use to execute the create market transaction, and which will be allowed
