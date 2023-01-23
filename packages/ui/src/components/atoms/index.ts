@@ -1,14 +1,19 @@
+import Button from "./Button";
+
+export { Button };
+
 export * from "./ActionInfo";
 export * from "./ActionInfoList";
 export * from "./AppBackground";
-export * from "./Button";
 export * from "./CellLabel";
 export * from "./ChainPicker";
 export * from "./Checkbox";
 export * from "./Chip";
 export * from "./DataRow";
+export * from "./Button";
 export * from "./DiscountLabel";
 export * from "./FlatSelect";
+export * from "./Icon";
 export * from "./InfoLabel";
 export * from "./Input";
 export * from "./Label";

@@ -1,3 +1,5 @@
 const config = require("tailwindconfig");
+const withMT = require("@material-tailwind/react/utils/withMT");
 
-module.exports = config;
+//comment
+module.exports = withMT(config);

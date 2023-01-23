@@ -3,6 +3,7 @@ import ButtonUnstyled, {
   ButtonUnstyledOwnerState,
   ButtonUnstyledProps,
 } from "@mui/base/ButtonUnstyled";
+import { Icon } from "components/atoms/Icon";
 import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg";
 
 const styles = {

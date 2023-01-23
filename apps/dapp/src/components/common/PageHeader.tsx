@@ -10,7 +10,7 @@ export const PageHeader = (props: PageHeaderProps) => {
   return (
     <>
       <div
-        className={`flex select-none font-fraktion uppercase ${props.className}`}
+        className={`flex select-none font-fraktion font-bold uppercase ${props.className}`}
       >
         {props.icon && (
           <TokenLogo {...props} size="lg" className="my-auto pl-0.5" />
