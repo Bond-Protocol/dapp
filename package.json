@@ -1,7 +1,9 @@
 {
   "name": "frontend-monorepo",
   "private": true,
-  "version": "0.0.7",
+  "engines": {
+    "node": ">=16.19"
+  },
   "workspaces": [
     "apps/*",
     "packages/*",
