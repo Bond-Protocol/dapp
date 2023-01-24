@@ -18,10 +18,11 @@ import data from "../data";
 
 const headConfig = {
   title: "Bond Protocol",
-  description: "The next evolution of Bonding-As-A-Service",
+  description:
+    "Acquire assets, own liquidity and diversify your treasury on the permissionless bond marketplace",
   url: "bondprotocol.finance",
   twitterHandle: "@bond_protocol",
-  image: "www.bondprotocol.finance/logo.svg",
+  image: "/logo.svg",
 };
 
 export default function Home() {

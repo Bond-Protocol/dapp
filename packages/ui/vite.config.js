@@ -1,9 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
-import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import dts from "vite-plugin-dts";
 import svgr from "vite-plugin-svgr";
+import path from "path";
 
 export default defineConfig(({ mode }) => ({
   plugins: [dts(), react(), svgr()],
@@ -31,16 +30,6 @@ export default defineConfig(({ mode }) => ({
         },
         inlineDynamicImports: false,
       },
-    },
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      // Enable esbuild polyfill plugins
-      plugins: [
-        NodeGlobalsPolyfillPlugin({
-          buffer: true,
-        }),
-      ],
     },
   },
   resolve: {
