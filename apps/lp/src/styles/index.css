@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-jakarta bg-black text-white;
+  }
+}
+
+@layer components {
+  .navbar-bg {
+    background-color: black;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    backdrop-filter: blur(16px);
+    @apply fixed w-full;
+  }
+
+  .main-bg-fill {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(231, 172, 92, 1) 100%
+    );
+    mix-blend-mode: screen;
+  }
+
+  .main-bg {
+    background-image: url("/sphere.png");
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    mix-blend-mode: luminosity;
+  }
+
+  .main-bg-fade {
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  .main-bg-clear {
+    isolation: isolate;
+  }
+
+  .bp-absolute-center {
+    @apply absolute left-[50%] top-[50%];
+    transform: translate(-50%, -50%);
+  }
+
+  .bp-btn-group {
+    @apply lg:child:min-w-[210px] lg:child:max-w-[210px] child:w-full mx-auto flex flex-col items-center justify-center gap-2 pt-12 lg:flex-row;
+  }
+
+  .bp-btn-lg {
+    @apply w-full max-w-[368px];
+  }
+
+  .bp-max-w {
+    @apply max-w-[1136px];
+  }
+
+  .hero-bg {
+    background-size: cover;
+    background-image: url("/hero-bg.png");
+  }
+}

@@ -1,4 +1,3 @@
-import { useMarkets } from "hooks/useMarkets";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export interface NavbarTabsProps {
@@ -7,7 +6,6 @@ export interface NavbarTabsProps {
 }
 
 export const NavbarTabs = (props: NavbarTabsProps) => {
-  const { isMarketOwner } = useMarkets();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -26,7 +24,7 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
     <div className={`flex select-none justify-center gap-6 ${props.className}`}>
       {tabs.map((tab) => (
         <div
-          className={`font-fraktion uppercase hover:cursor-pointer ${
+          className={`font-fraktion font-bold uppercase hover:cursor-pointer ${
             isSelected(tab.path) ? "text-light-secondary" : ""
           }`}
           onClick={() => navigate(tab.path)}

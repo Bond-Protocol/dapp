@@ -11,9 +11,25 @@ const Template: ComponentStory<typeof InfoLabel> = (args) => (
   <InfoLabel {...args} />
 );
 
+const Stacked: ComponentStory<typeof InfoLabel> = (args) => (
+  <div className="flex gap-x-2">
+    <InfoLabel {...args} />
+    <InfoLabel {...args} />
+    <InfoLabel {...args} />
+    <InfoLabel {...args} />
+  </div>
+);
+
 export const Primary = Template.bind({});
 Primary.args = {
   label: "Total Value Bonded",
-  tooltip: "2) h",
+  tooltip: "Lorem ipsum etc stuff this a long tooltip wagmi oke",
+  children: "$26.5M",
+};
+
+export const Multiple = Stacked.bind({});
+Multiple.args = {
+  label: "Total Value Bonded",
+  tooltip: "Lorem ipsum etc stuff this a long tooltip wagmi oke",
   children: "$26.5M",
 };

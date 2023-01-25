@@ -1,4 +1,4 @@
-import * as bondLibrary from "@bond-protocol/bond-library";
+import { TOKENS } from "@bond-protocol/bond-library";
 
 export interface TokenDetails {
   id: string;
@@ -12,7 +12,7 @@ export interface TokenDetails {
 }
 
 export const getTokenDetails = (token: any): TokenDetails => {
-  const bondLibraryToken = bondLibrary.TOKENS.get(token.id);
+  const bondLibraryToken = TOKENS.get(token.id);
 
   let pair: any;
   if (token.lpPair != undefined) {

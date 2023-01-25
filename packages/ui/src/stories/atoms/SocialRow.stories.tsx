@@ -20,6 +20,7 @@ Primary.args = {
   medium: "https://bondprotocol.finance",
   twitter: "https://bondprotocol.finance",
   telegram: "https://bondprotocol.finance",
+  everipedia: "https://bondprotocol.finance",
 };
 
 export const Secondary = Template.bind({});

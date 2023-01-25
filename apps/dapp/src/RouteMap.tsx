@@ -12,7 +12,7 @@ import {
   PolicyPage,
 } from "./components";
 import { useState } from "react";
-import { terms, privacyPolicy, cookiePolicy } from "./content";
+import { terms } from "./content";
 
 export const RouteMap: FC = () => {
   const [newMarket, setNewMarket] = useState<unknown>();

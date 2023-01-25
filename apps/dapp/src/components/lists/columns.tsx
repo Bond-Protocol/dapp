@@ -17,11 +17,13 @@ const bond: Column<CalculatedMarket> = {
   width: "w-[13%]",
   formatter: (market) => {
     const { quote, lpPair } = getTokenDetailsForMarket(market);
+    const chain = CHAINS.get(market.chainId);
 
     return {
       value: market.quoteToken.symbol,
       icon: quote?.logoUrl,
       lpPairIcon: lpPair?.logoUrl,
+      chainChip: chain?.image,
     };
   },
 };

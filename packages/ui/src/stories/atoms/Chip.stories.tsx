@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { ActionInfo } from "../../components/atoms/ActionInfo";
-import logo from "../../assets/icon-logo.png";
+import logo from "../../assets/icon-logo.svg";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
