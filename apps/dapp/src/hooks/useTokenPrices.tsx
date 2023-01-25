@@ -1,0 +1,382 @@
+import * as contractLibrary from "@bond-protocol/contract-library";
+import {
+  calcBalancerPoolPrice,
+  calcLpPrice,
+  LpPair,
+} from "@bond-protocol/contract-library";
+import { providers } from "services/owned-providers";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { Token, useListTokensQuery } from "../generated/graphql";
+import { useCallback, useEffect, useState } from "react";
+import * as bondLibrary from "@bond-protocol/bond-library";
+import {
+  CustomPriceSource,
+  SupportedPriceSource,
+} from "@bond-protocol/bond-library";
+import axios, { AxiosResponse } from "axios";
+import { useQuery } from "react-query";
+import { useAtom } from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
+import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
+
+export interface PriceDetails {
+  price: string;
+  source: string;
+}
+
+export type Price = Record<string, PriceDetails>;
+
+export interface TokenDetails {
+  id: string;
+  address: string;
+  chainId: string;
+  logoUrl: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  lpPair: LpPair | undefined;
+}
+
+export const useTokenPrices = () => {
+  const subgraphQueries = getSubgraphQueries(useListTokensQuery);
+
+  const [isTestnet] = useAtom(testnetMode);
+  const [tokens, setTokens] = useState<Token[]>([]);
+  const [currentPrices, setCurrentPrices] = useState<Price>({});
+
+  /*
+  Tokens can be present on multiple chains, and thus have differing ids in our library and subgraph.
+  However, they share price API ids, so this convenience function provides a Set with no duplicates.
+   */
+  const apiIds = bondLibrary.getUniqueApiIds();
+
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
+
+  /*
+  Loads token price data from Coingecko.
+   */
+  const coingeckoQuery = useQuery("coingeckoData", async () => {
+    const tokenIds = [...apiIds.coingecko].join(",");
+    try {
+      return axios
+        .get(
+          `https://api.coingecko.com/api/v3/simple/price?ids=${tokenIds}&vs_currencies=usd`
+        )
+        .then((response: AxiosResponse) => response.data);
+    } catch (e: any) {
+      throw new Error("Coingecko API error" + e);
+    }
+  });
+
+  /*
+  Loads custom price data. As these may be from varying sources, it is the responsibility of the customPriceFunction
+  defined on the Token in the bond-library to ensure these requests return a price string on success.
+   */
+  const customPriceQuery = useQuery("customPriceData", async () => {
+    const requests: Set<Promise<string>> = new Set();
+    const functions: Map<() => Promise<string>, string[]> = new Map();
+
+    const pricesMap = new Map();
+
+    try {
+      bondLibrary.TOKENS?.forEach((token: bondLibrary.Token, key: string) => {
+        token.priceSources?.forEach((priceSource: any | CustomPriceSource) => {
+          if (priceSource.source === "custom") {
+            /*
+            Tokens can be present on multiple chains, and thus have differing ids in our library and subgraph.
+            To avoid making a custom price request for each instance of the token, we use a map with the function
+            as the key, and a list of token IDs which use this function as the value.
+
+            First, we get an array of Token IDs which use this function, or an empty array if there are none.
+           */
+            const tokenIds =
+              functions.get(priceSource?.customPriceFunction) || [];
+
+            // If this function hasn't been added already, add it to the requests Set
+            if (tokenIds.length === 0) {
+              const provider =
+                priceSource.providerChainId != undefined
+                  ? providers[priceSource.providerChainId]
+                  : undefined;
+
+              requests.add(
+                priceSource
+                  .customPriceFunction(provider)
+                  .then((result: string) => {
+                    // When the request resolves, store the price in the pricesMap,
+                    // using the priceSource as the key and the result (price) as the value.
+                    tokenIds?.forEach((priceSource: string) => {
+                      pricesMap.set(priceSource, result);
+                    });
+                    return result;
+                  })
+              );
+            }
+
+            // Add the current Token ID to the array and set it as the value for this function's key.
+            tokenIds.push(key);
+            functions.set(priceSource.customPriceFunction, tokenIds);
+          }
+        });
+      });
+    } catch (e: any) {
+      console.log(e);
+      throw new Error("Error loading custom prices");
+    }
+
+    // When all the Promises have settled, return the pricesMap, which was populated by each request's 'then' callback.
+    return Promise.allSettled(requests).then(() => pricesMap);
+  });
+
+  /*
+  When all the price data has been loaded, we can populate the currentPricesMap which this hook will make available.
+  The map uses Token ID as the key, and an array of Price objects as the value.
+
+  The Price array is ordered by priority, based on the PriceSource's key as set in the bond-library.
+  For example, if the Coingecko price has key 0 and the Nomics price has key 1 in the bond-library's Token.priceSources
+  map, then the Coingecko price will be put in prices[0] and the Nomics price in prices[1].
+
+  The Coingecko price will therefore be the default, Nomics the fallback.
+  */
+  useEffect(() => {
+    if (coingeckoQuery.data && customPriceQuery.data) {
+      const currentPricesMap: Price = {};
+      const lpTokens: {
+        value: bondLibrary.LpToken | bondLibrary.BalancerWeightedPoolToken;
+        key: string;
+      }[] = [];
+
+      bondLibrary.TOKENS.forEach(
+        (
+          value:
+            | bondLibrary.Token
+            | bondLibrary.LpToken
+            | bondLibrary.BalancerWeightedPoolToken,
+          tokenKey: string
+        ) => {
+          // LP Tokens rely on the prices of their constituent tokens, so we calculate them later
+          if ("lpType" in value && value.lpType !== undefined) {
+            lpTokens.push({ value: value, key: tokenKey });
+          } else {
+            const prices: PriceDetails[] = [];
+            value.priceSources?.forEach(
+              (
+                priceSource: SupportedPriceSource | CustomPriceSource,
+                priority: number
+              ) => {
+                // First, we get the price from the appropriate query data, according to the PriceSource's source field.
+                let price;
+                switch (priceSource.source) {
+                  case "coingecko":
+                    price =
+                      coingeckoQuery.data[priceSource.apiId] &&
+                      coingeckoQuery.data[priceSource.apiId].usd;
+                    break;
+                  case "custom":
+                    price = customPriceQuery.data.get(tokenKey);
+                    break;
+                }
+                // Then, we insert it into the prices array, at position [priority],
+                // where priority is the PriceSource's key in the Token.priceSources map.
+                prices[priority] = {
+                  price: price,
+                  source: priceSource.source,
+                };
+              }
+            );
+            // @ts-ignore
+            currentPricesMap[tokenKey] = prices;
+          }
+        }
+      );
+
+      const promises: Promise<any>[] = [];
+      // Now we have the prices for the constituent tokens, we can calculate the LP pair prices
+      lpTokens.forEach((token) => {
+        if (token.value.lpType === undefined) return;
+        const split: string[] = token.key.split("_");
+        let chainId = split[0];
+
+        if ("poolAddress" in token.value) {
+          token.value.constituentTokens.forEach((token) => {
+            token.price = currentPricesMap[
+              chainId + "_" + token.address.toLowerCase()
+            ]
+              ? Number(
+                  // @ts-ignore
+                  currentPricesMap[
+                    chainId + "_" + token.address.toLowerCase()
+                  ][0].price
+                )
+              : undefined;
+          });
+
+          const balancerToken = {
+            poolAddress: token.value.poolAddress,
+            vaultAddress: token.value.vaultAddress,
+            constituentTokens: token.value.constituentTokens,
+          };
+
+          promises.push(
+            calcBalancerPoolPrice(
+              // @ts-ignore
+              balancerToken,
+              providers[chainId]
+            )
+              .then((result) => {
+                const prices: PriceDetails[] = [];
+                prices[0] = {
+                  // @ts-ignore
+                  price: result,
+                  source: "custom",
+                };
+
+                // @ts-ignore
+                currentPricesMap[token.key] = prices;
+              })
+              .catch((error) => console.log(error))
+          );
+        } else {
+          const lpType = bondLibrary.LP_TYPES.get(token.value.lpType);
+
+          //TODO: (aphex) patched this manually due to library fixes, should be made consistent
+          let token0Address = token.value.token0Address;
+          let token1Address = token.value.token1Address;
+
+          if (token0Address.indexOf("_") === -1)
+            token0Address = chainId + "_" + token0Address;
+          if (token1Address.indexOf("_") === -1)
+            token1Address = chainId + "_" + token1Address;
+
+          //@ts-ignore
+          token.value["token0"] = bondLibrary.getTokenByAddress(token0Address);
+
+          //@ts-ignore
+          token.value["token1"] = bondLibrary.getTokenByAddress(token1Address);
+
+          const t0 = currentPricesMap[token0Address];
+          const t1 = currentPricesMap[token1Address];
+
+          //@ts-ignore
+          token.value["token0"].price = t0 && t0[0]?.price;
+          //@ts-ignore
+          token.value["token1"].price = t1 && t1[0]?.price;
+
+          promises.push(
+            calcLpPrice(
+              {
+                // @ts-ignore
+                lpPair: { ...token.value, address: split[1] },
+                address: split[1],
+              },
+              lpType,
+              providers[chainId]
+            )
+              .then((result) => {
+                const prices: PriceDetails[] = [];
+                prices[0] = {
+                  // @ts-ignore
+                  price: result,
+                  source: "custom",
+                };
+
+                // @ts-ignore
+                currentPricesMap[token.key] = prices;
+              })
+              .catch((error) => console.log(error))
+          );
+        }
+      });
+
+      Promise.allSettled(promises).then(() => {
+        setCurrentPrices(currentPricesMap);
+      });
+    }
+  }, [tokens, coingeckoQuery.data, customPriceQuery.data]);
+
+  /*
+  We get a list of all tokens being used in the app by concatenating the .tokens data from each Subgraph request.
+   */
+  useEffect(() => {
+    if (isLoading) return;
+    setTokens(concatSubgraphQueryResultArrays(subgraphQueries, "tokens"));
+  }, [isLoading, isTestnet]);
+
+  function getPrice(id: string): number {
+    const sources = currentPrices[id.toLowerCase()];
+    if (!sources) return 0;
+    // @ts-ignore
+    for (const source of sources) {
+      if (source == undefined || source.price == undefined) {
+        continue;
+      }
+      return Number(source.price);
+    }
+    return 0;
+  }
+
+  function getTokenDetails(token: any): TokenDetails {
+    const bondLibraryToken = bondLibrary.TOKENS.get(token.id);
+
+    let pair: LpPair;
+    if (token.lpPair != undefined) {
+      pair = {
+        // @ts-ignore
+        token0: getTokenDetails(token.lpPair.token0),
+        // @ts-ignore
+        token1: getTokenDetails(token.lpPair.token1),
+      };
+    }
+
+    return {
+      id: token.id,
+      address: token.address,
+      chainId: token.id.split("_")[0],
+      logoUrl: bondLibraryToken?.logoUrl
+        ? bondLibraryToken.logoUrl
+        : "/placeholders/token-placeholder.png",
+      name: bondLibraryToken ? bondLibraryToken.name : token.name,
+      symbol: bondLibraryToken ? bondLibraryToken.symbol : token.symbol,
+      decimals: token.decimals,
+      // @ts-ignore
+      lpPair: pair,
+    };
+  }
+
+  const getTokenDetailsFromChain = useCallback(async function (
+    address: string,
+    chain: string
+  ) {
+    const contract = contractLibrary.IERC20__factory.connect(
+      address,
+      providers[chain]
+    );
+    try {
+      const [name, symbol] = await Promise.all([
+        contract.name(),
+        contract.symbol(),
+      ]);
+
+      return { name, symbol };
+    } catch (e: any) {
+      const error =
+        "Not an ERC-20 token, please double check the address and chain.";
+      throw Error(error);
+    }
+  },
+  []);
+
+  /*
+  tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
+  currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
+   */
+  return {
+    tokens: tokens,
+    currentPrices: currentPrices,
+    getPrice: (id: string) => getPrice(id),
+    getTokenDetails: (token: any) => getTokenDetails(token),
+    getTokenDetailsFromChain,
+    isLoading,
+  };
+};
