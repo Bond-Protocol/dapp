@@ -19,6 +19,7 @@ export const Label = (props: LabelProps) => {
           icon={props.icon}
           pairIcon={props.pairIcon}
           lpPairIcon={props.lpPairIcon}
+          chainChip={props.chainChip}
         />
       )}
       <div className="flex flex-col gap-0.5">

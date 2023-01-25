@@ -1,17 +1,24 @@
 export interface TokenLogoProps extends LogoProps {
   pairIcon?: string;
   lpPairIcon?: string;
+  chainChip?: string;
 }
 
 export interface LogoProps extends React.HtmlHTMLAttributes<HTMLImageElement> {
   size?: "sm" | "lg";
   icon?: string;
+  chainChip?: string;
   uneven?: boolean;
 }
 
 export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
+
   if (!props.pairIcon && !props.lpPairIcon) {
-    return <Logo className={className} icon={icon} {...props} />;
+    return (
+      <div>
+        <Logo className={className} icon={icon} {...props} />
+      </div>
+    );
   }
 
   return props.pairIcon || props.lpPairIcon ? (
@@ -28,6 +35,9 @@ export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
           {...props}
         />
       )}
+      {props.chainChip && (
+        <Logo icon={props.chainChip} {...props} />
+      )}
     </div>
   ) : (
     <Logo className={className} icon={icon} {...props} />
@@ -42,9 +52,17 @@ export const Logo = (props: LogoProps) => {
   const style = props.uneven ? uneven : base;
 
   return (
-    <img
-      className={`${style} rounded-full ${props.className}`}
-      src={props.icon}
-    />
+    <div className={`relative ${style} ${props.className}`}>
+      {props.chainChip &&
+        <img
+          className={`absolute z-10 h-[12px] w-[12px] rounded-full`}
+          src={props.chainChip}
+        />
+      }
+      <img
+        className={`absolute rounded-full`}
+        src={props.icon}
+      />
+    </div>
   );
 };
