@@ -8,6 +8,7 @@ export type CustomPriceFunction = (provider?: Provider) => Promise<number>;
 export enum CUSTOM_PRICE_FEEDS {
   US_STABLE = "us_stable",
   PPO = "PPO",
+  CVOL = "CVOL",
 }
 
 /*
@@ -29,6 +30,29 @@ export default {
       const priceBN = await fixedPriceContract.getFixedPrice();
 
       if (priceBN) return +formatUnits(priceBN, PRICE_DECIMALS);
+    } catch (e) {
+      // @ts-ignore
+      throw new Error(e);
+    }
+  },
+  [CUSTOM_PRICE_FEEDS.CVOL]: async (provider: Provider) => {
+    const TV_CVOL_TOKEN_ABI = ["function totalBalance() external view returns (uint256 balance, uint256 usdcPlatformLiquidity, uint256 intrinsicDEXVolTokenBalance, uint256 volTokenPositionBalance, uint256 dexUSDCAmount, uint256 dexVolTokensAmount)","function totalSupply() external view returns (uint)"];
+    const TV_CVOL_TOKEN_ADDRESS = "0xFDeB59a2B4891ea17610EE38665249acC9FCC506";
+    const TV_CVOL_DECIMALS = 18;
+    const USDC_DECIMALS = 6;
+
+    try {
+      const tvCvolContract = new ethers.Contract(TV_CVOL_TOKEN_ADDRESS, TV_CVOL_TOKEN_ABI, provider);
+
+      const [{ balance }, supply] = await Promise.all([tvCvolContract.totalBalance(),tvCvolContract.totalSupply()]);
+
+      if (supply.isZero()) {
+        return 0
+      }
+      
+      const usdcAmountBN = ethers.utils.parseUnits("1",TV_CVOL_DECIMALS).mul(balance).div(supply)
+      return formatUnits(usdcAmountBN, USDC_DECIMALS)
+
     } catch (e) {
       // @ts-ignore
       throw new Error(e);
