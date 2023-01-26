@@ -21,6 +21,7 @@
   "dependencies": {
     "@bond-protocol/bond-library": "*",
     "@bond-protocol/contract-library": "*",
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@mui/base": "^5.0.0-alpha.88",
     "@rainbow-me/rainbowkit": "0.8.1",
     "axios": "^0.27.2",
@@ -38,6 +39,7 @@
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
     "recharts": "^2.1.15",
+    "rollup-plugin-polyfill-node": "^0.10.2",
     "use-deep-compare-effect": "^1.8.1",
     "wagmi": "0.10.11",
     "ui": "*",

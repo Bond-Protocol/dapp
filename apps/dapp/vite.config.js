@@ -2,13 +2,48 @@ import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
+import nodePolyfills from "rollup-plugin-polyfill-node";
+
+/***
+ * DO NOT REMOVE THE POLYFILLS WITHOUT TESTING RAINBOWKIT THOROUGHLY, ESPECIALLY THE RAINBOW/WALLETCONNECT/COINBASE QR CODES
+ * (ALTHOUGH I THINK REMOVING IT MIGHT HAVE BROKEN METAMASK IN THE PAST TOO)
+ * ANYWAY IT DOES NOT WORK PROPERLY WITHOUT THEM
+ * OR AT LEAST NOT AT THE TIME OF WRITING
+ * MAYBE ONE DAY IN THE FUTURE IT WON'T BE NECESSARY
+ * AND I'LL BE A HAPPY SPACETURTLE
+ * BUT UNTIL THEN PLEASE DO NOT REMOVE THEM
+ ***/
 
 export default defineConfig({
   plugins: [react(), svgr()],
   root: "src",
   envDir: "..",
+  define: {
+    global: "globalThis",
+  },
   build: {
     outDir: "../dist",
+    rollupOptions: {
+      plugins: [nodePolyfills()],
+    },
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      // Node.js global to browser globalThis
+      define: {
+        global: "globalThis",
+      },
+      // Enable esbuild polyfill plugins
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          buffer: true,
+        }),
+      ],
+    },
   },
   resolve: {
     alias: {
