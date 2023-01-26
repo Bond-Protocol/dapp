@@ -64,7 +64,7 @@ export interface PrecalculatedMarket {
 
 export interface CalculatedMarket {
   id: string;
-  chainId: CHAIN_ID;
+  chainId: string;
   auctioneer: string;
   teller: string;
   marketId: number;

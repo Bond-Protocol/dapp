@@ -19,16 +19,13 @@ const commitHash = require("child_process")
   .execSync("git rev-parse --short HEAD")
   .toString()
   .slice(0, 7);
-console.log({ commitHash });
 
 export default defineConfig({
   plugins: [react(), svgr()],
-  define: {
-    __COMMIT_HASH__: JSON.stringify(commitHash),
-  },
   root: "src",
   envDir: "..",
   define: {
+    __COMMIT_HASH__: JSON.stringify(commitHash),
     global: "globalThis",
   },
   build: {

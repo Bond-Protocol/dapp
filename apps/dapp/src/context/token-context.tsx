@@ -1,12 +1,16 @@
 import { useTokenPrices } from "hooks/useTokenPrices";
 import { createContext, useContext } from "react";
+import { TokenDetails } from "ui";
 
-const initialState = {
+export type UseTokensReturn = ReturnType<typeof useTokenPrices>;
+
+const initialState: UseTokensReturn = {
   tokens: [],
   currentPrices: {},
-  getPrice: () => {},
-  getTokenDetails: () => {},
-  getTokenDetailsFromChain: () => {},
+  getPrice: (token: any) => 1,
+  getTokenDetails: (token: unknown) => ({ id: "" } as TokenDetails),
+  getTokenDetailsFromChain: (a: unknown, b: unknown) =>
+    Promise.resolve({ name: "", symbol: "" }),
   isLoading: true,
 };
 
