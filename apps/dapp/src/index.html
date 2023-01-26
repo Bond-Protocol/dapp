@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BondProtocol</title>
-    <link rel="icon" href="/favicon.png" type="image/svg+xml" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="./root.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BondProtocol</title>
+  <link rel="icon" href="/favicon.png" type="image/svg+xml" />
+</head>
+<body>
+<div id="root"></div>
+<div id="portal-root"></div>
+<script type="module" src="./root.tsx"></script>
+<script>
+  window.global = window;
+</script>
+<script type="module">
+  import process from "process";
+  import { Buffer } from "buffer";
+  window.Buffer = Buffer;
+  window.process = process;
+</script>
+</body>
 </html>
