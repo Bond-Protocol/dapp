@@ -14,24 +14,23 @@ import { subgraphEndpoints } from "../services/subgraph-endpoints";
 type PriceDataArray = Array<{ date: number; price: number }>;
 
 type CreateBondPurchaseDatasetArgs = {
-  priceData: PriceDataArray;
+  quoteTokenHistory: PriceDataArray;
+  payoutTokenHistory: PriceDataArray;
 } & Pick<ListBondPurchasesPerMarketQuery, "bondPurchases">;
 
-const getMarketPriceAtPurchaseTime = (
-  timestamp: number,
-  prices: PriceDataArray
-) => {
+const getClosestPrice = (timestamp: number, prices: PriceDataArray) => {
   const priceDate = getClosest(
     prices?.map((d) => d.date),
     timestamp
   );
   const details = prices?.find((d) => d.date === priceDate)!;
-  return { price: details?.price || 0, priceDate: priceDate };
+  return { price: details?.price || 0, date: priceDate };
 };
 
 const createBondPurchaseDataset = ({
-  priceData = [],
   bondPurchases = [],
+  quoteTokenHistory = [],
+  payoutTokenHistory = [],
 }: CreateBondPurchaseDatasetArgs): BondChartDataset[] => {
   const datesToRemove: number[] = [];
 
@@ -39,9 +38,15 @@ const createBondPurchaseDataset = ({
     //@ts-ignore
     (bondPurchases.reduce((entries, purchase) => {
       const date = Math.floor(purchase.timestamp * 1000);
-      const { price, priceDate } = getMarketPriceAtPurchaseTime(
+
+      const { price: payoutTokenPrice, date: priceDate } = getClosestPrice(
         date,
-        priceData
+        payoutTokenHistory
+      );
+
+      const { price: quoteTokenPrice } = getClosestPrice(
+        date,
+        quoteTokenHistory
       );
 
       //Remove price used for a specific purchase to avoid slopes
@@ -49,14 +54,15 @@ const createBondPurchaseDataset = ({
 
       const purchaseEntry = {
         date,
-        price,
-        discountedPrice: parseFloat(purchase.purchasePrice),
+        price: payoutTokenPrice,
+        discountedPrice: parseFloat(purchase.purchasePrice) * quoteTokenPrice,
       };
 
       const postPurchaseEntry = {
         date: date + 1,
-        price,
-        discountedPrice: parseFloat(purchase.postPurchasePrice),
+        price: payoutTokenPrice,
+        discountedPrice:
+          parseFloat(purchase.postPurchasePrice) * quoteTokenPrice,
       };
 
       return [...entries, purchaseEntry, postPurchaseEntry];
@@ -68,19 +74,17 @@ const createBondPurchaseDataset = ({
 
   return [
     ...updatedPurchases,
-    ...priceData.filter(
+    ...payoutTokenHistory.filter(
       (d) => !datesToRemove.includes(d?.date) && d?.date > earliestPurchase
     ),
   ];
 };
 
-export const useBondChartData = (market: CalculatedMarket, dayRange = 30) => {
-  const { prices: quoteTokenPrices, ...quoteTokenQuery } = useTokenPriceHistory(
-    market.quoteToken,
-    dayRange
-  );
+export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
+  const { prices: quoteTokenHistory, ...quoteTokenQuery } =
+    useTokenPriceHistory(market.quoteToken, dayRange);
 
-  const { prices: payoutTokenPrices, ...payoutTokenQuery } =
+  const { prices: payoutTokenHistory, ...payoutTokenQuery } =
     useTokenPriceHistory(market.payoutToken, dayRange);
 
   const { data: purchaseData, ...purchasesQuery } =
@@ -93,7 +97,8 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 30) => {
   const earliestDate = market.creationBlockTimestamp * 1000;
 
   const dataset: BondChartDataset[] = createBondPurchaseDataset({
-    priceData: payoutTokenPrices,
+    payoutTokenHistory,
+    quoteTokenHistory,
     bondPurchases: purchaseData?.bondPurchases as BondPurchase[],
   }).concat({
     date: Date.now(),
@@ -102,7 +107,7 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 30) => {
     price: market.fullPrice,
   });
 
-  const isLoading = [quoteTokenQuery, payoutTokenQuery].some(
+  const isLoading = [quoteTokenQuery, payoutTokenQuery, purchasesQuery].some(
     (q) => q.isLoading
   );
 

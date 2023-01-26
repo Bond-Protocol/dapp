@@ -43,9 +43,13 @@ export const Footer = ({
     <div className={`mx-auto h-24 w-full ${className} antialiased`}>
       <div className="flex h-full flex-col items-center ">
         <SocialRow {...socials} className="mt-8 justify-center" />
-        <div className="mb-3 flex font-fraktion text-[12px] uppercase child:mx-2 child:select-none">
+
+        <div className="flex font-fraktion text-[12px] uppercase child:mx-2 child:select-none">
           <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
         </div>
+      </div>
+      <div className="pb-0.5 pl-2 font-mono text-[10px]">
+        Build(#{__COMMIT_HASH__})
       </div>
     </div>
   );

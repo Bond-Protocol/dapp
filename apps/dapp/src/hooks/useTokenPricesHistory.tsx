@@ -11,17 +11,20 @@ import { getTokenPriceHistory } from "services/custom-queries";
 export const getPriceSourceForToken = (
   tokenId: string
 ): Array<SupportedPriceSource | CustomPriceSource> | undefined => {
-  return TOKENS.get(tokenId)?.priceSources;
+  //@ts-ignore
+  return TOKENS.get(tokenId)?.priceSources || [];
 };
 
 export const useTokenPriceHistory = (token: Token, dayRange = 30) => {
   //For now we're only using one price source soooooo
+  //@ts-ignore
   const [priceSource] = getPriceSourceForToken(token.id);
 
   if (!priceSource) {
     throw new Error(`Token ${token.symbol} missing price sources.`);
   }
 
+  //We currently don't have historical data for custom oracle tokens
   if ("customPriceFunction" in priceSource) {
     return {
       prices: [],
