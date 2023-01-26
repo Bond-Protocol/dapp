@@ -1,4 +1,5 @@
 export * from "./useBrowserStorage";
+export * from "./useTokenPricesHistory";
 export * from "./useListAllPurchases";
 export * from "./useCalculatedMarkets";
 export * from "./useFetchMarkets";
@@ -8,5 +9,6 @@ export * from "./useMyBonds";
 export * from "./useLoadMarkets";
 export * from "./useProtocol";
 export * from "./usePurchaseBond";
-export * from "./useTokens";
 export * from "./useTokenAllowance";
+export * from "./useTokenPricesHistory";
+export * from "./useTokens";

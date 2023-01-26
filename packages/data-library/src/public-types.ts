@@ -58,7 +58,8 @@ export interface ProtocolDefinition extends Omit<Protocol, "id"> {
   issuerAddresses: { [key: string]: string | string[] }; // address of that'll be issuing the market, usually a wallet or contract like a multi-sig or a treasury
 }
 
-export interface TokenDefinition extends Omit<Token, "priceSources" | "purchaseLinks"> {
+export interface TokenDefinition
+  extends Omit<Token, "priceSources" | "purchaseLinks"> {
   priceSources: Array<SupportedPriceSource | CustomPriceSource>; //List of prices sources
   purchaseLinks: { [key: string]: string }; // Links to where the token can be acquired
   addresses: { [key: string]: string }; // Token contract address links
