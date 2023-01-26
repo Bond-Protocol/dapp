@@ -31,7 +31,8 @@ export default function Home() {
   const ref = useRef(null);
 
   useLayoutEffect(() => {
-    const { height } = ref.current.getBoundingClientRect();
+    //@ts-ignore
+    const { height } = ref?.current?.getBoundingClientRect();
     setPageHeight(height);
   }, []);
 
