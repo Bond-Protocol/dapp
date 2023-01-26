@@ -22,7 +22,10 @@ interface ImportMetaEnv {
   readonly VITE_MARKET_REFERRAL_ADDRESS: string;
   readonly VITE_NO_FRONTEND_FEE_OWNERS: string;
   // more env variables...
+  readonly VITE_COMMIT_HASH: string;
 }
+
+declare const __COMMIT_HASH__: string;
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;

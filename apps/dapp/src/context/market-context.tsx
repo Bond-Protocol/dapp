@@ -22,8 +22,7 @@ const initialState = {
 export const MarketContext = createContext(initialState);
 
 export const useMarkets = () => {
-  const markets = useContext(MarketContext);
-  return markets;
+  return useContext(MarketContext);
 };
 
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {

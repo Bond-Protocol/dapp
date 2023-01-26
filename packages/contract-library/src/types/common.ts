@@ -1,5 +1,6 @@
 import { PromiseOrValue } from './contracts/common';
 import { BigNumberish } from 'ethers';
+import { CHAIN_ID } from 'src/../../data-library/dist/src';
 
 export type CreateMarketParams = {
   payoutToken: PromiseOrValue<string>;
@@ -16,13 +17,16 @@ export type CreateMarketParams = {
   scaleAdjustment: PromiseOrValue<BigNumberish>;
 };
 
-export interface Token {
-  id: string;
+export interface TokenBase {
   address: string;
   decimals: number;
+  price: number;
+}
+
+export interface Token extends TokenBase {
+  id: string;
   name: string;
   symbol: string;
-  price: number;
   purchaseLink?: string;
 }
 
@@ -36,16 +40,10 @@ export interface LpToken extends Token {
   lpPair?: LpPair;
 }
 
-export interface BalancerWeightedPoolConstituent {
-  address: string;
-  decimals: number;
-  price: number;
-}
-
 export interface BalancerWeightedPoolToken extends Token {
   poolAddress: string;
   vaultAddress: string;
-  constituentTokens: BalancerWeightedPoolConstituent[];
+  constituentTokens: TokenBase[];
 }
 
 export interface PrecalculatedMarket {

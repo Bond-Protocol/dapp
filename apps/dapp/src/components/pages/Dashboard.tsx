@@ -1,15 +1,15 @@
+import { useMemo } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import { useMyBonds } from "hooks/useMyBonds";
-import { InfoLabel } from "ui";
-import { OwnerBalance } from "src/generated/graphql";
-import { TokenDetails, useTokens } from "hooks";
 import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
+import { TokenDetails, InfoLabel } from "ui";
+import { useMyBonds } from "hooks/useMyBonds";
+import { useTokens } from "hooks";
+import { OwnerBalance } from "src/generated/graphql";
 import { PageHeader } from "components/common";
 import { BondList, tableColumns } from "components/lists";
 import { toTableData } from "src/utils/table";
 import { usdFormatter } from "src/utils/format";
 import { RequiresWallet } from "components/utility/RequiresWallet";
-import { useMemo } from "react";
 
 const isMainnet = (chain?: string) => {
   return chain === "mainnet" || chain === "homestead";

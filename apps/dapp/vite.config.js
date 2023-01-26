@@ -15,11 +15,17 @@ import nodePolyfills from "rollup-plugin-polyfill-node";
  * BUT UNTIL THEN PLEASE DO NOT REMOVE THEM
  ***/
 
+const commitHash = require("child_process")
+  .execSync("git rev-parse --short HEAD")
+  .toString()
+  .slice(0, 7);
+
 export default defineConfig({
   plugins: [react(), svgr()],
   root: "src",
   envDir: "..",
   define: {
+    __COMMIT_HASH__: JSON.stringify(commitHash),
     global: "globalThis",
   },
   build: {
