@@ -1,3 +1,5 @@
+@import "ui/style.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,14 +12,13 @@
 
 @layer components {
   .navbar-bg {
-    background-color: black;
+    @apply fixed w-full bg-black;
     background: linear-gradient(
       180deg,
       rgba(0, 0, 0, 1) 0%,
       rgba(255, 255, 255, 0) 100%
     );
     backdrop-filter: blur(16px);
-    @apply fixed w-full;
   }
 
   .main-bg-fill {
@@ -30,10 +31,12 @@
   }
 
   .main-bg {
+    background-color: black;
     background-image: url("/sphere.png");
     background-attachment: fixed;
-    background-size: cover;
     background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
     mix-blend-mode: luminosity;
   }
 
@@ -43,10 +46,6 @@
       rgba(0, 0, 0, 1) 0%,
       rgba(255, 255, 255, 0) 100%
     );
-  }
-
-  .main-bg-clear {
-    isolation: isolate;
   }
 
   .bp-absolute-center {
