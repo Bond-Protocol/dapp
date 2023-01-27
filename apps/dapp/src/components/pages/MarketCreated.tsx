@@ -1,34 +1,22 @@
-import { useSigner } from "wagmi";
-import { useNavigate, useParams } from "react-router-dom";
-import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
-import { useEffect, useState } from "react";
-import * as contractLibrary from "@bond-protocol/contract-library";
-import { getBlockExplorer } from "@bond-protocol/contract-library";
-import { Button, Input } from "ui";
-import { useForm } from "react-hook-form";
-import { ethers } from "ethers";
-import copyIcon from "assets/icons/copy-icon.svg";
-import { providers } from "services/owned-providers";
-import { usePurchaseBond } from "hooks/usePurchaseBond";
+import {useNavigate, useParams} from "react-router-dom";
+import {getProtocolByAddress, Protocol} from "@bond-protocol/bond-library";
+import {useEffect, useState} from "react";
+import {getBlockExplorer} from "@bond-protocol/contract-library";
+import {Button} from "ui";
+import {providers} from "services/owned-providers";
+import {MarketOwnerAllowanceForm} from "components/common/MarketOwnerAllowanceForm";
 
 export type MarketCreatedParams = {
   marketData: any;
 };
 
 export const MarketCreated = (props: MarketCreatedParams) => {
-  const { hash } = useParams();
+  const {hash} = useParams();
   const navigate = useNavigate();
-  const { getTokenAllowance } = usePurchaseBond();
-  const { register, handleSubmit } = useForm();
-  const { data: signer } = useSigner();
 
   const [protocol, setProtocol] = useState<Protocol | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [createTx, setCreateTx] = useState<any>();
-  const [allowanceIsLoading, setAllowanceIsLoading] = useState(false);
-  const [allowance, setAllowance] = useState(-1);
-  const [recommendedAllowance, setRecommendedAllowance] = useState("");
-  const [isAllowanceSufficient, setIsAllowanceSufficient] = useState(false);
   const [ownerAddress, setOwnerAddress] = useState(
     props.marketData.formValues.marketOwnerAddress
   );
@@ -41,95 +29,10 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       }
     });
 
-  const teller = contractLibrary.getAddressesForType(
-    props.marketData.chain,
-    props.marketData.bondType
-  ).teller;
-
   const {
     blockExplorerUrl: blockExplorerUrl,
     blockExplorerName: blockExplorerName,
   } = getBlockExplorer(props.marketData.chain, "tx");
-
-  const loadAllowance = () => {
-    const auctioneer = contractLibrary.getAddressesForType(
-      props.marketData.chain,
-      props.marketData.bondType
-    ).auctioneer;
-    setAllowanceIsLoading(true);
-
-    void getTokenAllowance(
-      props.marketData.marketParams.payoutToken,
-      ownerAddress,
-      auctioneer,
-      props.marketData.payoutToken.decimals,
-      providers[props.marketData.chain]
-    ).then((result) => {
-      setAllowance(Number(result));
-
-      const decimals = props.marketData.marketParams.capacityInQuote
-        ? props.marketData.quoteToken.decimals
-        : props.marketData.payoutToken.decimals;
-
-      const capacity =
-        props.marketData.marketParams.capacity / Math.pow(10, decimals);
-      const payoutTokenPrice = Number(
-        props.marketData.payoutToken.price.replace("$", "")
-      );
-      const quoteTokenPrice = Number(
-        props.marketData.quoteToken.price.replace("$", "")
-      );
-
-      let recommendedAllowance = props.marketData.marketParams.capacityInQuote
-        ? capacity / (payoutTokenPrice / quoteTokenPrice)
-        : capacity;
-
-      let recommendedAllowanceString = (
-        Number(recommendedAllowance) *
-        Math.pow(10, props.marketData.payoutToken.decimals)
-      ).toString();
-
-      recommendedAllowanceString = recommendedAllowanceString.split(".")[0];
-
-      setRecommendedAllowance(recommendedAllowanceString);
-      setIsAllowanceSufficient(
-        Number(recommendedAllowanceString) /
-        Math.pow(10, props.marketData.payoutToken.decimals) <=
-        Number(result)
-      );
-      setAllowanceIsLoading(false);
-    });
-  };
-
-  const onSubmit = async (data: any) => {
-    const auctioneer = contractLibrary.getAddressesForType(
-      props.marketData.chain,
-      props.marketData.bondType
-    ).auctioneer;
-
-    let amount = (
-      Number(data.amount) * Math.pow(10, props.marketData.payoutToken.decimals)
-    ).toString();
-
-    amount = amount.split(".")[0];
-
-    amount = (
-      Number(amount) / Math.pow(10, props.marketData.payoutToken.decimals)
-    ).toString();
-
-    const tx = await contractLibrary.changeApproval(
-      props.marketData.marketParams.payoutToken,
-      props.marketData.payoutToken.decimals,
-      auctioneer,
-      amount,
-      // @ts-ignore
-      signer
-    );
-
-    providers[props.marketData.chain].waitForTransaction(tx.hash).then(() => {
-      loadAllowance();
-    });
-  };
 
   useEffect(() => {
     if (createTx && !(createTx.status === 0) && isLoading) {
@@ -138,229 +41,11 @@ export const MarketCreated = (props: MarketCreatedParams) => {
         props.marketData.isMultisig ? createTx.to : createTx.from
       );
       setIsLoading(false);
-      loadAllowance();
     }
   }, [createTx, isLoading]);
 
-  const displayAllowance = () => {
-    switch (allowance) {
-      case -1:
-        return;
-      case 0:
-        return (
-          <div>
-            {!allowanceIsLoading && (
-              <div>
-                <div className="pb-8 text-center leading-normal text-red-500">
-                  Allowance: {allowance}{" "}
-                  {props.marketData.summaryData.payoutToken}
-                  <br />
-                  Capacity: {props.marketData.formValues.marketCapacity}{" "}
-                  {props.marketData.marketParams.capacityInQuote
-                    ? props.marketData.summaryData.quoteToken
-                    : props.marketData.summaryData.payoutToken}
-                  <br />
-                  Recommended Min Allowance:{" "}
-                  {Number(recommendedAllowance) /
-                    Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
-                  {props.marketData.summaryData.payoutToken}
-                </div>
-                <div className="pb-8 text-center leading-normal">
-                  In order to enable the market, you must allow the BondProtocol
-                  Teller contract ({teller}) to spend{" "}
-                  {props.marketData.summaryData.payoutToken} from the market
-                  owner address ({ownerAddress}).
-                </div>
-              </div>
-            )}
-            {allowanceIsLoading && (
-              <div className="pb-8 text-center leading-normal">
-                Awaiting allowance tx...
-              </div>
-            )}
-            {allowanceForm()}
-          </div>
-        );
-      default:
-        return (
-          <div>
-            {!allowanceIsLoading && (
-              <div>
-                <div
-                  className={`pb-8 text-center leading-normal ${
-                    isAllowanceSufficient ? `text-green-500` : `text-red-500`
-                  }`}
-                >
-                  Allowance: {allowance}{" "}
-                  {props.marketData.summaryData.payoutToken}
-                  <br />
-                  Capacity: {props.marketData.formValues.marketCapacity}{" "}
-                  {props.marketData.marketParams.capacityInQuote
-                    ? props.marketData.summaryData.quoteToken
-                    : props.marketData.summaryData.payoutToken}
-                  <br />
-                  Recommended Min Allowance:{" "}
-                  {Number(recommendedAllowance) /
-                    Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
-                  {props.marketData.summaryData.payoutToken}
-                </div>
-                {isAllowanceSufficient && (
-                  <div className="pb-8 text-center leading-normal">
-                    <p className="pb-8">
-                      You have set a sufficient allowance for the capacity of
-                      your market.
-                    </p>
-                    {props.marketData.marketParams.capacityInQuote && (
-                      <p className="pb-8">
-                        As your market capacity is determined by quantity of
-                        Quote Tokens received, you may need to increase the
-                        allowance for the spender ({teller}) if your Payout
-                        Token price declines in the future.
-                      </p>
-                    )}
-                    <p className="pb-8">
-                      If you have multiple markets paying out{" "}
-                      {props.marketData.summaryData.payoutToken} from this
-                      address, you should adjust the allowance to cover the sum
-                      capacity of all markets.
-                    </p>
-                    {allowanceForm()}
-                  </div>
-                )}
-                {allowance > 0 && !isAllowanceSufficient && (
-                  <div className="pb-8 text-center leading-normal">
-                    <p className="pb-8">
-                      You have set an insufficient allowance for the capacity of
-                      your market. We recommend setting the allowance high
-                      enough to cover the full market capacity.
-                    </p>
-                    {props.marketData.marketParams.capacityInQuote && (
-                      <p className="pb-8">
-                        As your market capacity is determined by quantity of
-                        Quote Tokens received, you may wish to set the allowance
-                        higher than the recommended minimum, in case your Payout
-                        Token price declines in the future.
-                      </p>
-                    )}
-                    <p className="pb-8">
-                      If you have multiple markets paying out{" "}
-                      {props.marketData.summaryData.payoutToken} from this
-                      address, you should adjust the allowance to cover the sum
-                      capacity of all markets.
-                    </p>
-                    {allowanceForm()}
-                  </div>
-                )}
-              </div>
-            )}
-            {allowanceIsLoading && (
-              <div className="pb-8 text-center leading-normal">
-                Awaiting allowance tx...
-              </div>
-            )}
-          </div>
-        );
-    }
-  };
-
-  const allowanceForm = () => {
-    return (
-      <div>
-        <div className="flex w-full justify-center">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              {...register("amount")}
-              defaultValue={
-                Number(recommendedAllowance) /
-                Math.pow(10, props.marketData.payoutToken.decimals)
-              }
-              label={`Allowance in ${props.marketData.summaryData.payoutToken}`}
-              className="mb-2"
-            />
-
-            <Button type="submit" className="font-faketion mt-5 w-full">
-              UPDATE ALLOWANCE
-            </Button>
-          </form>
-        </div>
-        <br />
-        {props.marketData.isMultisig === true && (
-          <div className="flex w-full justify-center">
-
-            <div>
-              <div>
-                Or you can manually execute the following transaction with your multisig to
-                update the allowance:
-              </div>
-
-              <div className="flex justify-center py-8">
-                <table>
-                  <tr>
-                    <td className="pr-4 text-left">Contract Address</td>
-                    <td className="pr-4 text-xs">
-                      {props.marketData.marketParams.payoutToken}
-                    </td>
-                    <td>
-                      <img
-                        onClick={() =>
-                          navigator.clipboard.writeText(
-                            props.marketData.marketParams.payoutToken
-                          )
-                        }
-                        src={copyIcon}
-                        className="stroke-current"
-                        width={16}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="pr-4 text-left">Method Name</td>
-                    <td className="pr-4 text-xs">approve</td>
-                  </tr>
-                  <tr>
-                    <td className="pr-4 text-left">_spender</td>
-                    <td className="pr-4 text-xs">{teller}</td>
-                    <td>
-                      <img
-                        onClick={() => navigator.clipboard.writeText(teller)}
-                        src={copyIcon}
-                        className="stroke-current"
-                        width={16}
-                      />
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="pr-4 text-left">amount</td>
-                    <td className="pr-4 text-xs">{recommendedAllowance}</td>
-                    <td>
-                      <img
-                        onClick={() =>
-                          navigator.clipboard.writeText(recommendedAllowance)
-                        }
-                        src={copyIcon}
-                        className="stroke-current"
-                        width={16}
-                      />
-                    </td>
-                  </tr>
-                </table>
-              </div>
-
-              <Button
-                onClick={() => loadAllowance()}
-                className="font-faketion mt-5 w-full"
-              >
-                REFRESH ALLOWANCE
-              </Button>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
-
   return (
-    <div className="mx-[20vw]">
+    <div className="mx-[15vw]">
       {isLoading && (
         <div className="py-4 text-center text-xl leading-normal">
           Waiting for tx confirmation...
@@ -370,9 +55,9 @@ export const MarketCreated = (props: MarketCreatedParams) => {
         <div>
           <h1 className="font-faketion py-10 text-center text-5xl leading-normal">
             ALL SET!
-            <br />
+            <br/>
             YOUR BOND MARKET
-            <br />
+            <br/>
             HAS BEEN DEPLOYED
           </h1>
 
@@ -391,7 +76,7 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 market list as soon as it has been indexed by our subgraph.
               </p>
 
-              <div className="pb-8">{displayAllowance()}</div>
+              <MarketOwnerAllowanceForm marketData={props.marketData}/>
 
               <Button
                 className="font-faketion mt-5 w-full"
@@ -418,8 +103,6 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 will need to access it directly via the contract, or via your
                 own UI.
               </p>
-
-              {displayAllowance()}
             </div>
           )}
         </div>

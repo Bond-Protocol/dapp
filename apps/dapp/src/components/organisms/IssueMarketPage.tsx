@@ -7,6 +7,7 @@ import { Button, SummaryCard } from "ui";
 import { providers } from "services/owned-providers";
 import { IssueMarketModal } from "../modals/IssueMarketModal";
 import { IssueMarketMultisigModal } from "components/modals/IssueMarketMultisigModal";
+import {MarketOwnerAllowanceForm} from "components/common/MarketOwnerAllowanceForm";
 
 export type IssueMarketPageProps = {
   onExecute: (marketData: any) => void;
@@ -72,6 +73,7 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
   };
 
   const selectedNetwork = network.chain?.id;
+
   return (
     <>
       <IssueMarketModal
@@ -103,6 +105,8 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
         <p className="font-faketion font-bold tracking-widest">VESTING TERMS</p>
 
         <SummaryCard fields={vestingSummaryFields} className="my-8" />
+
+        <MarketOwnerAllowanceForm marketData={props.data} />
 
         {!isConnected ? (
           <Button
