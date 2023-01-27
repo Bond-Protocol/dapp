@@ -18,7 +18,7 @@ import { mainnet, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumba
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/env-state";
 
-const isTestnet = !environment.isProduction;
+const isTestnet = environment.isTestnet;
 
 const { chains, provider } = configureChains(
   isTestnet
@@ -27,6 +27,7 @@ const { chains, provider } = configureChains(
   [publicProvider()]
 );
 
+console.log(chains)
 const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
