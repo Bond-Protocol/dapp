@@ -27,7 +27,6 @@ const { chains, provider } = configureChains(
   [publicProvider()]
 );
 
-console.log(chains)
 const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
