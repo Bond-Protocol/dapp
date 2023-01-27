@@ -94,8 +94,8 @@ export const MarketCreated = (props: MarketCreatedParams) => {
       setRecommendedAllowance(recommendedAllowanceString);
       setIsAllowanceSufficient(
         Number(recommendedAllowanceString) /
-          Math.pow(10, props.marketData.payoutToken.decimals) <=
-          Number(result)
+        Math.pow(10, props.marketData.payoutToken.decimals) <=
+        Number(result)
       );
       setAllowanceIsLoading(false);
     });
@@ -265,8 +265,8 @@ export const MarketCreated = (props: MarketCreatedParams) => {
 
   const allowanceForm = () => {
     return (
-      <div className="flex w-full justify-center">
-        {props.marketData.isMultisig === false && (
+      <div>
+        <div className="flex w-full justify-center">
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
               {...register("amount")}
@@ -282,73 +282,77 @@ export const MarketCreated = (props: MarketCreatedParams) => {
               UPDATE ALLOWANCE
             </Button>
           </form>
-        )}
+        </div>
+        <br />
         {props.marketData.isMultisig === true && (
-          <div>
+          <div className="flex w-full justify-center">
+
             <div>
-              Please execute the following transaction with your multisig to
-              update the allowance:
-            </div>
+              <div>
+                Or you can manually execute the following transaction with your multisig to
+                update the allowance:
+              </div>
 
-            <div className="flex justify-center py-8">
-              <table>
-                <tr>
-                  <td className="pr-4 text-left">Contract Address</td>
-                  <td className="pr-4 text-xs">
-                    {props.marketData.marketParams.payoutToken}
-                  </td>
-                  <td>
-                    <img
-                      onClick={() =>
-                        navigator.clipboard.writeText(
-                          props.marketData.marketParams.payoutToken
-                        )
-                      }
-                      src={copyIcon}
-                      className="stroke-current"
-                      width={16}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="pr-4 text-left">Method Name</td>
-                  <td className="pr-4 text-xs">approve</td>
-                </tr>
-                <tr>
-                  <td className="pr-4 text-left">_spender</td>
-                  <td className="pr-4 text-xs">{teller}</td>
-                  <td>
-                    <img
-                      onClick={() => navigator.clipboard.writeText(teller)}
-                      src={copyIcon}
-                      className="stroke-current"
-                      width={16}
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="pr-4 text-left">amount</td>
-                  <td className="pr-4 text-xs">{recommendedAllowance}</td>
-                  <td>
-                    <img
-                      onClick={() =>
-                        navigator.clipboard.writeText(recommendedAllowance)
-                      }
-                      src={copyIcon}
-                      className="stroke-current"
-                      width={16}
-                    />
-                  </td>
-                </tr>
-              </table>
-            </div>
+              <div className="flex justify-center py-8">
+                <table>
+                  <tr>
+                    <td className="pr-4 text-left">Contract Address</td>
+                    <td className="pr-4 text-xs">
+                      {props.marketData.marketParams.payoutToken}
+                    </td>
+                    <td>
+                      <img
+                        onClick={() =>
+                          navigator.clipboard.writeText(
+                            props.marketData.marketParams.payoutToken
+                          )
+                        }
+                        src={copyIcon}
+                        className="stroke-current"
+                        width={16}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="pr-4 text-left">Method Name</td>
+                    <td className="pr-4 text-xs">approve</td>
+                  </tr>
+                  <tr>
+                    <td className="pr-4 text-left">_spender</td>
+                    <td className="pr-4 text-xs">{teller}</td>
+                    <td>
+                      <img
+                        onClick={() => navigator.clipboard.writeText(teller)}
+                        src={copyIcon}
+                        className="stroke-current"
+                        width={16}
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="pr-4 text-left">amount</td>
+                    <td className="pr-4 text-xs">{recommendedAllowance}</td>
+                    <td>
+                      <img
+                        onClick={() =>
+                          navigator.clipboard.writeText(recommendedAllowance)
+                        }
+                        src={copyIcon}
+                        className="stroke-current"
+                        width={16}
+                      />
+                    </td>
+                  </tr>
+                </table>
+              </div>
 
-            <Button
-              onClick={() => loadAllowance()}
-              className="font-faketion mt-5 w-full"
-            >
-              REFRESH ALLOWANCE
-            </Button>
+              <Button
+                onClick={() => loadAllowance()}
+                className="font-faketion mt-5 w-full"
+              >
+                REFRESH ALLOWANCE
+              </Button>
+            </div>
           </div>
         )}
       </div>
