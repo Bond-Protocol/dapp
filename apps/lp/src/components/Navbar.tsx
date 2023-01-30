@@ -1,5 +1,6 @@
 import { LinkButton } from "./LinkButton";
 import Image from "next/image";
+import data from "../data";
 
 const Navlink = (props: { url: string; label: string }) => {
   return (
@@ -14,7 +15,7 @@ const Navlink = (props: { url: string; label: string }) => {
 
 const links = [
   { url: "https://docs.bondprotocol.finance", label: "Docs" },
-  { url: "", label: "Security" },
+  { url: data.links.audits, label: "Security" },
   { url: "", label: "Faqs" },
 ];
 

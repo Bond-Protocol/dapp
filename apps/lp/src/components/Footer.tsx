@@ -40,7 +40,7 @@ const List = (props: {
 
 export const Footer = () => {
   return (
-    <div className="justify-center bg-black px-8 pt-4 pb-6 font-sans md:pb-12">
+    <div className="justify-center bg-black px-8 pt-4 pb-6 font-sans md:pb-12 border-t border-white/20">
       <div className="xs:block w-full pt-8 md:hidden">
         <Image
           height={56}

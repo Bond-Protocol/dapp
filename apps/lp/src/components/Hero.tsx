@@ -16,7 +16,7 @@ const LinkButtonContent = ({
   iconClassName?: string;
 }) => {
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <span className="my-auto">{label}</span>
       <Image
         height={24}

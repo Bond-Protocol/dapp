@@ -4,18 +4,35 @@ type ValuesProps = {
   className?: string;
 };
 
-const content =
-  "lorem ipsum ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum";
-
 export const Values = (props: ValuesProps) => {
   return (
-    <div
-      className={`child:bg-black child:p-4 grid grid-cols-2 gap-y-4 md:pt-8 lg:flex lg:gap-8 ${props.className}`}
-    >
-      <TextBlock title="Bond" content={content} />
-      <TextBlock title="Own" content={content} />
-      <TextBlock title="Nurture" content={content} />
-      <TextBlock title="Deploy" content={content} />
+    <div className={`md:pt-8 ${props.className}`}>
+      <div
+        title="Bond"
+        className="backdrop-blur-md grid grid-cols-2 gap-y-4 lg:flex py-4 child:px-4 lg:child:px-8"
+      >
+        <TextBlock
+          title="Bond"
+          content="Custom bond strategies for protocols - any cycle, any stage"
+        />
+        <TextBlock
+          title="Own"
+          content={
+            <p>
+              Protocol-Owned Liquidity instead of renting from <br />
+              mercenary capital
+            </p>
+          }
+        />
+        <TextBlock
+          title="Nurture"
+          content="Treasury management to provide stability through any market conditions"
+        />
+        <TextBlock
+          title="Deploy"
+          content="Permissionless bond markets - no gatekeepers, no middlemen"
+        />
+      </div>
     </div>
   );
 };

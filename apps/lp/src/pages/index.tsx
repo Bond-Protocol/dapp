@@ -26,14 +26,20 @@ const headConfig = {
   image: "/logo.svg",
 };
 
+const makeAnimation = ({ type, delay, duration }: Record<string, string>) => ({
+  "data-aos": type,
+  "data-aos-delay": delay,
+  "data-aos-duration": duration,
+});
+
 export default function Home() {
   const [pageHeight, setPageHeight] = useState(0);
   const ref = useRef(null);
 
   useLayoutEffect(() => {
     //@ts-ignore
-    const { height } = ref?.current?.getBoundingClientRect();
-    setPageHeight(height);
+    const mainDiv = ref?.current?.getBoundingClientRect();
+    setPageHeight(mainDiv.height);
   }, []);
 
   return (
@@ -98,7 +104,11 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="bp-btn-group bp-btn-lg">
-                  <LinkButton size="lg" variant="ghost">
+                  <LinkButton
+                    href={data.links.whyBond}
+                    size="lg"
+                    variant="ghost"
+                  >
                     {"Why Bond?"}
                   </LinkButton>
                   <LinkButton href={data.links.dapp} size="lg">
@@ -112,13 +122,18 @@ export default function Home() {
                     content={data.protocols as CardProps[]}
                   />
                   <div className="pt-20">
-                    <LinkButton size="lg" variant="ghost">
+                    <LinkButton
+                      href={data.links.verify}
+                      size="lg"
+                      variant="ghost"
+                    >
                       {"Become a Partner"}
                     </LinkButton>
                   </div>
                 </div>
                 <div className="pt-20 lg:pt-32">
                   <Grid
+                    big
                     title="Audited By"
                     gridClassName="child:max-w-[360px] child:w-[360px] child:child:md:w-full"
                     content={data.auditors as CardProps[]}
@@ -128,6 +143,13 @@ export default function Home() {
                       {"Study Audits"}
                     </LinkButton>
                   </div>
+                </div>
+                <div className="pt-20 lg:pt-32">
+                  <Grid
+                    big
+                    title="Bug Bounties on"
+                    content={data.bounties as CardProps[]}
+                  />
                 </div>
                 <div className="pt-20 lg:py-20 lg:pt-32">
                   <div className="font-fraktion text-center text-4xl font-bold uppercase md:text-5xl">
