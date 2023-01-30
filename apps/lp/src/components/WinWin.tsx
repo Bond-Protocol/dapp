@@ -56,7 +56,9 @@ export const WinWin = (props: { className?: string }) => {
         {"A Win-Win for All"}
       </div>
       <div className="text-grey-500 pt-2 pb-8 text-center">
-        {"Bond protocol allows all parties to win and create stronger products"}
+        {
+          "Bond Protocol builds stronger protocols with more resilient treasuries"
+        }
       </div>
       <div className="relative">
         <div className="hidden lg:block">

@@ -39,11 +39,10 @@ export const Navbar = () => {
             className="xs:text-[10px] mx-0 md:text-[14px]"
             href="https://app.bondprotocol.finance"
             target="_blank"
-            variant="ghost"
             small
           >
             <div className="flex">
-              <span className="my-auto">Launch dApp</span>
+              <span className="my-auto">Launch App</span>
               <Image
                 height={24}
                 width={24}

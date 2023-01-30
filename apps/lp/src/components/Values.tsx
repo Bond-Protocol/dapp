@@ -12,7 +12,7 @@ export const Values = (props: ValuesProps) => {
         className="backdrop-blur-md grid grid-cols-2 gap-y-4 lg:flex py-4 child:px-4 lg:child:w-1/4"
       >
         <TextBlock
-          title="Bond"
+          title="Build"
           content={
             <p>
               Custom bond strategies for
@@ -36,7 +36,7 @@ export const Values = (props: ValuesProps) => {
           }
         />
         <TextBlock
-          title="Nurture"
+          title="Navigate"
           content={
             <p>
               Treasury management to <br /> provide stability through any <br />{" "}

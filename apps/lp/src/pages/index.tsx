@@ -23,7 +23,7 @@ const headConfig = {
     "Acquire assets, own liquidity and diversify your treasury on the permissionless bond marketplace",
   url: "bondprotocol.finance",
   twitterHandle: "@bond_protocol",
-  image: "/logo.svg",
+  image: "https://bondprotocol.finance/logo-long.svg",
 };
 
 export default function Home() {
@@ -47,8 +47,8 @@ export default function Home() {
               ref={ref}
               className="child:px-4 isolate mx-auto max-w-[600px] pt-4 font-sans antialiased md:max-w-[1440px] md:pt-12 lg:pt-20 lg:max-w-[1600px]"
             >
-              <Hero className="p-4 md:py-8 lg:py-12" />
-              <div className="mx-auto w-full px-4 lg:px-16">
+              <Hero className="mt-[10vh]" />
+              <div className="mx-auto w-full px-4 lg:px-16 mt-8">
                 <div className="flex flex-wrap justify-center gap-4 py-4 lg:flex-nowrap">
                   <div className="w-full grow lg:w-1/3 lg:grow-0">
                     <InfoLabel label="Total Value Bonded">
