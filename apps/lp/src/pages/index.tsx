@@ -26,12 +26,6 @@ const headConfig = {
   image: "/logo.svg",
 };
 
-const makeAnimation = ({ type, delay, duration }: Record<string, string>) => ({
-  "data-aos": type,
-  "data-aos-delay": delay,
-  "data-aos-duration": duration,
-});
-
 export default function Home() {
   const [pageHeight, setPageHeight] = useState(0);
   const ref = useRef(null);
@@ -45,16 +39,16 @@ export default function Home() {
   return (
     <>
       <Head {...headConfig} />
-      <main className="h-full">
+      <main className="h-full 2xl:max-w-2xl">
         <div className="h-full">
           <Background height={pageHeight}>
             <Navbar />
             <div
               ref={ref}
-              className="child:px-4 isolate mx-auto max-w-[400px] pt-4 font-sans antialiased md:max-w-[1440px] md:pt-12 lg:pt-16"
+              className="child:px-4 isolate mx-auto max-w-[600px] pt-4 font-sans antialiased md:max-w-[1440px] md:pt-12 lg:pt-16 lg:max-w-[1600px]"
             >
               <Hero className="p-4 md:py-8 lg:py-12" />
-              <div className="mx-auto md:max-w-[1136px] lg:max-w-[1336px]">
+              <div className="mx-auto w-full px-4 lg:px-16">
                 <div className="flex flex-wrap justify-center gap-4 py-4 lg:flex-nowrap">
                   <div className="w-full grow lg:w-1/3 lg:grow-0">
                     <InfoLabel label="Total Value Bonded">

@@ -9,28 +9,49 @@ export const Values = (props: ValuesProps) => {
     <div className={`md:pt-8 ${props.className}`}>
       <div
         title="Bond"
-        className="backdrop-blur-md grid grid-cols-2 gap-y-4 lg:flex py-4 child:px-4 lg:child:px-8"
+        className="backdrop-blur-md grid grid-cols-2 gap-y-4 lg:flex py-4 child:px-4 lg:child:w-1/4"
       >
         <TextBlock
           title="Bond"
-          content="Custom bond strategies for protocols - any cycle, any stage"
+          content={
+            <p>
+              Custom bond strategies for
+              <br />
+              protocols - any cycle,
+              <br />
+              any stage
+            </p>
+          }
         />
         <TextBlock
           title="Own"
           content={
             <p>
-              Protocol-Owned Liquidity instead of renting from <br />
+              Protocol-Owned Liquidity
+              <br />
+              instead of renting from
+              <br />
               mercenary capital
             </p>
           }
         />
         <TextBlock
           title="Nurture"
-          content="Treasury management to provide stability through any market conditions"
+          content={
+            <p>
+              Treasury management to <br /> provide stability through any <br />{" "}
+              market conditions
+            </p>
+          }
         />
         <TextBlock
           title="Deploy"
-          content="Permissionless bond markets - no gatekeepers, no middlemen"
+          content={
+            <p>
+              Permissionless bond markets - <br />
+              no gatekeepers, no middlemen
+            </p>
+          }
         />
       </div>
     </div>

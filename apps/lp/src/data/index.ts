@@ -22,7 +22,13 @@ const auditors = [
   },
 ];
 
-const bounties = [{ name: "ImmuneFi", logoUrl: "/external/immunefi.svg" }];
+const bounties = [
+  {
+    name: "ImmuneFi",
+    logoUrl: "/external/immunefi.svg",
+    url: "https://immunefi.com/",
+  },
+];
 
 const links = {
   audits: "https://github.com/Bond-Protocol/bond-contracts/tree/master/audits",

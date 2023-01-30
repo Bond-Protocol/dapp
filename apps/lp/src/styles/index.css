@@ -38,7 +38,7 @@
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: contain;
+    background-size: cover;
     mix-blend-mode: luminosity;
   }
 
