@@ -38,6 +38,7 @@ const links = {
     "https://docs.bondprotocol.finance/bond-marketplace/market-verification",
   whyBond:
     "https://docs.bondprotocol.finance/basics/bonding#what-are-the-benefits-of-bonding",
+  medium: "https://medium.com/@Bond_Protocol",
 };
 
 export default {
