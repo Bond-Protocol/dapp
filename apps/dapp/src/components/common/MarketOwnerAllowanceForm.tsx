@@ -191,13 +191,6 @@ export const MarketOwnerAllowanceForm = (props: AllowanceFormProps) => {
                   </tr>
                 </table>
               </div>
-
-              <Button
-                onClick={() => loadAllowance()}
-                className="font-faketion mt-5 w-full"
-              >
-                REFRESH ALLOWANCE
-              </Button>
             </div>
           </div>
       </div>
@@ -226,7 +219,15 @@ export const MarketOwnerAllowanceForm = (props: AllowanceFormProps) => {
                   {Number(recommendedAllowance) /
                     Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
                   {props.marketData.summaryData.payoutToken}
+                  <br />
+                  <Button
+                    onClick={() => loadAllowance()}
+                    className="font-faketion mt-5"
+                  >
+                    REFRESH ALLOWANCE
+                  </Button>
                 </div>
+
                 <div className="pb-8 text-center leading-normal">
                   In order to enable the market, you must allow the BondProtocol
                   Teller contract ({teller}) to spend{" "}
@@ -265,7 +266,15 @@ export const MarketOwnerAllowanceForm = (props: AllowanceFormProps) => {
                   {Number(recommendedAllowance) /
                     Math.pow(10, props.marketData.payoutToken.decimals)}{" "}
                   {props.marketData.summaryData.payoutToken}
+                  <br />
+                  <Button
+                    onClick={() => loadAllowance()}
+                    className="font-faketion mt-5"
+                  >
+                    REFRESH ALLOWANCE
+                  </Button>
                 </div>
+
                 {isAllowanceSufficient && (
                   <div className="pb-8 text-center leading-normal">
                     <p className="pb-8">
