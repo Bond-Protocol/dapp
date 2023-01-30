@@ -45,7 +45,7 @@ export default function Home() {
             <Navbar />
             <div
               ref={ref}
-              className="child:px-4 isolate mx-auto max-w-[600px] pt-4 font-sans antialiased md:max-w-[1440px] md:pt-12 lg:pt-16 lg:max-w-[1600px]"
+              className="child:px-4 isolate mx-auto max-w-[600px] pt-4 font-sans antialiased md:max-w-[1440px] md:pt-12 lg:pt-20 lg:max-w-[1600px]"
             >
               <Hero className="p-4 md:py-8 lg:py-12" />
               <div className="mx-auto w-full px-4 lg:px-16">
@@ -67,9 +67,9 @@ export default function Home() {
                   </div>
                 </div>
 
-                <Values className="pb-24" />
-                <WinWin />
-                <div className="gap-x-8 px-2 pt-14 md:flex lg:pt-24">
+                <Values />
+                <WinWin className="py-40" />
+                <div className="gap-x-8 px-2 md:flex">
                   <div className="md:w-1/2">
                     <div className="font-fraktion max-w-[90%] py-6 text-[25px] uppercase leading-none md:text-4xl md:font-bold">
                       {"The problem with existing yield farms"}

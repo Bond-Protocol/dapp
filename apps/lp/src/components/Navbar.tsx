@@ -14,9 +14,9 @@ const Navlink = (props: { url: string; label: string }) => {
 };
 
 const links = [
-  { url: "https://docs.bondprotocol.finance", label: "Docs" },
+  { url: data.links.docs, label: "Docs" },
   { url: data.links.audits, label: "Security" },
-  { url: "", label: "Faqs" },
+  { url: data.links.medium, label: "Blog" },
 ];
 
 export const Navbar = () => {
