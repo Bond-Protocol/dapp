@@ -1,6 +1,7 @@
 import { LinkButton } from "./LinkButton";
 import Image from "next/image";
 import data from "../data";
+import { TextBlock } from "./TextBlock";
 
 export type InfoLabelProps = {
   title: string;
@@ -10,15 +11,18 @@ export type InfoLabelProps = {
 };
 
 const content = [
-  { title: "Better Price", content: "Opportunity to buy discounted tokens" },
+  {
+    title: "Better Price",
+    content: "Dutch Auction for demand-based discounts",
+  },
   {
     title: "Permanent Liquidity",
-    content: "Own liquidity and earn trading fees",
+    content: "Stabilize market and earn trading fees",
   },
   { title: "Vested Tokens", content: "Long-term alignment with protocol" },
   {
     title: "Diversified Treasury",
-    content: "Acquire strategic assets",
+    content: "Protect treasury value and extend runway",
   },
 ];
 
@@ -55,10 +59,21 @@ export const WinWin = (props: { className?: string }) => {
       <div className="font-fraktion text-center text-5xl font-semibold uppercase">
         {"A Win-Win for All"}
       </div>
-      <div className="text-grey-500 pt-2 pb-8 text-center">
+      <div className="text-grey-500 pt-2 text-center">
         {
           "Bond Protocol builds stronger protocols with more resilient treasuries"
         }
+      </div>
+      <div className="flex justify-between py-12">
+        <TextBlock
+          title="Communities"
+          content="Acquire discounted governance tokens"
+        />
+        <TextBlock
+          className="text-right"
+          title="Protocols"
+          content="Diversify treasure and own liquidity"
+        />
       </div>
       <div className="relative">
         <div className="hidden lg:block">

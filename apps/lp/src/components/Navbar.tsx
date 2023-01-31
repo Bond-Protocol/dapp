@@ -46,7 +46,7 @@ export const Navbar = () => {
               <Image
                 height={24}
                 width={24}
-                src="/arrow-right.svg"
+                src="/arrow-right-black.svg"
                 alt="external_link_icon"
                 className="my-auto"
               />

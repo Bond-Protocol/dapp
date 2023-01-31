@@ -10,7 +10,7 @@ export const TextBlock = (props: TextBlockProps) => {
       <div className="font-fraktion text-[25px] font-bold uppercase">
         {props.title}
       </div>
-      <div className="text-light-grey-400 pr-2">{props.content}</div>
+      <div className="text-light-grey-400">{props.content}</div>
     </div>
   );
 };

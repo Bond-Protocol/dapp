@@ -35,7 +35,7 @@ export const Card = ({ logoUrl, url, name, className }: CardProps) => {
             src={logoUrl}
           />
         </div>
-        <div className="text-light-primary-200 select-none text-center md:w-2/3 lg:text-left">
+        <div className="select-none text-center md:w-2/3 lg:text-left font-bold lg:-ml-3">
           <p className="group-hover:hidden"> {name} </p>
           <p className="hidden group-hover:block text-light-secondary">
             Go to Market
@@ -61,7 +61,7 @@ export const BiggerCard = ({ logoUrl, url, name, className }: CardProps) => {
             src={logoUrl}
           />
         </div>
-        <div className="text-light-primary-200 select-none text-center">
+        <div className="select-none text-center font-bold pt-1">
           <p className="group-hover:hidden"> {name} </p>
           <p className="hidden group-hover:block text-light-secondary">
             Visit Website
