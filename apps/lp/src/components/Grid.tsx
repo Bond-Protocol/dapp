@@ -24,7 +24,7 @@ export const Card = ({ logoUrl, url, name, className }: CardProps) => {
       rel="noreferrer"
     >
       <div
-        className={`flex h-[76px] w-[160px] cursor-pointer group max-w-[160px] flex-col items-center justify-center bg-white/5 backdrop-blur-lg lg:w-[200px] lg:max-w-[200px] lg:flex-row ${className}`}
+        className={`group flex h-[76px] w-[160px] max-w-[160px] cursor-pointer flex-col items-center justify-center bg-white/5 backdrop-blur-lg hover:bg-white/10 lg:w-[200px] lg:max-w-[200px] lg:flex-row ${className}`}
       >
         <div className="h-8 md:w-1/3">
           <Image
@@ -35,9 +35,9 @@ export const Card = ({ logoUrl, url, name, className }: CardProps) => {
             src={logoUrl}
           />
         </div>
-        <div className="select-none text-center md:w-2/3 lg:text-left font-bold lg:-ml-3">
+        <div className="select-none text-center font-bold md:w-2/3 lg:-ml-3 lg:text-left">
           <p className="group-hover:hidden"> {name} </p>
-          <p className="hidden group-hover:block text-light-secondary">
+          <p className="text-light-secondary hidden group-hover:block">
             Go to Market
           </p>
         </div>
@@ -50,7 +50,7 @@ export const BiggerCard = ({ logoUrl, url, name, className }: CardProps) => {
   return (
     <a href={url} target="_blank" rel="noreferrer">
       <div
-        className={`flex h-[148px] cursor-pointer group w-[368px] max-w-[368px] flex-col items-center justify-center bg-white/5 backdrop-blur-lg lg:w-[368px] lg:max-w-[368px] ${className}`}
+        className={`group flex h-[148px] w-[368px] max-w-[368px] cursor-pointer flex-col items-center justify-center bg-white/5 backdrop-blur-lg hover:bg-white/10 lg:w-[368px] lg:max-w-[368px] ${className}`}
       >
         <div className="h-[88px]">
           <Image
@@ -61,9 +61,9 @@ export const BiggerCard = ({ logoUrl, url, name, className }: CardProps) => {
             src={logoUrl}
           />
         </div>
-        <div className="select-none text-center font-bold pt-1">
+        <div className="select-none pt-1 text-center font-bold">
           <p className="group-hover:hidden"> {name} </p>
-          <p className="hidden group-hover:block text-light-secondary">
+          <p className="text-light-secondary hidden group-hover:block">
             Visit Website
           </p>
         </div>
