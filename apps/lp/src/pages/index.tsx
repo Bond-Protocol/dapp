@@ -74,7 +74,7 @@ export default function Home() {
                     <div className="font-fraktion max-w-[90%] py-6 text-[25px] uppercase leading-none md:text-4xl md:font-bold">
                       {"The problem with existing yield farms"}
                     </div>
-                    <InfoLabel label="Initial LPers Left after 72h">
+                    <InfoLabel label="Initial Liquidity Providers gone after 72h">
                       30%
                     </InfoLabel>
                   </div>
@@ -150,7 +150,7 @@ export default function Home() {
                     {"Find bonds in the marketplace"}
                   </div>
                   <div className="py-10">
-                    <LinkButton href={data.links.dapp}>
+                    <LinkButton href={data.links.markets}>
                       {"Browse the Bond Market"}
                     </LinkButton>
                   </div>

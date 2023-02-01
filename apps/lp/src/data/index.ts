@@ -34,6 +34,7 @@ const links = {
   audits: "https://github.com/Bond-Protocol/bond-contracts/tree/master/audits",
   docs: "https://docs.bondprotocol.finance",
   dapp: "https://app.bondprotocol.finance",
+  markets: "https://app.bondprotocol.finance/#/markets",
   verify:
     "https://docs.bondprotocol.finance/bond-marketplace/market-verification",
   whyBond:

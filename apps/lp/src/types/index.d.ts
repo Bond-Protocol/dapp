@@ -4,3 +4,7 @@ declare module "aos" {
   };
   export default aos;
 }
+
+declare module "*.svg" {
+  export default any;
+}
