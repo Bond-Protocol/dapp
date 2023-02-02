@@ -26,6 +26,22 @@ const content = [
   },
 ];
 
+const smolContent = [
+  {
+    title: "Better Price",
+    content: "Dutch Auction for demand-based discounts",
+  },
+  { title: "Vested Tokens", content: "Long-term alignment with protocol" },
+  {
+    title: "Permanent Liquidity",
+    content: "Stabilize market and earn trading fees",
+  },
+  {
+    title: "Diversified Treasury",
+    content: "Protect treasury value and extend runway",
+  },
+];
+
 export const InvertedInfoLabel = (props: InfoLabelProps) => {
   return (
     <div
@@ -45,8 +61,18 @@ export const InvertedInfoLabel = (props: InfoLabelProps) => {
 
 export const WinWinGrid = () => {
   return (
-    <div className="mx-auto grid grid-cols-2 gap-y-[100px] gap-x-4 lg:gap-x-[370px] lg:gap-y-12">
+    <div className="mx-auto hidden grid-cols-2 gap-y-[100px] gap-x-4 lg:grid lg:gap-x-[370px] lg:gap-y-12">
       {content.map((c, i) => (
+        <InvertedInfoLabel {...c} key={i} />
+      ))}
+    </div>
+  );
+};
+
+export const SmolWinWinGrid = () => {
+  return (
+    <div className="mx-auto grid grid-cols-2 gap-y-[100px] gap-x-4 lg:hidden lg:gap-x-[370px] lg:gap-y-12">
+      {smolContent.map((c, i) => (
         <InvertedInfoLabel {...c} key={i} />
       ))}
     </div>
@@ -64,14 +90,15 @@ export const WinWin = (props: { className?: string }) => {
           "Bond Protocol builds stronger protocols with more resilient treasuries"
         }
       </div>
-      <div className="flex justify-between py-12">
+      <div className="flex w-full justify-center py-12 lg:justify-between">
         <TextBlock
-          title="Communities"
+          className="text-center lg:text-left"
+          title="Community"
           content="Acquire discounted governance tokens"
         />
         <TextBlock
-          className="text-right"
-          title="Protocols"
+          className="hidden text-right lg:block"
+          title="Protocol"
           content="Diversify treasure and own liquidity"
         />
       </div>
@@ -88,6 +115,14 @@ export const WinWin = (props: { className?: string }) => {
           />
         </div>
         <WinWinGrid />
+        <SmolWinWinGrid />
+      </div>
+      <div className="mx-auto py-12 lg:hidden">
+        <TextBlock
+          className="text-center"
+          title="Protocol"
+          content="Diversify treasure and own liquidity"
+        />
       </div>
       <div className="bp-btn-group bp-btn-lg">
         <LinkButton href={`${data.links.dapp}/#/markets`} variant="ghost">

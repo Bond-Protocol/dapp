@@ -9,7 +9,7 @@ export const Values = (props: ValuesProps) => {
     <div className={`md:pt-8 ${props.className}`}>
       <div
         title="Bond"
-        className="backdrop-blur-md grid grid-cols-2 gap-y-4 lg:flex py-4 child:px-4 lg:child:w-1/4"
+        className="child:px-4 lg:child:w-1/4 grid grid-cols-2 gap-y-4 py-4 backdrop-blur-md lg:flex"
       >
         <TextBlock
           title="Build"
@@ -27,7 +27,7 @@ export const Values = (props: ValuesProps) => {
           title="Own"
           content={
             <p>
-              Protocol-Owned Liquidity
+              Liquidity outright
               <br />
               instead of renting from
               <br />
