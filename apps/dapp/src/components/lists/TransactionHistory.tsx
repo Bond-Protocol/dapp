@@ -113,8 +113,15 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
   const { currentPrices } = useTokens();
 
   const { data, ...query } = useListBondPurchasesPerMarketQuery(
-    // @ts-ignore
-    { endpoint: subgraphEndpoints[props.market.chainId as CHAIN_ID] },
+    {
+      // @ts-ignore
+      endpoint: subgraphEndpoints[props.market.chainId as CHAIN_ID],
+      fetchParams: {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    },
     { marketId: props.market.id }
   );
 

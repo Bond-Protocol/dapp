@@ -89,8 +89,15 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
 
   const { data: purchaseData, ...purchasesQuery } =
     useListBondPurchasesPerMarketQuery(
-      // @ts-ignore
-      { endpoint: subgraphEndpoints[market.chainId as CHAIN_ID] },
+      {
+        // @ts-ignore
+        endpoint: subgraphEndpoints[market.chainId as CHAIN_ID],
+        fetchParams: {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      },
       { marketId: market.id }
     );
 
