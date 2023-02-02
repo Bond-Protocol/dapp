@@ -6,7 +6,7 @@ import {UseQueryResult} from "react-query";
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
   [CHAIN_ID.ETHEREUM_MAINNET]:
-    `https://gateway.thegraph.com/api/${import.meta.env.VITE_GRAPH_PROTOCOL_API_KEY}/subgraphs/id/9F8K4UDnrQEzXsVmHoJxs5qBVDJB5jEKtU9EVsXNTzZZ`,
+    `https://gateway.thegraph.com/api/${import.meta.env.VITE_GRAPH_PROTOCOL_API_KEY}/subgraphs/id/${import.meta.env.VITE_GRAPH_PROTOCOL_SUBGRAPH_ID}`,
   [CHAIN_ID.GOERLI_TESTNET]:
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli",
   [CHAIN_ID.ARBITRUM_MAINNET]:
