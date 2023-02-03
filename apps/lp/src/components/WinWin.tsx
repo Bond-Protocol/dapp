@@ -52,7 +52,7 @@ export const InvertedInfoLabel = (props: InfoLabelProps) => {
           {props.title}
         </div>
       </div>
-      <p className="text-light-primary-500 font-regular mx-auto max-w-[90%] select-none font-sans text-[14px] leading-none md:text-base">
+      <p className="font-regular mx-auto max-w-[90%] select-none font-sans text-[14px] leading-none text-gray-400 md:text-base">
         {props.content}
       </p>
     </div>
