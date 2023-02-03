@@ -1,3 +1,5 @@
+@import "ui/style.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,44 +11,8 @@
 }
 
 @layer components {
-  .navbar-bg {
-    background-color: black;
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-    backdrop-filter: blur(16px);
-    @apply fixed w-full;
-  }
-
-  .main-bg-fill {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(231, 172, 92, 1) 100%
-    );
-    mix-blend-mode: screen;
-  }
-
-  .main-bg {
-    background-image: url("/sphere.png");
-    background-attachment: fixed;
-    background-size: cover;
-    background-repeat: no-repeat;
-    mix-blend-mode: luminosity;
-  }
-
-  .main-bg-fade {
-    background: linear-gradient(
-      0deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(255, 255, 255, 0) 100%
-    );
-  }
-
-  .main-bg-clear {
-    isolation: isolate;
+  .bp-container {
+    @apply my-32 mx-auto max-w-[1170px] md:my-48 lg:my-72;
   }
 
   .bp-absolute-center {
@@ -64,6 +30,62 @@
 
   .bp-max-w {
     @apply max-w-[1136px];
+  }
+
+  .navbar-bg {
+    @apply fixed w-full bg-black;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    backdrop-filter: blur(16px);
+  }
+
+  .bp-arrow-grid-mobile {
+    grid-template-columns: 132px 16px 132px;
+  }
+
+  .bp-arrow-grid-tablet {
+    grid-template-columns: 202px 16px 202px;
+  }
+
+  .bp-arrow-grid {
+    grid-template-columns: 228px 32px 238px;
+  }
+
+  .bp-arrow-row {
+    @apply bp-arrow-grid-mobile md:bp-arrow-grid-tablet lg:bp-arrow-grid grid gap-x-2 p-4 pb-4 lg:gap-x-6;
+  }
+
+  .main-bg-fill {
+    background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(231, 172, 92, 1) 55%,
+      rgba(255, 255, 255, 0) 80%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    mix-blend-mode: screen;
+  }
+
+  .main-bg {
+    background-color: black;
+    background-image: url("/sphere.png");
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    mix-blend-mode: luminosity;
+  }
+
+  .main-bg-fade {
+    background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(255, 255, 255, 0) 65%,
+      rgba(255, 255, 255, 0) 100%
+    );
   }
 
   .hero-bg {

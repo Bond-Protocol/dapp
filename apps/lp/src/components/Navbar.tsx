@@ -1,5 +1,6 @@
 import { LinkButton } from "./LinkButton";
 import Image from "next/image";
+import data from "../data";
 
 const Navlink = (props: { url: string; label: string }) => {
   return (
@@ -13,9 +14,9 @@ const Navlink = (props: { url: string; label: string }) => {
 };
 
 const links = [
-  { url: "https://docs.bondprotocol.finance", label: "Docs" },
-  { url: "", label: "Security" },
-  { url: "", label: "Faqs" },
+  { url: data.links.docs, label: "Docs" },
+  { url: data.links.audits, label: "Security" },
+  { url: data.links.medium, label: "Blog" },
 ];
 
 export const Navbar = () => {
@@ -38,15 +39,14 @@ export const Navbar = () => {
             className="xs:text-[10px] mx-0 md:text-[14px]"
             href="https://app.bondprotocol.finance"
             target="_blank"
-            variant="ghost"
             small
           >
             <div className="flex">
-              <span className="my-auto">Launch dApp</span>
+              <span className="my-auto">Launch App</span>
               <Image
                 height={24}
                 width={24}
-                src="/arrow-right.svg"
+                src="/arrow-right-black.svg"
                 alt="external_link_icon"
                 className="my-auto"
               />
