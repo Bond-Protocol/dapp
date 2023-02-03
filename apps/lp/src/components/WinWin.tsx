@@ -110,7 +110,7 @@ export const WinWin = (props: { className?: string }) => {
         <TextBlock
           className="text-center"
           title="Protocol"
-          content="Diversify treasure and own liquidity"
+          content="Diversify treasury and own liquidity"
         />
       </div>
       <div className="bp-btn-group bp-btn-lg">

@@ -34,7 +34,7 @@ export const TheProblem = ({ className }: { className: string }) => {
             <TextBlock
               className="self-stretch justify-self-stretch"
               title="Sell Pressure"
-              content="Tokens acquired from yield farms are likely to be sold by mercenary capital, destabilizing price."
+              content="Tokens acquired from yield farms are likely to be sold by mercenary capital, destabilizing price"
             />
             <div className="self-center justify-self-center">
               <ArrowRight />
@@ -42,7 +42,7 @@ export const TheProblem = ({ className }: { className: string }) => {
             <TextBlock
               className="self-stretch justify-self-stretch"
               title="Price Volatility"
-              content="Wild swings in token price cause instability for the protocol and negatively impact community members."
+              content="Wild swings in token price cause instability for the protocol and negatively impact community members"
             />
           </div>
 
@@ -60,7 +60,7 @@ export const TheProblem = ({ className }: { className: string }) => {
             <TextBlock
               title="Fragile Liquidity"
               content={
-                'Liquidity providers exit and sell their "yield" into thin liquidity, causing further sell pressure.'
+                'Liquidity providers exit and sell their "yield" into thin liquidity, causing further sell pressure'
               }
             />
             <div className="self-center justify-self-center">
@@ -68,7 +68,7 @@ export const TheProblem = ({ className }: { className: string }) => {
             </div>
             <TextBlock
               title="Impermanent Loss"
-              content="Token volatility exacerbates liquidity providers’ IL, capping upside and discouraging liquidity."
+              content="Token volatility exacerbates liquidity providers’ IL, capping upside and discouraging liquidity"
             />
           </div>
         </div>
