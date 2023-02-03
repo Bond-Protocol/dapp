@@ -580,6 +580,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <>
                       <Input
                         {...field}
+                        id="bp__market_owner_address"
                         autoComplete="off"
                         label="Market Owner Address"
                         className={"mb-2"}
