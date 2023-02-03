@@ -26,7 +26,7 @@ const bounties = [
   {
     name: "ImmuneFi",
     logoUrl: "/external/immunefi.svg",
-    url: "https://immunefi.com/",
+    url: "https://immunefi.com/bounty/bondprotocol/",
   },
 ];
 
