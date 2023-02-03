@@ -1,14 +1,15 @@
 import Image from "next/image";
 
+const dapp = "https://app.bondprotocol.finance/#";
 const terms = [
-  { label: "Terms of Use", url: "as" },
-  { label: "Privacy Policy", url: "as" },
-  { label: "Cookie Policy", url: "sd" },
+  { label: "Privacy Policy", url: `${dapp}/privacy` },
+  { label: "Terms of Use", url: `${dapp}/terms` },
+  { label: "Cookie Policy", url: `${dapp}/cookie` },
 ];
 
 export const socials = [
-  { label: "Medium", url: "https://medium.com/@Bond_Protocol" },
   { label: "Discord", url: "https://discord.gg/bondprotocol" },
+  { label: "Medium", url: "https://medium.com/@Bond_Protocol" },
   { label: "Twitter", url: "https://twitter.com/bond_protocol" },
 ];
 
@@ -28,7 +29,7 @@ const List = (props: {
       <div className="px-4 pt-2">
         {props.items.map(({ url, label }, i) => (
           <a href={url} target="_blank" rel="noreferrer" key={i}>
-            <div className="hover:text-light-secondary bp-transition pt-1 font-light">
+            <div className="hover:text-light-secondary bp-transition pt-1 font-light text-light-grey-400">
               {label}
             </div>
           </a>
@@ -40,7 +41,7 @@ const List = (props: {
 
 export const Footer = () => {
   return (
-    <div className="justify-center bg-black px-8 pt-4 pb-6 font-sans md:pb-12">
+    <div className="justify-center bg-black px-8 pt-4 pb-6 font-sans md:pb-12 border-t border-white/20">
       <div className="xs:block w-full pt-8 md:hidden">
         <Image
           height={56}
@@ -61,6 +62,7 @@ export const Footer = () => {
         {/*<List title="Terms" items={terms} /> */}
         <List title="Resources" items={resources} />
         <List title="Community" items={socials} />
+        <List title="Terms" items={terms} />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { LinkButton } from "./LinkButton";
 import Image from "next/image";
 import data from "../data";
+import ArrowRight from "../assets/arrow-right.svg";
 
 export type HeroProps = {
   className?: string;
@@ -8,23 +9,17 @@ export type HeroProps = {
 
 const LinkButtonContent = ({
   label,
-  icon,
+  children,
   iconClassName = "",
 }: {
   label: string;
-  icon: string;
+  children: React.ReactNode;
   iconClassName?: string;
 }) => {
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <span className="my-auto">{label}</span>
-      <Image
-        height={24}
-        width={24}
-        src={icon}
-        alt={label + "_icon"}
-        className={`my-auto ${iconClassName}`}
-      />
+      {children}
     </div>
   );
 };
@@ -49,17 +44,14 @@ export const Hero = (props: HeroProps) => {
         <div className="flex w-full flex-col gap-y-2 pt-10">
           <div className="flex w-full flex-col gap-2 pt-10 md:max-w-[301px] md:flex-row md:self-end">
             <LinkButton href={data.links.docs} variant="ghost" small>
-              <LinkButtonContent
-                icon="/arrow-right.svg"
-                iconClassName="-rotate-45"
-                label="Read Docs"
-              />
+              <LinkButtonContent iconClassName="-rotate-45" label="Read Docs">
+                <ArrowRight className="-rotate-45 fill-current text-current" />
+              </LinkButtonContent>
             </LinkButton>
             <LinkButton href={data.links.dapp} small>
-              <LinkButtonContent
-                icon="/arrow-right-black.svg"
-                label="Bond Now"
-              />
+              <LinkButtonContent label="Bond Now">
+                <ArrowRight className="fill-current text-current" />
+              </LinkButtonContent>
             </LinkButton>
           </div>
         </div>
