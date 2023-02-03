@@ -88,7 +88,7 @@ export const WinWin = (props: { className?: string }) => {
         <TextBlock
           className="hidden text-right lg:block"
           title="Protocol"
-          content="Diversify treasure and own liquidity"
+          content="Diversify treasury and own liquidity"
         />
       </div>
       <div className="relative">
