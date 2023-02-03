@@ -29,7 +29,7 @@ export const Values = (props: ValuesProps) => {
       <div className="child:px-4 lg:child:w-1/4 grid grid-cols-2 gap-y-4 py-4 backdrop-blur-md lg:flex">
         <TextBlock
           title="Build"
-          titleClassName="text-[25px]"
+          titleClassName="text-[25px] font-fraktion"
           content={
             <p>
               Custom bond strategies for
@@ -42,7 +42,7 @@ export const Values = (props: ValuesProps) => {
         />
         <TextBlock
           title="Own"
-          titleClassName="text-[25px]"
+          titleClassName="text-[25px] font-fraktion"
           content={
             <p>
               Liquidity outright
@@ -55,7 +55,7 @@ export const Values = (props: ValuesProps) => {
         />
         <TextBlock
           title="Navigate"
-          titleClassName="text-[25px]"
+          titleClassName="text-[25px] font-fraktion"
           content={
             <p>
               Treasury management to <br /> provide stability through any <br />{" "}
@@ -65,7 +65,7 @@ export const Values = (props: ValuesProps) => {
         />
         <TextBlock
           title="Deploy"
-          titleClassName="text-[25px]"
+          titleClassName="text-[25px] font-fraktion"
           content={
             <p>
               Permissionless bond markets - <br />

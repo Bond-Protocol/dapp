@@ -1,6 +1,6 @@
 type TextBlockProps = {
   className?: string;
-  tileClassName?: string;
+  titleClassName?: string;
   title?: string;
   content?: string | React.ReactNode;
 };
@@ -9,7 +9,7 @@ export const TextBlock = (props: TextBlockProps) => {
   return (
     <div {...props} className={`min-w-[160px] ${props.className}`}>
       <div
-        className={`lg:font-fraktion font-bold uppercase lg:text-[25px] ${props.tileClassName}`}
+        className={`font-bold uppercase lg:text-[25px] ${props.titleClassName}`}
       >
         {props.title}
       </div>
