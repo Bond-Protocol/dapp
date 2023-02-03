@@ -10,37 +10,28 @@ export type InfoLabelProps = {
   className?: string;
 };
 
-const content = [
-  {
-    title: "Better Price",
-    content: "Dutch Auction for demand-based discounts",
-  },
-  {
-    title: "Permanent Liquidity",
-    content: "Stabilize market and earn trading fees",
-  },
-  { title: "Vested Tokens", content: "Long-term alignment with protocol" },
-  {
-    title: "Diversified Treasury",
-    content: "Protect treasury value and extend runway",
-  },
-];
+const price = {
+  title: "Better Price",
+  content: "Bid for demand-based discounts",
+};
 
-const smolContent = [
-  {
-    title: "Better Price",
-    content: "Dutch Auction for demand-based discounts",
-  },
-  { title: "Vested Tokens", content: "Long-term alignment with protocol" },
-  {
-    title: "Permanent Liquidity",
-    content: "Stabilize market and earn trading fees",
-  },
-  {
-    title: "Diversified Treasury",
-    content: "Protect treasury value and extend runway",
-  },
-];
+const liquidity = {
+  title: "Permanent Liquidity",
+  content: "Stabilize market and earn trading fees",
+};
+
+const tokens = {
+  title: "Vested Tokens",
+  content: "Long-term alignment with protocol",
+};
+
+const treasury = {
+  title: "Diversified Treasury",
+  content: "Protect treasury value and extend runway",
+};
+
+const content = [price, liquidity, tokens, treasury];
+const smolContent = [price, tokens, liquidity, treasury];
 
 export const InvertedInfoLabel = (props: InfoLabelProps) => {
   return (
@@ -86,9 +77,7 @@ export const WinWin = (props: { className?: string }) => {
         {"A Win-Win for All"}
       </div>
       <div className="text-grey-500 pt-2 text-center">
-        {
-          "Bond Protocol builds stronger protocols with more resilient treasuries"
-        }
+        {"Bonds builds stronger protocols with more resilient treasuries"}
       </div>
       <div className="flex w-full justify-center py-12 lg:justify-between">
         <TextBlock
@@ -125,8 +114,8 @@ export const WinWin = (props: { className?: string }) => {
         />
       </div>
       <div className="bp-btn-group bp-btn-lg">
-        <LinkButton href={`${data.links.dapp}/#/markets`} variant="ghost">
-          {"View Bonds"}
+        <LinkButton href={data.links.whyBond} variant="ghost">
+          {"Why Bond"}
         </LinkButton>
         <LinkButton href={`${data.links.dapp}/#/create`}>
           {"Issue Bonds"}

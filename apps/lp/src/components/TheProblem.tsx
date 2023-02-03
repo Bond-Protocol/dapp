@@ -74,11 +74,11 @@ export const TheProblem = ({ className }: { className: string }) => {
         </div>
       </div>
       <div className="bp-btn-group bp-btn-lg lg:pt-20">
-        <LinkButton href={data.links.whyBond} size="lg" variant="ghost">
+        <LinkButton href={data.links.yieldArticle} size="lg" variant="ghost">
           Dig Deeper
         </LinkButton>
         <LinkButton href={data.links.dapp} size="lg">
-          Be a Bondor
+          View Bonds
         </LinkButton>
       </div>
     </div>

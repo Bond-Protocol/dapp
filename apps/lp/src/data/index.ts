@@ -32,6 +32,8 @@ const bounties = [
 
 const links = {
   audits: "https://github.com/Bond-Protocol/bond-contracts/tree/master/audits",
+  yieldArticle:
+    "https://www.nansen.ai/research/all-hail-masterchef-analysing-yield-farming-activity",
   docs: "https://docs.bondprotocol.finance",
   dapp: "https://app.bondprotocol.finance",
   markets: "https://app.bondprotocol.finance/#/markets",
