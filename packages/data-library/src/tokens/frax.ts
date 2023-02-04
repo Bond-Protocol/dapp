@@ -2,14 +2,14 @@ import { CUSTOM_PRICE_FEEDS, CHAIN_ID } from "../constants";
 export default {
   name: "FRAX",
   symbol: "FRAX",
-  logoUrl: "https://storageapi.fleek.co/fc635ae1-c8aa-4181-b7db-801a533b8fa9-bucket/FRAX.png",
+  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/FRAX.png",
   priceSources: [{ source: "coingecko", apiId: "frax" }],
   purchaseLinks: {
     [CHAIN_ID.ETHEREUM_MAINNET]: "https://curve.fi/",
     [CHAIN_ID.ARBITRUM_MAINNET]: "https://saddle.exchange/#/",
   },
   addresses: {
-    [CHAIN_ID.ETHEREUM_MAINNET]: "0x853d955acef822db058eb8505911ed77f175b99e" ,
+    [CHAIN_ID.ETHEREUM_MAINNET]: "0x853d955acef822db058eb8505911ed77f175b99e",
     [CHAIN_ID.ARBITRUM_MAINNET]: "0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F",
     [CHAIN_ID.POLYGON_MAINNET]: "0x45c32fa6df82ead1e2ef74d17b76547eddfaff89",
     [CHAIN_ID.BSC_MAINNET]: "0x90c97f71e18723b0cf0dfa30ee176ab653e89f40",
