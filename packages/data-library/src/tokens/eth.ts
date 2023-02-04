@@ -3,7 +3,7 @@ import { CHAIN_ID } from "../constants";
 export default {
   name: "Wrapped Ethereum",
   symbol: "WETH",
-  logoUrl: "https://storageapi.fleek.co/fc635ae1-c8aa-4181-b7db-801a533b8fa9-bucket/WETH.png",
+  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
   priceSources: [{ source: "coingecko", apiId: "ethereum" }],
   purchaseLinks: {
     [CHAIN_ID.ETHEREUM_MAINNET]: "https://app.uniswap.org/#/swap",
@@ -22,7 +22,7 @@ export default {
     [CHAIN_ID.FANTOM_MAINNET]: "0x74b23882a30290451a17c44f4f05243b6b58c76d",
     [CHAIN_ID.GOERLI_TESTNET]: [
       "0xb4fbf271143f4fbf7b91a5ded31805e42b2208d6",
-      "0xdfcea9088c8a88a76ff74892c1457c17dfeef9c1"
+      "0xdfcea9088c8a88a76ff74892c1457c17dfeef9c1",
     ],
     [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]: "0x4200000000000000000000000000000000000006",
   },
