@@ -1,5 +1,5 @@
 import { useListUniqueBondersQuery } from "src/generated/graphql";
-import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { getSubgraphQueries } from "services";
 import { useOwnerTokenTbvs } from "./useOwnerTokenTbvs";
 import { usdFormatter } from "src/utils/format";
 import { useEffect, useState } from "react";

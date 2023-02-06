@@ -23,7 +23,6 @@ export const RouteMap: FC = () => {
       <Route path="/markets" element={<Markets />} />
       <Route path="/issuers" element={<IssuerList />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/my-markets" element={<MyMarkets />} />
       <Route
         path="/create"
         element={

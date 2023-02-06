@@ -1,4 +1,4 @@
-import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { getSubgraphQueries } from "services";
 import { useTokens } from "hooks/useTokens";
 import {
   OwnerTokenTbv,

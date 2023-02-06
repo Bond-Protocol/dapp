@@ -3,7 +3,6 @@ import { createContext, useContext } from "react";
 
 const initialState = {
   allMarkets: new Map(),
-  myMarkets: new Map(),
   marketsByIssuer: new Map(),
   issuers: [],
   isMarketOwner: false,
@@ -15,7 +14,6 @@ const initialState = {
     myPriceCalcs: false,
   },
   refetchAllMarkets: () => {},
-  refetchMyMarkets: () => {},
   refetchOne: (id: string) => {},
 };
 
@@ -27,6 +25,7 @@ export const useMarkets = () => {
 
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
   const calculatedMarkets = useCalculatedMarkets();
+  console.log("## AT MARKET PROVIDER -> AFTER HOOK##");
 
   return (
     // @ts-ignore

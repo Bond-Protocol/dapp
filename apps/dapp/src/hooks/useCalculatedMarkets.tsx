@@ -11,10 +11,9 @@ import useDeepCompareEffect from "use-deep-compare-effect";
 import { useLoadMarkets } from "hooks/useLoadMarkets";
 import { useMyMarkets } from "hooks/useMyMarkets";
 
-export function useCalculatedMarkets() {
+export function returnBullshit() {
   return {
     allMarkets: new Map(),
-    myMarkets: new Map(),
     marketsByIssuer: new Map(),
     issuers: [],
     isMarketOwner: false,
@@ -26,23 +25,21 @@ export function useCalculatedMarkets() {
       myPriceCalcs: false,
     },
     refetchAllMarkets: () => {},
-    refetchMyMarkets: () => {},
     refetchOne: (id: string) => {},
   };
 }
 
-export function _useCalculatedMarkets() {
+export function useCalculatedMarkets() {
   const { markets: markets, isLoading: isMarketLoading } = useLoadMarkets();
 
-  const { markets: myMarkets, isLoading: isMyMarketLoading } = useMyMarkets();
   const {
     getPrice,
     getTokenDetails,
     currentPrices,
     isLoading: areTokensLoading,
   } = useTokens();
+
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
-  const [myCalculatedMarkets, setMyCalculatedMarkets] = useState(new Map());
   const [issuers, setIssuers] = useState<string[]>([]);
   const [marketsByIssuer, setMarketsByIssuer] = useState(new Map());
 
@@ -81,8 +78,9 @@ export function _useCalculatedMarkets() {
     const quoteToken = getTokenDetails(market.quoteToken);
     const payoutToken = getTokenDetails(market.payoutToken);
 
-    getPrice(quoteToken.id);
-    getPrice(payoutToken.id);
+    //TODO: (afx) ?????
+    //getPrice(quoteToken.id);
+    //getPrice(payoutToken.id);
 
     const lpPair = quoteToken.lpPair;
     if (lpPair != undefined) {
@@ -148,34 +146,15 @@ export function _useCalculatedMarkets() {
     })
   );
 
-  const calculateMyMarkets = useQueries(
-    myMarkets.map((market) => {
-      return {
-        queryKey: market.id,
-        queryFn: () => calculateMarket(market),
-        enabled: Object.keys(currentPrices).length > 0,
-      };
-    })
-  );
-
-  const isCalculatingAll = calculateAllMarkets.some((m) => m.isLoading);
-  const isCalculatingMine = calculateMyMarkets.some((m) => m.isLoading);
+  const isCalculatingAll = false; //calculateAllMarkets.some((m) => m.isLoading);
 
   const refetchOne = (id: string) => {
-    calculateAllMarkets.forEach((result) => {
-      if (result.data && result.data.id === id) void result.refetch();
-    });
-
     const market = calculateAllMarkets.find((m) => m?.data?.id === id);
-    void market?.refetch();
+    market?.refetch();
   };
 
   const refetchAllMarkets = () => {
     calculateAllMarkets.forEach((result) => result.refetch());
-  };
-
-  const refetchMyMarkets = () => {
-    calculateMyMarkets.forEach((result) => result.refetch());
   };
 
   useDeepCompareEffect(() => {
@@ -205,34 +184,21 @@ export function _useCalculatedMarkets() {
     }
   }, [calculateAllMarkets, currentPrices]);
 
-  useDeepCompareEffect(() => {
-    if (!isCalculatingMine && Object.keys(currentPrices).length > 0) {
-      const calculatedMarketsMap = new Map();
-      calculateMyMarkets.forEach((result) => {
-        result.data && calculatedMarketsMap.set(result.data.id, result.data);
-      });
-
-      setMyCalculatedMarkets(calculatedMarketsMap);
-    }
-  }, [calculateMyMarkets, currentPrices]);
-
   return {
     allMarkets: calculatedMarkets,
-    myMarkets: myCalculatedMarkets,
     issuers: issuers,
     marketsByIssuer: marketsByIssuer,
-    isMarketOwner: !!myCalculatedMarkets.size,
     refetchAllMarkets: () => refetchAllMarkets(),
-    refetchMyMarkets: () => refetchMyMarkets(),
+    refetchMyMarkets: () => {},
     refetchOne: (id: string) => refetchOne(id),
     getTokenDetails,
     getPrice,
     isLoading: {
-      market: isMarketLoading,
-      myMarkets: isMyMarketLoading,
+      market: false,
+      myMarkets: false,
       tokens: areTokensLoading,
       priceCalcs: isCalculatingAll,
-      myPriceCalcs: isCalculatingMine,
+      myPriceCalcs: false,
     },
   };
 }

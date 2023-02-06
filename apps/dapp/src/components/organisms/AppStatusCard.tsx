@@ -1,5 +1,5 @@
 import { useTestnet } from "hooks/useTestnet";
-import { environment } from "../../env-state";
+import { environment } from "../../environment";
 import { ReactComponent as AlertIcon } from "../../assets/icons/alert.svg";
 import { ReactComponent as InfoIcon } from "../../assets/icons/info.svg";
 

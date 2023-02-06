@@ -14,8 +14,6 @@ import {
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
 export const App: FC = () => {
-  const [showInfoArea, setShowInfoArea] = useState(false);
-
   if (underMaintenance) return <CoverUpScreen />;
   const closeInfoArea = () => {
     window.scrollTo(0, 0);
@@ -32,7 +30,6 @@ export const App: FC = () => {
             <div className="relative min-h-[89vh] overflow-x-hidden pb-16 font-jakarta antialiased">
               <Navbar />
               <AppBackground />
-              <InformationArea open={showInfoArea} onClose={closeInfoArea} />
               <PolicyRoutes />
               <div className="mx-auto max-w-[1136px]">
                 <PageContainer>

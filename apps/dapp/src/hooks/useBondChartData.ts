@@ -9,7 +9,7 @@ import { BondChartDataset } from "components/organisms/LineChart";
 import { calcDiscountPercentage } from "../utils/calculate-percentage";
 import { interpolate } from "../utils/interpolate-price";
 import { useTokenPriceHistory } from "./useTokenPricesHistory";
-import { subgraphEndpoints } from "../services/subgraph-endpoints";
+import { subgraphEndpoints } from "../services";
 
 type PriceDataArray = Array<{ date: number; price: number }>;
 

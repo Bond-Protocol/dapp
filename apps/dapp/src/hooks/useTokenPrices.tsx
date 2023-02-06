@@ -6,9 +6,9 @@ import {
   LpPair,
 } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
-import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { getSubgraphQueries, useSubgraphQueries } from "services";
 import { Token, useListTokensQuery } from "../generated/graphql";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import * as bondLibrary from "@bond-protocol/bond-library";
 import {
   CustomPriceSource,
@@ -16,10 +16,9 @@ import {
 } from "@bond-protocol/bond-library";
 import axios, { AxiosResponse } from "axios";
 import { useQuery } from "react-query";
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
+import { environment } from "src/environment";
 
 export interface PriceDetails {
   price: string;
@@ -65,9 +64,7 @@ const lpTokens = allTokens
 type _Token = bondLibrary.Token & { key: string };
 
 export const useTokenPrices = () => {
-  const subgraphQueries = getSubgraphQueries(useListTokensQuery);
-
-  const [isTestnet] = useAtom(testnetMode);
+  const isTestnet = environment.isTestnet;
   const [tokens, setTokens] = useState<Token[]>([]);
   const [currentPrices, setCurrentPrices] = useState<Price>({});
 
@@ -77,7 +74,8 @@ export const useTokenPrices = () => {
    */
   const apiIds = bondLibrary.getUniqueApiIds();
 
-  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
+  const { queries: subgraphQueries, isLoading } =
+    useSubgraphQueries(useListTokensQuery);
   /*
   Loads token price data from Coingecko.
    */
@@ -369,11 +367,11 @@ export const useTokenPrices = () => {
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
    */
   return {
-    tokens: tokens,
-    currentPrices: currentPrices,
-    getPrice: (id: string) => getPrice(id),
-    getTokenDetails: (token: any) => getTokenDetails(token),
+    tokens,
+    currentPrices,
+    getPrice,
+    getTokenDetails,
     getTokenDetailsFromChain,
-    isLoading,
+    isLoading: false,
   };
 };
