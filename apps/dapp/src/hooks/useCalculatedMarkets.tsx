@@ -12,6 +12,26 @@ import { useLoadMarkets } from "hooks/useLoadMarkets";
 import { useMyMarkets } from "hooks/useMyMarkets";
 
 export function useCalculatedMarkets() {
+  return {
+    allMarkets: new Map(),
+    myMarkets: new Map(),
+    marketsByIssuer: new Map(),
+    issuers: [],
+    isMarketOwner: false,
+    isLoading: {
+      market: false,
+      myMarkets: false,
+      tokens: false,
+      priceCalcs: false,
+      myPriceCalcs: false,
+    },
+    refetchAllMarkets: () => {},
+    refetchMyMarkets: () => {},
+    refetchOne: (id: string) => {},
+  };
+}
+
+export function _useCalculatedMarkets() {
   const { markets: markets, isLoading: isMarketLoading } = useLoadMarkets();
 
   const { markets: myMarkets, isLoading: isMyMarketLoading } = useMyMarkets();

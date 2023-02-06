@@ -1,12 +1,13 @@
-import {CHAIN_ID} from "@bond-protocol/bond-library";
-import {useAtom} from "jotai";
+import { CHAIN_ID } from "@bond-protocol/bond-library";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {UseQueryResult} from "react-query";
+import { UseQueryResult } from "react-query";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
-  [CHAIN_ID.ETHEREUM_MAINNET]:
-    `${import.meta.env.VITE_ETHEREUM_MAINNET_SUBGRAPH_ENDPOINT}`,
+  [CHAIN_ID.ETHEREUM_MAINNET]: `${
+    import.meta.env.VITE_ETHEREUM_MAINNET_SUBGRAPH_ENDPOINT
+  }`,
   [CHAIN_ID.GOERLI_TESTNET]:
     `${import.meta.env.VITE_ETHEREUM_TESTNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.ARBITRUM_MAINNET]:
@@ -55,6 +56,11 @@ export const testnetEndpoints = [
   },
 ];
 
+export const getSubgraphEndpointsV2 = (
+  query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
+  variables?: {}
+) => {};
+
 export const getSubgraphQueries = (
   query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
   variables?: {}
@@ -74,8 +80,8 @@ export const getSubgraphQueries = (
             },
           },
         },
-        {queryKey: endpoint.url + "--" + query.name.toString(), ...variables},
-        {enabled: testnet ? !!testnet : !testnet}
+        { queryKey: endpoint.url + "--" + query.name.toString(), ...variables },
+        { enabled: testnet ? !!testnet : !testnet }
       )
     );
   });
@@ -109,7 +115,7 @@ export const getSubgraphQueriesPerChainFn = (
           },
         },
         variables,
-        {enabled: testnet ? !!testnet : !testnet},
+        { enabled: testnet ? !!testnet : !testnet }
       )
     );
   });
