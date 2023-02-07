@@ -1,4 +1,4 @@
-import { getSubgraphQueriesPerChainFn, useSubgraphForChain } from "services";
+import { getSubgraphQueriesPerChainFn } from "services";
 import { Market, useListMarketsQuery } from "../generated/graphql";
 import { useEffect, useState } from "react";
 import { getAddressesByChain } from "@bond-protocol/bond-library";
@@ -9,11 +9,12 @@ import { environment } from "src/environment";
 const isTestnet = environment.isTestnet;
 
 export function useLoadMarkets() {
-  const { queries: subgraphQueries, isLoading } = useSubgraphForChain(
+  const subgraphQueries = getSubgraphQueriesPerChainFn(
     useListMarketsQuery,
     getAddressesByChain,
     "addresses"
   );
+  const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   const [markets, setMarkets] = useState<Market[]>([]);
   const [marketsMap, setMarketsMap] = useState<Map<string, Market>>(new Map());

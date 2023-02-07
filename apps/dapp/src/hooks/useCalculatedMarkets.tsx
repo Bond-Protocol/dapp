@@ -9,35 +9,12 @@ import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { useLoadMarkets } from "hooks/useLoadMarkets";
-import { useMyMarkets } from "hooks/useMyMarkets";
-
-export function returnBullshit() {
-  return {
-    allMarkets: new Map(),
-    marketsByIssuer: new Map(),
-    issuers: [],
-    isMarketOwner: false,
-    isLoading: {
-      market: false,
-      myMarkets: false,
-      tokens: false,
-      priceCalcs: false,
-      myPriceCalcs: false,
-    },
-    refetchAllMarkets: () => {},
-    refetchOne: (id: string) => {},
-  };
-}
+import { getTokenDetails } from "src/utils";
 
 export function useCalculatedMarkets() {
-  const { markets: markets, isLoading: isMarketLoading } = useLoadMarkets();
+  const { getPrice, currentPrices, isLoading: areTokensLoading } = useTokens();
 
-  const {
-    getPrice,
-    getTokenDetails,
-    currentPrices,
-    isLoading: areTokensLoading,
-  } = useTokens();
+  const { markets: markets, isLoading: isMarketLoading } = useLoadMarkets();
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [issuers, setIssuers] = useState<string[]>([]);
@@ -60,6 +37,7 @@ export function useCalculatedMarkets() {
       no event, so the subgraph is not updated. Thus, we check here and return early if
       the market is not live.
     */
+    //TODO: Move all to a background task on startup
     const isLive = await contractLibrary.isLive(
       market.marketId,
       requestProvider,
@@ -77,10 +55,6 @@ export function useCalculatedMarkets() {
 
     const quoteToken = getTokenDetails(market.quoteToken);
     const payoutToken = getTokenDetails(market.payoutToken);
-
-    //TODO: (afx) ?????
-    //getPrice(quoteToken.id);
-    //getPrice(payoutToken.id);
 
     const lpPair = quoteToken.lpPair;
     if (lpPair != undefined) {
@@ -137,16 +111,14 @@ export function useCalculatedMarkets() {
   };
 
   const calculateAllMarkets = useQueries(
-    markets.map((market) => {
-      return {
-        queryKey: market.id,
-        queryFn: () => calculateMarket(market),
-        enabled: Object.keys(currentPrices).length > 0,
-      };
-    })
+    markets.map((market) => ({
+      queryKey: market.id,
+      queryFn: () => calculateMarket(market),
+      enabled: Object.keys(currentPrices).length > 0,
+    }))
   );
 
-  const isCalculatingAll = false; //calculateAllMarkets.some((m) => m.isLoading);
+  const isCalculatingAll = calculateAllMarkets.some((m) => m.isLoading);
 
   const refetchOne = (id: string) => {
     const market = calculateAllMarkets.find((m) => m?.data?.id === id);
@@ -170,6 +142,7 @@ export function useCalculatedMarkets() {
             result.data.owner,
             result?.data.chainId
           );
+
           const id = protocol?.id;
           const value = issuerMarkets.get(protocol?.id) || [];
 
@@ -186,19 +159,16 @@ export function useCalculatedMarkets() {
 
   return {
     allMarkets: calculatedMarkets,
-    issuers: issuers,
-    marketsByIssuer: marketsByIssuer,
-    refetchAllMarkets: () => refetchAllMarkets(),
-    refetchMyMarkets: () => {},
-    refetchOne: (id: string) => refetchOne(id),
+    issuers,
+    marketsByIssuer,
+    refetchAllMarkets,
+    refetchOne,
     getTokenDetails,
     getPrice,
     isLoading: {
-      market: false,
-      myMarkets: false,
+      market: isMarketLoading,
       tokens: areTokensLoading,
       priceCalcs: isCalculatingAll,
-      myPriceCalcs: false,
     },
   };
 }

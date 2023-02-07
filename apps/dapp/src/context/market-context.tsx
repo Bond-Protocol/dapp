@@ -25,7 +25,6 @@ export const useMarkets = () => {
 
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
   const calculatedMarkets = useCalculatedMarkets();
-  console.log("## AT MARKET PROVIDER -> AFTER HOOK##");
 
   return (
     // @ts-ignore

@@ -26,7 +26,6 @@ export const MarketList: FC<MarketListProps> = ({
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
 
-  console.log({ allMarkets, isLoading });
   const columns = issuer ? issuerColumns : tableColumns;
 
   const markets = props.markets || allMarkets;
