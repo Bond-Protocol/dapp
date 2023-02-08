@@ -1,3 +1,4 @@
+import PopperUnstyled from "@mui/base/PopperUnstyled";
 import "react-day-picker/dist/style.css";
 import { DayPicker } from "react-day-picker";
 import { useEffect, useState } from "react";
@@ -9,14 +10,20 @@ export type DatePickerProps = {
   className?: string;
   dateClassName?: string;
   label?: string;
-  string?: string;
   placeholder?: string;
   defaultValue?: Date;
 };
 
 export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [date, setDate] = useState<Date>();
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "date-popper" : undefined;
 
   const fromDate = new Date();
   const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
@@ -30,8 +37,8 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
   const handleClose = (date: unknown) => {
     if (date instanceof Date && !isNaN(date.valueOf())) {
       setDate(date);
-      setOpen(false);
       onChange && onChange(date?.getTime() / 1000);
+      setAnchorEl(null);
     }
   };
 
@@ -50,12 +57,9 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
   }, [onChange, date]);
 
   return (
-    <ClickAwayListener onClickAway={() => handleClose(date)}>
+    <ClickAwayListener onClickAway={(e: unknown) => handleClose(date)}>
       <div>
-        <div
-          className={props.className}
-          onClick={() => setOpen((prev) => !prev)}
-        >
+        <div id={id} className={props.className} onClick={handleClick}>
           {props.label && (
             <p className="font-jakarta mb-1 text-xs font-light">
               {props.label}
@@ -72,16 +76,17 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
             <CalendarIcon className="color-white my-auto" />
           </div>
         </div>
-        {open && (
-          <DayPicker
-            mode="single"
-            selected={date}
-            onSelect={handleClose}
-            fromDate={fromDate}
-            toDate={toDate}
-            className="font-jakarta absolute z-10 rounded-lg border p-3 text-xs backdrop-blur-xl"
-          />
-        )}
+        <PopperUnstyled open={open} anchorEl={anchorEl}>
+          <div className="m-2 rounded-md border bg-white/5 backdrop-blur-md">
+            <DayPicker
+              mode="single"
+              selected={date}
+              onSelect={handleClose}
+              fromDate={fromDate}
+              toDate={toDate}
+            />
+          </div>
+        </PopperUnstyled>
       </div>
     </ClickAwayListener>
   );
