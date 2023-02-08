@@ -69,7 +69,7 @@ export const LineChart = (props: ChartProps) => {
       <div className="flex h-full">
         {props.yAxisLabels && <CustomTick elements={props.yAxisLabels} />}
         <div className="h-full min-h-[20vh] w-full min-w-[25vw] border-light-primary-100/20">
-          <ResponsiveContainer>
+          <ResponsiveContainer className="max-w-[500px]">
             <Chart data={props.data}>
               <XAxis
                 hide
