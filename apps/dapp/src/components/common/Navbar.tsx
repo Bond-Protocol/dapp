@@ -1,11 +1,11 @@
 import { ConnectButton } from "components/common";
 import { ProtocolLogo } from "ui";
-import { useTestnet } from "hooks/useTestnet";
+import { useTestnetMode } from "hooks/useTestnet";
 import { NavbarTabs } from "./NavbarTabs";
 import { useNavigate } from "react-router-dom";
 
 export const Navbar = () => {
-  const { isTestnet } = useTestnet();
+  const { isTestnet } = useTestnetMode();
   const navigate = useNavigate();
 
   return (

@@ -3,14 +3,14 @@ import { FC } from "react";
 export type IssuerCardProps = {
   issuer: any;
   tbv: number;
-  markets: any[];
+  marketCount: number;
   navigate?: (to: string) => void;
 };
 
 export const IssuerCard: FC<IssuerCardProps> = ({
   issuer,
   tbv,
-  markets,
+  marketCount,
   navigate,
 }) => {
   const handleClick = (name: string) =>
@@ -19,14 +19,12 @@ export const IssuerCard: FC<IssuerCardProps> = ({
   const logo = issuer?.logoUrl || "/placeholders/token-placeholder.png";
   const _tbv = new Intl.NumberFormat("en-US").format(Math.floor(tbv));
 
-  const length = markets.length;
-
   const marketSize =
-    length < 1
+    marketCount < 1
       ? "No Open Markets"
-      : length === 1
-      ? `${length} Market`
-      : `${length} Markets`;
+      : marketCount === 1
+      ? `${marketCount} Market`
+      : `${marketCount} Markets`;
 
   return (
     <div
