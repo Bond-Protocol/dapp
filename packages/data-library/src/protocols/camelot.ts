@@ -24,6 +24,7 @@ export default {
   */
   issuerAddresses: {
     [CHAIN_ID.ARBITRUM_MAINNET]: ["0x01Bb7B44cc398AaA2b76Ac6253F0F5634279Db9D"],
+    [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: ["0xEb4bc9DfC7B3009b5F48Be8bF7736741721C97e3"]
   },
   /*
    Tokens specific to your protocol like your governance token or LPs can be added here.
@@ -39,6 +40,7 @@ export default {
       // Token contract addresses
       addresses: {
         [CHAIN_ID.ARBITRUM_MAINNET]: "0x3d9907F9a368ad0a51Be60f7Da3b97cf940982D8",
+        [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0x0288ED36a911AFE377B51C05cb33f7ABE899a517"
       },
       purchaseLinks: { [CHAIN_ID.ARBITRUM_MAINNET]: "https://app.camelot.exchange" }, // Where to acquire your token
       priceSources: [
@@ -56,5 +58,30 @@ export default {
         // { source: "custom", customPriceFunction: CUSTOM_PRICE_FEEDS.US_STABLE },
       ],
     },
+    {
+      name: "xGRAIL Token",
+      symbol: "xGRAIL",
+      logoUrl: "https://app.camelot.exchange/images/tokens/xgrail.svg",
+      // Token contract addresses
+      addresses: {
+        [CHAIN_ID.ARBITRUM_MAINNET]: "0x3CAaE25Ee616f2C8E13C74dA0813402eae3F496b",
+        [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0x45bd859A0533d29B4D55a860bd70A332AE810dEE"
+      },
+      purchaseLinks: { [CHAIN_ID.ARBITRUM_MAINNET]: "https://app.camelot.exchange" }, // Where to acquire your token
+      priceSources: [
+        /*
+           Check out our docs for supported price sources and their usage.
+           Although custom price feeds are supported, some features such as bond price history charts
+           do not currently support custom price feeds.
+        */
+        { source: "coingecko", apiId: "camelot-token" },
+        /*
+          If you need to add a custom price function please add it in ../custom-price-feeds.ts
+          then uncomment the following line and refer to it using the name you set in the
+          CUSTOM_PRICE_FEEDS enum
+        */
+        // { source: "custom", customPriceFunction: CUSTOM_PRICE_FEEDS.US_STABLE },
+      ],
+    }
   ],
 } as ProtocolDefinition;
