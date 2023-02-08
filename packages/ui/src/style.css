@@ -79,4 +79,29 @@
   .bp-transition {
     @apply transition-all duration-300 ease-in-out;
   }
+
+  .skeleton-container {
+    opacity: 0.6;
+    @apply rounded-md;
+    background: linear-gradient(
+      90deg,
+      rgba(138, 138, 138, 0.68) 0%,
+      rgba(132, 120, 100, 0.48) 100%
+    );
+  }
+
+  .skeleton {
+    mix-blend-mode: overlay;
+    animation: skeleton-loading 2s linear infinite alternate;
+  }
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(230, 12%, 24%);
+  }
+  100% {
+    background-color: hsl(230, 12%, 34%);
+    opacity: 20;
+  }
 }

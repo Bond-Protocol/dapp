@@ -19,9 +19,7 @@ export const IssuerList = () => {
 
   const scrollUp = () => window.scrollTo(0, 0);
 
-  const [issuers, setIssuers] = useState<Protocol[]>(
-    Array.from(PROTOCOLS.values())
-  );
+  const [issuers, setIssuers] = useState<Protocol[]>([]);
 
   useEffect(() => {
     const allIssuers = Array.from(PROTOCOLS.values()).filter(
@@ -35,7 +33,7 @@ export const IssuerList = () => {
       : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
 
     setIssuers(issuers);
-  }, [marketsByIssuer]);
+  }, [marketsByIssuer, metrics.protocolTbvs]);
 
   return (
     <>
@@ -62,11 +60,16 @@ export const IssuerList = () => {
       </div>
       <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">
         {issuers.map((issuer) => {
-          // const markets = marketsByIssuer.get(issuer.name) || [];
-          // const protocolTbv = metrics.protocolTbvs[issuer.name];
+          const markets = marketsByIssuer.get(issuer.name) || [];
+          const protocolTbv = metrics.protocolTbvs[issuer.name];
           return (
             <div key={issuer.id} className="min-w-[169px] max-w-[178px] flex-1">
-              <IssuerCard issuer={issuer} marketCount={0} navigate={navigate} />
+              <IssuerCard
+                issuer={issuer}
+                tbv={protocolTbv?.tbv || 0}
+                markets={markets}
+                navigate={navigate}
+              />
             </div>
           );
         })}

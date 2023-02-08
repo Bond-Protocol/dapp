@@ -14,7 +14,8 @@ import { getTokenDetails } from "src/utils";
 export function useCalculatedMarkets() {
   const { getPrice, currentPrices, isLoading: areTokensLoading } = useTokens();
 
-  const { markets: markets, isLoading: isMarketLoading } = useLoadMarkets();
+  const { markets, isLoading: isMarketLoading } = useLoadMarkets();
+  console.log({ markets });
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [issuers, setIssuers] = useState<string[]>([]);
