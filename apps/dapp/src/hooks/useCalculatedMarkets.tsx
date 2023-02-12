@@ -1,21 +1,18 @@
-import { useTokens } from "hooks/useTokens";
 import { useQueries } from "react-query";
 import { useState } from "react";
+import useDeepCompareEffect from "use-deep-compare-effect";
 import * as bondLibrary from "@bond-protocol/bond-library";
-import { CHAIN_ID, getProtocolByAddress } from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import type { CalculatedMarket } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
-import useDeepCompareEffect from "use-deep-compare-effect";
-import { useLoadMarkets } from "hooks/useLoadMarkets";
+import { useLoadMarkets, useTokens } from "hooks";
 import { getTokenDetails } from "src/utils";
 
 export function useCalculatedMarkets() {
   const { getPrice, currentPrices, isLoading: areTokensLoading } = useTokens();
 
   const { markets, isLoading: isMarketLoading } = useLoadMarkets();
-  console.log({ markets });
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [issuers, setIssuers] = useState<string[]>([]);
@@ -48,9 +45,9 @@ export function useCalculatedMarkets() {
 
     const purchaseLink = bondLibrary.TOKENS.get(
       market.quoteToken.id
-    )?.purchaseLinks.get(market.chainId as CHAIN_ID)
+    )?.purchaseLinks.get(market.chainId as bondLibrary.CHAIN_ID)
       ? bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(
-          market.chainId as CHAIN_ID
+          market.chainId as bondLibrary.CHAIN_ID
         )
       : "https://app.sushi.com/swap";
 
@@ -139,7 +136,7 @@ export function useCalculatedMarkets() {
         if (result && result.data) {
           calculatedMarketsMap.set(result.data.id, result.data);
 
-          const protocol = getProtocolByAddress(
+          const protocol = bondLibrary.getProtocolByAddress(
             result.data.owner,
             result?.data.chainId
           );

@@ -10,7 +10,7 @@ export type IssuerCardProps = {
 export const IssuerCard: FC<IssuerCardProps> = ({
   issuer,
   tbv,
-  marketCount,
+  marketCount = 0,
   navigate,
 }) => {
   const handleClick = (name: string) =>

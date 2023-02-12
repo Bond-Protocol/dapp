@@ -1,6 +1,8 @@
 import { PROTOCOLS } from "@bond-protocol/bond-library";
 import { ActionCard, InfoLabel, IssuerCard } from "ui";
 import { useMarkets } from "hooks";
+import { useAtom } from "jotai";
+import testnetMode from "../../atoms/testnetMode.atom";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
 import { useGlobalMetrics } from "hooks/useGlobalMetrics";
@@ -8,17 +10,16 @@ import { useListAllPurchases } from "hooks/useListAllPurchases";
 import { useEffect, useState } from "react";
 import { socials } from "..";
 import { Protocol } from "@bond-protocol/bond-library";
-import { useTestnetMode } from "hooks/useTestnet";
 
 export const IssuerList = () => {
   const { marketsByIssuer } = useMarkets();
   const { totalPurchases } = useListAllPurchases();
   const navigate = useNavigate();
   const metrics = useGlobalMetrics();
-  const [isTestnet] = useTestnetMode();
 
   const scrollUp = () => window.scrollTo(0, 0);
 
+  const [testnet] = useAtom(testnetMode);
   const [issuers, setIssuers] = useState<Protocol[]>([]);
 
   useEffect(() => {
@@ -28,7 +29,7 @@ export const IssuerList = () => {
         metrics.protocolTbvs[issuer.name]?.tbv > 0
     );
 
-    const issuers = isTestnet
+    const issuers = testnet
       ? allIssuers
       : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
 
@@ -67,7 +68,7 @@ export const IssuerList = () => {
               <IssuerCard
                 issuer={issuer}
                 tbv={protocolTbv?.tbv || 0}
-                markets={markets}
+                marketCount={markets?.length}
                 navigate={navigate}
               />
             </div>

@@ -34,13 +34,11 @@ const bondPrice: Column<CalculatedMarket> = {
   width: "w-[18%]",
   formatter: (market) => {
     const { payout } = getTokenDetailsForMarket(market);
-    const value = market.formattedDiscountedPrice;
-    const subtext = value ? market.formattedFullPrice + " Market" : "";
 
     return {
       icon: payout?.logoUrl,
-      value,
-      subtext,
+      value: market.formattedDiscountedPrice,
+      subtext: market.formattedFullPrice + " Market",
     };
   },
 };
@@ -52,8 +50,7 @@ const discount: Column<CalculatedMarket> = {
   width: "w-[8%]",
   Component: DiscountLabel,
   formatter: (market) => {
-    const value = market.discount + "%";
-    return { value };
+    return { value: market.discount + "%" };
   },
 };
 
@@ -63,14 +60,11 @@ const maxPayout: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[14%]",
   formatter: (market) => {
-    const maxPayout = longFormatter.format(parseFloat(market.maxPayout));
-    const value =
-      parseFloat(maxPayout) > 0
-        ? `${maxPayout} ${market.payoutToken.symbol}`
-        : null;
-
     return {
-      value,
+      value:
+        longFormatter.format(parseFloat(market.maxPayout)) +
+        " " +
+        market.payoutToken.symbol,
       subtext: usdFormatter.format(market.maxPayoutUsd),
       sortValue: market.maxPayoutUsd.toString(),
     };
@@ -115,7 +109,7 @@ const tbv: Column<CalculatedMarket> = {
   width: "w-[7%]",
   formatter: (market) => {
     return {
-      value: usdFormatter.format(market.tbvUsd),
+      value: usdLongFormatter.format(market.tbvUsd),
       sortValue: market.tbvUsd.toString(),
     };
   },
