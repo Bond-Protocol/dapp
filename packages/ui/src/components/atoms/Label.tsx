@@ -1,8 +1,9 @@
 import { TokenLogo, TokenLogoProps } from "../atoms";
+import { Skeleton } from "./Skeleton";
 
 export interface LabelProps extends TokenLogoProps {
   value?: string | React.ReactNode;
-  subtext?: string;
+  subtext?: string | React.ReactNode;
   textClassName?: string;
   iconSubtext?: string;
 }
@@ -22,13 +23,13 @@ export const Label = (props: LabelProps) => {
           chainChip={props.chainChip}
         />
       )}
-      <div className="flex flex-col gap-0.5">
+      <div className="flex w-full flex-col gap-0.5">
         <p
           className={`text-[15px] ${props.subtext && "leading-none"} ${
             props.textClassName
           }`}
         >
-          {props.value}
+          {props.value ? props.value : <Skeleton className="max-w-[60px]" />}
         </p>
         {props.subtext && (
           <p className="text-light-primary-100 font-mono text-sm leading-none">

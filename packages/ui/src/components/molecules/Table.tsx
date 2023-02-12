@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TableHeading, TableCell, Label, LabelProps } from "..";
 import { useSorting } from "hooks";
 
@@ -109,9 +109,10 @@ export interface TableBodyProps {
 export const TableBody = ({ rows, columns }: TableBodyProps) => {
   return (
     <tbody>
-      {rows?.map((row) => {
+      {rows?.map((row, i) => {
         return (
           <tr
+            key={i}
             className={`child:pl-5 border-white/15 h-20 border-b ${
               row.onClick &&
               "transition-all duration-300 ease-in-out hover:cursor-pointer hover:bg-white/5"

@@ -1,3 +1,5 @@
+import { Skeleton } from "./Skeleton";
+
 export type DiscountLabelProps = {
   value?: string;
 };
@@ -13,7 +15,7 @@ export const DiscountLabel = ({ value = "" }: DiscountLabelProps) => {
           : isPositive
           ? "text-light-success"
           : "text-light-alert"
-      } text-[15px] font-extralight`}
+      } w-full text-[15px] font-extralight`}
     >
       {value}
     </div>

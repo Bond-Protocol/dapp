@@ -23,6 +23,7 @@ export * from "./ModalTitle";
 export * from "./PageContainer";
 export * from "./ProtocolLogo";
 export * from "./Select";
+export * from "./Skeleton";
 export * from "./SocialRow";
 export * from "./TableCell";
 export * from "./TableHeading";

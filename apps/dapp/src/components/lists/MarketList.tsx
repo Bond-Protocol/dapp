@@ -65,7 +65,7 @@ export const MarketList: FC<MarketListProps> = ({
   ...props
 }) => {
   const navigate = useNavigate();
-  //const { allMarkets, isLoading } = useMarkets();
+  const { allMarkets, isLoading: isMktloading } = useMarkets();
   const { markets: prePriceMarkets, isLoading } = useLoadMarkets();
   console.log({ prePriceMarkets });
 
@@ -73,9 +73,9 @@ export const MarketList: FC<MarketListProps> = ({
 
   // const markets = props.markets || prePriceMarkets;
 
-  // const filteredMarkets = Array.from(markets.values()).filter((m) =>
-  //   issuer ? getProtocol(m.owner)?.id === issuer : true
-  // );
+  const filteredMarkets = prePriceMarkets.filter((m) =>
+    issuer ? getProtocol(m.owner)?.id === issuer : true
+  );
 
   // const tableMarkets = useMemo(
   //   () =>
@@ -91,15 +91,30 @@ export const MarketList: FC<MarketListProps> = ({
   //       }),
   //   [allMarkets, isLoading, issuer, columns]
   // );
-  const tableMarkets = useMemo(
-    function () {
-      //@ts-ignore
-      return prePriceMarkets.map((market) =>
-        toTableData(columns, formatMarket(market))
-      );
-    },
-    [prePriceMarkets, isLoading]
-  );
+
+  const tableMarkets = useMemo(() => {
+    const arePricesLoaded = Array.from(allMarkets.values()).length > 0;
+    const _markets = arePricesLoaded
+      ? Array.from(allMarkets.values())
+      : filteredMarkets;
+
+    return _markets
+      .map((market) => {
+        return toTableData(
+          columns,
+          arePricesLoaded ? market : formatMarket(market)
+        );
+      })
+      .map((r) => {
+        const row = { ...r };
+        //@ts-ignore
+        row["view"].onClick = (path: string) => navigate(path);
+        //@ts-ignore (TODO): Improve this
+        row.onClick = () =>
+          navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
+        return row;
+      });
+  }, [prePriceMarkets, allMarkets, isMktloading, isLoading]);
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
