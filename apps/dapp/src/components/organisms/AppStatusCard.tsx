@@ -22,33 +22,30 @@ const TestnetMessage = () => (
 );
 
 const WarningMessage = ({ toggleTestnet }: { toggleTestnet: () => void }) => (
-  <div className="flex w-full justify-center bg-red-400">
+  <div className="flex w-full justify-center bg-red-700 text-light-secondary-10">
     <AlertIcon />
     <span className="my-auto font-bold">
-      You're on a testing environment containing experimental features and bugs
+      You're on a staging environment containing experimental features and bugs
       and <span className="underline">utilizing real markets.</span>{" "}
       Transactions may result in a loss of funds.
-      <button className="underline" onClick={toggleTestnet}>
-        Click here to load testnet markets.
-      </button>
     </span>
     <AlertIcon />
   </div>
 );
 
 export const AppStatusCard = () => {
-  const { isTestnet, toggleTestnet } = useTestnetMode();
-  const showInfo = false; //environment.isStaging || environment.isTesting;
-  const showWarning = showInfo && !isTestnet;
+  const [isTestnet, setTestnet] = useTestnetMode();
+  const showInfo = isTestnet;
+  const showWarning = !showInfo && environment.isStaging;
 
   return (
     <div
       className={`${
-        showInfo ? "sticky z-10" : "hidden"
+        showInfo || showWarning ? "sticky z-10" : "hidden"
       } inset-0 text-center text-xs`}
     >
       {showWarning ? (
-        <WarningMessage toggleTestnet={toggleTestnet} />
+        <WarningMessage toggleTestnet={() => setTestnet(true)} />
       ) : (
         <TestnetMessage />
       )}

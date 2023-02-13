@@ -17,6 +17,8 @@ export const TableHeading = ({
   marketSort,
   setMarketSort,
   isSorting,
+  ascending,
+  alignEnd,
   ...props
 }: TableHeadingProps) => {
   return (
@@ -29,28 +31,28 @@ export const TableHeading = ({
         props.className
       }`}
     >
-      {isSorting && props.alignEnd && (
+      {isSorting && alignEnd && (
         <div
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}
         >
           <ArrowDownIcon
             width="16"
-            className={`${props.ascending ? "rotate-180" : ""} ${
+            className={`${ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"
             } fill-white`}
           />
         </div>
       )}
       {props.children}
-      {isSorting && !props.alignEnd && (
+      {isSorting && !alignEnd && (
         <div
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}
         >
           <ArrowDownIcon
             width="16"
-            className={`${props.ascending ? "rotate-180" : ""} ${
+            className={`${ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"
             } fill-white`}
           />

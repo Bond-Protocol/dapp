@@ -1,11 +1,10 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Providers } from "context/app-providers";
 import { PageContainer, AppBackground } from "ui";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
 import {
   AppStatusCard,
   CoverUpScreen,
-  InformationArea,
   Footer,
   MobileCover,
   Navbar,
@@ -15,10 +14,6 @@ const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
 export const App: FC = () => {
   if (underMaintenance) return <CoverUpScreen />;
-  const closeInfoArea = () => {
-    window.scrollTo(0, 0);
-    setShowInfoArea(false);
-  };
 
   return (
     <>
@@ -37,7 +32,7 @@ export const App: FC = () => {
                 </PageContainer>
               </div>
             </div>
-            <Footer closeInfoArea={closeInfoArea} />
+            <Footer />
           </div>
         </Providers>
       </div>

@@ -25,17 +25,11 @@ const FooterLink = ({
   );
 };
 
-export const Footer = ({
-  className = "",
-  closeInfoArea,
-}: {
-  className?: string;
-  closeInfoArea: () => void;
-}) => {
+export const Footer = ({ className = "" }: { className?: string }) => {
   const navigate = useNavigate();
 
   const goTo = (path: string) => {
-    closeInfoArea();
+    window.scrollTo(0, 0);
     navigate(path);
   };
 

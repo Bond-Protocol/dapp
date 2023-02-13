@@ -24,7 +24,7 @@ export const Link = forwardRef(function Button(
 ) {
   const pseudo = props.disabled ? styles.disabled : styles.hover;
   const style = `${styles.base} ${styles.active} ${pseudo}`;
-  const { children, ...rest } = props;
+  const { children, iconClassName, ...rest } = props;
 
   return (
     <ButtonUnstyled
@@ -43,7 +43,7 @@ export const Link = forwardRef(function Button(
         </p>
       )}
       {!props.disableIcon && (
-        <LinkIcon className={`color-inherit my-auto ${props.iconClassName}`} />
+        <LinkIcon className={`color-inherit my-auto ${iconClassName}`} />
       )}
     </ButtonUnstyled>
   );
