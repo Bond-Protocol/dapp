@@ -9,6 +9,7 @@ import {
   MobileCover,
   Navbar,
 } from "components";
+import { AppBackdrop } from "components/common/AppBackdrop";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
@@ -24,7 +25,7 @@ export const App: FC = () => {
             <AppStatusCard />
             <div className="relative min-h-[89vh] overflow-x-hidden pb-16 font-jakarta antialiased">
               <Navbar />
-              <AppBackground />
+              <AppBackdrop />
               <PolicyRoutes />
               <div className="mx-auto max-w-[1136px]">
                 <PageContainer>

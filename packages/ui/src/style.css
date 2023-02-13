@@ -17,7 +17,8 @@
 
   .bg-base {
     z-index: -100;
-    @apply absolute inset-0 h-full w-full;
+    @apply fixed h-[100vh] w-[100vw];
+    background-attachment: fixed;
   }
 
   .bg-grad-top {
@@ -26,6 +27,7 @@
       rgb(101, 137, 167, 1) 0%,
       rgba(255, 255, 255, 0) 50%
     );
+    background-attachment: fixed;
   }
 
   .bg-grad-top-2 {
@@ -35,6 +37,7 @@
       rgb(101, 137, 167, 1) 0%,
       rgba(255, 255, 255, 0) 50%
     );
+    background-attachment: fixed;
   }
 
   .bg-grad-top-xs {

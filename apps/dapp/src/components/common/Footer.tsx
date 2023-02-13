@@ -34,7 +34,9 @@ export const Footer = ({ className = "" }: { className?: string }) => {
   };
 
   return (
-    <div className={`mx-auto h-24 w-full ${className} antialiased`}>
+    <div
+      className={`mx-auto h-24 w-full bg-light-base ${className} antialiased`}
+    >
       <div className="flex h-full flex-col items-center ">
         <SocialRow {...socials} className="mt-8 justify-center" />
 
@@ -42,7 +44,7 @@ export const Footer = ({ className = "" }: { className?: string }) => {
           <FooterLink onClick={() => goTo("/terms")}>Terms of Use</FooterLink>
         </div>
       </div>
-      <div className="pb-0.5 pl-2 font-mono text-[10px]">
+      <div className="bg-light-base pb-0.5 pl-2 font-mono text-[10px]">
         Build(#{__COMMIT_HASH__})
       </div>
     </div>
