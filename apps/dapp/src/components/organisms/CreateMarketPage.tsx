@@ -44,9 +44,15 @@ const formDefaults = {
   vestingType: 0,
   bondsPerWeek: 7,
   debtBuffer: 30,
+  quoteToken: {
+    address: "",
+    confirmed: false,
+  },
+  payoutToken: {
+    address: "",
+    confirmed: false,
+  },
 };
-
-const priceFormatter = new Intl.NumberFormat("en-US");
 
 export type TokenInfo = {
   name: string;
@@ -107,155 +113,83 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     defaultValues: props.initialValues ? props.initialValues : formDefaults,
   });
 
-  const selectedChain = useWatch({
-    control,
-    name: "chain",
-  });
+  const form = useWatch({ control });
 
-  const marketOwnerAddress = useWatch({
-    control,
-    name: "marketOwnerAddress",
-  });
-
-  const payoutToken = useWatch({
-    control,
-    name: "payoutToken",
-    defaultValue: props.initialValues?.payoutToken || {
-      address: "",
-      confirmed: false,
-    },
-  });
-
-  const quoteToken = useWatch({
-    control,
-    name: "quoteToken",
-    defaultValue: props.initialValues?.quoteToken || {
-      address: "",
-      confirmed: false,
-    },
-  });
-
-  const marketCapacity = useWatch({
-    control,
-    name: "marketCapacity",
-  });
-
-  const capacityToken = useWatch({
-    control,
-    name: "capacityToken",
-  });
-
-  const minExchangeRate = useWatch({
-    control,
-    name: "minExchangeRate",
-  });
-
-  const payoutTokenPrice = useWatch({
-    control,
-    name: "payoutTokenPrice",
-  });
-
-  const quoteTokenPrice = useWatch({
-    control,
-    name: "quoteTokenPrice",
-  });
-
-  const marketExpiry = useWatch({
-    control,
-    name: "marketExpiryDate",
-  });
-
-  const timeAmount = useWatch({
-    control,
-    name: "timeAmount",
-  });
-
-  const bondVesting = useWatch({
-    control,
-    name: "vesting",
-  });
-
-  const bondsPerWeek = useWatch({
-    control,
-    name: "bondsPerWeek",
-  });
-
-  const debtBuffer = useWatch({
-    control,
-    name: "debtBuffer",
-  });
-
-  const vestingType = useWatch({
-    control,
-    name: "vestingType",
-    defaultValue: props.initialValues?.vestingType || 0,
-  });
-
-  const chainSelection = selectedChain?.id || selectedChain || "1";
+  const chainSelection = form.selectedChain?.id || form.selectedChain || "1";
 
   useEffect(() => {
-    if (marketOwnerAddress) {
-      const protocol = getProtocolByAddress(marketOwnerAddress, chainSelection);
+    if (form.marketOwnerAddress) {
+      const protocol = getProtocolByAddress(
+        form.marketOwnerAddress,
+        chainSelection
+      );
       setProtocol(protocol);
       setShowOwnerWarning(protocol === null);
     } else {
       setProtocol(null);
       setShowOwnerWarning(false);
     }
-  }, [marketOwnerAddress, chainSelection]);
+  }, [form.marketOwnerAddress, chainSelection]);
 
   useEffect(() => {
     setShowTokenWarning(
-      (ethers.utils.isAddress(payoutToken.address) &&
+      (ethers.utils.isAddress(form.payoutToken.address) &&
         libraryPayoutToken === undefined) ||
-        (ethers.utils.isAddress(quoteToken.address) &&
+        (ethers.utils.isAddress(form.quoteToken.address) &&
           libraryQuoteToken === undefined)
     );
-  }, [payoutToken, libraryPayoutToken, quoteToken, libraryQuoteToken]);
+  }, [
+    form.payoutToken,
+    libraryPayoutToken,
+    form.quoteToken,
+    libraryQuoteToken,
+  ]);
 
   useEffect(() => {
-    if (marketCapacity === undefined) {
+    if (form.marketCapacity === undefined) {
       setCapacityString("");
     } else {
       setCapacityString(
-        `${marketCapacity} ${
-          capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
+        `${form.marketCapacity} ${
+          form.capacityToken === 0 ? payoutTokenSymbol : quoteTokenSymbol
         }`
       );
     }
-  }, [marketCapacity, capacityToken]);
+  }, [form.marketCapacity, form.capacityToken]);
 
   useEffect(() => {
-    let rate = Number(payoutTokenPrice) / Number(quoteTokenPrice);
+    let rate = Number(form.payoutTokenPrice) / Number(form.quoteTokenPrice);
     rate = trimAsNumber(rate, calculateTrimDigits(rate));
     if (rate != Infinity && !isNaN(rate)) {
       setExchangeRate(rate);
     } else {
       setExchangeRate(0);
     }
-  }, [payoutTokenPrice, quoteTokenPrice]);
+  }, [form.payoutTokenPrice, form.quoteTokenPrice]);
 
   useEffect(() => {
-    let rate = Number(minExchangeRate);
+    let rate = Number(form.minExchangeRate);
     rate = trimAsNumber(rate, calculateTrimDigits(rate));
     if (rate != Infinity && !isNaN(rate)) {
       setMinimumExchangeRate(rate);
     } else {
       setMinimumExchangeRate(0);
     }
-  }, [minExchangeRate]);
+  }, [form.minExchangeRate]);
 
   useEffect(() => {
     if (
-      bondsPerWeek &&
+      form.bondsPerWeek &&
       marketExpiryDays &&
-      marketCapacity &&
+      form.marketCapacity &&
       payoutTokenSymbol &&
       quoteTokenSymbol
     ) {
       const capacity =
-        capacityToken === 0 ? marketCapacity : marketCapacity / exchangeRate;
-      const depositInterval = bondsPerWeek / 7;
+        form.capacityToken === 0
+          ? form.marketCapacity
+          : form.marketCapacity / exchangeRate;
+      const depositInterval = form.bondsPerWeek / 7;
       const intervals = marketExpiryDays / depositInterval;
       const cadence = capacity / intervals;
 
@@ -269,35 +203,35 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       setEstimatedBondCadence("");
     }
   }, [
-    bondsPerWeek,
+    form.bondsPerWeek,
     marketExpiryDays,
-    marketCapacity,
-    capacityToken,
+    form.marketCapacity,
+    form.capacityToken,
     payoutTokenSymbol,
     quoteTokenSymbol,
   ]);
 
   useEffect(() => {
-    if (bondsPerWeek && marketExpiryDays && marketCapacity) {
+    if (form.bondsPerWeek && marketExpiryDays && form.marketCapacity) {
       const duration = marketExpiryDays * 24 * 60 * 60;
-      const depositInterval = (24 * 60 * 60) / (bondsPerWeek / 7);
+      const depositInterval = (24 * 60 * 60) / (form.bondsPerWeek / 7);
       const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
       const debtBuffer =
-        ((marketCapacity * 0.25) /
-          ((marketCapacity * decayInterval) / duration)) *
+        ((form.marketCapacity * 0.25) /
+          ((form.marketCapacity * decayInterval) / duration)) *
         100;
 
       setValue("debtBuffer", Math.round(debtBuffer));
     }
-  }, [bondsPerWeek, marketExpiryDays, marketCapacity]);
+  }, [form.bondsPerWeek, marketExpiryDays, form.marketCapacity]);
 
   useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
       setMinExchangeRateString(
-        `${minExchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`
+        `${form.minExchangeRate} ${quoteTokenSymbol}/${payoutTokenSymbol}`
       );
     }
-  }, [minExchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
+  }, [form.minExchangeRate, payoutTokenSymbol, quoteTokenSymbol]);
 
   useEffect(() => {
     if (payoutTokenSymbol !== "" && quoteTokenSymbol !== "") {
@@ -311,13 +245,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const days =
       Number(
         (
-          Math.round(bondVesting - new Date().getTime() / 1000) /
+          Math.round(form.bondVesting - new Date().getTime() / 1000) /
           (60 * 60 * 24)
         ).toFixed(0)
       ) + 1;
 
     let string = "";
-    if (vestingType === 0 && days >= 0) {
+    if (form.vestingType === 0 && days >= 0) {
       if (isNaN(days)) {
         string = "";
       } else if (days === 0) {
@@ -326,23 +260,27 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         string = `Bonds vest in ${days} day`;
         if (days !== 1) string = string.concat("s");
       }
-    } else if (timeAmount && vestingType === 1) {
-      if (timeAmount.amount === 0) {
+    } else if (form.timeAmount && form.vestingType === 1) {
+      if (form.timeAmount.amount === 0) {
         string = "Bonds immediately on purchase";
       } else {
-        string = `Bonds vest ${timeAmount.amount} day`;
-        if (timeAmount.amount !== 1) string = string.concat("s");
+        string = `Bonds vest ${form.timeAmount.amount} day`;
+        if (form.timeAmount.amount !== 1) string = string.concat("s");
         string = string.concat(" after purchase");
       }
     }
     setVestingString(string);
-  }, [bondVesting, timeAmount && timeAmount.amount, vestingType]);
+  }, [
+    form.bondVesting,
+    form.timeAmount && form.timeAmount.amount,
+    form.vestingType,
+  ]);
 
   useEffect(() => {
     const days =
       Number(
         (
-          Math.round(marketExpiry - new Date().getTime() / 1000) /
+          Math.round(form.marketExpiry - new Date().getTime() / 1000) /
           (60 * 60 * 24)
         ).toFixed(0)
       ) + 1;
@@ -361,7 +299,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       setMarketExpiryString("");
       setMarketExpiryDays(0);
     }
-  }, [marketExpiry]);
+  }, [form.marketExpiry]);
 
   const summaryFields = [
     {
@@ -401,13 +339,13 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       label: "Bonds per week",
       tooltip:
         "The target number of maximum bonds per week. This could be split across multiple small transactions which add up to a maximum bond.",
-      value: `${bondsPerWeek}`,
+      value: `${form.bondsPerWeek}`,
     },
     {
       label: "Debt Buffer",
       tooltip:
         "The recommended value is calculated based on your market's capacity, duration and deposit interval. We recommend you do not change this unless you are sure you know what you are doing.",
-      value: `${debtBuffer}%`,
+      value: `${form.debtBuffer}%`,
     },
   ];
 
@@ -422,7 +360,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     }
 
     const price = Number(exchangeRate).toExponential();
-    const minPrice = Number(minExchangeRate).toExponential();
+    const minPrice = Number(form.minExchangeRate).toExponential();
 
     const priceSymbolIndex = price.indexOf("e") + 1;
     const minSymbolIndex = minPrice.indexOf("e") + 1;
@@ -586,20 +524,20 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   useEffect(() => {
     if (
       Object.keys(currentPrices).length > 0 &&
-      ethers.utils.isAddress(payoutToken.address)
+      ethers.utils.isAddress(form.payoutToken.address)
     ) {
-      void getTokenInfo(payoutToken.address, true);
+      void getTokenInfo(form.payoutToken.address, true);
     }
-  }, [payoutToken.address, chainSelection, currentPrices]);
+  }, [form.payoutToken.address, chainSelection, currentPrices]);
 
   useEffect(() => {
     if (
       Object.keys(currentPrices).length > 0 &&
-      ethers.utils.isAddress(quoteToken.address)
+      ethers.utils.isAddress(form.quoteToken.address)
     ) {
-      void getTokenInfo(quoteToken.address, false);
+      void getTokenInfo(form.quoteToken.address, false);
     }
-  }, [quoteToken.address, chainSelection, currentPrices]);
+  }, [form.quoteToken.address, chainSelection, currentPrices]);
 
   return (
     <div className="my-8">
@@ -1027,7 +965,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 )}
               />
 
-              {vestingType === 1 ? (
+              {form.vestingType === 1 ? (
                 <Controller
                   name="timeAmount"
                   control={control}
@@ -1047,7 +985,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   rules={{
                     validate: {
                       isSet: (value: number) =>
-                        vestingType !== 0 || !isNaN(value),
+                        form.vestingType !== 0 || !isNaN(value),
                     },
                   }}
                   render={({ field }) => (
