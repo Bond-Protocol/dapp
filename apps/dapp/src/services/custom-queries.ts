@@ -17,6 +17,6 @@ export const getTokenPriceHistory = (
   const toTimestamp = getUnixTime(to);
 
   return generateFetcher(
-    `https://api.coingecko.com/api/v3/coins/${apiId}/market_chart/range?vs_currency=usd&from=${fromTimestamp}&to=${toTimestamp}`
+    `${import.meta.env.VITE_COINGECKO_BASE_URL}/coins/${apiId}/market_chart/range?vs_currency=usd&from=${fromTimestamp}&to=${toTimestamp}&x_cg_pro_api_key=${import.meta.env.VITE_COINGECKO_API_KEY}`
   );
 };

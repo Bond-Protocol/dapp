@@ -61,7 +61,7 @@ export const useTokenPrices = () => {
     try {
       return axios
         .get(
-          `https://api.coingecko.com/api/v3/simple/price?ids=${tokenIds}&vs_currencies=usd`
+          `${import.meta.env.VITE_COINGECKO_BASE_URL}/simple/price?ids=${tokenIds}&vs_currencies=usd&x_cg_pro_api_key=${import.meta.env.VITE_COINGECKO_API_KEY}`
         )
         .then((response: AxiosResponse) => response.data);
     } catch (e: any) {
