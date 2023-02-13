@@ -5,6 +5,7 @@ import * as bondLibrary from "@bond-protocol/bond-library";
 export type ChainPickerProps = {
   className?: string;
   label?: string;
+  errorMessage?: string;
   defaultValue?: { label: string; id: string };
   onChange?: (chain: string) => void;
 };
@@ -42,6 +43,11 @@ export const ChainPicker = (props: ChainPickerProps) => {
           />
         </div>
       </div>
+      {props.errorMessage && (
+        <div className="my-1 justify-self-start text-xs font-light text-red-500">
+          <>{props.errorMessage}</>
+        </div>
+      )}
     </div>
   );
 };

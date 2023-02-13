@@ -4,6 +4,7 @@ import InputUnstyled, { InputUnstyledProps } from "@mui/base/InputUnstyled";
 export type InputProps = InputUnstyledProps & {
   label?: string | React.ReactNode;
   subText?: string | React.ReactNode;
+  errorMessage?: string;
 };
 
 export const Input = forwardRef(function Input(
@@ -15,11 +16,13 @@ export const Input = forwardRef(function Input(
       {props.label && <p className="mb-1 text-xs font-light">{props.label}</p>}
       <InputUnstyled
         {...props}
-        autoComplete="disabled-for-now-bcuz-chrome-sux"
+        autoComplete="disabled"
         ref={ref}
         componentsProps={{
           root: {
-            className: "w-full h-10 my-auto border rounded-lg",
+            className: `w-full h-10 my-auto border rounded-lg ${
+              props.errorMessage && " border-red-500 bg-red-500"
+            }`,
           },
           input: {
             className:
@@ -28,9 +31,18 @@ export const Input = forwardRef(function Input(
         }}
       />
       {props.subText && (
-        <p className="text-light-neutral mt-1 text-xs font-light">
+        <p
+          className={`text-light-neutral mt-1 text-xs font-light ${
+            props.errorMessage && " text-red-500"
+          }`}
+        >
           {props.subText}
         </p>
+      )}
+      {props.errorMessage && (
+        <div className="my-1 justify-self-start text-xs font-light text-red-500">
+          <>{props.errorMessage}</>
+        </div>
       )}
     </div>
   );
