@@ -555,7 +555,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <ChainPicker
                       {...field}
                       label="Chain"
-                      errorMessage={errors.chain?.message}
+                      errorMessage={errors.chain?.message?.toString()}
                       defaultValue={props.initialValues?.chain}
                     />
                   )}
@@ -847,7 +847,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                           errorMessage={
                             errors.minimumExchangeRate?.type === "isNumber"
                               ? "Must be a number"
-                              : errors.minimumExchangeRate?.message
+                              : errors.minimumExchangeRate?.message?.toString()
                           }
                         />
                       </>

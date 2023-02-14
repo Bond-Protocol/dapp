@@ -44,7 +44,7 @@ export const IssuerList = () => {
           label="Total Bonded Value"
           tooltip="Total Bonded Value across all Issuers"
         >
-          {metrics.tbv}
+          {metrics?.tbv}
         </InfoLabel>
         <InfoLabel
           label="Total Bonds"
@@ -56,7 +56,7 @@ export const IssuerList = () => {
           label="Unique Bonders"
           tooltip="Total unique addresses that interacted with protocol markets"
         >
-          {metrics.uniqueBonders}
+          {metrics?.uniqueBonders}
         </InfoLabel>
       </div>
       <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">

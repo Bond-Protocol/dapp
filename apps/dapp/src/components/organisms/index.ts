@@ -8,7 +8,6 @@ export * from "./CloseMarketCard";
 export * from "./CreateMarketPage";
 export * from "./IssuerPage";
 export * from "./IssueMarketPage";
-export * from "./MyMarkets";
 export * from "./PlaceholderChart";
 export * from "./TokenPriceCard";
 export * from "./TokenPickerCard";

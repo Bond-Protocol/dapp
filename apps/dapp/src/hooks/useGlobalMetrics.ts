@@ -18,7 +18,7 @@ export const useGlobalMetrics = () => {
 
     setUniqueBonders(
       subgraphQueries
-        .map((value) => value.data.uniqueBonders.length)
+        .map((value) => value.data?.uniqueBonders.length || 0)
         .reduce((previous, current) => previous + current)
     );
   }, [isLoading, isTestnet]);

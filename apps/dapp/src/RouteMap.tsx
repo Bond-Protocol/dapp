@@ -8,7 +8,6 @@ import {
   MarketInsights,
   Markets,
   MarketCreated,
-  MyMarkets,
   PolicyPage,
 } from "./components";
 import { useState } from "react";
