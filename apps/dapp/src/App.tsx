@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { Providers } from "context/app-providers";
-import { PageContainer, AppBackground } from "ui";
+import { PageContainer } from "ui";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
 import {
   AppStatusCard,
@@ -21,9 +21,9 @@ export const App: FC = () => {
       <MobileCover />
       <div className="xs:hidden fml:block">
         <Providers>
-          <div className="h-full">
-            <AppStatusCard />
-            <div className="relative min-h-[89vh] overflow-x-hidden pb-16 font-jakarta antialiased">
+          <AppStatusCard />
+          <div className="flex h-full min-h-[100vh] flex-col justify-between">
+            <div className="h-full overflow-x-hidden pb-16 font-jakarta antialiased">
               <Navbar />
               <AppBackdrop />
               <PolicyRoutes />
