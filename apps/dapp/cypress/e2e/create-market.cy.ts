@@ -23,7 +23,7 @@ describe("Create Markets", () => {
     cy.contains("Advanced Setup");
   });
 
-  it.only("Switches chains", () => {
+  it("Switches chains", () => {
     cy.visit("/create");
 
     cy.get("#bp__chain_picker_input").children().contains("Ethereum");
