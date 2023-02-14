@@ -1,9 +1,12 @@
-import { CHAIN_ID } from "@bond-protocol/bond-library";
+import {CHAIN_ID} from "@bond-protocol/bond-library";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
+import {UseQueryResult} from "react-query";
+
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
-  [CHAIN_ID.ETHEREUM_MAINNET]: `${
-    import.meta.env.VITE_ETHEREUM_MAINNET_SUBGRAPH_ENDPOINT
-  }`,
+  [CHAIN_ID.ETHEREUM_MAINNET]:
+    `${import.meta.env.VITE_ETHEREUM_MAINNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.GOERLI_TESTNET]:
     `${import.meta.env.VITE_ETHEREUM_TESTNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.ARBITRUM_MAINNET]:
@@ -51,3 +54,64 @@ export const testnetEndpoints = [
     chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,
   },
 ];
+
+export const getSubgraphQueries = (
+  query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
+  variables?: {}
+): UseQueryResult<any, any>[] => {
+  const [testnet, setTestnet] = useAtom(testnetMode);
+  const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;
+
+  const queries: UseQueryResult<any, any>[] = [];
+  endpoints.forEach((endpoint) => {
+    queries.push(
+      query(
+        {
+          endpoint: endpoint.url,
+          fetchParams: {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        },
+        {queryKey: endpoint.url + "--" + query.name.toString(), ...variables},
+        {enabled: testnet ? !!testnet : !testnet}
+      )
+    );
+  });
+  return queries;
+};
+
+export const getSubgraphQueriesPerChainFn = (
+  query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
+  func: (chain: CHAIN_ID) => any,
+  fieldName: string
+): UseQueryResult<any, any>[] => {
+  const [testnet, setTestnet] = useAtom(testnetMode);
+  const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;
+
+  const queries: UseQueryResult<any, any>[] = [];
+  endpoints.forEach((endpoint) => {
+    const variables = {
+      queryKey: endpoint.url + "--" + query.name.toString(),
+    };
+    // @ts-ignore
+    variables[fieldName] = func(endpoint.chain);
+
+    queries.push(
+      query(
+        {
+          endpoint: endpoint.url,
+          fetchParams: {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        },
+        variables,
+        {enabled: testnet ? !!testnet : !testnet},
+      )
+    );
+  });
+  return queries;
+};

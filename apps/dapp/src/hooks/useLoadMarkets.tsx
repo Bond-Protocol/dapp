@@ -1,12 +1,11 @@
-import { getSubgraphQueriesPerChainFn } from "services";
+import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
 import { Market, useListMarketsQuery } from "../generated/graphql";
 import { useEffect, useState } from "react";
 import { getAddressesByChain } from "@bond-protocol/bond-library";
+import { useAtom } from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
-import { environment } from "src/environment";
-
-const isTestnet = environment.isTestnet;
 
 export function useLoadMarkets() {
   const subgraphQueries = getSubgraphQueriesPerChainFn(
@@ -16,6 +15,7 @@ export function useLoadMarkets() {
   );
   const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
+  const [isTestnet] = useAtom(testnetMode);
   const [markets, setMarkets] = useState<Market[]>([]);
   const [marketsMap, setMarketsMap] = useState<Map<string, Market>>(new Map());
 
@@ -25,13 +25,12 @@ export function useLoadMarkets() {
   }, [isLoading, isTestnet]);
 
   useEffect(() => {
-    if (markets.length && !marketsMap.size) {
-      const map: Map<string, Market> = new Map();
-      markets.forEach((market) => {
-        map.set(market.id, market);
-      });
-      setMarketsMap(map);
-    }
+    const map: Map<string, Market> = new Map();
+    markets.forEach((market) => {
+      map.set(market.id, market);
+    });
+
+    setMarketsMap(map);
   }, [markets]);
 
   return {
