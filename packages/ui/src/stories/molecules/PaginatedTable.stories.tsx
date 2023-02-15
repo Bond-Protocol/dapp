@@ -4,7 +4,7 @@ import { PaginatedTable } from "../../components/molecules/PaginatedTable";
 import { data as _data } from "../mock-data/table";
 import { DiscountLabel, Button } from "../../components";
 
-const data = Array(100).fill(_data[0]);
+const data = Array(97).fill(_data[0]);
 
 const cols = [
   {

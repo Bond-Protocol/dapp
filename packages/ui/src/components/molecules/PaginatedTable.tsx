@@ -1,11 +1,10 @@
 import { ReactComponent as CaretDown } from "../../assets/icons/select-arrow-down.svg";
 import { useState } from "react";
-import { TablePaginationUnstyled } from "@mui/base";
 import { Table, TableProps } from "./Table";
 import { Icon } from "..";
 
 export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -14,18 +13,18 @@ export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
       ? Math.max(0, (1 + page) * rowsPerPage - props.data?.length || 0)
       : 0;
 
-  const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number
-  ) => {
+  const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+  const toggleSeeAll = () => {
+    if (rowsPerPage === -1) {
+      setRowsPerPage(10);
+      setPage(0);
+    } else {
+      setRowsPerPage(-1);
+      setPage(0);
+    }
   };
 
   const _data =
@@ -35,136 +34,141 @@ export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
 
   return (
     <div>
-      <Table {...props} data={_data} />
-      <TablePaginationCool
+      <Table {...props} emptyRows={emptyRows} data={_data} />
+      <TablePagination
         handleChangePage={handleChangePage}
         currentPage={page}
-        totalPages={9}
+        totalPages={Math.ceil(props.data?.length / Math.abs(rowsPerPage))}
+        onSeeAll={toggleSeeAll}
+        isShowingAll={rowsPerPage === -1}
       />
     </div>
   );
 };
 
-const Separator = () => (
-  <div className={"mx-[10px] w-[12px] border-b border-dashed"} />
-);
-
 export const PaginationSelector = (props: {
   value: number;
   currentPage: number;
-  onClickPage: (e: React.BaseSyntheticEvent, num: number) => void;
-  showSeparator?: boolean;
+  onClickPage: (num: number) => void;
+  showAsSeparator?: boolean;
   className?: string;
 }) => {
   const isSelected = props.value === props.currentPage;
   const selectedStyle =
     "border-light-secondary text-light-secondary rounded-lg border";
 
-  const handleClick = (e: React.BaseSyntheticEvent) =>
-    props.onClickPage(e, props.value);
+  const handleClick = () => props.onClickPage(props.value);
 
-  if (props.showSeparator) return <Separator />;
+  if (props.showAsSeparator) {
+    return <div className={"mx-[10px] w-[12px] border-b border-dashed"} />;
+  }
 
   return (
     <div
       onClick={handleClick}
-      className={`flex h-8 w-8 max-w-[32px] cursor-pointer select-none items-center justify-center p-1 text-center text-[14px] ${
+      className={`flex h-8 w-8 max-w-[32px] cursor-pointer select-none items-center justify-center p-1 text-center text-[14px] hover:rounded-lg hover:border ${
         isSelected && selectedStyle
-      } ${props.className} hover:rounded-lg hover:border`}
+      } ${props.className} `}
     >
-      {props.value}
+      {props.value + 1}
     </div>
   );
 };
 
-const TablePaginationCool = ({
-  count,
+export const TablePagination = ({
   totalPages,
   currentPage,
   handleChangePage,
+  onSeeAll,
+  isShowingAll,
 }: {
-  count: number;
   totalPages: number;
   currentPage: number;
-  handleChangePage: (e: React.BaseSyntheticEvent, page: number) => void;
+  handleChangePage: (page: number) => void;
+  onSeeAll: (e: React.BaseSyntheticEvent) => void;
+  isShowingAll?: boolean;
 }) => {
   const elements = Array(totalPages)
-    .fill({})
-    .map((x, i) => {
-      const thisPage = i + 1;
-      const showPage = (() => {
-        if (currentPage <= 3 && thisPage <= 6) {
+    .fill(null)
+    .map((_e, i) => {
+      const thisPage = i;
+
+      const showCurrentSelector = (() => {
+        if (currentPage <= 3 && thisPage <= 4) {
           return true;
         }
-        if (currentPage >= totalPages - 3 && thisPage >= totalPages - 4) {
+
+        if (currentPage >= totalPages - 3 && thisPage >= totalPages - 5) {
           return true;
         }
 
         return (
-          thisPage === 1 ||
+          thisPage === 0 ||
           thisPage === currentPage - 1 ||
           thisPage === currentPage ||
           thisPage === currentPage + 1 ||
-          thisPage === totalPages
+          thisPage === totalPages - 1
         );
       })();
 
-      const showSeparator = (function () {
-        if (currentPage <= 4 && thisPage === 6) return true;
-        if (currentPage >= totalPages - 2 && thisPage === totalPages - 5)
+      const showAsSeparator = (() => {
+        if (currentPage <= 2 && thisPage === 5) return true;
+        if (currentPage >= totalPages - 3 && thisPage === totalPages - 6)
           return true;
 
-        if (showPage) return false;
+        if (showCurrentSelector) return false;
 
         return thisPage === currentPage - 2 || thisPage === currentPage + 2;
       })();
 
       return (
         <PaginationSelector
-          key={i}
-          value={i + 1}
-          className={!showPage ? "hidden" : ""}
+          key={thisPage}
+          value={thisPage}
           currentPage={currentPage}
-          showSeparator={showSeparator}
+          showAsSeparator={showAsSeparator}
+          className={!showCurrentSelector ? "hidden" : ""}
           onClickPage={handleChangePage}
         />
       );
     });
 
-  const isFirstPage = currentPage === 1;
-  const isLastPage = currentPage === totalPages;
+  const isFirstPage = currentPage === 0;
+  const isLastPage = currentPage === totalPages - 1;
 
   return (
-    <div className="mt-2 flex w-full justify-center gap-x-0.5">
-      <Icon
-        className={
-          !isFirstPage
-            ? "cursor-pointer rounded-lg hover:border"
-            : "text-white/30"
-        }
-        onClick={(e: any) => {
-          if (!isFirstPage) {
-            handleChangePage(e, currentPage - 1);
-          }
-        }}
+    <div className="mt-2 w-full">
+      {!isShowingAll && (
+        <div className="flex justify-center gap-x-0.5">
+          <Icon
+            className={
+              !isFirstPage
+                ? "cursor-pointer rounded-lg hover:border"
+                : "text-white/30"
+            }
+            onClick={() => !isFirstPage && handleChangePage(currentPage - 1)}
+          >
+            {<CaretDown className="rotate-90" />}
+          </Icon>
+          {elements}
+          <Icon
+            className={
+              !isLastPage
+                ? "cursor-pointer rounded-lg hover:border"
+                : "text-white/30"
+            }
+            onClick={() => !isLastPage && handleChangePage(currentPage + 1)}
+          >
+            <CaretDown className="-rotate-90" />
+          </Icon>
+        </div>
+      )}
+      <div
+        className="mt-1 cursor-pointer select-none text-center font-mono text-[14px] uppercase hover:underline"
+        onClick={onSeeAll}
       >
-        {<CaretDown className="rotate-90" />}
-      </Icon>
-      {elements}
-      <Icon
-        className={
-          !isLastPage
-            ? "cursor-pointer rounded-lg hover:border"
-            : "text-white/30"
-        }
-        onClick={(e: any) => {
-          if (!isLastPage) {
-            handleChangePage(e, currentPage + 1);
-          }
-        }}
-      >
-        <CaretDown className="-rotate-90" />
-      </Icon>
+        {isShowingAll ? "See Less" : "See All"}
+      </div>
     </div>
   );
 };

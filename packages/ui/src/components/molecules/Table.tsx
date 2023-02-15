@@ -26,6 +26,7 @@ export interface TableProps {
   defaultSort?: string;
   footer?: React.ReactNode;
   Fallback?: (props?: any) => JSX.Element;
+  emptyRows?: number;
 }
 
 export const Table = (props: TableProps) => {
@@ -48,7 +49,13 @@ export const Table = (props: TableProps) => {
         hasData={!!data}
       />
       {props.loading && props.Fallback && <props.Fallback />}
-      {!props.loading && <TableBody columns={props.columns} rows={data} />}
+      {!props.loading && (
+        <TableBody
+          emptyRows={props.emptyRows}
+          columns={props.columns}
+          rows={data}
+        />
+      )}
       {props.footer && props.footer}
     </table>
   );
@@ -108,9 +115,10 @@ export const TableHead = (props: TableHeadProps) => {
 export interface TableBodyProps {
   columns: Column<unknown>[];
   rows?: Array<Record<string, Cell>>;
+  emptyRows?: number;
 }
 
-export const TableBody = ({ rows, columns }: TableBodyProps) => {
+export const TableBody = ({ columns, rows, emptyRows }: TableBodyProps) => {
   return (
     <tbody className="w-full">
       {rows?.map((row, i) => {
@@ -136,6 +144,13 @@ export const TableBody = ({ rows, columns }: TableBodyProps) => {
           </tr>
         );
       })}
+      {emptyRows ? (
+        <tr style={{ height: 80 * emptyRows }}>
+          <TableCell colSpan={columns.length} />
+        </tr>
+      ) : (
+        <div />
+      )}
     </tbody>
   );
 };

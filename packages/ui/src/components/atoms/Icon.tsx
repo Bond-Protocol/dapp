@@ -9,7 +9,7 @@ export const Icon = ({
   return (
     <div
       onClick={onClick}
-      className={` flex w-[32px] items-center justify-center fill-current text-current ${className}`}
+      className={` flex w-[32px] items-center justify-center fill-current text-current transition-colors ${className}`}
     >
       {props.children ? (
         props.children
