@@ -9,9 +9,7 @@ export const Icon = ({
   return (
     <div
       onClick={onClick}
-      className={`flex w-[32px] items-center justify-center fill-current text-current ${
-        onClick && "cursor-pointer"
-      } ${className}`}
+      className={` flex w-[32px] items-center justify-center fill-current text-current ${className}`}
     >
       {props.children ? (
         props.children

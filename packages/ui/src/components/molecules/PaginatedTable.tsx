@@ -39,7 +39,7 @@ export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
       <TablePaginationCool
         handleChangePage={handleChangePage}
         currentPage={page}
-        totalPages={15}
+        totalPages={9}
       />
     </div>
   );
@@ -92,20 +92,21 @@ const TablePaginationCool = ({
     .fill({})
     .map((x, i) => {
       const thisPage = i + 1;
-      const showShow =
-        thisPage === 1 ||
-        thisPage === currentPage - 1 ||
-        thisPage === currentPage ||
-        thisPage === currentPage + 1 ||
-        thisPage === totalPages;
-
-      const initialEdgeCase = (() => {
-        if (currentPage <= 3) {
-          if (thisPage <= 6) return true;
+      const showPage = (() => {
+        if (currentPage <= 3 && thisPage <= 6) {
+          return true;
         }
         if (currentPage >= totalPages - 3 && thisPage >= totalPages - 4) {
           return true;
         }
+
+        return (
+          thisPage === 1 ||
+          thisPage === currentPage - 1 ||
+          thisPage === currentPage ||
+          thisPage === currentPage + 1 ||
+          thisPage === totalPages
+        );
       })();
 
       const showSeparator = (function () {
@@ -113,7 +114,7 @@ const TablePaginationCool = ({
         if (currentPage >= totalPages - 2 && thisPage === totalPages - 5)
           return true;
 
-        if (initialEdgeCase) return false;
+        if (showPage) return false;
 
         return thisPage === currentPage - 2 || thisPage === currentPage + 2;
       })();
@@ -122,7 +123,7 @@ const TablePaginationCool = ({
         <PaginationSelector
           key={i}
           value={i + 1}
-          className={!showShow && !initialEdgeCase ? "hidden" : ""}
+          className={!showPage ? "hidden" : ""}
           currentPage={currentPage}
           showSeparator={showSeparator}
           onClickPage={handleChangePage}
@@ -136,18 +137,26 @@ const TablePaginationCool = ({
   return (
     <div className="mt-2 flex w-full justify-center gap-x-0.5">
       <Icon
-        className={"rounded-lg hover:border"}
+        className={
+          !isFirstPage
+            ? "cursor-pointer rounded-lg hover:border"
+            : "text-white/30"
+        }
         onClick={(e: any) => {
           if (!isFirstPage) {
             handleChangePage(e, currentPage - 1);
           }
         }}
       >
-        <CaretDown className="rotate-90" />
+        {<CaretDown className="rotate-90" />}
       </Icon>
       {elements}
       <Icon
-        className="rounded-lg hover:border"
+        className={
+          !isLastPage
+            ? "cursor-pointer rounded-lg hover:border"
+            : "text-white/30"
+        }
         onClick={(e: any) => {
           if (!isLastPage) {
             handleChangePage(e, currentPage + 1);
