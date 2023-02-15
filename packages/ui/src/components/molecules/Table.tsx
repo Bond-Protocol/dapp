@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { TableHeading, TableCell, Label, LabelProps } from "..";
-import { useSorting } from "hooks";
+import { useSorting, handleSorting } from "hooks";
 
 export type SortOrder = "asc" | "desc";
 
@@ -27,13 +27,14 @@ export interface TableProps {
   footer?: React.ReactNode;
   Fallback?: (props?: any) => JSX.Element;
   emptyRows?: number;
+  handleSorting: (field: string, sortOrder: string) => void;
 }
 
-export const Table = (props: TableProps) => {
-  const [data, handleSorting] = useSorting(props.data);
+export const Table = ({ data = [], ...props }: TableProps) => {
   const defaultSortOrder =
     props.columns.find((c) => c.defaultSortOrder)?.defaultSortOrder || "desc";
 
+  const handleSorting = props.handleSorting || (() => {});
   return (
     <table className="w-full table-fixed">
       <colgroup>

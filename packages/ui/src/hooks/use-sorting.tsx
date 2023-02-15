@@ -35,3 +35,23 @@ export const useSorting = (
   //@ts-ignore
   return [data, handleSorting];
 };
+
+export const handleSorting = (
+  sortField: string,
+  sortOrder: string,
+  data: Array<Record<string, any>>
+) => {
+  return data.sort((a, b) => {
+    const current = a[sortField]?.sortValue || a[sortField].value;
+    const next = b[sortField]?.sortValue || b[sortField].value;
+    if (!current) return 1;
+    if (!next) return -1;
+    if (!current && !next) return 0;
+
+    return (
+      current.toString().localeCompare(next.toString(), "en", {
+        numeric: true,
+      }) * (sortOrder === "asc" ? 1 : -1)
+    );
+  });
+};

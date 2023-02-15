@@ -1,9 +1,11 @@
 import { ReactComponent as CaretDown } from "../../assets/icons/select-arrow-down.svg";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Table, TableProps } from "./Table";
 import { Icon } from "..";
+import { useSorting } from "hooks/use-sorting";
 
 export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
+  const [data, handleSorting] = useSorting(props.data);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -21,8 +23,8 @@ export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
 
   const rows =
     rowsPerPage > 0
-      ? props.data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-      : props.data;
+      ? data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      : data;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -30,7 +32,12 @@ export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
 
   return (
     <div>
-      <Table {...props} emptyRows={emptyRows} data={rows} />
+      <Table
+        {...props}
+        handleSorting={handleSorting}
+        emptyRows={emptyRows}
+        data={rows}
+      />
       <TablePagination
         handleChangePage={handleChangePage}
         currentPage={page}
