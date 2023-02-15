@@ -24,6 +24,7 @@ export interface TableProps {
   data?: Array<Record<string, Cell>>;
   loading?: boolean;
   defaultSort?: string;
+  footer?: React.ReactNode;
   Fallback?: (props?: any) => JSX.Element;
 }
 
@@ -48,6 +49,7 @@ export const Table = (props: TableProps) => {
       />
       {props.loading && props.Fallback && <props.Fallback />}
       {!props.loading && <TableBody columns={props.columns} rows={data} />}
+      {props.footer && props.footer}
     </table>
   );
 };
@@ -110,7 +112,7 @@ export interface TableBodyProps {
 
 export const TableBody = ({ rows, columns }: TableBodyProps) => {
   return (
-    <tbody>
+    <tbody className="w-full">
       {rows?.map((row, i) => {
         return (
           <tr

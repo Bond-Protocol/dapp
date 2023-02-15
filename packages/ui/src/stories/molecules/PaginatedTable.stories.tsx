@@ -1,8 +1,10 @@
 import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { Table } from "../../components/molecules/Table";
-import { data } from "../mock-data/table";
+import { PaginatedTable } from "../../components/molecules/PaginatedTable";
+import { data as _data } from "../mock-data/table";
 import { DiscountLabel, Button } from "../../components";
+
+const data = Array(100).fill(_data[0]);
 
 const cols = [
   {
@@ -49,13 +51,15 @@ const cols = [
 ];
 
 export default {
-  title: "Components/Molecules/Table",
-  component: Table,
+  title: "Components/Molecules/PaginatedTable",
+  component: PaginatedTable,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof Table>;
+} as ComponentMeta<typeof PaginatedTable>;
 
-const Base: ComponentStory<typeof Table> = (args) => <Table {...args} />;
+const Base: ComponentStory<typeof PaginatedTable> = (args) => (
+  <PaginatedTable {...args} />
+);
 
 export const Primary = Base.bind({});
 Primary.args = {
