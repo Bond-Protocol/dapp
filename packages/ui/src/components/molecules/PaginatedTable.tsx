@@ -7,39 +7,35 @@ export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0
-      ? Math.max(0, (1 + page) * rowsPerPage - props.data?.length || 0)
-      : 0;
-
   const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
-  const toggleSeeAll = () => {
-    if (rowsPerPage === -1) {
-      setRowsPerPage(10);
-      setPage(0);
-    } else {
-      setRowsPerPage(-1);
-      setPage(0);
-    }
+  const toggleAll = () => {
+    setRowsPerPage(rowsPerPage === -1 ? 10 : -1);
+    setPage(0);
   };
 
-  const _data =
+  const totalRows = props.data?.length || 0;
+  const totalPages = Math.ceil(totalRows / Math.abs(rowsPerPage));
+
+  const rows =
     rowsPerPage > 0
       ? props.data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
       : props.data;
 
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalRows) : 0;
+
   return (
     <div>
-      <Table {...props} emptyRows={emptyRows} data={_data} />
+      <Table {...props} emptyRows={emptyRows} data={rows} />
       <TablePagination
         handleChangePage={handleChangePage}
         currentPage={page}
-        totalPages={Math.ceil(props.data?.length / Math.abs(rowsPerPage))}
-        onSeeAll={toggleSeeAll}
+        totalPages={totalPages}
+        onSeeAll={toggleAll}
         isShowingAll={rowsPerPage === -1}
       />
     </div>
@@ -50,7 +46,6 @@ export const PaginationSelector = (props: {
   value: number;
   currentPage: number;
   onClickPage: (num: number) => void;
-  showAsSeparator?: boolean;
   className?: string;
 }) => {
   const isSelected = props.value === props.currentPage;
@@ -58,10 +53,6 @@ export const PaginationSelector = (props: {
     "border-light-secondary text-light-secondary rounded-lg border";
 
   const handleClick = () => props.onClickPage(props.value);
-
-  if (props.showAsSeparator) {
-    return <div className={"mx-[10px] w-[12px] border-b border-dashed"} />;
-  }
 
   return (
     <div
@@ -98,7 +89,7 @@ export const TablePagination = ({
           return true;
         }
 
-        if (currentPage >= totalPages - 3 && thisPage >= totalPages - 5) {
+        if (currentPage >= totalPages - 4 && thisPage >= totalPages - 5) {
           return true;
         }
 
@@ -121,14 +112,17 @@ export const TablePagination = ({
         return thisPage === currentPage - 2 || thisPage === currentPage + 2;
       })();
 
+      if (showAsSeparator && totalPages > 7) {
+        return <div className={"mx-[10px] w-[12px] border-b border-dashed"} />;
+      }
+
       return (
         <PaginationSelector
           key={thisPage}
           value={thisPage}
           currentPage={currentPage}
-          showAsSeparator={showAsSeparator}
-          className={!showCurrentSelector ? "hidden" : ""}
           onClickPage={handleChangePage}
+          className={!showCurrentSelector && totalPages > 7 ? "hidden" : ""}
         />
       );
     });

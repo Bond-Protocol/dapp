@@ -7,7 +7,7 @@ import {
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
-import { Link, Column, Table } from "ui";
+import { Link, Column, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useTokens } from "hooks";
 import { useMemo } from "react";
@@ -162,7 +162,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
       <p className="ml-4 py-4 font-fraktion text-2xl uppercase">
         Transaction History
       </p>
-      <Table
+      <PaginatedTable
         defaultSort="timestamp"
         loading={query.isLoading}
         columns={marketTxsHistory}
