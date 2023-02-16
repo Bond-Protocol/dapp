@@ -12,7 +12,7 @@ export const subgraphEndpoints = {
   [CHAIN_ID.ARBITRUM_MAINNET]:
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-arbitrum-mainnet",
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
-    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli-arbitrum",
+    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-arbitrum-goerli",
   [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
     "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-optimism-goerli",
   [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
