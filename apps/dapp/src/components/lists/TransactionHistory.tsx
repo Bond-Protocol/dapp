@@ -30,11 +30,10 @@ const userTxsHistory: Column<any>[] = [
     label: "Total Value",
     alignEnd: true,
     formatter: (purchase) => {
-      const value = usdFormatter.format(
-        parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice)
-      );
+      const value =
+        parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice);
 
-      return { value };
+      return { value: usdFormatter.format(value), sortValue: value };
     },
   },
   {
@@ -46,6 +45,7 @@ const userTxsHistory: Column<any>[] = [
         value: `${longFormatter.format(purchase.amount)} ${
           purchase.quoteToken.symbol
         }`,
+        sortValue: purchase.amount,
       };
     },
   },
@@ -58,6 +58,7 @@ const userTxsHistory: Column<any>[] = [
         value: `${longFormatter.format(purchase.payout)} ${
           purchase.payoutToken.symbol
         }`,
+        sortValue: purchase.payout,
       };
     },
   },
