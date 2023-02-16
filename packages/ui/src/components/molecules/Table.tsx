@@ -34,6 +34,7 @@ export const Table = ({ data = [], ...props }: TableProps) => {
     props.columns.find((c) => c.defaultSortOrder)?.defaultSortOrder || "desc";
 
   const handleSorting = props.handleSorting || (() => {});
+
   return (
     <table className="w-full table-fixed">
       {props.columns.map((c, i) => (
@@ -142,7 +143,9 @@ export const TableBody = ({ columns, rows, emptyRows }: TableBodyProps) => {
           </tr>
         );
       })}
+
       {emptyRows ? (
+        // Avoid a layout jump when reaching the last page with empty rows.
         <tr style={{ height: 80 * emptyRows }}>
           <TableCell colSpan={columns.length} />
         </tr>
