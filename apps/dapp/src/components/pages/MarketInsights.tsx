@@ -56,7 +56,8 @@ export const MarketInsights = () => {
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {formattedPayout} {market.payoutToken.symbol}
+          {formattedPayout}{" "}
+          <span className="text-[24px]">{market.payoutToken.symbol}</span>
         </InfoLabel>
 
         <InfoLabel
