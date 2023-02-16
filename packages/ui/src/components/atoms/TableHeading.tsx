@@ -18,7 +18,6 @@ export const TableHeading = ({
   setMarketSort,
   isSorting,
   ascending,
-  alignEnd,
   ...props
 }: TableHeadingProps) => {
   return (
@@ -31,7 +30,7 @@ export const TableHeading = ({
         props.className
       }`}
     >
-      {isSorting && alignEnd && (
+      {isSorting && props.alignEnd && (
         <div
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}
@@ -45,7 +44,7 @@ export const TableHeading = ({
         </div>
       )}
       {props.children}
-      {isSorting && !alignEnd && (
+      {isSorting && !props.alignEnd && (
         <div
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}

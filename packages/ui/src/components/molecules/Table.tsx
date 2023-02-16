@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { TableHeading, TableCell, Label, LabelProps } from "..";
-import { useSorting, handleSorting } from "hooks";
 
 export type SortOrder = "asc" | "desc";
 
@@ -37,11 +36,9 @@ export const Table = ({ data = [], ...props }: TableProps) => {
   const handleSorting = props.handleSorting || (() => {});
   return (
     <table className="w-full table-fixed">
-      <colgroup>
-        {props.columns.map((c, i) => (
-          <col key={i} className={c.width && c.width} />
-        ))}
-      </colgroup>
+      {props.columns.map((c, i) => (
+        <col key={i} className={c.width && c.width} />
+      ))}
       <TableHead
         columns={props.columns}
         handleSorting={handleSorting}
