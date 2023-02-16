@@ -115,6 +115,7 @@ export const BondList = (props: any) => {
     <div>
       <Table
         defaultSort="vesting"
+        handleSorting={() => {}}
         columns={tableColumns}
         data={tableData}
         Fallback={props.Fallback}

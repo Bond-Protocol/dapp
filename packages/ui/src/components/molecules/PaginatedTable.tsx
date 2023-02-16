@@ -4,7 +4,7 @@ import { Table, TableProps } from "./Table";
 import { Icon } from "..";
 import { useSorting } from "hooks/use-sorting";
 
-export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
+export const PaginatedTable = (props: Omit<TableProps, "handleSorting">) => {
   const [data, handleSorting] = useSorting(props.data);
 
   const [page, setPage] = useState(0);
@@ -39,6 +39,7 @@ export const PaginatedTable = (props: Omit<TableProps, "footer">) => {
         data={rows}
       />
       <TablePagination
+        className="mt-4"
         handleChangePage={handleChangePage}
         currentPage={page}
         totalPages={totalPages}
@@ -74,12 +75,14 @@ export const PaginationSelector = (props: {
 };
 
 export const TablePagination = ({
+  className,
   totalPages,
   currentPage,
   handleChangePage,
   onSeeAll,
   isShowingAll,
 }: {
+  className?: string;
   totalPages: number;
   currentPage: number;
   handleChangePage: (page: number) => void;
@@ -138,7 +141,7 @@ export const TablePagination = ({
   const isLastPage = currentPage === totalPages - 1;
 
   return (
-    <div className="mt-2 w-full">
+    <div className={"w-full" + " " + className}>
       {!isShowingAll && (
         <div className="flex justify-center gap-x-0.5">
           <Icon

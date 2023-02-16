@@ -23,7 +23,6 @@ export interface TableProps {
   data?: Array<Record<string, Cell>>;
   loading?: boolean;
   defaultSort?: string;
-  footer?: React.ReactNode;
   Fallback?: (props?: any) => JSX.Element;
   emptyRows?: number;
   handleSorting: (field: string, sortOrder: string) => void;
@@ -55,7 +54,6 @@ export const Table = ({ data = [], ...props }: TableProps) => {
           rows={data}
         />
       )}
-      {props.footer && props.footer}
     </table>
   );
 };
