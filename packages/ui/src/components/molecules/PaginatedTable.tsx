@@ -38,14 +38,16 @@ export const PaginatedTable = (props: Omit<TableProps, "handleSorting">) => {
         emptyRows={emptyRows}
         data={rows}
       />
-      <TablePagination
-        className="mt-4"
-        handleChangePage={handleChangePage}
-        currentPage={page}
-        totalPages={totalPages}
-        onSeeAll={toggleAll}
-        isShowingAll={rowsPerPage === -1}
-      />
+      {totalRows > rowsPerPage && (
+        <TablePagination
+          className="mt-4"
+          handleChangePage={handleChangePage}
+          currentPage={page}
+          totalPages={totalPages}
+          onSeeAll={toggleAll}
+          isShowingAll={rowsPerPage === -1}
+        />
+      )}
     </div>
   );
 };

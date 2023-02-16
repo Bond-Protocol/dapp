@@ -1,5 +1,5 @@
 import { getToken } from "@bond-protocol/bond-library";
-import { Button, Table, Column } from "ui";
+import { Button, PaginatedTable, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
@@ -44,6 +44,7 @@ export const tableColumns: Array<Column<any>> = [
       return {
         value: bond.canClaim ? "Vested" : formatted,
         subtext: bond.canClaim ? `On ${formatted}` : `In ${timeLeft}`,
+        sortValue: expiry,
       };
     },
   },
@@ -113,9 +114,8 @@ export const BondList = (props: any) => {
 
   return (
     <div>
-      <Table
+      <PaginatedTable
         defaultSort="vesting"
-        handleSorting={() => {}}
         columns={tableColumns}
         data={tableData}
         Fallback={props.Fallback}

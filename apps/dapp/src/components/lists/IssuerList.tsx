@@ -1,5 +1,5 @@
 import { PROTOCOLS } from "@bond-protocol/bond-library";
-import { ActionCard, InfoLabel, IssuerCard } from "ui";
+import { ActionCard, InfoLabel, IssuerCard, Loading } from "ui";
 import { useMarkets } from "hooks";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
@@ -10,6 +10,7 @@ import { useListAllPurchases } from "hooks/useListAllPurchases";
 import { useEffect, useState } from "react";
 import { socials } from "..";
 import { Protocol } from "@bond-protocol/bond-library";
+import { meme } from "src/utils/words";
 
 export const IssuerList = () => {
   const { marketsByIssuer } = useMarkets();
@@ -59,22 +60,31 @@ export const IssuerList = () => {
           {metrics?.uniqueBonders}
         </InfoLabel>
       </div>
-      <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">
-        {issuers.map((issuer) => {
-          const markets = marketsByIssuer.get(issuer.name) || [];
-          const protocolTbv = metrics.protocolTbvs[issuer.name];
-          return (
-            <div key={issuer.id} className="min-w-[169px] max-w-[178px] flex-1">
-              <IssuerCard
-                issuer={issuer}
-                tbv={protocolTbv?.tbv || 0}
-                marketCount={markets?.length}
-                navigate={navigate}
-              />
-            </div>
-          );
-        })}
-      </div>
+      {issuers.length ? (
+        <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">
+          {issuers.map((issuer) => {
+            const markets = marketsByIssuer.get(issuer.name) || [];
+            const protocolTbv = metrics.protocolTbvs[issuer.name];
+            return (
+              <div
+                key={issuer.id}
+                className="min-w-[169px] max-w-[178px] flex-1"
+              >
+                <IssuerCard
+                  issuer={issuer}
+                  tbv={protocolTbv?.tbv || 0}
+                  marketCount={markets?.length}
+                  navigate={navigate}
+                />
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="pb-12">
+          <Loading content={meme()} />
+        </div>
+      )}
       <ActionCard
         className="mt-6"
         title="Do you wanna issue a bond?"

@@ -40,6 +40,7 @@ const getCustomCapacityLabel = (quote?: string, payout?: string) => {
 
 const formDefaults = {
   minExchangeRate: 0,
+  selectedChain: "1",
   capacityToken: 0,
   vestingType: 0,
   bondsPerWeek: 7,
@@ -115,7 +116,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   const form = useWatch({ control });
 
-  const chainSelection = form.selectedChain?.id || form.selectedChain || "1";
+  const chainSelection = form.chain || "1";
 
   useEffect(() => {
     if (form.marketOwnerAddress) {
