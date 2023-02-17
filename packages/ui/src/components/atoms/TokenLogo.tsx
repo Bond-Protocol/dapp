@@ -12,7 +12,6 @@ export interface LogoProps extends React.HtmlHTMLAttributes<HTMLImageElement> {
 }
 
 export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
-
   if (!props.pairIcon && !props.lpPairIcon) {
     return (
       <div>
@@ -35,9 +34,7 @@ export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
           {...props}
         />
       )}
-      {props.chainChip && (
-        <Logo icon={props.chainChip} {...props} />
-      )}
+      {props.chainChip && <Logo icon={props.chainChip} {...props} />}
     </div>
   ) : (
     <Logo className={className} icon={icon} {...props} />
@@ -45,24 +42,31 @@ export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
 };
 
 export const Logo = (props: LogoProps) => {
+  const basePixels = props.size === "lg" ? 48 : 32;
+  const unevenPixels = props.size === "lg" ? 36 : 20;
   const base = props.size === "lg" ? "h-[48px] w-[48px]" : "h-[32px] w-[32px]";
   const uneven =
     props.size === "lg" ? "h-[36px] w-[36px]" : "h-[20px] w-[20px]";
 
   const style = props.uneven ? uneven : base;
+  const size = props.uneven ? unevenPixels : basePixels;
 
   return (
     <div className={`relative ${style} ${props.className}`}>
-      {props.chainChip &&
+      {props.chainChip && (
         <img
           className={`absolute z-10 h-[12px] w-[12px] rounded-full`}
           src={props.chainChip}
         />
-      }
-      <img
-        className={`absolute rounded-full`}
-        src={props.icon}
-      />
+      )}
+      <div className={`flex items-center justify-center ${style}`}>
+        <img
+          className={`absolute rounded-full`}
+          src={props.icon}
+          width={size}
+          height={size}
+        />
+      </div>
     </div>
   );
 };
