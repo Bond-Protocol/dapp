@@ -47,7 +47,7 @@ const discount: Column<CalculatedMarket> = {
   label: "Discount",
   accessor: "discount",
   alignEnd: true,
-  width: "w-[8%]",
+  width: "w-[7%]",
   Component: DiscountLabel,
   formatter: (market) => {
     return { value: market.discount + "%" };
@@ -118,7 +118,7 @@ const tbv: Column<CalculatedMarket> = {
 const issuer: Column<CalculatedMarket> = {
   label: "Issuer",
   accessor: "issuer",
-  width: "w-[12%]",
+  width: "w-[16%]",
   formatter: (market) => {
     const protocol = getProtocol(market.owner);
     return {
@@ -132,6 +132,7 @@ const view: Column<CalculatedMarket> = {
   label: "",
   accessor: "view",
   alignEnd: true,
+  width: "w-[10%]",
   unsortable: true,
   formatter: (market) => ({ value: market.marketId, subtext: market.chainId }),
   Component: (props: any) => (
