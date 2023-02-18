@@ -50,7 +50,10 @@ const discount: Column<CalculatedMarket> = {
   width: "w-[7%]",
   Component: DiscountLabel,
   formatter: (market) => {
-    return { value: market.discount + "%" };
+    return {
+      value: market.discount + "%",
+      sortValue: market.discount,
+    };
   },
 };
 
@@ -66,7 +69,7 @@ const maxPayout: Column<CalculatedMarket> = {
         " " +
         market.payoutToken.symbol,
       subtext: usdFormatter.format(market.maxPayoutUsd),
-      sortValue: market.maxPayoutUsd.toString(),
+      sortValue: market.maxPayoutUsd,
     };
   },
 };
@@ -87,7 +90,6 @@ const vesting: Column<CalculatedMarket> = {
     return {
       value: formatDate.short(new Date(sort)),
       subtext: isTerm ? term : "Fixed Expiry",
-      sortValue: sort.toString(),
     };
   },
 };
@@ -98,7 +100,7 @@ const creationDate: Column<CalculatedMarket> = {
   width: "w-[15%]",
   formatter: (market) => ({
     value: formatDate.short(new Date(market.creationBlockTimestamp * 1000)),
-    sortValue: market.creationBlockTimestamp.toString(),
+    sortValue: market.creationBlockTimestamp,
   }),
 };
 
@@ -110,7 +112,7 @@ const tbv: Column<CalculatedMarket> = {
   formatter: (market) => {
     return {
       value: usdLongFormatter.format(market.tbvUsd),
-      sortValue: market.tbvUsd.toString(),
+      sortValue: market.tbvUsd,
     };
   },
 };

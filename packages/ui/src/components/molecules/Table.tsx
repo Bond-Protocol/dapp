@@ -4,7 +4,7 @@ import { TableHeading, TableCell, Label, LabelProps } from "..";
 export type SortOrder = "asc" | "desc";
 
 export interface Cell extends LabelProps {
-  sortValue?: string;
+  sortValue?: string | number;
 }
 
 export interface Column<T> {
