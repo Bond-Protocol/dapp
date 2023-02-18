@@ -3,9 +3,12 @@ import SelectUnstyled, { SelectUnstyledProps } from "@mui/base/SelectUnstyled";
 import OptionUnstyled from "@mui/base/OptionUnstyled";
 import { ReactComponent as SelectArrowDown } from "../../assets/icons/select-arrow-down.svg";
 import { TokenLabelProps } from "./TokenLabel";
+import { Icon } from "./Icon";
+import { Logo } from "./TokenLogo";
 
 export type SelectOptions = TokenLabelProps & {
   id: number | string;
+  image?: string;
 };
 
 export type SelectProps = SelectUnstyledProps<string> & {
@@ -57,7 +60,12 @@ export const Select = (props: SelectProps) => {
               },
             }}
           >
-            <div className="mx-3">{o.label}</div>
+            <div className="mx-3 flex">
+              {o?.image && (
+                <Logo uneven className="my-auto mr-2" icon={o.image} />
+              )}
+              <span className="my-auto inline-block">{o.label}</span>
+            </div>
           </OptionUnstyled>
         ))}
       </SelectUnstyled>

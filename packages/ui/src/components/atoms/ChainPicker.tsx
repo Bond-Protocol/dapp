@@ -13,6 +13,7 @@ export type ChainPickerProps = {
 const options = bondLibrary.SUPPORTED_CHAINS.map((supportedChain) => ({
   id: supportedChain.chainId,
   label: supportedChain.displayName,
+  image: supportedChain.image,
 }));
 
 export const ChainPicker = (props: ChainPickerProps) => {

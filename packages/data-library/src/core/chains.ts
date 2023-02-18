@@ -14,7 +14,8 @@ const ethereumMainnet: Chain = {
   rpcUrls: [""],
   blockExplorerUrls: ["https://etherscan.io/#/"],
   blockExplorerName: "Etherscan",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
   imageAltText: "Ethereum Logo",
 };
 
@@ -31,7 +32,8 @@ const goerliTestnet: Chain = {
   rpcUrls: [""],
   blockExplorerUrls: ["https://goerli.etherscan.io/#/"],
   blockExplorerName: "Etherscan",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
   imageAltText: "Ethereum Logo",
 };
 
@@ -48,7 +50,8 @@ const polygonMainnet: Chain = {
   rpcUrls: ["https://polygon-rpc.com/"],
   blockExplorerUrls: ["https://polygonscan.com/#/"],
   blockExplorerName: "Polygonscan",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/POLYGON.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/POLYGON.png",
   imageAltText: "Polygon Logo",
 };
 
@@ -65,7 +68,8 @@ const polygonMumbaiTestnet: Chain = {
   rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
   blockExplorerUrls: ["https://mumbai.polygonscan.com/#/"],
   blockExplorerName: "Polygonscan",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/POLYGON.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/POLYGON.png",
   imageAltText: "Polygon Logo",
 };
 
@@ -82,7 +86,8 @@ const fantomMainnet: Chain = {
   rpcUrls: ["https://rpc.ftm.tools"],
   blockExplorerUrls: ["https://ftmscan.com/#/"],
   blockExplorerName: "FTMScan",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/FANTOM.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/FANTOM.png",
   imageAltText: "Fantom Logo",
 };
 
@@ -99,7 +104,8 @@ const avalancheMainnet: Chain = {
   rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
   blockExplorerUrls: ["https://snowtrace.io/#/"],
   blockExplorerName: "Snowtrace",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/AVALANCHE.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/AVALANCHE.png",
   imageAltText: "Avalanche Logo",
 };
 
@@ -115,7 +121,8 @@ const avalancheFujiTestnet: Chain = {
   rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
   blockExplorerUrls: ["https://testnet.snowtrace.io/#/"],
   blockExplorerName: "Snowtrace",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/AVALANCHE.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/AVALANCHE.png",
   imageAltText: "Avalanche Logo",
 };
 
@@ -132,7 +139,8 @@ const bscMainnet: Chain = {
   rpcUrls: ["https://rpc.ankr.com/bsc"],
   blockExplorerUrls: ["https://bscscan.com/#/"],
   blockExplorerName: "BscScan",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/BSC.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/BSC.png",
   imageAltText: "Binance Smart Chain Logo",
 };
 
@@ -149,7 +157,8 @@ const arbitrumMainnet: Chain = {
   rpcUrls: ["https://arb1.arbitrum.io/rpc"],
   blockExplorerUrls: ["https://arbiscan.io/#/"],
   blockExplorerName: "Arbiscan",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
   imageAltText: "Arbitrum Logo",
 };
 
@@ -166,7 +175,8 @@ const arbitrumGoerliTestnet: Chain = {
   rpcUrls: ["https://goerli-rollup.arbitrum.io/rpc"],
   blockExplorerUrls: ["https://goerli.arbiscan.io/#/"],
   blockExplorerName: "Arbiscan",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
   imageAltText: "Arbitrum Logo",
 };
 
@@ -183,7 +193,8 @@ const optimismMainnet: Chain = {
   rpcUrls: ["https://mainnet.optimism.io"],
   blockExplorerUrls: ["https://optimistic.etherscan.io/#/"],
   blockExplorerName: "Optimism Explorer",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",
   imageAltText: "Optimism Logo",
 };
 
@@ -200,7 +211,8 @@ const optimismGoerliTestnet: Chain = {
   rpcUrls: ["https://goerli.optimism.io"],
   blockExplorerUrls: ["https://goerli-optimism.etherscan.io/#/"],
   blockExplorerName: "Optimism Goerli Explorer",
-  image: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",
+  image:
+    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",
   imageAltText: "Optimism Logo",
 };
 
