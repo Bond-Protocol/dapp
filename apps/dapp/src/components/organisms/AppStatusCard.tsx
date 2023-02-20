@@ -10,12 +10,11 @@ const TestnetMessage = () => (
     <div className="flex text-black ">
       <InfoIcon />
       <div className="my-auto">
-        You're on <span className="underline">{window.origin}</span>, a testnet
+        You're on <span className="underline">{window.origin}</span>, a staging
         environment. You can find the live BondProtocol dApp{" "}
         <a href={dAppLink} className="underline hover:cursor-pointer">
           here
         </a>
-        .
       </div>
     </div>
   </div>
@@ -36,7 +35,7 @@ const WarningMessage = ({ toggleTestnet }: { toggleTestnet: () => void }) => (
 export const AppStatusCard = () => {
   const [isTestnet, setTestnet] = useTestnetMode();
   const showInfo = isTestnet;
-  const showWarning = !showInfo && environment.isStaging;
+  const showWarning = !isTestnet && environment.isStaging;
 
   return (
     <div
