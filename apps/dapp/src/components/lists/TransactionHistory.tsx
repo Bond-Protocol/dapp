@@ -160,10 +160,8 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
 
   return (
     <div className={props.className}>
-      <p className="ml-4 py-4 font-fraktion text-2xl uppercase">
-        Transaction History
-      </p>
       <PaginatedTable
+        title="Transaction History"
         defaultSort="timestamp"
         loading={query.isLoading}
         columns={marketTxsHistory}

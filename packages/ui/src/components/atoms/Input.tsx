@@ -5,6 +5,7 @@ export type InputProps = InputUnstyledProps & {
   label?: string | React.ReactNode;
   subText?: string | React.ReactNode;
   errorMessage?: string;
+  inputClassName?: string;
 };
 
 export const Input = forwardRef(function Input(
@@ -17,16 +18,16 @@ export const Input = forwardRef(function Input(
       <InputUnstyled
         {...props}
         autoComplete="disabled"
+        spellCheck="false"
         ref={ref}
         componentsProps={{
           root: {
-            className: `w-full h-10 my-auto border rounded-lg ${
+            className: `w-full flex justify-center items-center h-10 my-auto border rounded-lg ${
               props.errorMessage && " border-red-500 bg-red-500"
             }`,
           },
           input: {
-            className:
-              "w-full pl-4 h-10 text-[15px] bg-transparent placeholder:text-white focus:outline-none",
+            className: `w-full pl-2 h-10 text-[15px] bg-transparent placeholder:text-white/75 focus:outline-none  ${props.inputClassName}`,
           },
         }}
       />

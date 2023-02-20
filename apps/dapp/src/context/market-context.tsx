@@ -6,12 +6,11 @@ const initialState = {
   marketsByIssuer: new Map(),
   issuers: [],
   isMarketOwner: false,
+  isSomeLoading: false,
   isLoading: {
     market: false,
-    myMarkets: false,
     tokens: false,
     priceCalcs: false,
-    myPriceCalcs: false,
   },
   refetchAllMarkets: () => {},
   refetchOne: (id: string) => {},

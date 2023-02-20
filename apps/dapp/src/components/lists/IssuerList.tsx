@@ -13,15 +13,19 @@ import { Protocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
 
 export const IssuerList = () => {
-  const { marketsByIssuer } = useMarkets();
+  const { marketsByIssuer, isLoading } = useMarkets();
   const { totalPurchases } = useListAllPurchases();
   const navigate = useNavigate();
   const metrics = useGlobalMetrics();
 
+  const isSomeLoading = isLoading.priceCalcs || isLoading.tokens;
+
   const scrollUp = () => window.scrollTo(0, 0);
 
   const [testnet] = useAtom(testnetMode);
-  const [issuers, setIssuers] = useState<Protocol[]>([]);
+  const [issuers, setIssuers] = useState<
+    Array<Protocol & { markets: any[]; protocolTbv: any }>
+  >([]);
 
   useEffect(() => {
     const allIssuers = Array.from(PROTOCOLS.values()).filter(
@@ -30,9 +34,19 @@ export const IssuerList = () => {
         metrics.protocolTbvs[issuer.name]?.tbv > 0
     );
 
-    const issuers = testnet
-      ? allIssuers
-      : allIssuers.filter((issuer) => issuer.links.twitter !== socials.twitter); //hacky way to get our stuff out
+    const issuers = (
+      testnet
+        ? allIssuers
+        : allIssuers.filter(
+            (issuer) => issuer.links.twitter !== socials.twitter
+          )
+    )
+      .map((issuer) => {
+        const markets = marketsByIssuer.get(issuer.name) || [];
+        const protocolTbv = metrics.protocolTbvs[issuer.name];
+        return { ...issuer, markets, protocolTbv };
+      })
+      .sort((a, b) => b.markets.length - a.markets.length);
 
     setIssuers(issuers);
   }, [marketsByIssuer, metrics.protocolTbvs]);
@@ -60,11 +74,9 @@ export const IssuerList = () => {
           {metrics?.uniqueBonders}
         </InfoLabel>
       </div>
-      {issuers.length ? (
+      {issuers.length && !isSomeLoading ? (
         <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">
           {issuers.map((issuer) => {
-            const markets = marketsByIssuer.get(issuer.name) || [];
-            const protocolTbv = metrics.protocolTbvs[issuer.name];
             return (
               <div
                 key={issuer.id}
@@ -72,8 +84,8 @@ export const IssuerList = () => {
               >
                 <IssuerCard
                   issuer={issuer}
-                  tbv={protocolTbv?.tbv || 0}
-                  marketCount={markets?.length}
+                  tbv={issuer.protocolTbv?.tbv || 0}
+                  marketCount={issuer.markets?.length}
                   navigate={navigate}
                 />
               </div>

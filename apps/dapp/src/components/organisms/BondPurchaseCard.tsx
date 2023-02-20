@@ -10,30 +10,22 @@ import { useGasPrice, usePurchaseBond, useTokenAllowance } from "hooks";
 import { Button, InputCard, ActionInfoList } from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
-import { useAccount } from "wagmi";
-import { NativeCurrency } from "@bond-protocol/bond-library";
-import { Signer } from "ethers";
-import { Provider } from "@wagmi/core";
+import { useAccount, useSigner } from "wagmi";
+import { useNativeCurrency } from "hooks/useNativeCurrency";
+import { providers } from "services/owned-providers";
+import { getProtocolByAddress } from "@bond-protocol/bond-library";
+import add from "date-fns/add";
+import { formatDate } from "src/utils";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
-  nativeCurrency: NativeCurrency;
-  nativeCurrencyPrice: number;
-  referralAddress: string;
-  issuerName: string;
-  provider: Provider;
-  signer: Signer;
 };
 
-export const BondPurchaseCard: FC<BondPurchaseCard> = ({
-  market,
-  nativeCurrency,
-  nativeCurrencyPrice,
-  referralAddress,
-  issuerName,
-  provider,
-  signer,
-}) => {
+const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
+const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
+const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
+
+export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
   const [payout, setPayout] = useState<string>("0");
@@ -44,7 +36,9 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
     gasPrice: "0",
     usdPrice: "0",
   });
+  const { data: signer } = useSigner();
 
+  const provider = providers[market.chainId];
   const { address, isConnected } = useAccount();
 
   const { getGasPrice } = useGasPrice();
@@ -67,10 +61,23 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
     "address"
   );
 
+  const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
+    market.chainId
+  );
+
+  const protocol = getProtocolByAddress(market.owner, market.chainId);
+  const issuerName = protocol?.name || "";
+
   const showOwnerBalanceWarning =
     Number(market.maxPayout) > Number(market.ownerBalance);
   const showOwnerAllowanceWarning =
     Number(market.maxPayout) > Number(market.ownerAllowance);
+
+  const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
+    market.chainId.concat("_").concat(market.owner)
+  )
+    ? NO_REFERRAL_ADDRESS
+    : REFERRAL_ADDRESS;
 
   useEffect(() => {
     if (gasPrice && estimatedGas) {
@@ -128,11 +135,22 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
   const onClickBond = !hasSufficientAllowance
     ? approveSpending
     : () => setShowModal(true);
+  console.log({ market });
+
+  const isTerm = market.vestingType === "fixed-term";
+  const vestingTimestamp = isTerm
+    ? add(Date.now(), { seconds: market.vesting })
+    : market.vesting * 1000;
 
   const summaryFields = [
     {
       leftLabel: "You will get",
       rightLabel: `${payout} ${market.payoutToken.symbol}`,
+    },
+    {
+      leftLabel: "Vested on",
+      rightLabel: `${formatDate.short(new Date(vestingTimestamp))}`,
+      tooltip: "The date in which you can claim your bond",
     },
     {
       leftLabel: "Max Bondable",
@@ -163,7 +181,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({
         0.05,
         market,
         referralAddress,
-        signer
+        signer!
       );
     } catch (e) {
       console.log(e);

@@ -155,6 +155,14 @@ export function useCalculatedMarkets() {
     }
   }, [calculateAllMarkets, currentPrices]);
 
+  const isLoading = {
+    market: isMarketLoading,
+    tokens: areTokensLoading,
+    priceCalcs: isCalculatingAll,
+  };
+
+  const isSomeLoading = () => Object.values(isLoading).some((x) => x);
+
   return {
     allMarkets: calculatedMarkets,
     issuers,
@@ -163,6 +171,7 @@ export function useCalculatedMarkets() {
     refetchOne,
     getTokenDetails,
     getPrice,
+    isSomeLoading,
     isLoading: {
       market: isMarketLoading,
       tokens: areTokensLoading,

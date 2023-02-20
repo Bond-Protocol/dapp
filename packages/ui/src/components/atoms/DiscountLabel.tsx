@@ -1,11 +1,9 @@
-import { Skeleton } from "./Skeleton";
-
 export type DiscountLabelProps = {
   value?: string;
 };
 
 export const DiscountLabel = ({ value = "" }: DiscountLabelProps) => {
-  const isPositive = parseFloat(value) > 0;
+  const isPositive = parseFloat(value) >= 0;
 
   return (
     <div
