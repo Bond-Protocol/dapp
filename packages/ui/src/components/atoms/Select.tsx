@@ -62,9 +62,15 @@ export const Select = (props: SelectProps) => {
           >
             <div className="mx-3 flex">
               {o?.image && (
-                <Logo uneven className="my-auto mr-2" icon={o.image} />
+                <Logo
+                  uneven
+                  className="my-auto mr-2 select-none"
+                  icon={o.image}
+                />
               )}
-              <span className="my-auto inline-block">{o.label}</span>
+              <span className="my-auto inline-block select-none">
+                {o.label}
+              </span>
             </div>
           </OptionUnstyled>
         ))}

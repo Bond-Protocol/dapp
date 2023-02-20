@@ -25,7 +25,7 @@ export const ChainPicker = (props: ChainPickerProps) => {
     props.onChange && props.onChange(selected);
   }, [selected]);
 
-  const handleChangeSelect = (e: any, value: any) => {
+  const handleChangeSelect = (_e: any, value: any) => {
     setSelected(value);
   };
 
