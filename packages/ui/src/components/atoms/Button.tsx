@@ -53,13 +53,11 @@ const styles = {
 };
 
 const Button = forwardRef(function Button(
-  props: ButtonProps,
+  { thin, icon, ...props }: ButtonProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
   const align =
-    props.icon || props.thin
-      ? "px-2"
-      : styles.alignment[props.align || "center"];
+    icon || thin ? "px-2" : styles.alignment[props.align || "center"];
 
   const height = styles.height[props.size || "md"];
   const variant = styles.variant[props.variant || "primary"];

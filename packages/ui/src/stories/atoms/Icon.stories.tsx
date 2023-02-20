@@ -1,6 +1,6 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Icon, IconProps } from "../../components/atoms/Icon";
+import { Icon } from "../../components/atoms/Icon";
 
 import discord from "../../assets/icons/socials/discord.svg";
 import telegram from "../../assets/icons/socials/telegram.svg";

@@ -1,4 +1,4 @@
-import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
+import { getSubgraphQueriesPerChainFn } from "services";
 import { useEffect, useState } from "react";
 import { BondPurchase, useListBondPurchasesQuery } from "../generated/graphql";
 import { getAddressesByChain } from "@bond-protocol/bond-library";

@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { environment } from "src/env-state";
+import { environment } from "src/environment";
 
 const isTestnet = environment.isTestnet;
 

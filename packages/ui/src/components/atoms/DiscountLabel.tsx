@@ -3,7 +3,7 @@ export type DiscountLabelProps = {
 };
 
 export const DiscountLabel = ({ value = "" }: DiscountLabelProps) => {
-  const isPositive = parseFloat(value) > 0;
+  const isPositive = parseFloat(value) >= 0;
 
   return (
     <div
@@ -13,7 +13,7 @@ export const DiscountLabel = ({ value = "" }: DiscountLabelProps) => {
           : isPositive
           ? "text-light-success"
           : "text-light-alert"
-      } text-[15px] font-extralight`}
+      } w-full text-[15px] font-extralight`}
     >
       {value}
     </div>

@@ -40,6 +40,7 @@ export const TokenPickerCard = (
         value={address}
         subText={props.subText}
         onChange={(e) => setAddress(e.target.value)}
+        errorMessage={props.errorMessage}
       />
 
       {props.errorMessage?.type === "required" && (

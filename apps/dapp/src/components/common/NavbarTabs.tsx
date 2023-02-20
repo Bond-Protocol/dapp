@@ -22,8 +22,9 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
 
   return (
     <div className={`flex select-none justify-center gap-6 ${props.className}`}>
-      {tabs.map((tab) => (
+      {tabs.map((tab, i) => (
         <div
+          key={i}
           className={`font-fraktion font-bold uppercase hover:cursor-pointer ${
             isSelected(tab.path) ? "text-light-secondary" : ""
           }`}

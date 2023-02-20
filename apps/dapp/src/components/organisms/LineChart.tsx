@@ -45,8 +45,10 @@ const CustomTick = ({
     <div
       className={`flex h-full justify-between border-light-primary-100/20 text-xs ${style} opacity-60`}
     >
-      {elements?.map((e) => (
-        <div className="pr-0.5 text-[10px] text-light-primary-100">{e}</div>
+      {elements?.map((e, i) => (
+        <div key={i} className="pr-0.5 text-[10px] text-light-primary-100">
+          {e}
+        </div>
       ))}
     </div>
   );

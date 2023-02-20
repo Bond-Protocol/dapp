@@ -1,30 +1,24 @@
 import { useListUniqueBondersQuery } from "src/generated/graphql";
-import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { getSubgraphQueries } from "services";
 import { useOwnerTokenTbvs } from "./useOwnerTokenTbvs";
 import { usdFormatter } from "src/utils/format";
 import { useEffect, useState } from "react";
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
+import { useTestnetMode } from "hooks/useTestnet";
 
 export const useGlobalMetrics = () => {
   const subgraphQueries = getSubgraphQueries(useListUniqueBondersQuery);
   const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
-  const [isTestnet] = useAtom(testnetMode);
+  const [isTestnet] = useTestnetMode();
   const [uniqueBonders, setUniqueBonders] = useState(0);
 
   useEffect(() => {
     if (isLoading) return;
 
-    let bonders = 0;
-    subgraphQueries.forEach((result) => {
-      if (result.data) bonders += result.data.uniqueBonders.length;
-    });
-
     setUniqueBonders(
       subgraphQueries
-        .map((value) => value.data.uniqueBonders.length)
+        .map((value) => value.data?.uniqueBonders.length || 0)
         .reduce((previous, current) => previous + current)
     );
   }, [isLoading, isTestnet]);
@@ -37,7 +31,7 @@ export const useGlobalMetrics = () => {
 
   return {
     tbv: usdFormatter.format(Math.trunc(tbv)),
-    protocolTbvs: protocolTbvs,
-    uniqueBonders: uniqueBonders,
+    protocolTbvs,
+    uniqueBonders,
   };
 };

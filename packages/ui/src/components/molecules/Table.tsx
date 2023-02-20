@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { TableHeading, TableCell, Label, LabelProps } from "..";
-import { useSorting } from "hooks";
 
 export type SortOrder = "asc" | "desc";
 
 export interface Cell extends LabelProps {
-  sortValue?: string;
+  sortValue?: string | number;
 }
 
 export interface Column<T> {
@@ -25,18 +24,23 @@ export interface TableProps {
   loading?: boolean;
   defaultSort?: string;
   Fallback?: (props?: any) => JSX.Element;
+  emptyRows?: number;
+  handleSorting: (field: string, sortOrder: string) => void;
 }
 
-export const Table = (props: TableProps) => {
-  const [data, handleSorting] = useSorting(props.data);
+export const Table = ({ data = [], ...props }: TableProps) => {
   const defaultSortOrder =
     props.columns.find((c) => c.defaultSortOrder)?.defaultSortOrder || "desc";
 
+  const handleSorting = props.handleSorting || (() => {});
+
   return (
     <table className="w-full table-fixed">
-      {props.columns.map((c) => (
-        <col className={c.width && c.width} />
-      ))}
+      <colgroup>
+        {props.columns.map((c, i) => (
+          <col key={i} className={c.width && c.width} />
+        ))}
+      </colgroup>
       <TableHead
         columns={props.columns}
         handleSorting={handleSorting}
@@ -45,7 +49,13 @@ export const Table = (props: TableProps) => {
         hasData={!!data}
       />
       {props.loading && props.Fallback && <props.Fallback />}
-      {!props.loading && <TableBody columns={props.columns} rows={data} />}
+      {!props.loading && (
+        <TableBody
+          emptyRows={props.emptyRows}
+          columns={props.columns}
+          rows={data}
+        />
+      )}
     </table>
   );
 };
@@ -104,14 +114,16 @@ export const TableHead = (props: TableHeadProps) => {
 export interface TableBodyProps {
   columns: Column<unknown>[];
   rows?: Array<Record<string, Cell>>;
+  emptyRows?: number;
 }
 
-export const TableBody = ({ rows, columns }: TableBodyProps) => {
+export const TableBody = ({ columns, rows, emptyRows }: TableBodyProps) => {
   return (
-    <tbody>
-      {rows?.map((row) => {
+    <tbody className="w-full">
+      {rows?.map((row, i) => {
         return (
           <tr
+            key={i}
             className={`child:pl-5 border-white/15 h-20 border-b ${
               row.onClick &&
               "transition-all duration-300 ease-in-out hover:cursor-pointer hover:bg-white/5"
@@ -120,7 +132,7 @@ export const TableBody = ({ rows, columns }: TableBodyProps) => {
             onClick={row.onClick}
           >
             {columns.map(({ accessor, alignEnd, Component }) => (
-              <TableCell alignEnd={alignEnd}>
+              <TableCell key={accessor} alignEnd={alignEnd}>
                 {Component ? (
                   <Component {...row[accessor]} />
                 ) : (
@@ -131,6 +143,15 @@ export const TableBody = ({ rows, columns }: TableBodyProps) => {
           </tr>
         );
       })}
+
+      {emptyRows ? (
+        // Avoid a layout jump when reaching the last page with empty rows.
+        <tr style={{ height: 80 * emptyRows }}>
+          <TableCell colSpan={columns.length} />
+        </tr>
+      ) : (
+        <tr />
+      )}
     </tbody>
   );
 };

@@ -1,5 +1,5 @@
-import { useTestnet } from "hooks/useTestnet";
-import { environment } from "../../env-state";
+import { useTestnetMode } from "hooks/useTestnet";
+import { environment } from "../../environment";
 import { ReactComponent as AlertIcon } from "../../assets/icons/alert.svg";
 import { ReactComponent as InfoIcon } from "../../assets/icons/info.svg";
 
@@ -10,45 +10,41 @@ const TestnetMessage = () => (
     <div className="flex text-black ">
       <InfoIcon />
       <div className="my-auto">
-        You're on <span className="underline">{window.origin}</span>, a testnet
+        You're on <span className="underline">{window.origin}</span>, a staging
         environment. You can find the live BondProtocol dApp{" "}
         <a href={dAppLink} className="underline hover:cursor-pointer">
           here
         </a>
-        .
       </div>
     </div>
   </div>
 );
 
 const WarningMessage = ({ toggleTestnet }: { toggleTestnet: () => void }) => (
-  <div className="flex w-full justify-center bg-red-400">
+  <div className="flex w-full justify-center bg-red-700 text-light-secondary-10">
     <AlertIcon />
     <span className="my-auto font-bold">
-      You're on a testing environment containing experimental features and bugs
+      You're on a staging environment containing experimental features and bugs
       and <span className="underline">utilizing real markets.</span>{" "}
       Transactions may result in a loss of funds.
-      <button className="underline" onClick={toggleTestnet}>
-        Click here to load testnet markets.
-      </button>
     </span>
     <AlertIcon />
   </div>
 );
 
-export const AppStatusCard = () => {
-  const { isTestnet, toggleTestnet } = useTestnet();
-  const showInfo = false; //environment.isStaging || environment.isTesting;
-  const showWarning = showInfo && !isTestnet;
+export const AppStatusBanner = () => {
+  const [isTestnet, setTestnet] = useTestnetMode();
+  const showInfo = isTestnet;
+  const showWarning = !isTestnet && environment.isStaging;
 
   return (
     <div
       className={`${
-        showInfo ? "sticky z-10" : "hidden"
+        showInfo || showWarning ? "sticky z-10" : "hidden"
       } inset-0 text-center text-xs`}
     >
       {showWarning ? (
-        <WarningMessage toggleTestnet={toggleTestnet} />
+        <WarningMessage toggleTestnet={() => setTestnet(true)} />
       ) : (
         <TestnetMessage />
       )}

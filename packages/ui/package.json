@@ -68,7 +68,5 @@
     "vite-plugin-dts": "^1.7.1",
     "viteconfig": "*"
   },
-  "dependencies": {
-    "@material-tailwind/react": "^1.2.5"
-  }
+  "dependencies": {}
 }

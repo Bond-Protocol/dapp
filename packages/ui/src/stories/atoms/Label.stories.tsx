@@ -1,8 +1,7 @@
-//@ts-nocheck
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Label } from "../../components/atoms/Label";
-import logo from "../../assets/icon-logo.png";
+import logo from "../../assets/logo-24.svg";
 import { Link, Tooltip } from "../../components/atoms";
 
 export default {
@@ -32,6 +31,13 @@ export const All = Template.bind({});
 All.args = {
   ...Subtext.args,
   ...Icon.args,
+};
+
+export const Loading = Template.bind({});
+Loading.args = {
+  ...Icon.args,
+  value: null,
+  subtext: null,
 };
 
 export const WithTooltip = Template.bind({});
