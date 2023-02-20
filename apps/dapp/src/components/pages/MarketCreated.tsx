@@ -103,6 +103,9 @@ export const MarketCreated = (props: MarketCreatedParams) => {
                 will need to access it directly via the contract, or via your
                 own UI.
               </p>
+
+              <MarketOwnerAllowanceForm marketData={props.marketData}/>
+
             </div>
           )}
         </div>

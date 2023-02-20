@@ -8,17 +8,17 @@ export const subgraphEndpoints = {
   [CHAIN_ID.ETHEREUM_MAINNET]:
     `${import.meta.env.VITE_ETHEREUM_MAINNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.GOERLI_TESTNET]:
-    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli",
+    `${import.meta.env.VITE_ETHEREUM_TESTNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.ARBITRUM_MAINNET]:
-    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-arbitrum-mainnet",
+    `${import.meta.env.VITE_ARBITRUM_MAINNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
-    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-goerli-arbitrum",
+    `${import.meta.env.VITE_ARBITRUM_TESTNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
-    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-optimism-goerli",
+    `${import.meta.env.VITE_OPTIMISM_TESTNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
-    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-polygon-mumbai",
+    `${import.meta.env.VITE_POLYGON_TESTNET_SUBGRAPH_ENDPOINT}`,
   [CHAIN_ID.AVALANCHE_FUJI_TESTNET]:
-    "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-avalanche-fuji",
+    `${import.meta.env.VITE_AVALANCHE_TESTNET_SUBGRAPH_ENDPOINT}`,
 };
 
 export const mainnetEndpoints = [
