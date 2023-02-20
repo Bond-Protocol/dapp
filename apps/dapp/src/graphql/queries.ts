@@ -47,11 +47,7 @@ export const listMarkets = gql`
             typeName
           }
         }
-<<<<<<< HEAD
         balancerWeightedPool {
-=======
-        balancerPool {
->>>>>>> 52de43b (Revert "remove balancer pool from queries as it was throwing error")
           id
           vaultAddress
           poolId
@@ -94,11 +90,7 @@ export const listTokens = gql`
           id
         }
       }
-<<<<<<< HEAD
       balancerWeightedPool {
-=======
-      balancerPool {
->>>>>>> 52de43b (Revert "remove balancer pool from queries as it was throwing error")
         constituentTokens {
           id
         }
@@ -183,11 +175,7 @@ export const listOwnedMarkets = gql`
             typeName
           }
         }
-<<<<<<< HEAD
         balancerWeightedPool {
-=======
-        balancerPool {
->>>>>>> 52de43b (Revert "remove balancer pool from queries as it was throwing error")
           id
           vaultAddress
           poolId

@@ -37,7 +37,7 @@ export const IssuerCard: FC<IssuerCardProps> = ({
       </div>
       <p className="my-2 text-center font-bold tracking-wide">{issuer.name}</p>
 
-      <p className="text-light-primary-300 font-mono text-[10px]">
+      <p className="text-light-primary-300 font-mono text-[12px]">
         TBV ${formattedTbv}
       </p>
       <p

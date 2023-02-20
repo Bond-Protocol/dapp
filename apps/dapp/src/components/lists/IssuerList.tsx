@@ -56,18 +56,21 @@ export const IssuerList = () => {
       <PageHeader title="Bond Issuers" />
       <div className="flex gap-x-4 py-10">
         <InfoLabel
+          reverse
           label="Total Bonded Value"
           tooltip="Total value, in USD, of assets acquired by issuers through bonds"
         >
           {metrics?.tbv}
         </InfoLabel>
         <InfoLabel
+          reverse
           label="Total Bonds"
           tooltip="Total count of bonds acquired through the protocol's smart contracts"
         >
           {totalPurchases}
         </InfoLabel>
         <InfoLabel
+          reverse
           label="Unique Bonders"
           tooltip="Total count of unique addresses that acquired bonds"
         >
