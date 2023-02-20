@@ -64,8 +64,8 @@ export default {
       logoUrl: "https://app.camelot.exchange/images/tokens/xgrail.svg",
       // Token contract addresses
       addresses: {
-        [CHAIN_ID.ARBITRUM_MAINNET]: "0x3CAaE25Ee616f2C8E13C74dA0813402eae3F496b",
-        [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0x45bd859A0533d29B4D55a860bd70A332AE810dEE"
+        [CHAIN_ID.ARBITRUM_MAINNET]: "0xDC132116a76683F5355042E1b67819551AaF34E5",
+        [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0x0e8b4c9d401a9c456D3e4D1E998bA79B3457Aa9c"
       },
       purchaseLinks: { [CHAIN_ID.ARBITRUM_MAINNET]: "https://app.camelot.exchange" }, // Where to acquire your token
       priceSources: [
