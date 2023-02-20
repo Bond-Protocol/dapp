@@ -32,7 +32,7 @@ export const FilterBox = (props: FilterBoxProps) => {
       <PopperUnstyled open={open} anchorEl={anchorEl}>
         <ClickAwayListener onClickAway={onClose}>
           <div className="bg-light-black min-w-[320px] rounded-lg p-4 transition-all">
-            <ChainPicker />
+            <ChainPicker showTestnets />
           </div>
         </ClickAwayListener>
       </PopperUnstyled>

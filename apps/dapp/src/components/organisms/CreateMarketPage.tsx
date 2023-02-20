@@ -23,6 +23,7 @@ import {
 } from "ui";
 import { useTokens } from "hooks";
 import { TokenPickerCard } from "./TokenPickerCard";
+import { useTestnetMode } from "hooks/useTestnet";
 
 const vestingOptions = [
   { label: "FIXED EXPIRY", value: 0 },
@@ -77,6 +78,7 @@ const StepLabel = (props: { text: string }) => {
 };
 
 export const CreateMarketPage = (props: CreateMarketPageProps) => {
+  const [isTestnet] = useTestnetMode();
   const { currentPrices, getPrice } = useTokens();
   const [payoutTokenInfo, setPayoutTokenInfo] = useState<TokenInfo>();
   const [quoteTokenInfo, setQuoteTokenInfo] = useState<TokenInfo>();
@@ -556,6 +558,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <ChainPicker
                       {...field}
                       label="Chain"
+                      showTestnets={isTestnet}
                       errorMessage={errors.chain?.message?.toString()}
                       defaultValue={props.initialValues?.chain}
                     />

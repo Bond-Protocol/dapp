@@ -8,15 +8,18 @@ export type ChainPickerProps = {
   errorMessage?: string;
   defaultValue?: { label: string; id: string };
   onChange?: (chain: string) => void;
+  showTestnets?: boolean;
 };
 
-const options = bondLibrary.SUPPORTED_CHAINS.map((supportedChain) => ({
-  id: supportedChain.chainId,
-  label: supportedChain.displayName,
-  image: supportedChain.image,
-}));
-
 export const ChainPicker = (props: ChainPickerProps) => {
+  const options = bondLibrary.SUPPORTED_CHAINS.filter(
+    (c) => props.showTestnets || !c.isTestnet
+  ).map((supportedChain) => ({
+    id: supportedChain.chainId,
+    label: supportedChain.displayName,
+    image: supportedChain.image,
+  }));
+
   const [selected, setSelected] = useState(
     props.defaultValue ? props.defaultValue.id : options[0].id
   );
