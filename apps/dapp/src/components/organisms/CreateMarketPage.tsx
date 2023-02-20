@@ -18,7 +18,7 @@ import {
   DatePicker,
   FlatSelect,
   Input,
-  SummaryCard,
+  ActionInfoList,
   TermPicker,
 } from "ui";
 import { useTokens } from "hooks";
@@ -306,49 +306,49 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   const summaryFields = [
     {
-      label: "Capacity",
+      leftLabel: "Capacity",
       tooltip:
         "The maximum amount of payout tokens to be paid out during the market's lifetime.",
-      value: capacityString,
+      rightleftLabel: capacityString,
     },
-    { label: "Payout Token", value: payoutTokenSymbol },
-    { label: "Quote Token", value: quoteTokenSymbol },
+    { leftLabel: "Payout Token", rightleftLabel: payoutTokenSymbol },
+    { leftLabel: "Quote Token", rightleftLabel: quoteTokenSymbol },
     /*
     {
-      label: "Estimated bond cadence",
+      leftLabel: "Estimated bond cadence",
       tooltip: "The estimated amount of payout tokens sold per day.",
-      value: estimatedBondCadence,
+      rightleftLabel: estimatedBondCadence,
     },
      */
-    { label: "Initial exchange rate", value: exchangeRateString },
+    { leftLabel: "Initial exchange rate", rightleftLabel: exchangeRateString },
     {
-      label: "Minimum exchange rate",
+      leftLabel: "Minimum exchange rate",
       tooltip: "The lowest exchange rate the market will offer",
-      value: minExchangeRateString,
+      rightleftLabel: minExchangeRateString,
     },
     {
-      label: "Conclusion",
+      leftLabel: "Conclusion",
       tooltip:
         "The date on which the market will close for new purchases, regardless of whether capacity has been reached.",
-      value: marketExpiryString,
+      rightleftLabel: marketExpiryString,
     },
     {
-      label: "Vesting",
+      leftLabel: "Vesting",
       tooltip:
         "The date on which bond purchasers will be able to claim their payout.",
-      value: vestingString,
+      rightleftLabel: vestingString,
     },
     {
-      label: "Bonds per week",
+      leftLabel: "Bonds per week",
       tooltip:
         "The target number of maximum bonds per week. This could be split across multiple small transactions which add up to a maximum bond.",
-      value: `${form.bondsPerWeek}`,
+      rightleftLabel: `${form.bondsPerWeek}`,
     },
     {
-      label: "Debt Buffer",
+      leftLabel: "Debt Buffer",
       tooltip:
-        "The recommended value is calculated based on your market's capacity, duration and deposit interval. We recommend you do not change this unless you are sure you know what you are doing.",
-      value: `${form.debtBuffer}%`,
+        "The recommended rightleftLabel is calculated based on your market's capacity, duration and deposit interval. We recommend you do not change this unless you are sure you know what you are doing.",
+      rightleftLabel: `${form.debtBuffer}%`,
     },
   ];
 
@@ -1026,7 +1026,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
             </div>
 
             <StepLabel text="3 CONFIRMATION" />
-            <SummaryCard fields={summaryFields} className="mt-8" />
+            <ActionInfoList fields={summaryFields} className="mt-8" />
 
             {!isValid && isSubmitted && (
               <div className="mt-4 text-xs font-light text-red-500">

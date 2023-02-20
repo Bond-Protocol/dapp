@@ -6,7 +6,7 @@ import { PurchaseSuccessDialog } from "../../components/modals";
 import { ModalDecorator } from "../decorators";
 
 export default {
-  title: "Components/Modals/PurchaseSuccess",
+  title: "Screens/Modals/PurchaseSuccess",
   component: PurchaseSuccessDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof Modal>;

@@ -5,7 +5,7 @@ import { TransactionHashDialog } from "../../components/modals";
 import { ModalDecorator, blockExplorerUrl } from "../decorators";
 
 export default {
-  title: "Components/Modals/TransactionHash",
+  title: "Screens/Modals/TransactionHash",
   component: TransactionHashDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof TransactionHashDialog>;

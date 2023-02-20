@@ -6,7 +6,6 @@ export * from "./ExpandableRow";
 export * from "./InputCard";
 export * from "./IssuerCard";
 export * from "./Modal";
-export * from "./SummaryCard";
 export * from "./PaginatedTable";
 export * from "./Table";
 export * from "./Tabs";

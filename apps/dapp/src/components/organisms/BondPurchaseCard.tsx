@@ -135,7 +135,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const onClickBond = !hasSufficientAllowance
     ? approveSpending
     : () => setShowModal(true);
-  console.log({ market });
 
   const isTerm = market.vestingType === "fixed-term";
   const vestingTimestamp = isTerm
@@ -190,7 +189,15 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   const submitTx = () => {
     if (!address) throw new Error("Not Connected");
-    return bond(address, amount, payout, 0.05, market, referralAddress, signer);
+    return bond(
+      address,
+      amount,
+      payout,
+      0.05,
+      market,
+      referralAddress,
+      signer!
+    );
   };
 
   return (

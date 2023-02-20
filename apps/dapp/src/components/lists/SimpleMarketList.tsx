@@ -3,25 +3,14 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { ExpandableRow, TableHeading, CellLabel, TableCell, Loading } from "ui";
 import { BondPurchaseCard } from "..";
 import { useMarkets, useTokens } from "hooks";
-import { providers } from "services/owned-providers";
-import {
-  CHAINS,
-  getProtocolByAddress,
-  NativeCurrency,
-} from "@bond-protocol/bond-library";
 
 type SimpleMarketListProps = {
   markets?: Map<string, CalculatedMarket>;
 };
 
-const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
-const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
-const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
-
 export const SimpleMarketList: FC<SimpleMarketListProps> = ({ ...props }) => {
   const { getTokenDetails } = useTokens();
   const { refetchOne, allMarkets, isLoading } = useMarkets();
-  const { getPrice } = useTokens();
 
   const markets = props.markets || allMarkets;
 
@@ -221,23 +210,6 @@ export const SimpleMarketList: FC<SimpleMarketListProps> = ({ ...props }) => {
 
         <tbody>
           {sortedMarkets.map((market: CalculatedMarket) => {
-            const protocol = getProtocolByAddress(market.owner, market.chainId);
-
-            const nativeCurrency: NativeCurrency = CHAINS.get(market.chainId)
-              ?.nativeCurrency || {
-              decimals: 18,
-              name: "Ethereum",
-              symbol: "ETH",
-            };
-
-            const nativeCurrencyPrice = getPrice(nativeCurrency.symbol);
-
-            const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
-              market.chainId.concat("_").concat(market.owner)
-            )
-              ? NO_REFERRAL_ADDRESS
-              : REFERRAL_ADDRESS;
-
             return (
               <ExpandableRow
                 key={market.id}
@@ -250,16 +222,7 @@ export const SimpleMarketList: FC<SimpleMarketListProps> = ({ ...props }) => {
                 onClose={() => clearInterval(timerRef.current)}
                 expanded={
                   <div className="w-[100vw] max-w-[1440px] py-8">
-                    <BondPurchaseCard
-                      market={market}
-                      nativeCurrency={nativeCurrency}
-                      nativeCurrencyPrice={nativeCurrencyPrice}
-                      referralAddress={referralAddress}
-                      issuerName={protocol?.name || "BondProtocol"}
-                      provider={providers[market.chainId]}
-                      // @ts-ignore
-                      signer={signer}
-                    />
+                    <BondPurchaseCard market={market} />
                   </div>
                 }
               >

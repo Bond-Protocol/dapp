@@ -6,7 +6,7 @@ import { PurchaseConfirmDialog } from "../../components/modals";
 import { ModalDecorator } from "../decorators";
 
 export default {
-  title: "Components/Modals/PurchaseConfirm",
+  title: "Screens/Modals/PurchaseConfirm",
   component: PurchaseConfirmDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof Modal>;

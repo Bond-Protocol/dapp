@@ -1,6 +1,5 @@
 export * from "./AppStatusCard";
 export * from "./BondCard";
-export * from "./BondDetails";
 export * from "./BondPurchaseCard";
 export * from "../modals/BondPurchaseModal";
 export * from "./BondDiscountChart";

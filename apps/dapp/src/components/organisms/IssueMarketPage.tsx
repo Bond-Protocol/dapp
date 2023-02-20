@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useAccount, useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { Button, SummaryCard } from "ui";
+import { Button, ActionInfoList } from "ui";
 import { providers } from "services/owned-providers";
 import { IssueMarketModal } from "../modals/IssueMarketModal";
 import { IssueMarketMultisigModal } from "components/modals/IssueMarketMultisigModal";
-import {MarketOwnerAllowanceForm} from "components/common/MarketOwnerAllowanceForm";
+import { MarketOwnerAllowanceForm } from "components/common/MarketOwnerAllowanceForm";
 
 export type IssueMarketPageProps = {
   onExecute: (marketData: any) => void;
@@ -33,26 +33,35 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
   };
 
   const marketSummaryFields = [
-    { label: "Capacity", value: props.data.summaryData.capacity },
-    { label: "Payout Token", value: props.data.summaryData.payoutToken },
-    { label: "Quote Token", value: props.data.summaryData.quoteToken },
+    { leftLabel: "Capacity", rightLabel: props.data.summaryData.capacity },
+    {
+      leftLabel: "Payout Token",
+      rightLabel: props.data.summaryData.payoutToken,
+    },
+    { leftLabel: "Quote Token", rightLabel: props.data.summaryData.quoteToken },
     /*
     {
-      label: "Estimated Bond Cadence",
-      value: props.data.summaryData.estimatedBondCadence,
+      leftLabel: "Estimated Bond Cadence",
+      rightLabel: props.data.summaryData.estimatedBondCadence,
     },
      */
     {
-      label: "Minimum Exchange Rate",
-      value: props.data.summaryData.minimumExchangeRate,
+      leftLabel: "Minimum Exchange Rate",
+      rightLabel: props.data.summaryData.minimumExchangeRate,
     },
   ];
 
   const vestingSummaryFields = [
-    { label: "Conclusion", value: props.data.summaryData.conclusion },
-    { label: "Vesting", value: props.data.summaryData.vesting },
-    { label: "Bonds per week", value: props.data.summaryData.bondsPerWeek },
-    { label: "Debt buffer", value: `${props.data.summaryData.debtBuffer}%` },
+    { leftLabel: "Conclusion", rightLabel: props.data.summaryData.conclusion },
+    { leftLabel: "Vesting", rightLabel: props.data.summaryData.vesting },
+    {
+      leftLabel: "Bonds per week",
+      rightLabel: props.data.summaryData.bondsPerWeek,
+    },
+    {
+      leftLabel: "Debt buffer",
+      rightLabel: `${props.data.summaryData.debtBuffer}%`,
+    },
   ];
 
   const onConfirm = async () => {
@@ -100,11 +109,11 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
       <div className="mx-[15vw]">
         <p className="font-faketion mt-8 font-bold tracking-widest">MARKET</p>
 
-        <SummaryCard fields={marketSummaryFields} className="my-8" />
+        <ActionInfoList fields={marketSummaryFields} className="my-8" />
 
         <p className="font-faketion font-bold tracking-widest">VESTING TERMS</p>
 
-        <SummaryCard fields={vestingSummaryFields} className="my-8" />
+        <ActionInfoList fields={vestingSummaryFields} className="my-8" />
 
         <MarketOwnerAllowanceForm marketData={props.data} />
 
