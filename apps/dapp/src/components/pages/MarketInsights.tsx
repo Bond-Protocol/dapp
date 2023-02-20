@@ -90,7 +90,7 @@ export const MarketInsights = () => {
       </div>
 
       <BondCard market={market} />
-      <TransactionHistory className="mt-8" market={market} />
+      <TransactionHistory className="mt-20" market={market} />
     </div>
   );
 };

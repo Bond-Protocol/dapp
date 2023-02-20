@@ -45,7 +45,8 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
         )
       : filteredData;
 
-  const emptyRows = Math.max(0, (1 + page) * rowsPerPage - totalRows);
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalRows) : 0;
 
   return (
     <div className={props.className}>
@@ -53,7 +54,7 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
         {props.title && (
           <p className="font-fraktion ml-4 text-2xl uppercase">{props.title}</p>
         )}
-        <SearchBar handleChange={setText} className="max-w-xs" />
+        <SearchBar value={text} handleChange={setText} className="max-w-xs" />
       </div>
       <Table
         {...props}
