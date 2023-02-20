@@ -1,9 +1,0 @@
-overwrite: true
-schema: "https://api.thegraph.com/subgraphs/name/bond-protocol/bond-protocol-arbitrum-mainnet"
-documents: "src/graphql/queries.ts"
-generates:
-  src/generated/graphql.ts:
-    plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-react-query"

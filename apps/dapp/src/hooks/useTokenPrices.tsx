@@ -255,8 +255,8 @@ export const useTokenPrices = () => {
           //@ts-ignore
           token.value["token1"] = bondLibrary.getTokenByAddress(token1Address);
 
-          const t0 = currentPricesMap[token0Address];
-          const t1 = currentPricesMap[token1Address];
+          const t0 = currentPricesMap[token0Address.toLowerCase()];
+          const t1 = currentPricesMap[token1Address.toLowerCase()];
 
           //@ts-ignore
           token.value["token0"].price = t0 && t0[0]?.price;

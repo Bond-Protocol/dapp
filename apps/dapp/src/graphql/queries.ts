@@ -47,7 +47,7 @@ export const listMarkets = gql`
             typeName
           }
         }
-        balancerPool {
+        balancerWeightedPool {
           id
           vaultAddress
           poolId
@@ -90,7 +90,7 @@ export const listTokens = gql`
           id
         }
       }
-      balancerPool {
+      balancerWeightedPool {
         constituentTokens {
           id
         }
@@ -175,7 +175,7 @@ export const listOwnedMarkets = gql`
             typeName
           }
         }
-        balancerPool {
+        balancerWeightedPool {
           id
           vaultAddress
           poolId
