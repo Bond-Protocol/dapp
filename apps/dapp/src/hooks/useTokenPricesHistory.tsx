@@ -20,12 +20,8 @@ export const useTokenPriceHistory = (token: Token, dayRange = 30) => {
   //@ts-ignore
   const [priceSource] = getPriceSourceForToken(token.id);
 
-  if (!priceSource) {
-    throw new Error(`Token ${token.symbol} missing price sources.`);
-  }
-
   //We currently don't have historical data for custom oracle tokens
-  if ("customPriceFunction" in priceSource) {
+  if (!priceSource || "customPriceFunction" in priceSource) {
     return {
       prices: [],
       isLoading: false,

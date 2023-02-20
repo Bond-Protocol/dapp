@@ -3,7 +3,7 @@ import { Providers } from "context/app-providers";
 import { PageContainer } from "ui";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
 import {
-  AppStatusCard,
+  AppStatusBanner,
   CoverUpScreen,
   Footer,
   MobileCover,
@@ -21,7 +21,7 @@ export const App: FC = () => {
       <MobileCover />
       <div className="xs:hidden fml:block">
         <Providers>
-          <AppStatusCard />
+          <AppStatusBanner />
           <div className="flex h-full min-h-[100vh] flex-col justify-between">
             <div className="h-full overflow-x-hidden pb-16 font-jakarta antialiased">
               <Navbar />

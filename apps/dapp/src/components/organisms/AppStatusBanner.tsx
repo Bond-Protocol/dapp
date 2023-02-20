@@ -32,7 +32,7 @@ const WarningMessage = ({ toggleTestnet }: { toggleTestnet: () => void }) => (
   </div>
 );
 
-export const AppStatusCard = () => {
+export const AppStatusBanner = () => {
   const [isTestnet, setTestnet] = useTestnetMode();
   const showInfo = isTestnet;
   const showWarning = !isTestnet && environment.isStaging;

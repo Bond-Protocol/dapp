@@ -6,7 +6,12 @@ import {
   formatLongNumber,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
-import { useGasPrice, usePurchaseBond, useTokenAllowance } from "hooks";
+import {
+  useGasPrice,
+  usePurchaseBond,
+  useTokenAllowance,
+  useTokens,
+} from "hooks";
 import { Button, InputCard, ActionInfoList } from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
@@ -15,7 +20,8 @@ import { useNativeCurrency } from "hooks/useNativeCurrency";
 import { providers } from "services/owned-providers";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import add from "date-fns/add";
-import { formatDate } from "src/utils";
+import { formatDate, getTokenDetails } from "src/utils";
+import { usdFormatter } from "src/utils/format";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -38,8 +44,14 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   });
   const { data: signer } = useSigner();
 
+  const quoteTokenDetails = getTokenDetails(market?.quoteToken);
   const provider = providers[market.chainId];
   const { address, isConnected } = useAccount();
+
+  const { getPrice } = useTokens();
+
+  const quotePrice = getPrice(market.quoteToken.id);
+  const payoutPrice = getPrice(market.payoutToken.id);
 
   const { getGasPrice } = useGasPrice();
   const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
@@ -208,6 +220,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           value={amount}
           balance={balance}
           market={market}
+          tokenIcon={quoteTokenDetails.logoUrl}
         />
         <div className="my-1 justify-self-start pt-2 text-xs font-light text-red-500">
           {showOwnerBalanceWarning && (

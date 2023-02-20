@@ -36,9 +36,11 @@ export const Table = ({ data = [], ...props }: TableProps) => {
 
   return (
     <table className="w-full table-fixed">
-      {props.columns.map((c, i) => (
-        <col key={i} className={c.width && c.width} />
-      ))}
+      <colgroup>
+        {props.columns.map((c, i) => (
+          <col key={i} className={c.width && c.width} />
+        ))}
+      </colgroup>
       <TableHead
         columns={props.columns}
         handleSorting={handleSorting}
@@ -148,7 +150,7 @@ export const TableBody = ({ columns, rows, emptyRows }: TableBodyProps) => {
           <TableCell colSpan={columns.length} />
         </tr>
       ) : (
-        <div />
+        <tr />
       )}
     </tbody>
   );

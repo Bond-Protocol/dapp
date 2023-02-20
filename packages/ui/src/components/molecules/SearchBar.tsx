@@ -9,7 +9,6 @@ export type SearchBarProps = {
 };
 
 export const SearchBar = (props: SearchBarProps) => {
-  console.log("search", { val: props.value });
   return (
     <div className={props.className}>
       <Input

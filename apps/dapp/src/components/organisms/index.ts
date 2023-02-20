@@ -1,4 +1,4 @@
-export * from "./AppStatusCard";
+export * from "./AppStatusBanner";
 export * from "./BondCard";
 export * from "./BondPurchaseCard";
 export * from "../modals/BondPurchaseModal";
