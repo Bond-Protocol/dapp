@@ -15,3 +15,9 @@ Primary.args = {
   label: "Wen dapp?",
   subText: "Enter seedphrase above",
 };
+
+export const WithError = Template.bind({});
+WithError.args = {
+  ...Primary.args,
+  errorMessage: "This is an error",
+};

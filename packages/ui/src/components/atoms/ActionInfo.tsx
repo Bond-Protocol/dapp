@@ -23,12 +23,11 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
           <Tooltip
             content={props.tooltip}
             iconWidth={13.3}
-            iconClassname="pb-[1px] ml-0.5 text-white fill-white"
+            iconClassname="pb-[1px] ml-0.5 fill-light-secondary-10"
           />
         )}
         {props.link && <Link href={props.link}>{props.value}</Link>}
       </div>
-      <div></div>
     </div>
   );
 };

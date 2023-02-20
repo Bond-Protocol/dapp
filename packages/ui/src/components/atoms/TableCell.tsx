@@ -6,7 +6,7 @@ export type TableCellProps = React.TdHTMLAttributes<HTMLTableCellElement> & {
 };
 
 export const TableCell = forwardRef(function TableCell(
-  { heading, ...props }: TableCellProps,
+  { heading, alignEnd, ...props }: TableCellProps,
   ref: React.ForwardedRef<HTMLTableCellElement>
 ) {
   const CellType = heading ? "th" : "td";
@@ -16,11 +16,9 @@ export const TableCell = forwardRef(function TableCell(
     <CellType
       {...props}
       ref={ref}
-      className={`${style} ${props.className} ${
-        props.alignEnd ? "text-right" : ""
-      }`}
+      className={`${style} ${props.className} ${alignEnd ? "text-right" : ""}`}
     >
-      <div className={`flex px-1 ${props.alignEnd && "justify-end"}`}>
+      <div className={`flex px-1 ${alignEnd && "justify-end"}`}>
         {props.children}
       </div>
     </CellType>

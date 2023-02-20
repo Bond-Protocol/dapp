@@ -9,7 +9,7 @@ export const ActionInfoList = (props: ActionInfoListProps) => {
   return (
     <ol className={`child:mt-2 first:mt-0 ${props.className}`}>
       {props.fields.map((f, i) => (
-        <ActionInfo {...f} />
+        <ActionInfo {...f} key={i} />
       ))}
     </ol>
   );

@@ -5,16 +5,21 @@ import * as bondLibrary from "@bond-protocol/bond-library";
 export type ChainPickerProps = {
   className?: string;
   label?: string;
+  errorMessage?: string;
   defaultValue?: { label: string; id: string };
   onChange?: (chain: string) => void;
+  showTestnets?: boolean;
 };
 
-const options = bondLibrary.SUPPORTED_CHAINS.map((supportedChain) => ({
-  id: supportedChain.chainId,
-  label: supportedChain.displayName,
-}));
-
 export const ChainPicker = (props: ChainPickerProps) => {
+  const options = bondLibrary.SUPPORTED_CHAINS.filter(
+    (c) => props.showTestnets || !c.isTestnet
+  ).map((supportedChain) => ({
+    id: supportedChain.chainId,
+    label: supportedChain.displayName,
+    image: supportedChain.image,
+  }));
+
   const [selected, setSelected] = useState(
     props.defaultValue ? props.defaultValue.id : options[0].id
   );
@@ -23,7 +28,7 @@ export const ChainPicker = (props: ChainPickerProps) => {
     props.onChange && props.onChange(selected);
   }, [selected]);
 
-  const handleChangeSelect = (e: any, value: any) => {
+  const handleChangeSelect = (_e: any, value: any) => {
     setSelected(value);
   };
 
@@ -42,6 +47,11 @@ export const ChainPicker = (props: ChainPickerProps) => {
           />
         </div>
       </div>
+      {props.errorMessage && (
+        <div className="my-1 justify-self-start text-xs font-light text-red-500">
+          <>{props.errorMessage}</>
+        </div>
+      )}
     </div>
   );
 };

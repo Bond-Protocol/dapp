@@ -14,9 +14,17 @@ import {
 
 import type { FC, ReactNode } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { mainnet, arbitrum, goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, avalancheFuji } from 'wagmi/chains';
+import {
+  mainnet,
+  arbitrum,
+  goerli,
+  arbitrumGoerli,
+  optimismGoerli,
+  polygonMumbai,
+  avalancheFuji,
+} from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
-import { environment } from "src/env-state";
+import { environment } from "src/environment";
 
 const isTestnet = environment.isTestnet;
 

@@ -8,7 +8,6 @@ import {
   MarketInsights,
   Markets,
   MarketCreated,
-  MyMarkets,
   PolicyPage,
 } from "./components";
 import { useState } from "react";
@@ -23,7 +22,6 @@ export const RouteMap: FC = () => {
       <Route path="/markets" element={<Markets />} />
       <Route path="/issuers" element={<IssuerList />} />
       <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/my-markets" element={<MyMarkets />} />
       <Route
         path="/create"
         element={

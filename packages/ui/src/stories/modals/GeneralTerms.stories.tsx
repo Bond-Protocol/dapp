@@ -5,7 +5,7 @@ import { GeneralTermsDialog } from "../../components/modals";
 import { ModalDecorator, blockExplorerUrl } from "../decorators";
 
 export default {
-  title: "Components/Modals/GeneralTerms",
+  title: "Screens/Modals/GeneralTerms",
   component: GeneralTermsDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof GeneralTermsDialog>;
