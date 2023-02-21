@@ -3,7 +3,7 @@ import { CUSTOM_PRICE_FEEDS, CHAIN_ID } from "../constants";
 export default {
   name: "DAI",
   symbol: "DAI",
-  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/DAI.png",
+  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/DAI.png",
   priceSources: [{ source: "coingecko", apiId: "dai" }],
   purchaseLinks: {
     [CHAIN_ID.ETHEREUM_MAINNET]: "https://curve.fi/",

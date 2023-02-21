@@ -2,7 +2,7 @@ import { CHAIN_ID } from "../constants";
 export default {
   name: "Wrapped Bitcoin",
   symbol: "WBTC",
-  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WBTC.png",
+  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WBTC.png",
   priceSources: [{ source: "coingecko", apiId: "wrapped-bitcoin" }],
   purchaseLinks: { [CHAIN_ID.ETHEREUM_MAINNET]: "https://curve.fi/" },
   addresses: {
