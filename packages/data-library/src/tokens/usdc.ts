@@ -2,8 +2,7 @@ import { CUSTOM_PRICE_FEEDS, CHAIN_ID } from "../constants";
 export default {
   name: "USD Coin",
   symbol: "USDC",
-  logoUrl:
-    "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDC.png",
+  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDC.png",
   addresses: {
     [CHAIN_ID.ETHEREUM_MAINNET]: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
     [CHAIN_ID.ARBITRUM_MAINNET]: "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
