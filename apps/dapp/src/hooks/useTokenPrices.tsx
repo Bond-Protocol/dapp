@@ -25,6 +25,11 @@ type BondLibraryToken = bondLibrary.Token & { key: string };
 
 const allTokens: Array<BondLibraryToken> = Array.from(
   bondLibrary.TOKENS.keys()
+).filter((key) => {
+    const split: string[] = key.split("_");
+    let chainId = split[0];
+    return providers[chainId] != undefined;
+  }
 ).map((key) => ({
   ...bondLibrary.TOKENS.get(key)!,
   key,
@@ -99,9 +104,9 @@ export const useTokenPrices = () => {
           //@ts-ignore
           token.price = baseTokens[chainId + "_" + token.address.toLowerCase()]
             ? Number(
-                // @ts-ignore
-                baseTokens[chainId + "_" + token.address.toLowerCase()][0].price
-              )
+              // @ts-ignore
+              baseTokens[chainId + "_" + token.address.toLowerCase()][0].price
+            )
             : undefined;
         });
 
@@ -180,7 +185,7 @@ export const useTokenPrices = () => {
         //@ts-ignore
         .map((query) => query.value)
         .reduce((prices, token) => {
-          return { ...prices, [token.key]: token.prices };
+          return { ...prices, [token && token.key]: token && token.prices };
         }, {})
     );
   };

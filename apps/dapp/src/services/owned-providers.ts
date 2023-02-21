@@ -1,5 +1,7 @@
 import { Provider } from "@wagmi/core";
 import { ethers } from "ethers";
+import {useAtom} from "jotai";
+import testnetMode from "../atoms/testnetMode.atom";
 
 type FallbackProviderConfig = {
   //RPC URL
@@ -16,7 +18,7 @@ export type ProviderOptions = {
   chainId: string;
 };
 
-const providerConfiguration: ProviderOptions[] = [
+const mainnetProviders: ProviderOptions[] = [
   {
     name: "mainnet",
     chainId: "1",
@@ -31,25 +33,28 @@ const providerConfiguration: ProviderOptions[] = [
     ],
   },
   {
-    name: "goerli",
-    chainId: "5",
-    rpcs: [
-      {
-        url: `https://eth-goerli.g.alchemy.com/v2/${
-          import.meta.env.VITE_ALCHEMY_GOERLI_KEY
-        }`,
-        weight: 1,
-        priority: 1,
-      },
-    ],
-  },
-  {
     name: "arbitrum",
     chainId: "42161",
     rpcs: [
       {
         url: `https://arb-mainnet.g.alchemy.com/v2/${
           import.meta.env.VITE_ALCHEMY_ARBITRUM_MAINNET_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
+];
+
+const testnetProviders: ProviderOptions[] = [
+  {
+    name: "goerli",
+    chainId: "5",
+    rpcs: [
+      {
+        url: `https://eth-goerli.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_GOERLI_KEY
         }`,
         weight: 1,
         priority: 1,
@@ -108,9 +113,12 @@ const providerConfiguration: ProviderOptions[] = [
   },
 ];
 
+import { environment } from "src/environment";
+const activeProviders = environment.isTestnet ? testnetProviders : mainnetProviders;
+
 export const providers: { [key: string]: Provider } =
   //Go through every chain
-  providerConfiguration.reduce((acc, config: ProviderOptions) => {
+  activeProviders.reduce((acc, config: ProviderOptions) => {
     //Setup static providers for nodes we own/trust
     const ownedNodesConfig = config.rpcs.map(({ url, priority, weight }) => {
       return {
