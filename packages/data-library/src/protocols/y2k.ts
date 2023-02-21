@@ -5,10 +5,11 @@ import { ProtocolDefinition } from "../public-types";
 export default {
   name: "Y2K", // Your protocol's display name, formatted as it will appear in the BondProtocol dApp
   description: "Y2K Finance is a suite of structured products designed for exotic peg derivatives.", // A short protocol description
-  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/Y2K.jpg",
+  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/Y2K.jpg",
   // Links to landing page, socials and docs
   links: {
-    governanceVote: "https://snapshot.org/#/y2k-finance.eth/proposal/0x85ec42ec3b57b372f907a0a5609cea0c73610632fd6843968d5c04bcafabf0ce", // A governance proposal related to bonds
+    governanceVote:
+      "https://snapshot.org/#/y2k-finance.eth/proposal/0x85ec42ec3b57b372f907a0a5609cea0c73610632fd6843968d5c04bcafabf0ce", // A governance proposal related to bonds
     homepage: "https://www.y2k.finance/",
     staking: "https://www.y2k.finance/lock",
     twitter: "y2kfinance",
@@ -35,12 +36,15 @@ export default {
     {
       name: "Y2K",
       symbol: "Y2K",
-      logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/Y2K.jpg",
+      logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/Y2K.jpg",
       // Token contract addresses
       addresses: {
         [CHAIN_ID.ARBITRUM_MAINNET]: "0x65c936f008bc34fe819bce9fa5afd9dc2d49977f",
       },
-      purchaseLinks: { [CHAIN_ID.ARBITRUM_MAINNET]: "https://app.balancer.fi/#/arbitrum/trade/0x82af49447d8a07e3bd95bd0d56f35241523fbab1/0x65c936f008bc34fe819bce9fa5afd9dc2d49977f" }, // Where to acquire your token
+      purchaseLinks: {
+        [CHAIN_ID.ARBITRUM_MAINNET]:
+          "https://app.balancer.fi/#/arbitrum/trade/0x82af49447d8a07e3bd95bd0d56f35241523fbab1/0x65c936f008bc34fe819bce9fa5afd9dc2d49977f",
+      }, // Where to acquire your token
       priceSources: [
         /*
            Check out our docs for supported price sources and their usage.

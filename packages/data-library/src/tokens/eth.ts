@@ -3,7 +3,7 @@ import { CHAIN_ID } from "../constants";
 export default {
   name: "Wrapped Ethereum",
   symbol: "WETH",
-  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
+  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
   priceSources: [{ source: "coingecko", apiId: "ethereum" }],
   purchaseLinks: {
     [CHAIN_ID.ETHEREUM_MAINNET]: "https://app.uniswap.org/#/swap",
