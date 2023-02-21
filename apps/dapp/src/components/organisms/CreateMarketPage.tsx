@@ -118,7 +118,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
 
   const form = useWatch({ control });
 
-  const chainSelection = form.chain || "1";
+  const chainSelection = form.chain || (isTestnet ? "5" : "1");
 
   useEffect(() => {
     if (form.marketOwnerAddress) {

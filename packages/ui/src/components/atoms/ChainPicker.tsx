@@ -13,7 +13,7 @@ export type ChainPickerProps = {
 
 export const ChainPicker = (props: ChainPickerProps) => {
   const options = bondLibrary.SUPPORTED_CHAINS.filter(
-    (c) => props.showTestnets || !c.isTestnet
+    (c) => props.showTestnets ? c.isTestnet : !c.isTestnet
   ).map((supportedChain) => ({
     id: supportedChain.chainId,
     label: supportedChain.displayName,
