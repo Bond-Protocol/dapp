@@ -104,9 +104,9 @@ export const useTokenPrices = () => {
           //@ts-ignore
           token.price = baseTokens[chainId + "_" + token.address.toLowerCase()]
             ? Number(
-              // @ts-ignore
-              baseTokens[chainId + "_" + token.address.toLowerCase()][0].price
-            )
+                // @ts-ignore
+                baseTokens[chainId + "_" + token.address.toLowerCase()][0].price
+              )
             : undefined;
         });
 
