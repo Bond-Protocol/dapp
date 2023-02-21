@@ -2,7 +2,7 @@ import { CUSTOM_PRICE_FEEDS, CHAIN_ID } from "../constants";
 export default {
   name: "Liquity USD",
   symbol: "LUSD",
-  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/LUSD.png",
+  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/LUSD.png",
   priceSources: [{ source: "coingecko", apiId: "liquity-usd" }],
   purchaseLinks: { [CHAIN_ID.ETHEREUM_MAINNET]: "https://curve.fi/#/ethereum/pools/lusd/swap" },
   addresses: {

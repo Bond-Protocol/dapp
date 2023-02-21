@@ -6,7 +6,7 @@ export default {
   name: "Sperax", // Your protocol's display name, formatted as it will appear in the BondProtocol dApp
   description:
     "Sperax is an Arbitrum DeFi protocol featuring a yield-aggregator stablecoin, Sperax USD (USDs), and a Uniswap V3 one-click farm launcher, Demeter protocol.", // A short protocol description
-  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/SPERAX.svg", // svg file
+  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/SPERAX.svg", // svg file
   // Links to landing page, socials and docs
   links: {
     governanceVote: "https://snapshot.org/#/speraxdao.eth", // A governance proposal related to bonds
@@ -38,7 +38,7 @@ export default {
     {
       name: "Sperax",
       symbol: "SPA",
-      logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/SPA.png", // svg file
+      logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/SPA.png", // svg file
       // Token contract addresses
       addresses: {
         [CHAIN_ID.ETHEREUM_MAINNET]: "0xB4A3B0Faf0Ab53df58001804DdA5Bfc6a3D59008",

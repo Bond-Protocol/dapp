@@ -5,7 +5,7 @@ import { ProtocolDefinition } from "../public-types";
 export default {
   name: "Redacted",
   description: "Empowering on-chain liquidity, governance and cash-flow for DeFi protocols.",
-  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png", // 1:1 square logo
+  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png", // 1:1 square logo
   links: {
     // Links to landing page, socials and docs
     governanceVote:
@@ -32,7 +32,7 @@ export default {
       // why use many word wen example do trick
       name: "BTRFLY",
       symbol: "BTRFLY",
-      logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png",
+      logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png",
       // Token contract addresses
       addresses: {
         [CHAIN_ID.ETHEREUM_MAINNET]: "0xc55126051B22eBb829D00368f4B12Bde432de5Da",

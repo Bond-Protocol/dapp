@@ -2,7 +2,7 @@ import { CUSTOM_PRICE_FEEDS, CHAIN_ID } from "../constants";
 export default {
   name: "FRAX",
   symbol: "FRAX",
-  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/FRAX.png",
+  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/FRAX.png",
   priceSources: [{ source: "coingecko", apiId: "frax" }],
   purchaseLinks: {
     [CHAIN_ID.ETHEREUM_MAINNET]: "https://curve.fi/",
