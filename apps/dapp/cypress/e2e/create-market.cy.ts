@@ -1,13 +1,16 @@
+import CreateMarketPage from "../pages/create-market";
+
 const VALID_ISSUER_ADDRESS = "0x245cc372C84B3645Bf0Ffe6538620B04a217988B";
 const INVALID_ISSUER_ADDRESS = "0x245cc372C84B3645Bf0Ffe6538620B04a21742069";
 
+const page = new CreateMarketPage();
+
 describe("Create Markets", () => {
-  it("Loads the page", () => {
-    cy.visit("/create");
+  beforeEach(() => {
+    page.visit();
   });
 
   it("Checks for content", () => {
-    cy.visit("/create");
     cy.contains("SET UP");
     cy.contains("Chain");
     cy.contains("Market Owner Address");
@@ -24,32 +27,18 @@ describe("Create Markets", () => {
   });
 
   it("Switches chains", () => {
-    cy.visit("/create");
+    page.switchChain("Arbitrum");
 
-    cy.get("#bp__chain_picker_input").children().contains("Ethereum");
-
-    cy.get("#bp__chain_picker_input").click();
-    cy.get("#bp__chain_picker_input")
-      .next()
-      .children("ul")
-      .get("li:nth-child(3)")
-      .first()
-      .click();
-
-    cy.get("#bp__chain_picker_input").children().contains("Arbitrum");
-
-    cy.get("#bp__chain_picker_input")
-      .children()
-      .should("not.contain", "Ethereum");
+    page.getSelectedChain().contains("Arbitrum");
+    page.getSelectedChain().should("not.contain", "Ethereum");
   });
 
   it("Validates a verified issuer", () => {
-    cy.visit("/create");
-    cy.get("#bp__market_owner_address").type(VALID_ISSUER_ADDRESS);
-    cy.get("#bp__market_owner_address").should(
-      "have.value",
-      VALID_ISSUER_ADDRESS
-    );
+    page.getMarketOwnerAddress().type(VALID_ISSUER_ADDRESS);
+    page.getMarketOwnerAddress().should("have.value", VALID_ISSUER_ADDRESS);
+
     cy.contains("Verified as OlympusDAO");
   });
+
+  it("Validates tokens", () => {});
 });
