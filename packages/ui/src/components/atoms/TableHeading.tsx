@@ -17,6 +17,7 @@ export const TableHeading = ({
   marketSort,
   setMarketSort,
   isSorting,
+  ascending,
   ...props
 }: TableHeadingProps) => {
   return (
@@ -36,7 +37,7 @@ export const TableHeading = ({
         >
           <ArrowDownIcon
             width="16"
-            className={`${props.ascending ? "rotate-180" : ""} ${
+            className={`${ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"
             } fill-white`}
           />
@@ -50,7 +51,7 @@ export const TableHeading = ({
         >
           <ArrowDownIcon
             width="16"
-            className={`${props.ascending ? "rotate-180" : ""} ${
+            className={`${ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"
             } fill-white`}
           />

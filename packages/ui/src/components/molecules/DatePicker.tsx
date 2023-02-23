@@ -7,6 +7,7 @@ import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg"
 
 export type DatePickerProps = {
   onChange?: (date?: number) => void;
+  errorMessage?: string;
   className?: string;
   dateClassName?: string;
   label?: string;
@@ -66,7 +67,9 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
             </p>
           )}
           <div
-            className={`flex h-10 justify-between rounded-lg border px-3 py-2 hover:cursor-pointer ${props.dateClassName}`}
+            className={`flex h-10 justify-between rounded-lg border px-3 py-2 hover:cursor-pointer ${
+              props.dateClassName
+            } ${props.errorMessage && "border-red-500 bg-red-500"}`}
           >
             <p
               className={`${date ? "font-bold" : ""} font-jakarta text-[15px]`}

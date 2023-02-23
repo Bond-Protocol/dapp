@@ -9,8 +9,6 @@ const initialState: UseTokensReturn = {
   currentPrices: {},
   getPrice: (token: any) => 1,
   getTokenDetails: (token: unknown) => ({ id: "" } as TokenDetails),
-  getTokenDetailsFromChain: (a: unknown, b: unknown) =>
-    Promise.resolve({ name: "", symbol: "" }),
   isLoading: true,
 };
 

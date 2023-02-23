@@ -56,7 +56,8 @@ export const MarketInsights = () => {
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {formattedPayout} {market.payoutToken.symbol}
+          {formattedPayout}{" "}
+          <span className="-ml-2 text-[24px]">{market.payoutToken.symbol}</span>
         </InfoLabel>
 
         <InfoLabel
@@ -89,7 +90,7 @@ export const MarketInsights = () => {
       </div>
 
       <BondCard market={market} />
-      <TransactionHistory className="mt-8" market={market} />
+      <TransactionHistory className="mt-20" market={market} />
     </div>
   );
 };

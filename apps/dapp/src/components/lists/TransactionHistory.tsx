@@ -7,7 +7,7 @@ import {
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
-import { Link, Column, Table } from "ui";
+import { Link, Column, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useTokens } from "hooks";
 import { useMemo } from "react";
@@ -30,11 +30,10 @@ const userTxsHistory: Column<any>[] = [
     label: "Total Value",
     alignEnd: true,
     formatter: (purchase) => {
-      const value = usdFormatter.format(
-        parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice)
-      );
+      const value =
+        parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice);
 
-      return { value };
+      return { value: usdFormatter.format(value), sortValue: value };
     },
   },
   {
@@ -46,6 +45,7 @@ const userTxsHistory: Column<any>[] = [
         value: `${longFormatter.format(purchase.amount)} ${
           purchase.quoteToken.symbol
         }`,
+        sortValue: purchase.amount,
       };
     },
   },
@@ -58,6 +58,7 @@ const userTxsHistory: Column<any>[] = [
         value: `${longFormatter.format(purchase.payout)} ${
           purchase.payoutToken.symbol
         }`,
+        sortValue: purchase.payout,
       };
     },
   },
@@ -159,10 +160,8 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
 
   return (
     <div className={props.className}>
-      <p className="ml-4 py-4 font-fraktion text-2xl uppercase">
-        Transaction History
-      </p>
-      <Table
+      <PaginatedTable
+        title="Transaction History"
         defaultSort="timestamp"
         loading={query.isLoading}
         columns={marketTxsHistory}

@@ -4,7 +4,7 @@ import { CHAIN_ID } from "../constants";
 export default {
   name: "OlympusDAO",
   description: "The Future Decentralized Reserve Currency",
-  logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
+  logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
   links: {
     governanceVote: "https://snapshot.org/#/olympusdao.eth",
     twitter: "https://twitter.com/olympusdao",
@@ -30,7 +30,7 @@ export default {
     {
       name: "Olympus",
       symbol: "OHM",
-      logoUrl: "https://storage.fleek.zone/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
+      logoUrl: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
       priceSources: [{ source: "coingecko", apiId: "olympus" }],
       addresses: {
         [CHAIN_ID.ETHEREUM_MAINNET]: "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",

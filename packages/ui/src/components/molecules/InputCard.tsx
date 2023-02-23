@@ -1,5 +1,5 @@
-import { Chip } from "../atoms/Chip";
 import { Input } from "../atoms/Input";
+import { TokenLogo } from "..";
 
 export type InputCardProps = {
   balance?: string;
@@ -7,6 +7,7 @@ export type InputCardProps = {
   onChange?: (amount: string) => void;
   value?: string;
   market: any;
+  tokenIcon?: string;
 };
 
 export const InputCard = ({
@@ -15,45 +16,30 @@ export const InputCard = ({
   value = "",
   onChange,
   market,
+  tokenIcon,
 }: InputCardProps) => {
-  const setSome = (num: number) => {
-    const max = Math.min(Number(balance), Number(market?.maxAmountAccepted));
-    const val = Number(
-      Number((num * max) / 100 + "").toFixed(market?.quoteToken.decimals)
-    ).toString();
-
-    handleChange(val);
-  };
-
   const setMax = () => {
     let max = Math.min(
       Number(balance),
       Number(market?.maxAmountAccepted)
     ).toString();
 
-    if (max.toString().indexOf("e") !== -1) {
-      const index = max.toString().indexOf("e") + 2;
-      const exp = Number(max.toString().substring(index));
-      max = Number(max)
-        .toFixed(exp + 3)
-        .toString();
-    }
     handleChange(max);
   };
 
   const handleChange = (amount: string) => {
+    let checkedAmount = amount;
+
     if (amount.indexOf("e") !== -1) {
       const index = amount.indexOf("e") + 2;
       const exp = Number(amount.substring(index));
-      amount = Number(amount)
+      checkedAmount = Number(amount)
         .toFixed(exp + 3)
         .toString();
     }
 
-    onChange && onChange(amount);
+    onChange && onChange(checkedAmount);
   };
-
-  //const token = getTokenDetails(market.quoteToken);
 
   return (
     <>
@@ -61,14 +47,7 @@ export const InputCard = ({
         <div className="my-auto text-xs">
           Balance: {balance + " " + market?.quoteToken?.symbol}
         </div>
-        <div className="child:mr-1 self-end">
-          <Chip onClick={() => setSome(25)}>25%</Chip>
-          <Chip onClick={() => setSome(50)}>50%</Chip>
-          <Chip onClick={() => setSome(75)}>75%</Chip>
-          <Chip onClick={setMax}>MAX</Chip>
-        </div>
       </div>
-
       <div className="flex w-full gap-2">
         <Input
           value={value}
@@ -76,6 +55,17 @@ export const InputCard = ({
           onChange={(event: React.BaseSyntheticEvent) => {
             handleChange(event.target.value);
           }}
+          startAdornment={
+            <TokenLogo uneven className="ml-2" icon={tokenIcon} />
+          }
+          endAdornment={
+            <div
+              onClick={setMax}
+              className="hover:text-light-secondary cursor-pointer p-3 font-mono text-[14px]"
+            >
+              MAX
+            </div>
+          }
         />
       </div>
     </>

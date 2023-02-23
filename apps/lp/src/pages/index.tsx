@@ -1,5 +1,4 @@
 import { useLayoutEffect, useRef, useState } from "react";
-import { InfoLabel } from "ui";
 
 import {
   Navbar,
@@ -10,7 +9,6 @@ import {
   Grid,
   Hero,
   LinkButton,
-  TextBlock,
   Head,
   Background,
 } from "../components";

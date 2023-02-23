@@ -1,7 +1,7 @@
 import { FC, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { Loading, Table } from "ui";
+import { Loading, PaginatedTable, Table } from "ui";
 import { useMarkets } from "hooks";
 import { toTableData } from "src/utils/table";
 import { meme } from "src/utils/words";
@@ -55,5 +55,11 @@ export const MarketList: FC<MarketListProps> = ({
     return <Loading content={meme()} />;
   }
 
-  return <Table defaultSort="discount" columns={columns} data={tableMarkets} />;
+  return (
+    <PaginatedTable
+      defaultSort="discount"
+      columns={columns}
+      data={tableMarkets}
+    />
+  );
 };

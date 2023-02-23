@@ -1,4 +1,4 @@
-import { getSubgraphQueries } from "services/subgraph-endpoints";
+import { getSubgraphQueries } from "services";
 import { useEffect, useState } from "react";
 import { UniqueBonder, useListUniqueBondersQuery } from "../generated/graphql";
 import { getAddressesByProtocol } from "@bond-protocol/bond-library";

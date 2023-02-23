@@ -85,9 +85,9 @@ export const TokenInput = forwardRef(function TokenInput(
         </div>
       </ClickAwayListener>
       {props.subText && (
-        <p className="font-faketion text-light-grey mt-1 text-xs font-light">
+        <div className="font-faketion text-light-grey mt-1 text-xs font-light">
           {props.subText}
-        </p>
+        </div>
       )}
     </div>
   );

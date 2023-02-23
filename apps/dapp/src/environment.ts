@@ -8,11 +8,11 @@ export enum ENVIRONMENT {
   DEVELOPMENT = "development",
 }
 
-export const environment = {
+export const environment = Object.freeze({
   isProduction: env === ENVIRONMENT.PRODUCTION,
   isStaging: env === ENVIRONMENT.STAGING,
   isTesting: env === ENVIRONMENT.TESTING,
   isDevelopment: env === ENVIRONMENT.DEVELOPMENT,
   isTestnet: testnet === "true",
   current: env as ENVIRONMENT,
-};
+});

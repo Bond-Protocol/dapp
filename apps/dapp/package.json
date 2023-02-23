@@ -15,7 +15,7 @@
     "lint": "eslint --ext .ts,.tsx src",
     "lint-staged": "lint-staged",
     "format": "prettier --write './**/*.{ts,tsx,json}'",
-    "codegen": "graphql-codegen --config codegen.yml",
+    "codegen": "graphql-codegen --config codegen.ts",
     "postinstall": "yarn codegen"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "axios": "^0.27.2",
     "buffer": "^6.0.3",
     "date-fns": "^2.29.2",
+    "dotenv": "^16.0.3",
     "ethers": "^5.6.8",
     "graphql": "^16.5.0",
     "graphql-request": "^4.3.0",
@@ -40,17 +41,17 @@
     "react-router-dom": "^6.3.0",
     "recharts": "^2.1.15",
     "rollup-plugin-polyfill-node": "^0.10.2",
-    "use-deep-compare-effect": "^1.8.1",
-    "wagmi": "0.10.11",
-    "ui": "*",
-    "tsconfig": "*",
     "tailwindconfig": "*",
+    "tailwindcss": "^3.1.4",
+    "tsconfig": "*",
+    "ui": "*",
+    "use-deep-compare-effect": "^1.8.1",
     "viteconfig": "*",
-    "tailwindcss": "^3.1.4"
+    "wagmi": "0.10.11"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
-    "@graphql-codegen/cli": "2.7.0",
+    "@graphql-codegen/cli": "3.0.0",
     "@graphql-codegen/typescript": "2.6.0",
     "@graphql-codegen/typescript-operations": "2.4.3",
     "@graphql-codegen/typescript-react-query": "^3.5.15",
@@ -63,6 +64,7 @@
     "@storybook/react": "^6.5.10",
     "@storybook/testing-library": "^0.0.13",
     "@storybook/theming": "^6.5.10",
+    "@types/node": "^16.11.5",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.28.0",

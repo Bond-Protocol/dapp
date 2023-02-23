@@ -1,25 +1,27 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { IssuerCard } from "components/molecules/IssuerCard";
-import logo from "../../assets/logo-24.svg";
+import { InputCard } from "components/molecules/InputCard";
 
 export default {
-  title: "Components/Molecules/IssuerCard",
-  component: IssuerCard,
+  title: "Components/Molecules/InputCard",
+  component: InputCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-  args: {
-    markets: [1, 2, 3],
-    tbv: "33420420",
-    issuer: {
-      id: "bp",
-      name: "YourDao",
-      logoUrl: logo,
-    },
-  },
-} as ComponentMeta<typeof IssuerCard>;
+} as ComponentMeta<typeof InputCard>;
 
-const Template: ComponentStory<typeof IssuerCard> = (args) => (
-  <IssuerCard {...args} />
+const Template: ComponentStory<typeof InputCard> = (args) => (
+  <InputCard {...args} />
 );
 
+const market = {
+  maxAmountAccepted: "123",
+  quoteToken: {
+    symbol: "DAI",
+    decimals: 18,
+    id: "goerli_0x2899a03ffdab5c90badc5920b4f53b0884eb13cc",
+  },
+};
+
 export const Primary = Template.bind({});
+Primary.args = {
+  market,
+};

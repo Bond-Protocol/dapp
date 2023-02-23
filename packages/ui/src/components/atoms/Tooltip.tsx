@@ -1,6 +1,6 @@
-//@ts-nocheck
 import { ReactComponent as TooltipIcon } from "../../assets/icons/tooltip-icon.svg";
-import MaterialTooltip from "@material-tailwind/react/components/Tooltip";
+import { useState } from "react";
+import { PopperUnstyled } from "@mui/base";
 
 export type TooltipProps = {
   content: string;
@@ -11,19 +11,40 @@ export type TooltipProps = {
 };
 
 export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const id = open ? "tooltip-popper" : undefined;
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const onClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
-    <MaterialTooltip
-      content={props.content}
-      className={`bg-light-tooltip font-jakarta text-grey-400 max-w-[240px] p-2 text-center text-xs ${props.className}`}
-    >
-      <div className="my-auto cursor-help">
+    <>
+      <div
+        id={id}
+        onMouseEnter={handleClick}
+        onMouseLeave={onClose}
+        className="my-auto cursor-help"
+      >
         {props.children || (
           <TooltipIcon
-            className={`my-auto ${props.iconClassname}`}
+            className={`hover:fill-light-secondary my-auto transition-all ${props.iconClassname}`}
             width={iconWidth}
           />
         )}
       </div>
-    </MaterialTooltip>
+      <PopperUnstyled open={open} anchorEl={anchorEl}>
+        <div
+          className={`bg-light-tooltip font-jakarta max-w-[240px] rounded p-2 text-center text-xs transition-all ${props.className}`}
+        >
+          {props.content}
+        </div>
+      </PopperUnstyled>
+    </>
   );
 };

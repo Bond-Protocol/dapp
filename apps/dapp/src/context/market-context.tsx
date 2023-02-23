@@ -3,19 +3,16 @@ import { createContext, useContext } from "react";
 
 const initialState = {
   allMarkets: new Map(),
-  myMarkets: new Map(),
   marketsByIssuer: new Map(),
   issuers: [],
   isMarketOwner: false,
+  isSomeLoading: false,
   isLoading: {
     market: false,
-    myMarkets: false,
     tokens: false,
     priceCalcs: false,
-    myPriceCalcs: false,
   },
   refetchAllMarkets: () => {},
-  refetchMyMarkets: () => {},
   refetchOne: (id: string) => {},
 };
 

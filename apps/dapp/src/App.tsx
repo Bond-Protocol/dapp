@@ -1,38 +1,31 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import { Providers } from "context/app-providers";
-import { PageContainer, AppBackground } from "ui";
+import { PageContainer } from "ui";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
 import {
-  AppStatusCard,
+  AppStatusBanner,
   CoverUpScreen,
-  InformationArea,
   Footer,
   MobileCover,
   Navbar,
 } from "components";
+import { AppBackdrop } from "components/common/AppBackdrop";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
 export const App: FC = () => {
-  const [showInfoArea, setShowInfoArea] = useState(false);
-
   if (underMaintenance) return <CoverUpScreen />;
-  const closeInfoArea = () => {
-    window.scrollTo(0, 0);
-    setShowInfoArea(false);
-  };
 
   return (
     <>
       <MobileCover />
       <div className="xs:hidden fml:block">
         <Providers>
-          <div className="h-full">
-            <AppStatusCard />
-            <div className="relative min-h-[89vh] overflow-x-hidden pb-16 font-jakarta antialiased">
+          <AppStatusBanner />
+          <div className="flex h-full min-h-[100vh] flex-col justify-between">
+            <div className="h-full overflow-x-hidden pb-16 font-jakarta antialiased">
               <Navbar />
-              <AppBackground />
-              <InformationArea open={showInfoArea} onClose={closeInfoArea} />
+              <AppBackdrop />
               <PolicyRoutes />
               <div className="mx-auto max-w-[1136px]">
                 <PageContainer>
@@ -40,7 +33,7 @@ export const App: FC = () => {
                 </PageContainer>
               </div>
             </div>
-            <Footer closeInfoArea={closeInfoArea} />
+            <Footer />
           </div>
         </Providers>
       </div>
