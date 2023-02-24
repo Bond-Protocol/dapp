@@ -1,12 +1,6 @@
 import { DatePicker } from "./components/date-picker";
 import Page from "./page";
 
-const VALID_ISSUER_ADDRESS = "0x245cc372C84B3645Bf0Ffe6538620B04a217988B";
-const INVALID_ISSUER_ADDRESS = "0x245cc372C84B3645Bf0Ffe6538620B04a21742069";
-
-const OHM_MAINNET_ADDRESS = "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5";
-const DAI_MAINNET_ADDRESS = "0x6b175474e89094c44da98b954eedeac495271d0f";
-
 export type CreateMarketConfiguration = {
   marketIssuerAddress: string;
   quoteTokenAddress: string;

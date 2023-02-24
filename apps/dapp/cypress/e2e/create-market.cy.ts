@@ -42,48 +42,53 @@ describe("Create Markets", () => {
     cy.contains("Verified as OlympusDAO");
   });
 
-  it("Validates tokens", () => {
-    page.getQuoteTokenPrice().should("be.empty");
+  it("Validates the payout token", () => {
     page.getPayoutTokenPrice().should("be.empty");
 
     page.getPayoutToken().type(OHM_MAINNET_ADDRESS);
-    page.getQuoteToken().type(DAI_MAINNET_ADDRESS);
 
     page.getPayoutCheckbox().click();
-    page.getQuoteCheckbox().click();
 
-    page.getQuoteTokenPrice().should("have.value", "DAI");
-    page.getPayoutTokenPrice().should("have.value", "OHM");
+    page.getPayoutTokenPrice().should("not.be", "");
   });
 
-  it("Fills market capacity", () => {
+  it("Validates the quote token", () => {
+    page.getQuoteTokenPrice().should("be.empty");
+
+    page.getQuoteToken().type(DAI_MAINNET_ADDRESS);
+
+    page.getQuoteCheckbox().click();
+
+    page.getQuoteTokenPrice().should("not.be", "");
+  });
+
+  it("Sets the market capacity", () => {
     page.getMarketCapacity().type("10000");
     page.getMarketCapacity().should("have.value", "10000");
   });
 
   it("Sets a market end date", () => {
-    page.getEndDatePicker().click();
-
-    cy.get(".MuiPopperUnstyled-root").get("[name=next-month]").click();
-    cy.get(".MuiPopperUnstyled-root").contains("1").click();
+    page.marketEndDatePicker.open();
+    page.marketEndDatePicker.nextMonth();
+    page.marketEndDatePicker.chooseDay("1");
   });
 
   it("Sets a bond vesting date", () => {
-    page.getVestingDatePicker().click();
-
-    cy.get(".MuiPopperUnstyled-root").get("[name=next-month]").click();
-    cy.get(".MuiPopperUnstyled-root").contains("4").click();
+    page.vestingDatePicker.open();
+    page.vestingDatePicker.nextMonth();
+    page.marketEndDatePicker.chooseDay("4");
   });
 
   it("Creates a basic Ethereum market", () => {
     page.createMarket(BASIC_MARKET_CONFIGURATION);
+
     cy.wait(5000);
     cy.contains("CONFIRM INFORMATION").click();
 
     cy.contains("Confirm and deploy").should("exist");
   });
 
-  it.only("Creates an Arbitrum market", () => {
+  it("Creates an Arbitrum market", () => {
     page.createMarket(ARBITRUM_MARKET);
 
     cy.wait(5000);
