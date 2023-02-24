@@ -5,8 +5,10 @@ export type CheckboxProps = {
   startChecked?: boolean;
   onChange?: (checked: boolean) => void;
   className?: string;
+  id?: string;
 };
 export const Checkbox = ({
+  id,
   startChecked = false,
   disabled,
   onChange,
@@ -26,6 +28,7 @@ export const Checkbox = ({
 
   return (
     <div
+      id={id}
       onClick={!disabled ? toggle : () => {}}
       className={`border-light-neutral flex h-6 w-6 items-center rounded-full border ${
         disabled ? "opacity-80" : "hover:cursor-pointer"

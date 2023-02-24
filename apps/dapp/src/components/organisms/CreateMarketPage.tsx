@@ -580,6 +580,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <>
                       <Input
                         {...field}
+                        id="bp__market_owner_address"
                         autoComplete="off"
                         label="Market Owner Address"
                         className={"mb-2"}
@@ -658,6 +659,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     render={({ field }) => (
                       <TokenPickerCard
                         {...field}
+                        id="bp__payout_token"
                         label="Payout Token"
                         subText="Enter the contract address of the payout token"
                         checkboxLabel="I confirm this is the token"
@@ -695,6 +697,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     render={({ field }) => (
                       <TokenPickerCard
                         {...field}
+                        id="bp__quote_token"
                         label="Quote Token"
                         subText="Enter the contract address of the quote token"
                         checkboxLabel="I confirm this is the token"
@@ -759,6 +762,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         <Input
                           {...field}
                           label="Payout Token Price"
+                          id="bp__payout_token_price"
                           className="mb-2"
                           errorMessage={
                             errors.payoutTokenPrice?.type === "isNumber"
@@ -786,6 +790,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         <Input
                           {...field}
                           label="Quote Token Price"
+                          id="bp__quote_token_price"
                           className="mb-2"
                           errorMessage={
                             errors.quoteTokenPrice?.type === "isNumber"
@@ -846,6 +851,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       <>
                         <Input
                           {...field}
+                          id="bp__market_capacity"
                           label="Market Capacity"
                           className={"mb-2"}
                           errorMessage={
@@ -893,6 +899,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 render={({ field }) => (
                   <>
                     <DatePicker
+                      id="bp__market_end_date"
                       {...field}
                       placeholder="Select a date"
                       label="Market End Date"
@@ -951,6 +958,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <>
                       <DatePicker
                         {...field}
+                        id="bp__vesting_date"
                         label="Bond Vesting Date"
                         placeholder="Select a date"
                         defaultValue={
