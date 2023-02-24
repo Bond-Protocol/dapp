@@ -15,8 +15,7 @@
     "lint": "eslint --ext .ts,.tsx src",
     "lint-staged": "lint-staged",
     "format": "prettier --write './**/*.{ts,tsx,json}'",
-    "codegen": "graphql-codegen --config codegen.ts",
-    "postinstall": "yarn codegen"
+    "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
     "@bond-protocol/bond-library": "*",
