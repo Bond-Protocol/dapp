@@ -17,7 +17,8 @@
     "format": "prettier --write './**/*.{ts,tsx,json}'",
     "codegen": "graphql-codegen --config codegen.ts",
     "postinstall": "yarn codegen",
-    "cypress": "cypress open"
+    "cypress": "cypress open --browser chrome",
+    "test": "cypress run"
   },
   "dependencies": {
     "@bond-protocol/bond-library": "*",

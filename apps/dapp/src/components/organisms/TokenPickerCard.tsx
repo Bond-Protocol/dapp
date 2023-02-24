@@ -16,6 +16,7 @@ export type TokenPickerCardProps = {
   defaultValue?: { address: string; confirmed: boolean };
   onChange?: (token: { address: string; confirmed: boolean }) => void;
   errorMessage?: any;
+  id?: string;
 };
 
 export const TokenPickerCard = (
@@ -34,6 +35,7 @@ export const TokenPickerCard = (
   return (
     <div className={`${props.className}`}>
       <Input
+        id={props.id}
         autoComplete="chrome-sucks"
         placeholder={props.placeholder}
         label={props.label}
@@ -68,6 +70,7 @@ export const TokenPickerCard = (
 
       <div className="mt-2 flex">
         <Checkbox
+          id={props.id + "_checkbox"}
           onChange={setConfirmed}
           startChecked={props.defaultValue?.confirmed}
         />
