@@ -81,8 +81,10 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const issuerName = protocol?.name || "";
 
   const showOwnerBalanceWarning =
+    market.callbackAddress === "0x0000000000000000000000000000000000000000" &&
     Number(market.maxPayout) > Number(market.ownerBalance);
   const showOwnerAllowanceWarning =
+    market.callbackAddress === "0x0000000000000000000000000000000000000000" &&
     Number(market.maxPayout) > Number(market.ownerAllowance);
 
   const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
