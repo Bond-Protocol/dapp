@@ -19,7 +19,8 @@
     "preview": "turbo run preview",
     "codegen": "turbo run codegen",
     "storybook": "turbo run storybook",
-    "build:storybook": "turbo run build:storybook"
+    "build:storybook": "turbo run build:storybook",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "turbo": "^1.6.3",

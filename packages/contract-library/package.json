@@ -19,7 +19,6 @@
     "clean": "rm -rf ./dist",
     "build": "tsc --build && tsc-alias -v",
     "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
-    "test": "jest",
     "format": "prettier --write ./src/**/*.ts",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "prepublishOnly": "yarn build",

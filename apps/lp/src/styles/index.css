@@ -71,7 +71,7 @@
 
   .main-bg {
     background-color: black;
-    background-image: url("/sphere.png");
+    background-image: url("/sphere.webp");
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: center;
@@ -90,6 +90,6 @@
 
   .hero-bg {
     background-size: cover;
-    background-image: url("/hero-bg.png");
+    background-image: url("/hero-bg.webp");
   }
 }

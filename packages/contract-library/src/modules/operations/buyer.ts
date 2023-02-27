@@ -244,6 +244,7 @@ export async function calcMarket(
     formattedTbvUsd: '',
     creationBlockTimestamp: market.creationBlockTimestamp,
     creationDate: '',
+    callbackAddress: market.callbackAddress,
   };
   const auctioneerContract = Auctioneer__factory.connect(
     market.auctioneer,
