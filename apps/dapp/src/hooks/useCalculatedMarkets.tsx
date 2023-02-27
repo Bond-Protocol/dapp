@@ -76,6 +76,7 @@ export function useCalculatedMarkets() {
           totalBondedAmount: market.totalBondedAmount,
           totalPayoutAmount: market.totalPayoutAmount,
           creationBlockTimestamp: market.creationBlockTimestamp,
+          callbackAddress: market.callbackAddress,
           payoutToken: {
             id: payoutToken.id,
             address: payoutToken.address,
