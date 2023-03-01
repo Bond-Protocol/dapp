@@ -35,6 +35,7 @@ export const tableColumns: Array<Column<any>> = [
   {
     label: "Vesting",
     accessor: "vesting",
+    defaultSortOrder: "asc",
     formatter: (bond) => {
       const expiry = bond?.bond?.bondToken?.expiry;
       const date = new Date(expiry * 1000);
