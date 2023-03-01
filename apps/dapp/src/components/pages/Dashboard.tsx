@@ -80,7 +80,7 @@ export const Dashboard = () => {
     return total + parseFloat(price);
   }, 0);
 
-  const loading = isLoading || arePricesLoading || !tbv || !claimable;
+  const loading = isLoading || arePricesLoading;
   const formattedTbv = usdFormatter.format(tbv as number);
   const formattedClaimable = usdFormatter.format(claimable);
 
