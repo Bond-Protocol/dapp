@@ -58,6 +58,7 @@ export const BondDiscountChart = ({ market }: BondDiscountChartProps) => {
 
   // const allRanges = [...defaultRanges, ...ranges];
 
+  console.log({ dataset });
   return (
     <div className="flex w-full max-w-[550px] flex-col">
       <LineChart

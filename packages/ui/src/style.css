@@ -108,3 +108,7 @@
     opacity: 20;
   }
 }
+
+.recharts-cartesian-axis-tick-value tspan {
+  @apply text-[8px];
+}

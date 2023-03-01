@@ -2,6 +2,8 @@ import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { LineChart } from "../../components/charts/LineChart";
 
+import data from "./mock-data";
+
 export default {
   title: "Components/Charts/LineChart",
   component: LineChart,
@@ -9,10 +11,12 @@ export default {
 } as ComponentMeta<typeof LineChart>;
 
 const Template: ComponentStory<typeof LineChart> = (args) => (
-  <LineChart {...args} />
+  <div className="">
+    <LineChart {...args} />
+  </div>
 );
 
 export const Primary = Template.bind({});
 Primary.args = {
-  className: "text-red-500 fill-red-500",
+  data,
 };

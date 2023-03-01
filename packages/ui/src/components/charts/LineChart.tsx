@@ -6,6 +6,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { format } from "date-fns";
+import { dynamicFormatter } from "utils/format";
 
 export const generateRange = (min: number, max: number, distance: number) => {
   const gapAmount = (max - min) / (distance + 1);
@@ -35,8 +37,8 @@ export type ChartProps = {
   yAxisLabels?: any[];
 };
 
-const getBottomPadding = (min: number) => min - min / 90;
-const getTopPadding = (max: number) => max + max / 90;
+const getBottomDomain = (min: number) => min - min / 90;
+const getTopDomain = (max: number) => max + max / 90;
 
 const CustomTick = ({
   xAxis,
@@ -67,6 +69,28 @@ export const generateTicks = (entries: number[], size: number) => {
   return [min, ...generateRange(min, max, size), max];
 };
 
+const Tick = ({ dy = 0, dx = 0, formatter = (v) => v, ...props }) => {
+  const { x, y, payload } = props;
+
+  const value = formatter(payload.value);
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={dy}
+        dx={dx}
+        className="font-jakarta text-[10px] font-extralight"
+        textAnchor="end"
+        fill="#666"
+      >
+        {value}
+      </text>
+    </g>
+  );
+};
+
 export const LineChart = (props: ChartProps) => {
   if (!props.data.length) {
     return <div />;
@@ -74,23 +98,24 @@ export const LineChart = (props: ChartProps) => {
 
   return (
     <>
-      <div className="flex h-full">
+      <div className="flex">
         {props.yAxisLabels && <CustomTick elements={props.yAxisLabels} />}
-        <div className="border-light-primary-100/20 h-full min-h-[20vh] w-full min-w-[25vw]">
-          <ResponsiveContainer className="max-w-[500px]">
+        <div className="min-h-[35vh] min-w-[40vw]">
+          <ResponsiveContainer className="-mb-8">
             <Chart data={props.data}>
               <XAxis
-                hide
-                tick={false}
-                tickFormatter={() => "0"}
+                tickLine={false}
                 dataKey="date"
                 scale="time"
+                tick={
+                  <Tick dy={4} formatter={(date) => format(date, "MM/dd p")} />
+                }
               />
               <YAxis
-                hide
-                tick={false}
-                tickFormatter={() => "0"}
-                domain={[getBottomPadding, getTopPadding]}
+                tickLine={false}
+                dx={4}
+                tick={<Tick formatter={dynamicFormatter} />}
+                domain={[getBottomDomain, getTopDomain]}
               />
               <Line dot={false} stroke="#40749b" dataKey="price" />
               <Line dot={false} stroke="#F2A94A" dataKey="discountedPrice" />
