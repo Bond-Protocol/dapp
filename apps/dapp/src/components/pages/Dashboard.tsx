@@ -10,15 +10,17 @@ import { BondList, tableColumns } from "components/lists";
 import { toTableData } from "src/utils/table";
 import { usdFormatter } from "src/utils/format";
 import { RequiresWallet } from "components/utility/RequiresWallet";
-
-const isMainnet = (chain?: string) => {
-  return chain === "mainnet" || chain === "homestead";
-};
+import { LoadingIndicator } from "components/utility/LoadingIndicator";
 
 export const Dashboard = () => {
-  const { myBonds } = useMyBonds();
+  const { myBonds, isLoading } = useMyBonds();
   const { chain } = useNetwork();
-  const { getTokenDetails, getPrice, currentPrices } = useTokens();
+  const {
+    getTokenDetails,
+    getPrice,
+    isLoading: arePricesLoading,
+    currentPrices,
+  } = useTokens();
   const account = useAccount();
 
   const data = useMemo(() => {
@@ -65,43 +67,46 @@ export const Dashboard = () => {
     [data]
   );
 
-  const tbv = usdFormatter.format(
+  const tbv =
     data?.reduce((total, bond) => {
       //@ts-ignore
       return total + bond.usdPriceNumber;
-    }, 0) as number
-  );
+    }, 0) || 0;
 
-  const claimable = usdFormatter.format(
-    data.reduce((total, bond) => {
-      if (!bond?.canClaim) return total;
+  const claimable = data.reduce((total, bond) => {
+    if (!bond?.canClaim) return total;
 
-      const price = bond?.usdPriceString || "0";
-      return total + parseFloat(price);
-    }, 0)
-  );
+    const price = bond?.usdPriceString || "0";
+    return total + parseFloat(price);
+  }, 0);
+
+  const loading = isLoading || arePricesLoading || !tbv || !claimable;
+  const formattedTbv = usdFormatter.format(tbv as number);
+  const formattedClaimable = usdFormatter.format(claimable);
 
   return (
     <>
       <PageHeader title={"Dashboard"} />
       <RequiresWallet>
-        <div className="mt-10 flex gap-4">
-          <InfoLabel
-            label="Account TBV"
-            tooltip="Total amount bonded in by this address denominated in USD"
-          >
-            {tbv}
-          </InfoLabel>
-          <InfoLabel
-            label="Claimable"
-            tooltip="Total claimable value denominated in USD"
-          >
-            <div className="text-light-success">{claimable}</div>
-          </InfoLabel>
-        </div>
-        <div className="mt-10">
-          <BondList data={account?.address && tableData} />
-        </div>
+        <LoadingIndicator loading={loading}>
+          <div className="mt-10 flex gap-4">
+            <InfoLabel
+              label="Account TBV"
+              tooltip="Total amount bonded in by this address denominated in USD"
+            >
+              {formattedTbv}
+            </InfoLabel>
+            <InfoLabel
+              label="Claimable"
+              tooltip="Total claimable value denominated in USD"
+            >
+              <div className="text-light-success">{formattedClaimable}</div>
+            </InfoLabel>
+          </div>
+          <div className="mt-10">
+            <BondList data={account?.address && tableData} />
+          </div>
+        </LoadingIndicator>
       </RequiresWallet>
     </>
   );
