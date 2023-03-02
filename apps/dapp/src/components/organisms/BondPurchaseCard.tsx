@@ -179,7 +179,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     {
       leftLabel: "Bond Contract",
       rightLabel: `View on ${blockExplorerName}`,
-      link: blockExplorerUrl + market.auctioneer,
+      link: blockExplorerUrl + market.teller,
     },
   ];
 

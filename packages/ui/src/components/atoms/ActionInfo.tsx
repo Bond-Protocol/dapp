@@ -26,7 +26,11 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
             iconClassname="pb-[1px] ml-0.5 fill-light-secondary-10"
           />
         )}
-        {props.link && <Link href={props.link}>{props.value}</Link>}
+        {props.link && (
+          <Link target="_blank" href={props.link}>
+            {props.value}
+          </Link>
+        )}
       </div>
     </div>
   );
