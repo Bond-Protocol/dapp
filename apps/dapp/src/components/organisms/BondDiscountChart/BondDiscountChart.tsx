@@ -1,4 +1,4 @@
-import { add, isFuture, isBefore } from "date-fns";
+import { add, isFuture, isBefore, isAfter, sub } from "date-fns";
 import { useState } from "react";
 import { LineChart, generateTicks } from "components/organisms/LineChart";
 import { useBondChartData } from "hooks/useBondChartData";
@@ -13,21 +13,8 @@ export type BondDiscountChartProps = {
   extraRanges?: number[];
 };
 
-const defaultRanges = [1, 3, 7];
-
-export const BondDiscountChart = ({
-  market,
-  extraRanges = [],
-}: BondDiscountChartProps) => {
-  const marketCreationDate = new Date(market.creationBlockTimestamp * 1000);
-  const isFirstDay = isBefore(Date.now(), add(marketCreationDate, { days: 1 }));
-
-  const [days, setDays] = useState(isFirstDay ? 1 : 30);
-
-  const { dataset, isLoading, purchases, isInvalid } = useBondChartData(
-    market,
-    days
-  );
+export const BondDiscountChart = ({ market }: BondDiscountChartProps) => {
+  const { dataset, isLoading, purchases, isInvalid } = useBondChartData(market);
 
   if (isLoading) {
     return <div />;
@@ -65,11 +52,11 @@ export const BondDiscountChart = ({
     4
   ).map((x) => formatDate.chartAxis(x));
 
-  const ranges = extraRanges.filter(
-    (days: number) => !isFuture(add(marketCreationDate, { days }))
-  );
+  // const ranges = extraRanges.filter(
+  //   (days: number) => !isFuture(add(marketCreationDate, { days }))
+  // );
 
-  const allRanges = [...defaultRanges, ...ranges];
+  // const allRanges = [...defaultRanges, ...ranges];
 
   return (
     <div className="flex w-full max-w-[550px] flex-col">
