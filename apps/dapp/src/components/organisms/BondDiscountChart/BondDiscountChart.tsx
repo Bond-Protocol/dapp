@@ -25,21 +25,29 @@ export const BondDiscountChart = ({
 
   const [days, setDays] = useState(isFirstDay ? 1 : 30);
 
-  const { dataset, isLoading, purchases } = useBondChartData(market, days);
+  const { dataset, isLoading, purchases, isInvalid } = useBondChartData(
+    market,
+    days
+  );
 
   if (isLoading) {
     return <div />;
   }
 
-  //@ts-ignore
   // Could remove and update chart to show price previous to market opening
-  if (!dataset || purchases?.length < 2 || market?.quoteToken?.lpPair) {
+  if (
+    !dataset ||
+    isInvalid ||
+    //@ts-ignore
+    purchases?.length < 2 ||
+    market?.quoteToken?.lpPair
+  ) {
     return (
       <PlaceholderChart
         message={
           <>
             Performance data for <br />
-            this market will be available soon
+            this market may be available soon
           </>
         }
       />

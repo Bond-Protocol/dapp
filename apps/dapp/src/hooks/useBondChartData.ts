@@ -127,5 +127,6 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
         ...data,
         discount: calcDiscountPercentage(data?.price, data?.discountedPrice),
       })),
+    isInvalid: quoteTokenQuery?.isInvalid || payoutTokenQuery?.isInvalid,
   };
 };
