@@ -27,9 +27,11 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
   const filteredData = useMemo(
     () =>
       data?.filter((r) =>
-        Object.values(r).some((v) =>
-          String(v?.value).toLowerCase().includes(text.toLowerCase())
-        )
+        Object.values(r).some((v) => {
+          const value = v?.searchValue || v?.value;
+
+          return String(value).toLowerCase().includes(text.toLowerCase());
+        })
       ),
     [text, data]
   );
