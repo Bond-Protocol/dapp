@@ -32,7 +32,7 @@ export type PaginationProps = {
   handleChangePage: (page: number) => void;
   onSeeAll: (e: React.BaseSyntheticEvent) => void;
   isShowingAll?: boolean;
-}
+};
 
 export const Pagination = ({
   className,
@@ -80,7 +80,7 @@ export const Pagination = ({
       })();
 
       if (showAsSeparator && totalPages > 7) {
-        return <div className={"mx-10px w-[12px] border-b border-dashed"} />;
+        return <div className={"mx-2.5 w-3 border-b border-dashed "} />;
       }
 
       return (

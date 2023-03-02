@@ -1,6 +1,5 @@
 import { add, isFuture, isBefore } from "date-fns";
 import { useState } from "react";
-import { Chip } from "ui";
 import { LineChart, generateTicks } from "components/organisms/LineChart";
 import { useBondChartData } from "hooks/useBondChartData";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
@@ -69,6 +68,7 @@ export const BondDiscountChart = ({
   const ranges = extraRanges.filter(
     (days: number) => !isFuture(add(marketCreationDate, { days }))
   );
+
   const allRanges = [...defaultRanges, ...ranges];
 
   return (
