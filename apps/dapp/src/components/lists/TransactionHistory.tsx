@@ -76,6 +76,7 @@ const marketTxsHistory: Column<any>[] = [
       return {
         value: `${start}...${end}`,
         subtext: purchase.addressUrl,
+        searchValue: address,
       };
     },
     Component: (props) => {
@@ -97,6 +98,7 @@ const marketTxsHistory: Column<any>[] = [
       return {
         value: `${start}...${end}`,
         subtext: purchase.txUrl,
+        searchValue: txHash,
       };
     },
     Component: (props) => {
