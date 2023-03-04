@@ -1,4 +1,3 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Modal } from "../../components/molecules/Modal";
 import { PurchaseSuccessDialog } from "../../components/modals";

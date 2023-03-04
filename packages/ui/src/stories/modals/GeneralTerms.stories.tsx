@@ -1,8 +1,7 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { GeneralTermsDialog } from "../../components/modals";
 
-import { ModalDecorator, blockExplorerUrl } from "../decorators";
+import { ModalDecorator } from "../decorators";
 
 export default {
   title: "Screens/Modals/GeneralTerms",

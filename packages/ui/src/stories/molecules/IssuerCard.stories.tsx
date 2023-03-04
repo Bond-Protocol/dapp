@@ -9,7 +9,7 @@ export default {
   argTypes: {},
   args: {
     markets: [1, 2, 3],
-    tbv: "33420420",
+    tbv: 33420420,
     issuer: {
       id: "bp",
       name: "YourDao",

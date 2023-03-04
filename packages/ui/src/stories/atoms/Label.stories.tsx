@@ -1,4 +1,3 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Label } from "../../components/atoms/Label";
 import logo from "../../assets/logo-24.svg";

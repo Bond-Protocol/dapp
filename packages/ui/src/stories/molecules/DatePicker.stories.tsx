@@ -17,6 +17,5 @@ const Template: ComponentStory<typeof DatePicker> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  onChange: (d: number) => 1503123051,
   label: "cool",
 };

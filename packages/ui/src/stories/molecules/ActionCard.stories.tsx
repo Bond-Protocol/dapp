@@ -18,5 +18,4 @@ Primary.args = {
   leftLabel: "Get help",
   rightLabel: "Or dont, up to you",
   onClickRight: () => {},
-  onClickLeft: () => {},
 };

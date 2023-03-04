@@ -1,4 +1,3 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { TransactionErrorDialog } from "../../components/modals";
 
@@ -20,7 +19,4 @@ Primary.args = {
   hash: "420",
   blockExplorerName: "etherscan",
   blockExplorerUrl,
-  error: {
-    message: "ran out of gas",
-  },
 };

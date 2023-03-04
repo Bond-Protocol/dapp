@@ -1,4 +1,3 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Modal } from "../../components/molecules/Modal";
 import { PurchaseConfirmDialog } from "../../components/modals";
@@ -18,7 +17,6 @@ const Template: ComponentStory<typeof PurchaseConfirmDialog> = (args) => (
 export const Primary = Template.bind({});
 
 Primary.args = {
-  title: "Transaction Confirmation",
   issuer: "OlympusDAO",
   amount: "333,333 DAI",
   payout: "333 GOHM",
