@@ -1,6 +1,4 @@
-import { format } from "date-fns";
-import { BondChartDataset } from "components/organisms/LineChart";
-import { dynamicFormatter } from "src/utils/format";
+import { formatCurrency, formatDate } from "utils";
 
 const getDiscountColor = (price: number, discount: number) => {
   if (price === discount) return "text-white";
@@ -9,7 +7,7 @@ const getDiscountColor = (price: number, discount: number) => {
 
 type ChartTooltipProps = {
   tokenSymbol: string;
-  payload?: Array<{ payload: BondChartDataset }>;
+  payload?: Array<{ payload: any }>;
 };
 
 const TooltipLabel = (props: {
@@ -27,7 +25,8 @@ const TooltipLabel = (props: {
     </div>
   );
 };
-export const BondDiscountTooltip = (props: ChartTooltipProps) => {
+
+export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
   const [data] = props.payload || [];
   const price = data?.payload.price || 0;
   const discount = data?.payload.discount || 0;
@@ -35,15 +34,15 @@ export const BondDiscountTooltip = (props: ChartTooltipProps) => {
   const date = data?.payload.date || Date.now();
 
   return (
-    <div className="min-w-[150px] rounded-lg border border-transparent bg-light-tooltip p-2 py-1 font-jakarta text-xs font-extralight">
+    <div className="bg-light-tooltip font-jakarta min-w-[150px] rounded-lg border border-transparent p-2 py-1 text-xs font-extralight">
       <TooltipLabel
-        value={dynamicFormatter(price.toString())}
+        value={formatCurrency.dynamicFormatter(price.toString())}
         label={`${props.tokenSymbol} Price: `}
-        className="mt-2 text-light-primary"
+        className="text-light-primary mt-2"
         valueClassName=""
       />
       <TooltipLabel
-        value={dynamicFormatter(discountedPrice.toString())}
+        value={formatCurrency.dynamicFormatter(discountedPrice.toString())}
         label="Bond Price: "
         className="text-light-secondary"
       />
@@ -56,8 +55,8 @@ export const BondDiscountTooltip = (props: ChartTooltipProps) => {
           discountedPrice
         )} text-right`}
       />
-      <div className="mt-2 text-[10px] text-light-primary-50">
-        {format(date, "PP pp")}
+      <div className="text-light-primary-50 mt-2 text-[10px]">
+        {formatDate.longDate(date)}
       </div>
     </div>
   );

@@ -44,3 +44,10 @@ export const dynamicFormatter = (value: string | number) => {
     maximumFractionDigits,
   }).format(parseFloat(num));
 };
+
+export const formatCurrency = {
+  dynamicFormatter,
+  longFormatter,
+  usdFormatter,
+  usdLongFormatter,
+};

@@ -109,6 +109,10 @@
   }
 }
 
-.recharts-cartesian-axis-tick-value tspan {
-  @apply text-[8px];
+.recharts-cartesian-axis-tick-value {
+  @apply fill-light-primary-100/50 text-[10px];
+}
+
+.recharts-cartesian-axis-line {
+  @apply stroke-light-primary-100/20;
 }

@@ -22,10 +22,10 @@ export const interpolate = (dataset: BondChartDataset[]) => {
       currentPrice = entry.discountedPrice;
       continue;
     }
-    //How many elements exist between known prices
-    let distance = 0;
+
+    let elementsBetweenKnownPrices = 0;
     for (let j = i + 1; j < purchases.length; j++) {
-      distance++;
+      elementsBetweenKnownPrices++;
       const next = purchases[j];
       if (next.discountedPrice) {
         nextPrice = next.discountedPrice || 0;
@@ -33,7 +33,7 @@ export const interpolate = (dataset: BondChartDataset[]) => {
       }
     }
 
-    generateRange(currentPrice, nextPrice, distance).forEach(
+    generateRange(currentPrice, nextPrice, elementsBetweenKnownPrices).forEach(
       (interpolatedPrice, idx) => {
         purchases[i + idx].discountedPrice = interpolatedPrice;
       }
