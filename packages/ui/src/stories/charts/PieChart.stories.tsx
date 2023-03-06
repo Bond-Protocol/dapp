@@ -10,8 +10,8 @@ export default {
 } as ComponentMeta<typeof PieChart>;
 
 const Template: ComponentStory<typeof PieChart> = (args) => (
-  <div className="">
-    <PieChart {...args} className="h-[40vh] w-[45vw]" />
+  <div className="h-[40vh] w-[45vw]">
+    <PieChart {...args} />
   </div>
 );
 
