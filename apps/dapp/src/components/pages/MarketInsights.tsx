@@ -25,15 +25,19 @@ export const MarketInsights = () => {
   const { quote, payout, lpPair } = getTokenDetailsForMarket(market);
   const protocol = getProtocol(market.owner);
 
+  const maxPayout =
+    market.currentCapacity < Number(market.maxPayout)
+      ? market.currentCapacity
+      : market.maxPayout;
+
+  const formattedPayout = longFormatter.format(
+    Number(trim(maxPayout, calculateTrimDigits(parseFloat(maxPayout))))
+  );
+
   const vestingLabel =
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
       : market.formattedShortVesting;
-
-  const formattedPayout = longFormatter.format(
-    //@ts-ignore
-    trim(market.maxPayout, calculateTrimDigits(parseFloat(market.maxPayout)))
-  );
 
   return (
     <div>

@@ -10,6 +10,7 @@ import { calcDiscountPercentage } from "../utils/calculate-percentage";
 import { interpolate } from "../utils/interpolate-price";
 import { useTokenPriceHistory } from "./useTokenPricesHistory";
 import { subgraphEndpoints } from "../services";
+import { isAfter, sub } from "date-fns";
 
 type PriceDataArray = Array<{ date: number; price: number }>;
 
@@ -80,7 +81,7 @@ const createBondPurchaseDataset = ({
   ];
 };
 
-export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
+export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
   const { prices: quoteTokenHistory, ...quoteTokenQuery } =
     useTokenPriceHistory(market.quoteToken, dayRange);
 
@@ -101,7 +102,7 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
       { marketId: market.id }
     );
 
-  const earliestDate = market.creationBlockTimestamp * 1000;
+  const marketCreationDate = market.creationBlockTimestamp * 1000;
 
   const dataset: BondChartDataset[] = createBondPurchaseDataset({
     payoutTokenHistory,
@@ -122,10 +123,15 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 3) => {
     isLoading,
     purchases: purchaseData?.bondPurchases,
     dataset: interpolate(dataset)
-      .filter((data) => data.date > earliestDate)
+      .filter(
+        (data) =>
+          data.date > marketCreationDate &&
+          isAfter(data.date, sub(Date.now(), { days: dayRange }))
+      )
       .map((data) => ({
         ...data,
         discount: calcDiscountPercentage(data?.price, data?.discountedPrice),
       })),
+    isInvalid: quoteTokenQuery?.isInvalid || payoutTokenQuery?.isInvalid,
   };
 };

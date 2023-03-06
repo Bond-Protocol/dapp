@@ -21,7 +21,7 @@ export const useTokenPriceHistory = (token: Token, dayRange = 30) => {
   const [priceSource] = getPriceSourceForToken(token.id);
 
   //We currently don't have historical data for custom oracle tokens
-  if (!priceSource || "customPriceFunction" in priceSource) {
+  if (!priceSource || priceSource.source === "custom") {
     return {
       prices: [],
       isLoading: false,
