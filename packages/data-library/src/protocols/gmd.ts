@@ -13,7 +13,7 @@ export default {
     twitter: "https://twitter.com/GMDprotocol",
     github: "https://github.com/saulgoodmandev/gmd",
     medium: "https://medium.com/@gmdprotocol",
-    discord: "discord.gg/x649QhTYxs",
+    discord: "https://discord.gg/x649QhTYxs",
     telegram: "https://t.me/+ukvWB5zXZChhMTgx",
     staking: "",
   },
