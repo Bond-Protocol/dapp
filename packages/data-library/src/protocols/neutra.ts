@@ -13,7 +13,7 @@ export default {
     twitter: "https://twitter.com/Neutrafinance",
     github: "https://github.com/NeutraFinance/neutra-gmx-contracts",
     medium: "https://medium.com/@neutrafinance",
-    discord: "discord.gg/h5GxDEAxyY",
+    discord: "https://discord.gg/h5GxDEAxyY",
     telegram: "https://t.me/NeutraFi",
     staking: "",
   },

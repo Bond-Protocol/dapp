@@ -266,7 +266,7 @@ export const listOwnerTokenTbvs = gql`
 
 export const listBondPurchasesPerMarket = gql`
   query ListBondPurchasesPerMarket($marketId: String, $queryKey: String! = "") {
-    bondPurchases(where: { marketId: $marketId }, orderBy: timestamp) {
+    bondPurchases(first: 1000, where: { marketId: $marketId }, orderBy: timestamp) {
       id
       recipient
       payout
@@ -326,6 +326,14 @@ export const listAllPurchases = gql`
     bondPurchases(first: 1000) {
       id
       owner
+    }
+  }
+`;
+
+export const getPurchaseCount = gql`
+  query GetPurchaseCount($queryKey: String! = "") {
+    purchaseCounts(first: 1) {
+      count
     }
   }
 `;
