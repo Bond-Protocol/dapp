@@ -330,6 +330,14 @@ export const listAllPurchases = gql`
   }
 `;
 
+export const getPurchaseCount = gql`
+  query GetPurchaseCount($queryKey: String! = "") {
+    purchaseCounts(first: 1) {
+      count
+    }
+  }
+`;
+
 /*
 export const listBondPurchases = gql`
   query ListBondPurchases {
