@@ -102,7 +102,7 @@ const marketTxsHistory: Column<any>[] = [
       };
     },
     Component: (props) => {
-      return <Link href={props.subtext}>{props.value}</Link>;
+      return <Link target="_blank" href={props.subtext}>{props.value}</Link>;
     },
   },
 ];
