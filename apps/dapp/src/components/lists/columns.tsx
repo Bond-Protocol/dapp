@@ -15,6 +15,7 @@ const bond: Column<CalculatedMarket> = {
   label: "Bond",
   accessor: "bond",
   width: "w-[13%]",
+  defaultSortOrder: "asc",
   formatter: (market) => {
     const { quote, lpPair } = getTokenDetailsForMarket(market);
     const chain = CHAINS.get(market.chainId);
@@ -48,6 +49,7 @@ const discount: Column<CalculatedMarket> = {
   accessor: "discount",
   alignEnd: true,
   width: "w-[7%]",
+  defaultSortOrder: "desc",
   Component: DiscountLabel,
   formatter: (market) => {
     return {
@@ -121,6 +123,7 @@ const issuer: Column<CalculatedMarket> = {
   label: "Issuer",
   accessor: "issuer",
   width: "w-[16%]",
+  defaultSortOrder: "asc",
   formatter: (market) => {
     const protocol = getProtocol(market.owner);
     return {
