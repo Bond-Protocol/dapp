@@ -5,6 +5,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  CartesianGrid,
 } from "recharts";
 import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
 import { formatCurrency, formatDate } from "utils";
@@ -37,16 +38,22 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
           <XAxis
             dataKey="date"
             tickFormatter={formatDate.dayMonthTime}
-            dx={-6}
             tickLine={false}
+            minTickGap={80}
           />
           <YAxis
             tickLine={false}
             domain={[getBottomDomain, getTopDomain]}
             tickFormatter={formatCurrency.dynamicFormatter}
           />
+          <CartesianGrid stroke="#404040" vertical={false} />
           <Line dot={false} stroke="#40749b" dataKey="price" />
-          <Line dot={false} stroke="#F2A94A" dataKey="discountedPrice" />
+          <Line
+            dot={false}
+            stroke="#F2A94A"
+            dataKey="discountedPrice"
+            strokeDasharray="2 2"
+          />
           <Tooltip
             wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
             content={
