@@ -3,7 +3,7 @@ import { ConnectButton } from "components/common";
 import { ReactComponent as LinkIcon } from "ui/assets/icons/external-link.svg";
 import { Tooltip } from "ui";
 import { useEffect, useState } from "react";
-import {  useNetwork, useSwitchNetwork } from "wagmi";
+import { useNetwork, useSwitchNetwork } from "wagmi";
 import { CHAINS } from "@bond-protocol/bond-library";
 
 export type BondButtonProps = {
@@ -37,7 +37,7 @@ export const BondButton = (props: BondButtonProps) => {
 
   if (props.showConnect)
     return (
-      <div className="flex w-full justify-center py-4">
+      <div className="flex w-full justify-center pt-4">
         <ConnectButton full />
       </div>
     );
@@ -51,20 +51,6 @@ export const BondButton = (props: BondButtonProps) => {
       </Tooltip>
     );
   }
-
-  // if (props.showPurchaseLink) {
-  //   return (
-  //     <Link
-  //       className="color-black hover:color-black mx-auto mt-4 flex w-full justify-center rounded-lg bg-light-secondary px-5 py-3 font-fraktion font-bold text-black hover:bg-white hover:text-black"
-  //       href={props.purchaseLink}
-  //       target="_blank"
-  //       rel="noopener noreferrer"
-  //       iconClassName="mb-0.5"
-  //     >
-  //       BUY {props.quoteTokenSymbol}
-  //     </Link>
-  //   );
-  // }
 
   return (
     <div className="flex gap-2">
