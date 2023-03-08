@@ -5,23 +5,30 @@ type ValuesProps = {
   className?: string;
 };
 
+const tbv = "$33M";
+const markets = "20";
+const bonds = "2K";
+
 export const Values = (props: ValuesProps) => {
   return (
     <div className={`${props.className}`}>
       <div className="flex flex-wrap justify-center gap-4 py-4 lg:flex-nowrap">
         <div className="w-full grow lg:w-1/3 lg:grow-0">
           <InfoLabel label="Total Value Bonded">
-            $24M<span className="text-[32px]">+</span>
+            {tbv}
+            <span className="text-[32px]">+</span>
           </InfoLabel>
         </div>
         <div className="grow lg:w-1/3">
           <InfoLabel label="Bonds Markets">
-            20<span className="text-[32px]">+</span>
+            {markets}
+            <span className="text-[32px]">+</span>
           </InfoLabel>
         </div>
         <div className="grow lg:w-1/3">
           <InfoLabel label="Bonds Issued">
-            1K<span className="text-[32px]">+</span>
+            {bonds}
+            <span className="text-[32px]">+</span>
           </InfoLabel>
         </div>
       </div>
