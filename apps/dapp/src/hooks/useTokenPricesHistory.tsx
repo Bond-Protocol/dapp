@@ -15,7 +15,7 @@ export const getPriceSourceForToken = (
   return TOKENS.get(tokenId)?.priceSources || [];
 };
 
-export const useTokenPriceHistory = (token: Token, dayRange = 30) => {
+export const useTokenPriceHistory = (token: Token, dayRange = 90) => {
   //For now we're only using one price source soooooo
   //@ts-ignore
   const [priceSource] = getPriceSourceForToken(token.id);

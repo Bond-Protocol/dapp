@@ -83,10 +83,10 @@ const createBondPurchaseDataset = ({
 
 export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
   const { prices: quoteTokenHistory, ...quoteTokenQuery } =
-    useTokenPriceHistory(market.quoteToken, dayRange);
+    useTokenPriceHistory(market.quoteToken);
 
   const { prices: payoutTokenHistory, ...payoutTokenQuery } =
-    useTokenPriceHistory(market.payoutToken, dayRange);
+    useTokenPriceHistory(market.payoutToken);
 
   const { data: purchaseData, ...purchasesQuery } =
     useListBondPurchasesPerMarketQuery(
