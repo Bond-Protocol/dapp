@@ -108,3 +108,11 @@
     opacity: 20;
   }
 }
+
+.recharts-cartesian-axis-tick-value {
+  @apply fill-light-primary-100/50 text-[10px];
+}
+
+.recharts-cartesian-axis-line {
+  @apply stroke-light-primary-100/20;
+}

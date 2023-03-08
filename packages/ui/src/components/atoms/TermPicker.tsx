@@ -15,6 +15,9 @@ const options = [
   { label: "Custom", id: 1 },
 ];
 
+/**
+ * Allows selection from an option list or a custom text input
+ */
 export const TermPicker = (props: TermPickerProps) => {
   const [id, setId] = useState(
     props.defaultValue ? props.defaultValue.id : options[0].id

@@ -1,11 +1,10 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { TransactionErrorDialog } from "../../components/modals";
 
 import { ModalDecorator, blockExplorerUrl } from "../decorators";
 
 export default {
-  title: "Screens/Modals/TransactionError",
+  title: "Components/Modals/TransactionError",
   component: TransactionErrorDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof TransactionErrorDialog>;
@@ -20,7 +19,4 @@ Primary.args = {
   hash: "420",
   blockExplorerName: "etherscan",
   blockExplorerUrl,
-  error: {
-    message: "ran out of gas",
-  },
 };

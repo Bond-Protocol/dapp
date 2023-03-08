@@ -36,6 +36,9 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
   );
 };
 
+/**
+ * Displays summary information with support for links and tooltips
+ */
 export const ActionInfo = (props: ActionInfoProps) => {
   return (
     <div className="child:my-auto child:mx-2 flex h-6 justify-between bg-white/5 text-sm">

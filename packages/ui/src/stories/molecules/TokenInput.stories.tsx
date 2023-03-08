@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { TokenInput } from "components/atoms/TokenInput";
+import { TokenInput } from "components/molecules/TokenInput";
 import baseIcon from "../../assets/logo-24.svg";
 
 export default {
-  title: "Components/Molecules/TokenInput",
+  title: "Design System/Molecules/TokenInput",
   component: TokenInput,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

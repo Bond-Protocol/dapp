@@ -3,7 +3,7 @@ import { TableCell } from "components/atoms/TableCell";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Atoms/TableCell",
+  title: "Design System/Atoms/TableCell",
   component: TableCell,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

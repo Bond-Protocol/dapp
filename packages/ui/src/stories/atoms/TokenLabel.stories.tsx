@@ -1,9 +1,8 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { TokenLabel } from "components/atoms/TokenLabel";
-import baseIcon from "../../assets/logo-24.svg";
 
 export default {
-  title: "Components/Atoms/TokenLabel",
+  title: "Design System/Atoms/TokenLabel",
   component: TokenLabel,
   argTypes: {},
 } as ComponentMeta<typeof TokenLabel>;
@@ -15,7 +14,6 @@ const Template: ComponentStory<typeof TokenLabel> = (args) => (
 export const Primary = Template.bind({});
 Primary.args = {
   label: "OHM",
-  logo: baseIcon,
 };
 
 export const SubText = Template.bind({});

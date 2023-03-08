@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { BondDiscountChart } from "components/organisms/BondDiscountChart";
+import { BondPriceChart } from "components/organisms/BondDiscountChart";
 import { BondPurchaseCard } from "components/organisms";
 
 export type BondCardProps = {
@@ -12,7 +12,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
   return (
     <div className={`flex gap-4 ${props.className}`}>
       <div className="flex w-1/2">
-        <BondDiscountChart market={market} />
+        <BondPriceChart market={market} />
       </div>
       <div className="w-1/2">
         <BondPurchaseCard market={market} />

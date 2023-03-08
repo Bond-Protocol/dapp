@@ -1,15 +1,14 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Modal } from "../../components/molecules/Modal";
 
 export default {
-  title: "Components/Molecules/Modal",
+  title: "Design System/Molecules/Modal",
   component: Modal,
 } as ComponentMeta<typeof Modal>;
 
 const Template: ComponentStory<typeof Modal> = (args) => <Modal {...args} />;
 
-const Background = (Story) => (
+const Background = (Story: any) => (
   <div className="h-[100vh]">
     <Story />
   </div>

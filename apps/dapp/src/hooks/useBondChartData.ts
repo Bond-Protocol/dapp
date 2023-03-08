@@ -5,7 +5,7 @@ import {
 } from "../generated/graphql";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { getClosest } from "../utils";
-import { BondChartDataset } from "components/organisms/LineChart";
+import type { BondPriceDatapoint } from "ui";
 import { calcDiscountPercentage } from "../utils/calculate-percentage";
 import { interpolate } from "../utils/interpolate-price";
 import { useTokenPriceHistory } from "./useTokenPricesHistory";
@@ -32,7 +32,7 @@ const createBondPurchaseDataset = ({
   bondPurchases = [],
   quoteTokenHistory = [],
   payoutTokenHistory = [],
-}: CreateBondPurchaseDatasetArgs): BondChartDataset[] => {
+}: CreateBondPurchaseDatasetArgs): BondPriceDatapoint[] => {
   const datesToRemove: number[] = [];
 
   const updatedPurchases =
@@ -104,7 +104,8 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
 
   const marketCreationDate = market.creationBlockTimestamp * 1000;
 
-  const dataset: BondChartDataset[] = createBondPurchaseDataset({
+  //@ts-ignore
+  const dataset: BondPriceDatapoint[] = createBondPurchaseDataset({
     payoutTokenHistory,
     quoteTokenHistory,
     bondPurchases: purchaseData?.bondPurchases as BondPurchase[],
@@ -125,12 +126,15 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
     dataset: interpolate(dataset)
       .filter(
         (data) =>
-          data.date > marketCreationDate &&
-          isAfter(data.date, sub(Date.now(), { days: dayRange }))
+          Number(data.date) > marketCreationDate &&
+          isAfter(Number(data.date), sub(Date.now(), { days: dayRange }))
       )
       .map((data) => ({
         ...data,
-        discount: calcDiscountPercentage(data?.price, data?.discountedPrice),
+        discount: calcDiscountPercentage(
+          Number(data?.price),
+          Number(data?.discountedPrice)
+        ),
       })),
     isInvalid: quoteTokenQuery?.isInvalid || payoutTokenQuery?.isInvalid,
   };
