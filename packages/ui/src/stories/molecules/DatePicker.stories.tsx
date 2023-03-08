@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { DatePicker } from "../../components/molecules/DatePicker";
 
 export default {
-  title: "Components/Molecules/DatePicker",
+  title: "Design System/Molecules/DatePicker",
   component: DatePicker,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

@@ -11,12 +11,12 @@ export default {
 
 const Template: ComponentStory<typeof BondPriceChart> = (args) => (
   <div className="">
-    <BondPriceChart {...args} className="h-[40vh] w-[45vw]" />
+    <BondPriceChart {...args} className="h-[30vh] w-[35vw]" />
   </div>
 );
 
 export const Primary = Template.bind({});
 Primary.args = {
-  data,
   payoutTokenSymbol: "GMX",
+  data,
 };

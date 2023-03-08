@@ -4,7 +4,7 @@ import { TransactionErrorDialog } from "../../components/modals";
 import { ModalDecorator, blockExplorerUrl } from "../decorators";
 
 export default {
-  title: "Screens/Modals/TransactionError",
+  title: "Components/Modals/TransactionError",
   component: TransactionErrorDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof TransactionErrorDialog>;

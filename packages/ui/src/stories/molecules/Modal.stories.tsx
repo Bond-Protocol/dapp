@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Modal } from "../../components/molecules/Modal";
 
 export default {
-  title: "Components/Molecules/Modal",
+  title: "Design System/Molecules/Modal",
   component: Modal,
 } as ComponentMeta<typeof Modal>;
 

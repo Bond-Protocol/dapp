@@ -3,7 +3,7 @@ import { Skeleton } from "../../components/atoms/Skeleton";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Atoms/Skeleton",
+  title: "Design System/Atoms/Skeleton",
   component: Skeleton,
   argTypes: {},
 } as ComponentMeta<typeof Skeleton>;

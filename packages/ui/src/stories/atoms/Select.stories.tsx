@@ -3,7 +3,7 @@ import { Select } from "components/atoms/Select";
 import baseLogo from "../../assets/logo-24.svg";
 
 export default {
-  title: "Components/Atoms/Select",
+  title: "Design System/Atoms/Select",
   component: Select,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

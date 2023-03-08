@@ -10,9 +10,10 @@ import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
 import { formatCurrency, formatDate } from "utils";
 
 export type BondPriceDatapoint = {
-  date?: string | number;
-  price?: string | number;
-  discountedPrice?: string | number;
+  date?: number;
+  price?: number;
+  discountedPrice?: number;
+  discount?: string | number;
 };
 
 export type BondPriceChartProps = {

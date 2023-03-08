@@ -4,7 +4,7 @@ import logo from "../../assets/logo-24.svg";
 import { Link, Tooltip } from "../../components/atoms";
 
 export default {
-  title: "Components/Atoms/Label",
+  title: "Design System/Atoms/Label",
   component: Label,
   argTypes: {},
   args: {

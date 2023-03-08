@@ -1,4 +1,4 @@
-import { BondChartDataset } from "components/organisms/LineChart";
+import type { BondPriceDatapoint } from "ui";
 
 export const generateRange = (min: number, max: number, distance: number) => {
   const gapAmount = (max - min) / (distance + 1);
@@ -7,7 +7,7 @@ export const generateRange = (min: number, max: number, distance: number) => {
     .map((min, i) => min + gapAmount * (i + 1));
 };
 
-export const interpolate = (dataset: BondChartDataset[]) => {
+export const interpolate = (dataset: BondPriceDatapoint[]) => {
   //Sort from latest since we always know the current discount
   const purchases = Array.from(dataset).sort(
     (a, b) => Number(b.date) - Number(a.date)

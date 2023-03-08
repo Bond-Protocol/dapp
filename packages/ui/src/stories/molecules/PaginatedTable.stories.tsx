@@ -57,7 +57,7 @@ const cols = [
 ];
 
 export default {
-  title: "Components/Molecules/PaginatedTable",
+  title: "Design System/Molecules/PaginatedTable",
   component: PaginatedTable,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

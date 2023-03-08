@@ -4,7 +4,7 @@ import { CreateMarketTermsDialog } from "../../components/modals";
 import { ModalDecorator } from "../decorators";
 
 export default {
-  title: "Screens/Modals/CreateMarketTerms",
+  title: "Components/Modals/CreateMarketTerms",
   component: CreateMarketTermsDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof CreateMarketTermsDialog>;

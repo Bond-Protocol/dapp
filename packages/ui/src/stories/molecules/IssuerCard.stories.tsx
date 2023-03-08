@@ -3,7 +3,7 @@ import { IssuerCard } from "components/molecules/IssuerCard";
 import logo from "../../assets/logo-24.svg";
 
 export default {
-  title: "Components/Molecules/IssuerCard",
+  title: "Design System/Molecules/IssuerCard",
   component: IssuerCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

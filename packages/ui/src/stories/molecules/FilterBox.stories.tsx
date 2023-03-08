@@ -2,7 +2,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { FilterBox } from "../../components/molecules/FilterBox";
 
 export default {
-  title: "Components/Molecules/FilterBox",
+  title: "Design System/Molecules/FilterBox",
   component: FilterBox,
   argTypes: {},
 } as ComponentMeta<typeof FilterBox>;

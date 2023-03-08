@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Link } from "components/atoms/Link";
 
 export default {
-  title: "Components/Atoms/Link",
+  title: "Design System/Atoms/Link",
   component: Link,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

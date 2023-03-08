@@ -6,7 +6,7 @@ const usdcLogo =
   "https://storageapi.fleek.co/fc635ae1-c8aa-4181-b7db-801a533b8fa9-bucket/USDC.png";
 
 export default {
-  title: "Components/Atoms/TokenLogo",
+  title: "Design System/Atoms/TokenLogo",
   component: TokenLogo,
 } as ComponentMeta<typeof TokenLogo>;
 

@@ -3,7 +3,7 @@ import { ActionInfoList } from "../../components/atoms/ActionInfoList";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Molecules/ActionInfoList",
+  title: "Design System/Molecules/ActionInfoList",
   component: ActionInfoList,
   argTypes: {},
 } as ComponentMeta<typeof ActionInfoList>;

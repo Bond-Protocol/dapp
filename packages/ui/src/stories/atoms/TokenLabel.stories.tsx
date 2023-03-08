@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { TokenLabel } from "components/atoms/TokenLabel";
 
 export default {
-  title: "Components/Atoms/TokenLabel",
+  title: "Design System/Atoms/TokenLabel",
   component: TokenLabel,
   argTypes: {},
 } as ComponentMeta<typeof TokenLabel>;

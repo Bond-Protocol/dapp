@@ -4,7 +4,7 @@ import { CreateMarketConfirmDialog } from "../../components/modals";
 import { ModalDecorator } from "../decorators";
 
 export default {
-  title: "Screens/Modals/CreateMarketConfirm",
+  title: "Components/Modals/CreateMarketConfirm",
   component: CreateMarketConfirmDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof CreateMarketConfirmDialog>;

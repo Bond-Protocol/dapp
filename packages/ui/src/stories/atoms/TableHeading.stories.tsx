@@ -3,7 +3,7 @@ import { TableHeading } from "components/atoms/TableHeading";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Atoms/TableHeading",
+  title: "Design System/Atoms/TableHeading",
   component: TableHeading,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
