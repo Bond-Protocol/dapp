@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { BondPriceChart } from "components/organisms/BondDiscountChart";
+import { BondPriceChart } from "components/organisms/BondPriceChart";
 import { BondPurchaseCard } from "components/organisms";
 
 export type BondCardProps = {

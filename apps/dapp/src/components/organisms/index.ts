@@ -2,7 +2,7 @@ export * from "./AppStatusBanner";
 export * from "./BondCard";
 export * from "./BondPurchaseCard";
 export * from "../modals/BondPurchaseModal";
-export * from "./BondDiscountChart";
+export * from "./BondPriceChart";
 export * from "./CloseMarketCard";
 export * from "./CreateMarketPage";
 export * from "./IssuerPage";
