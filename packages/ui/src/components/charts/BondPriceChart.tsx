@@ -47,12 +47,13 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
             tickFormatter={formatCurrency.dynamicFormatter}
           />
           <CartesianGrid stroke="#404040" vertical={false} />
-          <Line dot={false} stroke="#40749b" dataKey="price" />
+          <Line dot={false} strokeWidth={2} stroke="#40749b" dataKey="price" />
           <Line
             dot={false}
             stroke="#F2A94A"
             dataKey="discountedPrice"
-            strokeDasharray="2 2"
+            strokeDasharray="6 2"
+            strokeWidth={2}
           />
           <Tooltip
             wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
