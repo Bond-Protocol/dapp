@@ -33,6 +33,7 @@ export const Head = (props: MetaTagsProps) => (
   <NextHead>
     <title>{props.title}</title>
     <MetaTags {...props} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.png" type="image/png" />
+    <link rel="icon" href="/favicon.png" type="image/x-icon" />
   </NextHead>
 );
