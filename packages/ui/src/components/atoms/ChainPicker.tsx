@@ -33,11 +33,12 @@ export const ChainPicker = (props: ChainPickerProps) => {
   };
 
   return (
-    <div>
+    <div className="bp__chain_picker">
       {props.label && <p className="text-xs font-light">{props.label}</p>}
       <div className="flex gap-1">
         <div className="w-full">
           <Select
+            id="bp__chain_picker_input"
             value={selected}
             defaultValue={
               props.defaultValue ? props.defaultValue.id : options[0].id

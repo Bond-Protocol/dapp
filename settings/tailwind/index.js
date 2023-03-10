@@ -60,6 +60,7 @@ module.exports = {
           fontFamily: "PlusJakartaSans",
           fontWeight: "200",
           src: "url(/fonts/PlusJakartaSans-ExtraLight.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -67,6 +68,7 @@ module.exports = {
           fontFamily: "PlusJakartaSans",
           fontWeight: "300",
           src: "url(/fonts/PlusJakartaSans-Light.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -74,6 +76,7 @@ module.exports = {
           fontFamily: "PlusJakartaSans",
           fontWeight: "400",
           src: "url(/fonts/PlusJakartaSans-Regular.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -81,6 +84,7 @@ module.exports = {
           fontFamily: "PlusJakartaSans",
           fontWeight: "500",
           src: "url(/fonts/PlusJakartaSans-Medium.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -88,6 +92,7 @@ module.exports = {
           fontFamily: "PlusJakartaSans",
           fontWeight: "600",
           src: "url(/fonts/PlusJakartaSans-SemiBold.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -95,6 +100,7 @@ module.exports = {
           fontFamily: "PlusJakartaSans",
           fontWeight: "700",
           src: "url(/fonts/PlusJakartaSans-Bold.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -102,6 +108,7 @@ module.exports = {
           fontFamily: "PlusJakartaSans",
           fontWeight: "800",
           src: "url(/fonts/PlusJakartaSans-ExtraBold.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -109,6 +116,7 @@ module.exports = {
           fontFamily: "PPFraktionMono",
           fontWeight: "400",
           src: "url(/fonts/PPFraktionMono-Regular.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -116,6 +124,7 @@ module.exports = {
           fontFamily: "PPFraktionMono",
           fontWeight: "700",
           src: "url(/fonts/PPFraktionMono-Bold.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -123,6 +132,7 @@ module.exports = {
           fontFamily: "PPFraktionSans",
           fontWeight: "700",
           src: "url(/fonts/PPFraktionSans-Bold.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
       addBase({
@@ -130,6 +140,7 @@ module.exports = {
           fontFamily: "PPFraktionSans",
           fontWeight: "400",
           src: "url(/fonts/PPFraktionSans-Light.woff2) format('woff2')",
+          fontDisplay: "swap",
         },
       });
     }),

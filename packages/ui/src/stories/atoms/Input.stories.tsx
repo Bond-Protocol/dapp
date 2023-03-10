@@ -3,7 +3,7 @@ import { Input } from "components/atoms/Input";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Atoms/Input",
+  title: "Design System/Atoms/Input",
   component: Input,
   argTypes: {},
 } as ComponentMeta<typeof Input>;

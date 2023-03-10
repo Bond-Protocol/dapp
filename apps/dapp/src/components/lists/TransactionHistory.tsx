@@ -76,11 +76,12 @@ const marketTxsHistory: Column<any>[] = [
       return {
         value: `${start}...${end}`,
         subtext: purchase.addressUrl,
+        searchValue: address,
       };
     },
     Component: (props) => {
       return (
-        <Link target="_blank" href={props.subtext}>
+        <Link target="_blank" rel="noopener noreferrer" href={props.subtext}>
           {props.value}
         </Link>
       );
@@ -97,10 +98,11 @@ const marketTxsHistory: Column<any>[] = [
       return {
         value: `${start}...${end}`,
         subtext: purchase.txUrl,
+        searchValue: txHash,
       };
     },
     Component: (props) => {
-      return <Link href={props.subtext}>{props.value}</Link>;
+      return <Link target="_blank" rel="noopener noreferrer" href={props.subtext}>{props.value}</Link>;
     },
   },
 ];

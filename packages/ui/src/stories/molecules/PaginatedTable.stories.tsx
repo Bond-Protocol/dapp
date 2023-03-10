@@ -1,8 +1,8 @@
-import React from "react";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { PaginatedTable } from "../../components/molecules/PaginatedTable";
 import { data as _data } from "../mock-data/table";
 import { DiscountLabel, Button } from "../../components";
+import { MouseEventHandler } from "react";
 
 const data = Array(87).fill(_data[0]);
 
@@ -36,7 +36,13 @@ const cols = [
     width: "w-[7%]",
     alignEnd: true,
     unsortable: true,
-    Component: ({ value, ...props }) => (
+    Component: ({
+      value,
+      ...props
+    }: {
+      value: string;
+      onClick: MouseEventHandler<any>;
+    }) => (
       <Button
         thin
         size="sm"
@@ -51,7 +57,7 @@ const cols = [
 ];
 
 export default {
-  title: "Components/Molecules/PaginatedTable",
+  title: "Design System/Molecules/PaginatedTable",
   component: PaginatedTable,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

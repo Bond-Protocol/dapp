@@ -12,8 +12,8 @@ export default {
       "https://snapshot.org/#/y2k-finance.eth/proposal/0x85ec42ec3b57b372f907a0a5609cea0c73610632fd6843968d5c04bcafabf0ce", // A governance proposal related to bonds
     homepage: "https://www.y2k.finance/",
     staking: "https://www.y2k.finance/lock",
-    twitter: "y2kfinance",
-    github: "Y2K-Finance",
+    twitter: "https://twitter.com/y2kfinance",
+    github: "https://github.com/Y2K-Finance",
     medium: "https://medium.com/@Y2KFinance",
     discord: "https://discord.com/invite/3fqQsvC7C6",
     telegram: "",

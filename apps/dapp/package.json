@@ -16,7 +16,8 @@
     "lint-staged": "lint-staged",
     "format": "prettier --write './**/*.{ts,tsx,json}'",
     "codegen": "graphql-codegen --config codegen.ts",
-    "postinstall": "yarn codegen"
+    "test:open": "cypress open",
+    "test": "cypress run"
   },
   "dependencies": {
     "@bond-protocol/bond-library": "*",
@@ -72,6 +73,7 @@
     "@vitejs/plugin-react": "^1.3.0",
     "autoprefixer": "^10.4.7",
     "babel-loader": "^8.2.5",
+    "cypress": "^12.6.0",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",

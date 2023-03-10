@@ -1,11 +1,10 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Label } from "../../components/atoms/Label";
 import logo from "../../assets/logo-24.svg";
 import { Link, Tooltip } from "../../components/atoms";
 
 export default {
-  title: "Components/Atoms/Label",
+  title: "Design System/Atoms/Label",
   component: Label,
   argTypes: {},
   args: {

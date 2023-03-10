@@ -11,6 +11,9 @@ export interface LogoProps extends React.HtmlHTMLAttributes<HTMLImageElement> {
   uneven?: boolean;
 }
 
+/**
+ * Renders a token logo with support for single tokens, lp tokens and bond pairs
+ */
 export const TokenLogo = ({ className, icon, ...props }: TokenLogoProps) => {
   if (!props.pairIcon && !props.lpPairIcon) {
     return (

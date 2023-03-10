@@ -102,6 +102,7 @@ export function getMarketData(
       owner: marketInfo.owner,
       vesting: marketInfo.vesting,
       vestingType: vestingType,
+      callbackAddress: marketInfo.callbackAddr,
       payoutToken: {
         id: chainId + '_' + marketInfo.payoutToken,
         address: marketInfo.payoutToken,

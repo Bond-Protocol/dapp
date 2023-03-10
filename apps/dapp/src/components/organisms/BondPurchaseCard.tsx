@@ -21,7 +21,6 @@ import { providers } from "services/owned-providers";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import add from "date-fns/add";
 import { formatDate, getTokenDetails } from "src/utils";
-import { usdFormatter } from "src/utils/format";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -81,8 +80,10 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const issuerName = protocol?.name || "";
 
   const showOwnerBalanceWarning =
+    market.callbackAddress === "0x0000000000000000000000000000000000000000" &&
     Number(market.maxPayout) > Number(market.ownerBalance);
   const showOwnerAllowanceWarning =
+    market.callbackAddress === "0x0000000000000000000000000000000000000000" &&
     Number(market.maxPayout) > Number(market.ownerAllowance);
 
   const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
@@ -177,7 +178,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     {
       leftLabel: "Bond Contract",
       rightLabel: `View on ${blockExplorerName}`,
-      link: blockExplorerUrl + market.auctioneer,
+      link: blockExplorerUrl + market.teller,
     },
   ];
 
@@ -213,8 +214,8 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   };
 
   return (
-    <div>
-      <div>
+    <div className="h-full">
+      <div className="flex h-full flex-col justify-between">
         <InputCard
           onChange={setAmount}
           value={amount}
@@ -222,7 +223,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           market={market}
           tokenIcon={quoteTokenDetails.logoUrl}
         />
-        <div className="my-1 justify-self-start pt-2 text-xs font-light text-red-500">
+        <div className="my-1 pt-2 text-xs font-light text-red-500">
           {showOwnerBalanceWarning && (
             <div>
               <p className="py-1">
@@ -282,7 +283,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         >
           <Button
             disabled={!hasSufficientBalance}
-            className="mt-4 w-full"
+            className="mt-4 w-full pb-0"
             onClick={onClickBond}
           >
             {!hasSufficientAllowance && hasSufficientBalance

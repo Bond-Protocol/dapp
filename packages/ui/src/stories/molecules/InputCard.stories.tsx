@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { InputCard } from "components/molecules/InputCard";
 
 export default {
-  title: "Components/Molecules/InputCard",
+  title: "Design System/Molecules/InputCard",
   component: InputCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

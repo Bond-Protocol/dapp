@@ -3,13 +3,13 @@ import { IssuerCard } from "components/molecules/IssuerCard";
 import logo from "../../assets/logo-24.svg";
 
 export default {
-  title: "Components/Molecules/IssuerCard",
+  title: "Design System/Molecules/IssuerCard",
   component: IssuerCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
   args: {
     markets: [1, 2, 3],
-    tbv: "33420420",
+    tbv: 33420420,
     issuer: {
       id: "bp",
       name: "YourDao",

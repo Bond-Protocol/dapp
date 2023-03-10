@@ -13,6 +13,7 @@ export type DatePickerProps = {
   label?: string;
   placeholder?: string;
   defaultValue?: Date;
+  id?: string;
 };
 
 export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
@@ -59,7 +60,7 @@ export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
 
   return (
     <ClickAwayListener onClickAway={(e: unknown) => handleClose(date)}>
-      <div>
+      <div id={props.id}>
         <div id={id} className={props.className} onClick={handleClick}>
           {props.label && (
             <p className="font-jakarta mb-1 text-xs font-light">

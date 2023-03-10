@@ -283,7 +283,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
     const days =
       Number(
         (
-          Math.round(form.marketExpiry - new Date().getTime() / 1000) /
+          Math.round(form.marketExpiryDate - new Date().getTime() / 1000) /
           (60 * 60 * 24)
         ).toFixed(0)
       ) + 1;
@@ -302,53 +302,53 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
       setMarketExpiryString("");
       setMarketExpiryDays(0);
     }
-  }, [form.marketExpiry]);
+  }, [form.marketExpiryDate]);
 
   const summaryFields = [
     {
       leftLabel: "Capacity",
       tooltip:
         "The maximum amount of payout tokens to be paid out during the market's lifetime.",
-      rightleftLabel: capacityString,
+      rightLabel: capacityString,
     },
-    { leftLabel: "Payout Token", rightleftLabel: payoutTokenSymbol },
-    { leftLabel: "Quote Token", rightleftLabel: quoteTokenSymbol },
+    { leftLabel: "Payout Token", rightLabel: payoutTokenSymbol },
+    { leftLabel: "Quote Token", rightLabel: quoteTokenSymbol },
     /*
     {
       leftLabel: "Estimated bond cadence",
       tooltip: "The estimated amount of payout tokens sold per day.",
-      rightleftLabel: estimatedBondCadence,
+      rightLabel: estimatedBondCadence,
     },
      */
-    { leftLabel: "Initial exchange rate", rightleftLabel: exchangeRateString },
+    { leftLabel: "Initial exchange rate", rightLabel: exchangeRateString },
     {
       leftLabel: "Minimum exchange rate",
       tooltip: "The lowest exchange rate the market will offer",
-      rightleftLabel: minExchangeRateString,
+      rightLabel: minExchangeRateString,
     },
     {
       leftLabel: "Conclusion",
       tooltip:
         "The date on which the market will close for new purchases, regardless of whether capacity has been reached.",
-      rightleftLabel: marketExpiryString,
+      rightLabel: marketExpiryString,
     },
     {
       leftLabel: "Vesting",
       tooltip:
         "The date on which bond purchasers will be able to claim their payout.",
-      rightleftLabel: vestingString,
+      rightLabel: vestingString,
     },
     {
       leftLabel: "Bonds per week",
       tooltip:
         "The target number of maximum bonds per week. This could be split across multiple small transactions which add up to a maximum bond.",
-      rightleftLabel: `${form.bondsPerWeek}`,
+      rightLabel: `${form.bondsPerWeek}`,
     },
     {
       leftLabel: "Debt Buffer",
       tooltip:
-        "The recommended rightleftLabel is calculated based on your market's capacity, duration and deposit interval. We recommend you do not change this unless you are sure you know what you are doing.",
-      rightleftLabel: `${form.debtBuffer}%`,
+        "The recommended debt buffer is calculated based on your market's capacity, duration and deposit interval. We recommend you do not change this unless you are sure you know what you are doing.",
+      rightLabel: `${form.debtBuffer}%`,
     },
   ];
 
@@ -580,6 +580,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <>
                       <Input
                         {...field}
+                        id="bp__market_owner_address"
                         autoComplete="off"
                         label="Market Owner Address"
                         className={"mb-2"}
@@ -658,6 +659,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     render={({ field }) => (
                       <TokenPickerCard
                         {...field}
+                        id="bp__payout_token"
                         label="Payout Token"
                         subText="Enter the contract address of the payout token"
                         checkboxLabel="I confirm this is the token"
@@ -695,6 +697,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     render={({ field }) => (
                       <TokenPickerCard
                         {...field}
+                        id="bp__quote_token"
                         label="Quote Token"
                         subText="Enter the contract address of the quote token"
                         checkboxLabel="I confirm this is the token"
@@ -759,6 +762,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         <Input
                           {...field}
                           label="Payout Token Price"
+                          id="bp__payout_token_price"
                           className="mb-2"
                           errorMessage={
                             errors.payoutTokenPrice?.type === "isNumber"
@@ -786,6 +790,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                         <Input
                           {...field}
                           label="Quote Token Price"
+                          id="bp__quote_token_price"
                           className="mb-2"
                           errorMessage={
                             errors.quoteTokenPrice?.type === "isNumber"
@@ -846,6 +851,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                       <>
                         <Input
                           {...field}
+                          id="bp__market_capacity"
                           label="Market Capacity"
                           className={"mb-2"}
                           errorMessage={
@@ -893,6 +899,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 render={({ field }) => (
                   <>
                     <DatePicker
+                      id="bp__market_end_date"
                       {...field}
                       placeholder="Select a date"
                       label="Market End Date"
@@ -951,6 +958,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <>
                       <DatePicker
                         {...field}
+                        id="bp__vesting_date"
                         label="Bond Vesting Date"
                         placeholder="Select a date"
                         defaultValue={

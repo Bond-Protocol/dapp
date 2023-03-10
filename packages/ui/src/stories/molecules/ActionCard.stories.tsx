@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { ActionCard } from "../../components/molecules/ActionCard";
 
 export default {
-  title: "Components/Molecules/ActionCard",
+  title: "Design System/Molecules/ActionCard",
   component: ActionCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
@@ -18,5 +18,4 @@ Primary.args = {
   leftLabel: "Get help",
   rightLabel: "Or dont, up to you",
   onClickRight: () => {},
-  onClickLeft: () => {},
 };

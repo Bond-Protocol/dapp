@@ -1,5 +1,5 @@
+import { BondPriceChart } from "ui";
 import { bondDiscountDataset, rugPull } from "../../utils/mock-data";
-import { LineChart } from "components/organisms/LineChart";
 
 export const PlaceholderChart = ({
   message,
@@ -16,7 +16,10 @@ export const PlaceholderChart = ({
             <div className="text-center text-xs">{message}</div>
           </div>
           <div className="h-[99%] w-full blur-sm">
-            <LineChart data={downBad ? rugPull : bondDiscountDataset} />
+            <BondPriceChart
+              payoutTokenSymbol="ETH"
+              data={downBad ? rugPull : bondDiscountDataset}
+            />
           </div>
         </div>
       </div>

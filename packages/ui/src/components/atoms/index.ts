@@ -28,7 +28,6 @@ export * from "./SocialRow";
 export * from "./TableCell";
 export * from "./TableHeading";
 export * from "./TermPicker";
-export * from "./TokenInput";
 export * from "./TokenLogo";
 export * from "./TokenLabel";
 export * from "./Tooltip";

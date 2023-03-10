@@ -11,8 +11,8 @@ export default {
     governanceVote:
       "https://commonwealth.im/redacted-cartel/snapshot/redactedcartel.eth/0xa1049118915c1a53ad72cc650b7adfb4f4310ac84cde8d8e93aa7daf18dea441", // A governance proposal related to bonds
     homepage: "https://redacted.finance/",
-    twitter: "redactedcartel",
-    github: "redacted-cartel",
+    twitter: "https://twitter.com/redactedcartel",
+    github: "https://github.com/redacted-cartel",
     medium: "https://mirror.xyz/0xE90c74145245B498fef924fAdC7bb34253c7cF90",
     discord: "https://discord.com/invite/RwghRM6Shf",
     telegram: "",

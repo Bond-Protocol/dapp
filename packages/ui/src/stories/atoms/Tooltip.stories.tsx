@@ -3,7 +3,7 @@ import { Tooltip } from "../../components/atoms/Tooltip";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Atoms/Tooltip",
+  title: "Design System/Atoms/Tooltip",
   component: Tooltip,
   argTypes: {},
 } as ComponentMeta<typeof Tooltip>;
