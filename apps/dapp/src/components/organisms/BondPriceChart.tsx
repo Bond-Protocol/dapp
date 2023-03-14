@@ -46,8 +46,8 @@ export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
         <Chip selected={range === 7} onClick={(_e) => setRange(7)}>
           7D
         </Chip>
-        <Chip selected={range === 14} onClick={(_e) => setRange(14)}>
-          14D
+        <Chip selected={range === 30} onClick={(_e) => setRange(30)}>
+          30D
         </Chip>
       </div>
     </div>
