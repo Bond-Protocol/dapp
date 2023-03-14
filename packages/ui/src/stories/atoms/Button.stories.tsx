@@ -1,5 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import Button from "components/atoms/Button";
+import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg";
+import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -81,7 +83,12 @@ WithIcon.args = {
 
 export const IconOnly = Template.bind({});
 IconOnly.args = {
-  children: "",
+  variant: "ghost",
+  children: (
+    <div className="my-[2px] flex h-4 w-4 items-center justify-center transition-all duration-300">
+      <PlusIcon className="group-hover/button:fill-light-secondary fill-white" />
+    </div>
+  ),
   icon: true,
 };
 
