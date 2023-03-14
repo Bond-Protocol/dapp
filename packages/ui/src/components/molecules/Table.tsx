@@ -31,7 +31,9 @@ export interface TableProps {
 
 export const Table = ({ data = [], ...props }: TableProps) => {
   const defaultSortOrder =
-    props.columns.find((c) => c.accessor === props.defaultSort && c.defaultSortOrder)?.defaultSortOrder || "desc";
+    props.columns.find(
+      (c) => c.accessor === props.defaultSort && c.defaultSortOrder
+    )?.defaultSortOrder || "desc";
 
   const handleSorting = props.handleSorting || (() => {});
 
@@ -74,14 +76,15 @@ export const TableHead = (props: TableHeadProps) => {
   const [order, setOrder] = useState("asc");
 
   const handleSortingChange = (accessor: string) => {
-    const issuer = props.columns.find(c => {
-      if (c.accessor === accessor)
-        return c;
+    const issuer = props.columns?.find((c) => {
+      if (c.accessor === accessor) return c;
     });
 
     const sortOrder =
       accessor === sortField
-        ? (order === "desc" ? "asc" : "desc") // If the sort field is unchanged, reverse the sort order
+        ? order === "desc"
+          ? "asc"
+          : "desc" // If the sort field is unchanged, reverse the sort order
         : issuer?.defaultSortOrder || "desc"; // If the sort field has changed, use field default sort order
 
     setSortField(accessor);
@@ -91,9 +94,7 @@ export const TableHead = (props: TableHeadProps) => {
 
   useEffect(() => {
     if (props.defaultSortField && props.hasData) {
-      props.handleSorting(props.defaultSortField, props.defaultSortOrder);
-      setOrder(props.defaultSortOrder);
-      setSortField(props.defaultSortField);
+      handleSortingChange(props.defaultSortField);
     }
   }, [props.defaultSortField, props.hasData]);
 

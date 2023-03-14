@@ -102,7 +102,11 @@ const marketTxsHistory: Column<any>[] = [
       };
     },
     Component: (props) => {
-      return <Link target="_blank" rel="noopener noreferrer" href={props.subtext}>{props.value}</Link>;
+      return (
+        <Link target="_blank" rel="noopener noreferrer" href={props.subtext}>
+          {props.value}
+        </Link>
+      );
     },
   },
 ];
@@ -156,6 +160,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
           return p;
         })
         .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
+        .sort((a, b) => b.timestamp - a.timestamp)
         .map((p) => toTableData(marketTxsHistory, p)),
     [currentPrices, data]
   );
