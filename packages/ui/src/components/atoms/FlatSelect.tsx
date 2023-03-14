@@ -2,9 +2,13 @@ import { useState } from "react";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 
 type FlatSelectProps = {
-  options: Array<{ label: string; value: string | number }>;
+  options: Array<{
+    label: string;
+    value: string | number;
+    Icon?: (props: any) => JSX.Element;
+  }>;
   onChange: (value: string | number) => void;
-  label?: string;
+  label?: string | React.ReactNode;
   className?: string;
   default?: string | number;
 };
@@ -35,7 +39,18 @@ export const FlatSelect = (props: FlatSelectProps) => {
                 : "hover:bg-white/15 "
             }`}
           >
-            {o.label}
+            <div className="flex items-center justify-center">
+              {o.Icon && (
+                <o.Icon
+                  className={
+                    selected === o.value
+                      ? "stroke-light-secondary"
+                      : "stroke-white"
+                  }
+                />
+              )}
+              <div className="font-fraktion pl-1">{o.label}</div>
+            </div>
           </ButtonUnstyled>
         ))}
       </div>
