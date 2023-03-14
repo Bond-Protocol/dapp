@@ -25,6 +25,7 @@ export * from "./ProtocolLogo";
 export * from "./Select";
 export * from "./Skeleton";
 export * from "./SocialRow";
+export * from "./Switch";
 export * from "./TableCell";
 export * from "./TableHeading";
 export * from "./TermPicker";
