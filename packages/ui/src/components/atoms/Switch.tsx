@@ -2,7 +2,7 @@ import SwitchUnstyled, { SwitchUnstyledProps } from "@mui/base/SwitchUnstyled";
 
 const slotProps = {
   root: {
-    className: "relative inline-block w-10 h-6 m-2.5 cursor-pointer",
+    className: "relative inline-block w-10 h-6 mx-2.5 cursor-pointer",
   },
   input: {
     className:
@@ -35,7 +35,7 @@ export const Switch = (props: SwitchProps) => {
   return (
     <div className="flex items-center">
       <SwitchUnstyled componentsProps={slotProps} {...props} />
-      {props.label && <p className="blocktext-[14px]">{props.label}</p>}
+      {props.label && <p className="block text-sm">{props.label}</p>}
     </div>
   );
 };

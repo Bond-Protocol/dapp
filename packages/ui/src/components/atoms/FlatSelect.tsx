@@ -1,13 +1,13 @@
 import { useState } from "react";
 import ButtonUnstyled from "@mui/base/ButtonUnstyled";
 
-type FlatSelectProps = {
+type FlatSelectProps<T> = {
   options: Array<{
     label: string;
-    value: string | number;
+    value: string;
     Icon?: (props: any) => JSX.Element;
   }>;
-  onChange: (value: string | number) => void;
+  onChange: (value: string) => void;
   label?: string | React.ReactNode;
   className?: string;
   default?: string | number;

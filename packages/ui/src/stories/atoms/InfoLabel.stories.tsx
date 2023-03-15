@@ -33,3 +33,12 @@ Multiple.args = {
   tooltip: "Lorem ipsum etc stuff this a long tooltip wagmi oke",
   children: "$26.5M",
 };
+
+export const Small = Template.bind({});
+Small.args = {
+  label: "Current Ohm Price",
+  children: "10.25$",
+  tooltip: null,
+  small: true,
+  reverse: true,
+};

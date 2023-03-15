@@ -9,12 +9,21 @@ export type InputProps = InputUnstyledProps & {
 };
 
 export const Input = forwardRef(function Input(
-  { label, subText, errorMessage, inputClassName, ...props }: InputProps,
+  {
+    label,
+    subText,
+    errorMessage,
+    inputClassName,
+    className,
+    ...props
+  }: InputProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) {
   return (
-    <div className="w-full">
-      {label && <p className="mb-1 text-xs font-light">{label}</p>}
+    <div className={"w-full" + " " + className}>
+      {label && (
+        <p className="text-light-grey-400 mb-1 text-xs font-light">{label}</p>
+      )}
       <InputUnstyled
         {...props}
         autoComplete="disabled"

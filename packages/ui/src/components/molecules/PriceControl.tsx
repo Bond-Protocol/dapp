@@ -31,7 +31,7 @@ export const PriceControl = (props: PriceControlProps) => {
   };
 
   return (
-    <div className="flex justify-center p-4 backdrop-blur-md">
+    <div className="flex justify-center bg-white/5 p-4 backdrop-blur-md">
       <div className="flex items-center justify-center pr-8">
         <Button icon variant="ghost" onClick={lowerRate}>
           <div className="my-[2px] flex h-4 w-4 items-center justify-center transition-all duration-300">
