@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { FlatSelect } from "components/atoms/FlatSelect";
 
 export default {
-  title: "Components/Atoms/FlatSelect",
+  title: "Design System/Atoms/FlatSelect",
   component: FlatSelect,
 } as ComponentMeta<typeof FlatSelect>;
 

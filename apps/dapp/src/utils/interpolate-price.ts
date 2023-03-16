@@ -1,4 +1,4 @@
-import { BondChartDataset } from "components/organisms/LineChart";
+import type { BondPriceDatapoint } from "ui";
 
 export const generateRange = (min: number, max: number, distance: number) => {
   const gapAmount = (max - min) / (distance + 1);
@@ -7,7 +7,7 @@ export const generateRange = (min: number, max: number, distance: number) => {
     .map((min, i) => min + gapAmount * (i + 1));
 };
 
-export const interpolate = (dataset: BondChartDataset[]) => {
+export const interpolate = (dataset: BondPriceDatapoint[]) => {
   //Sort from latest since we always know the current discount
   const purchases = Array.from(dataset).sort(
     (a, b) => Number(b.date) - Number(a.date)
@@ -22,10 +22,10 @@ export const interpolate = (dataset: BondChartDataset[]) => {
       currentPrice = entry.discountedPrice;
       continue;
     }
-    //How many elements exist between known prices
-    let distance = 0;
+
+    let elementsBetweenKnownPrices = 0;
     for (let j = i + 1; j < purchases.length; j++) {
-      distance++;
+      elementsBetweenKnownPrices++;
       const next = purchases[j];
       if (next.discountedPrice) {
         nextPrice = next.discountedPrice || 0;
@@ -33,7 +33,7 @@ export const interpolate = (dataset: BondChartDataset[]) => {
       }
     }
 
-    generateRange(currentPrice, nextPrice, distance).forEach(
+    generateRange(currentPrice, nextPrice, elementsBetweenKnownPrices).forEach(
       (interpolatedPrice, idx) => {
         purchases[i + idx].discountedPrice = interpolatedPrice;
       }

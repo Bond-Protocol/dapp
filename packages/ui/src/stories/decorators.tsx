@@ -1,4 +1,3 @@
-import React from "react";
 import { Modal } from "../components/molecules";
 
 export const blockExplorerUrl = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";

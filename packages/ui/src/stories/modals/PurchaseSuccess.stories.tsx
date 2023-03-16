@@ -1,4 +1,3 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Modal } from "../../components/molecules/Modal";
 import { PurchaseSuccessDialog } from "../../components/modals";
@@ -6,7 +5,7 @@ import { PurchaseSuccessDialog } from "../../components/modals";
 import { ModalDecorator } from "../decorators";
 
 export default {
-  title: "Screens/Modals/PurchaseSuccess",
+  title: "Components/Modals/PurchaseSuccess",
   component: PurchaseSuccessDialog,
   decorators: [ModalDecorator],
 } as ComponentMeta<typeof Modal>;

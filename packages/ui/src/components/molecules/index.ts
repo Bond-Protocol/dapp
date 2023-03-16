@@ -9,3 +9,4 @@ export * from "./Modal";
 export * from "./PaginatedTable";
 export * from "./Table";
 export * from "./Tabs";
+export * from "./TokenInput";

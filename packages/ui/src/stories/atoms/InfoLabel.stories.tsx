@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { InfoLabel } from "../../components/atoms/InfoLabel";
 
 export default {
-  title: "Components/Atoms/InfoLabel",
+  title: "Design System/Atoms/InfoLabel",
   component: InfoLabel,
 } as ComponentMeta<typeof InfoLabel>;
 

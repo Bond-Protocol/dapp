@@ -68,5 +68,7 @@
     "vite-plugin-dts": "^1.7.1",
     "viteconfig": "*"
   },
-  "dependencies": {}
+  "dependencies": {
+    "date-fns": "^2.29.2"
+  }
 }

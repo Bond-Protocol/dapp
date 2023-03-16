@@ -1,10 +1,12 @@
-import React from "react";
+//@ts-nocheck
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { PaginatedTable } from "../../components/molecules/PaginatedTable";
-import { data as _data } from "../mock-data/table";
+import { data } from "../mock-data/table";
 import { DiscountLabel, Button } from "../../components";
+import { MouseEventHandler } from "react";
 
-const data = Array(87).fill(_data[0]);
+const tableData = Array(87).fill(data[0]);
+const sortableData = [...data];
 
 const cols = [
   {
@@ -27,7 +29,11 @@ const cols = [
     alignEnd: true,
   },
   { label: "Vesting", accessor: "vesting" },
-  { label: "Creation Date", accessor: "creationDate" },
+  {
+    label: "Creation Date",
+    accessor: "creationDate",
+    defaultSortOrder: "asc",
+  },
   { label: "TBV", accessor: "tbv", width: "w-[8%]", alignEnd: true },
   { label: "Issuer", accessor: "issuer" },
   {
@@ -36,7 +42,13 @@ const cols = [
     width: "w-[7%]",
     alignEnd: true,
     unsortable: true,
-    Component: ({ value, ...props }) => (
+    Component: ({
+      value,
+      ...props
+    }: {
+      value: string;
+      onClick: MouseEventHandler<any>;
+    }) => (
       <Button
         thin
         size="sm"
@@ -51,7 +63,7 @@ const cols = [
 ];
 
 export default {
-  title: "Components/Molecules/PaginatedTable",
+  title: "Design System/Molecules/PaginatedTable",
   component: PaginatedTable,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
@@ -63,7 +75,14 @@ const Base: ComponentStory<typeof PaginatedTable> = (args) => (
 
 export const Primary = Base.bind({});
 Primary.args = {
-  data,
+  data: tableData,
+  columns: cols,
+  defaultSort: "creationDate",
+};
+
+export const Sorting = Base.bind({});
+Sorting.args = {
+  data: sortableData,
   columns: cols,
   defaultSort: "creationDate",
 };

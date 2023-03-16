@@ -3,7 +3,7 @@ import { SocialRow } from "../../components/atoms/SocialRow";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Atoms/SocialRow",
+  title: "Design System/Atoms/SocialRow",
   component: SocialRow,
   argTypes: {},
 } as ComponentMeta<typeof SocialRow>;

@@ -1,11 +1,9 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { ActionInfoList } from "../../components/atoms/ActionInfoList";
-import logo from "../../assets/icon-logo.png";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Components/Molecules/ActionInfoList",
+  title: "Design System/Molecules/ActionInfoList",
   component: ActionInfoList,
   argTypes: {},
 } as ComponentMeta<typeof ActionInfoList>;

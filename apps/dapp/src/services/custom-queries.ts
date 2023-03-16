@@ -2,8 +2,23 @@ import { sub, getUnixTime } from "date-fns";
 
 export const generateFetcher = (url: string) => {
   return async () => {
-    const result = await fetch(url);
-    return result.json();
+    const proxyUrl = import.meta.env.VITE_COINGECKO_PRO_PROXY_URL;
+    let isError = false;
+    let result;
+
+    if (proxyUrl && proxyUrl.length !== 0) {
+      result = await fetch(proxyUrl.concat(url))
+        .catch(() => {
+          isError = true;
+        });
+    }
+
+    if (!proxyUrl || proxyUrl.length === 0 || isError) {
+      const publicUrl = import.meta.env.VITE_COINGECKO_PUBLIC_URL;
+      result = await fetch(publicUrl.concat(url));
+    }
+
+    return result && result.json();
   };
 };
 
@@ -17,6 +32,6 @@ export const getTokenPriceHistory = (
   const toTimestamp = getUnixTime(to);
 
   return generateFetcher(
-    `https://api.coingecko.com/api/v3/coins/${apiId}/market_chart/range?vs_currency=usd&from=${fromTimestamp}&to=${toTimestamp}`
+    `/coins/${apiId}/market_chart/range?vs_currency=usd&from=${fromTimestamp}&to=${toTimestamp}`
   );
 };

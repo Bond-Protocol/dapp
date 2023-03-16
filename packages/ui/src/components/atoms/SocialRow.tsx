@@ -19,6 +19,9 @@ export type SocialRowProps = {
   width?: number;
 };
 
+/**
+ * Displays and links supported social networks
+ */
 export const SocialRow = (props: SocialRowProps) => {
   return (
     <div
