@@ -1,6 +1,6 @@
 import { Provider } from '@ethersproject/providers';
 import { BigNumberish, Signer } from 'ethers';
-import { getAddresses } from './address-provider';
+import {getAddresses, getAddressesForType} from './address-provider';
 import {
   Aggregator,
   Aggregator__factory,
@@ -17,8 +17,14 @@ import {
 } from 'types';
 
 export enum BOND_TYPE {
-  FIXED_EXPIRY = 'fixed-expiration',
-  FIXED_TERM = 'fixed-term',
+  FIXED_EXPIRY_SDA = 'fixed-expiry-sda',
+  FIXED_EXPIRY_FPA = 'fixed-expiry-fpa',
+  FIXED_EXPIRY_OFDA = 'fixed-expiry-ofda',
+  FIXED_EXPIRY_OSDA = 'fixed-expiry-osda',
+  FIXED_TERM_SDA = 'fixed-term-sda',
+  FIXED_TERM_FPA = 'fixed-term-fpa',
+  FIXED_TERM_OFDA = 'fixed-term-ofda',
+  FIXED_TERM_OSDA = 'fixed-term-osda',
 }
 
 export function getAggregator(
@@ -54,12 +60,18 @@ export function getTellerContract(
   chainId: string,
 ): FixedExpirationTeller | FixedTermTeller {
   switch (bondType) {
-    case BOND_TYPE.FIXED_EXPIRY:
+    case BOND_TYPE.FIXED_EXPIRY_SDA:
+    case BOND_TYPE.FIXED_EXPIRY_FPA:
+    case BOND_TYPE.FIXED_EXPIRY_OFDA:
+    case BOND_TYPE.FIXED_EXPIRY_OSDA:
       return FixedExpirationTeller__factory.connect(
-        getAddresses(chainId).fixedExpirationTeller,
+        getAddresses(chainId).fixedExpiryTeller,
         providerOrSigner,
       );
-    case BOND_TYPE.FIXED_TERM:
+    case BOND_TYPE.FIXED_TERM_SDA:
+    case BOND_TYPE.FIXED_TERM_FPA:
+    case BOND_TYPE.FIXED_TERM_OFDA:
+    case BOND_TYPE.FIXED_TERM_OSDA:
       return FixedTermTeller__factory.connect(
         getAddresses(chainId).fixedTermTeller,
         providerOrSigner,
@@ -72,18 +84,10 @@ export function getAuctioneerForCreate(
   bondType: BOND_TYPE,
   chainId: string,
 ): Auctioneer {
-  switch (bondType) {
-    case BOND_TYPE.FIXED_EXPIRY:
-      return Auctioneer__factory.connect(
-        getAddresses(chainId).fixedExpirationAuctioneer,
-        providerOrSigner,
-      );
-    case BOND_TYPE.FIXED_TERM:
-      return Auctioneer__factory.connect(
-        getAddresses(chainId).fixedTermAuctioneer,
-        providerOrSigner,
-      );
-  }
+  return Auctioneer__factory.connect(
+    getAddressesForType(chainId, bondType).auctioneer,
+    providerOrSigner,
+  );
 }
 
 export async function getAuctioneerFromAggregator(

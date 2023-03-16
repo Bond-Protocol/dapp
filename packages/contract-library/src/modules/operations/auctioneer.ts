@@ -34,30 +34,8 @@ export async function createMarket(
   overrides?: Overrides,
 ): Promise<ContractTransaction> {
   const auctioneer = getAuctioneerForCreate(signer, bondType, chainId);
-
   try {
-    const bytes = ethers.utils.defaultAbiCoder.encode(
-      [
-        'tuple(address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 conclusion, uint32 depositInterval, int8 scaleAdjustment)',
-      ],
-      [
-        [
-          config.payoutToken,
-          config.quoteToken,
-          config.callbackAddr,
-          config.capacityInQuote,
-          config.capacity,
-          config.formattedInitialPrice,
-          config.formattedMinimumPrice,
-          config.debtBuffer,
-          config.vesting,
-          config.conclusion,
-          config.depositInterval,
-          config.scaleAdjustment,
-        ],
-      ],
-    );
-
+    const bytes = getBytes(config, bondType);
     return auctioneer.createMarket(bytes, overrides);
   } catch (e) {
     console.log(e);
@@ -65,37 +43,110 @@ export async function createMarket(
   }
 }
 
-export function createMarketMultisig(config: CreateMarketParams): string {
+export function createMarketMultisig(config: CreateMarketParams, bondType: BOND_TYPE): string {
   try {
     // @ts-ignore
     const auctioneer = new ethers.utils.Interface(auctioneerAbi.abi);
-
-    const bytes = ethers.utils.defaultAbiCoder.encode(
-      [
-        'tuple(address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 conclusion, uint32 depositInterval, int8 scaleAdjustment)',
-      ],
-      [
-        [
-          config.payoutToken,
-          config.quoteToken,
-          config.callbackAddr,
-          config.capacityInQuote,
-          config.capacity,
-          config.formattedInitialPrice,
-          config.formattedMinimumPrice,
-          config.debtBuffer,
-          config.vesting,
-          config.conclusion,
-          config.depositInterval,
-          config.scaleAdjustment,
-        ],
-      ],
-    );
+    const bytes = getBytes(config, bondType);
 
     return auctioneer.encodeFunctionData('createMarket', [bytes]);
   } catch (e) {
     console.log(e);
     throw e;
+  }
+}
+
+function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
+  switch (bondType) {
+    case BOND_TYPE.FIXED_EXPIRY_SDA:
+    case BOND_TYPE.FIXED_TERM_SDA:
+      return ethers.utils.defaultAbiCoder.encode(
+        [
+          'tuple(address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 conclusion, uint32 depositInterval, int8 scaleAdjustment)',
+        ],
+        [
+          [
+            config.payoutToken,
+            config.quoteToken,
+            config.callbackAddr,
+            config.capacityInQuote,
+            config.capacity,
+            config.formattedInitialPrice,
+            config.formattedMinimumPrice,
+            config.debtBuffer,
+            config.vesting,
+            config.conclusion,
+            config.depositInterval,
+            config.scaleAdjustment,
+          ],
+        ],
+      );
+    case BOND_TYPE.FIXED_EXPIRY_FPA:
+    case BOND_TYPE.FIXED_TERM_FPA:
+      return ethers.utils.defaultAbiCoder.encode(
+        [
+          'tuple(address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedPrice, uint48 vesting, uint48 conclusion, uint32 depositInterval, int8 scaleAdjustment)',
+        ],
+        [
+          [
+            config.payoutToken,
+            config.quoteToken,
+            config.callbackAddr,
+            config.capacityInQuote,
+            config.capacity,
+            config.formattedPrice,
+            config.vesting,
+            config.conclusion,
+            config.depositInterval,
+            config.scaleAdjustment,
+          ],
+        ],
+      );
+    case BOND_TYPE.FIXED_EXPIRY_OFDA:
+    case BOND_TYPE.FIXED_TERM_OFDA:
+      return ethers.utils.defaultAbiCoder.encode(
+        [
+          'tuple(address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 fixedDiscount, uint48 maxDiscountFromCurrent, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 conclusion)',
+        ],
+        [
+          [
+            config.payoutToken,
+            config.quoteToken,
+            config.callbackAddr,
+            config.oracle,
+            config.fixedDiscount,
+            config.maxDiscountFromCurrent,
+            config.capacityInQuote,
+            config.capacity,
+            config.depositInterval,
+            config.vesting,
+            config.conclusion,
+          ],
+        ],
+      );
+    case BOND_TYPE.FIXED_EXPIRY_OSDA:
+    case BOND_TYPE.FIXED_TERM_OSDA:
+      return ethers.utils.defaultAbiCoder.encode(
+        [
+          'tuple(address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 baseDiscount, uint48 maxDiscountFromCurrent, uint48 targetIntervalDiscount, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 conclusion)',
+        ],
+        [
+          [
+            config.payoutToken,
+            config.quoteToken,
+            config.callbackAddr,
+            config.oracle,
+            config.baseDiscount,
+            config.maxDiscountFromCurrent,
+            config.targetIntervalDiscount,
+            config.capacityInQuote,
+            config.capacity,
+            config.depositInterval,
+            config.vesting,
+            config.conclusion,
+          ],
+        ],
+      );
   }
 }
 

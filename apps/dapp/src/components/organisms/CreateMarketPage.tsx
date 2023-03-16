@@ -455,7 +455,7 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         scaleAdjustment: scaleAdjustment,
       },
       bondType:
-        data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
+        data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY_SDA : BOND_TYPE.FIXED_TERM_SDA,
       chain: chainSelection,
       formValues: formValues,
       payoutToken: payoutTokenInfo,

@@ -90,7 +90,7 @@ export function getMarketData(
     let vestingType = '';
     if (teller === addresses.fixedTermTeller) {
       vestingType = 'fixed-term';
-    } else if (teller === addresses.fixedExpirationTeller) {
+    } else if (teller === addresses.fixedExpiryTeller) {
       vestingType = 'fixed-expiration';
     }
 

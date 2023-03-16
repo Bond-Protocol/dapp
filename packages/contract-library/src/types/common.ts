@@ -1,6 +1,5 @@
 import { PromiseOrValue } from './contracts/common';
 import { BigNumberish } from 'ethers';
-import { CHAIN_ID } from 'src/../../data-library/dist/src';
 
 export type CreateMarketParams = {
   payoutToken: PromiseOrValue<string>;
@@ -8,13 +7,19 @@ export type CreateMarketParams = {
   callbackAddr: PromiseOrValue<string>;
   capacityInQuote: PromiseOrValue<boolean>;
   capacity: PromiseOrValue<BigNumberish>;
-  formattedInitialPrice: PromiseOrValue<BigNumberish>;
-  formattedMinimumPrice: PromiseOrValue<BigNumberish>;
   debtBuffer: PromiseOrValue<BigNumberish>;
   vesting: PromiseOrValue<BigNumberish>;
   conclusion: PromiseOrValue<BigNumberish>;
   depositInterval: PromiseOrValue<BigNumberish>;
-  scaleAdjustment: PromiseOrValue<BigNumberish>;
+  scaleAdjustment?: PromiseOrValue<BigNumberish>;
+  formattedPrice?: PromiseOrValue<BigNumberish>;
+  formattedInitialPrice?: PromiseOrValue<BigNumberish>;
+  formattedMinimumPrice?: PromiseOrValue<BigNumberish>;
+  oracle?: PromiseOrValue<string>;
+  fixedDiscount?: PromiseOrValue<BigNumberish>;
+  maxDiscountFromCurrent?: PromiseOrValue<BigNumberish>;
+  baseDiscount?: PromiseOrValue<BigNumberish>;
+  targetIntervalDiscount?: PromiseOrValue<BigNumberish>;
 };
 
 export interface TokenBase {

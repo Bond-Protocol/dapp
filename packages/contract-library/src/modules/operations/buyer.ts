@@ -1,5 +1,5 @@
 import { BigNumberish } from '@ethersproject/bignumber';
-import { LpType, SUPPORTED_LP_TYPES } from '@bond-protocol/bond-library';
+import { LpType } from '@bond-protocol/bond-library';
 import {
   BigNumber,
   ContractTransaction,
@@ -112,10 +112,16 @@ export async function redeem(
   let teller;
   if (tellerAddress) {
     switch (bondType) {
-      case BOND_TYPE.FIXED_EXPIRY:
+      case BOND_TYPE.FIXED_EXPIRY_SDA:
+      case BOND_TYPE.FIXED_EXPIRY_FPA:
+      case BOND_TYPE.FIXED_EXPIRY_OFDA:
+      case BOND_TYPE.FIXED_EXPIRY_OSDA:
         teller = FixedExpirationTeller__factory.connect(tellerAddress, signer);
         break;
-      case BOND_TYPE.FIXED_TERM:
+      case BOND_TYPE.FIXED_TERM_SDA:
+      case BOND_TYPE.FIXED_TERM_FPA:
+      case BOND_TYPE.FIXED_TERM_OFDA:
+      case BOND_TYPE.FIXED_TERM_OSDA:
         teller = FixedTermTeller__factory.connect(tellerAddress, signer);
         break;
     }
@@ -393,14 +399,14 @@ export async function calcMarket(
   if (calculatedMarket.isInstantSwap) {
     calculatedMarket.formattedLongVesting = 'Immediate Payout';
     calculatedMarket.formattedShortVesting = 'Immediate';
-  } else if (calculatedMarket.vestingType === BOND_TYPE.FIXED_TERM) {
+  } else if (calculatedMarket.vestingType === "fixed-term") {
     calculatedMarket.formattedLongVesting = longVestingPeriod(
       calculatedMarket.vesting,
     );
     calculatedMarket.formattedShortVesting = longVestingPeriod(
       calculatedMarket.vesting,
     );
-  } else if (calculatedMarket.vestingType === BOND_TYPE.FIXED_EXPIRY) {
+  } else if (calculatedMarket.vestingType === "fixed-expiry") {
     calculatedMarket.formattedLongVesting = format(
       new Date(calculatedMarket.vesting * 1000),
       'do MMM y',
