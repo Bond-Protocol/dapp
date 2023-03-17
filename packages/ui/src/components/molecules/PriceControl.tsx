@@ -21,11 +21,11 @@ export const PriceControl = (props: PriceControlProps) => {
   );
 
   const rateMod = props.percentage ? 0.25 : 0.001;
+  const scale = 4;
 
   const raiseRate = () => {
     setValue((prev) => {
-      const newRate = (Number(prev) + rateMod).toString();
-      console.log({ newRate });
+      const newRate = (Number(prev) + rateMod).toFixed(scale);
       props.onRateChange && props.onRateChange(newRate);
       return newRate;
     });
@@ -33,7 +33,7 @@ export const PriceControl = (props: PriceControlProps) => {
 
   const lowerRate = () => {
     setValue((prev) => {
-      const newRate = (Number(prev) - rateMod).toString();
+      const newRate = (Number(prev) - rateMod).toFixed(scale);
       props.onRateChange && props.onRateChange(newRate);
       return newRate;
     });

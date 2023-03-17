@@ -16,7 +16,7 @@ export const Primary = Template.bind({});
 Primary.args = {
   topLabel: "Fixed Price",
   tooltip: "ya",
-  exchangeRate: 0.25,
+  exchangeRate: 0.256,
   payoutTokenSymbol: "OHM",
   quoteTokenSymbol: "DAI",
   onRateChange: () => {},
