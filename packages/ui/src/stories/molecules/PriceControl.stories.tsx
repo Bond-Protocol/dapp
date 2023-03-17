@@ -26,6 +26,6 @@ export const Percentage = Template.bind({});
 Percentage.args = {
   ...Primary.args,
   percentage: true,
-  topLabel: "Initial Discount",
-  label: "From Oracle Price",
+  bottomLabel: "Initial Discount",
+  topLabel: "From Oracle Price",
 };

@@ -5,7 +5,7 @@ import { ReactComponent as DynamicOraclePriceImage } from "../../assets/images/d
 import { ReactComponent as StaticOraclePriceImage } from "../../assets/images/static-oracle-price.svg";
 
 export type PriceType = "dynamic" | "static";
-export type PriceOptions = PriceType | "oracle-dynamic" | "oracle-static";
+export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
 
 export type PriceModelDetailsProps = {
   type: PriceType;
@@ -14,7 +14,7 @@ export type PriceModelDetailsProps = {
   oracle?: boolean;
 };
 
-const options: Record<PriceOptions, any> = {
+const options: Record<PriceModel, any> = {
   dynamic: {
     Image: DynamicPriceImage,
     title: "Dynamic Discount",
@@ -47,12 +47,12 @@ export const PriceModelDetails = ({
   type = "dynamic",
   ...props
 }: PriceModelDetailsProps) => {
-  const adjustedType: PriceOptions = props.oracle ? `oracle-${type}` : type;
+  const adjustedType: PriceModel = props.oracle ? `oracle-${type}` : type;
   const option = options[adjustedType];
 
   return (
     <div
-      className={`flex w-[560px] max-w-[560px] items-center bg-white/5 py-4 backdrop-blur-md ${props.className}`}
+      className={`flex items-center bg-white/5 py-4 backdrop-blur-md ${props.className}`}
     >
       <div className="w-min px-4">
         <option.Image className="stroke-white" />

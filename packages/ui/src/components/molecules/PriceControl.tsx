@@ -4,8 +4,8 @@ import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
 import { useNumericInput } from "hooks/use-numeric-input";
 
 export type PriceControlProps = {
-  topLabel: string;
-  label?: string;
+  bottomLabel: string;
+  topLabel?: string;
   quoteTokenSymbol?: string;
   payoutTokenSymbol?: string;
   exchangeRate: number;
@@ -22,6 +22,11 @@ export const PriceControl = (props: PriceControlProps) => {
 
   const rateMod = props.percentage ? 0.25 : 0.001;
   const scale = 4;
+
+  const onChange = (e: React.BaseSyntheticEvent) => {
+    const updated = numericInput.onChange(e);
+    props.onRateChange && props.onRateChange(updated);
+  };
 
   const raiseRate = () => {
     setValue((prev) => {
@@ -40,7 +45,7 @@ export const PriceControl = (props: PriceControlProps) => {
   };
 
   return (
-    <div className="flex justify-center bg-white/5 p-4 backdrop-blur-md">
+    <div className="flex w-full justify-center bg-white/5 p-4 backdrop-blur-md">
       <div className="flex items-center justify-center pr-8">
         <Button icon variant="ghost" onClick={lowerRate}>
           <div className="my-[2px] flex h-4 w-4 items-center justify-center transition-all duration-300">
@@ -50,19 +55,20 @@ export const PriceControl = (props: PriceControlProps) => {
       </div>
       <div className="text-light-grey-400 flex flex-col items-center justify-center">
         <div className="flex text-[14px]">
-          {props.label ??
+          {props.topLabel ??
             `${props.payoutTokenSymbol} per ${props.quoteTokenSymbol}`}
         </div>
 
         <div className="font-fraktion text-[25px] text-white">
           <input
-            value={value}
             {...numericInput}
+            value={value}
+            onChange={onChange}
             className="bg-transparent text-center"
           />
         </div>
         <div className="font-fraktion flex font-bold uppercase">
-          {props.topLabel}
+          {props.bottomLabel}
           {props.tooltip && (
             <Tooltip
               content={props.tooltip}

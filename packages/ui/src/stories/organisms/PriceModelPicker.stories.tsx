@@ -9,7 +9,7 @@ export default {
 } as ComponentMeta<typeof PriceModelPicker>;
 
 const Template: ComponentStory<typeof PriceModelPicker> = (args) => (
-  <div className="max-w-[560px]">
+  <div className="">
     <PriceModelPicker {...args} />
   </div>
 );

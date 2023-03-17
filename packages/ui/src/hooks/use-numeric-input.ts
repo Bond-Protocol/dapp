@@ -9,10 +9,11 @@ export const useNumericInput = (initialValue = "0", isPercentual?: boolean) => {
     const nextValue = event.target.value;
 
     if (isNaN(nextValue)) {
-      return;
+      return value;
     }
 
     setValue(nextValue);
+    return nextValue;
   };
 
   const getAValidPercentage = (v: string) => {
