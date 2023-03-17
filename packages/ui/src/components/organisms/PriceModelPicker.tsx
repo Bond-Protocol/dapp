@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { FlatSelect, Switch } from "..";
+import { FlatSelect, InfoLabel, Switch } from "..";
 import { ReactComponent as SawLineIcon } from "../../assets/icons/saw-line.svg";
 import { ReactComponent as LineIcon } from "../../assets/icons/line.svg";
 import {
   PriceModelDetails,
   PriceType,
 } from "components/molecules/PriceModelDetails";
+import { PriceControl } from "components/molecules/PriceControl";
 
 export type PriceModelPrickerProps = {
   a?: any;
@@ -59,6 +60,7 @@ export const PriceModelPicker = (props: PriceModelPrickerProps) => {
         type={type}
         onOracleChange={setAddress}
       />
+      <div className="flex gap-x-4 pt-4"></div>
     </div>
   );
 };

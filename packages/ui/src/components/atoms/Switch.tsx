@@ -2,20 +2,17 @@ import SwitchUnstyled, { SwitchUnstyledProps } from "@mui/base/SwitchUnstyled";
 
 const slotProps = {
   root: {
-    className: "relative inline-block w-10 h-6 mx-2.5 cursor-pointer",
+    className: "relative inline-block w-8 h-5 mx-1 cursor-pointer",
   },
   input: {
     className:
       "cursor-pointer absolute w-full h-full inset-0 opacity-0 z-10 m-0",
   },
   thumb: ({ checked }: { checked: boolean }) => {
-    const checkedStyle = checked ? "left-[20px]" : "";
+    const checkedStyle = checked ? "left-4" : "left-1";
 
     return {
-      className:
-        "block relative w-4 h-4 top-1 left-1 bg-white rounded-full transition-all duration-300" +
-        " " +
-        checkedStyle,
+      className: `block relative w-3 h-3 top-1 bg-white rounded-full transition-all duration-300 ${checkedStyle}`,
     };
   },
   track: ({ checked }: { checked: boolean }) => {
@@ -35,7 +32,7 @@ export const Switch = (props: SwitchProps) => {
   return (
     <div className="flex items-center">
       <SwitchUnstyled componentsProps={slotProps} {...props} />
-      {props.label && <p className="block text-sm">{props.label}</p>}
+      {props.label && <p className="">{props.label}</p>}
     </div>
   );
 };

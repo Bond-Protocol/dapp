@@ -3,7 +3,7 @@ import { useState } from "react";
 import { PopperUnstyled } from "@mui/base";
 
 export type TooltipProps = {
-  content: string;
+  content: string | React.ReactNode;
   className?: string;
   iconClassname?: string;
   iconWidth?: number;

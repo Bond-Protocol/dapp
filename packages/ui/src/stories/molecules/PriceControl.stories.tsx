@@ -15,8 +15,17 @@ const Template: ComponentStory<typeof PriceControl> = (args) => (
 export const Primary = Template.bind({});
 Primary.args = {
   topLabel: "Fixed Price",
-  exchangeRate: 0.094,
+  tooltip: "ya",
+  exchangeRate: 0.25,
   payoutTokenSymbol: "OHM",
   quoteTokenSymbol: "DAI",
   onRateChange: () => {},
+};
+
+export const Percentage = Template.bind({});
+Percentage.args = {
+  ...Primary.args,
+  percentage: true,
+  topLabel: "Initial Discount",
+  label: "From Oracle Price",
 };

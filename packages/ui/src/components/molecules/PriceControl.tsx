@@ -1,30 +1,39 @@
-import { Button } from "..";
+import { Tooltip, Button } from "..";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg";
 import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
-import { useState } from "react";
+import { useNumericInput } from "hooks/use-numeric-input";
 
 export type PriceControlProps = {
   topLabel: string;
-  quoteTokenSymbol: string;
-  payoutTokenSymbol: string;
+  label?: string;
+  quoteTokenSymbol?: string;
+  payoutTokenSymbol?: string;
   exchangeRate: number;
-  onRateChange: (exchangeRate: number) => any;
+  onRateChange: (exchangeRate: string | number) => any;
+  tooltip?: React.ReactNode;
+  percentage?: boolean;
 };
 
 export const PriceControl = (props: PriceControlProps) => {
-  const [rate, setRate] = useState(props.exchangeRate);
+  const { value, setValue, ...numericInput } = useNumericInput(
+    props.exchangeRate.toString(),
+    props.percentage
+  );
+
+  const rateMod = props.percentage ? 0.25 : 0.001;
 
   const raiseRate = () => {
-    setRate((rate) => {
-      const newRate = Number((rate + 0.01).toFixed(4));
+    setValue((prev) => {
+      const newRate = (Number(prev) + rateMod).toString();
+      console.log({ newRate });
       props.onRateChange && props.onRateChange(newRate);
       return newRate;
     });
   };
 
   const lowerRate = () => {
-    setRate((rate) => {
-      const newRate = Number((rate - 0.01).toFixed(4));
+    setValue((prev) => {
+      const newRate = (Number(prev) - rateMod).toString();
       props.onRateChange && props.onRateChange(newRate);
       return newRate;
     });
@@ -40,11 +49,27 @@ export const PriceControl = (props: PriceControlProps) => {
         </Button>
       </div>
       <div className="text-light-grey-400 flex flex-col items-center justify-center">
-        <div className="font-fraktion font-bold uppercase">
-          {props.topLabel}
+        <div className="flex text-[14px]">
+          {props.label ??
+            `${props.payoutTokenSymbol} per ${props.quoteTokenSymbol}`}
         </div>
-        <div className="font-fraktion text-[25px] text-white">{rate}</div>
-        <div className="text-[14px]">{`${props.payoutTokenSymbol} per ${props.quoteTokenSymbol}`}</div>
+
+        <div className="font-fraktion text-[25px] text-white">
+          <input
+            value={value}
+            {...numericInput}
+            className="bg-transparent text-center"
+          />
+        </div>
+        <div className="font-fraktion flex font-bold uppercase">
+          {props.topLabel}
+          {props.tooltip && (
+            <Tooltip
+              content={props.tooltip}
+              iconClassname="ml-1 fill-light-grey-500"
+            />
+          )}
+        </div>
       </div>
       <div className="flex items-center justify-center pl-8">
         <Button icon variant="ghost" onClick={raiseRate}>
