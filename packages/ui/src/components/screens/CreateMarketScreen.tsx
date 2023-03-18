@@ -12,20 +12,19 @@ const tokenOptions = [
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   return (
-    <div id="cbm-root">
-      {" "}
-      <div id="cbm-top-control" className="flex items-center justify-end">
+    <div id="cm-root">
+      <div id="cm-top-control" className="flex items-center justify-end">
         <Switch label="Custom" />
         <div className="font-fraktion mr-2 pl-8 text-sm tracking-widest">
           RESET
         </div>
       </div>
-      <div id="cbm-main-container" className="flex">
-        <div id="cbm-left-container" className="max-w-[560px]">
+      <div id="cm-main-container" className="flex">
+        <div id="cm-left-container" className="w-1/2">
           <div className="flex">
             <div className="flex w-1/2 gap-x-2 pr-2">
-              <Input id="cbm-input-bond-token" label="Bond Token" />
-              <Input id="cbm-input-vesting" label="Vesting" />
+              <Input id="cm-input-bond-token" label="Bond Token" />
+              <Input id="cm-input-vesting" label="Vesting" />
             </div>
             <div className="w-1/2 pl-2">
               <Input className="" label="Get Token" />
@@ -42,9 +41,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <PriceModelPicker onModelChange={() => {}} />
         </div>
-        <div id="cbm-right-container" className="w-1/2 "></div>
+        <div id="cm-right-container" className="w-1/2 "></div>
       </div>
-      <div id="cbm-card-row"></div>
+      <div id="cm-card-row"></div>
     </div>
   );
 };

@@ -109,10 +109,16 @@
   }
 }
 
+/*recharts style override*/
 .recharts-cartesian-axis-tick-value {
   @apply fill-light-primary-100/50 text-[10px];
 }
 
 .recharts-cartesian-axis-line {
   @apply stroke-light-primary-100/20;
+}
+
+/*react-day-picker styles*/
+.rdp {
+  --rdp-background-color: transparent;
 }

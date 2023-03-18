@@ -23,10 +23,10 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "turbo": "^1.6.3",
+    "eslint": "^8.17.0",
+    "eslint-config-custom": "*",
     "prettier": "^2.7.0",
     "prettier-plugin-tailwindcss": "^0.1.11",
-    "eslint": "^8.17.0",
-    "eslint-config-custom": "*"
+    "turbo": "^1.6.3"
   }
 }

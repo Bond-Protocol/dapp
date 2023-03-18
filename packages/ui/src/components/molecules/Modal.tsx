@@ -30,7 +30,7 @@ const ModalBackdrop = forwardRef(function ModalContainer(
 
 const ModalHeader = (props: ModalHeaderProps) => {
   return (
-    <div className="text-light-secondary fill-light-secondary flex select-none justify-between p-2 pt-1">
+    <div className="text-light-secondary fill-light-secondary flex select-none items-center justify-between p-2 pt-1">
       <p className="font-fraktion my-auto p-2 font-bold uppercase tracking-wide">
         {props?.topLeftContent}
       </p>
