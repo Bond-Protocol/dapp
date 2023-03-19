@@ -14,8 +14,8 @@ const Template: ComponentStory<typeof ActionCard> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  title: "Have anxiety?",
-  leftLabel: "Get help",
-  rightLabel: "Or dont, up to you",
+  title: "Wagmi?",
+  leftLabel: "LESGOOOO",
+  rightLabel: "Fat nope-Nope",
   onClickRight: () => {},
 };

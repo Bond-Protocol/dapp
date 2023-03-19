@@ -62,7 +62,7 @@ export const Modal = ({ title, ...props }: ModalProps) => {
     >
       <ModalBackdrop>
         <ModalBackground>
-          <div className={`${props.large ? "w-[576px] pb-20" : "w-[405px]"} `}>
+          <div className={`min-w-[405px]`}>
             <ModalHeader
               topLeftContent={title}
               onClickClose={props.onClickClose}

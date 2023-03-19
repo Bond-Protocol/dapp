@@ -71,7 +71,7 @@ const Button = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `group/button select-none uppercase outline-none font-mono font-extrabold tracking-widest border rounded transition-all duration-300 ${style} ${props.className}`,
+          className: `group/button select-none uppercase outline-none font-mono font-extrabold tracking-widest border rounded-lg transition-all duration-300 ${style} ${props.className}`,
         }),
       }}
     />

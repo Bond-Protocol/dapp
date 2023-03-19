@@ -36,6 +36,7 @@ export const DatePicker = (props: {
           IconRight: () => <ArrowDownIcon className="rotate-180" />,
         }}
         classNames={{
+          root: "rdp m-0",
           caption_label: "font-light",
           button_reset: "",
           weeknumber: "",

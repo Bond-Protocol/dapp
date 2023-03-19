@@ -9,7 +9,7 @@ type InputModalProps = React.PropsWithChildren<{
   onSubmit?: (value: any) => void;
   ModalContent: (props: {
     onChange: Function;
-    onCancel: Function;
+    onCancel?: Function;
   }) => JSX.Element;
 }>;
 

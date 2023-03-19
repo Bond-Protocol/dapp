@@ -5,7 +5,9 @@ export type InputProps = InputUnstyledProps & {
   label?: string | React.ReactNode;
   subText?: string | React.ReactNode;
   errorMessage?: string;
+  rootClassName?: string;
   inputClassName?: string;
+  subTextClassName?: string;
 };
 
 export const Input = forwardRef(function Input(
@@ -13,17 +15,17 @@ export const Input = forwardRef(function Input(
     label,
     subText,
     errorMessage,
-    inputClassName,
-    className,
+    className = "",
+    rootClassName = "",
+    inputClassName = "",
+    subTextClassName = "",
     ...props
   }: InputProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) {
   return (
-    <div className={"w-full" + " " + className}>
-      {label && (
-        <p className="text-light-grey-400 mb-1 text-xs font-light">{label}</p>
-      )}
+    <div className={"text-light-grey w-full" + " " + className}>
+      {label && <p className="mb-1 text-xs font-light">{label}</p>}
       <InputUnstyled
         {...props}
         autoComplete="disabled"
@@ -33,24 +35,24 @@ export const Input = forwardRef(function Input(
           root: {
             className: `w-full flex justify-center items-center h-10 my-auto border rounded-lg ${
               errorMessage && " border-red-500 bg-red-500"
-            }`,
+            } ${rootClassName}`,
           },
           input: {
-            className: `w-full pl-2 h-10 text-[15px] bg-transparent placeholder:text-white/75 focus:outline-none  ${inputClassName}`,
+            className: `w-full pl-2 h-10 text-white text-[15px] bg-transparent placeholder:text-white/75 focus:outline-none  ${inputClassName}`,
           },
         }}
       />
       {subText && (
         <p
-          className={`text-light-neutral mt-1 text-xs font-light ${
+          className={`mt-1 font-mono text-xs font-light ${
             errorMessage && " text-red-500"
-          }`}
+          } ${subTextClassName}`}
         >
           {subText}
         </p>
       )}
       {errorMessage && (
-        <div className="my-1 justify-self-start text-xs font-light text-red-500">
+        <div className="my-1 justify-self-start font-mono text-xs font-light text-red-500">
           <>{errorMessage}</>
         </div>
       )}
