@@ -17,5 +17,7 @@ const Template: ComponentStory<typeof SelectVestingDialog> = (args) => (
 export const Primary = Template.bind({});
 
 Primary.args = {
-  onChange: () => {},
+  onSubmit: (onSubmitArgs: any) => {
+    console.log({ onSubmitArgs });
+  },
 };

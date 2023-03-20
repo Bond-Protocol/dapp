@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNumericInput } from "hooks/use-numeric-input";
 import { Checkbox, Input } from "..";
 
@@ -16,44 +16,65 @@ const LengthWarning = () => (
   </div>
 );
 
+const errorMessage = "Vesting time can't be longer than 270 days";
+
 export type ManualVestingTermInputProps = {
   limit?: number;
   maxRecommended?: number;
   defaultValue?: string;
-  onSubmit: (value: string) => void;
+  onChange: (value: string, other?: any) => void;
+  className?: string;
 };
 
 export const ManualVestingTermInput = ({
   limit = 270,
   maxRecommended = 30,
   defaultValue = "7",
-  onSubmit,
+  className,
+  ...props
 }: ManualVestingTermInputProps) => {
-  const { value, setValue } = useNumericInput(defaultValue);
+  const { value, setValue } = useNumericInput(defaultValue + " days");
   const [acceptedWarning, setAcceptedWarning] = useState(false);
 
-  const warning = parseFloat(value) > maxRecommended;
+  const error = parseFloat(value) > limit;
+  const warning = !error && parseFloat(value) > maxRecommended;
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     const { value } = e.target;
 
-    if (warning && !acceptedWarning) return;
+    const warning = !error && parseFloat(value) > maxRecommended;
+    const canSubmit = !!value && !error && (warning ? acceptedWarning : true);
 
-    onSubmit(value);
     setValue(value);
+    props.onChange(value, { canSubmit });
   };
 
+  useEffect(() => {
+    if (warning) {
+      props.onChange(value, { canSubmit: acceptedWarning });
+    }
+  }, [error, acceptedWarning, warning]);
+
   return (
-    <div>
+    <div className={"w-full" + " " + className}>
       <Input
-        label="Vesting Terms"
+        errorMessage={error ? errorMessage : ""}
+        label="Vesting Term"
+        onFocus={() => setValue((value) => value.split(" ")[0])}
+        onBlur={() => setValue((value) => value + " days")}
         subText={
-          warning ? <VestingWarning value={value} /> : `Max ${limit} days`
+          error ? (
+            ""
+          ) : warning ? (
+            <VestingWarning value={value} />
+          ) : (
+            `Max ${limit} days`
+          )
         }
         rootClassName={warning ? "border-light-secondary" : ""}
         subTextClassName={warning ? "text-light-secondary" : ""}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={onChange}
       />
       {warning && (
         <div className="pt-4">

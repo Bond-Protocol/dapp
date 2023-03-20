@@ -19,3 +19,9 @@ export const Warning = Template.bind({});
 Warning.args = {
   defaultValue: "420",
 };
+
+export const Error = Template.bind({});
+Error.args = {
+  limit: 270,
+  defaultValue: "420",
+};

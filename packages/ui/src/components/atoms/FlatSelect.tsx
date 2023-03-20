@@ -32,7 +32,11 @@ export const FlatSelect = (props: FlatSelectProps) => {
         {props.options.map((option, i) => (
           <ButtonUnstyled
             key={i}
-            onClick={() => handleChange(option.value)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleChange(option.value);
+            }}
             className={`font-faketion w-full rounded-lg border-transparent py-1 tracking-widest transition-all duration-200 ${
               selected === option.value
                 ? "text-light-secondary bg-white/20"

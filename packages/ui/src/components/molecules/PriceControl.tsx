@@ -45,10 +45,10 @@ export const PriceControl = (props: PriceControlProps) => {
   };
 
   return (
-    <div className="flex w-full justify-center bg-white/5 p-4 backdrop-blur-md">
+    <div className="flex justify-center bg-white/5 p-4 backdrop-blur-md">
       <div className="flex items-center justify-center pr-8">
         <Button icon variant="ghost" onClick={lowerRate}>
-          <div className="my-[2px] flex h-4 w-4 items-center justify-center transition-all duration-300">
+          <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
             <MinusIcon className="group-hover/button:fill-light-secondary fill-white" />
           </div>
         </Button>
@@ -79,7 +79,7 @@ export const PriceControl = (props: PriceControlProps) => {
       </div>
       <div className="flex items-center justify-center pl-8">
         <Button icon variant="ghost" onClick={raiseRate}>
-          <div className="my-[2px] flex h-4 w-4 items-center justify-center transition-all duration-300">
+          <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
             <PlusIcon className="group-hover/button:fill-light-secondary fill-white" />
           </div>
         </Button>

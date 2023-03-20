@@ -1,42 +1,89 @@
-import { useState } from "react";
-import { Button, DatePicker, FlatSelect } from "..";
+import { ManualVestingTermInput } from "components/molecules/ManualVestingTermInput";
+import { useEffect, useState } from "react";
+import { Button, DatePicker, FlatSelect, Link } from "..";
+import { formatDate } from "utils";
 
 const options = [
   { label: "DATE", value: "date" },
   { label: "TERM", value: "term" },
 ];
 
-type TermTypes = "term" | "date";
+type TermType = "term" | "date";
 
 export const SelectVestingDialog = (props: {
-  onChange: Function;
-  onCancel?: Function;
+  onSubmit: Function;
+  onClose: Function;
 }) => {
-  const [type, setType] = useState<TermTypes>("date");
+  const [type, setType] = useState<TermType>("date");
+  const [date, setDate] = useState<Date>();
+  const [days, setDays] = useState<string>("7");
+  const [state, setState] = useState({ canSubmit: true });
+
+  const canSubmit = type === "date" ? !!date : state.canSubmit;
 
   const onChange = (date?: Date) => {
-    console.log("TokenPickerDialog onChange ", { type, date });
+    setDate(date);
+    setType(type);
   };
 
+  const onManualChange = (days: string, other: any) => {
+    setDays(days);
+    setState(other);
+  };
+
+  const handleTypeChange = (type: TermType) => {
+    setType(type);
+    setDate(undefined);
+  };
+
+  const handleSubmit = (e: React.BaseSyntheticEvent) => {
+    const formattedDate = date && formatDate.short(date);
+    const label = type === "date" ? formattedDate : `${days} days`;
+
+    props.onSubmit({ value: { type, date, days }, label });
+
+    props.onClose(e);
+  };
+
+  useEffect(() => {
+    props.onSubmit({ type, date, days, canSubmit });
+  }, [type, date, days]);
+
   return (
-    <div className="flex w-full flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <FlatSelect
         default="date"
         options={options}
-        onChange={(v) => {
-          console.log({ v });
-          setType(v);
-        }}
+        onChange={handleTypeChange}
       />
-      {type === "date" ? <DatePicker onChange={onChange} /> : <div />}
+      {type === "date" ? (
+        <DatePicker onChange={onChange} />
+      ) : (
+        <ManualVestingTermInput
+          defaultValue={days}
+          onChange={onManualChange}
+          className="mt-4 w-[416px] max-w-[416px] "
+        />
+      )}
       <div className="flex w-full gap-x-2 pt-4">
-        <Button variant="ghost" size="lg" className="w-full">
+        <Button
+          variant="ghost"
+          size="lg"
+          className="w-full"
+          onClick={(e) => props.onClose(e)}
+        >
           Cancel
         </Button>
-        <Button size="lg" className="w-full">
+        <Button
+          disabled={!canSubmit}
+          onClick={handleSubmit}
+          size="lg"
+          className="w-full"
+        >
           Select
         </Button>
       </div>
+      <Link className="mt-4 -mb-1 font-mono text-sm">CUSTOM VESTING FAQ</Link>
     </div>
   );
 };

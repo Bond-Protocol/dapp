@@ -1,3 +1,5 @@
+import { SelectModal } from "components/molecules/SelectModal";
+import { SelectVestingDialog } from "components/modals/SelectVestingDialog";
 import { PriceModelPicker } from "components/organisms/PriceModelPicker";
 import { FlatSelect, Input, Switch } from "..";
 
@@ -23,15 +25,26 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         <div id="cm-left-container" className="w-1/2">
           <div className="flex">
             <div className="flex w-1/2 gap-x-2 pr-2">
-              <Input id="cm-input-bond-token" label="Bond Token" />
-              <Input id="cm-input-vesting" label="Vesting" />
+              <SelectModal
+                label="Bond Token"
+                ModalContent={SelectVestingDialog}
+              />
+              <SelectModal
+                label="Vesting"
+                title="Custom Vesting"
+                ModalContent={SelectVestingDialog}
+              />
             </div>
             <div className="w-1/2 pl-2">
               <Input className="" label="Get Token" />
             </div>
           </div>
           <div className="flex gap-x-4 py-4">
-            <Input label="Capacity" className="pr-2" />
+            <SelectModal
+              label="Capacity"
+              className="pr-2"
+              ModalContent={SelectVestingDialog}
+            />
             <FlatSelect
               label="ok "
               className="pl-2"
