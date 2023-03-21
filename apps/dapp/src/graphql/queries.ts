@@ -200,21 +200,12 @@ export const listOwnedMarkets = gql`
   }
 `;
 
-/*
-  The line id_not: "0x0352114677f0245a481a79079237e59186f276d5" in this request is to filter out the BOND-20230923
-  token created to pay out prizes from the poker tournament. There seems to have been a problem in the create txn
-  which has led to the underlying token field being null - it is a non nullable field, so this is causing subgraph
-  errors. Oighty is looking into the transactions to work out why this has happened, for now, this workaround will
-  ensure other ERC-20 bond tokens will still show up in the UI.
- */
-
 export const listErc20BondTokens = gql`
   query ListErc20BondTokens($queryKey: String! = "") {
     bondTokens(
       where: {
         type: "fixed-expiration"
         teller_not_in: ["0x007fe7c498a2cf30971ad8f2cbc36bd14ac51156"]
-        id_not: "0x0352114677f0245a481a79079237e59186f276d5"
       }
     ) {
       id
