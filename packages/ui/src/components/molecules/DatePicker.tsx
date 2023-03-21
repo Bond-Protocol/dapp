@@ -28,6 +28,8 @@ export const DatePicker = (props: {
         fromDate={fromDate}
         toDate={toDate}
         onSelect={onSelect}
+        fixedWeeks
+        showOutsideDays
         formatters={{
           formatWeekdayName: (date) => getDayFirstLetter(date),
         }}

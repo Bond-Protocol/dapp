@@ -1,4 +1,3 @@
-//@ts-nocheck
 import {
   InputUnstyled,
   InputUnstyledProps,
@@ -7,6 +6,7 @@ import {
 import { forwardRef, useState } from "react";
 import editIcon from "../../assets/icons/edit-icon.svg";
 import closeIcon from "../../assets/icons/close-icon.svg";
+import { Icon, Input, InputProps } from "..";
 
 export type TokenInput = {
   symbol?: string;
@@ -92,3 +92,43 @@ export const TokenInput = forwardRef(function TokenInput(
     </div>
   );
 });
+
+export const TokenAmountInput = (
+  props: InputProps & { symbol?: string; icon?: string }
+) => {
+  const [value, setValue] = useState(props.value + " " + props.symbol);
+
+  const onBlur = (_e: React.BaseSyntheticEvent) => {
+    let updated = value === "" ? 0 : value;
+    setValue(updated + " " + props.symbol);
+  };
+
+  const onFocus = (_e: React.BaseSyntheticEvent) => {
+    let updated = parseFloat(value);
+    let checked = isNaN(updated) ? "" : updated.toString();
+
+    setValue(checked);
+  };
+
+  const onChange = (e: React.BaseSyntheticEvent) => {
+    e.preventDefault();
+
+    const updated = e.target.value;
+
+    if (!isNaN(updated)) {
+      setValue(updated);
+    }
+  };
+
+  return (
+    <Input
+      {...props}
+      onBlur={onBlur}
+      onFocus={onFocus}
+      onChange={onChange}
+      value={value}
+      label={props.label}
+      startAdornment={<Icon className="pl-2" width={24} src={props.icon} />}
+    />
+  );
+};

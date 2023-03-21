@@ -6,6 +6,11 @@ export default {
   component: ManualVestingTermInput,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
+  args: {
+    onChange: (onChangeArgs) => {
+      console.log({ onChangeargs: onChangeArgs });
+    },
+  },
 } as ComponentMeta<typeof ManualVestingTermInput>;
 
 const Template: ComponentStory<typeof ManualVestingTermInput> = (args) => (

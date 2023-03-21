@@ -24,7 +24,7 @@ export const FlatSelect = (props: FlatSelectProps) => {
   };
 
   return (
-    <div className={`w-full ${props.className}`}>
+    <div className={`flex w-full flex-col justify-end ${props.className}`}>
       {props.label && (
         <p className="font-jakarta mb-1 text-xs font-light">{props.label}</p>
       )}

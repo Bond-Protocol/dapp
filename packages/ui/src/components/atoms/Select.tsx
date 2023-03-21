@@ -44,7 +44,7 @@ export const Select = (props: SelectProps) => {
               "w-full overflow-visible overflow-x-hidden border-x border-b rounded",
           },
           popper: {
-            className: "w-full backdrop-blur-xl",
+            className: "z-10 w-full backdrop-blur-xl",
           },
         }}
       >

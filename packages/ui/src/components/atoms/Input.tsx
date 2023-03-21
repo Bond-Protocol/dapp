@@ -10,19 +10,16 @@ export type InputProps = InputUnstyledProps & {
   subTextClassName?: string;
 };
 
-export const Input = forwardRef(function Input(
-  {
-    label,
-    subText,
-    errorMessage,
-    className = "",
-    rootClassName = "",
-    inputClassName = "",
-    subTextClassName = "",
-    ...props
-  }: InputProps,
-  ref: React.ForwardedRef<HTMLInputElement>
-) {
+export const Input = ({
+  label,
+  subText,
+  errorMessage,
+  className = "",
+  rootClassName = "",
+  inputClassName = "",
+  subTextClassName = "",
+  ...props
+}: InputProps) => {
   return (
     <div className={"text-light-grey w-full" + " " + className}>
       {label && <p className="mb-1 text-xs font-light">{label}</p>}
@@ -30,7 +27,6 @@ export const Input = forwardRef(function Input(
         {...props}
         autoComplete="disabled"
         spellCheck="false"
-        ref={ref}
         componentsProps={{
           root: {
             className: `w-full flex justify-center items-center h-10 my-auto border rounded-lg ${
@@ -58,4 +54,4 @@ export const Input = forwardRef(function Input(
       )}
     </div>
   );
-});
+};

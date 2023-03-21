@@ -1,22 +1,41 @@
 import { SelectModal } from "components/molecules/SelectModal";
 import { SelectVestingDialog } from "components/modals/SelectVestingDialog";
 import { PriceModelPicker } from "components/organisms/PriceModelPicker";
-import { FlatSelect, Input, Switch } from "..";
+import { FlatSelect, Input, Icon, TokenAmountInput } from "..";
+import { vestingOptions } from "utils/options";
+import { dai, olympus } from "./sample-tokens";
 
 export type CreateMarketScreenProps = {
   a?: boolean;
 };
 
-const tokenOptions = [
+const capacityOptions = [
   { label: "SELL", value: 0 },
   { label: "BUY", value: 1 },
 ];
 
+const tokenOptions = [
+  {
+    id: olympus.id,
+    value: olympus.id,
+    image: olympus.image.small,
+    label: olympus.symbol.toUpperCase(),
+  },
+  {
+    id: dai.id,
+    value: dai.id,
+    image: dai.image.small,
+    label: dai.symbol.toUpperCase(),
+  },
+];
+
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
+  const quoteToken = dai;
+  const payoutToken = olympus;
+
   return (
     <div id="cm-root">
       <div id="cm-top-control" className="flex items-center justify-end">
-        <Switch label="Custom" />
         <div className="font-fraktion mr-2 pl-8 text-sm tracking-widest">
           RESET
         </div>
@@ -28,31 +47,44 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               <SelectModal
                 label="Bond Token"
                 ModalContent={SelectVestingDialog}
+                options={tokenOptions}
+                customLabel="View more"
               />
               <SelectModal
                 label="Vesting"
                 title="Custom Vesting"
+                options={vestingOptions}
+                defaultValue="7d"
                 ModalContent={SelectVestingDialog}
               />
             </div>
             <div className="w-1/2 pl-2">
-              <Input className="" label="Get Token" />
+              <SelectModal
+                label="Get Token"
+                ModalContent={SelectVestingDialog}
+                options={tokenOptions}
+                customLabel="View more"
+              />
             </div>
           </div>
           <div className="flex gap-x-4 py-4">
-            <SelectModal
+            <TokenAmountInput
               label="Capacity"
-              className="pr-2"
-              ModalContent={SelectVestingDialog}
+              icon={quoteToken.image.small}
+              value={10}
+              symbol={quoteToken.symbol.toUpperCase()}
             />
             <FlatSelect
-              label="ok "
               className="pl-2"
-              options={tokenOptions}
+              options={capacityOptions}
               onChange={() => {}}
             />
           </div>
-          <PriceModelPicker onModelChange={() => {}} />
+          <PriceModelPicker
+            payoutTokenSymbol={payoutToken.symbol.toUpperCase()}
+            quoteTokenSymbol={quoteToken.symbol.toUpperCase()}
+            onModelChange={() => {}}
+          />
         </div>
         <div id="cm-right-container" className="w-1/2 "></div>
       </div>

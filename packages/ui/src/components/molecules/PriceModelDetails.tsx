@@ -52,7 +52,7 @@ export const PriceModelDetails = ({
 
   return (
     <div
-      className={`flex items-center justify-center bg-white/5 py-4 backdrop-blur-md ${props.className}`}
+      className={`flex h-[160px] items-center justify-center bg-white/5 py-4 backdrop-blur-md ${props.className}`}
     >
       <div className="w-min px-4">
         <option.Image className="stroke-white" />

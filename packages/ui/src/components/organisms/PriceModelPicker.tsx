@@ -13,13 +13,12 @@ import {
 } from "components/molecules/PriceControl";
 
 export type PriceModelPrickerProps = {
-  a?: any;
   onModelChange: (args: {
     type: PriceType;
     oracle: boolean;
     address: string;
   }) => any;
-};
+} & Partial<PriceControlProps>;
 
 const options = [
   {
@@ -77,7 +76,7 @@ export const PriceModelPicker = (props: PriceModelPrickerProps) => {
   }, [type, oracle, address]);
 
   return (
-    <div className="">
+    <div className="w-full">
       <div className="flex items-center justify-between">
         <p className="text-light-grey-400 text-sm">Price Model</p>
         <Switch label="Oracle" onChange={(e) => setOracle(e.target.checked)} />
@@ -98,10 +97,13 @@ export const PriceModelPicker = (props: PriceModelPrickerProps) => {
         onOracleChange={setAddress}
       />
       <div className="flex justify-between gap-x-4 pt-4">
-        {priceControlFields.map((p: any) => {
+        {priceControlFields.map((p: any, i) => {
           return (
             <PriceControl
+              key={i}
               {...p}
+              payoutTokenSymbol={props.payoutTokenSymbol}
+              quoteTokenSymbol={props.quoteTokenSymbol}
               exchangeRate={0.25}
               onRateChange={(rate) => {
                 return { priceModel, [p.property]: rate };

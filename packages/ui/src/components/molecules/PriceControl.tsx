@@ -12,13 +12,12 @@ export type PriceControlProps = {
   onRateChange: (exchangeRate: string | number) => any;
   tooltip?: React.ReactNode;
   percentage?: boolean;
+  className?: string;
 };
 
 export const PriceControl = (props: PriceControlProps) => {
-  const { value, setValue, ...numericInput } = useNumericInput(
-    props.exchangeRate.toString(),
-    props.percentage
-  );
+  const { value, setValue, getAValidPercentage, ...numericInput } =
+    useNumericInput(props.exchangeRate.toString(), props.percentage);
 
   const rateMod = props.percentage ? 0.25 : 0.001;
   const scale = 4;
@@ -30,22 +29,27 @@ export const PriceControl = (props: PriceControlProps) => {
 
   const raiseRate = () => {
     setValue((prev) => {
-      const newRate = (Number(prev) + rateMod).toFixed(scale);
+      let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
+      newRate = props.percentage ? getAValidPercentage(newRate) : newRate;
+
       props.onRateChange && props.onRateChange(newRate);
-      return newRate;
+      return props.percentage ? newRate + "%" : newRate;
     });
   };
 
   const lowerRate = () => {
     setValue((prev) => {
-      const newRate = (Number(prev) - rateMod).toFixed(scale);
+      let newRate = (parseFloat(prev) - rateMod).toFixed(scale);
+      newRate = props.percentage ? getAValidPercentage(newRate) : newRate;
       props.onRateChange && props.onRateChange(newRate);
-      return newRate;
+      return props.percentage ? newRate + "%" : newRate;
     });
   };
 
   return (
-    <div className="flex justify-center bg-white/5 p-4 backdrop-blur-md">
+    <div
+      className={`flex w-full justify-center bg-white/5 p-4 backdrop-blur-md ${props.className}`}
+    >
       <div className="flex items-center justify-center pr-8">
         <Button icon variant="ghost" onClick={lowerRate}>
           <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
@@ -53,7 +57,7 @@ export const PriceControl = (props: PriceControlProps) => {
           </div>
         </Button>
       </div>
-      <div className="text-light-grey-400 flex flex-col items-center justify-center">
+      <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
         <div className="flex text-[14px]">
           {props.topLabel ??
             `${props.payoutTokenSymbol} per ${props.quoteTokenSymbol}`}
@@ -64,7 +68,7 @@ export const PriceControl = (props: PriceControlProps) => {
             {...numericInput}
             value={value}
             onChange={onChange}
-            className="bg-transparent text-center"
+            className="w-min bg-transparent text-center"
           />
         </div>
         <div className="font-fraktion flex font-bold uppercase">

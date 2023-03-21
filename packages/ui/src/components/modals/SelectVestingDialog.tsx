@@ -37,8 +37,15 @@ export const SelectVestingDialog = (props: {
   };
 
   const handleSubmit = (e: React.BaseSyntheticEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     const formattedDate = date && formatDate.short(date);
-    const label = type === "date" ? formattedDate : `${days} days`;
+    const label =
+      type === "date"
+        ? formattedDate
+        : days.includes("days")
+        ? days
+        : `${days} days`;
 
     props.onSubmit({ value: { type, date, days }, label });
 
