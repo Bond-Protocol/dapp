@@ -43,8 +43,8 @@ export default {
       ],
     },
     {
-      name: "Theta CVOL LP",
-      symbol: "T-CVOL-LP",
+      name: "Theta CVI LP",
+      symbol: "T-CVI-LP",
       logoUrl: "https://assets.coingecko.com/coins/images/13875/small/GOVI.png?1612451531",
       priceSources: [
         {
