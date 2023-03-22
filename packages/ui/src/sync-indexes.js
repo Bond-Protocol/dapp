@@ -68,9 +68,4 @@ function createIndexFile(
 }
 
 // Usage: call createIndexFile with the starting directory path, an array of directories to skip, and an array of extensions to include
-createIndexFile(
-  __dirname,
-  ["assets", "stories", ""],
-  [".ts", ".tsx"],
-  [".d.ts"]
-);
+createIndexFile(__dirname, ["assets", "stories"], [".ts", ".tsx"], [".d.ts"]);
