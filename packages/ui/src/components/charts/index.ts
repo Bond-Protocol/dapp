@@ -1,1 +1,2 @@
-export * from "./BondPriceChart";
+export * from './BondPriceChart'
+export * from './BondPriceChartTooltip'

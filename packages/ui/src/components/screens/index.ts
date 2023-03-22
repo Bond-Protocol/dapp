@@ -1,1 +1,1 @@
-export * from "./CreateMarketScreen";
+export * from './CreateMarketScreen'

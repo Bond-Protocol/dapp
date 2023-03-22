@@ -1,1 +1,1 @@
-export * from "./PriceModelPicker";
+export * from './PriceModelPicker'
