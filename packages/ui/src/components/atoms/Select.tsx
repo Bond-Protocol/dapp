@@ -55,7 +55,7 @@ export const Select = (props: SelectProps) => {
             componentsProps={{
               root: {
                 className:
-                  "font-jakarta cursor-pointer flex my-auto py-2 hover:bg-opacity-90",
+                  "font-jakarta cursor-pointer flex my-auto py-2 hover:bg-opacity-90 hover:bg-light-primary/20",
               },
             }}
           >

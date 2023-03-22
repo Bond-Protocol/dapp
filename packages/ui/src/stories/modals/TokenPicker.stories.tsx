@@ -3,6 +3,7 @@ import { Modal } from "../../components/molecules/Modal";
 import { TokenPickerDialog } from "../../components/modals/TokenPickerDialog";
 
 import { ModalDecorator } from "../decorators";
+import { list as tokenList } from "utils/sample-tokens";
 
 export default {
   title: "Components/Modals/TokenPicker",
@@ -17,7 +18,11 @@ const Template: ComponentStory<typeof TokenPickerDialog> = (args) => (
 export const Primary = Template.bind({});
 
 Primary.args = {
-  onSubmit: (onSubmitArgs: any) => {
-    console.log({ onSubmitArgs });
-  },
+  tokens: [
+    ...tokenList,
+    ...tokenList,
+    ...tokenList,
+    ...tokenList,
+    ...tokenList,
+  ],
 };

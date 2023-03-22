@@ -22,7 +22,7 @@ Primary.args = {};
 
 export const Warning = Template.bind({});
 Warning.args = {
-  defaultValue: "420",
+  defaultValue: "80",
 };
 
 export const Error = Template.bind({});

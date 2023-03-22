@@ -7,6 +7,7 @@ import { forwardRef, useState } from "react";
 import editIcon from "../../assets/icons/edit-icon.svg";
 import closeIcon from "../../assets/icons/close-icon.svg";
 import { Icon, Input, InputProps } from "..";
+import { longFormatter } from "utils";
 
 export type TokenInput = {
   symbol?: string;
@@ -99,12 +100,13 @@ export const TokenAmountInput = (
   const [value, setValue] = useState(props.value + " " + props.symbol);
 
   const onBlur = (_e: React.BaseSyntheticEvent) => {
-    let updated = value === "" ? 0 : value;
-    setValue(updated + " " + props.symbol);
+    let updated = value === "" ? "0" : value;
+    updated = longFormatter.format(Number(updated));
+    setValue(`${updated} ${props.symbol}`);
   };
 
   const onFocus = (_e: React.BaseSyntheticEvent) => {
-    let updated = parseFloat(value);
+    let updated = Number(value.replace(/[^0-9.-]+/g, ""));
     let checked = isNaN(updated) ? "" : updated.toString();
 
     setValue(checked);

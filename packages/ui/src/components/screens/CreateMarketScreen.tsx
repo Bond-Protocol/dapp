@@ -3,7 +3,9 @@ import { SelectVestingDialog } from "components/modals/SelectVestingDialog";
 import { PriceModelPicker } from "components/organisms/PriceModelPicker";
 import { FlatSelect, Input, Icon, TokenAmountInput } from "..";
 import { vestingOptions } from "utils/options";
-import { dai, olympus } from "./sample-tokens";
+import { dai, ohm, list as tokenList } from "utils/sample-tokens";
+
+import { coingeckoResponseToSelectOption } from "utils/tokens";
 
 export type CreateMarketScreenProps = {
   a?: boolean;
@@ -14,24 +16,11 @@ const capacityOptions = [
   { label: "BUY", value: 1 },
 ];
 
-const tokenOptions = [
-  {
-    id: olympus.id,
-    value: olympus.id,
-    image: olympus.image.small,
-    label: olympus.symbol.toUpperCase(),
-  },
-  {
-    id: dai.id,
-    value: dai.id,
-    image: dai.image.small,
-    label: dai.symbol.toUpperCase(),
-  },
-];
+const tokenOptions = tokenList.map(coingeckoResponseToSelectOption);
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const quoteToken = dai;
-  const payoutToken = olympus;
+  const payoutToken = ohm;
 
   return (
     <div id="cm-root">

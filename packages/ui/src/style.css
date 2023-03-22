@@ -8,6 +8,20 @@
   body {
     @apply font-jakarta text-white;
   }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    @apply rounded-full;
+  }
+
+  ::-webkit-scrollbar-track {
+    border: 1px solid #40749b;
+    @apply rounded-full;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #40749b;
+    @apply rounded-full;
+  }
 }
 
 @layer components {
