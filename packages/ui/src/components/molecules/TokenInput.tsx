@@ -97,15 +97,18 @@ export const TokenInput = forwardRef(function TokenInput(
 export const TokenAmountInput = (
   props: InputProps & { symbol?: string; icon?: string }
 ) => {
-  const [value, setValue] = useState(props.value + " " + props.symbol);
+  const [value, setValue] = useState(props.value as string);
+  const [showTokenSymbol, setShowTokenSymbol] = useState(true);
 
   const onBlur = (_e: React.BaseSyntheticEvent) => {
     let updated = value === "" ? "0" : value;
     updated = longFormatter.format(Number(updated));
-    setValue(`${updated} ${props.symbol}`);
+    setValue(updated);
+    setShowTokenSymbol(true);
   };
 
   const onFocus = (_e: React.BaseSyntheticEvent) => {
+    setShowTokenSymbol(false);
     let updated = Number(value.replace(/[^0-9.-]+/g, ""));
     let checked = isNaN(updated) ? "" : updated.toString();
 
@@ -128,9 +131,11 @@ export const TokenAmountInput = (
       onBlur={onBlur}
       onFocus={onFocus}
       onChange={onChange}
-      value={value}
+      value={showTokenSymbol ? `${value} ${props.symbol}` : value}
       label={props.label}
-      startAdornment={<Icon className="pl-2" width={24} src={props.icon} />}
+      startAdornment={
+        props.icon && <Icon className="pl-2" width={24} src={props.icon} />
+      }
     />
   );
 };

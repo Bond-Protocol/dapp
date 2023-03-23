@@ -21,7 +21,7 @@ export const Input = ({
 }: InputProps) => {
   return (
     <div className={"text-light-grey w-full" + " " + className}>
-      {label && <p className="mb-1 text-xs font-light">{label}</p>}
+      {label && <p className="mb-1 text-sm font-light">{label}</p>}
       <InputUnstyled
         {...props}
         autoComplete="disabled"

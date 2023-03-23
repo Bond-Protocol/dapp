@@ -1,9 +1,6 @@
 import { SearchBar } from "components/molecules/SearchBar";
 import { useEffect, useState } from "react";
-import { list as tokenList } from "utils/sample-tokens";
 import { Label } from "..";
-
-const l = [...tokenList, ...tokenList, ...tokenList, ...tokenList];
 
 const includesText = (field: string, target: string) => {
   return field.toLowerCase().includes(target.toLowerCase());
@@ -17,9 +14,9 @@ const includesAddress = (token: any, target: string) => {
 
 const fields = ["name", "symbol"];
 
-export const TokenPickerDialog = (props: {
-  onChange: Function;
-  onCancel: Function;
+export const SelectTokenDialog = (props: {
+  onSubmit: Function;
+  onClose: Function;
   tokens: Record<string, any>;
 }) => {
   const [filter, setFilter] = useState("");
@@ -54,7 +51,12 @@ export const TokenPickerDialog = (props: {
             icon={token.image.small}
             onClick={(e) => {
               e.preventDefault();
-              props.onChange(token);
+              props.onSubmit({
+                value: token,
+                label: token.symbol.toUpperCase(),
+                icon: token.image.small,
+              });
+              props.onClose(e);
             }}
           />
         ))}

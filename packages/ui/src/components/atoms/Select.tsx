@@ -28,7 +28,7 @@ export const Select = (props: SelectProps) => {
   }, [selected]);
 
   return (
-    <div className="relative mt-1 max-h-20 w-full">
+    <div className="relative w-full">
       <SelectUnstyled
         {...props}
         value={props.value || selected}
@@ -36,8 +36,7 @@ export const Select = (props: SelectProps) => {
         onChange={onChange}
         componentsProps={{
           root: {
-            className:
-              "h-10 max-h-24 w-full border rounded-lg color-white flex py-2",
+            className: "h-10 w-full border rounded-lg color-white flex py-2",
           },
           listbox: {
             className:

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { InfoLabel } from "../../components/atoms/InfoLabel";
 
@@ -38,7 +37,6 @@ export const Small = Template.bind({});
 Small.args = {
   label: "Current Ohm Price",
   children: "10.25$",
-  tooltip: null,
   small: true,
   reverse: true,
 };

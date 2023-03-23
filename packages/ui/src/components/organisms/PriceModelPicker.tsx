@@ -11,6 +11,7 @@ import {
   PriceControl,
   PriceControlProps,
 } from "components/molecules/PriceControl";
+import { ReactComponent as AngleIcon } from "../../assets/icons/angle.svg";
 
 export type PriceModelPrickerProps = {
   onModelChange: (args: {
@@ -75,6 +76,8 @@ export const PriceModelPicker = (props: PriceModelPrickerProps) => {
     props.onModelChange({ type, oracle, address });
   }, [type, oracle, address]);
 
+  const shouldRender = props.quoteTokenSymbol && props.payoutTokenSymbol;
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between">
@@ -97,20 +100,31 @@ export const PriceModelPicker = (props: PriceModelPrickerProps) => {
         onOracleChange={setAddress}
       />
       <div className="flex justify-between gap-x-4 pt-4">
-        {priceControlFields.map((p: any, i) => {
-          return (
-            <PriceControl
-              key={i}
-              {...p}
-              payoutTokenSymbol={props.payoutTokenSymbol}
-              quoteTokenSymbol={props.quoteTokenSymbol}
-              exchangeRate={0.25}
-              onRateChange={(rate) => {
-                return { priceModel, [p.property]: rate };
-              }}
-            />
-          );
-        })}
+        {!shouldRender ? (
+          <div
+            className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md`}
+          >
+            <div className="text-light-grey flex items-center justify-center py-4 text-sm">
+              <AngleIcon className="fill-light-grey text-light-grey h-12 w-12 pr-2" />
+              Select tokens to <br /> view price controls{" "}
+            </div>
+          </div>
+        ) : (
+          priceControlFields.map((p: any, i) => {
+            return (
+              <PriceControl
+                key={i}
+                {...p}
+                payoutTokenSymbol={props.payoutTokenSymbol}
+                quoteTokenSymbol={props.quoteTokenSymbol}
+                exchangeRate={0.25}
+                onRateChange={(rate) => {
+                  return { priceModel, [p.property]: rate };
+                }}
+              />
+            );
+          })
+        )}
       </div>
     </div>
   );

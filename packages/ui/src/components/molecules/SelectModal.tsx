@@ -3,6 +3,11 @@ import { Select, Modal, ModalProps, SelectProps } from "..";
 import editIcon from "../../assets/icons/edit-icon.svg";
 import userIcon from "../../assets/icons/user.svg";
 
+interface SelectModalHandlers {
+  onSubmit: Function;
+  onClose: (event: React.BaseSyntheticEvent) => void;
+}
+
 type SelectModalProps = React.PropsWithChildren<{
   className?: string;
   id?: string;
@@ -10,10 +15,7 @@ type SelectModalProps = React.PropsWithChildren<{
   onSubmit?: (value: any) => void;
   customLabel?: string;
   customIcon?: string;
-  ModalContent: (props: {
-    onSubmit: Function;
-    onClose: (event: React.BaseSyntheticEvent) => void;
-  }) => JSX.Element;
+  ModalContent: <T extends SelectModalHandlers>(props: T) => JSX.Element;
 }> &
   Partial<ModalProps> &
   Partial<SelectProps>;
@@ -68,7 +70,9 @@ export const SelectModal = ({
     <>
       <div className="w-full">
         {props.label && (
-          <div className="text-light-grey-400 mb-1 text-sm">{props.label}</div>
+          <div className="text-light-grey-400 mb-1 text-sm font-light">
+            {props.label}
+          </div>
         )}
         <Select
           options={customOptions}

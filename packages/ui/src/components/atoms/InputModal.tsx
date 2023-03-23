@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Modal, ModalProps } from "..";
+import {
+  Icon,
+  Input,
+  Modal,
+  ModalProps,
+  TokenAmountInput,
+  TokenLogo,
+} from "..";
 import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-icon.svg";
 
 type InputModalProps = React.PropsWithChildren<{
@@ -16,9 +23,12 @@ type InputModalProps = React.PropsWithChildren<{
 
 export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
   const [open, setOpen] = useState(false);
+  const [value, setValue] = useState();
+  const [customContent, setCustomContent] = useState({ label: "", icon: "" });
 
   const handleSubmit = (value: any) => {
     props.onSubmit && props.onSubmit(value);
+    setCustomContent({ label: value.label, icon: value.icon });
   };
 
   const handleClose = (e: React.BaseSyntheticEvent) => {
@@ -28,27 +38,29 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
   };
 
   return (
-    <>
-      <div className="w-full">
-        {props.label && (
-          <div className="text-light-grey-400 mb-1 text-sm">{props.label}</div>
-        )}
-        <div
-          className={`hover:border-light-secondary flex h-10 w-full cursor-pointer items-center justify-between rounded-lg border py-1 px-3 ${props.className}`}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setOpen(true);
-          }}
-        >
-          {props.children}
-          <ArrowDownIcon className="rotate-180" />
-        </div>
-      </div>
+    <div className="flex w-full flex-col justify-end">
+      <Input
+        label={props.label}
+        inputClassName="cursor-pointer"
+        value={customContent.label}
+        startAdornment={
+          customContent.icon && (
+            <Icon width={32} className="pl-2" src={customContent.icon} />
+          )
+        }
+        endAdornment={
+          <ArrowDownIcon className="mr-3 rotate-180 fill-white text-white" />
+        }
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setOpen(true);
+        }}
+      />
 
       <Modal open={open} onClickClose={handleClose} title={props.title}>
         <ModalContent onSubmit={handleSubmit} onClose={handleClose} />
       </Modal>
-    </>
+    </div>
   );
 };

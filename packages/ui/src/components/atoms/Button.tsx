@@ -52,7 +52,7 @@ const styles = {
   },
 };
 
-const Button = forwardRef(function Button(
+export const Button = forwardRef(function Button(
   { thin, icon, ...props }: ButtonProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
@@ -77,5 +77,3 @@ const Button = forwardRef(function Button(
     />
   );
 });
-
-export default Button;
