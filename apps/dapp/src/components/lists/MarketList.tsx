@@ -30,10 +30,11 @@ export const MarketList: FC<MarketListProps> = ({
 
   const markets = props.markets || allMarkets;
 
-  const filteredMarkets = Array.from(markets.values()).filter((m) =>
-    issuer ? getProtocol(m.owner)?.id === issuer : true
-  );
+  const filteredMarkets = Array.from(markets.values())
+    .filter((m) => (issuer ? getProtocol(m.owner)?.id === issuer : true))
+    .sort((a, b) => b.discount - a.discount);
 
+  console.log({ filteredMarkets });
   const tableMarkets = useMemo(
     () =>
       filteredMarkets
