@@ -97,6 +97,7 @@ export function getMarketData(
     return {
       id: marketId.toString(),
       chainId: chainId,
+      name: "PLACEHOLDER", // TODO: Use auctioneer name
       auctioneer: auctioneer,
       teller: teller,
       owner: marketInfo.owner,

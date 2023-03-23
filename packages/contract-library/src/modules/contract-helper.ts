@@ -7,7 +7,16 @@ import {
   Auctioneer,
   Auctioneer__factory,
   Authority,
-  Authority__factory,
+  Authority__factory, BondFixedExpCDA,
+  BondFixedExpCDA__factory, BondFixedExpFPA,
+  BondFixedExpFPA__factory, BondFixedExpOFDA,
+  BondFixedExpOFDA__factory, BondFixedExpOSDA,
+  BondFixedExpOSDA__factory, BondFixedTermCDA,
+  BondFixedTermCDA__factory, BondFixedTermFPA,
+  BondFixedTermFPA__factory, BondFixedTermOFDA,
+  BondFixedTermOFDA__factory,
+  BondFixedTermOSDA,
+  BondFixedTermOSDA__factory,
   BondTeller,
   BondTeller__factory,
   FixedExpirationTeller,
@@ -83,8 +92,9 @@ export function getAuctioneerForCreate(
   providerOrSigner: Signer | Provider,
   bondType: BOND_TYPE,
   chainId: string,
-): Auctioneer {
-  return Auctioneer__factory.connect(
+): BondFixedExpCDA | BondFixedExpFPA | BondFixedExpOFDA | BondFixedExpOSDA | BondFixedTermCDA | BondFixedTermFPA | BondFixedTermOFDA | BondFixedTermOSDA {
+  const factory = getAuctioneerFactoryForType(bondType);
+  return factory.connect(
     getAddressesForType(chainId, bondType).auctioneer,
     providerOrSigner,
   );
@@ -98,4 +108,62 @@ export async function getAuctioneerFromAggregator(
   const aggregator = getAggregator(providerOrSigner, chainId);
   const auctioneerAddress = await aggregator.getAuctioneer(marketId, {});
   return Auctioneer__factory.connect(auctioneerAddress, providerOrSigner);
+}
+
+export function getAuctioneerFactoryForType(bondType: BOND_TYPE) {
+  switch (bondType) {
+    case BOND_TYPE.FIXED_EXPIRY_SDA:
+      return BondFixedExpCDA__factory;
+    case BOND_TYPE.FIXED_EXPIRY_FPA:
+      return BondFixedExpFPA__factory;
+    case BOND_TYPE.FIXED_EXPIRY_OFDA:
+      return BondFixedExpOFDA__factory
+    case BOND_TYPE.FIXED_EXPIRY_OSDA:
+      return BondFixedExpOSDA__factory;
+    case BOND_TYPE.FIXED_TERM_SDA:
+      return BondFixedTermCDA__factory
+    case BOND_TYPE.FIXED_TERM_FPA:
+      return BondFixedTermFPA__factory;
+    case BOND_TYPE.FIXED_TERM_OFDA:
+      return BondFixedTermOFDA__factory
+    case BOND_TYPE.FIXED_TERM_OSDA:
+      return BondFixedTermOSDA__factory;
+  }
+}
+
+export function getAuctioneerFactoryForName(auctioneerName: string, auctioneerAddress: string, provider: Provider) {
+  let factory;
+  switch (auctioneerName) {
+    case "BondFixedExpCDA":
+      factory = BondFixedExpCDA__factory;
+      break;
+    case "BondFixedExpFPA":
+      factory = BondFixedExpFPA__factory;
+      break;
+    case "BondFixedExpOFDA":
+      factory = BondFixedExpOFDA__factory
+      break;
+    case "BondFixedExpOSDA":
+      factory = BondFixedExpOSDA__factory;
+      break;
+    case "BondFixedTermCDA":
+      factory = BondFixedTermCDA__factory
+      break;
+    case "BondFixedTermFPA":
+      factory = BondFixedTermFPA__factory;
+      break;
+    case "BondFixedTermOFDA":
+      factory = BondFixedTermOFDA__factory
+      break;
+    case "BondFixedTermOSDA":
+      factory = BondFixedTermOSDA__factory;
+      break;
+    default:
+      throw Error("Auctioneer Factory Not Found for " + auctioneerName + " " + auctioneerAddress);
+  }
+
+  return factory.connect(
+    auctioneerAddress,
+    provider,
+  );
 }

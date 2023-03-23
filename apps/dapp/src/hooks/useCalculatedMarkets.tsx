@@ -67,6 +67,7 @@ export function useCalculatedMarkets() {
         {
           id: market.id,
           chainId: market.chainId,
+          name: market.name,
           auctioneer: market.auctioneer,
           teller: market.teller,
           owner: market.owner,
@@ -105,6 +106,11 @@ export function useCalculatedMarkets() {
       )
       .then((result: CalculatedMarket) => result)
       .catch((e) => {
+        console.log({
+          id: market.id,
+          auctioneer: market.auctioneer,
+          market
+        });
         console.log("catch", e);
       });
   };

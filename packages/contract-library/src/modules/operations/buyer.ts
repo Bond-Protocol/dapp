@@ -9,7 +9,7 @@ import {
 } from 'ethers';
 import { Provider } from '@ethersproject/providers';
 import {
-  BOND_TYPE,
+  BOND_TYPE, getAuctioneerFactoryForName, getAuctioneerFactoryForType,
   getBaseBondTeller,
   getTellerContract,
 } from '../contract-helper';
@@ -252,10 +252,8 @@ export async function calcMarket(
     creationDate: '',
     callbackAddress: market.callbackAddress,
   };
-  const auctioneerContract = Auctioneer__factory.connect(
-    market.auctioneer,
-    provider,
-  );
+  const auctioneerContract = getAuctioneerFactoryForName(market.name, market.auctioneer, provider);
+
   const payoutTokenContract = IERC20__factory.connect(
     market.payoutToken.address,
     provider,
@@ -268,7 +266,6 @@ export async function calcMarket(
     maxAmountAccepted,
     marketInfo,
     isLive,
-    markets,
     ownerPayoutBalance,
     ownerPayoutAllowance,
   ] = await Promise.all([
@@ -281,13 +278,14 @@ export async function calcMarket(
     ),
     auctioneerContract.getMarketInfoForPurchase(calculatedMarket.marketId),
     auctioneerContract.isLive(calculatedMarket.marketId),
-    auctioneerContract.markets(calculatedMarket.marketId),
     payoutTokenContract.balanceOf(calculatedMarket.owner),
     payoutTokenContract.allowance(
       calculatedMarket.owner,
       calculatedMarket.teller,
     ),
   ]);
+
+  const markets: any = auctioneerContract.markets(calculatedMarket.marketId);
 
   calculatedMarket.isLive = isLive;
 

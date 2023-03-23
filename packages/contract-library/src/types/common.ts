@@ -54,6 +54,7 @@ export interface BalancerWeightedPoolToken extends Token {
 export interface PrecalculatedMarket {
   id: string;
   chainId: string;
+  name: string;
   auctioneer: string;
   teller: string;
   owner: string;
