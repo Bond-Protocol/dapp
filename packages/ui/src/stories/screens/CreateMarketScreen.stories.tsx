@@ -13,4 +13,6 @@ const Template: ComponentStory<typeof CreateMarketScreen> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  getExchangeRate: (t, tt) => 0.25,
+};

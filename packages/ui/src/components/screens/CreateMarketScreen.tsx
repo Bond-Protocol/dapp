@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { SelectModal } from "components/molecules/SelectModal";
 import { SelectVestingDialog } from "components/modals/SelectVestingDialog";
 import { PriceModelPicker } from "components/organisms/PriceModelPicker";
@@ -9,14 +10,23 @@ import {
   InfoLabel,
 } from "..";
 import { vestingOptions } from "utils/options";
-import { dai, ohm, list as tokenList } from "utils/sample-tokens";
+import { list as tokenList } from "utils/sample-tokens";
 
-import { coingeckoResponseToSelectOption } from "utils/tokens";
-import { useState } from "react";
 import { PlaceholderChart } from "components/charts/PlaceholderChar";
+import {
+  useCreateMarket,
+  Action as Action,
+} from "../../reducers/create-market";
+
+type Token = {
+  name: string;
+  symbol: string;
+  icon: string;
+};
 
 export type CreateMarketScreenProps = {
   a?: boolean;
+  getExchangeRate: (quote: Token, payout: Token) => number;
 };
 
 const capacityOptions = [
@@ -29,25 +39,24 @@ const lengthOptions = [
   { label: "10 Days", value: "10d" },
 ];
 
-const emptyToken = {
-  name: "",
-  symbol: "",
-  image: {
-    small: "",
-  },
-};
-
-const tokenOptions = tokenList.map(coingeckoResponseToSelectOption);
-
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
-  const [quoteToken, setQuoteToken] = useState(emptyToken);
-  const [payoutToken, setPayoutToken] = useState(emptyToken);
-  const [isCapacityInQuoteToken, setIsCapacityInQuoteToken] = useState(false);
-  const [capacity, setCapacity] = useState("0");
+  const [state, dispatch] = useCreateMarket((state) => {
+    return { ...state, startDate: Date.now() };
+  });
 
-  const capacityToken = isCapacityInQuoteToken ? quoteToken : payoutToken;
+  const [marketExchangeRate, setMarketExchangeRate] = useState(0);
+  console.log({ marketExchangeRate });
 
-  console.log({ quoteToken });
+  const totalBonds = 100;
+  const maxAmountInSingleTx = 42;
+
+  useEffect(() => {
+    const rate = props.getExchangeRate(state.quoteToken, state.payoutToken);
+    setMarketExchangeRate(rate);
+  }, [state.quoteToken, state.payoutToken]);
+
+  const capacityToken =
+    state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
 
   return (
     <div id="cm-root">
@@ -63,10 +72,12 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               <InputModal
                 label="Bond Token"
                 title="Select token"
-                onSubmit={({ value }) => setPayoutToken(value)}
                 ModalContent={(props) => (
                   <SelectTokenDialog {...props} tokens={tokenList} />
                 )}
+                onSubmit={({ value }) =>
+                  dispatch({ type: Action.UPDATE_PAYOUT_TOKEN, value })
+                }
               />
               <SelectModal
                 label="Vesting"
@@ -74,38 +85,51 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 options={vestingOptions}
                 defaultValue="7d"
                 ModalContent={SelectVestingDialog}
+                onSubmit={({ value }) =>
+                  dispatch({ type: Action.UPDATE_VESTING, value })
+                }
               />
             </div>
             <div className="w-1/2 pl-2">
               <InputModal
                 label="Get Token"
                 title="Select token"
-                onSubmit={({ value }) => setQuoteToken(value)}
                 ModalContent={(props) => (
                   <SelectTokenDialog {...props} tokens={tokenList} />
                 )}
+                onSubmit={({ value }) =>
+                  dispatch({ type: Action.UPDATE_QUOTE_TOKEN, value })
+                }
               />
             </div>
           </div>
           <div className="flex gap-x-4 py-4">
             <TokenAmountInput
               label="Capacity"
-              value={capacity}
-              icon={capacityToken.image.small ?? null}
-              symbol={capacityToken.symbol.toUpperCase()}
+              value={state.capacity}
+              icon={capacityToken.icon}
+              symbol={capacityToken.symbol}
+              onChange={(value) =>
+                dispatch({ type: Action.UPDATE_CAPACITY, value })
+              }
             />
             <FlatSelect
-              className="pl-2"
               options={capacityOptions}
-              onChange={(opts) => {
-                setIsCapacityInQuoteToken(opts === "quote");
-              }}
+              onChange={(value) =>
+                dispatch({ type: Action.UPDATE_CAPACITY_TYPE, value })
+              }
             />
           </div>
           <PriceModelPicker
-            payoutTokenSymbol={payoutToken.symbol.toUpperCase()}
-            quoteTokenSymbol={quoteToken.symbol.toUpperCase()}
-            onModelChange={() => {}}
+            payoutTokenSymbol={state.payoutToken.symbol}
+            quoteTokenSymbol={state.quoteToken.symbol}
+            exchangeRate={marketExchangeRate}
+            onChange={(value) =>
+              dispatch({ type: Action.UPDATE_PRICE_MODEL, value })
+            }
+            onRateChange={(value) => {
+              dispatch({ type: Action.UPDATE_PRICE_RATES, value });
+            }}
           />
         </div>
         <div
@@ -119,6 +143,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <InputModal
               label="Market Start Date"
               title="Select start date"
+              defaultValue={{ value: state.startDate, label: "Today" }}
               ModalContent={SelectVestingDialog}
             />
             <SelectModal
@@ -132,15 +157,15 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           <div className="mt-4 flex gap-x-4">
             <InfoLabel
               tooltip={`Maximum amount of ${
-                capacityToken.symbol?.toUpperCase() || "the selected asset"
+                capacityToken?.symbol || "the selected asset"
               } that can be purchased in a single transaction`}
               label={"Max Bond Size"}
               reverse
             >
-              100 {capacityToken?.symbol.toUpperCase()}
+              {maxAmountInSingleTx} {capacityToken?.symbol}
             </InfoLabel>
             <InfoLabel label={"Total Bonds Available"} reverse>
-              420
+              {totalBonds}
             </InfoLabel>
           </div>
         </div>

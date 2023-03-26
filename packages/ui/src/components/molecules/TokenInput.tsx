@@ -110,7 +110,8 @@ export const TokenAmountInput = (
   const onFocus = (_e: React.BaseSyntheticEvent) => {
     setShowTokenSymbol(false);
     let updated = Number(value.replace(/[^0-9.-]+/g, ""));
-    let checked = isNaN(updated) ? "" : updated.toString();
+    let checked = isNaN(updated) || updated === 0 ? "" : updated.toString();
+    console.log({ updated, checked });
 
     setValue(checked);
   };
@@ -121,6 +122,7 @@ export const TokenAmountInput = (
     const updated = e.target.value;
 
     if (!isNaN(updated)) {
+      props.onChange && props.onChange(updated);
       setValue(updated);
     }
   };

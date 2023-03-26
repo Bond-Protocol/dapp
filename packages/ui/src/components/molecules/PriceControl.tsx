@@ -9,7 +9,7 @@ export type PriceControlProps = {
   quoteTokenSymbol?: string;
   payoutTokenSymbol?: string;
   exchangeRate: number;
-  onRateChange: (exchangeRate: string | number) => any;
+  onRateChange: (exchangeRate: any) => any;
   tooltip?: React.ReactNode;
   percentage?: boolean;
   className?: string;
@@ -19,6 +19,7 @@ export const PriceControl = (props: PriceControlProps) => {
   const { value, setValue, getAValidPercentage, ...numericInput } =
     useNumericInput(props.exchangeRate.toString(), props.percentage);
 
+  console.log({ value, props });
   const rateMod = props.percentage ? 0.25 : 0.001;
   const scale = 4;
 

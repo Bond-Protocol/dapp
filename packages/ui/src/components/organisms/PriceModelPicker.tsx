@@ -13,8 +13,8 @@ import {
 } from "components/molecules/PriceControl";
 import { ReactComponent as AngleIcon } from "../../assets/icons/angle.svg";
 
-export type PriceModelPrickerProps = {
-  onModelChange: (args: {
+export type PriceModelPickerProps = {
+  onChange: (args: {
     type: PriceType;
     oracle: boolean;
     address: string;
@@ -63,7 +63,7 @@ const priceControlConfig: Record<
   ],
 };
 
-export const PriceModelPicker = (props: PriceModelPrickerProps) => {
+export const PriceModelPicker = (props: PriceModelPickerProps) => {
   const [type, setType] = useState<PriceType>("dynamic");
   const [oracle, setOracle] = useState(false);
   const [address, setAddress] = useState("");
@@ -73,7 +73,7 @@ export const PriceModelPicker = (props: PriceModelPrickerProps) => {
   const priceControlFields = priceControlConfig[priceModel];
 
   useEffect(() => {
-    props.onModelChange({ type, oracle, address });
+    props.onChange({ type, oracle, address });
   }, [type, oracle, address]);
 
   const shouldRender = props.quoteTokenSymbol && props.payoutTokenSymbol;
@@ -88,9 +88,7 @@ export const PriceModelPicker = (props: PriceModelPrickerProps) => {
       <FlatSelect
         className="mt-2"
         options={options}
-        onChange={(e: PriceType) => {
-          setType(e);
-        }}
+        onChange={(e: PriceType) => setType(e)}
       />
 
       <PriceModelDetails
@@ -117,8 +115,10 @@ export const PriceModelPicker = (props: PriceModelPrickerProps) => {
                 {...p}
                 payoutTokenSymbol={props.payoutTokenSymbol}
                 quoteTokenSymbol={props.quoteTokenSymbol}
-                exchangeRate={0.25}
+                exchangeRate={props.exchangeRate}
                 onRateChange={(rate) => {
+                  props.onRateChange &&
+                    props.onRateChange({ priceModel, [p.property]: rate });
                   return { priceModel, [p.property]: rate };
                 }}
               />

@@ -7,7 +7,7 @@ const includesText = (field: string, target: string) => {
 };
 
 const includesAddress = (token: any, target: string) => {
-  return Object.values(token?.platforms).some(
+  return Object.values(token?.addresses).some(
     (address: any) => address.toLowerCase() === target.toLowerCase()
   );
 };
@@ -46,17 +46,17 @@ export const SelectTokenDialog = (props: {
             key={i}
             className="hover:bg-light-primary/20 cursor-pointer px-3"
             subtextClassName="text-sans text-light-primary"
-            value={token.symbol.toUpperCase()}
+            value={token.symbol}
             subtext={token.name}
-            icon={token.image.small}
+            icon={token.icon}
             onClick={(e) => {
               e.preventDefault();
+              props.onClose(e);
               props.onSubmit({
                 value: token,
-                label: token.symbol.toUpperCase(),
-                icon: token.image.small,
+                label: token.symbol,
+                icon: token.icon,
               });
-              props.onClose(e);
             }}
           />
         ))}

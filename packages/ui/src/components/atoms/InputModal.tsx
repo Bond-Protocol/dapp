@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  Icon,
-  Input,
-  Modal,
-  ModalProps,
-  TokenAmountInput,
-  TokenLogo,
-} from "..";
+import { Icon, Input, Modal, ModalProps } from "..";
 import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-icon.svg";
 
 type InputModalProps = React.PropsWithChildren<{
@@ -18,13 +11,17 @@ type InputModalProps = React.PropsWithChildren<{
     onSubmit: Function;
     onClose: (event: React.BaseSyntheticEvent) => void;
   }) => JSX.Element;
+  defaultValue?: any;
 }> &
   Partial<ModalProps>;
 
 export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState();
-  const [customContent, setCustomContent] = useState({ label: "", icon: "" });
+
+  const [customContent, setCustomContent] = useState({
+    label: props.defaultValue?.label,
+    icon: props.defaultValue?.icon,
+  });
 
   const handleSubmit = (value: any) => {
     props.onSubmit && props.onSubmit(value);
@@ -45,7 +42,11 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
         value={customContent.label}
         startAdornment={
           customContent.icon && (
-            <Icon width={32} className="pl-2" src={customContent.icon} />
+            <Icon
+              width={24}
+              className="fill-white pl-2 text-white"
+              src={customContent.icon}
+            />
           )
         }
         endAdornment={

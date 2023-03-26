@@ -725,4 +725,14 @@ const gmx = {
   last_updated: "2023-03-22T09:52:55.604Z",
 };
 
-export const list = [dai, ohm, eth, crv, gmx];
+const toProtocolTokens = (token) => {
+  return {
+    name: token.name,
+    symbol: token.symbol.toUpperCase(),
+    icon: token.image.small,
+    addresses: token.platforms,
+    links: token.links,
+  };
+};
+
+export const list = [dai, ohm, eth, crv, gmx].map(toProtocolTokens);
