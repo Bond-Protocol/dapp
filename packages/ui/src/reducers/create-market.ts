@@ -2,6 +2,7 @@ import { useReducer } from "react";
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
+
 export enum Action {
   UPDATE_QUOTE_TOKEN = "update_bond_token",
   UPDATE_PAYOUT_TOKEN = "update_payout_token",
@@ -12,10 +13,12 @@ export enum Action {
   UPDATE_PRICE_RATES = "update_price_rates",
 }
 
-type Token = Object & {
+export type Token = {
   name: string;
   symbol: string;
   icon: string;
+  price: number;
+  addresses?: { [key: string | number]: string | string[] };
 };
 
 type CapacityType = "quote" | "payout";
@@ -31,13 +34,14 @@ export type CreateMarketState = {
   priceModel: PriceModel;
   priceModels: Record<PriceModel, any>;
   oracleAddress?: string;
-  startDate?: Date;
+  startDate?: Date | number;
 };
 
 const emptyToken = {
   name: "",
   symbol: "",
   icon: "",
+  price: 0,
 };
 
 const initialState: CreateMarketState = {
@@ -62,33 +66,33 @@ export function reducer(
   state: CreateMarketState,
   action: { type: Action; [key: string]: any }
 ) {
-  const { type, ...args } = action;
+  const { type, value, ...args } = action;
 
   switch (type) {
     case Action.UPDATE_QUOTE_TOKEN: {
-      return { ...state, quoteToken: args.value };
+      return { ...state, quoteToken: value };
     }
 
     case Action.UPDATE_PAYOUT_TOKEN: {
-      return { ...state, payoutToken: args.value };
+      return { ...state, payoutToken: value };
     }
 
     case Action.UPDATE_CAPACITY: {
       return {
         ...state,
-        capacity: args.value,
+        capacity: value,
       };
     }
 
     case Action.UPDATE_CAPACITY_TYPE: {
       return {
         ...state,
-        capacityType: args.value,
+        capacityType: value,
       };
     }
 
     case Action.UPDATE_VESTING: {
-      return { ...state, vesting: args.value };
+      return { ...state, vesting: value };
     }
 
     case Action.UPDATE_PRICE_MODEL: {
@@ -101,7 +105,7 @@ export function reducer(
     }
 
     case Action.UPDATE_PRICE_RATES: {
-      const { priceModel, ...rates } = args.value;
+      const { priceModel, ...rates } = value;
 
       return {
         ...state,

@@ -1,3 +1,9 @@
+import {
+  getAddressesByProtocol,
+  TOKENS,
+  aphexTokens,
+} from "@bond-protocol/bond-library";
+
 export const dai = {
   id: "dai",
   symbol: "dai",
@@ -342,390 +348,41 @@ export const ohm = {
   last_updated: "2023-03-20T15:18:24.184Z",
 };
 
-export const eth = {
-  id: "ethereum",
-  symbol: "eth",
-  name: "Ethereum",
-  asset_platform_id: null,
-  platforms: {
-    "": "",
-  },
-  detail_platforms: {
-    "": {
-      decimal_place: null,
-      contract_address: "",
-    },
-  },
-  block_time_in_minutes: 0,
-  hashing_algorithm: "Ethash",
-  categories: ["Smart Contract Platform", "Layer 1 (L1)", "Ethereum Ecosystem"],
-  public_notice: null,
-  additional_notices: [],
-  description: {
-    en: "Ethereum is a global, open-source platform for decentralized applications. In other words, the vision is to create a world computer that anyone can build applications in a decentralized manner; while all states and data are distributed and publicly accessible. Ethereum supports smart contracts in which developers can write code in order to program digital value. Examples of decentralized apps (dapps) that are built on Ethereum includes tokens, non-fungible tokens, decentralized finance apps, lending protocol, decentralized exchanges, and much more.\r\n\r\nOn Ethereum, all transactions and smart contract executions require a small fee to be paid. This fee is called Gas. In technical terms, Gas refers to the unit of measure on the amount of computational effort required to execute an operation or a smart contract. The more complex the execution operation is, the more gas is required to fulfill that operation. Gas fees are paid entirely in Ether (ETH), which is the native coin of the blockchain. The price of gas can fluctuate from time to time depending on the network demand.",
-  },
-  links: {
-    homepage: ["https://www.ethereum.org/", "", ""],
-    blockchain_site: [
-      "https://etherscan.io/",
-      "https://ethplorer.io/",
-      "https://blockchair.com/ethereum",
-      "https://eth.tokenview.io/",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-    ],
-    official_forum_url: ["", "", ""],
-    chat_url: ["", "https://discord.com/invite/CetY6Y4", ""],
-    announcement_url: ["", ""],
-    twitter_screen_name: "ethereum",
-    facebook_username: "",
-    bitcointalk_thread_identifier: null,
-    telegram_channel_identifier: "",
-    subreddit_url: "https://www.reddit.com/r/ethereum",
-    repos_url: {
-      github: [
-        "https://github.com/ethereum/go-ethereum",
-        "https://github.com/ethereum/py-evm",
-        "https://github.com/ethereum/aleth",
-        "https://github.com/ethereum/web3.py",
-        "https://github.com/ethereum/solidity",
-        "https://github.com/ethereum/sharding",
-        "https://github.com/ethereum/casper",
-        "https://github.com/paritytech/parity",
-      ],
-      bitbucket: [],
-    },
-  },
-  image: {
-    thumb:
-      "https://assets.coingecko.com/coins/images/279/thumb/ethereum.png?1595348880",
-    small:
-      "https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880",
-    large:
-      "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880",
-  },
-  country_origin: "",
-  genesis_date: "2015-07-30",
-  sentiment_votes_up_percentage: 77.7,
-  sentiment_votes_down_percentage: 22.3,
-  ico_data: {
-    ico_start_date: "2014-07-20T00:00:00.000Z",
-    ico_end_date: "2014-09-01T00:00:00.000Z",
-    short_desc: "A decentralized platform for applications",
-    description: null,
-    links: {},
-    softcap_currency: "",
-    hardcap_currency: "",
-    total_raised_currency: "",
-    softcap_amount: null,
-    hardcap_amount: null,
-    total_raised: null,
-    quote_pre_sale_currency: "",
-    base_pre_sale_amount: null,
-    quote_pre_sale_amount: null,
-    quote_public_sale_currency: "BTC",
-    base_public_sale_amount: 1,
-    quote_public_sale_amount: 0.00074794,
-    accepting_currencies: "",
-    country_origin: "",
-    pre_sale_start_date: null,
-    pre_sale_end_date: null,
-    whitelist_url: "",
-    whitelist_start_date: null,
-    whitelist_end_date: null,
-    bounty_detail_url: "",
-    amount_for_sale: null,
-    kyc_required: true,
-    whitelist_available: null,
-    pre_sale_available: null,
-    pre_sale_ended: false,
-  },
-  market_cap_rank: 2,
-  coingecko_rank: 2,
-  coingecko_score: 78.783,
-  developer_score: 97.494,
-  community_score: 72.746,
-  liquidity_score: 95.183,
-  public_interest_score: 0.236,
-  developer_data: {
-    forks: 16236,
-    stars: 41575,
-    subscribers: 2189,
-    total_issues: 7139,
-    closed_issues: 6906,
-    pull_requests_merged: 5124,
-    pull_request_contributors: 805,
-    code_additions_deletions_4_weeks: {
-      additions: 9042,
-      deletions: -2702,
-    },
-    commit_count_4_weeks: 76,
-    last_4_weeks_commit_activity_series: [
-      0, 1, 5, 0, 1, 4, 0, 0, 5, 11, 3, 5, 6, 0, 0, 5, 4, 1, 3, 4, 0, 0, 4, 6,
-      0, 0, 0, 0,
-    ],
-  },
-  public_interest_stats: {
-    alexa_rank: 8793,
-    bing_matches: null,
-  },
-  status_updates: [],
-  last_updated: "2023-03-22T08:30:01.112Z",
+const samplePrices = {
+  "camelot-token": { usd: 2979.49 },
+  "compound-governance-token": { usd: 42.28 },
+  "convex-finance": { usd: 5.1 },
+  dai: { usd: 1.0 },
+  "dola-usd": { usd: 0.992941 },
+  ethereum: { usd: 1760.35 },
+  everipedia: { usd: 0.00657865 },
+  frax: { usd: 0.998734 },
+  "gmd-protocol": { usd: 62.9 },
+  gmx: { usd: 68.87 },
+  "governance-ohm": { usd: 2751.57 },
+  govi: { usd: 0.478081 },
+  "ibuffer-token": { usd: 0.291616 },
+  "inverse-finance": { usd: 47.35 },
+  "jpeg-d": { usd: 0.00080279 },
+  layer2dao: { usd: 0.00220314 },
+  "liquity-usd": { usd: 1.013 },
+  "matic-network": { usd: 1.094 },
+  "neutra-finance": { usd: 1.8 },
+  "new-order": { usd: 0.0406143 },
+  olympus: { usd: 10.27 },
+  pendle: { usd: 0.316152 },
+  pine: { usd: 0.192935 },
+  redacted: { usd: 286.79 },
+  "shapeshift-fox-token": { usd: 0.03340564 },
+  sperax: { usd: 0.00590564 },
+  "sperax-usd": { usd: 0.994354 },
+  tether: { usd: 1.002 },
+  "usd-coin": { usd: 1.001 },
+  "wrapped-bitcoin": { usd: 27821 },
+  y2k: { usd: 4.03 },
 };
-
-const crv = {
-  id: "curve-dao-token",
-  symbol: "crv",
-  name: "Curve DAO",
-  asset_platform_id: "ethereum",
-  platforms: {
-    ethereum: "0xd533a949740bb3306d119cc777fa900ba034cd52",
-    "polygon-pos": "0x172370d5cd63279efa6d502dab29171933a610af",
-    fantom: "0x1e4f97b9f9f913c46f1632781732927b9019c68b",
-    "arbitrum-one": "0x11cdb42b0eb46d95f990bedd4695a6e3fa034978",
-    sora: "0x002ead91a2de57b8855b53d4a62c25277073fd7f65f7e5e79f4936ed747fcad0",
-    energi: "0xd3319eaf3c4743ac75aace77befcfa445ed6e69e",
-    "optimistic-ethereum": "0x0994206dfe8de6ec6920ff4d779b0d950605fb53",
-  },
-  detail_platforms: {
-    ethereum: {
-      decimal_place: 18,
-      contract_address: "0xd533a949740bb3306d119cc777fa900ba034cd52",
-    },
-    "polygon-pos": {
-      decimal_place: 18,
-      contract_address: "0x172370d5cd63279efa6d502dab29171933a610af",
-    },
-    fantom: {
-      decimal_place: 18,
-      contract_address: "0x1e4f97b9f9f913c46f1632781732927b9019c68b",
-    },
-    "arbitrum-one": {
-      decimal_place: 18,
-      contract_address: "0x11cdb42b0eb46d95f990bedd4695a6e3fa034978",
-    },
-    sora: {
-      decimal_place: 18,
-      contract_address:
-        "0x002ead91a2de57b8855b53d4a62c25277073fd7f65f7e5e79f4936ed747fcad0",
-    },
-    energi: {
-      decimal_place: 18,
-      contract_address: "0xd3319eaf3c4743ac75aace77befcfa445ed6e69e",
-    },
-    "optimistic-ethereum": {
-      decimal_place: 18,
-      contract_address: "0x0994206dfe8de6ec6920ff4d779b0d950605fb53",
-    },
-  },
-  block_time_in_minutes: 0,
-  hashing_algorithm: null,
-  categories: [
-    "Decentralized Exchange (DEX)",
-    "Automated Market Maker (AMM)",
-    "Yield Farming",
-    "Decentralized Finance (DeFi)",
-    "Governance",
-    "Exchange-based Tokens",
-    "Polygon Ecosystem",
-    "Fantom Ecosystem",
-    "Arbitrum Ecosystem",
-    "Gnosis Chain Ecosystem",
-    "Ethereum Ecosystem",
-    "Optimism Ecosystem",
-  ],
-  public_notice: null,
-  additional_notices: [],
-  description: {
-    en: "Similar to Uniswap, Curve Finance is an Automated Market Maker (AMM) based Decentralised Exchange (DEX). Unlike Uniswap, its main focus is only to swap between assets that are supposed to have the same value. This is useful in the DeFi ecosystem as there are plenty of wrapped tokens and synthetic tokens that aim to mimic the price of the real underlying asset. \r\n\r\nFor example, one of the biggest pools is 3CRV, which is a stablecoin pool consisting of DAI, USDT, and USDC. Their ratio in the pool will be based on the supply and demand of the market. Depositing a coin with a lesser ratio will yield the user a higher percentage of the pool. As such when the ratio is heavily tilted to one of the coins, it may serve as a good chance to arbitrage.\r\n\r\nCurve Finance also supports yield-bearing tokens. For example, it collaborated with Yearn Finance to release yUSD pools that consisted of yDAI, yUSDT, yUSDC and yTUSD. Users that participated in this pool will not only have yield from the underlying yield-bearing tokens, but also the swap fees generated by the Curve pool. Including the yield farming rewards in terms of CRV tokens, liquidity providers of the pool actually have three sources of yield. ",
-  },
-  links: {
-    homepage: ["https://www.curve.fi/", "https://curve.eth.link/", ""],
-    blockchain_site: [
-      "https://etherscan.io/token/0xd533a949740bb3306d119cc777fa900ba034cd52",
-      "https://ethplorer.io/address/0xd533a949740bb3306d119cc777fa900ba034cd52",
-      "https://polygonscan.com/token/0x172370d5cd63279efa6d502dab29171933a610af",
-      "https://arbiscan.io/token/0x11cdb42b0eb46d95f990bedd4695a6e3fa034978",
-      "https://ftmscan.com/token/0x1e4f97b9f9f913c46f1632781732927b9019c68b",
-      "https://scan.meter.io/address/0x1e4f97b9f9f913c46f1632781732927b9019c68b",
-      "https://ftmscan.com/address/0x1e4f97b9f9f913c46f1632781732927b9019c68b",
-      "https://explorer.energi.network/token/0xd3319eaf3c4743ac75aace77befcfa445ed6e69e",
-      "https://optimistic.etherscan.io/token/0x0994206dfE8De6Ec6920FF4D779B0d950605Fb53",
-      "",
-    ],
-    official_forum_url: ["", "", ""],
-    chat_url: ["https://discord.gg/9uEHakc", "", ""],
-    announcement_url: ["", ""],
-    twitter_screen_name: "curvefinance",
-    facebook_username: "",
-    bitcointalk_thread_identifier: null,
-    telegram_channel_identifier: "curvefi",
-    subreddit_url: null,
-    repos_url: {
-      github: [
-        "https://github.com/curvefi/curve-contract",
-        "https://github.com/curvefi/curve-vue",
-      ],
-      bitbucket: [],
-    },
-  },
-  image: {
-    thumb:
-      "https://assets.coingecko.com/coins/images/12124/thumb/Curve.png?1597369484",
-    small:
-      "https://assets.coingecko.com/coins/images/12124/small/Curve.png?1597369484",
-    large:
-      "https://assets.coingecko.com/coins/images/12124/large/Curve.png?1597369484",
-  },
-  country_origin: "",
-  genesis_date: null,
-  contract_address: "0xd533a949740bb3306d119cc777fa900ba034cd52",
-  sentiment_votes_up_percentage: 80,
-  sentiment_votes_down_percentage: 20,
-  market_cap_rank: 63,
-  coingecko_rank: 111,
-  coingecko_score: 44.36,
-  developer_score: 61.576,
-  community_score: 10.746,
-  liquidity_score: 59.03,
-  public_interest_score: 0.035,
-  developer_data: {
-    forks: 350,
-    stars: 921,
-    subscribers: 52,
-    total_issues: 43,
-    closed_issues: 22,
-    pull_requests_merged: 104,
-    pull_request_contributors: 12,
-    code_additions_deletions_4_weeks: {
-      additions: 0,
-      deletions: 0,
-    },
-    commit_count_4_weeks: 0,
-    last_4_weeks_commit_activity_series: [
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0,
-    ],
-  },
-  public_interest_stats: {
-    alexa_rank: 14362,
-    bing_matches: null,
-  },
-  status_updates: [],
-  last_updated: "2023-03-22T09:52:22.528Z",
-};
-
-const gmx = {
-  id: "gmx",
-  symbol: "gmx",
-  name: "GMX",
-  asset_platform_id: "arbitrum-one",
-  platforms: {
-    "arbitrum-one": "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
-    avalanche: "0x62edc0692bd897d2295872a9ffcac5425011c661",
-  },
-  detail_platforms: {
-    "arbitrum-one": {
-      decimal_place: 18,
-      contract_address: "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
-    },
-    avalanche: {
-      decimal_place: 18,
-      contract_address: "0x62edc0692bd897d2295872a9ffcac5425011c661",
-    },
-  },
-  block_time_in_minutes: 0,
-  hashing_algorithm: null,
-  categories: [
-    "Derivatives",
-    "Perpetuals",
-    "Decentralized Finance (DeFi)",
-    "Avalanche Ecosystem",
-    "Arbitrum Ecosystem",
-  ],
-  public_notice: null,
-  additional_notices: [],
-  description: {
-    en: "GMX is a decentralized spot and perpetual exchange that supports low swap fees and zero price impact trades.\r\n\r\nTrading is supported by a unique multi-asset pool that earns liquidity providers fees from market making, swap fees, leverage trading (spreads, funding fees & liquidations) and asset rebalancing.\r\n\r\nDynamic pricing is supported by Chainlink Oracles along with TWAP pricing from leading volume DEXs.",
-  },
-  links: {
-    homepage: ["https://gmx.io/#/?ref=coingecko", "", ""],
-    blockchain_site: [
-      "https://arbiscan.io/token/0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a",
-      "https://snowtrace.io/token/0x62edc0692BD897D2295872a9FFCac5425011c661",
-      "https://avascan.info/blockchain/c/address/0x62edc0692bd897d2295872a9ffcac5425011c661/token",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-      "",
-    ],
-    official_forum_url: ["https://medium.com/@gmx.io", "", ""],
-    chat_url: ["https://discord.gg/cxjZYR4gQK", "", ""],
-    announcement_url: ["", ""],
-    twitter_screen_name: "GMX_IO",
-    facebook_username: "",
-    bitcointalk_thread_identifier: null,
-    telegram_channel_identifier: "GMX_IO",
-    subreddit_url: null,
-    repos_url: {
-      github: ["https://github.com/xvi10/gambit-contracts"],
-      bitbucket: [],
-    },
-  },
-  image: {
-    thumb:
-      "https://assets.coingecko.com/coins/images/18323/thumb/arbit.png?1631532468",
-    small:
-      "https://assets.coingecko.com/coins/images/18323/small/arbit.png?1631532468",
-    large:
-      "https://assets.coingecko.com/coins/images/18323/large/arbit.png?1631532468",
-  },
-  country_origin: "",
-  genesis_date: null,
-  contract_address: "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
-  sentiment_votes_up_percentage: 87.8,
-  sentiment_votes_down_percentage: 12.2,
-  market_cap_rank: 72,
-  coingecko_rank: 243,
-  coingecko_score: 35.369,
-  developer_score: 40.652,
-  community_score: 9.3,
-  liquidity_score: 42.129,
-  public_interest_score: 0,
-  developer_data: {
-    forks: 8,
-    stars: 19,
-    subscribers: 5,
-    total_issues: 0,
-    closed_issues: 0,
-    pull_requests_merged: 9,
-    pull_request_contributors: 3,
-    code_additions_deletions_4_weeks: {
-      additions: 0,
-      deletions: 0,
-    },
-    commit_count_4_weeks: 0,
-    last_4_weeks_commit_activity_series: [
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-      0, 0, 0,
-    ],
-  },
-  public_interest_stats: {
-    alexa_rank: null,
-    bing_matches: null,
-  },
-  status_updates: [],
-  last_updated: "2023-03-22T09:52:55.604Z",
-};
-
-const toProtocolTokens = (token) => {
+//Map coingecko result to our format
+const toProtocolTokens = (token: any) => {
   return {
     name: token.name,
     symbol: token.symbol.toUpperCase(),
@@ -735,4 +392,18 @@ const toProtocolTokens = (token) => {
   };
 };
 
-export const list = [dai, ohm, eth, crv, gmx].map(toProtocolTokens);
+export const list = aphexTokens
+  .filter((t) => t.priceSources.some((s) => s.source === "coingecko"))
+  .map((token) => {
+    const apiId = token.priceSources[0]?.apiId;
+    const price = samplePrices[apiId]?.usd ?? 0;
+
+    return {
+      id: apiId,
+      name: token.name,
+      symbol: token.symbol,
+      icon: token.logoUrl,
+      addresses: token.addresses,
+      price,
+    };
+  });

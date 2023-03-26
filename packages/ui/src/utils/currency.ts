@@ -15,6 +15,36 @@ export const longFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
+export const getPriceScale = (value: string | number) => {
+  let num = String(value);
+
+  let rateMod = 0.001;
+  let scale = 0;
+  let [single, decimal] = num.split(".").map((n) => parseFloat(n));
+
+  if (decimal > 1000) {
+    rateMod = 0.01;
+    scale = 6;
+  }
+
+  if (decimal > 100) {
+    rateMod = 0.1;
+    scale = 5;
+  }
+
+  if (single > 0) {
+    rateMod = 1;
+    scale = 2;
+  }
+
+  if (single > 100) {
+    scale = 0;
+    rateMod = 10;
+  }
+
+  return { rateMod, scale };
+};
+
 export const dynamicFormatter = (value: string | number) => {
   let num = String(value);
 

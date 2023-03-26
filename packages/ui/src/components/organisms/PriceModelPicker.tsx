@@ -76,7 +76,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
     props.onChange({ type, oracle, address });
   }, [type, oracle, address]);
 
-  const shouldRender = props.quoteTokenSymbol && props.payoutTokenSymbol;
+  const shouldRender = props.quoteToken?.symbol && props.payoutToken?.symbol;
 
   return (
     <div className="w-full">
@@ -111,11 +111,10 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
           priceControlFields.map((p: any, i) => {
             return (
               <PriceControl
-                key={i}
                 {...p}
-                payoutTokenSymbol={props.payoutTokenSymbol}
-                quoteTokenSymbol={props.quoteTokenSymbol}
-                exchangeRate={props.exchangeRate}
+                key={`${priceModel}-${p.property}`}
+                payoutToken={props.payoutToken}
+                quoteToken={props.quoteToken}
                 onRateChange={(rate) => {
                   props.onRateChange &&
                     props.onRateChange({ priceModel, [p.property]: rate });

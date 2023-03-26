@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 
 export const useNumericInput = (initialValue = "0", isPercentual?: boolean) => {
-  const [value, setValue] = useState<string>(
-    isPercentual ? `${initialValue}%` : initialValue
-  );
+  const [value, setValue] = useState<string>(initialValue);
 
   useEffect(() => {
     let updated = value ?? initialValue;

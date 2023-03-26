@@ -2,12 +2,15 @@ import { Tooltip, Button } from "..";
 import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg";
 import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
 import { useNumericInput } from "hooks/use-numeric-input";
+import { Token } from "reducers/create-market";
+import { useEffect, useState } from "react";
+import { getPriceScale } from "utils";
 
 export type PriceControlProps = {
   bottomLabel: string;
   topLabel?: string;
-  quoteTokenSymbol?: string;
-  payoutTokenSymbol?: string;
+  quoteToken?: Token;
+  payoutToken?: Token;
   exchangeRate: number;
   onRateChange: (exchangeRate: any) => any;
   tooltip?: React.ReactNode;
@@ -17,11 +20,19 @@ export type PriceControlProps = {
 
 export const PriceControl = (props: PriceControlProps) => {
   const { value, setValue, getAValidPercentage, ...numericInput } =
-    useNumericInput(props.exchangeRate.toString(), props.percentage);
+    useNumericInput("0.25", props.percentage);
+  const [rateMod, setRateMod] = useState(0.25);
+  const [scale, setScale] = useState(2);
 
-  console.log({ value, props });
-  const rateMod = props.percentage ? 0.25 : 0.001;
-  const scale = 4;
+  useEffect(() => {
+    if (props.quoteToken && props.payoutToken && !props.percentage) {
+      const rate = props.quoteToken?.price / props.payoutToken.price;
+      const { rateMod, scale } = getPriceScale(rate);
+      setValue(rate.toFixed(scale));
+      setRateMod(rateMod);
+      setScale(scale);
+    }
+  }, [props.quoteToken, props.payoutToken]);
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     const updated = numericInput.onChange(e);
@@ -31,7 +42,9 @@ export const PriceControl = (props: PriceControlProps) => {
   const raiseRate = () => {
     setValue((prev) => {
       let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
-      newRate = props.percentage ? getAValidPercentage(newRate) : newRate;
+      newRate = props.percentage
+        ? Number(getAValidPercentage(newRate)).toFixed(2)
+        : newRate;
 
       props.onRateChange && props.onRateChange(newRate);
       return props.percentage ? newRate + "%" : newRate;
@@ -41,7 +54,9 @@ export const PriceControl = (props: PriceControlProps) => {
   const lowerRate = () => {
     setValue((prev) => {
       let newRate = (parseFloat(prev) - rateMod).toFixed(scale);
-      newRate = props.percentage ? getAValidPercentage(newRate) : newRate;
+      newRate = props.percentage
+        ? Number(getAValidPercentage(newRate)).toFixed(2)
+        : newRate;
       props.onRateChange && props.onRateChange(newRate);
       return props.percentage ? newRate + "%" : newRate;
     });
@@ -60,9 +75,10 @@ export const PriceControl = (props: PriceControlProps) => {
       </div>
       <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
         <div className="flex text-[14px]">
-          {props.topLabel ?? (props.quoteTokenSymbol && props.payoutTokenSymbol)
-            ? `${props.payoutTokenSymbol || "???"} per ${
-                props.quoteTokenSymbol || "???"
+          {props.topLabel ??
+          (props.quoteToken?.symbol && props.payoutToken?.symbol)
+            ? `${props.payoutToken?.symbol || "???"} per ${
+                props.quoteToken?.symbol || "???"
               }`
             : ""}
         </div>
@@ -72,7 +88,7 @@ export const PriceControl = (props: PriceControlProps) => {
             {...numericInput}
             value={value}
             onChange={onChange}
-            className="w-[190px] bg-transparent text-center"
+            className="w-[170px] bg-transparent text-center"
           />
         </div>
         <div className="font-fraktion flex font-bold uppercase">

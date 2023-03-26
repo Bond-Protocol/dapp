@@ -3,6 +3,7 @@ import { SelectModal } from "components/molecules/SelectModal";
 import { SelectVestingDialog } from "components/modals/SelectVestingDialog";
 import { PriceModelPicker } from "components/organisms/PriceModelPicker";
 import {
+  Button,
   FlatSelect,
   InputModal,
   TokenAmountInput,
@@ -15,18 +16,16 @@ import { list as tokenList } from "utils/sample-tokens";
 import { PlaceholderChart } from "components/charts/PlaceholderChar";
 import {
   useCreateMarket,
-  Action as Action,
+  Action,
+  CreateMarketState,
+  Token,
 } from "../../reducers/create-market";
-
-type Token = {
-  name: string;
-  symbol: string;
-  icon: string;
-};
 
 export type CreateMarketScreenProps = {
   a?: boolean;
   getExchangeRate: (quote: Token, payout: Token) => number;
+  onSubmit: (state: CreateMarketState) => void;
+  onSubmitMultisig: (state: CreateMarketState) => void;
 };
 
 const capacityOptions = [
@@ -45,15 +44,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   });
 
   const [marketExchangeRate, setMarketExchangeRate] = useState(0);
-  console.log({ marketExchangeRate });
 
   const totalBonds = 100;
   const maxAmountInSingleTx = 42;
-
-  useEffect(() => {
-    const rate = props.getExchangeRate(state.quoteToken, state.payoutToken);
-    setMarketExchangeRate(rate);
-  }, [state.quoteToken, state.payoutToken]);
 
   const capacityToken =
     state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
@@ -65,8 +58,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           RESET
         </div>
       </div>
-      <div id="cm-main-container" className="flex gap-x-4">
-        <div id="cm-left-container" className="w-1/2">
+      <div id="cm-main-container" className="flex">
+        <div id="cm-left-container" className="w-1/2 pr-2">
           <div className="flex">
             <div className="flex w-1/2 gap-x-2 pr-2">
               <InputModal
@@ -121,9 +114,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <PriceModelPicker
-            payoutTokenSymbol={state.payoutToken.symbol}
-            quoteTokenSymbol={state.quoteToken.symbol}
-            exchangeRate={marketExchangeRate}
+            payoutToken={state.payoutToken}
+            quoteToken={state.quoteToken}
             onChange={(value) =>
               dispatch({ type: Action.UPDATE_PRICE_MODEL, value })
             }
@@ -134,7 +126,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         </div>
         <div
           id="cm-right-container"
-          className="h-fill flex w-1/2 flex-col justify-between"
+          className="h-fill flex w-1/2 flex-col justify-between pl-2"
         >
           <div className="mt-2 flex h-full w-full">
             <PlaceholderChart />{" "}
@@ -170,7 +162,23 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
         </div>
       </div>
-      <div id="cm-card-row"></div>
+      <div className="mt-8 flex justify-center gap-x-10">
+        <Button
+          onClick={() => props.onSubmitMultisig(state)}
+          variant="ghost"
+          size="lg"
+          className="w-[308px]"
+        >
+          Get Multi-Sig Config
+        </Button>
+        <Button
+          onClick={() => props.onSubmit(state)}
+          size="lg"
+          className="w-[308px]"
+        >
+          Deploy Market
+        </Button>
+      </div>
     </div>
   );
 };
