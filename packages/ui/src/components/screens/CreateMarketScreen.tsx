@@ -18,12 +18,10 @@ import {
   useCreateMarket,
   Action,
   CreateMarketState,
-  Token,
 } from "../../reducers/create-market";
 
 export type CreateMarketScreenProps = {
   a?: boolean;
-  getExchangeRate: (quote: Token, payout: Token) => number;
   onSubmit: (state: CreateMarketState) => void;
   onSubmitMultisig: (state: CreateMarketState) => void;
 };
@@ -42,8 +40,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const [state, dispatch] = useCreateMarket((state) => {
     return { ...state, startDate: Date.now() };
   });
-
-  const [marketExchangeRate, setMarketExchangeRate] = useState(0);
 
   const totalBonds = 100;
   const maxAmountInSingleTx = 42;

@@ -14,5 +14,6 @@ const Template: ComponentStory<typeof CreateMarketScreen> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  getExchangeRate: (t, tt) => 0.25,
+  onSubmit: (state) => console.log({ state }),
+  onSubmitMultisig: (state) => console.log({ state }),
 };

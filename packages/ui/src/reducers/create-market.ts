@@ -26,7 +26,6 @@ type CapacityType = "quote" | "payout";
 export type CreateMarketState = {
   quoteToken: Token;
   payoutToken: Token;
-  capacityToken: Token;
   capacityType: CapacityType;
   capacity: string;
   vesting: "term" | "expiry";
@@ -47,7 +46,6 @@ const emptyToken = {
 const initialState: CreateMarketState = {
   quoteToken: emptyToken,
   payoutToken: emptyToken,
-  capacityToken: emptyToken,
   capacityType: "payout" as CapacityType,
   capacity: "0",
   vesting: "term",
@@ -68,6 +66,7 @@ export function reducer(
 ) {
   const { type, value, ...args } = action;
 
+  console.log({ type, action });
   switch (type) {
     case Action.UPDATE_QUOTE_TOKEN: {
       return { ...state, quoteToken: value };
@@ -96,11 +95,13 @@ export function reducer(
     }
 
     case Action.UPDATE_PRICE_MODEL: {
+      const { priceModel, oracle, oracleAddress } = value;
+
       return {
         ...state,
-        type: args.type,
-        oracle: !!args.oracle,
-        oracleAddress: args.address,
+        priceModel,
+        oracle,
+        oracleAddress,
       };
     }
 

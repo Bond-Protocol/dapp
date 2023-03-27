@@ -21,18 +21,22 @@ export type PriceControlProps = {
 export const PriceControl = (props: PriceControlProps) => {
   const { value, setValue, getAValidPercentage, ...numericInput } =
     useNumericInput("0.25", props.percentage);
-  const [rateMod, setRateMod] = useState(0.25);
-  const [scale, setScale] = useState(2);
+  const [rateMod, setRateMod] = useState(0.25); // Default rate mod for percetages;
+  const [scale, setScale] = useState(2); // Default scale for percentages;
+
+  const [reverseExchangeRate, setReverseExchangeRate] = useState(false);
 
   useEffect(() => {
     if (props.quoteToken && props.payoutToken && !props.percentage) {
-      const rate = props.quoteToken?.price / props.payoutToken.price;
+      const initialRate = props.quoteToken?.price / props.payoutToken.price;
+      const rate = reverseExchangeRate ? 1 / initialRate : initialRate;
       const { rateMod, scale } = getPriceScale(rate);
       setValue(rate.toFixed(scale));
       setRateMod(rateMod);
       setScale(scale);
+      props.onRateChange(rate);
     }
-  }, [props.quoteToken, props.payoutToken]);
+  }, [reverseExchangeRate, props.quoteToken, props.payoutToken]);
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     const updated = numericInput.onChange(e);
@@ -61,6 +65,12 @@ export const PriceControl = (props: PriceControlProps) => {
       return props.percentage ? newRate + "%" : newRate;
     });
   };
+  const exchangeLabel =
+    props.quoteToken?.symbol && props.payoutToken?.symbol
+      ? `${props.payoutToken?.symbol || "???"} per ${
+          props.quoteToken?.symbol || "???"
+        }`
+      : "";
 
   return (
     <div
@@ -74,13 +84,18 @@ export const PriceControl = (props: PriceControlProps) => {
         </Button>
       </div>
       <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
-        <div className="flex text-[14px]">
-          {props.topLabel ??
-          (props.quoteToken?.symbol && props.payoutToken?.symbol)
-            ? `${props.payoutToken?.symbol || "???"} per ${
-                props.quoteToken?.symbol || "???"
-              }`
-            : ""}
+        <div
+          className={`flex select-none text-[14px] ${
+            props.percentage ? "" : "cursor-pointer"
+          }`}
+          onClick={(e) => {
+            e.preventDefault();
+            setReverseExchangeRate((prev) => !prev);
+          }}
+        >
+          {props.topLabel ?? reverseExchangeRate
+            ? exchangeLabel.split(" ").reverse().join(" ")
+            : exchangeLabel}
         </div>
 
         <div className="font-fraktion text-[25px] text-white">

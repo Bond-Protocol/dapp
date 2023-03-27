@@ -15,9 +15,9 @@ import { ReactComponent as AngleIcon } from "../../assets/icons/angle.svg";
 
 export type PriceModelPickerProps = {
   onChange: (args: {
-    type: PriceType;
+    priceModel: PriceModel;
     oracle: boolean;
-    address: string;
+    oracleAddress: string;
   }) => any;
 } & Partial<PriceControlProps>;
 
@@ -66,15 +66,15 @@ const priceControlConfig: Record<
 export const PriceModelPicker = (props: PriceModelPickerProps) => {
   const [type, setType] = useState<PriceType>("dynamic");
   const [oracle, setOracle] = useState(false);
-  const [address, setAddress] = useState("");
+  const [oracleAddress, setOracleAddress] = useState("");
 
   const priceModel: PriceModel = oracle ? `oracle-${type}` : type;
 
   const priceControlFields = priceControlConfig[priceModel];
 
   useEffect(() => {
-    props.onChange({ type, oracle, address });
-  }, [type, oracle, address]);
+    props.onChange({ priceModel, oracle, oracleAddress });
+  }, [type, oracle, oracleAddress]);
 
   const shouldRender = props.quoteToken?.symbol && props.payoutToken?.symbol;
 
@@ -95,7 +95,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
         className="mt-4"
         oracle={oracle}
         type={type}
-        onOracleChange={setAddress}
+        onOracleChange={setOracleAddress}
       />
       <div className="flex justify-between gap-x-4 pt-4">
         {!shouldRender ? (

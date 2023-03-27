@@ -13,7 +13,6 @@ export const CreateMarketController = () => {
       <CreateMarketScreen
         onSubmit={(state) => onSubmit(state, "wallet")}
         onSubmitMultisig={(state) => onSubmit(state, "multisig")}
-        getExchangeRate={getExchangeRate}
       />
     </>
   );
