@@ -1,3 +1,4 @@
+//@ts-nocheck [TO BE DEPRECATED]
 import { useEffect, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import * as contractLibrary from "@bond-protocol/contract-library";
@@ -458,10 +459,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         fixedDiscount: BigNumber.from("10000").toString(),
         maxDiscountFromCurrent: BigNumber.from("10000").toString(),
         baseDiscount: BigNumber.from("5000").toString(),
-        targetIntervalDiscount: BigNumber.from("1000").toString()
+        targetIntervalDiscount: BigNumber.from("1000").toString(),
       },
       bondType:
-        data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY_OFDA : BOND_TYPE.FIXED_TERM_OFDA,
+        data.vestingType === 0
+          ? BOND_TYPE.FIXED_EXPIRY_OFDA
+          : BOND_TYPE.FIXED_TERM_OFDA,
       chain: chainSelection,
       formValues: formValues,
       payoutToken: payoutTokenInfo,

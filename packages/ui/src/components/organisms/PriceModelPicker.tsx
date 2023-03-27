@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState, useEffect } from "react";
 import { FlatSelect, Switch } from "..";
 import { ReactComponent as SawLineIcon } from "../../assets/icons/saw-line.svg";

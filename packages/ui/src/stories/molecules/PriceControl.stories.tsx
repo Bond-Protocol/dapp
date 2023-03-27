@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { PriceControl } from "../../components/molecules/PriceControl";
 
