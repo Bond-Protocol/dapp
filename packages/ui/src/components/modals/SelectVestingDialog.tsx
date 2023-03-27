@@ -4,17 +4,18 @@ import { Button, DatePicker, FlatSelect, Link } from "..";
 import { formatDate } from "utils";
 
 const options = [
-  { label: "DATE", value: "date" },
   { label: "TERM", value: "term" },
+  { label: "DATE", value: "date" },
 ];
 
 type TermType = "term" | "date";
 
+const defaultType = "term";
 export const SelectVestingDialog = (props: {
   onSubmit: Function;
   onClose: Function;
 }) => {
-  const [type, setType] = useState<TermType>("date");
+  const [type, setType] = useState<TermType>(defaultType);
   const [date, setDate] = useState<Date>();
   const [days, setDays] = useState<string>("7");
   const [state, setState] = useState({ canSubmit: true });
@@ -53,13 +54,13 @@ export const SelectVestingDialog = (props: {
   };
 
   useEffect(() => {
-    props.onSubmit({ type, date, days, canSubmit });
+    props.onSubmit({ value: { type, date, days, canSubmit } });
   }, [type, date, days]);
 
   return (
     <div className="flex flex-col items-center justify-center">
       <FlatSelect
-        default="date"
+        default={defaultType}
         options={options}
         onChange={handleTypeChange}
       />

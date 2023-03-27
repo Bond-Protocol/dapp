@@ -9,6 +9,13 @@ const VestingWarning = ({ value }: { value: string }) => (
   </div>
 );
 
+const LengthWarning = () => (
+  <div className="text-light-grey pt-1 font-mono text-sm">
+    Your selected vesting terms go beyond the usual. This might deter people
+    from purchasing your bond and you could be facing high discounts.
+  </div>
+);
+
 const errorMessage = "Vesting time can't be longer than 270 days";
 
 export type ManualVestingTermInputProps = {
@@ -23,7 +30,6 @@ export const ManualVestingTermInput = ({
   limit = 270,
   maxRecommended = 30,
   defaultValue = "7",
-
   className,
   ...props
 }: ManualVestingTermInputProps) => {
@@ -53,17 +59,14 @@ export const ManualVestingTermInput = ({
     <div className={"w-full" + " " + className}>
       <Input
         errorMessage={error ? errorMessage : ""}
-        label="Vesting Term"
+        label="Market length"
         onFocus={() => setValue((value) => value.split(" ")[0])}
         onBlur={() => setValue((value) => value + " days")}
         subText={
           error ? (
             ""
           ) : warning ? (
-            <div>
-              {value} days seems like an excessive vesting term. <br /> Please
-              make sure you know what you're doing.
-            </div>
+            <VestingWarning value={value} />
           ) : (
             `Max ${limit} days`
           )
@@ -73,6 +76,12 @@ export const ManualVestingTermInput = ({
         value={value}
         onChange={onChange}
       />
+      {warning && (
+        <div className="pt-4">
+          <Checkbox label="I understand" onChange={setAcceptedWarning} />
+          <LengthWarning />
+        </div>
+      )}
     </div>
   );
 };

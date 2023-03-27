@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { SelectModal } from "components/molecules/SelectModal";
 import { SelectVestingDialog } from "components/modals/SelectVestingDialog";
 import { PriceModelPicker } from "components/organisms/PriceModelPicker";
@@ -9,6 +8,7 @@ import {
   TokenAmountInput,
   SelectTokenDialog,
   InfoLabel,
+  SelectDateDialog,
 } from "..";
 import { vestingOptions } from "utils/options";
 import { list as tokenList } from "utils/sample-tokens";
@@ -29,11 +29,6 @@ export type CreateMarketScreenProps = {
 const capacityOptions = [
   { label: "SELL", value: "payout" },
   { label: "BUY", value: "quote" },
-];
-
-const lengthOptions = [
-  { label: "30 Days", value: "30d" },
-  { label: "10 Days", value: "10d" },
 ];
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
@@ -132,7 +127,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               label="Market Start Date"
               title="Select start date"
               defaultValue={{ value: state.startDate, label: "Today" }}
-              ModalContent={SelectVestingDialog}
+              ModalContent={SelectDateDialog}
             />
             <SelectModal
               label="Market Length"
