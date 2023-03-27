@@ -3,7 +3,6 @@ import { Button, PaginatedTable, Column } from "ui";
 import { formatDate } from "src/utils/date";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
-import { providers } from "services/owned-providers";
 import { OwnerBalance } from "../../generated/graphql";
 import { ContractTransaction } from "ethers";
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";

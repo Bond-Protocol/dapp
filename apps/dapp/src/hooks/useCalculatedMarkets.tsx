@@ -67,6 +67,7 @@ export function useCalculatedMarkets() {
         {
           id: market.id,
           chainId: market.chainId,
+          name: market.name,
           auctioneer: market.auctioneer,
           teller: market.teller,
           owner: market.owner,

@@ -10,7 +10,7 @@ import {
 import * as bondLibrary from "@bond-protocol/bond-library";
 import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
 import { providers } from "services/owned-providers";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import {
   Accordion,
   Button,
@@ -453,9 +453,15 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         conclusion: data.marketExpiryDate,
         depositInterval: Math.trunc((24 * 60 * 60) / (data.bondsPerWeek / 7)),
         scaleAdjustment: scaleAdjustment,
+        oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
+        formattedPrice: formattedMinimumPrice.toString(),
+        fixedDiscount: BigNumber.from("10000").toString(),
+        maxDiscountFromCurrent: BigNumber.from("10000").toString(),
+        baseDiscount: BigNumber.from("5000").toString(),
+        targetIntervalDiscount: BigNumber.from("1000").toString()
       },
       bondType:
-        data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY : BOND_TYPE.FIXED_TERM,
+        data.vestingType === 0 ? BOND_TYPE.FIXED_EXPIRY_OFDA : BOND_TYPE.FIXED_TERM_OFDA,
       chain: chainSelection,
       formValues: formValues,
       payoutToken: payoutTokenInfo,
