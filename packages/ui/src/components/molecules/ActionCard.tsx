@@ -1,5 +1,5 @@
 import { Link } from "..";
-import Button from "components/atoms/Button";
+import { Button } from "components/atoms/Button";
 
 export interface ActionCardProps {
   className?: string;

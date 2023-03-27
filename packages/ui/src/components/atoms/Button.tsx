@@ -52,7 +52,7 @@ const styles = {
   },
 };
 
-const Button = forwardRef(function Button(
+export const Button = forwardRef(function Button(
   { thin, icon, ...props }: ButtonProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
@@ -71,11 +71,9 @@ const Button = forwardRef(function Button(
       ref={ref}
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
-          className: `select-none uppercase outline-none font-mono font-extrabold tracking-widest border rounded transition-all duration-300 ${style} ${props.className}`,
+          className: `group/button select-none uppercase outline-none font-mono font-extrabold tracking-widest border rounded-lg transition-all duration-300 ${style} ${props.className}`,
         }),
       }}
     />
   );
 });
-
-export default Button;

@@ -3,7 +3,6 @@ import SelectUnstyled, { SelectUnstyledProps } from "@mui/base/SelectUnstyled";
 import OptionUnstyled from "@mui/base/OptionUnstyled";
 import { ReactComponent as SelectArrowDown } from "../../assets/icons/select-arrow-down.svg";
 import { TokenLabelProps } from "./TokenLabel";
-import { Icon } from "./Icon";
 import { Logo } from "./TokenLogo";
 
 export type SelectOptions = TokenLabelProps & {
@@ -29,23 +28,22 @@ export const Select = (props: SelectProps) => {
   }, [selected]);
 
   return (
-    <div className="relative mt-1 max-h-20 w-full">
+    <div className="relative w-full">
       <SelectUnstyled
         {...props}
-        value={selected}
+        value={props.value || selected}
         onClick={() => setOpen(() => !open)}
         onChange={onChange}
         componentsProps={{
           root: {
-            className:
-              "h-10 max-h-24 w-full border rounded-lg color-white flex py-2",
+            className: "h-10 w-full border rounded-lg color-white flex py-2",
           },
           listbox: {
             className:
-              "w-full max-h-36 overflow-scroll border-x border-b rounded",
+              "w-full overflow-visible overflow-x-hidden border-x border-b rounded",
           },
           popper: {
-            className: "w-full backdrop-blur-xl",
+            className: "z-10 w-full backdrop-blur-xl",
           },
         }}
       >
@@ -56,21 +54,15 @@ export const Select = (props: SelectProps) => {
             componentsProps={{
               root: {
                 className:
-                  "font-jakarta cursor-pointer flex my-auto py-2 hover:bg-opacity-90",
+                  "font-jakarta cursor-pointer flex my-auto py-2 hover:bg-opacity-90 hover:bg-light-primary/20",
               },
             }}
           >
-            <div className="mx-3 flex">
+            <div className="mx-3 flex items-center">
               {o?.image && (
-                <Logo
-                  uneven
-                  className="my-auto mr-2 select-none"
-                  icon={o.image}
-                />
+                <Logo uneven className="mr-2 select-none" icon={o.image} />
               )}
-              <span className="my-auto inline-block select-none">
-                {o.label}
-              </span>
+              <span className="inline-block select-none">{o.label}</span>
             </div>
           </OptionUnstyled>
         ))}

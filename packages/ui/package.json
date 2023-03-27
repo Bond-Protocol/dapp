@@ -69,6 +69,8 @@
     "viteconfig": "*"
   },
   "dependencies": {
-    "date-fns": "^2.29.2"
+    "date-fns": "^2.29.2",
+    "react-day-picker": "^8.6.0",
+    "@mui/base": "^5.0.0-alpha.88"
   }
 }

@@ -18,3 +18,7 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
     </ReactQueryProvider>
   );
 };
+
+export const DevProviders: FC<{ children: ReactNode }> = ({ children }) => {
+  return <Router>{children}</Router>;
+};

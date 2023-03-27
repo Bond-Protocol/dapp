@@ -9,13 +9,9 @@ export default {
 } as ComponentMeta<typeof DatePicker>;
 
 const Template: ComponentStory<typeof DatePicker> = (args) => (
-  <div>
+  <div className="w-min">
     <DatePicker {...args} />
-    <div>hello</div>
   </div>
 );
 
 export const Primary = Template.bind({});
-Primary.args = {
-  label: "cool",
-};
