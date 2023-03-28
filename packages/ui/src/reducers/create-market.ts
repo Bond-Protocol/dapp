@@ -18,6 +18,7 @@ export type Token = {
   symbol: string;
   icon: string;
   price: number;
+  decimals: number;
   addresses?: { [key: string | number]: string | string[] };
 };
 
@@ -34,6 +35,7 @@ export type CreateMarketState = {
   priceModels: Record<PriceModel, any>;
   oracleAddress?: string;
   startDate?: Date | number;
+  endDate?: Date | number;
 };
 
 const emptyToken = {
@@ -41,6 +43,7 @@ const emptyToken = {
   symbol: "",
   icon: "",
   price: 0,
+  decimals: 18,
 };
 
 const initialState: CreateMarketState = {
@@ -52,6 +55,7 @@ const initialState: CreateMarketState = {
   vestingDate: 0,
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
+  endDate: 0,
   priceModels: {
     dynamic: {},
     static: {},
@@ -66,7 +70,6 @@ export function reducer(
 ) {
   const { type, value, ...args } = action;
 
-  console.log({ type, action });
   switch (type) {
     case Action.UPDATE_QUOTE_TOKEN: {
       return { ...state, quoteToken: value };

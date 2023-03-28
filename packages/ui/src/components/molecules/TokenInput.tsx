@@ -111,7 +111,6 @@ export const TokenAmountInput = (
     setShowTokenSymbol(false);
     let updated = Number(value.replace(/[^0-9.-]+/g, ""));
     let checked = isNaN(updated) || updated === 0 ? "" : updated.toString();
-    console.log({ updated, checked });
 
     setValue(checked);
   };

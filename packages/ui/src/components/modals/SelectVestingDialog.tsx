@@ -4,7 +4,7 @@ import { Button, DatePicker, FlatSelect, Link } from "..";
 import { formatDate } from "utils";
 
 const options = [
-  { label: "TERM", value: "term" },
+  { label: "LENGTH", value: "term" },
   { label: "DATE", value: "date" },
 ];
 

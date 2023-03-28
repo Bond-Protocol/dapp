@@ -3,9 +3,7 @@ import { ReactComponent as DynamicPriceImage } from "../../assets/images/dynamic
 import { ReactComponent as StaticPriceImage } from "../../assets/images/static-price.svg";
 import { ReactComponent as DynamicOraclePriceImage } from "../../assets/images/dynamic-oracle-price.svg";
 import { ReactComponent as StaticOraclePriceImage } from "../../assets/images/static-oracle-price.svg";
-
-export type PriceType = "dynamic" | "static";
-export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
+import { PriceType, PriceModel } from "reducers";
 
 export type PriceModelDetailsProps = {
   type: PriceType;
