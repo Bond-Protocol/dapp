@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { SelectModal } from "components/molecules/SelectModal";
 import { SelectVestingDialog } from "components/modals/SelectVestingDialog";
 import { PriceModelPicker } from "components/organisms/PriceModelPicker";
@@ -32,6 +33,7 @@ const capacityOptions = [
 ];
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
+  const [index, setIndex] = useState(0);
   const [state, dispatch] = useCreateMarket((state) => {
     return { ...state, startDate: Date.now() };
   });
@@ -45,17 +47,25 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   return (
     <div id="cm-root">
       <div id="cm-top-control" className="flex items-center justify-end">
-        <div className="font-fraktion mr-2 pl-8 text-sm tracking-widest">
+        <div
+          onClick={() => {
+            dispatch({ type: Action.RESET });
+            setIndex((i) => ++i);
+          }}
+          className="hover:text-light-secondary font-fraktion mr-2 cursor-pointer px-8 text-sm tracking-widest"
+        >
           RESET
         </div>
       </div>
-      <div id="cm-main-container" className="flex">
+      <div key={index} id="cm-main-container" className="flex">
         <div id="cm-left-container" className="w-1/2 pr-2">
           <div className="flex">
             <div className="flex w-1/2 gap-x-2 pr-2">
               <InputModal
                 label="Bond Token"
                 title="Select token"
+                value={state.payoutToken.symbol}
+                icon={state.payoutToken.icon}
                 ModalContent={(props) => (
                   <SelectTokenDialog {...props} tokens={tokenList} />
                 )}
@@ -78,6 +88,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               <InputModal
                 label="Get Token"
                 title="Select token"
+                value={state.quoteToken.symbol}
+                icon={state.quoteToken.icon}
                 ModalContent={(props) => (
                   <SelectTokenDialog {...props} tokens={tokenList} />
                 )}

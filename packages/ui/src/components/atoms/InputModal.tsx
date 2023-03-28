@@ -7,6 +7,8 @@ type InputModalProps = React.PropsWithChildren<{
   id?: string;
   label?: string;
   onSubmit?: (value: any) => void;
+  value: string;
+  icon?: string;
   ModalContent: (props: {
     onSubmit: Function;
     onClose: (event: React.BaseSyntheticEvent) => void;
@@ -18,14 +20,8 @@ type InputModalProps = React.PropsWithChildren<{
 export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
   const [open, setOpen] = useState(false);
 
-  const [customContent, setCustomContent] = useState({
-    label: props.defaultValue?.label,
-    icon: props.defaultValue?.icon,
-  });
-
   const handleSubmit = (value: any) => {
     props.onSubmit && props.onSubmit(value);
-    setCustomContent({ label: value.label, icon: value.icon });
   };
 
   const handleClose = (e: React.BaseSyntheticEvent) => {
@@ -39,13 +35,13 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
       <Input
         label={props.label}
         inputClassName="cursor-pointer"
-        value={customContent.label}
+        value={props.value}
         startAdornment={
-          customContent.icon && (
+          props.icon && (
             <Icon
               width={24}
               className="fill-white pl-2 text-white"
-              src={customContent.icon}
+              src={props.icon}
             />
           )
         }

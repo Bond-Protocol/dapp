@@ -11,6 +11,7 @@ export enum Action {
   UPDATE_VESTING = "update_vesting",
   UPDATE_PRICE_MODEL = "update_price_model",
   UPDATE_PRICE_RATES = "update_price_rates",
+  RESET = "reset",
 }
 
 export type Token = {
@@ -30,7 +31,7 @@ export type CreateMarketState = {
   capacityType: CapacityType;
   capacity: string;
   vesting: "term" | "expiry";
-  vestingDate: number;
+  vestingDate: string;
   priceModel: PriceModel;
   priceModels: Record<PriceModel, any>;
   oracleAddress?: string;
@@ -52,7 +53,7 @@ const initialState: CreateMarketState = {
   capacityType: "payout" as CapacityType,
   capacity: "0",
   vesting: "term",
-  vestingDate: 0,
+  vestingDate: "7",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
   endDate: 0,
@@ -68,7 +69,7 @@ export function reducer(
   state: CreateMarketState,
   action: { type: Action; [key: string]: any }
 ) {
-  const { type, value, ...args } = action;
+  const { type, value } = action;
 
   switch (type) {
     case Action.UPDATE_QUOTE_TOKEN: {
@@ -121,6 +122,10 @@ export function reducer(
           },
         },
       };
+    }
+
+    case Action.RESET: {
+      return initialState;
     }
 
     default: {
