@@ -93,9 +93,10 @@ export const PriceControl = (props: PriceControlProps) => {
             setReverseExchangeRate((prev) => !prev);
           }}
         >
-          {props.topLabel ?? reverseExchangeRate
-            ? exchangeLabel.split(" ").reverse().join(" ")
-            : exchangeLabel}
+          {props.topLabel ??
+            (reverseExchangeRate
+              ? exchangeLabel.split(" ").reverse().join(" ")
+              : exchangeLabel)}
         </div>
 
         <div className="font-fraktion text-[25px] text-white">

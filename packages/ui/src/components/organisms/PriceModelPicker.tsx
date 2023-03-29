@@ -72,6 +72,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
   const priceModel: PriceModel = oracle ? `oracle-${type}` : type;
 
   const priceControlFields = priceControlConfig[priceModel];
+  console.log({ priceModel, priceControlFields });
 
   useEffect(() => {
     props.onChange({ priceModel, oracle, oracleAddress });
@@ -110,6 +111,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
           </div>
         ) : (
           priceControlFields.map((p: any, i) => {
+            console.log({ p });
             return (
               <PriceControl
                 {...p}

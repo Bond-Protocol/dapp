@@ -2,64 +2,7 @@ import { ethers, BigNumber } from "ethers";
 import { CreateMarketScreen, CreateMarketState } from "ui";
 import * as contractLib from "@bond-protocol/contract-library";
 import { useNetwork, useSigner } from "wagmi";
-
-const doPriceMath = (state: CreateMarketState) => {
-  let rates = state.priceModels[state.priceModel];
-
-  const price = Number(rates?.initialPrice).toExponential();
-  const minPrice = Number(rates?.minPrice).toExponential();
-
-  const priceSymbolIndex = price.indexOf("e") + 1;
-  const minSymbolIndex = minPrice.indexOf("e") + 1;
-
-  const priceCoefficient = Number(price.substring(0, priceSymbolIndex - 1));
-  const minPriceCoefficient = Number(minPrice.substring(0, minSymbolIndex - 1));
-
-  // The exchange rates are the price of the payout token divided by the price of the quote token
-  // Therefore, the coefficient is already calculated for us.
-  // We can get the difference in the price decimals (payoutPriceDecimals - quotePriceDecimals) from the exponent of the exchange rate.
-  const priceDecimalDiff = Number(price.substring(priceSymbolIndex));
-  const minPriceDecimalDiff = Number(minPrice.substring(minSymbolIndex));
-
-  const tokenDecimalOffset =
-    state.quoteToken.decimals - state.payoutToken.decimals;
-
-  let priceDecimalOffset = priceDecimalDiff / 2;
-
-  priceDecimalOffset > 0
-    ? (priceDecimalOffset = Math.floor(priceDecimalOffset))
-    : (priceDecimalOffset = Math.ceil(priceDecimalOffset));
-
-  const scaleAdjustment = tokenDecimalOffset - priceDecimalOffset;
-
-  const exp =
-    36 +
-    scaleAdjustment +
-    state.quoteToken.decimals -
-    state.payoutToken.decimals +
-    priceDecimalDiff;
-
-  // Calculate the decimal difference in the initial price and minimum price to offset the exponent
-  const minPriceOffset = minPriceDecimalDiff - priceDecimalDiff;
-
-  const minExp = exp + minPriceOffset;
-
-  const matcher = /\.|,/g;
-  // Compile prices into strings for market creation
-  const formattedInitialPrice = (priceCoefficient * Math.pow(10, exp))
-    .toLocaleString()
-    .replaceAll(matcher, "");
-
-  const formattedMinimumPrice = (minPriceCoefficient * Math.pow(10, minExp))
-    .toLocaleString()
-    .replaceAll(matcher, "");
-
-  return {
-    scaleAdjustment,
-    formattedMinimumPrice,
-    formattedInitialPrice,
-  };
-};
+import { doPriceMath } from "./helpers";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
@@ -79,13 +22,14 @@ export const CreateMarketController = () => {
     if (state.vesting === "term") {
       vesting = state.vestingDate;
     } else if (state.vesting === "expiry") {
-      vesting = state.vestingDate * 24 * 60 * 60;
+      vesting = Number(state.vestingDate) * 24 * 60 * 60;
     }
 
-    //TODO: Replace with fetching from wallet
+    if (!network.chain?.id) throw new Error("Unspecified chain");
+
     const chain = {
-      id: 5,
-      label: "Goerli",
+      id: network?.chain?.id,
+      label: network.chain.name,
     };
 
     //TODO: REPLACE
@@ -95,12 +39,11 @@ export const CreateMarketController = () => {
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
-    //TODO: REMOVE
+    //TODO: Check for addresses
     const payoutTokenAddress = extractAddress(
       state.payoutToken.addresses[chain.id]
     );
 
-    //TODO: REMOVE
     const quoteTokenAddress = extractAddress(
       state.quoteToken.addresses[chain.id]
     );
@@ -141,13 +84,14 @@ export const CreateMarketController = () => {
       chain: chain.id,
     };
 
-    const tx = await contractLib.createMarket(
-      config.marketParams,
-      config.bondType,
-      config.chain,
-      signer,
-      { gasLimit: 1000000 }
-    );
+    console.log({ config, state });
+    // const tx = await contractLib.createMarket(
+    //   config.marketParams,
+    //   config.bondType,
+    //   config.chain,
+    //   signer,
+    //   { gasLimit: 1000000 }
+    // );
 
     return config;
   };

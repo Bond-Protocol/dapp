@@ -29,9 +29,10 @@ export type CreateMarketState = {
   quoteToken: Token;
   payoutToken: Token;
   capacityType: CapacityType;
-  capacity: string;
+  capacity: number;
   vesting: "term" | "expiry";
   vestingDate: string;
+  bondsPerWeek: number;
   priceModel: PriceModel;
   priceModels: Record<PriceModel, any>;
   oracleAddress?: string;
@@ -51,12 +52,13 @@ const initialState: CreateMarketState = {
   quoteToken: emptyToken,
   payoutToken: emptyToken,
   capacityType: "payout" as CapacityType,
-  capacity: "0",
+  capacity: 0,
   vesting: "term",
   vestingDate: "7",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
   endDate: 0,
+  bondsPerWeek: 7,
   priceModels: {
     dynamic: {},
     static: {},
@@ -81,17 +83,13 @@ export function reducer(
     }
 
     case Action.UPDATE_CAPACITY: {
-      return {
-        ...state,
-        capacity: value,
-      };
+      const capacity = isNaN(Number(value)) ? 0 : Number(value);
+
+      return { ...state, capacity };
     }
 
     case Action.UPDATE_CAPACITY_TYPE: {
-      return {
-        ...state,
-        capacityType: value,
-      };
+      return { ...state, capacityType: value };
     }
 
     case Action.UPDATE_VESTING: {

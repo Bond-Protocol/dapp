@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreateMarketController } from "components/organisms";
+import { CreateMarketController } from "components/modules/create-market";
 import { socials, PageHeader, PageNavigation } from "components/common";
 
 const docsSublink = "/bond-marketplace/deploy-a-bond-market";
