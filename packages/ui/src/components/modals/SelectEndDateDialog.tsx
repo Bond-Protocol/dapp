@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, DatePicker, FlatSelect } from "..";
-import { formatDate } from "utils";
+import { formatDate, dateMath } from "utils";
 import { ManualDayInput } from "components/molecules/ManualDayInput";
 
 const options = [
@@ -18,18 +18,18 @@ export const SelectEndDateDialog = (props: {
 }) => {
   const [type, setType] = useState<TermType>(defaultType);
   const [date, setDate] = useState<Date>();
-  const [days, setDays] = useState<string>("");
   const [state, setState] = useState({ canSubmit: true });
 
   const canSubmit = type === "date" ? !!date : state.canSubmit;
 
-  const onChange = (args: { date: Date; invalid?: boolean }) => {
+  const onDateChange = (args: { date: Date; invalid?: boolean }) => {
     setDate(args.date);
-    setType(type);
+    setType("date");
   };
 
-  const onManualChange = (days: string, other: any) => {
-    setDays(days);
+  const onDayChange = (date: Date, other: any) => {
+    setDate(date);
+    setType("term");
     setState(other);
   };
 
@@ -41,22 +41,10 @@ export const SelectEndDateDialog = (props: {
   const handleSubmit = (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const formattedDate = date && formatDate.short(date);
-    const label =
-      type === "date"
-        ? formattedDate
-        : days.includes("days")
-        ? days
-        : `${days} days`;
 
-    props.onSubmit({ value: { type, date, days }, label });
-
+    props.onSubmit(date);
     props.onClose(e);
   };
-
-  useEffect(() => {
-    props.onSubmit({ value: { type, date, days, canSubmit } });
-  }, [type, date, days]);
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -66,12 +54,15 @@ export const SelectEndDateDialog = (props: {
         onChange={handleTypeChange}
       />
       {type === "date" ? (
-        <DatePicker showTime onChange={onChange} />
+        <DatePicker
+          showTime
+          from={dateMath.addDays(props.startDate, 1)}
+          onChange={onDateChange}
+        />
       ) : (
         <ManualDayInput
           startDate={props.startDate}
-          defaultValue={days}
-          onChange={onManualChange}
+          onChange={onDayChange}
           className="mt-4 w-[416px] max-w-[416px] "
         />
       )}

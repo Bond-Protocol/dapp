@@ -30,11 +30,12 @@ export const DatePicker = (props: {
   className?: string;
   defaultDate?: Date;
   defaultTime?: string;
+  from?: Date;
 }) => {
   const [date, setDate] = useState<Date>();
   const { time, setTime, matcher } = useTimeInput(props.defaultTime);
 
-  const fromDate = new Date();
+  const fromDate = props.from ?? new Date();
   const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
 
   useEffect(() => {
@@ -87,7 +88,7 @@ export const DatePicker = (props: {
         <Input
           className="mt-2"
           placeholder="00:00"
-          errorMessage={isInThePast && "That date is in the past 👀 "}
+          errorMessage={isInThePast ? "That date is in the past 👀 " : ""}
           value={time}
           onChange={(e) => setTime(e)}
           startAdornment={<ClockIcon className="ml-2" />}

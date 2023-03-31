@@ -40,8 +40,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const [state, dispatch] = useCreateMarket((initialState) => {
     return {
       ...initialState,
-      startDate: new Date(),
-      endDate: dateMath.addMonths(new Date(), 1),
     };
   });
 
@@ -57,7 +55,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         <div
           onClick={() => {
             dispatch({ type: Action.RESET });
-            setIndex((i) => ++i); //TODO: (afx) :pepe_gun:
+            setIndex((i) => ++i); //TODO: (afx) :pepe_gun: but its valid react so
           }}
           className="hover:text-light-secondary font-fraktion mr-2 cursor-pointer px-8 text-sm tracking-widest"
         >
@@ -144,7 +142,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <InputModal
               label="Market Start Date"
               title="Select start date"
-              value={formatDate.short(state.startDate)}
+              value={
+                state.startDate ? formatDate.dateAndTime(state.startDate) : ""
+              }
               endAdornment={<CalendarIcon className="mr-2" />}
               ModalContent={(props) => <SelectDateDialog {...props} />}
               onSubmit={(value) =>
@@ -154,7 +154,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <InputModal
               label="Market End Date"
               title="Select end date"
-              value={formatDate.short(state.endDate)}
+              disabled={!state.startDate}
+              value={state.endDate ? formatDate.dateAndTime(state.endDate) : ""}
               endAdornment={<CalendarIcon className="mr-2" />}
               ModalContent={(props) => (
                 <SelectEndDateDialog startDate={state.startDate} {...props} />

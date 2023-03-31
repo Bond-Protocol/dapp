@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNumericInput } from "hooks/use-numeric-input";
 import { dateMath, formatDate } from "utils";
 import { Input } from "..";
 
 const errorMessage = "Markets can't be longer than 270 days";
 
-export type ManualVestingTermInputProps = {
+export type ManualVestingDayInputProps = {
   limit?: number;
   defaultValue?: string;
-  onChange: (value: string, other?: any) => void;
+  onChange: (date: Date, other?: any) => void;
   className?: string;
-  startDate: Date;
+  startDate?: Date;
 };
 
 export const ManualDayInput = ({
@@ -19,21 +19,21 @@ export const ManualDayInput = ({
   className,
   startDate,
   ...props
-}: ManualVestingTermInputProps) => {
+}: ManualVestingDayInputProps) => {
   const { value: days, setValue: setDays } = useNumericInput();
   const [endDate, setEndDate] = useState<Date>();
 
   const onChange = (e: React.BaseSyntheticEvent) => {
+    if (!startDate) return;
     const { value } = e.target;
-
     const error = parseFloat(value) > limit;
-    const canSubmit = !!value && !error;
     const calculatedDate = dateMath.addDays(startDate, parseFloat(value));
-    console.log({ limit, value, error, canSubmit });
+
+    const canSubmit = !!value && !error;
 
     setEndDate(calculatedDate);
     setDays(value);
-    props.onChange(value, { canSubmit });
+    props.onChange(calculatedDate, { canSubmit });
   };
 
   const error = parseFloat(days) > limit;

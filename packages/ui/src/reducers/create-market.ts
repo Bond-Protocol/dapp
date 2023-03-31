@@ -36,8 +36,8 @@ export type CreateMarketState = {
   bondsPerWeek: number;
   priceModel: PriceModel;
   priceModels: Record<PriceModel, any>;
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
   oracleAddress?: string;
   oracle?: boolean;
 };
@@ -59,9 +59,7 @@ const initialState: CreateMarketState = {
   vestingDate: "",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
-  endDate: new Date(),
   bondsPerWeek: 7,
-  startDate: new Date(),
   priceModels: {
     dynamic: {},
     static: {},

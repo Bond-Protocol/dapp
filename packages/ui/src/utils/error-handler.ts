@@ -1,5 +1,5 @@
 class BondProtocolError extends Error {
-  constructor(message: string, prefix = "[BP-Error]") {
+  constructor(message: string, prefix = "") {
     super(`${prefix}: ${message}`);
     this.name = this.constructor.name;
     Object.setPrototypeOf(this, new.target.prototype);

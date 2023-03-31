@@ -84,6 +84,24 @@ export const PriceControl = (props: PriceControlProps) => {
         </Button>
       </div>
       <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
+        <div className="font-fraktion flex font-bold uppercase">
+          {props.bottomLabel}
+          {props.tooltip && (
+            <Tooltip
+              content={props.tooltip}
+              iconClassname="ml-1 fill-light-grey-500"
+            />
+          )}
+        </div>
+
+        <div className="font-fraktion text-[25px] text-white">
+          <input
+            {...numericInput}
+            value={value}
+            onChange={onChange}
+            className="w-[170px] bg-transparent text-center"
+          />
+        </div>
         <div
           className={`flex select-none text-[14px] ${
             props.percentage ? "" : "cursor-pointer"
@@ -97,24 +115,6 @@ export const PriceControl = (props: PriceControlProps) => {
             (reverseExchangeRate
               ? exchangeLabel.split(" ").reverse().join(" ")
               : exchangeLabel)}
-        </div>
-
-        <div className="font-fraktion text-[25px] text-white">
-          <input
-            {...numericInput}
-            value={value}
-            onChange={onChange}
-            className="w-[170px] bg-transparent text-center"
-          />
-        </div>
-        <div className="font-fraktion flex font-bold uppercase">
-          {props.bottomLabel}
-          {props.tooltip && (
-            <Tooltip
-              content={props.tooltip}
-              iconClassname="ml-1 fill-light-grey-500"
-            />
-          )}
         </div>
       </div>
       <div className="flex items-center justify-center ">

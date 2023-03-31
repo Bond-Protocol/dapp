@@ -30,6 +30,8 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
   return (
     <div className="flex w-full flex-col justify-end">
       <Input
+        disabled={props.disabled}
+        placeholder={props.placeholder}
         label={props.label}
         inputClassName="cursor-pointer"
         value={props.value}
@@ -50,7 +52,7 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          setOpen(true);
+          if (!props.disabled) setOpen(true);
         }}
       />
 
