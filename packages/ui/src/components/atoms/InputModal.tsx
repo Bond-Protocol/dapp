@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Icon, Input, Modal, ModalProps } from "..";
+import { Icon, Input, InputProps, Modal, ModalProps } from "..";
 import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-icon.svg";
 
 type InputModalProps = React.PropsWithChildren<{
   className?: string;
   id?: string;
   label?: string;
-  onSubmit?: (value: any) => void;
+  onSubmit: (value: any) => void;
   value: string;
   icon?: string;
   ModalContent: (props: {
@@ -15,14 +15,11 @@ type InputModalProps = React.PropsWithChildren<{
   }) => JSX.Element;
   defaultValue?: any;
 }> &
-  Partial<ModalProps>;
+  Partial<ModalProps> &
+  Partial<InputProps>;
 
 export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
   const [open, setOpen] = useState(false);
-
-  const handleSubmit = (value: any) => {
-    props.onSubmit && props.onSubmit(value);
-  };
 
   const handleClose = (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
@@ -46,7 +43,9 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
           )
         }
         endAdornment={
-          <ArrowDownIcon className="mr-3 rotate-180 fill-white text-white" />
+          props.endAdornment ?? (
+            <ArrowDownIcon className="mr-3 rotate-180 fill-white text-white" />
+          )
         }
         onClick={(e) => {
           e.preventDefault();
@@ -56,7 +55,7 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
       />
 
       <Modal open={open} onClickClose={handleClose} title={props.title}>
-        <ModalContent onSubmit={handleSubmit} onClose={handleClose} />
+        <ModalContent onSubmit={props.onSubmit} onClose={handleClose} />
       </Modal>
     </div>
   );

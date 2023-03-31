@@ -72,7 +72,6 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
   const priceModel: PriceModel = oracle ? `oracle-${type}` : type;
 
   const priceControlFields = priceControlConfig[priceModel];
-  console.log({ priceModel, priceControlFields });
 
   useEffect(() => {
     props.onChange({ priceModel, oracle, oracleAddress });
@@ -82,10 +81,10 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between">
-        <p className="text-light-grey-400 text-sm">Price Model</p>
-        <Switch label="Oracle" onChange={(e) => setOracle(e.target.checked)} />
-      </div>
+      {/* <div className="flex items-center justify-between"> */}
+      {/*   <p className="text-light-grey-400 text-sm">Price Model</p> */}
+      {/*   <Switch label="Oracle" onChange={(e) => setOracle(e.target.checked)} /> */}
+      {/* </div> */}
 
       <FlatSelect
         className="mt-2"
@@ -111,7 +110,6 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
           </div>
         ) : (
           priceControlFields.map((p: any, i) => {
-            console.log({ p });
             return (
               <PriceControl
                 {...p}

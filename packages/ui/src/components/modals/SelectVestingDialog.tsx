@@ -17,7 +17,7 @@ export const SelectVestingDialog = (props: {
 }) => {
   const [type, setType] = useState<TermType>(defaultType);
   const [date, setDate] = useState<Date>();
-  const [days, setDays] = useState<string>("7");
+  const [days, setDays] = useState<string>("");
   const [state, setState] = useState({ canSubmit: true });
 
   const canSubmit = type === "date" ? !!date : state.canSubmit;

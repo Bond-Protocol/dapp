@@ -20,6 +20,8 @@ import {
   Action,
   CreateMarketState,
 } from "../../reducers/create-market";
+import { formatDate, dateMath } from "utils";
+import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 
 export type CreateMarketScreenProps = {
   a?: boolean;
@@ -35,7 +37,11 @@ const capacityOptions = [
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const [index, setIndex] = useState(0);
   const [state, dispatch] = useCreateMarket((state) => {
-    return { ...state, startDate: Date.now() };
+    return {
+      ...state,
+      startDate: new Date(),
+      endDate: dateMath.addMonths(new Date(), 1),
+    };
   });
 
   const totalBonds = 100;
@@ -50,7 +56,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         <div
           onClick={() => {
             dispatch({ type: Action.RESET });
-            setIndex((i) => ++i);
+            setIndex((i) => ++i); //TODO: (afx) :pepe_gun:
           }}
           className="hover:text-light-secondary font-fraktion mr-2 cursor-pointer px-8 text-sm tracking-widest"
         >
@@ -122,9 +128,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             onChange={(value) =>
               dispatch({ type: Action.UPDATE_PRICE_MODEL, value })
             }
-            onRateChange={(value) => {
-              dispatch({ type: Action.UPDATE_PRICE_RATES, value });
-            }}
+            onRateChange={(value) =>
+              dispatch({ type: Action.UPDATE_PRICE_RATES, value })
+            }
           />
         </div>
         <div
@@ -138,15 +144,22 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <InputModal
               label="Market Start Date"
               title="Select start date"
-              defaultValue={{ value: state.startDate, label: "Today" }}
-              ModalContent={SelectDateDialog}
+              value={formatDate.short(state.startDate)}
+              endAdornment={<CalendarIcon className="mr-2" />}
+              ModalContent={(props) => <SelectDateDialog {...props} />}
+              onSubmit={(value) =>
+                dispatch({ type: Action.UPDATE_START_DATE, value })
+              }
             />
-            <SelectModal
-              label="Market Length"
-              title="Set Market Length"
-              options={vestingOptions}
-              defaultValue="7d"
-              ModalContent={SelectVestingDialog}
+            <InputModal
+              label="Market End Date"
+              title="Select end date"
+              value={formatDate.short(state.endDate)}
+              endAdornment={<CalendarIcon className="mr-2" />}
+              ModalContent={(props) => <SelectDateDialog {...props} />}
+              onSubmit={(value) =>
+                dispatch({ type: Action.UPDATE_END_DATE, value })
+              }
             />
           </div>
           <div className="mt-4 flex gap-x-4">

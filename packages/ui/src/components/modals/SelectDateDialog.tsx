@@ -1,40 +1,51 @@
 import { useEffect, useState } from "react";
-import { Button, DatePicker } from "..";
-import { formatDate } from "utils";
+import { ReactComponent as ClockIcon } from "assets/icons/clock.svg";
 
-type TermType = "term" | "date";
+import { Button, DatePicker, Input } from "..";
+import { useTimeInput } from "hooks/use-time-input";
+import { dateMath } from "utils";
 
-const defaultType = "term";
 export const SelectDateDialog = (props: {
   onSubmit: Function;
   onClose: Function;
+  defaultDate?: Date;
+  defaultTime?: string;
 }) => {
-  const [type, setType] = useState<TermType>(defaultType);
-  const [date, setDate] = useState<Date>();
-
-  const canSubmit = !!date;
-
-  const onChange = (date?: Date) => {
-    setDate(date);
-    setType(type);
-  };
+  const [date, setDate] = useState<Date>(props.defaultDate ?? new Date());
+  const { time, setTime, matcher } = useTimeInput(props.defaultTime);
 
   const handleSubmit = (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const label = date && formatDate.short(date);
-    props.onSubmit({ value: { type, date }, label });
 
     props.onClose(e);
+
+    props.onSubmit(date);
   };
 
   useEffect(() => {
-    props.onSubmit({ value: { type, date, canSubmit } });
-  }, [type, date]);
+    //Update date with time once its typed
+    if (matcher.test(time) && date) {
+      const fullDate = dateMath.addTimeToDate(date, time);
+      setDate(fullDate);
+    }
+  }, [time]);
+
+  const isInThePast =
+    matcher.test(time) &&
+    dateMath.isBefore(dateMath.addTimeToDate(date, time), new Date());
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <DatePicker onChange={onChange} />
+      <DatePicker onChange={setDate} />
+      <Input
+        className="mt-2"
+        placeholder="16:00"
+        errorMessage={isInThePast && "That time is in the past 👀"}
+        value={time}
+        onChange={(e) => setTime(e)}
+        startAdornment={<ClockIcon className="ml-2" />}
+      />
       <div className="flex w-full gap-x-2 pt-4">
         <Button
           variant="ghost"
@@ -44,12 +55,7 @@ export const SelectDateDialog = (props: {
         >
           Cancel
         </Button>
-        <Button
-          disabled={!canSubmit}
-          onClick={handleSubmit}
-          size="lg"
-          className="w-full"
-        >
+        <Button onClick={handleSubmit} size="lg" className="w-full">
           Select
         </Button>
       </div>

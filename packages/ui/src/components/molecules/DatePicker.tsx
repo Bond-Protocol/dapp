@@ -7,17 +7,19 @@ const getDayFirstLetter = (date = new Date(), locale = "en-US") => {
 };
 
 export const DatePicker = (props: {
-  onChange: (date?: Date) => void;
+  onChange: (date: Date) => void;
   className?: string;
+  defaultDate?: Date;
 }) => {
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date>(props.defaultDate ?? new Date());
 
   const fromDate = new Date();
   const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
 
   const onSelect = (date?: Date) => {
-    setDate(date);
-    props.onChange(date);
+    const nextDate = date ?? new Date();
+    setDate(nextDate);
+    props.onChange(nextDate);
   };
 
   return (
