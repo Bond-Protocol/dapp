@@ -2,6 +2,7 @@ import { SearchBar } from "components/molecules/SearchBar";
 import { useEffect, useState } from "react";
 import { Label } from "..";
 
+//Checks whether a field includes a string
 const includesText = (field: string, target: string) => {
   return field.toLowerCase().includes(target.toLowerCase());
 };
@@ -14,6 +15,9 @@ const includesAddress = (token: any, target: string) => {
 
 const fields = ["name", "symbol"];
 
+/**
+ * Shows a list of tokens to be selected with a search bar
+ * */
 export const SelectTokenDialog = (props: {
   onSubmit: Function;
   onClose: Function;
@@ -23,18 +27,19 @@ export const SelectTokenDialog = (props: {
   const [list, setList] = useState(props.tokens);
 
   useEffect(() => {
-    const f = props.tokens.filter(
+    const filteredTokens = props.tokens.filter(
       (token: Record<string, any>) =>
         fields.some((field) => includesText(token[field], filter)) ||
         includesAddress(token, filter)
     );
 
-    setList(f);
+    setList(filteredTokens);
   }, [filter]);
 
   return (
     <div className="w-[448px]">
       <SearchBar
+        autoFocus
         value={filter}
         onChange={setFilter}
         inputClassName=""

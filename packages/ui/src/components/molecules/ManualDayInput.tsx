@@ -1,58 +1,62 @@
 import { useEffect, useState } from "react";
 import { useNumericInput } from "hooks/use-numeric-input";
-import { Checkbox, Input } from "..";
-import { formatDate } from "utils";
+import { dateMath, formatDate } from "utils";
+import { Input } from "..";
 
-const VestingWarning = ({ value }: { value: string }) => (
-  <div>
-    {value} days seems like an excessive vesting term. <br /> Please make sure
-    you know what you're doing.
-  </div>
-);
-
-const errorMessage = "Vesting time can't be longer than 270 days";
+const errorMessage = "Markets can't be longer than 270 days";
 
 export type ManualVestingTermInputProps = {
   limit?: number;
   defaultValue?: string;
   onChange: (value: string, other?: any) => void;
   className?: string;
+  startDate: Date;
 };
 
 export const ManualDayInput = ({
   limit = 270,
   defaultValue,
   className,
+  startDate,
   ...props
 }: ManualVestingTermInputProps) => {
-  const { value, setValue } = useNumericInput();
-
-  const error = parseFloat(value) > limit;
+  const { value: days, setValue: setDays } = useNumericInput();
+  const [endDate, setEndDate] = useState<Date>();
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     const { value } = e.target;
 
+    const error = parseFloat(value) > limit;
     const canSubmit = !!value && !error;
+    const calculatedDate = dateMath.addDays(startDate, parseFloat(value));
+    console.log({ limit, value, error, canSubmit });
 
-    setValue(value);
+    setEndDate(calculatedDate);
+    setDays(value);
     props.onChange(value, { canSubmit });
   };
 
+  const error = parseFloat(days) > limit;
   return (
     <div className={"w-full" + " " + className}>
       <Input
+        autoFocus
         errorMessage={error ? errorMessage : ""}
         label="Market Length"
         placeholder="Enter the amount of days to run the market"
-        onFocus={() => setValue((value) => value.split(" ")[0])}
-        onBlur={() => setValue((value) => value + " days")}
+        onFocus={() => setDays((value) => value.split(" ")[0])}
+        onBlur={() => setDays((value) => value + " days")}
         subText={`Max ${limit} days`}
-        value={value !== "0" ? value : ""}
+        value={days !== "0" ? days : ""}
         onChange={onChange}
       />
-      <div className="flex items-center justify-center p-8">
-        <h4>{formatDate.short(new Date())}</h4>
-        <p>End Date</p>
+      <div className="flex flex-col items-center justify-center p-8 pb-6">
+        <h4 className="font-fraktion text-5xl font-bold">
+          {endDate && formatDate.short(endDate) !== "invalid"
+            ? formatDate.short(endDate)
+            : ""}
+        </h4>
+        <p className="text-light-grey font-fraktion font-bold">END DATE</p>
       </div>
     </div>
   );

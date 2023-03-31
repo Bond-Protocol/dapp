@@ -9,7 +9,9 @@ export default {
 } as ComponentMeta<typeof CreateMarketScreen>;
 
 const Template: ComponentStory<typeof CreateMarketScreen> = (args) => (
-  <CreateMarketScreen {...args} />
+  <div className="max-w-[1136px]">
+    <CreateMarketScreen {...args} />
+  </div>
 );
 
 export const Primary = Template.bind({});

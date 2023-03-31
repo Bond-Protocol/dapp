@@ -22,6 +22,7 @@ import {
 } from "../../reducers/create-market";
 import { formatDate, dateMath } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import { SelectEndDateDialog } from "components/modals/SelectEndDateDialog";
 
 export type CreateMarketScreenProps = {
   a?: boolean;
@@ -36,9 +37,9 @@ const capacityOptions = [
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const [index, setIndex] = useState(0);
-  const [state, dispatch] = useCreateMarket((state) => {
+  const [state, dispatch] = useCreateMarket((initialState) => {
     return {
-      ...state,
+      ...initialState,
       startDate: new Date(),
       endDate: dateMath.addMonths(new Date(), 1),
     };
@@ -83,7 +84,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 label="Vesting"
                 title="Custom Vesting"
                 options={vestingOptions}
-                defaultValue="7d"
                 ModalContent={SelectVestingDialog}
                 onSubmit={({ value }) =>
                   dispatch({ type: Action.UPDATE_VESTING, value })
@@ -156,7 +156,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               title="Select end date"
               value={formatDate.short(state.endDate)}
               endAdornment={<CalendarIcon className="mr-2" />}
-              ModalContent={(props) => <SelectDateDialog {...props} />}
+              ModalContent={(props) => (
+                <SelectEndDateDialog startDate={state.startDate} {...props} />
+              )}
               onSubmit={(value) =>
                 dispatch({ type: Action.UPDATE_END_DATE, value })
               }

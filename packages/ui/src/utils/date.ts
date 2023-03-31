@@ -2,46 +2,36 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import format from "date-fns/format";
 import fnsAddMonths from "date-fns/addMonths";
 import fnsIsBefore from "date-fns/isBefore";
+import fnsAddDays from "date-fns/addDays";
+import { wrapWithErrorHandler } from "./error-handler";
 
-const handleError = (error: Error) => {
-  console.error(error);
-  return "invalid";
-};
-
-const withErrorHandling = (fn: Function) => {
-  return (...args: any[]) => {
-    try {
-      return fn(...args);
-    } catch (error) {
-      return handleError(error as any);
-    }
-  };
-};
-
-export const short = withErrorHandling((date: Date) => {
+export const short = (date: Date) => {
   return format(date, "yyyy.MM.dd");
-});
+};
 
-export const dayMonthTime = withErrorHandling((date: Date) => {
+export const dayMonthTime = (date: Date) => {
   return format(date, "MM/dd p");
-});
+};
 
-export const distanceToNow = withErrorHandling((date: Date) => {
+export const distanceToNow = (date: Date) => {
   return formatDistanceToNow(date);
-});
+};
 
-export const longDate = withErrorHandling((date: Date) => {
+export const longDate = (date: Date) => {
   return format(date, "PP pp");
-});
+};
 
-export const addMonths = withErrorHandling((date: Date, months: number) => {
+export const addMonths = (date: Date, months: number) => {
   return fnsAddMonths(date, months);
-});
+};
 
-export const isBefore = withErrorHandling((date: Date, target: Date) => {
+export const isBefore = (date: Date, target: Date) => {
   return fnsIsBefore(date, target);
-});
+};
 
+/**
+ * Adds a time string in hh:mm format to a date object
+ */
 export const addTimeToDate = (date = new Date(), time = "00:00") => {
   // Extract the day, month, and year from the date
   const day = date.getDate();
@@ -55,15 +45,20 @@ export const addTimeToDate = (date = new Date(), time = "00:00") => {
   return new Date(year, month, day, Number(hours), Number(minutes));
 };
 
-export const formatDate = {
+export const addDays = (date: Date, days: number) => {
+  return fnsAddDays(date, days);
+};
+
+export const formatDate = wrapWithErrorHandler({
   short,
   longDate,
   dayMonthTime,
   distanceToNow,
-};
+});
 
-export const dateMath = {
-  addMonths,
+export const dateMath = wrapWithErrorHandler({
   isBefore,
+  addDays,
+  addMonths,
   addTimeToDate,
-};
+});

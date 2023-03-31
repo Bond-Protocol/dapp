@@ -33,7 +33,7 @@ export const ManualVestingTermInput = ({
   className,
   ...props
 }: ManualVestingTermInputProps) => {
-  const { value, setValue } = useNumericInput(defaultValue + " days");
+  const { value, setValue } = useNumericInput();
   const [acceptedWarning, setAcceptedWarning] = useState(false);
 
   const error = parseFloat(value) > limit;
@@ -53,13 +53,19 @@ export const ManualVestingTermInput = ({
     if (warning) {
       props.onChange(value, { canSubmit: acceptedWarning });
     }
+    if (error) {
+      setAcceptedWarning(false);
+      props.onChange(value, { canSubmit: !error });
+    }
   }, [error, acceptedWarning, warning]);
 
   return (
     <div className={"w-full" + " " + className}>
       <Input
+        autoFocus
         errorMessage={error ? errorMessage : ""}
         label="Market Length"
+        placeholder="Enter the amount of vesting days"
         onFocus={() => setValue((value) => value.split(" ")[0])}
         onBlur={() => setValue((value) => value + " days")}
         subText={
@@ -73,12 +79,16 @@ export const ManualVestingTermInput = ({
         }
         rootClassName={warning ? "border-light-secondary" : ""}
         subTextClassName={warning ? "text-light-secondary" : ""}
-        value={value}
+        value={value !== "0" ? value : ""}
         onChange={onChange}
       />
       {warning && (
         <div className="pt-4">
-          <Checkbox label="I understand" onChange={setAcceptedWarning} />
+          <Checkbox
+            label="I understand"
+            startChecked={acceptedWarning}
+            onChange={setAcceptedWarning}
+          />
           <LengthWarning />
         </div>
       )}

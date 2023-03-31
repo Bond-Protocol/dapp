@@ -13,6 +13,7 @@ export const SearchBar = (props: SearchBarProps) => {
   return (
     <div className={props.className}>
       <Input
+        autoFocus={props.autoFocus}
         placeholder={props.placeholder ?? "Search"}
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}

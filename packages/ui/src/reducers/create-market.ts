@@ -2,6 +2,16 @@ import { useReducer } from "react";
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
+export type CapacityType = "quote" | "payout";
+
+export type Token = {
+  name: string;
+  symbol: string;
+  icon: string;
+  price: number;
+  decimals: number;
+  addresses?: { [key: string | number]: string | string[] };
+};
 
 export enum Action {
   UPDATE_QUOTE_TOKEN = "update_bond_token",
@@ -15,17 +25,6 @@ export enum Action {
   UPDATE_END_DATE = "update_end_date",
   RESET = "reset",
 }
-
-export type Token = {
-  name: string;
-  symbol: string;
-  icon: string;
-  price: number;
-  decimals: number;
-  addresses?: { [key: string | number]: string | string[] };
-};
-
-type CapacityType = "quote" | "payout";
 
 export type CreateMarketState = {
   quoteToken: Token;
@@ -43,7 +42,7 @@ export type CreateMarketState = {
   oracle?: boolean;
 };
 
-const emptyToken = {
+const placeholderToken = {
   name: "",
   symbol: "",
   icon: "",
@@ -52,12 +51,12 @@ const emptyToken = {
 };
 
 const initialState: CreateMarketState = {
-  quoteToken: emptyToken,
-  payoutToken: emptyToken,
+  quoteToken: placeholderToken,
+  payoutToken: placeholderToken,
   capacityType: "payout" as CapacityType,
   capacity: "",
   vesting: "term",
-  vestingDate: "7",
+  vestingDate: "",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
   endDate: new Date(),
@@ -71,10 +70,10 @@ const initialState: CreateMarketState = {
   },
 };
 
-export function reducer(
+export const reducer = (
   state: CreateMarketState,
   action: { type: Action; [key: string]: any }
-): CreateMarketState {
+): CreateMarketState => {
   const { type, value } = action;
 
   console.log({ type, value });
@@ -144,7 +143,7 @@ export function reducer(
       return state;
     }
   }
-}
+};
 
 export const useCreateMarket = (init = (state: CreateMarketState) => state) => {
   return useReducer(reducer, initialState, init);
