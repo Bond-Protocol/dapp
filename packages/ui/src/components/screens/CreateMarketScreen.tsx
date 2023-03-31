@@ -20,12 +20,11 @@ import {
   Action,
   CreateMarketState,
 } from "../../reducers/create-market";
-import { formatDate, dateMath } from "utils";
+import { formatDate } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { SelectEndDateDialog } from "components/modals/SelectEndDateDialog";
 
 export type CreateMarketScreenProps = {
-  a?: boolean;
   onSubmit: (state: CreateMarketState) => void;
   onSubmitMultisig: (state: CreateMarketState) => void;
 };
@@ -158,7 +157,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               value={state.endDate ? formatDate.dateAndTime(state.endDate) : ""}
               endAdornment={<CalendarIcon className="mr-2" />}
               ModalContent={(props) => (
-                <SelectEndDateDialog startDate={state.startDate} {...props} />
+                <SelectEndDateDialog
+                  {...props}
+                  startDate={state.startDate ?? new Date()}
+                />
               )}
               onSubmit={(value) =>
                 dispatch({ type: Action.UPDATE_END_DATE, value })

@@ -22,7 +22,7 @@ export const SelectVestingDialog = (props: {
 
   const canSubmit = type === "date" ? !!date : state.canSubmit;
 
-  const onChange = (date?: Date) => {
+  const onChange = ({ date }: { date: Date }) => {
     setDate(date);
     setType(type);
   };
