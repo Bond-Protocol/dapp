@@ -40,7 +40,7 @@ export const SelectVestingDialog = (props: {
   const handleSubmit = (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const formattedDate = date && formatDate.short(date);
+    const formattedDate = date && formatDate.shorter(date);
     const label =
       type === "date"
         ? formattedDate
@@ -52,10 +52,6 @@ export const SelectVestingDialog = (props: {
 
     props.onClose(e);
   };
-
-  useEffect(() => {
-    props.onSubmit({ value: { type, date, days, canSubmit } });
-  }, [type, date, days]);
 
   return (
     <div className="flex flex-col items-center justify-center">

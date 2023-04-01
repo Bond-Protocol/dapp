@@ -12,7 +12,7 @@ import {
   useTokenAllowance,
   useTokens,
 } from "hooks";
-import { Button, InputCard, ActionInfoList } from "ui";
+import { Button, InputCard, ActionInfoList, formatDate } from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
 import { useAccount, useSigner } from "wagmi";
@@ -20,7 +20,7 @@ import { useNativeCurrency } from "hooks/useNativeCurrency";
 import { providers } from "services/owned-providers";
 import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import add from "date-fns/add";
-import { formatDate, getTokenDetails } from "src/utils";
+import { getTokenDetails } from "src/utils";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;

@@ -56,7 +56,7 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
         )} text-right`}
       />
       <div className="text-light-primary-50 mt-2 text-[10px]">
-        {formatDate.longDate(date)}
+        {formatDate.long(date)}
       </div>
     </div>
   );

@@ -6,10 +6,11 @@ import fnsAddDays from "date-fns/addDays";
 import { wrapWithErrorHandler } from "./error-handler";
 
 // Format
+export const shorter = (date: Date) => format(date, "yy.MM.dd");
 export const short = (date: Date) => format(date, "yyyy.MM.dd");
-export const dateAndTime = (date: Date) => format(date, "yyyy.MM.dd - HH:mm");
+export const long = (date: Date) => format(date, "PP pp");
 export const dayMonthTime = (date: Date) => format(date, "MM/dd p");
-export const longDate = (date: Date) => format(date, "PP pp");
+export const dateAndTime = (date: Date) => format(date, "yyyy.MM.dd - HH:mm");
 export const distanceToNow = (date: Date) => formatDistanceToNow(date);
 
 // Math
@@ -38,9 +39,9 @@ export const addTimeToDate = (date = new Date(), time = "00:00") => {
 };
 
 export const formatDate = wrapWithErrorHandler({
+  shorter,
   short,
-  long: longDate,
-  longDate,
+  long,
   dateAndTime,
   dayMonthTime,
   distanceToNow,
