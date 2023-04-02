@@ -12,6 +12,8 @@ export interface ActionInfoLabelProps {
   tooltip?: string;
   link?: string;
   className?: string;
+  linkClassName?: string;
+  tooltipClassName?: string;
 }
 
 export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
@@ -23,11 +25,15 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
           <Tooltip
             content={props.tooltip}
             iconWidth={13.3}
-            iconClassname="pb-[1px] ml-0.5 fill-light-secondary-10"
+            iconClassname={`pb-[1px] ml-0.5 fill-light-secondary-10 ${props.tooltipClassName}`}
           />
         )}
         {props.link && (
-          <Link target="_blank" href={props.link}>
+          <Link
+            target="_blank"
+            href={props.link}
+            className={props.linkClassName}
+          >
             {props.value}
           </Link>
         )}
@@ -50,4 +56,15 @@ export const ActionInfo = (props: ActionInfoProps) => {
       />
     </div>
   );
+};
+
+export const SummaryRow = (props: ActionInfoProps) => {
+  <div className="child:my-auto child:mx-2 flex h-6 justify-between bg-white/5 text-2xl">
+    <ActionInfoLabel value={props.leftLabel} tooltip={props.tooltip} />
+    <ActionInfoLabel
+      value={props.rightLabel}
+      link={props.link}
+      className="font-bold"
+    />
+  </div>;
 };

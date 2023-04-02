@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { IssuerCard } from "components/molecules/IssuerCard";
-import logo from "../../assets/logo-24.svg";
+import { IssuerCard } from "components";
+import logo from "assets/logo-24.svg";
 
 export default {
   title: "Design System/Molecules/IssuerCard",

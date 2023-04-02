@@ -1,9 +1,8 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Modal } from "../../components/molecules/Modal";
-import { SelectTokenDialog } from "../../components/modals/SelectTokenDialog";
+import { Modal, SelectTokenDialog } from "components";
 
 import { ModalDecorator } from "../decorators";
-import { list as tokenList } from "utils/sample-tokens";
+import { list as tokenList } from "utils";
 
 export default {
   title: "Components/Modals/SelectToken",

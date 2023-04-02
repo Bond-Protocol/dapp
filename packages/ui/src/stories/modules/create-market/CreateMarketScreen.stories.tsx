@@ -1,8 +1,8 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { CreateMarketScreen } from "../../components/screens/CreateMarketScreen";
+import { CreateMarketScreen } from "components";
 
 export default {
-  title: "Screens/CreateMarketScreen",
+  title: "Modules/CreateMarket",
   component: CreateMarketScreen,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},

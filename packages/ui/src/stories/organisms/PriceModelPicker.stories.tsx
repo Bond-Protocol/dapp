@@ -1,6 +1,5 @@
-//@ts-nocheck
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { PriceModelPicker } from "../../components/organisms/PriceModelPicker";
+import { PriceModelPicker } from "components";
 
 export default {
   title: "Design System/Organisms/PriceModelPicker",
@@ -16,6 +15,3 @@ const Template: ComponentStory<typeof PriceModelPicker> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = {
-  onModelChange: () => {},
-};

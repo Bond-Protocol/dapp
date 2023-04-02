@@ -1,5 +1,6 @@
 export * from './currency'
 export * from './date'
+export * from './error-handler'
 export * from './getTokenDetails'
 export * from './options'
 export * from './sample-tokens'

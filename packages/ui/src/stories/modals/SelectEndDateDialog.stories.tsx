@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Modal } from "../../components/molecules/Modal";
+import { Modal } from "components";
 
-import { SelectEndDateDialog } from "../../components/modals/SelectEndDateDialog";
+import { SelectEndDateDialog } from "components";
 
 import { ModalDecorator } from "../decorators";
 

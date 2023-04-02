@@ -1,9 +1,9 @@
-import { Input } from "..";
-import { ReactComponent as DynamicPriceImage } from "../../assets/images/dynamic-price.svg";
-import { ReactComponent as StaticPriceImage } from "../../assets/images/static-price.svg";
-import { ReactComponent as DynamicOraclePriceImage } from "../../assets/images/dynamic-oracle-price.svg";
-import { ReactComponent as StaticOraclePriceImage } from "../../assets/images/static-oracle-price.svg";
-import { PriceType, PriceModel } from "reducers";
+import { ReactComponent as DynamicPriceImage } from "assets/images/dynamic-price.svg";
+import { ReactComponent as StaticPriceImage } from "assets/images/static-price.svg";
+import { ReactComponent as DynamicOraclePriceImage } from "assets/images/dynamic-oracle-price.svg";
+import { ReactComponent as StaticOraclePriceImage } from "assets/images/static-oracle-price.svg";
+import { Input } from "components";
+import { PriceType, PriceModel } from "./create-market-reducer";
 
 export type PriceModelDetailsProps = {
   type: PriceType;

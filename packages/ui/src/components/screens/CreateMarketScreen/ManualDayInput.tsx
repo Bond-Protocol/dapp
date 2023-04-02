@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNumericInput } from "hooks/use-numeric-input";
 import { dateMath, formatDate } from "utils";
-import { Input } from "..";
+import { Input } from "components";
 
 const errorMessage = "Markets can't be longer than 270 days";
 

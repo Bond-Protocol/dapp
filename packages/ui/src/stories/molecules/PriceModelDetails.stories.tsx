@@ -1,6 +1,5 @@
-//@ts-nocheck
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { PriceModelDetails } from "components/molecules/PriceModelDetails";
+import { PriceModelDetails } from "components";
 
 export default {
   title: "Design System/Molecules/PriceModelDetails",
@@ -20,15 +19,14 @@ export const Oracle = Base.bind({});
 Oracle.args = {
   oracle: true,
   type: "dynamic",
+  onOracleChange: () => {},
 };
 
-export const All = () => {
-  return (
-    <div className="child:pb-20">
-      <Base type="dynamic" />
-      <Base type="static" />
-      <Base oracle type="dynamic" />
-      <Base oracle type="static" />
-    </div>
-  );
-};
+export const All: ComponentStory<typeof PriceModelDetails> = (args) => (
+  <div className="child:pb-20">
+    <Base {...args} type="dynamic" />
+    <Base {...args} type="static" />
+    <Base {...args} oracle type="dynamic" />
+    <Base {...args} oracle type="static" />
+  </div>
+);

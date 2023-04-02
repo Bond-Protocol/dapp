@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { Button } from "components/atoms/Button";
-import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg";
-import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
+import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
+import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

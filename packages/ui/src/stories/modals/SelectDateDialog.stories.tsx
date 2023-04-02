@@ -1,9 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Modal } from "../../components/molecules/Modal";
-
-import { SelectDateDialog } from "../../components/modals/SelectDateDialog";
-
 import { ModalDecorator } from "../decorators";
+
+import { Modal, SelectDateDialog } from "components";
 
 export default {
   title: "Components/Modals/SelectDate",

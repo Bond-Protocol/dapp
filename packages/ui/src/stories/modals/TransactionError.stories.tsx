@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { TransactionErrorDialog } from "../../components/modals";
+import { TransactionErrorDialog } from "components";
 
 import { ModalDecorator, blockExplorerUrl } from "../decorators";
 

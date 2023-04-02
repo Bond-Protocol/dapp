@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { TokenLabel } from "components/atoms/TokenLabel";
+import { TokenLabel } from "components";
 
 export default {
   title: "Design System/Atoms/TokenLabel",

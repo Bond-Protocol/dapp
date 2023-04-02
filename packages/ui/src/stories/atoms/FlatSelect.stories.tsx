@@ -1,7 +1,7 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { FlatSelect } from "components/atoms/FlatSelect";
-import { ReactComponent as SawLineIcon } from "../../assets/icons/saw-line.svg";
-import { ReactComponent as LineIcon } from "../../assets/icons/line.svg";
+import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
+import { ReactComponent as LineIcon } from "assets/icons/line.svg";
 
 export default {
   title: "Design System/Atoms/FlatSelect",

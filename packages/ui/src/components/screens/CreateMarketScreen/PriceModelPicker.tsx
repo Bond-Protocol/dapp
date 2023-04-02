@@ -1,18 +1,11 @@
-//@ts-nocheck
 import { useState, useEffect } from "react";
-import { FlatSelect, Switch } from "..";
-import { ReactComponent as SawLineIcon } from "../../assets/icons/saw-line.svg";
-import { ReactComponent as LineIcon } from "../../assets/icons/line.svg";
-import {
-  PriceModelDetails,
-  PriceModel,
-  PriceType,
-} from "components/molecules/PriceModelDetails";
-import {
-  PriceControl,
-  PriceControlProps,
-} from "components/molecules/PriceControl";
-import { ReactComponent as AngleIcon } from "../../assets/icons/angle.svg";
+import { FlatSelect } from "components";
+import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
+import { ReactComponent as LineIcon } from "assets/icons/line.svg";
+import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
+import { PriceModelDetails } from "./PriceModelDetails";
+import { PriceModel, PriceType } from "./create-market-reducer";
+import { PriceControl, PriceControlProps } from "./PriceControl";
 
 export type PriceModelPickerProps = {
   onChange: (args: {

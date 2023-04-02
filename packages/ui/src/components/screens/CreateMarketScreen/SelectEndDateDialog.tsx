@@ -1,7 +1,6 @@
-import { ManualVestingTermInput } from "components/molecules/ManualVestingTermInput";
-import { useEffect, useState } from "react";
-import { Button, DatePicker, FlatSelect, Link } from "..";
-import { formatDate } from "utils";
+import { useState } from "react";
+import { dateMath } from "utils";
+import { Button, DatePicker, FlatSelect, ManualDayInput } from "components";
 
 const options = [
   { label: "LENGTH", value: "term" },
@@ -11,24 +10,25 @@ const options = [
 type TermType = "term" | "date";
 
 const defaultType = "term";
-export const SelectVestingDialog = (props: {
+export const SelectEndDateDialog = (props: {
   onSubmit: Function;
   onClose: Function;
+  startDate: Date;
 }) => {
   const [type, setType] = useState<TermType>(defaultType);
   const [date, setDate] = useState<Date>();
-  const [days, setDays] = useState<string>("");
   const [state, setState] = useState({ canSubmit: true });
 
   const canSubmit = type === "date" ? !!date : state.canSubmit;
 
-  const onChange = ({ date }: { date: Date }) => {
-    setDate(date);
-    setType(type);
+  const onDateChange = (args: { date: Date; invalid?: boolean }) => {
+    setDate(args.date);
+    setType("date");
   };
 
-  const onManualChange = (days: string, other: any) => {
-    setDays(days);
+  const onDayChange = (date: Date, other: any) => {
+    setDate(date);
+    setType("term");
     setState(other);
   };
 
@@ -40,16 +40,8 @@ export const SelectVestingDialog = (props: {
   const handleSubmit = (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const formattedDate = date && formatDate.shorter(date);
-    const label =
-      type === "date"
-        ? formattedDate
-        : days.includes("days")
-        ? days
-        : `${days} days`;
 
-    props.onSubmit({ value: { type, date, days }, label });
-
+    props.onSubmit(date);
     props.onClose(e);
   };
 
@@ -61,11 +53,15 @@ export const SelectVestingDialog = (props: {
         onChange={handleTypeChange}
       />
       {type === "date" ? (
-        <DatePicker onChange={onChange} />
+        <DatePicker
+          showTime
+          from={dateMath.addDays(props.startDate, 1)}
+          onChange={onDateChange}
+        />
       ) : (
-        <ManualVestingTermInput
-          defaultValue={days}
-          onChange={onManualChange}
+        <ManualDayInput
+          startDate={props.startDate}
+          onChange={onDayChange}
           className="mt-4 w-[416px] max-w-[416px] "
         />
       )}
@@ -87,7 +83,6 @@ export const SelectVestingDialog = (props: {
           Select
         </Button>
       </div>
-      <Link className="mt-4 -mb-1 font-mono text-sm">CUSTOM VESTING FAQ</Link>
     </div>
   );
 };

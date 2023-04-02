@@ -1,10 +1,10 @@
-import { Tooltip, Button } from "..";
-import { ReactComponent as PlusIcon } from "../../assets/icons/plus.svg";
-import { ReactComponent as MinusIcon } from "../../assets/icons/minus.svg";
-import { useNumericInput } from "hooks/use-numeric-input";
-import { Token } from "reducers/create-market";
 import { useEffect, useState } from "react";
+import { Tooltip, Button } from "components";
 import { getPriceScale } from "utils";
+import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
+import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
+import { useNumericInput } from "hooks/use-numeric-input";
+import { Token } from "./create-market-reducer";
 
 export type PriceControlProps = {
   bottomLabel: string;

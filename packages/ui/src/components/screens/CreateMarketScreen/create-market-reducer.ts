@@ -2,7 +2,8 @@ import { useReducer } from "react";
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
-export type CapacityType = "quote" | "payout";
+export type CapacityOption = "quote" | "payout";
+export type VestingOption = "term" | "expiry";
 
 export type Token = {
   name: string;
@@ -29,9 +30,9 @@ export enum Action {
 export type CreateMarketState = {
   quoteToken: Token;
   payoutToken: Token;
-  capacityType: CapacityType;
+  capacityType: CapacityOption;
   capacity: string;
-  vesting: "term" | "expiry";
+  vesting: VestingOption;
   vestingDate: string;
   bondsPerWeek: number;
   priceModel: PriceModel;
@@ -53,7 +54,7 @@ const placeholderToken = {
 const initialState: CreateMarketState = {
   quoteToken: placeholderToken,
   payoutToken: placeholderToken,
-  capacityType: "payout" as CapacityType,
+  capacityType: "payout" as CapacityOption,
   capacity: "",
   vesting: "term",
   vestingDate: "",

@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { ManualVestingTermInput } from "../../components/molecules/ManualVestingTermInput";
+import { ManualVestingTermInput } from "components";
 
 export default {
   title: "Design System/Molecules/ManualVestingTermInput",

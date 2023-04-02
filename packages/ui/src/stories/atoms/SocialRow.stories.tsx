@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { SocialRow } from "../../components/atoms/SocialRow";
+import { SocialRow } from "components/atoms/SocialRow";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {

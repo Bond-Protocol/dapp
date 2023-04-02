@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { ActionCard } from "../../components/molecules/ActionCard";
+import { ActionCard } from "components";
 
 export default {
   title: "Design System/Molecules/ActionCard",

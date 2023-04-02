@@ -1,28 +1,27 @@
 import { useState } from "react";
-import { SelectModal } from "components/molecules/SelectModal";
-import { SelectVestingDialog } from "components/modals/SelectVestingDialog";
-import { PriceModelPicker } from "components/organisms/PriceModelPicker";
 import {
   Button,
   FlatSelect,
   InputModal,
-  TokenAmountInput,
-  SelectTokenDialog,
   InfoLabel,
+  SelectTokenDialog,
+  SelectModal,
+  SelectVestingDialog,
   SelectDateDialog,
-} from "..";
+  PlaceholderChart,
+  TokenAmountInput,
+} from "components";
 import { vestingOptions } from "utils/options";
 import { list as tokenList } from "utils/sample-tokens";
-
-import { PlaceholderChart } from "components/charts/PlaceholderChar";
 import {
   useCreateMarket,
   Action,
   CreateMarketState,
-} from "../../reducers/create-market";
+  SelectEndDateDialog,
+  PriceModelPicker,
+} from "./";
 import { formatDate } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
-import { SelectEndDateDialog } from "components/modals/SelectEndDateDialog";
 
 export type CreateMarketScreenProps = {
   onSubmit: (state: CreateMarketState) => void;

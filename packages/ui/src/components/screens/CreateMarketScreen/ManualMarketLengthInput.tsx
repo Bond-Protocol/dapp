@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
+import { Checkbox, Input } from "components";
 import { useNumericInput } from "hooks/use-numeric-input";
-import { Checkbox, Input } from "..";
 
 const VestingWarning = ({ value }: { value: string }) => (
   <div>
@@ -18,7 +18,7 @@ const LengthWarning = () => (
 
 const errorMessage = "Vesting time can't be longer than 270 days";
 
-export type ManualVestingTermInputProps = {
+export type ManualMarketLengthInputProps = {
   limit?: number;
   maxRecommended?: number;
   defaultValue?: string;
@@ -26,14 +26,14 @@ export type ManualVestingTermInputProps = {
   className?: string;
 };
 
-export const ManualVestingTermInput = ({
+export const ManualMarketLenghtInput = ({
   limit = 270,
   maxRecommended = 30,
   defaultValue = "7",
   className,
   ...props
-}: ManualVestingTermInputProps) => {
-  const { value, setValue } = useNumericInput();
+}: ManualMarketLengthInputProps) => {
+  const { value, setValue } = useNumericInput(defaultValue + " days");
   const [acceptedWarning, setAcceptedWarning] = useState(false);
 
   const error = parseFloat(value) > limit;
@@ -53,19 +53,13 @@ export const ManualVestingTermInput = ({
     if (warning) {
       props.onChange(value, { canSubmit: acceptedWarning });
     }
-    if (error) {
-      setAcceptedWarning(false);
-      props.onChange(value, { canSubmit: !error });
-    }
   }, [error, acceptedWarning, warning]);
 
   return (
     <div className={"w-full" + " " + className}>
       <Input
-        autoFocus
         errorMessage={error ? errorMessage : ""}
-        label="Market Length"
-        placeholder="Enter the amount of vesting days"
+        label="Market length"
         onFocus={() => setValue((value) => value.split(" ")[0])}
         onBlur={() => setValue((value) => value + " days")}
         subText={
@@ -79,16 +73,12 @@ export const ManualVestingTermInput = ({
         }
         rootClassName={warning ? "border-light-secondary" : ""}
         subTextClassName={warning ? "text-light-secondary" : ""}
-        value={value !== "0" ? value : ""}
+        value={value}
         onChange={onChange}
       />
       {warning && (
         <div className="pt-4">
-          <Checkbox
-            label="I understand"
-            startChecked={acceptedWarning}
-            onChange={setAcceptedWarning}
-          />
+          <Checkbox label="I understand" onChange={setAcceptedWarning} />
           <LengthWarning />
         </div>
       )}

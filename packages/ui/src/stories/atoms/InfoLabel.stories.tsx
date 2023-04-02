@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { InfoLabel } from "../../components/atoms/InfoLabel";
+import { InfoLabel } from "components/atoms/InfoLabel";
 
 export default {
   title: "Design System/Atoms/InfoLabel",

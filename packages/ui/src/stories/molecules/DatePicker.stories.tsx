@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { DatePicker } from "../../components/molecules/DatePicker";
+import { DatePicker } from "components";
 
 export default {
   title: "Design System/Molecules/DatePicker",
