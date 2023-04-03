@@ -57,14 +57,3 @@ export const ActionInfo = (props: ActionInfoProps) => {
     </div>
   );
 };
-
-export const SummaryRow = (props: ActionInfoProps) => {
-  <div className="child:my-auto child:mx-2 flex h-6 justify-between bg-white/5 text-2xl">
-    <ActionInfoLabel value={props.leftLabel} tooltip={props.tooltip} />
-    <ActionInfoLabel
-      value={props.rightLabel}
-      link={props.link}
-      className="font-bold"
-    />
-  </div>;
-};

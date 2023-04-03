@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { Modal, ConfirmMarketCreationDialog } from "components";
 import { ModalDecorator } from "../decorators";

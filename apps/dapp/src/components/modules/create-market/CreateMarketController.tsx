@@ -39,7 +39,7 @@ export const CreateMarketController = () => {
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
-    //TODO: Check for addresses
+    //TODO: Check for addresses| Little hack to extract first address from testnet
     const payoutTokenAddress = extractAddress(
       state.payoutToken.addresses[chain.id]
     );

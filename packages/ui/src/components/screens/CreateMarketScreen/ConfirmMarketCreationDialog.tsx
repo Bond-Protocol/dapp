@@ -1,4 +1,10 @@
-import { SummaryLabel, InfoList } from "components";
+import {
+  Button,
+  SummaryLabel,
+  InfoList,
+  ButtonGroup,
+  Tooltip,
+} from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { CreateMarketState } from "components";
 import { formatDate, longFormatter } from "utils";
@@ -120,6 +126,14 @@ export const ConfirmMarketCreationDialog = ({
       </div>
       <h4 className="font-fraktion mt-4">PRICING</h4>
       <InfoList fields={fields} />
+      <div className="">
+        <Button size="lg" className="w-full">
+          <div className="flex justify-center">
+            Deploy
+            <Tooltip content="ok" />
+          </div>
+        </Button>
+      </div>
     </div>
   );
 };

@@ -7,7 +7,6 @@ export * from "./FilterBox";
 export * from "./InfoList";
 export * from "./InputCard";
 export * from "./IssuerCard";
-export * from "./MarketRow";
 export * from "./Modal";
 export * from "./PaginatedTable";
 export * from "./Pagination";

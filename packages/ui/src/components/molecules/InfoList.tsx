@@ -18,12 +18,12 @@ export const SummaryRow = (props: ActionInfoProps) => {
   );
 };
 
-export interface ActionInfoListProps {
+export interface InfoListProps {
   fields: Array<ActionInfoProps>;
   className?: string;
 }
 
-export const InfoList = (props: ActionInfoListProps) => {
+export const InfoList = (props: InfoListProps) => {
   return (
     <ol className={`child:mt-1 first:mt-0 ${props.className}`}>
       {props.fields.map((f, i) => (

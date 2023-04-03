@@ -1,6 +1,5 @@
 import { getToken } from "@bond-protocol/bond-library";
-import { Button, PaginatedTable, Column } from "ui";
-import { formatDate } from "src/utils/date";
+import { Button, PaginatedTable, Column, formatDate } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
