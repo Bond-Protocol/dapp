@@ -55,7 +55,7 @@ export const SelectModal = ({
     label: string;
     image?: string;
   }) => {
-    props.onSubmit && props.onSubmit(value);
+    props.onSubmit && props.onSubmit({ value });
     setValue("user");
     setCustomContent({ label, image: image ?? userIcon });
   };
@@ -81,7 +81,7 @@ export const SelectModal = ({
             if (value === "custom") setOpen(true);
             if (value) setValue(value);
 
-            props.onSubmit && props.onSubmit(value);
+            props.onSubmit && props.onSubmit({ value });
           }}
         />
       </div>
