@@ -41,6 +41,9 @@ export type CreateMarketState = {
   endDate?: Date;
   oracleAddress?: string;
   oracle?: boolean;
+  maxBondSize?: number;
+  debtBuffer?: number;
+  depositInterval?: number;
 };
 
 const placeholderToken = {
@@ -61,6 +64,9 @@ const initialState: CreateMarketState = {
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
   bondsPerWeek: 7,
+  maxBondSize: 100,
+  debtBuffer: 45,
+  depositInterval: 24,
   priceModels: {
     dynamic: {},
     static: {},

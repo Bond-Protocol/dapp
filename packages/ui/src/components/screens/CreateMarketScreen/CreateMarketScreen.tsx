@@ -8,24 +8,23 @@ import {
   SelectModal,
   SelectVestingDialog,
   SelectDateDialog,
+  SelectEndDateDialog,
   PlaceholderChart,
   TokenAmountInput,
+  Modal,
+  Action,
+  PriceModelPicker,
+  ConfirmMarketCreationDialog,
+  useCreateMarket,
 } from "components";
+import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import { formatDate } from "utils";
 import { vestingOptions } from "utils/options";
 import { list as tokenList } from "utils/sample-tokens";
-import {
-  useCreateMarket,
-  Action,
-  CreateMarketState,
-  SelectEndDateDialog,
-  PriceModelPicker,
-} from "./";
-import { formatDate } from "utils";
-import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 
 export type CreateMarketScreenProps = {
-  onSubmit: (state: CreateMarketState) => void;
-  onSubmitMultisig: (state: CreateMarketState) => void;
+  onSubmit: () => void;
+  onSubmitMultisig: () => void;
 };
 
 const capacityOptions = [
@@ -35,6 +34,7 @@ const capacityOptions = [
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const [index, setIndex] = useState(0);
+  const [open, setOpen] = useState(false);
   const [state, dispatch] = useCreateMarket((initialState) => {
     return {
       ...initialState,
@@ -183,7 +183,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       </div>
       <div className="mt-8 flex justify-center gap-x-10">
         <Button
-          onClick={() => props.onSubmitMultisig(state)}
+          onClick={() => {}}
           variant="ghost"
           size="lg"
           className="w-[308px]"
@@ -191,13 +191,28 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           Get Multi-Sig Config
         </Button>
         <Button
-          onClick={() => props.onSubmit(state)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpen(true);
+          }}
           size="lg"
           className="w-[308px]"
         >
           Deploy Market
         </Button>
       </div>
+      <Modal
+        title="Confirm Market Creation"
+        open={open}
+        onClickClose={() => setOpen(false)}
+      >
+        <ConfirmMarketCreationDialog
+          marketState={state}
+          submitCreateMarketTransaction={props.onSubmit}
+          submitApproveSpendingTransaction={props.onSubmitMultisig}
+        />
+      </Modal>
     </div>
   );
 };
