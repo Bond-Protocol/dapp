@@ -18,13 +18,6 @@ export const CreateMarketController = () => {
   ) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
-    let vesting;
-    if (state.vesting === "term") {
-      vesting = state.vestingDate;
-    } else if (state.vesting === "expiry") {
-      vesting = Number(state.vestingDate) * 24 * 60 * 60;
-    }
-
     if (!network.chain?.id) throw new Error("Unspecified chain");
 
     const chain = {
@@ -66,7 +59,7 @@ export const CreateMarketController = () => {
         formattedInitialPrice: formattedInitialPrice.toString(),
         formattedMinimumPrice: formattedMinimumPrice.toString(),
         debtBuffer: ~~(debtBuffer * Math.pow(10, 3)), // Account for 3 decimal places, truncate anything else
-        vesting: vesting,
+        vesting: state.vesting,
         conclusion: state.endDate,
         depositInterval: Math.trunc((24 * 60 * 60) / (bondsPerWeek / 7)),
         scaleAdjustment: scaleAdjustment,
@@ -78,7 +71,7 @@ export const CreateMarketController = () => {
         targetIntervalDiscount: BigNumber.from("1000").toString(),
       },
       bondType:
-        state.vesting === "expiry"
+        state.vestingType === "date"
           ? contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA
           : contractLib.BOND_TYPE.FIXED_TERM_OFDA,
       chain: chain.id,

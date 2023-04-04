@@ -11,7 +11,6 @@ const state = {
   payoutToken: ohm,
   capacityType: "payout",
   capacity: "10000000",
-  vestingDate: "",
   priceModel: "dynamic",
   oracleAddress: "",
   bondsPerWeek: 7,

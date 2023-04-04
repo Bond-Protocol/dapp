@@ -43,7 +43,7 @@ const getPriceFields = (state: CreateMarketState) => {
     : getStaticPriceFields(state);
 };
 
-const formatVesting = ({ vesting, vestingDate }: CreateMarketState) => {
+const formatVesting = ({ vesting, vestingType }: CreateMarketState) => {
   return {
     icon: fastVesting,
     label: "7 DAYS",

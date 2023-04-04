@@ -3,6 +3,7 @@ import { useReducer } from "react";
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
 export type CapacityOption = "quote" | "payout";
+export type VestingType = "term" | "date";
 
 export type Token = {
   name: string;
@@ -32,7 +33,7 @@ export type CreateMarketState = {
   capacityType: CapacityOption;
   capacity: string;
   vesting: string;
-  vestingDate: string;
+  vestingType: VestingType;
   bondsPerWeek: number;
   priceModel: PriceModel;
   priceModels: Record<PriceModel, any>;
@@ -56,7 +57,7 @@ const initialState: CreateMarketState = {
   capacityType: "payout" as CapacityOption,
   capacity: "",
   vesting: "",
-  vestingDate: "",
+  vestingType: "term",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
   bondsPerWeek: 7,
@@ -103,7 +104,7 @@ export const reducer = (
         vesting = (value.value.getTime() / 1000).toString();
       }
 
-      return { ...state, vesting };
+      return { ...state, vesting, vestingType: value.type };
     }
 
     case Action.UPDATE_START_DATE: {
