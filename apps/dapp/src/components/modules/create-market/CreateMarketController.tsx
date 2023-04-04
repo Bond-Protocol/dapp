@@ -41,6 +41,39 @@ export const CreateMarketController = () => {
       state.quoteToken.addresses[chain.id]
     );
 
+    let bondType: string;
+
+    switch (state.priceModel) {
+      case "dynamic":
+        bondType = (
+          state.vestingType === "term" ?
+            contractLib.BOND_TYPE.FIXED_TERM_SDA :
+            contractLib.BOND_TYPE.FIXED_EXPIRY_SDA
+        );
+        break;
+      case "static":
+        bondType = (
+          state.vestingType === "term" ?
+            contractLib.BOND_TYPE.FIXED_TERM_FPA :
+            contractLib.BOND_TYPE.FIXED_EXPIRY_FPA
+        );
+        break;
+      case "oracle-dynamic":
+        bondType = (
+          state.vestingType === "term" ?
+            contractLib.BOND_TYPE.FIXED_TERM_OSDA :
+            contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA
+        );
+        break;
+      case "oracle-static":
+        bondType = (
+          state.vestingType === "term" ?
+            contractLib.BOND_TYPE.FIXED_TERM_OFDA :
+            contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA
+        );
+        break;
+    }
+
     const config = {
       summaryData: { ...state },
       marketParams: {
@@ -70,10 +103,7 @@ export const CreateMarketController = () => {
         baseDiscount: BigNumber.from("5000").toString(),
         targetIntervalDiscount: BigNumber.from("1000").toString(),
       },
-      bondType:
-        state.vestingType === "date"
-          ? contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA
-          : contractLib.BOND_TYPE.FIXED_TERM_OFDA,
+      bondType: bondType,
       chain: chain.id,
     };
 
