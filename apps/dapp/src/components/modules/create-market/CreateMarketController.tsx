@@ -93,12 +93,12 @@ export const CreateMarketController = () => {
         formattedMinimumPrice: formattedMinimumPrice.toString(),
         debtBuffer: ~~(debtBuffer * Math.pow(10, 3)), // Account for 3 decimal places, truncate anything else
         vesting: state.vesting,
-        conclusion: state.endDate,
+        conclusion: state.endDate && (state.endDate.getTime() / 1000).toString(),
         depositInterval: Math.trunc((24 * 60 * 60) / (bondsPerWeek / 7)),
         scaleAdjustment: scaleAdjustment,
         oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
         formattedPrice: formattedMinimumPrice.toString(),
-        fixedDiscount: BigNumber.from("10000").toString(),
+        fixedDiscount: formattedInitialPrice.toString(),
         maxDiscountFromCurrent: BigNumber.from("10000").toString(),
         baseDiscount: BigNumber.from("5000").toString(),
         targetIntervalDiscount: BigNumber.from("1000").toString(),
@@ -108,13 +108,26 @@ export const CreateMarketController = () => {
     };
 
     console.log({ config, state });
-    // const tx = await contractLib.createMarket(
-    //   config.marketParams,
-    //   config.bondType,
-    //   config.chain,
-    //   signer,
-    //   { gasLimit: 1000000 }
-    // );
+    console.log(
+      config.marketParams.payoutToken,
+      config.marketParams.quoteToken,
+      config.marketParams.callbackAddr,
+      config.marketParams.capacityInQuote,
+      config.marketParams.capacity,
+      config.marketParams.formattedPrice,
+      config.marketParams.vesting,
+      config.marketParams.conclusion,
+      config.marketParams.depositInterval,
+      config.marketParams.scaleAdjustment,
+    )
+     const tx = await contractLib.createMarket(
+       // @ts-ignore
+       config.marketParams,
+       config.bondType,
+       config.chain,
+       signer,
+       { gasLimit: 1000000 }
+     );
 
     return config;
   };
