@@ -34,6 +34,7 @@ export const SelectModal = ({
     label: "",
     image: "",
   });
+  const [lastCustomValue, setLastCustomValue] = useState();
 
   const customOptions = [
     ...options,
@@ -57,7 +58,8 @@ export const SelectModal = ({
   }) => {
     props.onSubmit && props.onSubmit({ value });
     setValue("user");
-    setCustomContent({ label, image: image ?? userIcon });
+    setLastCustomValue(value);
+    if (label) setCustomContent({ label, image: image ?? userIcon });
   };
 
   const handleClose = (e: React.BaseSyntheticEvent) => {
@@ -78,10 +80,28 @@ export const SelectModal = ({
           options={customOptions}
           value={value}
           onChange={(_e, value) => {
-            if (value === "custom") setOpen(true);
+            if (value === "user") {
+              // @ts-ignore
+              value = lastCustomValue;
+              console.log(customContent)
+            }
+            if (value === "custom") {
+              setOpen(true);
+              return;
+            }
             if (value) setValue(value);
 
-            props.onSubmit && props.onSubmit({ value });
+            //@ts-ignore
+            if (value && value.custom) {
+              //@ts-ignore
+              setLastCustomValue(value);
+            }
+            // @ts-ignore
+            if (value && !value.type) {
+              props.onSubmit && props.onSubmit({ value: { type: "term", value: value } });
+            } else if (value) {
+              props.onSubmit && props.onSubmit({ value });
+            }
           }}
         />
       </div>
