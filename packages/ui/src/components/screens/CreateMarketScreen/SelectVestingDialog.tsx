@@ -48,7 +48,7 @@ export const SelectVestingDialog = (props: {
         ? days
         : `${days} days`;
 
-    props.onSubmit({ value: { type, date, days }, label });
+    props.onSubmit({ value: { type, value: (type === "date" ? date : days) }, label });
 
     props.onClose(e);
   };
