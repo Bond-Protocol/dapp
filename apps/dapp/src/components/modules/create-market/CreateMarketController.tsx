@@ -97,7 +97,7 @@ export const CreateMarketController = () => {
         depositInterval: Math.trunc((24 * 60 * 60) / (bondsPerWeek / 7)),
         scaleAdjustment: scaleAdjustment,
         oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
-        formattedPrice: formattedMinimumPrice.toString(),
+        formattedPrice: formattedInitialPrice.toString(),
         fixedDiscount: formattedInitialPrice.toString(),
         maxDiscountFromCurrent: BigNumber.from("10000").toString(),
         baseDiscount: BigNumber.from("5000").toString(),
