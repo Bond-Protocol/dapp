@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { CreateMarketScreen } from "components";
+import data from "../../charts/btc-price";
 
 export default {
   title: "Modules/CreateMarket",

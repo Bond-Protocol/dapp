@@ -2,18 +2,6 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { ProjectionChart } from "components";
 
 import data from "./btc-price";
-import { generateDiscountedPrices } from "./projection-algorithm";
-
-let maxDiscount = 2;
-let triggerCount = 7;
-let minDiscount = 3;
-
-const prices = generateDiscountedPrices(
-  data,
-  maxDiscount,
-  triggerCount,
-  minDiscount
-);
 
 export default {
   title: "Components/Charts/ProjectionChart",
@@ -30,5 +18,5 @@ const Template: ComponentStory<typeof ProjectionChart> = (args) => (
 export const Primary = Template.bind({});
 Primary.args = {
   payoutTokenSymbol: "AFX",
-  data: prices,
+  data,
 };

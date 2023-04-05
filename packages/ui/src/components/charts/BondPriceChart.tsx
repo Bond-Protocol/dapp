@@ -23,8 +23,8 @@ export type BondPriceChartProps = {
   className?: string;
 };
 
-const getBottomDomain = (min: number) => min - min / 90;
-const getTopDomain = (max: number) => max + max / 90;
+export const getBottomDomain = (min: number) => min - min / 90;
+export const getTopDomain = (max: number) => max + max / 90;
 
 export const BondPriceChart = (props: BondPriceChartProps) => {
   if (!props.data.length) {

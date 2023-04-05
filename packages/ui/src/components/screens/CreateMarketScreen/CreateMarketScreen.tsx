@@ -16,11 +16,13 @@ import {
   PriceModelPicker,
   ConfirmMarketCreationDialog,
   useCreateMarket,
+  ProjectionChart,
 } from "components";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { formatDate } from "utils";
 import { vestingOptions } from "utils/options";
 import { list as tokenList } from "utils/sample-tokens";
+import data from "../../../stories/charts/btc-price";
 
 export type CreateMarketScreenProps = {
   onSubmit: () => void;
@@ -133,8 +135,13 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           id="cm-right-container"
           className="h-fill flex w-1/2 flex-col justify-between pl-2"
         >
-          <div className="mt-2 flex h-full w-full">
-            <PlaceholderChart />{" "}
+          <div className="mt-2 flex h-[290px] w-full">
+            <ProjectionChart
+              data={data}
+              initialPrice={state.priceModels[state.priceModel].initialPrice}
+              minPrice={state.priceModels[state.priceModel].minPrice}
+              payoutTokenSymbol={state.payoutToken.symbol}
+            />
           </div>
           <div className="flex gap-x-4">
             <InputModal
