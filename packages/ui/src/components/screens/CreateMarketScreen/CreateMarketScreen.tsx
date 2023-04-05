@@ -17,6 +17,7 @@ import {
   ConfirmMarketCreationDialog,
   useCreateMarket,
   ProjectionChart,
+  CreateMarketState,
 } from "components";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { formatDate } from "utils";
@@ -25,8 +26,8 @@ import { list as tokenList } from "utils/sample-tokens";
 import data from "../../../stories/charts/btc-price";
 
 export type CreateMarketScreenProps = {
-  onSubmit: () => void;
-  onSubmitMultisig: () => void;
+  onSubmitAllowance: (state?: CreateMarketState) => void;
+  onSubmitCreation: (state: CreateMarketState) => void;
 };
 
 const capacityOptions = [
@@ -216,8 +217,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       >
         <ConfirmMarketCreationDialog
           marketState={state}
-          submitCreateMarketTransaction={props.onSubmit}
-          submitApproveSpendingTransaction={props.onSubmitMultisig}
+          submitCreateMarketTransaction={() => props.onSubmitCreation(state)}
+          submitApproveSpendingTransaction={() =>
+            props.onSubmitAllowance(state)
+          }
         />
       </Modal>
     </div>

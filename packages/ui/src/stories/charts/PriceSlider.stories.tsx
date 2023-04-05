@@ -11,6 +11,4 @@ const Template: ComponentStory<typeof PriceSlider> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = {
-  startChecked: true,
-};
+Primary.args = {};

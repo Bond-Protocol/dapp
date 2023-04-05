@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { CreateMarketScreen } from "components";
-import data from "../../charts/btc-price";
 
 export default {
   title: "Modules/CreateMarket",
@@ -17,6 +16,6 @@ const Template: ComponentStory<typeof CreateMarketScreen> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  onSubmit: (state) => console.log({ state }),
-  onSubmitMultisig: (state) => console.log({ state }),
+  onSubmitCreation: (state) => console.log({ state }),
+  onSubmitAllowance: (state) => console.log({ state }),
 };
