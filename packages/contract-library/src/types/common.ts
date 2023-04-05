@@ -9,7 +9,9 @@ export type CreateMarketParams = {
   capacity: PromiseOrValue<BigNumberish>;
   debtBuffer: PromiseOrValue<BigNumberish>;
   vesting: PromiseOrValue<BigNumberish>;
-  conclusion: PromiseOrValue<BigNumberish>;
+  start: PromiseOrValue<BigNumberish>;
+  conclusion?: PromiseOrValue<BigNumberish>;
+  duration?: PromiseOrValue<BigNumberish>;
   depositInterval: PromiseOrValue<BigNumberish>;
   scaleAdjustment?: PromiseOrValue<BigNumberish>;
   formattedPrice?: PromiseOrValue<BigNumberish>;

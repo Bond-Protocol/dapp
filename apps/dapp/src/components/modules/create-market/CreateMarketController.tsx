@@ -74,6 +74,13 @@ export const CreateMarketController = () => {
         break;
     }
 
+    let duration;
+    if (state.endDate && state.startDate) {
+      duration = (state.endDate.getTime() / 1000) - (state.startDate.getTime() / 1000);
+    } else if (state.endDate) {
+      duration = (state.endDate.getTime() / 1000) -  Date.now();
+    }
+
     const config = {
       summaryData: { ...state },
       marketParams: {
@@ -102,24 +109,18 @@ export const CreateMarketController = () => {
         maxDiscountFromCurrent: BigNumber.from("10000").toString(),
         baseDiscount: BigNumber.from("5000").toString(),
         targetIntervalDiscount: BigNumber.from("1000").toString(),
+        start: state.startDate ?
+          (state.startDate.getTime() / 1000).toString() :
+          0,
+        duration: duration,
       },
       bondType: bondType,
       chain: chain.id,
     };
 
     console.log({ config, state });
-    console.log(
-      config.marketParams.payoutToken,
-      config.marketParams.quoteToken,
-      config.marketParams.callbackAddr,
-      config.marketParams.capacityInQuote,
-      config.marketParams.capacity,
-      config.marketParams.formattedPrice,
-      config.marketParams.vesting,
-      config.marketParams.conclusion,
-      config.marketParams.depositInterval,
-      config.marketParams.scaleAdjustment,
-    )
+
+    // TODO: send data to modal instead of calling createMarket
      const tx = await contractLib.createMarket(
        // @ts-ignore
        config.marketParams,

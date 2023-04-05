@@ -47,14 +47,8 @@
       "type": "error"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "conclusion_",
-          "type": "uint256"
-        }
-      ],
-      "name": "Auctioneer_MarketConcluded",
+      "inputs": [],
+      "name": "Auctioneer_MarketNotActive",
       "type": "error"
     },
     {
@@ -816,12 +810,17 @@
       "outputs": [
         {
           "internalType": "uint48",
-          "name": "vesting",
+          "name": "start",
           "type": "uint48"
         },
         {
           "internalType": "uint48",
           "name": "conclusion",
+          "type": "uint48"
+        },
+        {
+          "internalType": "uint48",
+          "name": "vesting",
           "type": "uint48"
         }
       ],

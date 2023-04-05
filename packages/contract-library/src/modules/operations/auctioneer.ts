@@ -85,7 +85,7 @@ function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
     case BOND_TYPE.FIXED_TERM_FPA:
       return ethers.utils.defaultAbiCoder.encode(
         [
-          'tuple(address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedPrice, uint48 vesting, uint48 conclusion, uint32 depositInterval, int8 scaleAdjustment)',
+          'tuple(address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedPrice, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration, int8 scaleAdjustment)',
         ],
         [
           [
@@ -95,9 +95,10 @@ function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
             config.capacityInQuote,
             config.capacity,
             config.formattedPrice,
-            config.vesting,
-            config.conclusion,
             config.depositInterval,
+            config.vesting,
+            config.start,
+            config.duration,
             config.scaleAdjustment,
           ],
         ],

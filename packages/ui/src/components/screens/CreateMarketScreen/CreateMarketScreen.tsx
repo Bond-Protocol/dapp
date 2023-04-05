@@ -152,7 +152,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <InputModal
               label="Market End Date"
               title="Select end date"
-              disabled={!state.startDate}
               value={state.endDate ? formatDate.dateAndTime(state.endDate) : ""}
               endAdornment={<CalendarIcon className="mr-2" />}
               ModalContent={(props) => (
