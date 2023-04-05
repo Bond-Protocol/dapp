@@ -44,11 +44,11 @@ export const CreateMarketController = () => {
 
     //TODO: Check for addresses| Little hack to extract first address from testnet
     const payoutTokenAddress = extractAddress(
-      state.payoutToken.addresses[chain.id]
+      state.payoutToken.addresses[chain?.id]
     );
 
     const quoteTokenAddress = extractAddress(
-      state.quoteToken.addresses[chain.id]
+      state.quoteToken.addresses[chain?.id]
     );
 
     let bondType: string;
@@ -115,7 +115,7 @@ export const CreateMarketController = () => {
         duration: state.duration,
       },
       bondType: bondType,
-      chain: chain.id,
+      chain: chain?.id,
     };
 
     console.log({ config, state });
@@ -139,9 +139,9 @@ export const CreateMarketController = () => {
         onSubmitCreation={onSubmit}
         onSubmitMultisig={() => {}}
         // @ts-ignore
-        provider={providers[network.chain.id]}
+        provider={providers[network.chain?.id]}
         // @ts-ignore
-        chain={network.chain.id}
+        chain={network.chain?.id}
         projectionData={projectionData.prices}
       />
     </>
