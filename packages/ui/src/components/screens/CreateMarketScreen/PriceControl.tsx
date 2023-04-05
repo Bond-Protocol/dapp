@@ -24,7 +24,7 @@ export const PriceControl = (props: PriceControlProps) => {
   const [rateMod, setRateMod] = useState(0.25); // Default rate mod for percetages;
   const [scale, setScale] = useState(2); // Default scale for percentages;
 
-  const [reverseExchangeRate, setReverseExchangeRate] = useState(false);
+  const [reverseExchangeRate, setReverseExchangeRate] = useState(true);
 
   useEffect(() => {
     if (props.quoteToken && props.payoutToken && !props.percentage) {

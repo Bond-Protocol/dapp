@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useState } from "react";
 import {
   Button,
   FlatSelect,
@@ -72,10 +72,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 value={state.payoutToken.symbol}
                 icon={state.payoutToken.icon}
                 ModalContent={(props) => (
-                  <SelectTokenDialog {...props}
-                                     tokens={tokenList}
-                                     provider={provider}
-                                     chain={chain}
+                  <SelectTokenDialog
+                    {...props}
+                    tokens={tokenList}
+                    provider={provider}
+                    chain={chain}
                   />
                 )}
                 onSubmit={({ value }) =>
@@ -99,10 +100,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 value={state.quoteToken.symbol}
                 icon={state.quoteToken.icon}
                 ModalContent={(props) => (
-                  <SelectTokenDialog {...props}
-                                     tokens={tokenList}
-                                     provider={provider}
-                                     chain={chain}
+                  <SelectTokenDialog
+                    {...props}
+                    tokens={tokenList}
+                    provider={provider}
+                    chain={chain}
                   />
                 )}
                 onSubmit={({ value }) =>
@@ -158,7 +160,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               value={
                 state.startDate ? formatDate.dateAndTime(state.startDate) : ""
               }
-              endAdornment={<CalendarIcon className="mr-2" />}
+              endAdornment={<CalendarIcon className="mr-2 fill-white" />}
               ModalContent={(props) => <SelectDateDialog {...props} />}
               onSubmit={(value) =>
                 dispatch({ type: Action.UPDATE_START_DATE, value })
@@ -168,7 +170,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               label="Market End"
               title="Select end date"
               value={state.endDate ? formatDate.dateAndTime(state.endDate) : ""}
-              endAdornment={<CalendarIcon className="mr-2" />}
+              endAdornment={<CalendarIcon className="mr-2 fill-white" />}
               ModalContent={(props) => (
                 <SelectEndDateDialog
                   {...props}
@@ -181,18 +183,31 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="mt-4 flex gap-x-4">
-            <InfoLabel
-              tooltip={`Maximum amount of ${
-                capacityToken?.symbol || "the selected asset"
-              } that can be purchased in a single transaction`}
-              label={"Max Bond Size"}
-              reverse
-            >
-              {state.maxBondSize} {capacityToken?.symbol}
-            </InfoLabel>
-            <InfoLabel label={"Market Length"} reverse>
-              {state.durationInDays} DAYS
-            </InfoLabel>
+            {!state.startDate || !state.endDate ? (
+              <div
+                className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md`}
+              >
+                <div className="text-light-grey flex items-center justify-center py-4 text-sm">
+                  <CalendarIcon className="fill-light-grey text-light-grey h-12 w-12 pr-2" />
+                  Select dates to view market duration
+                </div>
+              </div>
+            ) : (
+              <>
+                <InfoLabel
+                  tooltip={`Maximum amount of ${
+                    capacityToken?.symbol || "the selected asset"
+                  } that can be purchased in a single transaction`}
+                  label={"Max Bond Size"}
+                  reverse
+                >
+                  {state.maxBondSize} {capacityToken?.symbol}
+                </InfoLabel>
+                <InfoLabel label={"Market Length"} reverse>
+                  {state.durationInDays} DAYS
+                </InfoLabel>
+              </>
+            )}
           </div>
         </div>
       </div>

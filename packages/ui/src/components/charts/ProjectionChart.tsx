@@ -1,19 +1,13 @@
 import { useEffect, useState } from "react";
+import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
 import {
-  BondPriceChart,
-  BondPriceChartProps,
-  PlaceholderChart,
-  getBottomDomain,
-  getTopDomain,
-  //PriceSlider,
-} from "./";
-import {
-  findEdges,
   generateDiscountedPrices,
   getDiscountPercentage,
   PriceData,
+  generateFixedDiscountPrice,
+  ProjectionConfiguration,
 } from "./projection-algorithm";
-import { ReactComponent as ChartIcon } from "assets/icons/chart-large.svg";
+import { CreateMarketState, useCreateMarket } from "..";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
@@ -21,33 +15,43 @@ export type ProjectionChartProps = {
   minPrice?: number;
 };
 
+const getProjectionDataset = (
+  state: CreateMarketState,
+  data: PriceData[],
+  args: ProjectionConfiguration
+) => {
+  return state.priceModel === "dynamic"
+    ? generateDiscountedPrices(data, args)
+    : generateFixedDiscountPrice(data, args);
+};
+
 export const ProjectionChart = ({
   minPrice = 0,
   ...props
 }: BondPriceChartProps & ProjectionChartProps) => {
-  const [value, setValue] = useState(27500);
   const [maxDiscount, setMaxDiscount] = useState(3);
+  const [state] = useCreateMarket();
 
   let maxPremium = 8; // The max premium a bond can get, in %
   let triggerCount = 4; // The amount of bonds purchased -> not yet accurate
 
-  const prices = generateDiscountedPrices(
-    props.data,
+  const prices = getProjectionDataset(state, props.data, {
     maxDiscount,
+    maxPremium,
     triggerCount,
-    maxPremium
-  );
+    fixedPrice: state.priceModels.static.initialPrice, //TODO: Update
+  });
 
-  const edges = findEdges(prices);
-  edges.max = getTopDomain(edges.max);
-  edges.min = getBottomDomain(edges.min);
+  // const edges = findEdges(prices);
+  // edges.max = getTopDomain(edges.max);
+  // edges.min = getBottomDomain(edges.min);
 
   useEffect(() => {
     const initialPrice = props.initialPrice || prices[0]?.price;
     const discount = getDiscountPercentage(initialPrice, minPrice);
     if (discount < 0) return;
     setMaxDiscount(discount);
-  }, [value, minPrice, props.initialPrice]);
+  }, [minPrice, props.initialPrice]);
 
   const shouldRender = prices.length > 0;
 

@@ -102,7 +102,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
             </div>
           </div>
         ) : (
-          priceControlFields.map((p: any, i) => {
+          priceControlFields.map((p: any) => {
             return (
               <PriceControl
                 {...p}
