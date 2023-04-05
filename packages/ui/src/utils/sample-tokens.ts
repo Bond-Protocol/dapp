@@ -405,7 +405,8 @@ export const list = aphexTokens
       symbol: token.symbol,
       icon: token.logoUrl,
       addresses: token.addresses,
+      apiId,
       price,
-      decimals: 18,
+      priceSources: token.priceSources,
     };
   });

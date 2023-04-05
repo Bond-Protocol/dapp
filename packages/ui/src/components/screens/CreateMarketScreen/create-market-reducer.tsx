@@ -1,9 +1,10 @@
-import { useReducer } from "react";
 import {
   calculateTrimDigits,
-  trim, trimAsNumber,
+  trim,
+  trimAsNumber,
 } from "@bond-protocol/contract-library";
 import { formatDate } from "utils";
+import { useReducer, useContext, createContext, Dispatch } from "react";
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
@@ -89,10 +90,9 @@ const initialState: CreateMarketState = {
 function calculateDuration(endDate?: Date, startDate?: Date) {
   let duration;
   if (endDate && startDate) {
-    duration =
-      endDate.getTime() / 1000 - startDate.getTime() / 1000;
+    duration = endDate.getTime() / 1000 - startDate.getTime() / 1000;
   } else if (endDate) {
-    duration = (endDate.getTime() / 1000) -  (Date.now() / 1000);
+    duration = endDate.getTime() / 1000 - Date.now() / 1000;
   }
   return duration && duration.toFixed(0);
 }
@@ -114,8 +114,8 @@ function onChangeDate(endDate?: Date, startDate?: Date, capacity?: string) {
   return {
     duration,
     durationInDays,
-    maxBondSize
-  }
+    maxBondSize,
+  };
 }
 
 export const reducer = (
@@ -146,7 +146,7 @@ export const reducer = (
       return {
         ...state,
         capacity,
-        maxBondSize
+        maxBondSize,
       };
     }
 
@@ -170,43 +170,39 @@ export const reducer = (
         ...state,
         vesting,
         vestingString,
-        vestingType: value.type
+        vestingType: value.type,
       };
     }
 
     case Action.UPDATE_START_DATE: {
-      const {
-        duration,
-        durationInDays,
-        maxBondSize
-      } = onChangeDate(state.endDate, value, state.capacity);
+      const { duration, durationInDays, maxBondSize } = onChangeDate(
+        state.endDate,
+        value,
+        state.capacity
+      );
 
       return {
         ...state,
         startDate: value,
-        duration: duration
-          ? duration.toString()
-          : "",
+        duration: duration ? duration.toString() : "",
         durationInDays,
-        maxBondSize
+        maxBondSize,
       };
     }
 
     case Action.UPDATE_END_DATE: {
-      const {
-        duration,
-        durationInDays,
-        maxBondSize
-      } = onChangeDate(value, state.startDate, state.capacity);
+      const { duration, durationInDays, maxBondSize } = onChangeDate(
+        value,
+        state.startDate,
+        state.capacity
+      );
 
       return {
         ...state,
         endDate: value,
-        duration: duration
-          ? duration.toString()
-          : "",
+        duration: duration ? duration.toString() : "",
         durationInDays,
-        maxBondSize
+        maxBondSize,
       };
     }
 
@@ -246,6 +242,23 @@ export const reducer = (
   }
 };
 
-export const useCreateMarket = (init = (state: CreateMarketState) => state) => {
-  return useReducer(reducer, initialState, init);
+export const CreateMarketContext = createContext<
+  [CreateMarketState, Dispatch<{ [key: string]: any; type: Action }>]
+>([initialState, () => null]);
+
+export const CreateMarketProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const stateControls = useReducer(reducer, initialState);
+  return (
+    <CreateMarketContext.Provider value={stateControls}>
+      {children}
+    </CreateMarketContext.Provider>
+  );
+};
+
+export const useCreateMarket = () => {
+  return useContext(CreateMarketContext);
 };

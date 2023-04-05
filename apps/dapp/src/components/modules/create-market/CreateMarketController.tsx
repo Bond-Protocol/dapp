@@ -1,9 +1,16 @@
 import { ethers, BigNumber } from "ethers";
-import { CreateMarketScreen, CreateMarketState } from "ui";
+import {
+  CreateMarketContext,
+  CreateMarketProvider,
+  CreateMarketScreen,
+  CreateMarketState,
+  useCreateMarket,
+} from "ui";
 import * as contractLib from "@bond-protocol/contract-library";
 import { useNetwork, useSigner } from "wagmi";
 import { doPriceMath } from "./helpers";
-import {providers} from "services";
+import { providers } from "services";
+import { useProjectionChartData } from "hooks/useProjectionChart";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
@@ -12,6 +19,11 @@ const extractAddress = (addresses: string | string[]) => {
 export const CreateMarketController = () => {
   const { data: signer } = useSigner();
   const network = useNetwork();
+  const [state] = useCreateMarket();
+  const projectionData = useProjectionChartData({
+    quoteToken: state.quoteToken,
+    payoutToken: state.payoutToken,
+  });
 
   const onSubmit = async (state: CreateMarketState) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
@@ -68,8 +80,6 @@ export const CreateMarketController = () => {
         break;
     }
 
-
-
     const config = {
       summaryData: { ...state },
       marketParams: {
@@ -89,7 +99,8 @@ export const CreateMarketController = () => {
         formattedMinimumPrice: formattedMinimumPrice.toString(),
         debtBuffer: ~~(debtBuffer * Math.pow(10, 3)), // Account for 3 decimal places, truncate anything else
         vesting: state.vesting,
-        conclusion: state.endDate && (state.endDate.getTime() / 1000).toFixed(0),
+        conclusion:
+          state.endDate && (state.endDate.getTime() / 1000).toFixed(0),
         depositInterval: Math.trunc((24 * 60 * 60) / (bondsPerWeek / 7)),
         scaleAdjustment: scaleAdjustment,
         oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
@@ -98,9 +109,9 @@ export const CreateMarketController = () => {
         maxDiscountFromCurrent: BigNumber.from("10000").toString(),
         baseDiscount: BigNumber.from("5000").toString(),
         targetIntervalDiscount: BigNumber.from("1000").toString(),
-        start: state.startDate ?
-          (state.startDate.getTime() / 1000).toFixed(0) :
-          0,
+        start: state.startDate
+          ? (state.startDate.getTime() / 1000).toFixed(0)
+          : 0,
         duration: state.duration,
       },
       bondType: bondType,
@@ -131,6 +142,7 @@ export const CreateMarketController = () => {
         provider={providers[network.chain.id]}
         // @ts-ignore
         chain={network.chain.id}
+        projectionData={projectionData.prices}
       />
     </>
   );

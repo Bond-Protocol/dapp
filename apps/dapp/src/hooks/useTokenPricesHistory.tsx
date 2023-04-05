@@ -18,7 +18,10 @@ export const getPriceSourceForToken = (
 export const useTokenPriceHistory = (token: Token, dayRange = 90) => {
   //For now we're only using one price source soooooo
   //@ts-ignore
+  if (!token) return;
+  console.log({ token });
   const [priceSource] = getPriceSourceForToken(token.id);
+  console.log(token, priceSource);
 
   //We currently don't have historical data for custom oracle tokens
   if (!priceSource || priceSource.source === "custom") {
@@ -36,6 +39,21 @@ export const useTokenPriceHistory = (token: Token, dayRange = 90) => {
 
   return {
     prices: tokenPriceHistory?.prices.map((element: Array<number>) => ({
+      date: element[0],
+      price: element[1],
+    })),
+    isLoading: tokenPriceHistoryQuery.isLoading,
+  };
+};
+
+export const useCoingeckoTokenHistory = (token: Token, dayRange = 7) => {
+  const { data: tokenPriceHistory, ...tokenPriceHistoryQuery } = useQuery(
+    `token-price-history-${token.symbol}-${dayRange}d`,
+    getTokenPriceHistory(token.id, { days: dayRange }, Date.now())
+  );
+
+  return {
+    prices: tokenPriceHistory?.prices?.map((element: Array<number>) => ({
       date: element[0],
       price: element[1],
     })),

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CreateMarketController } from "components/modules/create-market";
 import { socials, PageHeader, PageNavigation } from "components/common";
+import { CreateMarketProvider } from "ui";
 
 const docsSublink = "/bond-marketplace/deploy-a-bond-market";
 
@@ -34,7 +35,9 @@ export const CreateMarket = (props: CreateMarketProps) => {
       />
       <PageHeader className="mt-8" title={title} subtitle={subtitle} />
       <div className="mt-4">
-        <CreateMarketController />
+        <CreateMarketProvider>
+          <CreateMarketController />
+        </CreateMarketProvider>
       </div>
     </div>
   );

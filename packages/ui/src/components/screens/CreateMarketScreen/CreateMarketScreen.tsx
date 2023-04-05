@@ -23,9 +23,10 @@ import { formatDate } from "utils";
 import type { Provider } from "@ethersproject/providers";
 import { vestingOptions } from "utils/options";
 import { list as tokenList } from "utils/sample-tokens";
-import data from "../../../stories/charts/btc-price";
+import { PriceData } from "components/charts/projection-algorithm";
 
 export type CreateMarketScreenProps = {
+  projectionData: Array<PriceData>;
   onSubmitAllowance: (state?: CreateMarketState) => void;
   onSubmitCreation: (state: CreateMarketState) => void;
   provider: Provider;
@@ -43,11 +44,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
 
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
-  const [state, dispatch] = useCreateMarket((initialState) => {
-    return {
-      ...initialState,
-    };
-  });
+  const [state, dispatch] = useCreateMarket();
 
   const capacityToken =
     state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
@@ -148,7 +145,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         >
           <div className="mt-2 flex h-[290px] w-full">
             <ProjectionChart
-              data={data}
+              data={props.projectionData}
               initialPrice={state.priceModels[state.priceModel].initialPrice}
               minPrice={state.priceModels[state.priceModel].minPrice}
               payoutTokenSymbol={state.payoutToken.symbol}

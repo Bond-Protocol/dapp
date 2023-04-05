@@ -22,6 +22,7 @@ export type BondPriceChartProps = {
   data: Array<BondPriceDatapoint>;
   payoutTokenSymbol: string;
   className?: string;
+  disableTooltip?: boolean;
 };
 
 export const getBottomDomain = (min: number) => min - min / 90;
@@ -29,6 +30,7 @@ export const getTopDomain = (max: number) => max + max / 90;
 
 export const BondPriceChart = (props: BondPriceChartProps) => {
   if (!props.data.length) {
+    console.log("fml");
     return <div className="h-full w-full" />;
   }
 
@@ -56,12 +58,14 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
             strokeDasharray="6 2"
             strokeWidth={2}
           />
-          <Tooltip
-            wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
-            content={
-              <BondPriceChartTooltip tokenSymbol={props.payoutTokenSymbol} />
-            }
-          />
+          {!props.disableTooltip && (
+            <Tooltip
+              wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
+              content={
+                <BondPriceChartTooltip tokenSymbol={props.payoutTokenSymbol} />
+              }
+            />
+          )}
         </Chart>
       </ResponsiveContainer>
     </div>
