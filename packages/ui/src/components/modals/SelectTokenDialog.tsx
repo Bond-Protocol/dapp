@@ -69,15 +69,25 @@ export const SelectTokenDialog = (props: {
                 props.provider,
               );
 
-              tkn.decimals().then(result => {
-                token.decimals = result;
-                props.onClose(e);
-                props.onSubmit({
-                  value: token,
-                  label: token.symbol,
-                  icon: token.icon,
+              tkn.decimals()
+                .then(result => {
+                  // When async result completes, return with correct decimals
+                  token.decimals = result;
+                  props.onSubmit({
+                    value: token,
+                    label: token.symbol,
+                    icon: token.icon,
+                  });
                 });
-              })
+
+              // Quick return for UI responsiveness before decimals call completes
+              props.onSubmit({
+                value: token,
+                label: token.symbol,
+                icon: token.icon,
+              });
+
+              props.onClose(e);
             }}
           />
         ))}
