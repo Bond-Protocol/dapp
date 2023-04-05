@@ -67,3 +67,14 @@ export function generateDiscountedPrices(
 
   return discountedPrices;
 }
+
+export const generateFixedDiscountPrice = (
+  prices: PriceData[],
+  fixedPrice: number
+) => {
+  return prices.map((p) => ({
+    ...p,
+    discountedPrice: fixedPrice,
+    discount: 5,
+  }));
+};
