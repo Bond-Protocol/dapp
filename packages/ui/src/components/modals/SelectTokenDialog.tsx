@@ -1,6 +1,12 @@
 import { SearchBar } from "components/molecules/SearchBar";
 import { useEffect, useState } from "react";
 import { Label } from "..";
+import type { Provider } from "@ethersproject/providers";
+import {IERC20__factory} from "@bond-protocol/contract-library";
+
+const extractAddress = (addresses: string | string[]) => {
+  return Array.isArray(addresses) ? addresses[0] : addresses;
+};
 
 //Checks whether a field includes a string
 const includesText = (field: string, target: string) => {
@@ -22,6 +28,8 @@ export const SelectTokenDialog = (props: {
   onSubmit: Function;
   onClose: Function;
   tokens: Record<string, any>;
+  provider: Provider;
+  chain: string;
 }) => {
   const [filter, setFilter] = useState("");
   const [list, setList] = useState(props.tokens);
@@ -56,12 +64,20 @@ export const SelectTokenDialog = (props: {
             icon={token.icon}
             onClick={(e) => {
               e.preventDefault();
-              props.onClose(e);
-              props.onSubmit({
-                value: token,
-                label: token.symbol,
-                icon: token.icon,
-              });
+              const tkn = IERC20__factory.connect(
+                extractAddress(token.addresses[props.chain]),
+                props.provider,
+              );
+
+              tkn.decimals().then(result => {
+                token.decimals = result;
+                props.onClose(e);
+                props.onSubmit({
+                  value: token,
+                  label: token.symbol,
+                  icon: token.icon,
+                });
+              })
             }}
           />
         ))}

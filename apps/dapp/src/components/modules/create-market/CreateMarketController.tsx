@@ -3,6 +3,7 @@ import { CreateMarketScreen, CreateMarketState } from "ui";
 import * as contractLib from "@bond-protocol/contract-library";
 import { useNetwork, useSigner } from "wagmi";
 import { doPriceMath } from "./helpers";
+import {providers} from "services";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
@@ -78,8 +79,9 @@ export const CreateMarketController = () => {
     if (state.endDate && state.startDate) {
       duration = (state.endDate.getTime() / 1000) - (state.startDate.getTime() / 1000);
     } else if (state.endDate) {
-      duration = (state.endDate.getTime() / 1000) -  Date.now();
+      duration = (state.endDate.getTime() / 1000) -  (Date.now() / 1000);
     }
+    duration = duration && duration.toFixed(0);
 
     const config = {
       summaryData: { ...state },
@@ -100,7 +102,7 @@ export const CreateMarketController = () => {
         formattedMinimumPrice: formattedMinimumPrice.toString(),
         debtBuffer: ~~(debtBuffer * Math.pow(10, 3)), // Account for 3 decimal places, truncate anything else
         vesting: state.vesting,
-        conclusion: state.endDate && (state.endDate.getTime() / 1000).toString(),
+        conclusion: state.endDate && (state.endDate.getTime() / 1000).toFixed(0),
         depositInterval: Math.trunc((24 * 60 * 60) / (bondsPerWeek / 7)),
         scaleAdjustment: scaleAdjustment,
         oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
@@ -110,7 +112,7 @@ export const CreateMarketController = () => {
         baseDiscount: BigNumber.from("5000").toString(),
         targetIntervalDiscount: BigNumber.from("1000").toString(),
         start: state.startDate ?
-          (state.startDate.getTime() / 1000).toString() :
+          (state.startDate.getTime() / 1000).toFixed(0) :
           0,
         duration: duration,
       },
@@ -138,6 +140,10 @@ export const CreateMarketController = () => {
       <CreateMarketScreen
         onSubmit={(state) => onSubmit(state, "wallet")}
         onSubmitMultisig={(state) => onSubmit(state, "multisig")}
+        // @ts-ignore
+        provider={providers[network.chain.id]}
+        // @ts-ignore
+        chain={network.chain.id}
       />
     </>
   );

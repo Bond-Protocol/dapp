@@ -22,10 +22,13 @@ import {
 } from "./";
 import { formatDate } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import type { Provider } from "@ethersproject/providers";
 
 export type CreateMarketScreenProps = {
   onSubmit: (state: CreateMarketState) => void;
   onSubmitMultisig: (state: CreateMarketState) => void;
+  provider: Provider;
+  chain: string;
 };
 
 const capacityOptions = [
@@ -34,6 +37,9 @@ const capacityOptions = [
 ];
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
+  const provider = props.provider;
+  const chain = props.chain;
+
   const [index, setIndex] = useState(0);
   const [state, dispatch] = useCreateMarket((initialState) => {
     return {
@@ -70,7 +76,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 value={state.payoutToken.symbol}
                 icon={state.payoutToken.icon}
                 ModalContent={(props) => (
-                  <SelectTokenDialog {...props} tokens={tokenList} />
+                  <SelectTokenDialog {...props}
+                                     tokens={tokenList}
+                                     provider={provider}
+                                     chain={chain}
+                  />
                 )}
                 onSubmit={({ value }) =>
                   dispatch({ type: Action.UPDATE_PAYOUT_TOKEN, value })
@@ -93,7 +103,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 value={state.quoteToken.symbol}
                 icon={state.quoteToken.icon}
                 ModalContent={(props) => (
-                  <SelectTokenDialog {...props} tokens={tokenList} />
+                  <SelectTokenDialog {...props}
+                                     tokens={tokenList}
+                                     provider={provider}
+                                     chain={chain}
+                  />
                 )}
                 onSubmit={({ value }) =>
                   dispatch({ type: Action.UPDATE_QUOTE_TOKEN, value })
