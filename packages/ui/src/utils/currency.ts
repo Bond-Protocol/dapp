@@ -43,7 +43,7 @@ export const getPriceScale = (value: string | number) => {
   return { rateMod, scale };
 };
 
-export const dynamicFormatter = (value: string | number) => {
+export const dynamicFormatter = (value: string | number, currency = true) => {
   let num = String(value);
 
   if (!num?.split) return num;
@@ -66,9 +66,15 @@ export const dynamicFormatter = (value: string | number) => {
     maximumFractionDigits = 0;
   }
 
+  if (currency) {
+    return new Intl.NumberFormat("en-us", {
+      style: "currency",
+      currency: "usd",
+      maximumFractionDigits,
+    }).format(parseFloat(num));
+  }
+
   return new Intl.NumberFormat("en-us", {
-    style: "currency",
-    currency: "usd",
     maximumFractionDigits,
   }).format(parseFloat(num));
 };

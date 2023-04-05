@@ -13,10 +13,7 @@ export const CreateMarketController = () => {
   const { data: signer } = useSigner();
   const network = useNetwork();
 
-  const onSubmit = async (
-    state: CreateMarketState,
-    type: "wallet" | "multisig"
-  ) => {
+  const onSubmit = async (state: CreateMarketState) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
     if (!network.chain?.id) throw new Error("Unspecified chain");
@@ -46,38 +43,35 @@ export const CreateMarketController = () => {
 
     switch (state.priceModel) {
       case "dynamic":
-        bondType = (
-          state.vestingType === "term" ?
-            contractLib.BOND_TYPE.FIXED_TERM_SDA :
-            contractLib.BOND_TYPE.FIXED_EXPIRY_SDA
-        );
+        bondType =
+          state.vestingType === "term"
+            ? contractLib.BOND_TYPE.FIXED_TERM_SDA
+            : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
         break;
       case "static":
-        bondType = (
-          state.vestingType === "term" ?
-            contractLib.BOND_TYPE.FIXED_TERM_FPA :
-            contractLib.BOND_TYPE.FIXED_EXPIRY_FPA
-        );
+        bondType =
+          state.vestingType === "term"
+            ? contractLib.BOND_TYPE.FIXED_TERM_FPA
+            : contractLib.BOND_TYPE.FIXED_EXPIRY_FPA;
         break;
       case "oracle-dynamic":
-        bondType = (
-          state.vestingType === "term" ?
-            contractLib.BOND_TYPE.FIXED_TERM_OSDA :
-            contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA
-        );
+        bondType =
+          state.vestingType === "term"
+            ? contractLib.BOND_TYPE.FIXED_TERM_OSDA
+            : contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA;
         break;
       case "oracle-static":
-        bondType = (
-          state.vestingType === "term" ?
-            contractLib.BOND_TYPE.FIXED_TERM_OFDA :
-            contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA
-        );
+        bondType =
+          state.vestingType === "term"
+            ? contractLib.BOND_TYPE.FIXED_TERM_OFDA
+            : contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA;
         break;
     }
 
     let duration;
     if (state.endDate && state.startDate) {
-      duration = (state.endDate.getTime() / 1000) - (state.startDate.getTime() / 1000);
+      duration =
+        state.endDate.getTime() / 1000 - state.startDate.getTime() / 1000;
     } else if (state.endDate) {
       duration = (state.endDate.getTime() / 1000) -  (Date.now() / 1000);
     }
@@ -123,14 +117,14 @@ export const CreateMarketController = () => {
     console.log({ config, state });
 
     // TODO: send data to modal instead of calling createMarket
-     const tx = await contractLib.createMarket(
-       // @ts-ignore
-       config.marketParams,
-       config.bondType,
-       config.chain,
-       signer,
-       { gasLimit: 1000000 }
-     );
+    const tx = await contractLib.createMarket(
+      // @ts-ignore
+      config.marketParams,
+      config.bondType,
+      config.chain,
+      signer,
+      { gasLimit: 1000000 }
+    );
 
     return config;
   };
@@ -138,8 +132,8 @@ export const CreateMarketController = () => {
   return (
     <>
       <CreateMarketScreen
-        onSubmit={(state) => onSubmit(state, "wallet")}
-        onSubmitMultisig={(state) => onSubmit(state, "multisig")}
+        onSubmitCreation={onSubmit}
+        onSubmitMultisig={() => {}}
         // @ts-ignore
         provider={providers[network.chain.id]}
         // @ts-ignore

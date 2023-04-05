@@ -8,25 +8,27 @@ import {
   SelectModal,
   SelectVestingDialog,
   SelectDateDialog,
+  SelectEndDateDialog,
   PlaceholderChart,
   TokenAmountInput,
+  Modal,
+  Action,
+  PriceModelPicker,
+  ConfirmMarketCreationDialog,
+  useCreateMarket,
+  ProjectionChart,
+  CreateMarketState,
 } from "components";
+import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import { formatDate } from "utils";
+import type { Provider } from "@ethersproject/providers";
 import { vestingOptions } from "utils/options";
 import { list as tokenList } from "utils/sample-tokens";
-import {
-  useCreateMarket,
-  Action,
-  CreateMarketState,
-  SelectEndDateDialog,
-  PriceModelPicker,
-} from "./";
-import { formatDate } from "utils";
-import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
-import type { Provider } from "@ethersproject/providers";
+import data from "../../../stories/charts/btc-price";
 
 export type CreateMarketScreenProps = {
-  onSubmit: (state: CreateMarketState) => void;
-  onSubmitMultisig: (state: CreateMarketState) => void;
+  onSubmitAllowance: (state?: CreateMarketState) => void;
+  onSubmitCreation: (state: CreateMarketState) => void;
   provider: Provider;
   chain: string;
 };
@@ -41,6 +43,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const chain = props.chain;
 
   const [index, setIndex] = useState(0);
+  const [open, setOpen] = useState(false);
   const [state, dispatch] = useCreateMarket((initialState) => {
     return {
       ...initialState,
@@ -147,8 +150,13 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           id="cm-right-container"
           className="h-fill flex w-1/2 flex-col justify-between pl-2"
         >
-          <div className="mt-2 flex h-full w-full">
-            <PlaceholderChart />{" "}
+          <div className="mt-2 flex h-[290px] w-full">
+            <ProjectionChart
+              data={data}
+              initialPrice={state.priceModels[state.priceModel].initialPrice}
+              minPrice={state.priceModels[state.priceModel].minPrice}
+              payoutTokenSymbol={state.payoutToken.symbol}
+            />
           </div>
           <div className="flex gap-x-4">
             <InputModal
@@ -197,7 +205,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       </div>
       <div className="mt-8 flex justify-center gap-x-10">
         <Button
-          onClick={() => props.onSubmitMultisig(state)}
+          onClick={() => {}}
           variant="ghost"
           size="lg"
           className="w-[308px]"
@@ -205,13 +213,30 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           Get Multi-Sig Config
         </Button>
         <Button
-          onClick={() => props.onSubmit(state)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setOpen(true);
+          }}
           size="lg"
           className="w-[308px]"
         >
           Deploy Market
         </Button>
       </div>
+      <Modal
+        title="Confirm Market Creation"
+        open={open}
+        onClickClose={() => setOpen(false)}
+      >
+        <ConfirmMarketCreationDialog
+          marketState={state}
+          submitCreateMarketTransaction={() => props.onSubmitCreation(state)}
+          submitApproveSpendingTransaction={() =>
+            props.onSubmitAllowance(state)
+          }
+        />
+      </Modal>
     </div>
   );
 };

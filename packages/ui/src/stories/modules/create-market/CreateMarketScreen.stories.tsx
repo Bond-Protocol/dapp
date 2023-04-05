@@ -16,6 +16,6 @@ const Template: ComponentStory<typeof CreateMarketScreen> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  onSubmit: (state) => console.log({ state }),
-  onSubmitMultisig: (state) => console.log({ state }),
+  onSubmitCreation: (state) => console.log({ state }),
+  onSubmitAllowance: (state) => console.log({ state }),
 };
