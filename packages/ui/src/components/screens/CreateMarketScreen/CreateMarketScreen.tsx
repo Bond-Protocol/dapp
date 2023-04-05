@@ -9,7 +9,6 @@ import {
   SelectVestingDialog,
   SelectDateDialog,
   SelectEndDateDialog,
-  PlaceholderChart,
   TokenAmountInput,
   Modal,
   Action,
