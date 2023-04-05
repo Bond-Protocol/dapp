@@ -68,14 +68,7 @@ export const CreateMarketController = () => {
         break;
     }
 
-    let duration;
-    if (state.endDate && state.startDate) {
-      duration =
-        state.endDate.getTime() / 1000 - state.startDate.getTime() / 1000;
-    } else if (state.endDate) {
-      duration = (state.endDate.getTime() / 1000) -  (Date.now() / 1000);
-    }
-    duration = duration && duration.toFixed(0);
+
 
     const config = {
       summaryData: { ...state },
@@ -108,7 +101,7 @@ export const CreateMarketController = () => {
         start: state.startDate ?
           (state.startDate.getTime() / 1000).toFixed(0) :
           0,
-        duration: duration,
+        duration: state.duration,
       },
       bondType: bondType,
       chain: chain.id,

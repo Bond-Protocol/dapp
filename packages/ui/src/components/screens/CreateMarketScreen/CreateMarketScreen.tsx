@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {
   Button,
   FlatSelect,
@@ -49,9 +49,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       ...initialState,
     };
   });
-
-  const totalBonds = 100;
-  const maxAmountInSingleTx = 42;
 
   const capacityToken =
     state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
@@ -160,7 +157,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <div className="flex gap-x-4">
             <InputModal
-              label="Market Start Date"
+              label="Market Start"
               title="Select start date"
               value={
                 state.startDate ? formatDate.dateAndTime(state.startDate) : ""
@@ -172,7 +169,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }
             />
             <InputModal
-              label="Market End Date"
+              label="Market End"
               title="Select end date"
               value={state.endDate ? formatDate.dateAndTime(state.endDate) : ""}
               endAdornment={<CalendarIcon className="mr-2" />}
@@ -195,10 +192,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               label={"Max Bond Size"}
               reverse
             >
-              {maxAmountInSingleTx} {capacityToken?.symbol}
+              {state.maxBondSize} {capacityToken?.symbol}
             </InfoLabel>
-            <InfoLabel label={"Total Bonds Available"} reverse>
-              {totalBonds}
+            <InfoLabel label={"Market Length"} reverse>
+              {state.durationInDays} DAYS
             </InfoLabel>
           </div>
         </div>

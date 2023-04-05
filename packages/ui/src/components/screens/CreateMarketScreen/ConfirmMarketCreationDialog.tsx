@@ -2,38 +2,29 @@ import { Button, SummaryLabel, InfoList, Tooltip } from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { CreateMarketState } from "components";
-import { dynamicFormatter, formatDate } from "utils";
+import { formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
-  const initialPrice = dynamicFormatter(
-    state.priceModels.dynamic.initialPrice,
-    false
-  );
-  const minPrice = dynamicFormatter(state.priceModels.dynamic.minPrice, false);
   const tokenSymbols = `${state.payoutToken.symbol} PER ${state.quoteToken.symbol}`;
   return [
     {
       leftLabel: "Initial Price",
-      rightLabel: `${initialPrice} ${tokenSymbols}`,
+      rightLabel: `${state.priceModels.dynamic.initialPrice} ${tokenSymbols}`,
     },
     {
       leftLabel: "Minimum Price",
-      rightLabel: `${minPrice} ${tokenSymbols}`,
+      rightLabel: `${state.priceModels.dynamic.minPrice} ${tokenSymbols}`,
     },
   ];
 };
 
 const getStaticPriceFields = (state: CreateMarketState) => {
-  const fixedPrice = dynamicFormatter(
-    state.priceModels.static.initialPrice,
-    false
-  );
   const tokenSymbols = `${state.payoutToken.symbol} PER ${state.quoteToken.symbol}`;
   return [
     {
       leftLabel: "Fixed Price",
-      rightLabel: `${fixedPrice} ${tokenSymbols}`,
+      rightLabel: `${state.priceModels.static.initialPrice} ${tokenSymbols}`,
     },
   ];
 };
@@ -48,13 +39,17 @@ const formatMarketState = (state: CreateMarketState) => {
   return {
     vesting: {
       icon: fastVesting,
-      value: "7 DAYS",
+      value: state.vestingString,
     },
     capacity: {
       icon:
         state.capacityType === "payout"
           ? state.payoutToken.icon
           : state.quoteToken.icon,
+      symbol:
+        state.capacityType === "payout"
+          ? state.payoutToken.symbol
+          : state.quoteToken.symbol,
       value: state.capacity,
     },
 
@@ -80,11 +75,11 @@ export const ConfirmMarketCreationDialog = ({
     ...getPriceFields(marketState),
     {
       leftLabel: "Max Bond Size",
-      rightLabel: "100 OHM",
+      rightLabel: marketState.maxBondSize + " " + formattedState.capacity.symbol,
     },
     {
-      leftLabel: "Total Max Bonds",
-      rightLabel: "10",
+      leftLabel: "Market Length",
+      rightLabel: marketState.durationInDays.toString(),
     },
   ];
 
@@ -126,7 +121,11 @@ export const ConfirmMarketCreationDialog = ({
       <div className="grid grid-cols-[1fr_32px_1fr]">
         <SummaryLabel
           small
-          value={formattedState.startDate}
+          value={
+            formattedState.startDate !== "invalid"
+              ? formattedState.startDate
+              : "Immediate"
+          }
           subtext="MARKET START DATE"
         />
         <div className="flex items-center justify-center">

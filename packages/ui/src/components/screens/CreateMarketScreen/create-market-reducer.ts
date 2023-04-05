@@ -1,4 +1,9 @@
 import { useReducer } from "react";
+import {
+  calculateTrimDigits,
+  trim, trimAsNumber,
+} from "@bond-protocol/contract-library";
+import { formatDate } from "utils";
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
@@ -34,6 +39,7 @@ export type CreateMarketState = {
   capacity: string;
   vesting: string;
   vestingType: VestingType;
+  vestingString: string;
   bondsPerWeek: number;
   priceModel: PriceModel;
   priceModels: Record<PriceModel, any>;
@@ -44,6 +50,8 @@ export type CreateMarketState = {
   maxBondSize?: number;
   debtBuffer?: number;
   depositInterval?: number;
+  duration: string;
+  durationInDays: number;
 };
 
 const placeholderToken = {
@@ -61,12 +69,15 @@ const initialState: CreateMarketState = {
   capacity: "",
   vesting: "",
   vestingType: "term",
+  vestingString: "",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
   bondsPerWeek: 7,
-  maxBondSize: 100,
+  maxBondSize: 0,
   debtBuffer: 45,
   depositInterval: 24,
+  duration: "",
+  durationInDays: 0,
   priceModels: {
     dynamic: {},
     static: {},
@@ -74,6 +85,38 @@ const initialState: CreateMarketState = {
     "oracle-static": {},
   },
 };
+
+function calculateDuration(endDate?: Date, startDate?: Date) {
+  let duration;
+  if (endDate && startDate) {
+    duration =
+      endDate.getTime() / 1000 - startDate.getTime() / 1000;
+  } else if (endDate) {
+    duration = (endDate.getTime() / 1000) -  (Date.now() / 1000);
+  }
+  return duration && duration.toFixed(0);
+}
+
+function calculateMaxBondSize(capacity: string, durationInDays: number) {
+  const maxBondSize = Number(capacity) / durationInDays;
+  return trimAsNumber(maxBondSize, calculateTrimDigits(maxBondSize));
+}
+
+function onChangeDate(endDate?: Date, startDate?: Date, capacity?: string) {
+  const duration = calculateDuration(endDate, startDate);
+  const durationInDays = Math.ceil(Number(duration) / 60 / 60 / 24);
+
+  let maxBondSize = 0;
+  if (capacity) {
+    maxBondSize = calculateMaxBondSize(capacity, durationInDays);
+  }
+
+  return {
+    duration,
+    durationInDays,
+    maxBondSize
+  }
+}
 
 export const reducer = (
   state: CreateMarketState,
@@ -95,7 +138,16 @@ export const reducer = (
     case Action.UPDATE_CAPACITY: {
       const capacity = isNaN(Number(value)) ? "" : value;
 
-      return { ...state, capacity };
+      let maxBondSize = 0;
+      if (state.durationInDays) {
+        maxBondSize = calculateMaxBondSize(capacity, state.durationInDays);
+      }
+
+      return {
+        ...state,
+        capacity,
+        maxBondSize
+      };
     }
 
     case Action.UPDATE_CAPACITY_TYPE: {
@@ -104,21 +156,58 @@ export const reducer = (
 
     case Action.UPDATE_VESTING: {
       let vesting: string = "";
+      let vestingString: string = "";
+
       if (value.type === "term") {
         vesting = (value.value * 24 * 60 * 60).toString();
+        vestingString = value.value + " DAYS";
       } else if (value.type === "date") {
         vesting = (value.value.getTime() / 1000).toString();
+        vestingString = formatDate.short(value.value as Date);
       }
 
-      return { ...state, vesting, vestingType: value.type };
+      return {
+        ...state,
+        vesting,
+        vestingString,
+        vestingType: value.type
+      };
     }
 
     case Action.UPDATE_START_DATE: {
-      return { ...state, startDate: value };
+      const {
+        duration,
+        durationInDays,
+        maxBondSize
+      } = onChangeDate(state.endDate, value, state.capacity);
+
+      return {
+        ...state,
+        startDate: value,
+        duration: duration
+          ? duration.toString()
+          : "",
+        durationInDays,
+        maxBondSize
+      };
     }
 
     case Action.UPDATE_END_DATE: {
-      return { ...state, endDate: value };
+      const {
+        duration,
+        durationInDays,
+        maxBondSize
+      } = onChangeDate(value, state.startDate, state.capacity);
+
+      return {
+        ...state,
+        endDate: value,
+        duration: duration
+          ? duration.toString()
+          : "",
+        durationInDays,
+        maxBondSize
+      };
     }
 
     case Action.UPDATE_PRICE_MODEL: {
