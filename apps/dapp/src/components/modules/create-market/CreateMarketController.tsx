@@ -174,6 +174,10 @@ export const CreateMarketController = () => {
       chain: chain?.id,
     };
 
+    console.log({
+      config
+    })
+
     // TODO: send data to modal instead of calling createMarket
     const tx = await contractLib.createMarket(
       // @ts-ignore
