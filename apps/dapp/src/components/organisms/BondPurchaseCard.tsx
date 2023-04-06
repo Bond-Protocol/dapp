@@ -283,7 +283,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         >
           <Button
             disabled={!hasSufficientBalance}
-            className="mt-4 w-full pb-0"
+            className="mt-4 w-full"
             onClick={onClickBond}
           >
             {!hasSufficientAllowance && hasSufficientBalance

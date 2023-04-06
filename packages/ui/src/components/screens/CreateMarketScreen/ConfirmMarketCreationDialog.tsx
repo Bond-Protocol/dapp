@@ -6,7 +6,7 @@ import { formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
-  const tokenSymbols = `${state.payoutToken.symbol} PER ${state.quoteToken.symbol}`;
+  const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
   return [
     {
       leftLabel: "Initial Price",
@@ -20,7 +20,7 @@ const getDynamicPriceFields = (state: CreateMarketState) => {
 };
 
 const getStaticPriceFields = (state: CreateMarketState) => {
-  const tokenSymbols = `${state.payoutToken.symbol} PER ${state.quoteToken.symbol}`;
+  const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
   return [
     {
       leftLabel: "Fixed Price",
@@ -75,7 +75,8 @@ export const ConfirmMarketCreationDialog = ({
     ...getPriceFields(marketState),
     {
       leftLabel: "Max Bond Size",
-      rightLabel: marketState.maxBondSize + " " + formattedState.capacity.symbol,
+      rightLabel:
+        marketState.maxBondSize + " " + formattedState.capacity.symbol,
     },
     {
       leftLabel: "Market Length",
