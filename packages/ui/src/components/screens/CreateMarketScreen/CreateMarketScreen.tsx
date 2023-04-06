@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {
   Button,
   FlatSelect,
@@ -27,6 +27,7 @@ import { PriceData } from "components/charts/projection-algorithm";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
+  fetchAllowance: (state: CreateMarketState) => string;
   onSubmitAllowance: (state?: CreateMarketState) => void;
   onSubmitCreation: (state: CreateMarketState) => void;
   provider: Provider;
@@ -49,6 +50,15 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
 
   const capacityToken =
     state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
+
+  useEffect(() => {
+    const fetchAllowance = async () => {
+      const allowance = await props.fetchAllowance(state);
+      dispatch({ type: Action.UPDATE_ALLOWANCE, value: allowance });
+    }
+
+    fetchAllowance();
+  }, [state.payoutToken, state.priceModel, state.vestingType]);
 
   return (
     <div id="cm-root">
@@ -80,8 +90,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                     chain={chain}
                   />
                 )}
-                onSubmit={({ value }) =>
-                  dispatch({ type: Action.UPDATE_PAYOUT_TOKEN, value })
+                onSubmit={({ value }) => {
+                  dispatch({ type: Action.UPDATE_PAYOUT_TOKEN, value });
+                }
                 }
               />
               <SelectModal

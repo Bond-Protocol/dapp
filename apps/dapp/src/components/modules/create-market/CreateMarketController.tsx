@@ -6,6 +6,8 @@ import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
+import {usePurchaseBond} from "hooks";
+import {getAddressesForType} from "@bond-protocol/contract-library";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
@@ -16,11 +18,67 @@ export const CreateMarketController = () => {
   const network = useNetwork();
   const [state] = useCreateMarket();
   const { createMarketTokens: tokens } = useTokens();
+  const { getTokenAllowance } = usePurchaseBond();
 
   const projectionData = useProjectionChartData({
     quoteToken: state.quoteToken,
     payoutToken: state.payoutToken,
   });
+
+  function getBondType(state: CreateMarketState) {
+    switch (state.priceModel) {
+      case "dynamic":
+        return state.vestingType === "term"
+          ? contractLib.BOND_TYPE.FIXED_TERM_SDA
+          : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
+      case "static":
+        return state.vestingType === "term"
+          ? contractLib.BOND_TYPE.FIXED_TERM_FPA
+          : contractLib.BOND_TYPE.FIXED_EXPIRY_FPA;
+      case "oracle-dynamic":
+        return state.vestingType === "term"
+          ? contractLib.BOND_TYPE.FIXED_TERM_OSDA
+          : contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA;
+      case "oracle-static":
+        return state.vestingType === "term"
+          ? contractLib.BOND_TYPE.FIXED_TERM_OFDA
+          : contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA;
+    }
+  }
+
+  const fetchAllowance = async (state: CreateMarketState) => {
+    if (!state.payoutToken.address) return;
+
+    if (!network.chain?.id) throw new Error("Unspecified chain");
+
+    if (!signer) return 0;
+
+    const address = await signer.getAddress();
+
+    const chain = {
+      id: network?.chain?.id,
+      label: network.chain.name,
+    };
+
+    const auctioneer = getAddressesForType(
+      chain?.id.toString(),
+      getBondType(state)
+    ).auctioneer;
+
+    const allowance = await getTokenAllowance(
+      state.payoutToken.address,
+      address,
+      auctioneer,
+      state.payoutToken.decimals,
+      providers[chain?.id]
+    );
+
+    return (
+      allowance
+        ? allowance.toString()
+        : 0
+    )
+  }
 
   const onSubmit = async (state: CreateMarketState) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
@@ -48,34 +106,7 @@ export const CreateMarketController = () => {
       state.quoteToken.addresses[chain?.id]
     );
 
-    let bondType: string;
-
-    switch (state.priceModel) {
-      case "dynamic":
-        bondType =
-          state.vestingType === "term"
-            ? contractLib.BOND_TYPE.FIXED_TERM_SDA
-            : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
-        break;
-      case "static":
-        bondType =
-          state.vestingType === "term"
-            ? contractLib.BOND_TYPE.FIXED_TERM_FPA
-            : contractLib.BOND_TYPE.FIXED_EXPIRY_FPA;
-        break;
-      case "oracle-dynamic":
-        bondType =
-          state.vestingType === "term"
-            ? contractLib.BOND_TYPE.FIXED_TERM_OSDA
-            : contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA;
-        break;
-      case "oracle-static":
-        bondType =
-          state.vestingType === "term"
-            ? contractLib.BOND_TYPE.FIXED_TERM_OFDA
-            : contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA;
-        break;
-    }
+    let bondType: string = getBondType(state);
 
     const config = {
       summaryData: { ...state },
@@ -135,11 +166,12 @@ export const CreateMarketController = () => {
       <CreateMarketScreen
         //@ts-ignore
         tokens={tokens.filter((t) => {
-          console.log({ token: t.chainId, network: network.chain?.id });
+        //  console.log({ token: t.chainId, network: network.chain?.id });
           return t.chainId === network.chain?.id;
         })}
         onSubmitCreation={onSubmit}
         onSubmitAllowance={() => {}}
+        fetchAllowance={fetchAllowance}
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}
         projectionData={projectionData.prices}

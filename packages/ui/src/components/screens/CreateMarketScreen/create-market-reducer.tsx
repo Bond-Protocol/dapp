@@ -1,6 +1,7 @@
 import { calculateTrimDigits, trimAsNumber } from "utils/trim";
 import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";
+import {ethers} from "ethers";
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
@@ -23,6 +24,7 @@ export enum Action {
   UPDATE_PAYOUT_TOKEN = "update_payout_token",
   UPDATE_CAPACITY_TYPE = "update_capacity_type",
   UPDATE_CAPACITY = "update_capacity",
+  UPDATE_ALLOWANCE = "update_allowance",
   UPDATE_VESTING = "update_vesting",
   UPDATE_PRICE_MODEL = "update_price_model",
   UPDATE_PRICE_RATES = "update_price_rates",
@@ -41,6 +43,10 @@ export type CreateMarketState = {
   payoutToken: Token;
   capacityType: CapacityOption;
   capacity: string;
+  allowance: string;
+  recommendedAllowance: string;
+  recommendedAllowanceDecimalAdjusted: string;
+  isAllowanceSufficient: boolean;
   vesting: string;
   vestingType: VestingType;
   vestingString: string;
@@ -71,6 +77,10 @@ const initialState: CreateMarketState = {
   payoutToken: placeholderToken,
   capacityType: "payout" as CapacityOption,
   capacity: "",
+  allowance: "",
+  recommendedAllowance: "",
+  recommendedAllowanceDecimalAdjusted: "",
+  isAllowanceSufficient: false,
   vesting: "",
   vestingType: "term",
   vestingString: "",
@@ -121,6 +131,50 @@ function onChangeDate(endDate?: Date, startDate?: Date, capacity?: string) {
   };
 }
 
+function calculateAllowance(
+  payoutToken: Token,
+  quoteToken: Token,
+  capacity: string,
+  capacityType: string,
+  allowance: string) {
+  if (
+    !payoutToken || !payoutToken.price || !payoutToken.decimals ||
+    !quoteToken || !quoteToken.price || !quoteToken.decimals ||
+    !capacity || !capacityType || !allowance
+  ) {
+    return {
+      recommendedAllowance: "",
+      recommendedAllowanceDecimalAdjusted: "",
+      isAllowanceSufficient: false,
+    };
+  }
+
+  const recommendedAllowance = capacityType === "quote"
+    ? Number(capacity) / (payoutToken.price / quoteToken.price)
+    : capacity;
+
+  const rec = (
+    Number(recommendedAllowance)
+    * Math.pow(10, payoutToken.decimals)
+  ).toString();
+
+  let recommendedAllowanceDecimalAdjusted = BigInt(
+    rec.split(".")[0]
+  ).toString();
+
+  recommendedAllowanceDecimalAdjusted = recommendedAllowanceDecimalAdjusted.split(".")[0];
+
+  const isAllowanceSufficient = (
+    Number(recommendedAllowance) <= Number(allowance)
+  );
+
+  return {
+    recommendedAllowance: recommendedAllowance.toString(),
+    recommendedAllowanceDecimalAdjusted,
+    isAllowanceSufficient,
+  }
+}
+
 export const reducer = (
   state: CreateMarketState,
   action: { type: Action; [key: string]: any }
@@ -131,11 +185,71 @@ export const reducer = (
 
   switch (type) {
     case Action.UPDATE_QUOTE_TOKEN: {
-      return { ...state, quoteToken: value };
+      const {
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      } = calculateAllowance(
+        state.payoutToken,
+        value,
+        state.capacity,
+        state.capacityType,
+        state.allowance,
+      );
+
+      return {
+        ...state,
+        quoteToken: value,
+        allowance: value,
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      };
     }
 
     case Action.UPDATE_PAYOUT_TOKEN: {
-      return { ...state, payoutToken: value };
+      const {
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      } = calculateAllowance(
+        value,
+        state.quoteToken,
+        state.capacity,
+        state.capacityType,
+        state.allowance,
+      );
+
+      return {
+        ...state,
+        payoutToken: value,
+        allowance: value,
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      };
+    }
+
+    case Action.UPDATE_ALLOWANCE: {
+      const {
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      } = calculateAllowance(
+        state.payoutToken,
+        state.quoteToken,
+        state.capacity,
+        state.capacityType,
+        value,
+      );
+
+      return {
+        ...state,
+        allowance: value,
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      };
     }
 
     case Action.UPDATE_CAPACITY: {
@@ -146,15 +260,48 @@ export const reducer = (
         maxBondSize = calculateMaxBondSize(capacity, state.durationInDays);
       }
 
+      const {
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      } = calculateAllowance(
+        state.payoutToken,
+        state.quoteToken,
+        capacity,
+        state.capacityType,
+        state.allowance,
+      );
+
       return {
         ...state,
         capacity,
         maxBondSize,
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
       };
     }
 
     case Action.UPDATE_CAPACITY_TYPE: {
-      return { ...state, capacityType: value };
+      const {
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      } = calculateAllowance(
+        state.payoutToken,
+        state.quoteToken,
+        state.capacity,
+        value,
+        state.allowance,
+      );
+
+      return {
+        ...state,
+        capacityType: value,
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient
+      };
     }
 
     case Action.UPDATE_VESTING: {
@@ -247,11 +394,11 @@ export const reducer = (
 
 export const CreateMarketContext = createContext<
   [CreateMarketState, Dispatch<{ [key: string]: any; type: Action }>]
->([initialState, () => null]);
+  >([initialState, () => null]);
 
 export const CreateMarketProvider = ({
-  children,
-}: {
+                                       children,
+                                     }: {
   children: React.ReactNode;
 }) => {
   const stateControls = useReducer(reducer, initialState);
