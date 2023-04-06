@@ -30,7 +30,6 @@ export const getTopDomain = (max: number) => max + max / 90;
 
 export const BondPriceChart = (props: BondPriceChartProps) => {
   if (!props.data.length) {
-    console.log("fml");
     return <div className="h-full w-full" />;
   }
 
@@ -57,6 +56,19 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
             dataKey="discountedPrice"
             strokeDasharray="6 2"
             strokeWidth={2}
+          />
+          <Line
+            dot={false}
+            stroke="#F2A94A"
+            dataKey="initialPrice"
+            strokeDasharray="6 2"
+            strokeWidth={2}
+          />
+          <Line
+            dot={false}
+            strokeWidth={1}
+            stroke="#FF0606"
+            dataKey="minPrice"
           />
           {!props.disableTooltip && (
             <Tooltip

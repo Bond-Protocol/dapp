@@ -382,31 +382,19 @@ const samplePrices = {
   "wrapped-bitcoin": { usd: 27821 },
   y2k: { usd: 4.03 },
 };
-//Map coingecko result to our format
-const toProtocolTokens = (token: any) => {
+
+export const list = aphexTokens.map((token) => {
+  const apiId = token.priceSources[0]?.apiId;
+  const price = samplePrices[apiId]?.usd ?? 0;
+
   return {
+    id: apiId,
     name: token.name,
-    symbol: token.symbol.toUpperCase(),
-    icon: token.image.small,
-    addresses: token.platforms,
-    links: token.links,
+    symbol: token.symbol,
+    icon: token.logoUrl,
+    addresses: token.addresses,
+    apiId,
+    price,
+    priceSources: token.priceSources,
   };
-};
-
-export const list = aphexTokens
-  .filter((t) => t.priceSources.some((s) => s.source === "coingecko"))
-  .map((token) => {
-    const apiId = token.priceSources[0]?.apiId;
-    const price = samplePrices[apiId]?.usd ?? 0;
-
-    return {
-      id: apiId,
-      name: token.name,
-      symbol: token.symbol,
-      icon: token.logoUrl,
-      addresses: token.addresses,
-      apiId,
-      price,
-      priceSources: token.priceSources,
-    };
-  });
+});

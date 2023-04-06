@@ -1,16 +1,11 @@
-import { ethers, BigNumber } from "ethers";
-import {
-  CreateMarketContext,
-  CreateMarketProvider,
-  CreateMarketScreen,
-  CreateMarketState,
-  useCreateMarket,
-} from "ui";
-import * as contractLib from "@bond-protocol/contract-library";
 import { useNetwork, useSigner } from "wagmi";
+import { ethers, BigNumber } from "ethers";
+import * as contractLib from "@bond-protocol/contract-library";
+import { CreateMarketScreen, CreateMarketState, useCreateMarket } from "ui";
 import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
+import { useTokens } from "context/token-context";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
@@ -20,6 +15,8 @@ export const CreateMarketController = () => {
   const { data: signer } = useSigner();
   const network = useNetwork();
   const [state] = useCreateMarket();
+  const { createMarketTokens: tokens } = useTokens();
+
   const projectionData = useProjectionChartData({
     quoteToken: state.quoteToken,
     payoutToken: state.payoutToken,
@@ -136,12 +133,15 @@ export const CreateMarketController = () => {
   return (
     <>
       <CreateMarketScreen
+        //@ts-ignore
+        tokens={tokens.filter((t) => {
+          console.log({ token: t.chainId, network: network.chain?.id });
+          return t.chainId === network.chain?.id;
+        })}
         onSubmitCreation={onSubmit}
-        onSubmitMultisig={() => {}}
-        // @ts-ignore
-        provider={providers[network.chain?.id]}
-        // @ts-ignore
-        chain={network.chain?.id}
+        onSubmitAllowance={() => {}}
+        provider={providers[network.chain?.id as number]}
+        chain={String(network.chain?.id)}
         projectionData={projectionData.prices}
       />
     </>

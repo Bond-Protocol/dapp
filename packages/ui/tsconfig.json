@@ -2,6 +2,8 @@
   "extends": "tsconfig/react-library.json",
   "compilerOptions": {
     "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": true,
     "baseUrl": "src",
     "paths": {
@@ -10,9 +12,6 @@
       ],
       "hooks/*": [
         "./hooks/*"
-      ],
-      "reducers/*": [
-        "./reducers/*"
       ],
       "assets/*": [
         "./assets/*"
@@ -28,6 +27,7 @@
   ],
   "exclude": [
     "dist",
+    "src/stories/**/*",
     "build",
     "node_modules"
   ]

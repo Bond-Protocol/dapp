@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState, useEffect } from "react";
 import { FlatSelect } from "components";
 import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
@@ -109,10 +110,14 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
                 key={`${priceModel}-${p.property}`}
                 payoutToken={props.payoutToken}
                 quoteToken={props.quoteToken}
-                onRateChange={(rate) => {
+                onRateChange={(rate, reversed) => {
                   props.onRateChange &&
-                    props.onRateChange({ priceModel, [p.property]: rate });
-                  return { priceModel, [p.property]: rate };
+                    props.onRateChange({
+                      priceModel,
+                      [p.property]: rate,
+                      reversed,
+                    });
+                  return { priceModel, [p.property]: rate, reversed };
                 }}
               />
             );

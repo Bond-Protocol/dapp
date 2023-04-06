@@ -1,8 +1,8 @@
 import { SearchBar } from "components/molecules/SearchBar";
 import { useEffect, useState } from "react";
-import { Label } from "..";
+import { Label, Token } from "..";
 import type { Provider } from "@ethersproject/providers";
-import {IERC20__factory} from "@bond-protocol/contract-library";
+import { IERC20__factory } from "@bond-protocol/contract-library";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
@@ -27,7 +27,7 @@ const fields = ["name", "symbol"];
 export const SelectTokenDialog = (props: {
   onSubmit: Function;
   onClose: Function;
-  tokens: Record<string, any>;
+  tokens: Token[];
   provider: Provider;
   chain: string;
 }) => {
@@ -63,24 +63,6 @@ export const SelectTokenDialog = (props: {
             subtext={token.name}
             icon={token.icon}
             onClick={(e) => {
-              e.preventDefault();
-              const tkn = IERC20__factory.connect(
-                extractAddress(token.addresses[props.chain]),
-                props.provider,
-              );
-
-              tkn.decimals()
-                .then(result => {
-                  // When async result completes, return with correct decimals
-                  token.decimals = result;
-                  props.onSubmit({
-                    value: token,
-                    label: token.symbol,
-                    icon: token.icon,
-                  });
-                });
-
-              // Quick return for UI responsiveness before decimals call completes
               props.onSubmit({
                 value: token,
                 label: token.symbol,

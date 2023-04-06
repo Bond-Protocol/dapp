@@ -23,17 +23,16 @@ export type Price = Record<string, PriceDetails>;
 
 type BondLibraryToken = bondLibrary.Token & { key: string };
 
-const allTokens: Array<BondLibraryToken> = Array.from(
-  bondLibrary.TOKENS.keys()
-).filter((key) => {
+const allTokens: Array<BondLibraryToken> = Array.from(bondLibrary.TOKENS.keys())
+  .filter((key) => {
     const split: string[] = key.split("_");
     let chainId = split[0];
     return providers[chainId] != undefined;
-  }
-).map((key) => ({
-  ...bondLibrary.TOKENS.get(key)!,
-  key,
-}));
+  })
+  .map((key) => ({
+    ...bondLibrary.TOKENS.get(key)!,
+    key,
+  }));
 
 const baseTokens = allTokens.filter((t) => !("lpType" in t));
 const lpTokens = allTokens
@@ -45,6 +44,7 @@ const isTestnet = environment.isTestnet;
 export const useTokenPrices = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [currentPrices, setCurrentPrices] = useState<Price>({});
+  const [createMarketTokens, setCreateMarketTokens] = useState<Token[]>([]);
 
   const subgraphQueries = getSubgraphQueries(useListTokensQuery);
   const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
@@ -209,7 +209,9 @@ export const useTokenPrices = () => {
     async function setupPrices() {
       const baseTokenPrices = mapBaseTokenPrices();
       const lpTokenPrices = await mapLpTokenPrices(baseTokenPrices);
-      setCurrentPrices({ ...baseTokenPrices, ...lpTokenPrices });
+      const prices = { ...baseTokenPrices, ...lpTokenPrices };
+
+      setCurrentPrices(prices);
     }
   }, [tokens, coingeckoQuery.data, customPriceQuery.data]);
 
@@ -234,12 +236,38 @@ export const useTokenPrices = () => {
     return 0;
   }
 
+  useEffect(() => {
+    if (tokens.length > 0 && Object.keys(currentPrices).length > 0) {
+      const updatedTokens = tokens.map((t) => {
+        const price = getPrice(t.id);
+        const details = getTokenDetails(t);
+
+        const apiId = details.priceSources?.find((s) => s?.apiId)?.apiId;
+
+        return {
+          ...t,
+          icon: details.logoUrl,
+          decimals: Number(t.decimals),
+          chainId: Number(t.chainId),
+          price,
+          apiId,
+          priceSources: details.priceSources,
+          addresses: {
+            [t.network]: t.address,
+          },
+        };
+      });
+      setCreateMarketTokens(updatedTokens);
+    }
+  }, [tokens, currentPrices]);
+
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
    */
   return {
     tokens,
+    createMarketTokens,
     currentPrices,
     getPrice,
     getTokenDetails,

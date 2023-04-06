@@ -1,8 +1,4 @@
-import {
-  calculateTrimDigits,
-  trim,
-  trimAsNumber,
-} from "@bond-protocol/contract-library";
+import { calculateTrimDigits, trimAsNumber } from "utils/trim";
 import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";
 
@@ -18,6 +14,8 @@ export type Token = {
   price: number;
   decimals: number;
   addresses?: { [key: string | number]: string | string[] };
+  address?: string;
+  apiId?: string;
 };
 
 export enum Action {
@@ -33,6 +31,11 @@ export enum Action {
   RESET = "reset",
 }
 
+export type PriceModelConfig = {
+  reversedRate?: boolean;
+  [key: string]: any;
+};
+
 export type CreateMarketState = {
   quoteToken: Token;
   payoutToken: Token;
@@ -43,7 +46,7 @@ export type CreateMarketState = {
   vestingString: string;
   bondsPerWeek: number;
   priceModel: PriceModel;
-  priceModels: Record<PriceModel, any>;
+  priceModels: Record<PriceModel, PriceModelConfig>;
   startDate?: Date;
   endDate?: Date;
   oracleAddress?: string;

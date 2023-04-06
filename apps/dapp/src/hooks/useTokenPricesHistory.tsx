@@ -3,6 +3,7 @@ import type {
   CustomPriceSource,
   SupportedPriceSource,
 } from "@bond-protocol/bond-library";
+import type { Token as CreateMarketToken } from "ui";
 import type { Token } from "@bond-protocol/contract-library";
 import { TOKENS } from "@bond-protocol/bond-library";
 
@@ -19,9 +20,7 @@ export const useTokenPriceHistory = (token: Token, dayRange = 90) => {
   //For now we're only using one price source soooooo
   //@ts-ignore
   if (!token) return;
-  console.log({ token });
   const [priceSource] = getPriceSourceForToken(token.id);
-  console.log(token, priceSource);
 
   //We currently don't have historical data for custom oracle tokens
   if (!priceSource || priceSource.source === "custom") {
@@ -46,10 +45,13 @@ export const useTokenPriceHistory = (token: Token, dayRange = 90) => {
   };
 };
 
-export const useCoingeckoTokenHistory = (token: Token, dayRange = 7) => {
+export const useCoingeckoTokenHistory = (
+  token: CreateMarketToken,
+  dayRange = 7
+) => {
   const { data: tokenPriceHistory, ...tokenPriceHistoryQuery } = useQuery(
     `token-price-history-${token.symbol}-${dayRange}d`,
-    getTokenPriceHistory(token.id, { days: dayRange }, Date.now())
+    getTokenPriceHistory(token.apiId, { days: dayRange }, Date.now())
   );
 
   return {

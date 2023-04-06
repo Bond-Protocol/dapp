@@ -15,14 +15,14 @@ import {
   PriceModelPicker,
   ConfirmMarketCreationDialog,
   useCreateMarket,
-  ProjectionChart,
+  ProjectionChartSimple,
   CreateMarketState,
+  Token,
 } from "components";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { formatDate } from "utils";
 import type { Provider } from "@ethersproject/providers";
 import { vestingOptions } from "utils/options";
-import { list as tokenList } from "utils/sample-tokens";
 import { PriceData } from "components/charts/projection-algorithm";
 
 export type CreateMarketScreenProps = {
@@ -31,6 +31,7 @@ export type CreateMarketScreenProps = {
   onSubmitCreation: (state: CreateMarketState) => void;
   provider: Provider;
   chain: string;
+  tokens: Token[];
 };
 
 const capacityOptions = [
@@ -71,10 +72,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 title="Select token"
                 value={state.payoutToken.symbol}
                 icon={state.payoutToken.icon}
-                ModalContent={(props) => (
+                ModalContent={(modalProps) => (
                   <SelectTokenDialog
-                    {...props}
-                    tokens={tokenList}
+                    {...modalProps}
+                    tokens={props.tokens}
                     provider={provider}
                     chain={chain}
                   />
@@ -99,10 +100,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 title="Select token"
                 value={state.quoteToken.symbol}
                 icon={state.quoteToken.icon}
-                ModalContent={(props) => (
+                ModalContent={(modalProps) => (
                   <SelectTokenDialog
-                    {...props}
-                    tokens={tokenList}
+                    {...modalProps}
+                    tokens={props.tokens}
                     provider={provider}
                     chain={chain}
                   />
@@ -146,7 +147,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           className="h-fill flex w-1/2 flex-col justify-between pl-2"
         >
           <div className="mt-2 flex h-[290px] w-full">
-            <ProjectionChart
+            <ProjectionChartSimple
               data={props.projectionData}
               initialPrice={state.priceModels[state.priceModel].initialPrice}
               minPrice={state.priceModels[state.priceModel].minPrice}

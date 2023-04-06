@@ -98,11 +98,18 @@ export function generateDiscountedPrices(
 
 export const generateFixedDiscountPrice = (
   prices: PriceData[],
-  config: ProjectionConfiguration
+  { fixedPrice }: ProjectionConfiguration
 ): DiscountedPriceData[] => {
   return prices.map((p) => ({
     ...p,
-    discountedPrice: config.fixedPrice || 0,
-    discount: getDiscountPercentage(p.price, config.fixedPrice || 0),
+    discountedPrice: fixedPrice || 0,
+    discount: getDiscountPercentage(p.price, fixedPrice || 0),
   }));
+};
+
+export const generatedDiscountedPricesSimple = (
+  prices: PriceData[],
+  { minPrice, initialPrice }: ProjectionConfiguration
+) => {
+  return prices.map((p) => ({ ...p, initialPrice, minPrice }));
 };
