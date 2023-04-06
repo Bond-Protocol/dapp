@@ -12,7 +12,7 @@ export type PriceControlProps = {
   quoteToken?: Token;
   payoutToken?: Token;
   exchangeRate: number;
-  onRateChange: (exchangeRate: any, isReversed: boolean) => any;
+  onRateChange: (exchangeRate: any, isReversed?: boolean) => any;
   tooltip?: React.ReactNode;
   percentage?: boolean;
   className?: string;

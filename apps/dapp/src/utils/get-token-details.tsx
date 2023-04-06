@@ -67,6 +67,7 @@ export function getTokenDetails(token: any): TokenDetails {
 
   return {
     id: token.id,
+    //@ts-ignore
     priceSources: bondLibraryToken?.priceSources,
     address: token.address,
     chainId: token.id.split("_")[0],

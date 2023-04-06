@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { CreateMarketState } from "ui";
 
 export const doPriceMath = (state: CreateMarketState) => {

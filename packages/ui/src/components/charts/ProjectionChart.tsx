@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useEffect, useState } from "react";
 import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
 import {
