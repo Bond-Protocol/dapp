@@ -13,7 +13,6 @@ export type ProjectionChartSimpleProps = {
   data?: PriceData[];
   initialPrice?: number;
   minPrice?: number;
-  isReversed?: boolean;
 };
 
 const getProjectionDataset = (
@@ -36,17 +35,13 @@ export const ProjectionChartSimple = ({
   let maxPremium = 8; // The max premium a bond can get, in %
   let triggerCount = 4; // The amount of bonds purchased -> not yet accurate
 
-  const fixedPrice = state.priceModels.static.initialPrice;
-  const initialPrice = state.priceModels.dynamic.initialPrice;
-  const minimumPrice = state.priceModels.dynamic.minPrice;
-
   const prices = getProjectionDataset(state, props.data, {
     maxDiscount,
     maxPremium,
     triggerCount,
-    fixedPrice: props.isReversed ? 1 / fixedPrice : fixedPrice,
-    initialPrice: props.isReversed ? 1 / initialPrice : initialPrice,
-    minPrice: props.isReversed ? 1 / minimumPrice : minimumPrice,
+    fixedPrice: state.priceModels.static.initialPrice, //TODO: Update
+    initialPrice: state.priceModels.dynamic.initialPrice,
+    minPrice: state.priceModels.dynamic.minPrice,
   });
 
   useEffect(() => {
