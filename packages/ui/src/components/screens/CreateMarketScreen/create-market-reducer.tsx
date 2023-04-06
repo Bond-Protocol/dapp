@@ -93,6 +93,7 @@ const initialState: CreateMarketState = {
   depositInterval: 24,
   duration: "",
   durationInDays: 0,
+  priceModelReversed: false,
   priceModels: {
     dynamic: {},
     static: {},
@@ -205,6 +206,7 @@ export const reducer = (
         state.allowance
       );
 
+      console.log({ isAllowanceSufficient });
       return {
         ...state,
         quoteToken: value,

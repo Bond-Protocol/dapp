@@ -8,6 +8,7 @@ const initialState: UseTokensReturn = {
   tokens: [],
   currentPrices: {},
   getPrice: (token: any) => 1,
+  //@ts-ignore
   getTokenDetails: (token: unknown) => ({ id: "" } as TokenDetails),
   isLoading: true,
 };

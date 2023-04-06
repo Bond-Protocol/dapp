@@ -251,7 +251,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       >
         <ConfirmMarketCreationDialog
           marketState={state}
-          hasAllowance={Number(state.allowance) >= Number(state.capacity)}
+          hasAllowance={state.isAllowanceSufficient}
           submitCreateMarketTransaction={() => props.onSubmitCreation(state)}
           submitApproveSpendingTransaction={() =>
             props.onSubmitAllowance(state)

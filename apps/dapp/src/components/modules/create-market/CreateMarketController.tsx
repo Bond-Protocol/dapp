@@ -1,4 +1,5 @@
-import { useNetwork, useSigner } from "wagmi";
+//@ts-nocheck
+import { useAccount, useNetwork, useSigner } from "wagmi";
 import { ethers, BigNumber } from "ethers";
 import * as contractLib from "@bond-protocol/contract-library";
 import {
@@ -20,6 +21,7 @@ const extractAddress = (addresses: string | string[]) => {
 
 export const CreateMarketController = () => {
   const { data: signer } = useSigner();
+  const { isConnected } = useAccount();
   const network = useNetwork();
   const [state, dispatch] = useCreateMarket();
   const { createMarketTokens: tokens } = useTokens();
@@ -110,10 +112,8 @@ export const CreateMarketController = () => {
 
     const confirmed = await tx.wait(1);
 
-    console.log({ confirmed });
+    //Lazy assumption that allowance is now equal to capacity if tx is sucessful
     dispatch({ type: Action.UPDATE_ALLOWANCE, value: state.capacity });
-
-    console.log({ tx });
   };
 
   const onSubmit = async (state: CreateMarketState) => {
@@ -174,6 +174,12 @@ export const CreateMarketController = () => {
       chain: chain?.id,
     };
 
+    console.log({
+      marketParams: config.marketParams,
+      bondType: config.bondType,
+      state,
+    });
+
     // TODO: send data to modal instead of calling createMarket
     const tx = await contractLib.createMarket(
       // @ts-ignore
@@ -190,7 +196,11 @@ export const CreateMarketController = () => {
   return (
     <>
       <CreateMarketScreen
-        tokens={tokens.filter((t) => t.chainId === network.chain?.id)}
+        tokens={tokens.filter((t) => {
+          return isConnected
+            ? t.chainId === network.chain?.id
+            : t.chainId === "1";
+        })}
         onSubmitCreation={onSubmit}
         onSubmitAllowance={approveCapacitySpending}
         fetchAllowance={fetchAllowance}
