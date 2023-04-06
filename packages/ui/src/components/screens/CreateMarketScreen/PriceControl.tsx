@@ -108,7 +108,7 @@ export const PriceControl = (props: PriceControlProps) => {
           }`}
           onClick={(e) => {
             e.preventDefault();
-            setReverseExchangeRate((prev) => !prev);
+            //setReverseExchangeRate((prev) => !prev);
           }}
         >
           {props.topLabel ??
