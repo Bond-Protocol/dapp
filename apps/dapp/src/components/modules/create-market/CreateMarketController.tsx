@@ -6,8 +6,8 @@ import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
-import {usePurchaseBond} from "hooks";
-import {getAddressesForType} from "@bond-protocol/contract-library";
+import { usePurchaseBond } from "hooks";
+import { getAddressesForType } from "@bond-protocol/contract-library";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
@@ -73,12 +73,8 @@ export const CreateMarketController = () => {
       providers[chain?.id]
     );
 
-    return (
-      allowance
-        ? allowance.toString()
-        : 0
-    )
-  }
+    return allowance ? allowance.toString() : 0;
+  };
 
   const onSubmit = async (state: CreateMarketState) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
@@ -146,8 +142,6 @@ export const CreateMarketController = () => {
       chain: chain?.id,
     };
 
-    console.log({ config, state });
-
     // TODO: send data to modal instead of calling createMarket
     const tx = await contractLib.createMarket(
       // @ts-ignore
@@ -164,11 +158,7 @@ export const CreateMarketController = () => {
   return (
     <>
       <CreateMarketScreen
-        //@ts-ignore
-        tokens={tokens.filter((t) => {
-        //  console.log({ token: t.chainId, network: network.chain?.id });
-          return t.chainId === network.chain?.id;
-        })}
+        tokens={tokens.filter((t) => t.chainId === network.chain?.id)}
         onSubmitCreation={onSubmit}
         onSubmitAllowance={() => {}}
         fetchAllowance={fetchAllowance}

@@ -34,7 +34,7 @@ export enum Action {
 }
 
 export type PriceModelConfig = {
-  reversedRate?: boolean;
+  isReversed?: boolean;
   [key: string]: any;
 };
 
@@ -53,6 +53,7 @@ export type CreateMarketState = {
   bondsPerWeek: number;
   priceModel: PriceModel;
   priceModels: Record<PriceModel, PriceModelConfig>;
+  priceModelReversed: boolean;
   startDate?: Date;
   endDate?: Date;
   oracleAddress?: string;
@@ -181,7 +182,7 @@ export const reducer = (
 ): CreateMarketState => {
   const { type, value } = action;
 
-  console.log({ type, value });
+  console.log({ type, value, state });
 
   switch (type) {
     case Action.UPDATE_QUOTE_TOKEN: {
@@ -368,7 +369,8 @@ export const reducer = (
     }
 
     case Action.UPDATE_PRICE_RATES: {
-      const { priceModel, ...rates } = value;
+      const { priceModel, isReversed, ...rates } = value;
+      console.log({ priceModel, isReversed });
 
       return {
         ...state,
@@ -377,6 +379,7 @@ export const reducer = (
           [priceModel]: {
             ...(state.priceModels[priceModel as PriceModel] ?? {}),
             ...rates,
+            isReversed,
           },
         },
       };

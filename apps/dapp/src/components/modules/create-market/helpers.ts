@@ -1,10 +1,4 @@
 import { CreateMarketState } from "ui";
-import {
-  BOND_TYPE,
-  calculateTrimDigits,
-  trim,
-  trimAsNumber,
-} from "@bond-protocol/contract-library";
 
 export const doPriceMath = (state: CreateMarketState) => {
   let rates = state.priceModels[state.priceModel];

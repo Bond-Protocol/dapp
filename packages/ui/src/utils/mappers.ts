@@ -16,7 +16,6 @@ export const toTokenList = (
   getPrice: (id: string) => number
 ) => {
   return tokens.map((token) => {
-    console.log({ token });
     // @ts-ignore
     const apiId = token.priceSources[0]?.apiId;
     // @ts-ignore

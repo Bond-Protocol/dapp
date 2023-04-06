@@ -163,6 +163,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               initialPrice={state.priceModels[state.priceModel].initialPrice}
               minPrice={state.priceModels[state.priceModel].minPrice}
               payoutTokenSymbol={state.payoutToken.symbol}
+              isReversed={state.priceModels[state.priceModel].isReversed}
             />
           </div>
           <div className="flex gap-x-4">
