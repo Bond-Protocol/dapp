@@ -1,7 +1,7 @@
 import { calculateTrimDigits, trimAsNumber } from "utils/trim";
 import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";
-import {ethers} from "ethers";
+import { ethers } from "ethers";
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
@@ -137,11 +137,18 @@ function calculateAllowance(
   quoteToken: Token,
   capacity: string,
   capacityType: string,
-  allowance: string) {
+  allowance: string
+) {
   if (
-    !payoutToken || !payoutToken.price || !payoutToken.decimals ||
-    !quoteToken || !quoteToken.price || !quoteToken.decimals ||
-    !capacity || !capacityType || !allowance
+    !payoutToken ||
+    !payoutToken.price ||
+    !payoutToken.decimals ||
+    !quoteToken ||
+    !quoteToken.price ||
+    !quoteToken.decimals ||
+    !capacity ||
+    !capacityType ||
+    !allowance
   ) {
     return {
       recommendedAllowance: "",
@@ -150,30 +157,30 @@ function calculateAllowance(
     };
   }
 
-  const recommendedAllowance = capacityType === "quote"
-    ? Number(capacity) / (payoutToken.price / quoteToken.price)
-    : capacity;
+  const recommendedAllowance =
+    capacityType === "quote"
+      ? Number(capacity) / (payoutToken.price / quoteToken.price)
+      : capacity;
 
   const rec = (
-    Number(recommendedAllowance)
-    * Math.pow(10, payoutToken.decimals)
+    Number(recommendedAllowance) * Math.pow(10, payoutToken.decimals)
   ).toString();
 
   let recommendedAllowanceDecimalAdjusted = BigInt(
     rec.split(".")[0]
   ).toString();
 
-  recommendedAllowanceDecimalAdjusted = recommendedAllowanceDecimalAdjusted.split(".")[0];
+  recommendedAllowanceDecimalAdjusted =
+    recommendedAllowanceDecimalAdjusted.split(".")[0];
 
-  const isAllowanceSufficient = (
-    Number(recommendedAllowance) <= Number(allowance)
-  );
+  const isAllowanceSufficient =
+    Number(recommendedAllowance) <= Number(allowance);
 
   return {
     recommendedAllowance: recommendedAllowance.toString(),
     recommendedAllowanceDecimalAdjusted,
     isAllowanceSufficient,
-  }
+  };
 }
 
 export const reducer = (
@@ -189,22 +196,21 @@ export const reducer = (
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       } = calculateAllowance(
         state.payoutToken,
         value,
         state.capacity,
         state.capacityType,
-        state.allowance,
+        state.allowance
       );
 
       return {
         ...state,
         quoteToken: value,
-        allowance: value,
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       };
     }
 
@@ -212,22 +218,21 @@ export const reducer = (
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       } = calculateAllowance(
         value,
         state.quoteToken,
         state.capacity,
         state.capacityType,
-        state.allowance,
+        state.allowance
       );
 
       return {
         ...state,
         payoutToken: value,
-        allowance: value,
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       };
     }
 
@@ -235,13 +240,13 @@ export const reducer = (
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       } = calculateAllowance(
         state.payoutToken,
         state.quoteToken,
         state.capacity,
         state.capacityType,
-        value,
+        value
       );
 
       return {
@@ -249,7 +254,7 @@ export const reducer = (
         allowance: value,
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       };
     }
 
@@ -264,13 +269,13 @@ export const reducer = (
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       } = calculateAllowance(
         state.payoutToken,
         state.quoteToken,
         capacity,
         state.capacityType,
-        state.allowance,
+        state.allowance
       );
 
       return {
@@ -279,7 +284,7 @@ export const reducer = (
         maxBondSize,
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       };
     }
 
@@ -287,13 +292,13 @@ export const reducer = (
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       } = calculateAllowance(
         state.payoutToken,
         state.quoteToken,
         state.capacity,
         value,
-        state.allowance,
+        state.allowance
       );
 
       return {
@@ -301,7 +306,7 @@ export const reducer = (
         capacityType: value,
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
-        isAllowanceSufficient
+        isAllowanceSufficient,
       };
     }
 
@@ -397,11 +402,11 @@ export const reducer = (
 
 export const CreateMarketContext = createContext<
   [CreateMarketState, Dispatch<{ [key: string]: any; type: Action }>]
-  >([initialState, () => null]);
+>([initialState, () => null]);
 
 export const CreateMarketProvider = ({
-                                       children,
-                                     }: {
+  children,
+}: {
   children: React.ReactNode;
 }) => {
   const stateControls = useReducer(reducer, initialState);

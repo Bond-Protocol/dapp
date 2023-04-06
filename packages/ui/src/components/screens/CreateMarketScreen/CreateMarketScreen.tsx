@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   FlatSelect,
@@ -27,7 +27,7 @@ import { PriceData } from "components/charts/projection-algorithm";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
-  fetchAllowance: (state: CreateMarketState) => string;
+  fetchAllowance: (state: CreateMarketState) => Promise<any>;
   onSubmitAllowance: (state?: CreateMarketState) => void;
   onSubmitCreation: (state: CreateMarketState) => void;
   provider: Provider;
@@ -55,7 +55,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     const fetchAllowance = async () => {
       const allowance = await props.fetchAllowance(state);
       dispatch({ type: Action.UPDATE_ALLOWANCE, value: allowance });
-    }
+    };
 
     fetchAllowance();
   }, [state.payoutToken, state.priceModel, state.vestingType]);
@@ -92,8 +92,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 )}
                 onSubmit={({ value }) => {
                   dispatch({ type: Action.UPDATE_PAYOUT_TOKEN, value });
-                }
-                }
+                }}
               />
               <SelectModal
                 label="Vesting"
@@ -252,6 +251,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       >
         <ConfirmMarketCreationDialog
           marketState={state}
+          hasAllowance={Number(state.allowance) >= Number(state.capacity)}
           submitCreateMarketTransaction={() => props.onSubmitCreation(state)}
           submitApproveSpendingTransaction={() =>
             props.onSubmitAllowance(state)

@@ -1,7 +1,12 @@
 import { useNetwork, useSigner } from "wagmi";
 import { ethers, BigNumber } from "ethers";
 import * as contractLib from "@bond-protocol/contract-library";
-import { CreateMarketScreen, CreateMarketState, useCreateMarket } from "ui";
+import {
+  Action,
+  CreateMarketScreen,
+  CreateMarketState,
+  useCreateMarket,
+} from "ui";
 import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
@@ -16,9 +21,9 @@ const extractAddress = (addresses: string | string[]) => {
 export const CreateMarketController = () => {
   const { data: signer } = useSigner();
   const network = useNetwork();
-  const [state] = useCreateMarket();
+  const [state, dispatch] = useCreateMarket();
   const { createMarketTokens: tokens } = useTokens();
-  const { getTokenAllowance } = usePurchaseBond();
+  const { getTokenAllowance, approveSpending } = usePurchaseBond();
 
   const projectionData = useProjectionChartData({
     quoteToken: state.quoteToken,
@@ -76,7 +81,43 @@ export const CreateMarketController = () => {
     return allowance ? allowance.toString() : 0;
   };
 
+  const approveCapacitySpending = async () => {
+    if (!state.payoutToken.address) return;
+
+    if (!network.chain?.id) throw new Error("Unspecified chain");
+
+    if (!signer) return 0;
+
+    const address = await signer.getAddress();
+
+    const chain = {
+      id: network?.chain?.id,
+      label: network.chain.name,
+    };
+
+    const auctioneer = getAddressesForType(
+      chain?.id.toString(),
+      getBondType(state)
+    ).auctioneer;
+
+    const tx = await approveSpending(
+      state.payoutToken.address,
+      state.payoutToken.decimals,
+      auctioneer,
+      signer,
+      state.capacity
+    );
+
+    const confirmed = await tx.wait(1);
+
+    console.log({ confirmed });
+    dispatch({ type: Action.UPDATE_ALLOWANCE, value: state.capacity });
+
+    console.log({ tx });
+  };
+
   const onSubmit = async (state: CreateMarketState) => {
+    console.log("hello??", { state });
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
     if (!network.chain?.id) throw new Error("Unspecified chain");
@@ -93,22 +134,13 @@ export const CreateMarketController = () => {
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
-    //TODO: Check for addresses| Little hack to extract first address from testnet
-    const payoutTokenAddress = extractAddress(
-      state.payoutToken.addresses[chain?.id]
-    );
-
-    const quoteTokenAddress = extractAddress(
-      state.quoteToken.addresses[chain?.id]
-    );
-
     let bondType: string = getBondType(state);
 
     const config = {
       summaryData: { ...state },
       marketParams: {
-        quoteToken: quoteTokenAddress,
-        payoutToken: payoutTokenAddress,
+        quoteToken: state.quoteToken.address,
+        payoutToken: state.payoutToken.address,
         callbackAddr: "0x0000000000000000000000000000000000000000",
         capacity: ethers.utils
           .parseUnits(
@@ -160,7 +192,7 @@ export const CreateMarketController = () => {
       <CreateMarketScreen
         tokens={tokens.filter((t) => t.chainId === network.chain?.id)}
         onSubmitCreation={onSubmit}
-        onSubmitAllowance={() => {}}
+        onSubmitAllowance={approveCapacitySpending}
         fetchAllowance={fetchAllowance}
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}
