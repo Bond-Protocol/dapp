@@ -12,7 +12,7 @@ export type PriceControlProps = {
   quoteToken?: Token;
   payoutToken?: Token;
   exchangeRate: number;
-  onRateChange: (exchangeRate: any, isReversed?: boolean) => any;
+  onRateChange: (exchangeRate: any) => any;
   tooltip?: React.ReactNode;
   percentage?: boolean;
   className?: string;
@@ -24,62 +24,47 @@ export const PriceControl = (props: PriceControlProps) => {
   const [rateMod, setRateMod] = useState(0.25); // Default rate mod for percetages;
   const [scale, setScale] = useState(2); // Default scale for percentages;
 
-  const [isReversed, setIsReversed] = useState(true);
+  const [reverseExchangeRate, setReverseExchangeRate] = useState(true);
 
   useEffect(() => {
     if (props.quoteToken && props.payoutToken && !props.percentage) {
       const initialRate = props.quoteToken?.price / props.payoutToken.price;
-
-      const reverseRate = 1 / initialRate;
-      const rate = isReversed ? reverseRate : initialRate;
-
+      const rate = reverseExchangeRate ? 1 / initialRate : initialRate;
       const { rateMod, scale } = getPriceScale(rate);
-
       setValue(rate.toFixed(scale));
-
       setRateMod(rateMod);
       setScale(scale);
-
-      props.onRateChange(initialRate, isReversed);
+      props.onRateChange(rate);
     }
-  }, [isReversed, props.quoteToken, props.payoutToken]);
-
-  const handleRateChange = (amount: number) => {
-    const rate = isReversed ? 1 / amount : amount;
-    const reversedRate = isReversed ? amount : 1 / amount;
-    return { rate, reversedRate };
-  };
+  }, [reverseExchangeRate, props.quoteToken, props.payoutToken]);
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     const updated = numericInput.onChange(e);
-    const rates = handleRateChange(updated);
-
-    props.onRateChange && props.onRateChange(rates.rate, isReversed);
+    props.onRateChange && props.onRateChange(updated);
   };
 
   const raiseRate = () => {
     setValue((prev) => {
-      let newRate = parseFloat(prev) + rateMod;
+      let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
+      newRate = props.percentage
+        ? Number(getAValidPercentage(newRate)).toFixed(scale)
+        : newRate;
 
-      let rate = isReversed ? 1 / newRate : newRate;
-      let reverseRate = isReversed ? newRate : 1 / newRate;
-
-      props.onRateChange && props.onRateChange(rate, isReversed);
-
-      return (isReversed ? reverseRate : rate).toFixed(scale);
+      props.onRateChange && props.onRateChange(newRate);
+      return props.percentage ? newRate + "%" : newRate;
     });
   };
 
   const lowerRate = () => {
     setValue((prev) => {
-      let newRate = parseFloat(prev) - rateMod;
-      let rate = isReversed ? 1 / newRate : newRate;
-      let reverseRate = isReversed ? newRate : 1 / newRate;
-      props.onRateChange && props.onRateChange(rate, isReversed);
-      return (isReversed ? reverseRate : rate).toFixed(scale);
+      let newRate = (parseFloat(prev) - rateMod).toFixed(scale);
+      newRate = props.percentage
+        ? Number(getAValidPercentage(newRate)).toFixed(scale)
+        : newRate;
+      props.onRateChange && props.onRateChange(newRate);
+      return props.percentage ? newRate + "%" : newRate;
     });
   };
-
   const exchangeLabel =
     props.quoteToken?.symbol && props.payoutToken?.symbol
       ? `${props.payoutToken?.symbol || "???"} per ${
@@ -123,11 +108,11 @@ export const PriceControl = (props: PriceControlProps) => {
           }`}
           onClick={(e) => {
             e.preventDefault();
-            setIsReversed((prev) => !prev);
+            //setReverseExchangeRate((prev) => !prev);
           }}
         >
           {props.topLabel ??
-            (isReversed
+            (reverseExchangeRate
               ? exchangeLabel.split(" ").reverse().join(" ")
               : exchangeLabel)}
         </div>
