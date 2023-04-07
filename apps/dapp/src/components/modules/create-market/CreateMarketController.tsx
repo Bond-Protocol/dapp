@@ -1,27 +1,35 @@
 //@ts-nocheck
-import {useState} from "react";
-import {useAccount, useNetwork, useSigner} from "wagmi";
-import {BigNumber, ethers} from "ethers";
+import { useState } from "react";
+import { useAccount, useNetwork, useSigner } from "wagmi";
+import { BigNumber, ethers } from "ethers";
 import * as contractLib from "@bond-protocol/contract-library";
-import {getAddressesForType, getBlockExplorer} from "@bond-protocol/contract-library";
-import {Action, CreateMarketScreen, CreateMarketState, useCreateMarket,} from "ui";
-import {doPriceMath} from "./helpers";
-import {providers} from "services";
-import {useProjectionChartData} from "hooks/useProjectionChart";
-import {useTokens} from "context/token-context";
-import {usePurchaseBond} from "hooks";
+import {
+  getAddressesForType,
+  getBlockExplorer,
+} from "@bond-protocol/contract-library";
+import {
+  Action,
+  CreateMarketScreen,
+  CreateMarketState,
+  useCreateMarket,
+} from "ui";
+import { doPriceMath } from "./helpers";
+import { providers } from "services";
+import { useProjectionChartData } from "hooks/useProjectionChart";
+import { useTokens } from "context/token-context";
+import { usePurchaseBond } from "hooks";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
 };
 
 export const CreateMarketController = () => {
-  const {data: signer} = useSigner();
-  const {isConnected} = useAccount();
+  const { data: signer } = useSigner();
+  const { isConnected } = useAccount();
   const network = useNetwork();
   const [state, dispatch] = useCreateMarket();
-  const {createMarketTokens: tokens} = useTokens();
-  const {getTokenAllowance, approveSpending} = usePurchaseBond();
+  const { createMarketTokens: tokens } = useTokens();
+  const { getTokenAllowance, approveSpending } = usePurchaseBond();
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");
 
@@ -57,11 +65,8 @@ export const CreateMarketController = () => {
   }
 
   const getTeller = (chain: string, state: CreateMarketState) => {
-    return getAddressesForType(
-      chain,
-      getBondType(state)
-    ).teller;
-  }
+    return getAddressesForType(chain, getBondType(state)).teller;
+  };
 
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;
@@ -110,8 +115,8 @@ export const CreateMarketController = () => {
       getBondType(state)
     ).auctioneer;
 
-    setAllowanceTx(true);
     try {
+      setAllowanceTx(true);
       const tx = await approveSpending(
         state.payoutToken.address,
         state.payoutToken.decimals,
@@ -121,14 +126,12 @@ export const CreateMarketController = () => {
       );
 
       const confirmed = await tx.wait(1);
+      dispatch({ type: Action.UPDATE_ALLOWANCE, value: state.capacity });
     } catch (e) {
-      console.log({e});
+      console.log({ e });
     } finally {
       setAllowanceTx(false);
     }
-
-    //Lazy assumption that allowance is now equal to capacity if tx is sucessful
-    dispatch({type: Action.UPDATE_ALLOWANCE, value: state.capacity});
   };
 
   const configureMarket = (state: CreateMarketState) => {
@@ -145,13 +148,13 @@ export const CreateMarketController = () => {
     const debtBuffer = 0.3;
     const bondsPerWeek = 20;
 
-    const {scaleAdjustment, formattedInitialPrice, formattedMinimumPrice} =
+    const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
     let bondType: string = getBondType(state);
 
     return {
-      summaryData: {...state},
+      summaryData: { ...state },
       marketParams: {
         quoteToken: state.quoteToken.address,
         payoutToken: state.payoutToken.address,
@@ -187,7 +190,7 @@ export const CreateMarketController = () => {
       bondType: bondType,
       chain: chain?.id,
     };
-  }
+  };
 
   const getTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
@@ -196,7 +199,7 @@ export const CreateMarketController = () => {
       config?.marketParams,
       config?.bondType
     );
-  }
+  };
 
   const onSubmit = async (state: CreateMarketState) => {
     const config = configureMarket(state);
@@ -207,7 +210,7 @@ export const CreateMarketController = () => {
       config.bondType,
       config.chain,
       signer,
-      {gasLimit: 1000000}
+      { gasLimit: 1000000 }
     );
     setCreationHash(tx.hash);
 

@@ -19,8 +19,7 @@ const options: Record<PriceModel, any> = {
     description: (
       <>
         enable protocols to issue tokens over time by controlling price and
-        target discount speed.
-        <br /> Works especially well for{" "}
+        discount speed. Best for{" "}
         <span className="font-bold">short-term bonds</span>.
       </>
     ),
@@ -58,12 +57,12 @@ export const PriceModelDetails = ({
     <div
       className={`flex h-[160px] items-center justify-center bg-white/5 py-4 ${props.className}`}
     >
-      <div className="w-min px-4">
+      <div className="w-min px-3 pr-2">
         <option.Image className="stroke-white" />
       </div>
       <div className="w-[400px]">
         <div className="text-light-grey-400">
-          <span className="mr-1 font-bold text-white">{option.title}</span>
+          <span className="mr-0.5 font-bold text-white">{option.title}</span>
           {option.description}
         </div>
 

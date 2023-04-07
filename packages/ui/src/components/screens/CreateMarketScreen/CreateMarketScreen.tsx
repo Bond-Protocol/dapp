@@ -178,7 +178,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               label="Market Start"
               title="Select start date"
               value={
-                state.startDate ? formatDate.dateAndTime(state.startDate) : ""
+                state.startDate
+                  ? formatDate.dateAndTime(state.startDate) + " UTC"
+                  : ""
               }
               endAdornment={<CalendarIcon className="mr-2 fill-white" />}
               ModalContent={(props) => <SelectDateDialog {...props} />}
@@ -189,7 +191,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <InputModal
               label="Market End"
               title="Select end date"
-              value={state.endDate ? formatDate.dateAndTime(state.endDate) : ""}
+              value={
+                state.endDate
+                  ? formatDate.dateAndTime(state.endDate) + " UTC"
+                  : ""
+              }
               endAdornment={<CalendarIcon className="mr-2 fill-white" />}
               ModalContent={(props) => (
                 <SelectEndDateDialog
@@ -262,10 +268,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         title={
           props.creationHash
             ? "Transaction Submitted"
-            : ( showMultisig
-                ? "Transaction Details"
-                : "Confirm Market Creation"
-            )
+            : showMultisig
+            ? "Transaction Details"
+            : "Confirm Market Creation"
         }
         open={open}
         onClickClose={() => setOpen(false)}
