@@ -194,7 +194,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="mt-4 flex gap-x-4">
-            {!state.startDate || !state.endDate ? (
+            {!state.durationInDays ? (
               <div
                 className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md`}
               >

@@ -80,7 +80,7 @@ export const ConfirmMarketCreationDialog = ({
     },
     {
       leftLabel: "Market Length",
-      rightLabel: marketState.durationInDays.toString(),
+      rightLabel: marketState.durationInDays.toString() + " DAYS",
     },
   ];
 

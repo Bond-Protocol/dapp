@@ -12,7 +12,7 @@ export const useProjectionChartData = ({ quoteToken, payoutToken }: any) => {
     if (quoteRes.prices && payoutRes.prices) {
       //@ts-ignore
       const updated = payoutRes.prices?.map((p, i) => {
-        const quotePrice = quoteRes.prices[i].price;
+        const quotePrice = quoteRes.prices[i]?.price;
         return {
           ...p,
           price: 1 / (quotePrice / p.price),
