@@ -33,11 +33,11 @@ export const getPriceScale = (value: string | number) => {
   }
 
   if (single > 0) {
-    rateMod = 1;
+    rateMod = 0.1;
   }
 
   if (single > 100) {
-    rateMod = 10;
+    rateMod = 1;
   }
 
   return { rateMod, scale };
