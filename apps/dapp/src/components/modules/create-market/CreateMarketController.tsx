@@ -125,7 +125,7 @@ export const CreateMarketController = () => {
         state.capacity
       );
 
-      const confirmed = await tx.wait(1);
+      await tx.wait(1);
       dispatch({ type: Action.UPDATE_ALLOWANCE, value: state.capacity });
     } catch (e) {
       console.log({ e });
@@ -220,11 +220,9 @@ export const CreateMarketController = () => {
   return (
     <>
       <CreateMarketScreen
-        tokens={tokens.filter((t) => {
-          return isConnected
-            ? t.chainId === network.chain?.id
-            : t.chainId === "1";
-        })}
+        tokens={tokens.filter((t) =>
+          isConnected ? t.chainId === network.chain?.id : t.chainId === "1"
+        )}
         onSubmitCreation={onSubmit}
         onSubmitAllowance={approveCapacitySpending}
         onSubmitMultisigCreation={setCreationHash}

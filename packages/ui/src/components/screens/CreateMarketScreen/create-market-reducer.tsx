@@ -1,8 +1,6 @@
-//@ts-nocheck
 import { calculateTrimDigits, trimAsNumber } from "utils/trim";
 import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";
-import { ethers } from "ethers";
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
@@ -93,7 +91,6 @@ const initialState: CreateMarketState = {
   depositInterval: 24,
   duration: "",
   durationInDays: 0,
-  priceModelReversed: false,
   priceModels: {
     dynamic: {},
     static: {},

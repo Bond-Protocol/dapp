@@ -20,6 +20,8 @@ export const useProjectionChartData = ({ quoteToken, payoutToken }: any) => {
       });
 
       setPrices(updated);
+    } else {
+      setPrices([]);
     }
   }, [quoteToken, payoutToken, quoteRes.isLoading, payoutRes.isLoading]);
 
