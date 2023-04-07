@@ -26,7 +26,7 @@ export const doPriceMath = (state: CreateMarketState) => {
   const minPriceDecimalDiff = Number(minPrice.substring(minSymbolIndex));
 
   const tokenDecimalOffset =
-    state.quoteToken.decimals - state.payoutToken.decimals;
+    state.payoutToken.decimals - state.quoteToken.decimals;
 
   let priceDecimalOffset = priceDecimalDiff / 2;
 
