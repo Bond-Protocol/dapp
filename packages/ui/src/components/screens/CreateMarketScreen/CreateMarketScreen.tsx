@@ -19,6 +19,7 @@ import {
   CreateMarketState,
   Token,
   TransactionHashDialog,
+  Tooltip,
 } from "components";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { formatDate } from "utils";
@@ -48,6 +49,18 @@ const capacityOptions = [
   { label: "BUY", value: "quote" },
 ];
 
+const MarketErrors = ({ state }: { state: CreateMarketState }) => {
+  console.log({ state }, parseFloat(state.capacity));
+  return (
+    <div className="font-fraktion flex flex-col gap-y-2 text-left">
+      {!state.quoteToken.address && <p>Select a quote token</p>}
+      {!state.payoutToken.address && <p>Select a payout token</p>}
+      {!parseFloat(state.capacity) && <p>Enter a capacity</p>}
+      {!state.endDate && <p>Select end date</p>}
+    </div>
+  );
+};
+
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const provider = props.provider;
   const chain = props.chain;
@@ -68,6 +81,45 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
 
     fetchAllowance();
   }, [state.payoutToken, state.priceModel, state.vestingType]);
+
+  const canSubmit =
+    parseFloat(state.capacity) > 0 &&
+    state.endDate &&
+    state.vesting &&
+    state.quoteToken.address &&
+    state.payoutToken.address;
+
+  const buttons = (
+    <>
+      <Button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setShowMultisig(true);
+          setOpen(true);
+        }}
+        variant="ghost"
+        disabled={!canSubmit}
+        size="lg"
+        className="mr-5 w-[308px]"
+      >
+        Get Multi-Sig Config
+      </Button>
+      <Button
+        disabled={!canSubmit}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setShowMultisig(false);
+          setOpen(true);
+        }}
+        size="lg"
+        className="ml-5 w-[308px]"
+      >
+        Deploy Market
+      </Button>
+    </>
+  );
 
   return (
     <div id="cm-root">
@@ -103,6 +155,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   dispatch({ type: Action.UPDATE_PAYOUT_TOKEN, value });
                 }}
               />
+
               <SelectModal
                 label="Vesting"
                 title="Custom Vesting"
@@ -113,6 +166,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 }
               />
             </div>
+
             <div className="w-1/2 pl-2">
               <InputModal
                 label="Get Token"
@@ -143,6 +197,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 dispatch({ type: Action.UPDATE_CAPACITY, value })
               }
             />
+
             <FlatSelect
               options={capacityOptions}
               onChange={(value) =>
@@ -237,33 +292,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-8 flex justify-center gap-x-10">
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setShowMultisig(true);
-            setOpen(true);
-          }}
-          variant="ghost"
-          size="lg"
-          className="w-[308px]"
-        >
-          Get Multi-Sig Config
-        </Button>
-        <Button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setShowMultisig(false);
-            setOpen(true);
-          }}
-          size="lg"
-          className="w-[308px]"
-        >
-          Deploy Market
-        </Button>
-      </div>
+      <div className="mt-8 flex justify-center gap-x-10">{buttons}</div>
       <Modal
         title={
           props.creationHash
