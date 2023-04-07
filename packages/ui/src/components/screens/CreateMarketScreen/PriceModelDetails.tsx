@@ -15,15 +15,21 @@ export type PriceModelDetailsProps = {
 const options: Record<PriceModel, any> = {
   dynamic: {
     Image: DynamicPriceImage,
-    title: "Dynamic Discount",
-    description:
-      "Bond Market are ... Lorem ipsum dolor sit amet consectetur. Facilisis consequat in ut massa quam ut.",
+    title: "Sequential Dutch Auction",
+    description: (
+      <>
+        enable protocols to issue tokens over time by controlling price and
+        target discount speed.
+        <br /> Works especially well for{" "}
+        <span className="font-bold">short-term bonds</span>.
+      </>
+    ),
   },
   static: {
     Image: StaticPriceImage,
     title: "Fixed Discount",
     description:
-      "Bond Market are ... Lorem ipsum dolor sit amet consectetur. Facilisis consequat in ut massa quam ut.",
+      "enable trial runs for limited quantity of vested tokens. Best for gauging demand for different vesting lengths.",
   },
   ["oracle-dynamic"]: {
     oracle: true,
@@ -57,7 +63,7 @@ export const PriceModelDetails = ({
       </div>
       <div className="w-[400px]">
         <div className="text-light-grey-400">
-          <span className="mr-2 font-bold text-white">{option.title}</span>
+          <span className="mr-1 font-bold text-white">{option.title}</span>
           {option.description}
         </div>
 

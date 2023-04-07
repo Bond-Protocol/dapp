@@ -1,4 +1,5 @@
 //@ts-nocheck
+import { useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { ethers, BigNumber } from "ethers";
 import * as contractLib from "@bond-protocol/contract-library";
@@ -13,7 +14,10 @@ import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
-import { getAddressesForType } from "@bond-protocol/contract-library";
+import {
+  getAddressesForType,
+  getBlockExplorer,
+} from "@bond-protocol/contract-library";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
@@ -26,6 +30,13 @@ export const CreateMarketController = () => {
   const [state, dispatch] = useCreateMarket();
   const { createMarketTokens: tokens } = useTokens();
   const { getTokenAllowance, approveSpending } = usePurchaseBond();
+  const [allowanceTx, setAllowanceTx] = useState(false);
+  const [creationHash, setCreationHash] = useState("");
+
+  const blockExplorer = getBlockExplorer(
+    String(network?.chain?.id) || "1",
+    "tx"
+  );
 
   const projectionData = useProjectionChartData({
     quoteToken: state.quoteToken,
@@ -90,8 +101,6 @@ export const CreateMarketController = () => {
 
     if (!signer) return 0;
 
-    const address = await signer.getAddress();
-
     const chain = {
       id: network?.chain?.id,
       label: network.chain.name,
@@ -102,15 +111,22 @@ export const CreateMarketController = () => {
       getBondType(state)
     ).auctioneer;
 
-    const tx = await approveSpending(
-      state.payoutToken.address,
-      state.payoutToken.decimals,
-      auctioneer,
-      signer,
-      state.capacity
-    );
+    setAllowanceTx(true);
+    try {
+      const tx = await approveSpending(
+        state.payoutToken.address,
+        state.payoutToken.decimals,
+        auctioneer,
+        signer,
+        state.capacity
+      );
 
-    const confirmed = await tx.wait(1);
+      const confirmed = await tx.wait(1);
+    } catch (e) {
+      console.log({ e });
+    } finally {
+      setAllowanceTx(false);
+    }
 
     //Lazy assumption that allowance is now equal to capacity if tx is sucessful
     dispatch({ type: Action.UPDATE_ALLOWANCE, value: state.capacity });
@@ -184,6 +200,7 @@ export const CreateMarketController = () => {
       signer,
       { gasLimit: 1000000 }
     );
+    setCreationHash(tx.hash);
 
     return config;
   };
@@ -202,6 +219,10 @@ export const CreateMarketController = () => {
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}
         projectionData={projectionData.prices}
+        isAllowanceTxPending={allowanceTx}
+        creationHash={creationHash}
+        blockExplorerName={blockExplorer.blockExplorerName}
+        blockExplorerUrl={blockExplorer.blockExplorerUrl}
       />
     </>
   );

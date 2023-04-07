@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { calculateTrimDigits, trimAsNumber } from "utils/trim";
 import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";

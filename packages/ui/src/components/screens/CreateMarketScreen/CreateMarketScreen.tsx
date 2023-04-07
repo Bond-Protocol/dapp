@@ -18,6 +18,7 @@ import {
   ProjectionChartSimple,
   CreateMarketState,
   Token,
+  TransactionHashDialog,
 } from "components";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { formatDate } from "utils";
@@ -33,6 +34,10 @@ export type CreateMarketScreenProps = {
   provider: Provider;
   chain: string;
   tokens: Token[];
+  isAllowanceTxPending?: boolean;
+  creationHash?: string;
+  blockExplorerUrl: string;
+  blockExplorerName: string;
 };
 
 const capacityOptions = [
@@ -244,18 +249,32 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         </Button>
       </div>
       <Modal
-        title="Confirm Market Creation"
+        title={
+          props.creationHash
+            ? "Transaction Submitted"
+            : "Confirm Market Creation"
+        }
         open={open}
         onClickClose={() => setOpen(false)}
       >
-        <ConfirmMarketCreationDialog
-          marketState={state}
-          hasAllowance={state.isAllowanceSufficient}
-          submitCreateMarketTransaction={() => props.onSubmitCreation(state)}
-          submitApproveSpendingTransaction={() =>
-            props.onSubmitAllowance(state)
-          }
-        />
+        {props.creationHash ? (
+          <TransactionHashDialog
+            key={index}
+            blockExplorerUrl={props.blockExplorerUrl}
+            blockExplorerName={props.blockExplorerName}
+            hash={props.creationHash}
+          />
+        ) : (
+          <ConfirmMarketCreationDialog
+            marketState={state}
+            hasAllowance={state.isAllowanceSufficient}
+            isAllowanceTxPending={props.isAllowanceTxPending}
+            submitCreateMarketTransaction={() => props.onSubmitCreation(state)}
+            submitApproveSpendingTransaction={() =>
+              props.onSubmitAllowance(state)
+            }
+          />
+        )}
       </Modal>
     </div>
   );
