@@ -31,6 +31,9 @@ export type CreateMarketScreenProps = {
   fetchAllowance: (state: CreateMarketState) => Promise<any>;
   onSubmitAllowance: (state?: CreateMarketState) => void;
   onSubmitCreation: (state: CreateMarketState) => void;
+  onSubmitMultisigCreation: (txHash: string) => void;
+  getTeller: (chain: string, state: CreateMarketState) => string;
+  getTxBytecode: (state: CreateMarketState) => string;
   provider: Provider;
   chain: string;
   tokens: Token[];
@@ -51,6 +54,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
 
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
+  const [showMultisig, setShowMultisig] = useState(false);
   const [state, dispatch] = useCreateMarket();
 
   const capacityToken =
@@ -229,7 +233,12 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       </div>
       <div className="mt-8 flex justify-center gap-x-10">
         <Button
-          onClick={() => {}}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowMultisig(true);
+            setOpen(true);
+          }}
           variant="ghost"
           size="lg"
           className="w-[308px]"
@@ -240,6 +249,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            setShowMultisig(false);
             setOpen(true);
           }}
           size="lg"
@@ -252,7 +262,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         title={
           props.creationHash
             ? "Transaction Submitted"
-            : "Confirm Market Creation"
+            : ( showMultisig
+                ? "Transaction Details"
+                : "Confirm Market Creation"
+            )
         }
         open={open}
         onClickClose={() => setOpen(false)}
@@ -267,12 +280,17 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         ) : (
           <ConfirmMarketCreationDialog
             marketState={state}
+            showMultisig={showMultisig}
+            chain={chain}
             hasAllowance={state.isAllowanceSufficient}
             isAllowanceTxPending={props.isAllowanceTxPending}
             submitCreateMarketTransaction={() => props.onSubmitCreation(state)}
             submitApproveSpendingTransaction={() =>
               props.onSubmitAllowance(state)
             }
+            submitMultisigCreation={props.onSubmitMultisigCreation}
+            getTeller={props.getTeller}
+            getTxBytecode={props.getTxBytecode}
           />
         )}
       </Modal>

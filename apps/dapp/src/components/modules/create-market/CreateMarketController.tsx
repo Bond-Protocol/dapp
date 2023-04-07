@@ -1,35 +1,27 @@
 //@ts-nocheck
-import { useState } from "react";
-import { useAccount, useNetwork, useSigner } from "wagmi";
-import { ethers, BigNumber } from "ethers";
+import {useState} from "react";
+import {useAccount, useNetwork, useSigner} from "wagmi";
+import {BigNumber, ethers} from "ethers";
 import * as contractLib from "@bond-protocol/contract-library";
-import {
-  Action,
-  CreateMarketScreen,
-  CreateMarketState,
-  useCreateMarket,
-} from "ui";
-import { doPriceMath } from "./helpers";
-import { providers } from "services";
-import { useProjectionChartData } from "hooks/useProjectionChart";
-import { useTokens } from "context/token-context";
-import { usePurchaseBond } from "hooks";
-import {
-  getAddressesForType,
-  getBlockExplorer,
-} from "@bond-protocol/contract-library";
+import {getAddressesForType, getBlockExplorer} from "@bond-protocol/contract-library";
+import {Action, CreateMarketScreen, CreateMarketState, useCreateMarket,} from "ui";
+import {doPriceMath} from "./helpers";
+import {providers} from "services";
+import {useProjectionChartData} from "hooks/useProjectionChart";
+import {useTokens} from "context/token-context";
+import {usePurchaseBond} from "hooks";
 
 const extractAddress = (addresses: string | string[]) => {
   return Array.isArray(addresses) ? addresses[0] : addresses;
 };
 
 export const CreateMarketController = () => {
-  const { data: signer } = useSigner();
-  const { isConnected } = useAccount();
+  const {data: signer} = useSigner();
+  const {isConnected} = useAccount();
   const network = useNetwork();
   const [state, dispatch] = useCreateMarket();
-  const { createMarketTokens: tokens } = useTokens();
-  const { getTokenAllowance, approveSpending } = usePurchaseBond();
+  const {createMarketTokens: tokens} = useTokens();
+  const {getTokenAllowance, approveSpending} = usePurchaseBond();
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");
 
@@ -64,6 +56,13 @@ export const CreateMarketController = () => {
     }
   }
 
+  const getTeller = (chain: string, state: CreateMarketState) => {
+    return getAddressesForType(
+      chain,
+      getBondType(state)
+    ).teller;
+  }
+
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;
 
@@ -79,7 +78,7 @@ export const CreateMarketController = () => {
     };
 
     const auctioneer = getAddressesForType(
-      chain?.id.toString(),
+      chain,
       getBondType(state)
     ).auctioneer;
 
@@ -123,17 +122,16 @@ export const CreateMarketController = () => {
 
       const confirmed = await tx.wait(1);
     } catch (e) {
-      console.log({ e });
+      console.log({e});
     } finally {
       setAllowanceTx(false);
     }
 
     //Lazy assumption that allowance is now equal to capacity if tx is sucessful
-    dispatch({ type: Action.UPDATE_ALLOWANCE, value: state.capacity });
+    dispatch({type: Action.UPDATE_ALLOWANCE, value: state.capacity});
   };
 
-  const onSubmit = async (state: CreateMarketState) => {
-    console.log("hello??", { state });
+  const configureMarket = (state: CreateMarketState) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
     if (!network.chain?.id) throw new Error("Unspecified chain");
@@ -147,13 +145,13 @@ export const CreateMarketController = () => {
     const debtBuffer = 0.3;
     const bondsPerWeek = 20;
 
-    const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
+    const {scaleAdjustment, formattedInitialPrice, formattedMinimumPrice} =
       doPriceMath(state);
 
     let bondType: string = getBondType(state);
 
-    const config = {
-      summaryData: { ...state },
+    return {
+      summaryData: {...state},
       marketParams: {
         quoteToken: state.quoteToken.address,
         payoutToken: state.payoutToken.address,
@@ -189,16 +187,27 @@ export const CreateMarketController = () => {
       bondType: bondType,
       chain: chain?.id,
     };
+  }
 
-    console.log({ config });
-    // TODO: send data to modal instead of calling createMarket
+  const getTxBytecode = (state: CreateMarketState) => {
+    const config = configureMarket(state);
+
+    return contractLib.createMarketMultisig(
+      config?.marketParams,
+      config?.bondType
+    );
+  }
+
+  const onSubmit = async (state: CreateMarketState) => {
+    const config = configureMarket(state);
+
     const tx = await contractLib.createMarket(
       // @ts-ignore
       config.marketParams,
       config.bondType,
       config.chain,
       signer,
-      { gasLimit: 1000000 }
+      {gasLimit: 1000000}
     );
     setCreationHash(tx.hash);
 
@@ -215,7 +224,10 @@ export const CreateMarketController = () => {
         })}
         onSubmitCreation={onSubmit}
         onSubmitAllowance={approveCapacitySpending}
+        onSubmitMultisigCreation={setCreationHash}
         fetchAllowance={fetchAllowance}
+        getTeller={getTeller}
+        getTxBytecode={getTxBytecode}
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}
         projectionData={projectionData.prices}

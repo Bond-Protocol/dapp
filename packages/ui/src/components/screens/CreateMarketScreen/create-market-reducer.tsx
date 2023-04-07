@@ -148,8 +148,7 @@ function calculateAllowance(
     !quoteToken.price ||
     !quoteToken.decimals ||
     !capacity ||
-    !capacityType ||
-    !allowance
+    !capacityType
   ) {
     return {
       recommendedAllowance: "",
@@ -206,7 +205,6 @@ export const reducer = (
         state.allowance
       );
 
-      console.log({ isAllowanceSufficient });
       return {
         ...state,
         quoteToken: value,
