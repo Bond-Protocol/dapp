@@ -278,7 +278,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 <InfoLabel
                   tooltip={`Maximum amount of ${
                     capacityToken?.symbol || "the selected asset"
-                  } that can be purchased in a single transaction`}
+                  } that can be ${ state.capacityType === "quote" ? "deposited" : "purchased" } in a single transaction`}
                   label={"Max Bond Size"}
                   reverse
                 >
