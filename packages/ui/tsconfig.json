@@ -5,29 +5,47 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "types": [
+      "cypress"
+    ],
     "paths": {
+      "src/*": [
+        "./src/*"
+      ],
       "components/*": [
-        "./components/*"
+        "./src/components/*"
+      ],
+      "components": [
+        "./src/components/index"
       ],
       "hooks/*": [
-        "./hooks/*"
+        "./src/hooks/*"
       ],
       "assets/*": [
-        "./assets/*"
+        "./src/assets/*"
       ],
       "assets": [
-        "./assets/index"
+        "./src/assets/index"
+      ],
+      "utils": [
+        "./src/utils/index"
+      ],
+      "utils/*": [
+        "./src/utils/*"
       ]
     }
   },
   "include": [
     "src/**/*",
     "src/main.d.ts",
+    "src/cypress.d.ts",
   ],
   "exclude": [
     "dist",
     "build",
-    "node_modules"
+    "node_modules",
+    "src/**/*.stories.*",
+    "src/**/*.cy.*",
   ]
 }

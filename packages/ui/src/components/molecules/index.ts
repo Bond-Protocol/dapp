@@ -14,4 +14,3 @@ export * from "./SearchBar";
 export * from "./SelectModal";
 export * from "./Table";
 export * from "./Tabs";
-export * from "./TokenInput";

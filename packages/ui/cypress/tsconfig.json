@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "../"
+  },
+  "include": [
+    "tests/**/*",
+    "cypress.d.ts",
+    "../src/**/*"
+  ],
+  "exclude": [
+    "dist",
+    "build",
+    "node_modules",
+    "src/**/*.stories.*",
+    "src/**/*.cy.*",
+  ]
+}

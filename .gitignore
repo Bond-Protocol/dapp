@@ -17,6 +17,10 @@ build
 dist-ssr
 *.local
 src/generated/*
+packages/ui/cypress/videos
+packages/ui/cypress/screenshots
+apps/dapp/cypress/videos
+apps/dapp/cypress/screenshots
 
 ### PROJECT
 

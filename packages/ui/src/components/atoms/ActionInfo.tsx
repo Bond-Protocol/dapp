@@ -1,5 +1,5 @@
-import { Link, Tooltip } from "./";
-import {Copy} from "components/atoms/Copy";
+import { Link, Tooltip } from "components";
+import { Copy } from "components/atoms/Copy";
 
 export interface ActionInfoProps {
   leftLabel?: string;

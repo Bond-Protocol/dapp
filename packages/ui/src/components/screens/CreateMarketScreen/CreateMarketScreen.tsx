@@ -9,7 +9,7 @@ import {
   SelectVestingDialog,
   SelectDateDialog,
   SelectEndDateDialog,
-  TokenAmountInput,
+  TokenInput,
   Modal,
   Action,
   PriceModelPicker,
@@ -182,7 +182,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             </div>
           </div>
           <div className="flex gap-x-4 py-4">
-            <TokenAmountInput
+            <TokenInput
               label="Capacity"
               value={state.capacity}
               icon={capacityToken.icon}

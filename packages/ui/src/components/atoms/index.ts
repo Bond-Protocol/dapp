@@ -30,4 +30,5 @@ export * from "./TableHeading";
 export * from "./TermPicker";
 export * from "./TokenLabel";
 export * from "./TokenLogo";
+export * from "./TokenInput";
 export * from "./Tooltip";

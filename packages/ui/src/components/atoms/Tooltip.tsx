@@ -1,4 +1,4 @@
-import { ReactComponent as TooltipIcon } from "../../assets/icons/tooltip-icon.svg";
+import { ReactComponent as TooltipIcon } from "assets/icons/tooltip-icon.svg";
 import { useState } from "react";
 import { PopperUnstyled } from "@mui/base";
 
