@@ -46,18 +46,6 @@ const capacityOptions = [
   { label: "BUY", value: "quote" },
 ];
 
-const MarketErrors = ({ state }: { state: CreateMarketState }) => {
-  console.log({ state }, parseFloat(state.capacity));
-  return (
-    <div className="font-fraktion flex flex-col gap-y-2 text-left">
-      {!state.quoteToken.address && <p>Select a quote token</p>}
-      {!state.payoutToken.address && <p>Select a payout token</p>}
-      {!parseFloat(state.capacity) && <p>Enter a capacity</p>}
-      {!state.endDate && <p>Select end date</p>}
-    </div>
-  );
-};
-
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const chain = props.chain;
 
@@ -88,6 +76,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const buttons = (
     <>
       <Button
+        id="cm-pre-submit-ms"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -102,6 +91,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         Get Multi-Sig Config
       </Button>
       <Button
+        id="cm-pre-submit"
         disabled={!canSubmit}
         onClick={(e) => {
           e.preventDefault();
@@ -135,6 +125,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           <div className="flex">
             <div className="flex w-1/2 gap-x-2 pr-2">
               <InputModal
+                id="cm-payout-token-picker"
                 label="Bond Token"
                 title="Select token"
                 value={state.payoutToken.symbol}
@@ -152,6 +143,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               />
 
               <SelectModal
+                id="cm-vesting-picker"
                 label="Vesting"
                 title="Custom Vesting"
                 options={vestingOptions}
@@ -164,6 +156,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
 
             <div className="w-1/2 pl-2">
               <InputModal
+                id="cm-quote-token-picker"
                 label="Get Token"
                 title="Select token"
                 value={state.quoteToken.symbol}
@@ -183,6 +176,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <div className="flex gap-x-4 py-4">
             <TokenInput
+              id="cm-capacity-picker"
               label="Capacity"
               value={state.capacity}
               icon={capacityToken.icon}
@@ -193,6 +187,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
 
             <FlatSelect
+              id="cm-capacity-type-picker"
               options={capacityOptions}
               onChange={(value) =>
                 dispatch({ type: Action.UPDATE_CAPACITY_TYPE, value })
@@ -200,6 +195,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <PriceModelPicker
+            id="cm-price-model-picker"
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
             onChange={(value) =>
@@ -216,6 +212,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         >
           <div className="mt-2 flex h-[290px] w-full">
             <ProjectionChartSimple
+              id="cm-projection-chart"
               data={props.projectionData}
               initialPrice={state.priceModels[state.priceModel].initialPrice}
               minPrice={state.priceModels[state.priceModel].minPrice}
@@ -224,6 +221,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <div className="flex gap-x-4">
             <InputModal
+              id="cm-start-date-picker"
               label="Market Start"
               title="Select start date"
               value={
@@ -236,6 +234,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }
             />
             <InputModal
+              id="cm-end-date-picker"
               label="Market End"
               title="Select end date"
               value={state.endDate ? formatDate.dateAndTime(state.endDate) : ""}
@@ -243,6 +242,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               ModalContent={(props) => (
                 <SelectEndDateDialog
                   {...props}
+                  id="cm-end-date-dialog"
                   startDate={state.startDate ?? new Date()}
                 />
               )}

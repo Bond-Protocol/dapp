@@ -7,6 +7,7 @@ type FlatSelectProps = {
     value: any;
     Icon?: (props: any) => JSX.Element;
   }>;
+  id?: string;
   onChange: (value: any) => void;
   label?: string | React.ReactNode;
   className?: string;

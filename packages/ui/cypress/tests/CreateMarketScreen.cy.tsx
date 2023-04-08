@@ -1,27 +1,39 @@
-import { CreateMarketScreen, CreateMarketProvider } from "components";
+import { CreateMarketScreenProps } from "src/components";
+import CreateMarketTester, {
+  defaultProps,
+} from "../helpers/CreateMarketTester";
+
+const component = new CreateMarketTester();
+
+const props: CreateMarketScreenProps = {
+  ...defaultProps,
+};
 
 describe("<CreateMarketScreen />", () => {
-  it("renders", () => {
-    // see: https://on.cypress.io/mounting-react
-    cy.mount(
-      <div>
-        <CreateMarketProvider>
-          <CreateMarketScreen
-            tokens={[]}
-            onSubmitCreation={() => {}}
-            onSubmitAllowance={() => {}}
-            onSubmitMultisigCreation={() => {}}
-            fetchAllowance={() => Promise.resolve("1")}
-            getTeller={() => ""}
-            getTxBytecode={() => ""}
-            chain={"1"}
-            projectionData={[]}
-            creationHash=""
-            blockExplorerUrl=""
-            blockExplorerName=""
-          />
-        </CreateMarketProvider>
-      </div>
-    );
+  beforeEach(() => {
+    //@ts-ignore
+    component.mount(props);
+  });
+
+  it.only("Creates a dynamic discount market", () => {
+    component.getPayoutToken().click();
+    cy.contains("OHM").click();
+
+    component.getQuoteToken().click();
+    cy.contains("DAI").click();
+
+    component.getVesting().click();
+    cy.contains("7 days").click();
+
+    component.getCapacity().type("100");
+
+    component.getEndDate().click();
+
+    cy.get(".bp-manual-day-input").children().first().type("10");
+    cy.get("#end-date-select-button").click();
+
+    component.getConfirmButton().click();
+
+    component.getSubmitDeployButton().click();
   });
 });

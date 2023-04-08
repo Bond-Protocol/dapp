@@ -14,6 +14,7 @@ export const SelectEndDateDialog = (props: {
   onSubmit: Function;
   onClose: Function;
   startDate: Date;
+  id?: string;
 }) => {
   const [type, setType] = useState<TermType>(defaultType);
   const [date, setDate] = useState<Date>();
@@ -46,7 +47,7 @@ export const SelectEndDateDialog = (props: {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div id={props.id} className="flex flex-col items-center justify-center">
       <FlatSelect
         default={defaultType}
         options={options}
@@ -67,6 +68,7 @@ export const SelectEndDateDialog = (props: {
       )}
       <div className="flex w-full gap-x-2 pt-4">
         <Button
+          id="end-date-cancel-button"
           variant="ghost"
           size="lg"
           className="w-full"
@@ -75,6 +77,7 @@ export const SelectEndDateDialog = (props: {
           Cancel
         </Button>
         <Button
+          id="end-date-select-button"
           disabled={!canSubmit}
           onClick={handleSubmit}
           size="lg"

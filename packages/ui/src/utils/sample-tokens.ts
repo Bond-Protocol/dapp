@@ -1,9 +1,5 @@
 //@ts-nocheck
-import {
-  getAddressesByProtocol,
-  TOKENS,
-  aphexTokens,
-} from "@bond-protocol/bond-library";
+import { aphexTokens } from "@bond-protocol/bond-library";
 
 export const dai = {
   id: "dai",
@@ -391,10 +387,12 @@ export const list = aphexTokens.map((token) => {
     id: apiId,
     name: token.name,
     symbol: token.symbol,
-    icon: token.logoUrl,
+    icon: token.logoUrl || "",
     addresses: token.addresses,
+    address: token.addresses["5"],
     apiId,
     price,
     priceSources: token.priceSources,
+    decimals: 18,
   };
 });

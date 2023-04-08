@@ -13,6 +13,7 @@ export type ProjectionChartSimpleProps = {
   data?: PriceData[];
   initialPrice?: number;
   minPrice?: number;
+  id?: string;
 };
 
 const getProjectionDataset = (
@@ -54,7 +55,7 @@ export const ProjectionChartSimple = ({
   const shouldRender = prices.length > 0;
 
   return (
-    <div className="h-full w-[35vw]">
+    <div id={props.id} className="h-full w-[35vw]">
       {!shouldRender ? (
         <div className="h-[99%] w-full">
           <PlaceholderChart message="Market simulation will appear here" />

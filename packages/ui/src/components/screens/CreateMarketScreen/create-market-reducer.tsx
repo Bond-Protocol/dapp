@@ -71,7 +71,7 @@ const placeholderToken = {
   decimals: 18,
 };
 
-const initialState: CreateMarketState = {
+export const placeholderState: CreateMarketState = {
   quoteToken: placeholderToken,
   payoutToken: placeholderToken,
   capacityType: "payout" as CapacityOption,
@@ -160,7 +160,9 @@ function calculateAllowance(
       : capacity;
 
   const matcher = /\.|,/g;
-  const rec = (Number(recommendedAllowance) * Math.pow(10, payoutToken.decimals))
+  const rec = (
+    Number(recommendedAllowance) * Math.pow(10, payoutToken.decimals)
+  )
     .toLocaleString()
     .replaceAll(matcher, "");
 
@@ -387,7 +389,7 @@ export const reducer = (
     }
 
     case Action.RESET: {
-      return initialState;
+      return placeholderState;
     }
 
     default: {
@@ -398,14 +400,17 @@ export const reducer = (
 
 export const CreateMarketContext = createContext<
   [CreateMarketState, Dispatch<{ [key: string]: any; type: Action }>]
->([initialState, () => null]);
+>([placeholderState, () => null]);
 
 export const CreateMarketProvider = ({
   children,
+  initialState = placeholderState,
 }: {
   children: React.ReactNode;
+  initialState?: CreateMarketState;
 }) => {
   const stateControls = useReducer(reducer, initialState);
+
   return (
     <CreateMarketContext.Provider value={stateControls}>
       {children}

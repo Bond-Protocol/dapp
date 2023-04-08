@@ -30,6 +30,7 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
   return (
     <div className="flex w-full flex-col justify-end">
       <Input
+        id={props.id}
         disabled={props.disabled}
         placeholder={props.placeholder}
         label={props.label}

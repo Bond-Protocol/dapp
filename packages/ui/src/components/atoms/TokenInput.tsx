@@ -1,30 +1,21 @@
-//import { useState } from "react";
+import { useState } from "react";
 import { Icon, Input, InputProps } from "..";
+import { longFormatter } from "utils";
 
-export type TokenInput = {
+export type TokenInputProps = InputProps & {
   symbol?: string;
-  logo?: string;
-  className?: string;
+  icon?: string;
   labelClassName?: string;
-  value?: string;
-  subText?: string;
-  label?: string;
   editing?: boolean;
 };
 
-export const TokenInput = (
-  props: InputProps & { symbol?: string; icon?: string }
-) => {
-  //const [value, setValue] = useState(props.value as string);
-  //const [showTokenSymbol, setShowTokenSymbol] = useState(true);
-  const value = "";
-  const setValue = (s: string) => {};
-  const showTokenSymbol = true;
-  const setShowTokenSymbol = (f: boolean) => {};
+export const TokenInput = (props: TokenInputProps) => {
+  const [value, setValue] = useState(props.value as string);
+  const [showTokenSymbol, setShowTokenSymbol] = useState(true);
 
   const onBlur = (_e: React.BaseSyntheticEvent) => {
     let updated = value === "" ? "0" : value;
-    updated = ""; //longFormatter.format(Number(updated));
+    updated = longFormatter.format(Number(updated));
     setValue(updated);
     setShowTokenSymbol(true);
   };

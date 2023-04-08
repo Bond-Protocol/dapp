@@ -38,7 +38,7 @@ export const ManualDayInput = ({
 
   const error = parseFloat(days) > limit;
   return (
-    <div className={"w-full" + " " + className}>
+    <div className={"bp-manual-day-input w-full" + " " + className}>
       <Input
         autoFocus
         errorMessage={error ? errorMessage : ""}

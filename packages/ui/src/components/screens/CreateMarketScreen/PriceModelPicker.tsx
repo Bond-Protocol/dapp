@@ -14,6 +14,7 @@ export type PriceModelPickerProps = {
     oracle: boolean;
     oracleAddress: string;
   }) => any;
+  id?: string;
 } & Partial<PriceControlProps>;
 
 const options = [
@@ -74,7 +75,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
   const shouldRender = props.quoteToken?.symbol && props.payoutToken?.symbol;
 
   return (
-    <div className="w-full">
+    <div id={props.id} className="w-full">
       {/* <div className="flex items-center justify-between"> */}
       {/*   <p className="text-light-grey-400 text-sm">Price Model</p> */}
       {/*   <Switch label="Oracle" onChange={(e) => setOracle(e.target.checked)} /> */}

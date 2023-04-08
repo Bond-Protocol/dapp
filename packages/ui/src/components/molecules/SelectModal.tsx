@@ -77,13 +77,14 @@ export const SelectModal = ({
           </div>
         )}
         <Select
+          id={props.id}
           options={customOptions}
           value={value}
           onChange={(_e, value) => {
             if (value === "user") {
               // @ts-ignore
               value = lastCustomValue;
-              console.log(customContent)
+              console.log(customContent);
             }
             if (value === "custom") {
               setOpen(true);
@@ -98,7 +99,8 @@ export const SelectModal = ({
             }
             // @ts-ignore
             if (value && !value.type) {
-              props.onSubmit && props.onSubmit({ value: { type: "term", value: value } });
+              props.onSubmit &&
+                props.onSubmit({ value: { type: "term", value: value } });
             } else if (value) {
               props.onSubmit && props.onSubmit({ value });
             }

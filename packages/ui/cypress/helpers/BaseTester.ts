@@ -1,10 +1,6 @@
-export default class Page {
-  protected visit() {
-    cy.visit("/");
-  }
-
-  protected getInputField(field: string) {
-    return cy.get(field);
+export default class BaseTester {
+  protected get(value: string) {
+    return cy.get(value);
   }
 
   protected selectDropdownOption(field: string, option: string) {

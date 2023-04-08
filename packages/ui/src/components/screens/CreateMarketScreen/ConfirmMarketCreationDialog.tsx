@@ -117,7 +117,7 @@ export const ConfirmMarketCreationDialog = ({
   ];
 
   return (
-    <div>
+    <div id="cm-confirm-modal">
       {!props.showMultisig ? (
         <div className="text-fraktion">
           <div>
@@ -178,6 +178,7 @@ export const ConfirmMarketCreationDialog = ({
             {props.hasAllowance ? (
               <Button
                 size="lg"
+                id="cm-confirm-modal-submit"
                 className="w-full"
                 onClick={props.submitCreateMarketTransaction}
               >
@@ -187,6 +188,7 @@ export const ConfirmMarketCreationDialog = ({
               <Button
                 size="lg"
                 className="w-full"
+                id="cm-confirm-modal-allowance"
                 disabled={props.isAllowanceTxPending}
                 onClick={props.submitApproveSpendingTransaction}
               >
@@ -248,6 +250,7 @@ export const ConfirmMarketCreationDialog = ({
             <div className="mt-4">
               {props.hasAllowance ? (
                 <Button
+                  id="cm-confirm-modal-submit"
                   size="lg"
                   className="w-full"
                   onClick={props.submitCreateMarketTransaction}
@@ -257,6 +260,7 @@ export const ConfirmMarketCreationDialog = ({
               ) : (
                 <Button
                   size="lg"
+                  id="cm-confirm-modal-submit-allowance"
                   className="w-full"
                   disabled={props.isAllowanceTxPending}
                   onClick={props.submitApproveSpendingTransaction}
