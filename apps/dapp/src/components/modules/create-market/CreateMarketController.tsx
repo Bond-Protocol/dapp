@@ -19,10 +19,6 @@ import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
 
-const extractAddress = (addresses: string | string[]) => {
-  return Array.isArray(addresses) ? addresses[0] : addresses;
-};
-
 export const CreateMarketController = () => {
   const { data: signer } = useSigner();
   const { isConnected } = useAccount();
@@ -32,6 +28,7 @@ export const CreateMarketController = () => {
   const { getTokenAllowance, approveSpending } = usePurchaseBond();
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");
+  const [created, setCreated] = useState(false);
 
   const blockExplorer = getBlockExplorer(
     String(network?.chain?.id) || "1",
@@ -204,15 +201,21 @@ export const CreateMarketController = () => {
   const onSubmit = async (state: CreateMarketState) => {
     const config = configureMarket(state);
 
-    const tx = await contractLib.createMarket(
-      // @ts-ignore
-      config.marketParams,
-      config.bondType,
-      config.chain,
-      signer,
-      { gasLimit: 1000000 }
-    );
-    setCreationHash(tx.hash);
+    try {
+      const tx = await contractLib.createMarket(
+        // @ts-ignore
+        config.marketParams,
+        config.bondType,
+        config.chain,
+        signer,
+        { gasLimit: 1000000 }
+      );
+      setCreationHash(tx.hash);
+      await tx.wait(1);
+      setCreated(true);
+    } catch (e) {
+      console.log(e);
+    }
 
     return config;
   };
@@ -236,6 +239,7 @@ export const CreateMarketController = () => {
         creationHash={creationHash}
         blockExplorerName={blockExplorer.blockExplorerName}
         blockExplorerUrl={blockExplorer.blockExplorerUrl}
+        created={created}
       />
     </>
   );

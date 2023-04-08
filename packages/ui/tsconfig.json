@@ -45,7 +45,6 @@
     "dist",
     "build",
     "node_modules",
-    "src/**/*.stories.*",
     "src/**/*.cy.*",
   ]
 }

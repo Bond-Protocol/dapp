@@ -222,7 +222,7 @@ export const ConfirmMarketCreationDialog = ({
                 iconClassname={"pb-[1px] ml-0.5 fill-light-secondary-10"}
               />
             </div>
-            <p className="font-fraktion text-base uppercase text-white break-words mx-2 pb-4 text-xs">
+            <p className="font-fraktion uppercase text-white break-words mx-2 pb-4 text-xs">
               {bytecode}
             </p>
           </div>

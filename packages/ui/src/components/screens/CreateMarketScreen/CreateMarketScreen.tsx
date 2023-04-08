@@ -19,6 +19,7 @@ import {
   CreateMarketState,
   Token,
   TransactionHashDialog,
+  MarketCreatedDialog,
 } from "components";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { formatDate } from "utils";
@@ -39,6 +40,7 @@ export type CreateMarketScreenProps = {
   creationHash?: string;
   blockExplorerUrl: string;
   blockExplorerName: string;
+  created: boolean;
 };
 
 const capacityOptions = [
@@ -294,7 +296,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         open={open}
         onClickClose={() => setOpen(false)}
       >
-        {props.creationHash ? (
+        {props.created && <MarketCreatedDialog />}
+        {!props.created && props.creationHash ? (
           <TransactionHashDialog
             key={index}
             blockExplorerUrl={props.blockExplorerUrl}

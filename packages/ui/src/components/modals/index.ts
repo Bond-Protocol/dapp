@@ -1,6 +1,7 @@
 export * from './CreateMarketConfirmDialog'
 export * from './CreateMarketTermsDialog'
 export * from './GeneralTermsDialog'
+export * from './MarketCreatedDialog'
 export * from './PurchaseConfirmDialog'
 export * from './PurchaseSuccessDialog'
 export * from './SelectTokenDialog'
