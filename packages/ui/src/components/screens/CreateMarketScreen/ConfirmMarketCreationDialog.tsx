@@ -7,6 +7,7 @@ import fastVesting from "assets/icons/vesting/fast.svg";
 import {CHAINS} from "@bond-protocol/bond-library/dist/src";
 import copyIcon from "assets/icons/copy-icon.svg";
 import {useState} from "react";
+import {Copy} from "components/atoms/Copy";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
@@ -96,6 +97,25 @@ export const ConfirmMarketCreationDialog = ({
       rightLabel: marketState.durationInDays.toString() + " DAYS",
     },
   ];
+
+  const multisigFields = [
+    { leftLabel: "Chain", rightLabel: chainName },
+    {
+      leftLabel: "Contract Address",
+      rightLabel: teller,
+      copy: teller
+    },
+    {
+      leftLabel: "Payout Token",
+      rightLabel: marketState.payoutToken.address,
+      copy: marketState.payoutToken.address
+    },
+    {
+      leftLabel: "Recommended Allowance",
+      rightLabel: marketState.recommendedAllowanceDecimalAdjusted,
+      copy: marketState.recommendedAllowanceDecimalAdjusted
+    }
+  ]
 
   return (
     <div>
@@ -188,73 +208,27 @@ export const ConfirmMarketCreationDialog = ({
         </div>
       ) : (
         <div className="text-fraktion">
-          <div className="mt-5 px-6 text-sm font-extralight">
-            <h4 className="font-fraktion mt-4">Chain</h4>
-            <p>{chainName}</p>
-          </div>
+          <InfoList fields={multisigFields} />
 
-          <div className="mt-5 px-6 text-sm font-extralight">
-            <div className="flex flex-row justify-center gap-2">
-              <h4 className="font-fraktion mt-4">Contract Address</h4>
-              <img
-                onClick={() => navigator.clipboard.writeText(teller)}
-                src={copyIcon}
-                className="stroke-current"
-                width={16}
+          <div className="mt-1 text-sm font-extralight bg-white/5">
+            <div className="flex flex-row mx-2">
+              <h4 className="text-light-grey py-2.5 text-base font-light">Transaction Bytecode</h4>
+              <Copy
+                content={bytecode}
+                iconWidth={13.3}
+                iconClassname={"pb-[1px] ml-0.5 fill-light-secondary-10"}
               />
             </div>
-            <p>{teller}</p>
+            <p className="font-fraktion text-base uppercase text-white break-words mx-2 pb-4 text-xs">{bytecode}</p>
           </div>
 
-          <div className="mt-5 px-6 text-sm font-extralight">
-            <div className="flex flex-row justify-center gap-2">
-              <h4 className="font-fraktion mt-4">Allowance Token</h4>
-              <img
-                onClick={() => marketState.payoutToken.address && navigator.clipboard.writeText(marketState.payoutToken.address)}
-                src={copyIcon}
-                className="stroke-current"
-                width={16}
-              />
-            </div>
-            <p>{marketState.payoutToken.symbol}</p>
-            <p>{marketState.payoutToken.address}</p>
-          </div>
-
-          <div className="mt-5 px-6 text-sm font-extralight">
-            <div className="flex flex-row justify-center gap-2">
-              <h4 className="font-fraktion mt-4">Recommended Allowance</h4>
-              <img
-                onClick={() => navigator.clipboard.writeText(marketState.recommendedAllowanceDecimalAdjusted)}
-                src={copyIcon}
-                className="stroke-current"
-                width={16}
-              />
-            </div>
-            <p>{marketState.recommendedAllowance} {marketState.payoutToken.symbol}</p>
-            <p>{marketState.recommendedAllowanceDecimalAdjusted}</p>
-          </div>
-
-          <div className="mt-5 px-6 text-sm font-extralight">
-            <div className="flex flex-row justify-center gap-2">
-              <h4 className="font-fraktion mt-4">Transaction Bytecode</h4>
-              <img
-                onClick={() => navigator.clipboard.writeText(bytecode)}
-                src={copyIcon}
-                className="stroke-current"
-                width={16}
-              />
-            </div>
-
-            <p className="break-words pb-4 text-xs">{bytecode}</p>
-          </div>
-
-          <div className="mt-5 px-6 text-sm font-extralight">
+          <div className="mt-5 px-2 text-sm justify-center font-extralight">
             After executing the transaction, enter the transaction hash below for final confirmation.
           </div>
 
           <Input
             label="Transaction Hash"
-            className="mt-2"
+            className="my-2"
             onChange={(e) => setTxHash(e.target.value)}
           />
 

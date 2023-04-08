@@ -1,16 +1,19 @@
 import { Link, Tooltip } from "./";
+import {Copy} from "components/atoms/Copy";
 
 export interface ActionInfoProps {
   leftLabel?: string;
   tooltip?: string;
   rightLabel?: string;
   link?: string;
+  copy?: string;
 }
 
 export interface ActionInfoLabelProps {
   value?: string;
   tooltip?: string;
   link?: string;
+  copy?: string;
   className?: string;
   linkClassName?: string;
   tooltipClassName?: string;
@@ -37,6 +40,13 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
             {props.value}
           </Link>
         )}
+        {props.copy && (
+          <Copy
+            content={props.copy}
+            iconWidth={13.3}
+            iconClassname={"pb-[1px] ml-0.5 fill-light-secondary-10"}
+          />
+        )}
       </div>
     </div>
   );
@@ -47,8 +57,12 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
  */
 export const ActionInfo = (props: ActionInfoProps) => {
   return (
-    <div className="child:my-auto child:mx-2 flex h-6 justify-between bg-white/5 text-sm">
-      <ActionInfoLabel value={props.leftLabel} tooltip={props.tooltip} />
+    <div className="child:my-auto child:mx-3 flex h-6 justify-between bg-white/5 text-sm">
+      <ActionInfoLabel
+        value={props.leftLabel}
+        tooltip={props.tooltip}
+        copy={props.copy}
+      />
       <ActionInfoLabel
         value={props.rightLabel}
         link={props.link}

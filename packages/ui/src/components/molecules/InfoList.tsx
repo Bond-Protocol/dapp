@@ -6,6 +6,7 @@ export const SummaryRow = (props: ActionInfoProps) => {
       <ActionInfoLabel
         value={props.leftLabel}
         tooltip={props.tooltip}
+        copy={props.copy}
         className="text-base font-light"
         tooltipClassName="fill-light-grey"
       />
