@@ -230,7 +230,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <div className="flex gap-x-4">
             <InputModal
-              label="Market Start (UTC)"
+              label="Market Start"
               title="Select start date"
               value={
                 state.startDate
@@ -244,7 +244,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }
             />
             <InputModal
-              label="Market End (UTC)"
+              label="Market End"
               title="Select end date"
               value={
                 state.endDate
