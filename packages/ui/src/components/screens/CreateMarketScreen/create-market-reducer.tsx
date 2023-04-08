@@ -159,9 +159,10 @@ function calculateAllowance(
       ? Number(capacity) / (payoutToken.price / quoteToken.price)
       : capacity;
 
-  const rec = (
-    Number(recommendedAllowance) * Math.pow(10, payoutToken.decimals)
-  ).toString();
+  const matcher = /\.|,/g;
+  const rec = (Number(recommendedAllowance) * Math.pow(10, payoutToken.decimals))
+    .toLocaleString()
+    .replaceAll(matcher, "");
 
   let recommendedAllowanceDecimalAdjusted = BigInt(
     rec.split(".")[0]
