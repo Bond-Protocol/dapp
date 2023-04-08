@@ -1,12 +1,6 @@
 import { SearchBar } from "components/molecules/SearchBar";
 import { useEffect, useState } from "react";
 import { Label, Token } from "..";
-import type { Provider } from "@ethersproject/providers";
-import { IERC20__factory } from "@bond-protocol/contract-library";
-
-const extractAddress = (addresses: string | string[]) => {
-  return Array.isArray(addresses) ? addresses[0] : addresses;
-};
 
 //Checks whether a field includes a string
 const includesText = (field: string, target: string) => {
@@ -28,7 +22,6 @@ export const SelectTokenDialog = (props: {
   onSubmit: Function;
   onClose: Function;
   tokens: Token[];
-  provider: Provider;
   chain: string;
 }) => {
   const [filter, setFilter] = useState("");

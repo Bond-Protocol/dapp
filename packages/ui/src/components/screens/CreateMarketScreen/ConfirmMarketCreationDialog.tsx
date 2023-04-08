@@ -1,13 +1,12 @@
-import {Button, SummaryLabel, InfoList, Tooltip, Icon, Input} from "components";
+import { Button, SummaryLabel, InfoList, Tooltip, Input } from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { CreateMarketState } from "components";
 import { formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
-import {CHAINS} from "@bond-protocol/bond-library/dist/src";
-import copyIcon from "assets/icons/copy-icon.svg";
-import {useState} from "react";
-import {Copy} from "components/atoms/Copy";
+import { CHAINS } from "@bond-protocol/bond-library/dist/src";
+import { useState } from "react";
+import { Copy } from "components/atoms/Copy";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
@@ -63,9 +62,9 @@ const formatMarketState = (state: CreateMarketState) => {
 };
 
 export const ConfirmMarketCreationDialog = ({
-                                              marketState,
-                                              ...props
-                                            }: {
+  marketState,
+  ...props
+}: {
   marketState: CreateMarketState;
   showMultisig: boolean;
   chain: string;
@@ -80,7 +79,7 @@ export const ConfirmMarketCreationDialog = ({
   const chainName = CHAINS.get(props.chain)?.displayName;
   const bytecode = props.getTxBytecode(marketState);
   const teller = props.getTeller(props.chain, marketState);
-  const formattedState = formatMarketState(marketState)
+  const formattedState = formatMarketState(marketState);
 
   const [txHash, setTxHash] = useState("");
 
@@ -103,19 +102,19 @@ export const ConfirmMarketCreationDialog = ({
     {
       leftLabel: "Contract Address",
       rightLabel: teller,
-      copy: teller
+      copy: teller,
     },
     {
       leftLabel: "Payout Token",
       rightLabel: marketState.payoutToken.address,
-      copy: marketState.payoutToken.address
+      copy: marketState.payoutToken.address,
     },
     {
       leftLabel: "Recommended Allowance",
       rightLabel: marketState.recommendedAllowanceDecimalAdjusted,
-      copy: marketState.recommendedAllowanceDecimalAdjusted
-    }
-  ]
+      copy: marketState.recommendedAllowanceDecimalAdjusted,
+    },
+  ];
 
   return (
     <div>
@@ -212,18 +211,23 @@ export const ConfirmMarketCreationDialog = ({
 
           <div className="mt-1 text-sm font-extralight bg-white/5">
             <div className="flex flex-row mx-2">
-              <h4 className="text-light-grey py-2.5 text-base font-light">Transaction Bytecode</h4>
+              <h4 className="text-light-grey py-2.5 text-base font-light">
+                Transaction Bytecode
+              </h4>
               <Copy
                 content={bytecode}
                 iconWidth={13.3}
                 iconClassname={"pb-[1px] ml-0.5 fill-light-secondary-10"}
               />
             </div>
-            <p className="font-fraktion text-base uppercase text-white break-words mx-2 pb-4 text-xs">{bytecode}</p>
+            <p className="font-fraktion text-base uppercase text-white break-words mx-2 pb-4 text-xs">
+              {bytecode}
+            </p>
           </div>
 
           <div className="mt-5 px-2 text-sm justify-center font-extralight">
-            After executing the transaction, enter the transaction hash below for final confirmation.
+            After executing the transaction, enter the transaction hash below
+            for final confirmation.
           </div>
 
           <Input
@@ -241,37 +245,37 @@ export const ConfirmMarketCreationDialog = ({
           </Button>
 
           {!props.showMultisig && (
-          <div className="mt-4">
-            {props.hasAllowance ? (
-              <Button
-                size="lg"
-                className="w-full"
-                onClick={props.submitCreateMarketTransaction}
-              >
-                Deploy Market
-              </Button>
-            ) : (
-              <Button
-                size="lg"
-                className="w-full"
-                disabled={props.isAllowanceTxPending}
-                onClick={props.submitApproveSpendingTransaction}
-              >
-                <div className="flex justify-center">
-                  Approve capacity
-                  {props.isAllowanceTxPending ? (
-                    <Tooltip content="Awaiting transaction confirmation">
-                      <Timer className="ml-1" />{" "}
-                    </Tooltip>
-                  ) : (
-                    //TODO: Correct this
-                    <Tooltip content="Teller contract needs to be allowed spending token to the total amount of configured capacity for market" />
-                  )}
-                </div>
-              </Button>
-            )}
-          </div>
-            )}
+            <div className="mt-4">
+              {props.hasAllowance ? (
+                <Button
+                  size="lg"
+                  className="w-full"
+                  onClick={props.submitCreateMarketTransaction}
+                >
+                  Deploy Market
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  className="w-full"
+                  disabled={props.isAllowanceTxPending}
+                  onClick={props.submitApproveSpendingTransaction}
+                >
+                  <div className="flex justify-center">
+                    Approve capacity
+                    {props.isAllowanceTxPending ? (
+                      <Tooltip content="Awaiting transaction confirmation">
+                        <Timer className="ml-1" />{" "}
+                      </Tooltip>
+                    ) : (
+                      //TODO: Correct this
+                      <Tooltip content="Teller contract needs to be allowed spending token to the total amount of configured capacity for market" />
+                    )}
+                  </div>
+                </Button>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

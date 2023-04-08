@@ -85,7 +85,7 @@ export const PriceControl = (props: PriceControlProps) => {
       </div>
       <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
         <div className="font-fraktion flex font-bold uppercase">
-          {props.bottomLabel}
+          {props.topLabel}
           {props.tooltip && (
             <Tooltip
               content={props.tooltip}
@@ -111,7 +111,7 @@ export const PriceControl = (props: PriceControlProps) => {
             //setReverseExchangeRate((prev) => !prev);
           }}
         >
-          {props.topLabel ??
+          {props.bottomLabel ??
             (reverseExchangeRate
               ? exchangeLabel.split(" ").reverse().join(" ")
               : exchangeLabel)}

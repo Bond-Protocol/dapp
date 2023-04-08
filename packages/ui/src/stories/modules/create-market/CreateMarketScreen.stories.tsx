@@ -18,4 +18,15 @@ export const Primary = Template.bind({});
 Primary.args = {
   onSubmitCreation: (state) => console.log({ state }),
   onSubmitAllowance: (state) => console.log({ state }),
+  onSubmitMultisigCreation: () => {},
+  projectionData: [],
+  fetchAllowance: () => Promise.resolve(1),
+  getTeller: () => "",
+  getTxBytecode: () => "",
+  chain: "",
+  tokens: [],
+  isAllowanceTxPending: false,
+  creationHash: "",
+  blockExplorerUrl: "",
+  blockExplorerName: "",
 };

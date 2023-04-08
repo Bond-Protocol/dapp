@@ -19,11 +19,9 @@ import {
   CreateMarketState,
   Token,
   TransactionHashDialog,
-  Tooltip,
 } from "components";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { formatDate } from "utils";
-import type { Provider } from "@ethersproject/providers";
 import { vestingOptions } from "utils/options";
 import { PriceData } from "components/charts/projection-algorithm";
 
@@ -35,7 +33,6 @@ export type CreateMarketScreenProps = {
   onSubmitMultisigCreation: (txHash: string) => void;
   getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
-  provider: Provider;
   chain: string;
   tokens: Token[];
   isAllowanceTxPending?: boolean;
@@ -62,7 +59,6 @@ const MarketErrors = ({ state }: { state: CreateMarketState }) => {
 };
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
-  const provider = props.provider;
   const chain = props.chain;
 
   const [index, setIndex] = useState(0);
@@ -147,7 +143,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   <SelectTokenDialog
                     {...modalProps}
                     tokens={props.tokens}
-                    provider={provider}
                     chain={chain}
                   />
                 )}
@@ -177,7 +172,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   <SelectTokenDialog
                     {...modalProps}
                     tokens={props.tokens}
-                    provider={provider}
                     chain={chain}
                   />
                 )}
@@ -233,9 +227,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               label="Market Start"
               title="Select start date"
               value={
-                state.startDate
-                  ? formatDate.dateAndTime(state.startDate)
-                  : ""
+                state.startDate ? formatDate.dateAndTime(state.startDate) : ""
               }
               endAdornment={<CalendarIcon className="mr-2 fill-white" />}
               ModalContent={(props) => <SelectDateDialog {...props} />}
@@ -246,11 +238,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <InputModal
               label="Market End"
               title="Select end date"
-              value={
-                state.endDate
-                  ? formatDate.dateAndTime(state.endDate)
-                  : ""
-              }
+              value={state.endDate ? formatDate.dateAndTime(state.endDate) : ""}
               endAdornment={<CalendarIcon className="mr-2 fill-white" />}
               ModalContent={(props) => (
                 <SelectEndDateDialog
@@ -278,7 +266,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 <InfoLabel
                   tooltip={`Maximum amount of ${
                     capacityToken?.symbol || "the selected asset"
-                  } that can be ${ state.capacityType === "quote" ? "deposited" : "purchased" } in a single transaction`}
+                  } that can be ${
+                    state.capacityType === "quote" ? "deposited" : "purchased"
+                  } in a single transaction`}
                   label={"Max Bond Size"}
                   reverse
                 >

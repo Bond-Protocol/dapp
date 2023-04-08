@@ -57,7 +57,9 @@ export const TableHeading = ({
           />
         </div>
       )}
-      {props.tooltip && <Tooltip content={props.tooltip} />}
+      {props.tooltip && (
+        <Tooltip iconClassname="fill-white" content={props.tooltip} />
+      )}
     </TableCell>
   );
 };

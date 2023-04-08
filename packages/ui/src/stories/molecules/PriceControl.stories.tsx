@@ -15,6 +15,7 @@ const Template: ComponentStory<typeof PriceControl> = (args) => (
 export const Primary = Template.bind({});
 Primary.args = {
   topLabel: "Fixed Price",
+  bottomLabel: "Initial Discount",
   tooltip: "ya",
   exchangeRate: 0.256,
   onRateChange: () => {},

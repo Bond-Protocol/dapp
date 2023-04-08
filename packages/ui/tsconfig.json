@@ -27,7 +27,6 @@
   ],
   "exclude": [
     "dist",
-    "src/stories/**/*",
     "build",
     "node_modules"
   ]

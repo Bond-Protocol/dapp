@@ -34,27 +34,27 @@ const priceControlConfig: Record<
   Array<Partial<PriceControlProps> & { property: string }>
 > = {
   dynamic: [
-    { property: "initialPrice", bottomLabel: "Initial Price" },
-    { property: "minPrice", bottomLabel: "Min Price" },
+    { property: "initialPrice", topLabel: "Initial Price" },
+    { property: "minPrice", topLabel: "Min Price" },
   ],
-  static: [{ property: "initialPrice", bottomLabel: "Fixed Price" }],
+  static: [{ property: "initialPrice", topLabel: "Fixed Price" }],
   ["oracle-dynamic"]: [
     {
       property: "initialDiscount",
-      topLabel: "From Oracle Price",
-      bottomLabel: "Initial Discount",
+      bottomLabel: "From Oracle Price",
+      topLabel: "Initial Discount",
       percentage: true,
     },
-    { property: "minPrice", bottomLabel: "Min Price" },
+    { property: "minPrice", topLabel: "Min Price" },
   ],
   ["oracle-static"]: [
     {
       property: "initialDiscount",
-      topLabel: "From Oracle Price",
-      bottomLabel: "Fixed Discount",
+      bottomLabel: "From Oracle Price",
+      topLabel: "Fixed Discount",
       percentage: true,
     },
-    { property: "minPrice", bottomLabel: "Min Price" },
+    { property: "minPrice", topLabel: "Min Price" },
   ],
 };
 
