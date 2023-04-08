@@ -1,7 +1,5 @@
 import { useState } from "react";
-
 import { Button, DatePicker } from "components";
-import { getUtcDate } from "utils";
 
 export const SelectDateDialog = (props: {
   onSubmit: Function;
@@ -27,7 +25,6 @@ export const SelectDateDialog = (props: {
     <div className="flex flex-col items-center justify-center">
       <DatePicker
         showTime
-        from={getUtcDate(new Date())}
         onChange={({ date, invalid }) => {
           setDate(date);
           setInvalid(!!invalid);

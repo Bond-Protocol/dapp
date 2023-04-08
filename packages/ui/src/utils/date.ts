@@ -37,11 +37,11 @@ export const addTimeToDate = (date = new Date(), time = "00:00") => {
   // Create a new Date object with the current date and the specified time
   return new Date(year, month, day, Number(hours), Number(minutes));
 };
-
+/*
 export const getUtcDate = (date: Date) => {
   return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000); // create a new date instance in UTC timezone
 };
-
+*/
 export const formatDate = wrapWithErrorHandler({
   shorter,
   short,

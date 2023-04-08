@@ -5,7 +5,7 @@ import { ReactComponent as ClockIcon } from "assets/icons/clock.svg";
 
 import { Input } from "..";
 import { useTimeInput } from "hooks/use-time-input";
-import { dateMath, getUtcDate } from "utils";
+import { dateMath } from "utils";
 
 const styleOverride = {
   root: "rdp m-0",
@@ -44,7 +44,7 @@ export const DatePicker = (props: {
     //Update date with time once its typed
     if (matcher.test(time) && date) {
       const fullDate = dateMath.addTimeToDate(date, time);
-      const invalid = dateMath.isBefore(fullDate, getUtcDate(new Date()));
+      const invalid = dateMath.isBefore(fullDate, new Date());
       setDate(fullDate);
       props.onChange({ date: fullDate, invalid });
     }
@@ -65,7 +65,7 @@ export const DatePicker = (props: {
     matcher.test(time) &&
     dateMath.isBefore(
       dateMath.addTimeToDate(date, time),
-      getUtcDate(new Date())
+      new Date()
     );
 
   return (
