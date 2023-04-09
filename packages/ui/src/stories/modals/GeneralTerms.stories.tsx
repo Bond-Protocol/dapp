@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { GeneralTermsDialog } from "../../components/modals";
+import { GeneralTermsDialog } from "components";
 
 import { ModalDecorator } from "../decorators";
 

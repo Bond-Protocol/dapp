@@ -56,7 +56,7 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
         {props.title && (
           <p className="font-fraktion ml-4 text-2xl uppercase">{props.title}</p>
         )}
-        <SearchBar value={text} handleChange={setText} className="max-w-xs" />
+        <SearchBar value={text} onChange={setText} className="max-w-xs" />
       </div>
       <Table
         {...props}

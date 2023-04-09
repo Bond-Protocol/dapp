@@ -1,6 +1,5 @@
 export * from "./get-token-details";
 export * from "./createTweet";
-export * from "./date";
 export * from "./formatSymbolForWallet";
 export * from "./generate-fetcher";
 export * from "./getLocale";

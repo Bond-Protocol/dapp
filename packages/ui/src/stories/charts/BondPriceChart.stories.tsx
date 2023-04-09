@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { BondPriceChart } from "../../components/charts/BondPriceChart";
+import { BondPriceChart } from "components";
 
 import data from "./mock-data";
 

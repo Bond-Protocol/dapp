@@ -93,6 +93,21 @@ export const protocols: ProtocolDefinition[] = [
         },
       },
       {
+        name: "Test Link",
+        symbol: "LINK",
+        priceSources: [
+          { source: "coingecko", apiId: "chainlink" },
+        ],
+        purchaseLinks: {
+          [CHAIN_ID.GOERLI_TESTNET]: "https://goerli.etherscan.io/address/0x20be9a427F3BB6bC15873420644d1f5F4db31CC0#writeContract",
+        },
+        logoUrl: "https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png?1547034700",
+        addresses: {
+          [CHAIN_ID.GOERLI_TESTNET]:
+            "0x20be9a427F3BB6bC15873420644d1f5F4db31CC0",
+        },
+      },
+      {
         name: "COMP-USDT SLP",
         symbol: "COMP-USDT SLP",
         //@ts-ignore

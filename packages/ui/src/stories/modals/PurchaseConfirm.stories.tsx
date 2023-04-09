@@ -1,6 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Modal } from "../../components/molecules/Modal";
-import { PurchaseConfirmDialog } from "../../components/modals";
+import { Modal, PurchaseConfirmDialog } from "components";
 
 import { ModalDecorator } from "../decorators";
 

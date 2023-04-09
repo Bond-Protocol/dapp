@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Checkbox, Link } from "components/atoms";
-import { ButtonGroup } from "components/molecules/ButtonGroup";
+import { ButtonGroup, Checkbox, Link } from "components";
 
 const verificationLink = (
   <Link

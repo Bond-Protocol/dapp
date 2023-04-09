@@ -5,3 +5,5 @@ export * from "./MarketCreated";
 export * from "./MarketInsights";
 export * from "./Markets";
 export * from "./PolicyPage";
+
+export * from "./deprecated";

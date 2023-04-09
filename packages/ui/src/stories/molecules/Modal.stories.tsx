@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Modal } from "../../components/molecules/Modal";
+import { Modal } from "components";
 
 export default {
   title: "Design System/Molecules/Modal",

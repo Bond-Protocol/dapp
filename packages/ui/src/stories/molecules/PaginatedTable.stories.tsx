@@ -1,8 +1,7 @@
 //@ts-nocheck
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { PaginatedTable } from "../../components/molecules/PaginatedTable";
 import { data } from "../mock-data/table";
-import { DiscountLabel, Button } from "../../components";
+import { DiscountLabel, PaginatedTable, Button } from "components";
 import { MouseEventHandler } from "react";
 
 const tableData = Array(87).fill(data[0]);

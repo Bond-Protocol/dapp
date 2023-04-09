@@ -8,6 +8,20 @@
   body {
     @apply font-jakarta text-white;
   }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    @apply rounded-full;
+  }
+
+  ::-webkit-scrollbar-track {
+    border: 1px solid #40749b;
+    @apply rounded-full;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: #40749b;
+    @apply rounded-full;
+  }
 }
 
 @layer components {
@@ -109,10 +123,16 @@
   }
 }
 
+/*recharts style override*/
 .recharts-cartesian-axis-tick-value {
   @apply fill-light-primary-100/50 text-[10px];
 }
 
 .recharts-cartesian-axis-line {
   @apply stroke-light-primary-100/20;
+}
+
+/*react-day-picker styles*/
+.rdp {
+  --rdp-background-color: transparent;
 }

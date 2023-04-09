@@ -1,4 +1,3 @@
 module.exports = {
-  root: true,
-  extends: ["custom", "plugin:storybook/recommended"]
+  extends: ["custom", "plugin:storybook/recommended", "cypress"],
 };

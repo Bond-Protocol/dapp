@@ -5,6 +5,7 @@ export interface LabelProps extends TokenLogoProps {
   value?: string | React.ReactNode;
   subtext?: string | React.ReactNode;
   textClassName?: string;
+  subtextClassName?: string;
   iconSubtext?: string;
 }
 
@@ -32,7 +33,11 @@ export const Label = (props: LabelProps) => {
           {props.value ? props.value : <Skeleton className="max-w-[60px]" />}
         </p>
         {props.subtext && (
-          <p className="text-light-primary-100 font-mono text-sm leading-none">
+          <p
+            className={`text-light-primary-100 text-sm leading-none ${
+              props.subtextClassName ?? "font-mono"
+            }`}
+          >
             {props.subtext}
           </p>
         )}

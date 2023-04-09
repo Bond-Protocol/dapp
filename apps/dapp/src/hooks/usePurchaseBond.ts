@@ -15,14 +15,15 @@ export const usePurchaseBond = () => {
     tokenAddress: string,
     tokenDecimals: number,
     auctioneer: string,
-    signer: Signer
+    signer: Signer,
+    capacity = "1000000000"
   ): Promise<ContractTransaction> => {
     if (!signer) throw Error("Not connected");
     return changeApproval(
       tokenAddress,
       tokenDecimals,
       auctioneer,
-      "1000000000",
+      capacity,
       signer
     );
   };

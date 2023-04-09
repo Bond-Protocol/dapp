@@ -1,6 +1,10 @@
 import type { CalculatedMarket, LpPair } from "@bond-protocol/contract-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { TOKENS, getTokenByAddress } from "@bond-protocol/bond-library";
+import {
+  TOKENS,
+  getTokenByAddress,
+  SupportedPriceSource,
+} from "@bond-protocol/bond-library";
 import { providers } from "services";
 
 export interface TokenDetails {
@@ -12,6 +16,7 @@ export interface TokenDetails {
   symbol: string;
   decimals: number;
   lpPair: LpPair | undefined;
+  priceSources: Array<SupportedPriceSource>;
 }
 
 export function getTokenDetailsForMarket(market: CalculatedMarket) {
@@ -62,6 +67,8 @@ export function getTokenDetails(token: any): TokenDetails {
 
   return {
     id: token.id,
+    //@ts-ignore
+    priceSources: bondLibraryToken?.priceSources,
     address: token.address,
     chainId: token.id.split("_")[0],
     logoUrl: bondLibraryToken?.logoUrl

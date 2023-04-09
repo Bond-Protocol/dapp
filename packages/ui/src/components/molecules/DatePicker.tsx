@@ -1,97 +1,101 @@
-import PopperUnstyled from "@mui/base/PopperUnstyled";
-import "react-day-picker/dist/style.css";
-import { DayPicker } from "react-day-picker";
+import { DayPicker, DayPickerProps } from "react-day-picker";
+import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-slim.svg";
 import { useEffect, useState } from "react";
-import { ClickAwayListener } from "@mui/base";
-import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
+import { ReactComponent as ClockIcon } from "assets/icons/clock.svg";
 
-export type DatePickerProps = {
-  onChange?: (date?: number) => void;
-  errorMessage?: string;
-  className?: string;
-  dateClassName?: string;
-  label?: string;
-  placeholder?: string;
-  defaultValue?: Date;
-  id?: string;
+import { Input } from "..";
+import { useTimeInput } from "hooks/use-time-input";
+import { dateMath } from "utils";
+
+const styleOverride = {
+  root: "rdp m-0",
+  caption_label: "font-light",
+  button_reset: "",
+  weeknumber: "",
+  day: "rdp-day !rounded-md",
+  nav_button:
+    "rdp-nav_button border-none fill-white hover:fill-light-secondary cursor-pointer",
+  button:
+    "border border-transparent hover:border-white rounded-md disabled:text-light-grey disabled:border-none",
+  day_selected: "bg-light-primary",
 };
 
-export const DatePicker = ({ onChange, ...props }: DatePickerProps) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+const getDayFirstLetter = (date = new Date(), locale = "en-US") => {
+  return date.toLocaleDateString(locale, { weekday: "long" }).substring(0, 1);
+};
+
+export const DatePicker = (
+  props: DayPickerProps & {
+    onChange: (args: { date: Date; invalid?: boolean }) => void;
+    showTime?: boolean;
+    className?: string;
+    defaultDate?: Date;
+    defaultTime?: string;
+    from?: Date;
+  }
+) => {
   const [date, setDate] = useState<Date>();
+  const { time, setTime, matcher } = useTimeInput(props.defaultTime);
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "date-popper" : undefined;
-
-  const fromDate = new Date();
+  const fromDate = props.from ?? new Date();
   const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
 
-  const formattedDate =
-    date &&
-    new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-      .toISOString()
-      .split("T")[0];
+  useEffect(() => {
+    if (!props.showTime) return;
 
-  const handleClose = (date: unknown) => {
-    if (date instanceof Date && !isNaN(date.valueOf())) {
-      setDate(date);
-      onChange && onChange(date?.getTime() / 1000);
-      setAnchorEl(null);
+    //Update date with time once its typed
+    if (matcher.test(time) && date) {
+      const fullDate = dateMath.addTimeToDate(date, time);
+      const invalid = dateMath.isBefore(fullDate, new Date());
+      setDate(fullDate);
+      props.onChange({ date: fullDate, invalid });
     }
+  }, [props.showTime, time]);
+
+  const onSelect = (date?: Date) => {
+    const nextDate = date ?? new Date();
+    setDate(nextDate);
+
+    props.onChange({
+      date: nextDate,
+      invalid: props.showTime && !matcher.test(time),
+    });
   };
 
-  useEffect(() => {
-    if (
-      !date &&
-      props.defaultValue instanceof Date &&
-      !isNaN(props.defaultValue.valueOf())
-    ) {
-      setDate(props.defaultValue);
-    }
-  }, [props.defaultValue]);
-
-  useEffect(() => {
-    onChange && onChange((date as Date)?.getTime() / 1000);
-  }, [onChange, date]);
+  const isInThePast =
+    props.showTime &&
+    matcher.test(time) &&
+    dateMath.isBefore(dateMath.addTimeToDate(date, time), new Date());
 
   return (
-    <ClickAwayListener onClickAway={(e: unknown) => handleClose(date)}>
-      <div id={props.id}>
-        <div id={id} className={props.className} onClick={handleClick}>
-          {props.label && (
-            <p className="font-jakarta mb-1 text-xs font-light">
-              {props.label}
-            </p>
-          )}
-          <div
-            className={`flex h-10 justify-between rounded-lg border px-3 py-2 hover:cursor-pointer ${
-              props.dateClassName
-            } ${props.errorMessage && "border-red-500 bg-red-500"}`}
-          >
-            <p
-              className={`${date ? "font-bold" : ""} font-jakarta text-[15px]`}
-            >
-              {date ? formattedDate : props.placeholder}
-            </p>
-            <CalendarIcon className="color-white my-auto" />
-          </div>
-        </div>
-        <PopperUnstyled open={open} anchorEl={anchorEl}>
-          <div className="m-2 rounded-md border bg-white/5 backdrop-blur-md">
-            <DayPicker
-              mode="single"
-              selected={date}
-              onSelect={handleClose}
-              fromDate={fromDate}
-              toDate={toDate}
-            />
-          </div>
-        </PopperUnstyled>
-      </div>
-    </ClickAwayListener>
+    <div className={props.className ?? ""}>
+      <DayPicker
+        fixedWeeks
+        showOutsideDays
+        mode="single"
+        selected={date}
+        fromDate={fromDate}
+        toDate={toDate}
+        onSelect={onSelect}
+        classNames={styleOverride}
+        formatters={{
+          formatWeekdayName: (date) => getDayFirstLetter(date),
+        }}
+        components={{
+          IconLeft: () => <ArrowDownIcon />,
+          IconRight: () => <ArrowDownIcon className="rotate-180" />,
+        }}
+      />
+      {props.showTime && (
+        <Input
+          className="mt-2"
+          placeholder="00:00"
+          errorMessage={isInThePast ? "That date is in the past 👀 " : ""}
+          value={time}
+          onChange={(e) => setTime(e)}
+          startAdornment={<ClockIcon className="ml-2" />}
+        />
+      )}
+    </div>
   );
 };

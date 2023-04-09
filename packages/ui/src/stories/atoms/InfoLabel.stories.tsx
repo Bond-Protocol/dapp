@@ -1,6 +1,5 @@
-//@ts-nocheck
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { InfoLabel } from "../../components/atoms/InfoLabel";
+import { InfoLabel } from "components/atoms/InfoLabel";
 
 export default {
   title: "Design System/Atoms/InfoLabel",
@@ -32,4 +31,12 @@ Multiple.args = {
   label: "Total Value Bonded",
   tooltip: "Lorem ipsum etc stuff this a long tooltip wagmi oke",
   children: "$26.5M",
+};
+
+export const Small = Template.bind({});
+Small.args = {
+  label: "Current Ohm Price",
+  children: "10.25$",
+  small: true,
+  reverse: true,
 };

@@ -143,7 +143,10 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
           className="font-faketion mt-5 w-full"
           onClick={() => {
             setTxnBytecode(
-              contractLibrary.createMarketMultisig(props.data.marketParams)
+              contractLibrary.createMarketMultisig(
+                props.data.marketParams,
+                props.data.bondType
+              )
             );
             props.data.isMultisig = true;
 
