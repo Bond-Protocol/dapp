@@ -1,4 +1,3 @@
-//@ts-nocheck [TO BE DEPRECATED]
 import { useEffect, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import * as contractLibrary from "@bond-protocol/contract-library";
@@ -11,7 +10,7 @@ import {
 import * as bondLibrary from "@bond-protocol/bond-library";
 import { getProtocolByAddress, Protocol } from "@bond-protocol/bond-library";
 import { providers } from "services/owned-providers";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import {
   Accordion,
   Button,
@@ -84,12 +83,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const [payoutTokenInfo, setPayoutTokenInfo] = useState<TokenInfo>();
   const [quoteTokenInfo, setQuoteTokenInfo] = useState<TokenInfo>();
 
-  const [libraryPayoutToken, setLibraryPayoutToken] = useState<
-    bondLibrary.Token | undefined
-  >(undefined);
-  const [libraryQuoteToken, setLibraryQuoteToken] = useState<
-    bondLibrary.Token | undefined
-  >(undefined);
+  const [libraryPayoutToken, setLibraryPayoutToken] =
+    useState<bondLibrary.Token | undefined>(undefined);
+  const [libraryQuoteToken, setLibraryQuoteToken] =
+    useState<bondLibrary.Token | undefined>(undefined);
   const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
   const [protocol, setProtocol] = useState<Protocol | null>(null);
@@ -454,17 +451,11 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
         conclusion: data.marketExpiryDate,
         depositInterval: Math.trunc((24 * 60 * 60) / (data.bondsPerWeek / 7)),
         scaleAdjustment: scaleAdjustment,
-        oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
-        formattedPrice: formattedMinimumPrice.toString(),
-        fixedDiscount: BigNumber.from("10000").toString(),
-        maxDiscountFromCurrent: BigNumber.from("10000").toString(),
-        baseDiscount: BigNumber.from("5000").toString(),
-        targetIntervalDiscount: BigNumber.from("1000").toString(),
       },
       bondType:
         data.vestingType === 0
-          ? BOND_TYPE.FIXED_EXPIRY_OFDA
-          : BOND_TYPE.FIXED_TERM_OFDA,
+          ? BOND_TYPE.FIXED_EXPIRY_SDA
+          : BOND_TYPE.FIXED_TERM_SDA,
       chain: chainSelection,
       formValues: formValues,
       payoutToken: payoutTokenInfo,
@@ -908,18 +899,10 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 render={({ field }) => (
                   <>
                     <DatePicker
-                      id="bp__market_end_date"
                       {...field}
-                      placeholder="Select a date"
-                      label="Market End Date"
-                      defaultValue={
+                      defaultDate={
                         props.initialValues &&
                         new Date(props.initialValues?.marketExpiryDate * 1000)
-                      }
-                      errorMessage={
-                        errors.marketExpiryDate?.type === "isSet"
-                          ? "Date must be set"
-                          : ""
                       }
                     />
                   </>
@@ -967,16 +950,8 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                     <>
                       <DatePicker
                         {...field}
-                        id="bp__vesting_date"
-                        label="Bond Vesting Date"
-                        placeholder="Select a date"
-                        defaultValue={
+                        defaultDate={
                           new Date(props.initialValues?.vesting * 1000)
-                        }
-                        errorMessage={
-                          errors.vesting?.type === "isSet"
-                            ? "Date must be set"
-                            : ""
                         }
                       />
 

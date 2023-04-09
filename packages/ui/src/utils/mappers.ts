@@ -35,20 +35,3 @@ export const toTokenList = (
     };
   });
 };
-
-export const list = aphexTokens.map((token) => {
-  // @ts-ignore
-  const apiId = token.priceSources[0]?.apiId;
-  //const price = samplePrices[apiId]?.usd ?? 0;
-
-  return {
-    id: apiId,
-    name: token.name,
-    symbol: token.symbol,
-    icon: token.logoUrl,
-    addresses: token.addresses,
-    apiId,
-    price: 0,
-    priceSources: token.priceSources,
-  };
-});

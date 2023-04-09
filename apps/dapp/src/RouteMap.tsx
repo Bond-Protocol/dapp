@@ -2,6 +2,7 @@ import type { FC } from "react";
 import { Route, Routes as Switch } from "react-router-dom";
 import {
   CreateMarket,
+  CreateMarketV1,
   Dashboard,
   IssuerPage,
   IssuerList,
@@ -29,9 +30,18 @@ export const RouteMap: FC = () => {
         }
       />
       <Route
-        path="/create/:hash"
+        path="/create/v1"
+        element={
+          <CreateMarketV1
+            onExecute={(marketData) => setNewMarket(marketData)}
+          />
+        }
+      />
+      <Route
+        path="/create/v1/:hash"
         element={<MarketCreated marketData={newMarket} />}
       />
+
       <Route path="/issuers/:name" element={<IssuerPage />} />
       <Route path="/market/:chainId/:id" element={<MarketInsights />} />
     </Switch>
