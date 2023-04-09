@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
@@ -212,6 +211,7 @@ export const CreateMarketController = () => {
       );
       setCreationHash(tx.hash);
       await tx.wait(1);
+      console.log({ transaction });
       setCreated(true);
     } catch (e) {
       console.log(e);

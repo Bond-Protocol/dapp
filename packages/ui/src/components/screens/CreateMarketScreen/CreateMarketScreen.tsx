@@ -287,7 +287,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       <div className="mt-8 flex justify-center gap-x-10">{buttons}</div>
       <Modal
         title={
-          props.creationHash
+          props.created
+            ? "Success!"
+            : props.creationHash
             ? "Transaction Submitted"
             : showMultisig
             ? "Transaction Details"
@@ -305,20 +307,24 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             hash={props.creationHash}
           />
         ) : (
-          <ConfirmMarketCreationDialog
-            marketState={state}
-            showMultisig={showMultisig}
-            chain={chain}
-            hasAllowance={state.isAllowanceSufficient}
-            isAllowanceTxPending={props.isAllowanceTxPending}
-            submitCreateMarketTransaction={() => props.onSubmitCreation(state)}
-            submitApproveSpendingTransaction={() =>
-              props.onSubmitAllowance(state)
-            }
-            submitMultisigCreation={props.onSubmitMultisigCreation}
-            getTeller={props.getTeller}
-            getTxBytecode={props.getTxBytecode}
-          />
+          !props.created && (
+            <ConfirmMarketCreationDialog
+              marketState={state}
+              showMultisig={showMultisig}
+              chain={chain}
+              hasAllowance={state.isAllowanceSufficient}
+              isAllowanceTxPending={props.isAllowanceTxPending}
+              submitCreateMarketTransaction={() =>
+                props.onSubmitCreation(state)
+              }
+              submitApproveSpendingTransaction={() =>
+                props.onSubmitAllowance(state)
+              }
+              submitMultisigCreation={props.onSubmitMultisigCreation}
+              getTeller={props.getTeller}
+              getTxBytecode={props.getTxBytecode}
+            />
+          )
         )}
       </Modal>
     </div>
