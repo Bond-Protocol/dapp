@@ -5,7 +5,7 @@ import { CreateMarketState } from "components";
 import { formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { CHAINS } from "@bond-protocol/bond-library/dist/src";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Copy } from "components/atoms/Copy";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
@@ -75,6 +75,7 @@ export const ConfirmMarketCreationDialog = ({
   submitMultisigCreation: (txHash: string) => void;
   getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
+  estimateGas: (state: CreateMarketState) => string;
 }) => {
   const chainName = CHAINS.get(props.chain)?.displayName;
   const bytecode = props.getTxBytecode(marketState);
@@ -82,6 +83,16 @@ export const ConfirmMarketCreationDialog = ({
   const formattedState = formatMarketState(marketState);
 
   const [txHash, setTxHash] = useState("");
+  const [gasEstimate, setGasEstimate] = useState<string>("Pending");
+
+  useEffect(() => {
+    const getGasEstimate = async () => {
+      const estimate = await props.estimateGas(marketState);
+      setGasEstimate(estimate);
+    }
+
+    getGasEstimate();
+  }, []);
 
   const fields = [
     { leftLabel: "Price Model", rightLabel: marketState.priceModel },
@@ -94,6 +105,10 @@ export const ConfirmMarketCreationDialog = ({
     {
       leftLabel: "Market Length",
       rightLabel: marketState.durationInDays.toString() + " DAYS",
+    },
+    {
+      leftLabel: "Estimated Gas",
+      rightLabel: gasEstimate,
     },
   ];
 
@@ -113,6 +128,10 @@ export const ConfirmMarketCreationDialog = ({
       leftLabel: "Recommended Allowance",
       rightLabel: marketState.recommendedAllowanceDecimalAdjusted,
       copy: marketState.recommendedAllowanceDecimalAdjusted,
+    },
+    {
+      leftLabel: "Estimated Gas",
+      rightLabel: gasEstimate,
     },
   ];
 

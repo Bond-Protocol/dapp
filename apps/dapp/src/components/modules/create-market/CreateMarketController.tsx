@@ -29,6 +29,7 @@ export const CreateMarketController = () => {
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");
   const [created, setCreated] = useState(false);
+  const [gasEstimate, setGasEstimate] = useState(0);
 
   const blockExplorer = getBlockExplorer(
     String(network?.chain?.id) || "1",
@@ -209,7 +210,7 @@ export const CreateMarketController = () => {
         config.bondType,
         config.chain,
         signer,
-        { gasLimit: 1000000 }
+        { gasLimit: gasEstimate }
       );
       setCreationHash(tx.hash);
       await tx.wait(1);
@@ -220,7 +221,26 @@ export const CreateMarketController = () => {
 
     return config;
   };
-  Number;
+
+  const estimateGas = async (state: CreateMarketState) => {
+    const config = configureMarket(state);
+
+    try {
+      let estimate = await contractLib.estimateGasCreateMarket(
+        // @ts-ignore
+        config.marketParams,
+        config.bondType,
+        config.chain,
+        signer,
+        {}
+      );
+      setGasEstimate(estimate);
+      return estimate.toString();
+    } catch (e) {
+      return "Error estimating gas - contact us!"
+    }
+  };
+
   return (
     <>
       <CreateMarketScreen
@@ -230,6 +250,7 @@ export const CreateMarketController = () => {
         onSubmitCreation={onSubmit}
         onSubmitAllowance={approveCapacitySpending}
         onSubmitMultisigCreation={setCreationHash}
+        estimateGas={estimateGas}
         fetchAllowance={fetchAllowance}
         getTeller={getTeller}
         getTxBytecode={getTxBytecode}

@@ -26,6 +26,23 @@ export async function closeMarket(
   }
 }
 
+export async function estimateGasCreateMarket(
+  config: CreateMarketParams,
+  bondType: BOND_TYPE,
+  chainId: string,
+  signer: Signer,
+  overrides?: Overrides,
+): Promise<BigNumber> {
+  const auctioneer = getAuctioneerForCreate(signer, bondType, chainId);
+  try {
+    const bytes = getBytes(config, bondType);
+    return auctioneer.estimateGas.createMarket(bytes, overrides);
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
 export async function createMarket(
   config: CreateMarketParams,
   bondType: BOND_TYPE,
