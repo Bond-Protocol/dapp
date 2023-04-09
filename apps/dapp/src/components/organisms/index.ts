@@ -4,7 +4,6 @@ export * from "./BondPurchaseCard";
 export * from "../modals/BondPurchaseModal";
 export * from "./BondPriceChart";
 export * from "./CloseMarketCard";
-export * from "./CreateMarketPage";
 export * from "./IssuerPage";
 export * from "./IssueMarketPage";
 export * from "./PlaceholderChart";

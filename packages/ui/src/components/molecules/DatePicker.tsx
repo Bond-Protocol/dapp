@@ -1,4 +1,4 @@
-import { DayPicker } from "react-day-picker";
+import { DayPicker, DayPickerProps } from "react-day-picker";
 import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-slim.svg";
 import { useEffect, useState } from "react";
 import { ReactComponent as ClockIcon } from "assets/icons/clock.svg";
@@ -24,14 +24,16 @@ const getDayFirstLetter = (date = new Date(), locale = "en-US") => {
   return date.toLocaleDateString(locale, { weekday: "long" }).substring(0, 1);
 };
 
-export const DatePicker = (props: {
-  onChange: (args: { date: Date; invalid?: boolean }) => void;
-  showTime?: boolean;
-  className?: string;
-  defaultDate?: Date;
-  defaultTime?: string;
-  from?: Date;
-}) => {
+export const DatePicker = (
+  props: DayPickerProps & {
+    onChange: (args: { date: Date; invalid?: boolean }) => void;
+    showTime?: boolean;
+    className?: string;
+    defaultDate?: Date;
+    defaultTime?: string;
+    from?: Date;
+  }
+) => {
   const [date, setDate] = useState<Date>();
   const { time, setTime, matcher } = useTimeInput(props.defaultTime);
 
@@ -63,10 +65,7 @@ export const DatePicker = (props: {
   const isInThePast =
     props.showTime &&
     matcher.test(time) &&
-    dateMath.isBefore(
-      dateMath.addTimeToDate(date, time),
-      new Date()
-    );
+    dateMath.isBefore(dateMath.addTimeToDate(date, time), new Date());
 
   return (
     <div className={props.className ?? ""}>

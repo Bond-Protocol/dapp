@@ -15,14 +15,14 @@ import {
   Accordion,
   Button,
   ChainPicker,
-  DatePicker,
+  DatePickerV1,
   FlatSelect,
   Input,
   ActionInfoList,
   TermPicker,
 } from "ui";
 import { useTokens } from "hooks";
-import { TokenPickerCard } from "./TokenPickerCard";
+import { TokenPickerCard } from "components";
 import { useTestnetMode } from "hooks/useTestnet";
 
 const vestingOptions = [
@@ -83,10 +83,12 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
   const [payoutTokenInfo, setPayoutTokenInfo] = useState<TokenInfo>();
   const [quoteTokenInfo, setQuoteTokenInfo] = useState<TokenInfo>();
 
-  const [libraryPayoutToken, setLibraryPayoutToken] =
-    useState<bondLibrary.Token | undefined>(undefined);
-  const [libraryQuoteToken, setLibraryQuoteToken] =
-    useState<bondLibrary.Token | undefined>(undefined);
+  const [libraryPayoutToken, setLibraryPayoutToken] = useState<
+    bondLibrary.Token | undefined
+  >(undefined);
+  const [libraryQuoteToken, setLibraryQuoteToken] = useState<
+    bondLibrary.Token | undefined
+  >(undefined);
   const [showOwnerWarning, setShowOwnerWarning] = useState(false);
   const [showTokenWarning, setShowTokenWarning] = useState(false);
   const [protocol, setProtocol] = useState<Protocol | null>(null);
@@ -898,11 +900,19 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                 }}
                 render={({ field }) => (
                   <>
-                    <DatePicker
+                    <DatePickerV1
+                      id="bp__market_end_date"
                       {...field}
-                      defaultDate={
+                      placeholder="Select a date"
+                      label="Market End Date"
+                      defaultValue={
                         props.initialValues &&
                         new Date(props.initialValues?.marketExpiryDate * 1000)
+                      }
+                      errorMessage={
+                        errors.marketExpiryDate?.type === "isSet"
+                          ? "Date must be set"
+                          : ""
                       }
                     />
                   </>
@@ -948,10 +958,18 @@ export const CreateMarketPage = (props: CreateMarketPageProps) => {
                   }}
                   render={({ field }) => (
                     <>
-                      <DatePicker
+                      <DatePickerV1
                         {...field}
-                        defaultDate={
+                        id="bp__vesting_date"
+                        label="Bond Vesting Date"
+                        placeholder="Select a date"
+                        defaultValue={
                           new Date(props.initialValues?.vesting * 1000)
+                        }
+                        errorMessage={
+                          errors.vesting?.type === "isSet"
+                            ? "Date must be set"
+                            : ""
                         }
                       />
 
