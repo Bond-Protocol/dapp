@@ -37,11 +37,11 @@ declare global {
 Cypress.Commands.add("mount", mount);
 
 //Override default
-Cypress.on("uncaught:exception", (err, runnable) => {
-  console.log("here");
-  // returning false here prevents Cypress from
-  // failing the test
-  return false;
-});
+// Cypress.on("uncaught:exception", (err, runnable) => {
+//   console.log("here");
+//   // returning false here prevents Cypress from
+//   // failing the test
+//   return false;
+// });
 // Example use:
 // cy.mount(<MyComponent />)

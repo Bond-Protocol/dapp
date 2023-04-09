@@ -38,7 +38,7 @@ export const SelectTokenDialog = (props: {
   }, [filter]);
 
   return (
-    <div className="w-[448px]">
+    <div className="w-[448px]" tabIndex={-1}>
       <SearchBar
         autoFocus
         value={filter}

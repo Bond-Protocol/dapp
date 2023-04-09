@@ -99,10 +99,10 @@ export const getAddresses = (chainId: string): ContractAddresses => {
 };
 
 export const getAddressesForType = (
-  chainId: string | { id: string; label: string },
+  chain_id: string | { id: string; label: string },
   bondType: BOND_TYPE,
 ): AddressesForType => {
-  const id = typeof chainId === 'string' ? chainId : chainId?.id;
+  let id = typeof chain_id === 'string' ? chain_id : chain_id?.id;
 
   switch (bondType) {
     case BOND_TYPE.FIXED_EXPIRY_SDA:

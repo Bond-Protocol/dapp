@@ -2,7 +2,8 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Token } from "@bond-protocol/contract-library";
 import { Checkbox, Input } from "ui";
-import { TokenInfo, TokenPriceCard } from "components/organisms";
+import { TokenPriceCard } from "components/organisms";
+import { TokenInfo } from "components/deprecated/CreateMarketScreenV1";
 
 export type TokenPickerCardProps = {
   token?: TokenInfo;

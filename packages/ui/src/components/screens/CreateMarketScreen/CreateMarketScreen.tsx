@@ -20,11 +20,10 @@ import {
   Token,
   TransactionHashDialog,
   MarketCreatedDialog,
+  PriceData,
 } from "components";
+import { formatDate, vestingOptions } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
-import { formatDate } from "utils";
-import { vestingOptions } from "utils/options";
-import { PriceData } from "components/charts/projection-algorithm";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;

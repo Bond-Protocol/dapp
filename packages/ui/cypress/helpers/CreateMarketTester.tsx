@@ -9,7 +9,9 @@ import { list } from "utils";
 
 export const defaultProps: CreateMarketScreenProps = {
   tokens: list,
-  onSubmitCreation: (state) => {},
+  onSubmitCreation: (state) => {
+    console.log({ state });
+  },
   onSubmitAllowance: () => {},
   onSubmitMultisigCreation: () => {},
   fetchAllowance: () => Promise.resolve("10000000"),
@@ -39,7 +41,7 @@ export default class CreateMarketTester extends BaseTester {
 
     cy.mount(
       <CreateMarketProvider initialState={initialState}>
-        <CreateMarketScreen {...this.props} />;
+        <CreateMarketScreen {...this.props} />
       </CreateMarketProvider>
     );
   }

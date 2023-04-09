@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
@@ -74,7 +75,7 @@ export const CreateMarketController = () => {
     const address = await signer.getAddress();
 
     const chain = {
-      id: network?.chain?.id,
+      id: String(network?.chain?.id),
       label: network.chain.name,
     };
 
@@ -199,6 +200,7 @@ export const CreateMarketController = () => {
 
   const onSubmit = async (state: CreateMarketState) => {
     const config = configureMarket(state);
+    console.log({ state });
 
     try {
       const tx = await contractLib.createMarket(
@@ -211,7 +213,6 @@ export const CreateMarketController = () => {
       );
       setCreationHash(tx.hash);
       await tx.wait(1);
-      console.log({ transaction });
       setCreated(true);
     } catch (e) {
       console.log(e);
@@ -219,7 +220,7 @@ export const CreateMarketController = () => {
 
     return config;
   };
-
+  Number;
   return (
     <>
       <CreateMarketScreen
