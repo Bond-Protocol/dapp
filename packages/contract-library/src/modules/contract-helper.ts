@@ -1,26 +1,19 @@
 import { Provider } from '@ethersproject/providers';
 import { BigNumberish, Signer } from 'ethers';
-import { getAddresses, getAddressesForType } from './address-provider';
+import {getAddresses, getAddressesForType} from './address-provider';
 import {
   Aggregator,
   Aggregator__factory,
   Auctioneer,
   Auctioneer__factory,
   Authority,
-  Authority__factory,
-  BondFixedExpCDA,
-  BondFixedExpCDA__factory,
-  BondFixedExpFPA,
-  BondFixedExpFPA__factory,
-  BondFixedExpOFDA,
-  BondFixedExpOFDA__factory,
-  BondFixedExpOSDA,
-  BondFixedExpOSDA__factory,
-  BondFixedTermCDA,
-  BondFixedTermCDA__factory,
-  BondFixedTermFPA,
-  BondFixedTermFPA__factory,
-  BondFixedTermOFDA,
+  Authority__factory, BondFixedExpCDA,
+  BondFixedExpCDA__factory, BondFixedExpFPA,
+  BondFixedExpFPA__factory, BondFixedExpOFDA,
+  BondFixedExpOFDA__factory, BondFixedExpOSDA,
+  BondFixedExpOSDA__factory, BondFixedTermCDA,
+  BondFixedTermCDA__factory, BondFixedTermFPA,
+  BondFixedTermFPA__factory, BondFixedTermOFDA,
   BondFixedTermOFDA__factory,
   BondFixedTermOSDA,
   BondFixedTermOSDA__factory,
@@ -33,12 +26,10 @@ import {
 } from 'types';
 
 export enum BOND_TYPE {
-  FIXED_EXPIRY_DEPRECATED = 'fixed-expiration',
   FIXED_EXPIRY_SDA = 'fixed-expiry-sda',
   FIXED_EXPIRY_FPA = 'fixed-expiry-fpa',
   FIXED_EXPIRY_OFDA = 'fixed-expiry-ofda',
   FIXED_EXPIRY_OSDA = 'fixed-expiry-osda',
-  FIXED_TERM_DEPRECATED = 'fixed-term',
   FIXED_TERM_SDA = 'fixed-term-sda',
   FIXED_TERM_FPA = 'fixed-term-fpa',
   FIXED_TERM_OFDA = 'fixed-term-ofda',
@@ -82,7 +73,6 @@ export function getTellerContract(
     case BOND_TYPE.FIXED_EXPIRY_FPA:
     case BOND_TYPE.FIXED_EXPIRY_OFDA:
     case BOND_TYPE.FIXED_EXPIRY_OSDA:
-    case BOND_TYPE.FIXED_EXPIRY_DEPRECATED:
       return FixedExpirationTeller__factory.connect(
         getAddresses(chainId).fixedExpiryTeller,
         providerOrSigner,
@@ -91,7 +81,6 @@ export function getTellerContract(
     case BOND_TYPE.FIXED_TERM_FPA:
     case BOND_TYPE.FIXED_TERM_OFDA:
     case BOND_TYPE.FIXED_TERM_OSDA:
-    case BOND_TYPE.FIXED_TERM_DEPRECATED:
       return FixedTermTeller__factory.connect(
         getAddresses(chainId).fixedTermTeller,
         providerOrSigner,
@@ -103,15 +92,7 @@ export function getAuctioneerForCreate(
   providerOrSigner: Signer | Provider,
   bondType: BOND_TYPE,
   chainId: string,
-):
-  | BondFixedExpCDA
-  | BondFixedExpFPA
-  | BondFixedExpOFDA
-  | BondFixedExpOSDA
-  | BondFixedTermCDA
-  | BondFixedTermFPA
-  | BondFixedTermOFDA
-  | BondFixedTermOSDA {
+): BondFixedExpCDA | BondFixedExpFPA | BondFixedExpOFDA | BondFixedExpOSDA | BondFixedTermCDA | BondFixedTermFPA | BondFixedTermOFDA | BondFixedTermOSDA {
   const factory = getAuctioneerFactoryForType(bondType);
   return factory.connect(
     getAddressesForType(chainId, bondType).auctioneer,
@@ -132,65 +113,57 @@ export async function getAuctioneerFromAggregator(
 export function getAuctioneerFactoryForType(bondType: BOND_TYPE) {
   switch (bondType) {
     case BOND_TYPE.FIXED_EXPIRY_SDA:
-    case BOND_TYPE.FIXED_EXPIRY_DEPRECATED:
       return BondFixedExpCDA__factory;
     case BOND_TYPE.FIXED_EXPIRY_FPA:
       return BondFixedExpFPA__factory;
     case BOND_TYPE.FIXED_EXPIRY_OFDA:
-      return BondFixedExpOFDA__factory;
+      return BondFixedExpOFDA__factory
     case BOND_TYPE.FIXED_EXPIRY_OSDA:
       return BondFixedExpOSDA__factory;
     case BOND_TYPE.FIXED_TERM_SDA:
-    case BOND_TYPE.FIXED_TERM_DEPRECATED:
-      return BondFixedTermCDA__factory;
+      return BondFixedTermCDA__factory
     case BOND_TYPE.FIXED_TERM_FPA:
       return BondFixedTermFPA__factory;
     case BOND_TYPE.FIXED_TERM_OFDA:
-      return BondFixedTermOFDA__factory;
+      return BondFixedTermOFDA__factory
     case BOND_TYPE.FIXED_TERM_OSDA:
       return BondFixedTermOSDA__factory;
   }
 }
 
-export function getAuctioneerFactoryForName(
-  auctioneerName: string,
-  auctioneerAddress: string,
-  provider: Provider,
-) {
+export function getAuctioneerFactoryForName(auctioneerName: string, auctioneerAddress: string, provider: Provider) {
   let factory;
   switch (auctioneerName) {
-    case 'BondFixedExpCDA':
+    case "BondFixedExpCDA":
       factory = BondFixedExpCDA__factory;
       break;
-    case 'BondFixedExpFPA':
+    case "BondFixedExpFPA":
       factory = BondFixedExpFPA__factory;
       break;
-    case 'BondFixedExpOFDA':
-      factory = BondFixedExpOFDA__factory;
+    case "BondFixedExpOFDA":
+      factory = BondFixedExpOFDA__factory
       break;
-    case 'BondFixedExpOSDA':
+    case "BondFixedExpOSDA":
       factory = BondFixedExpOSDA__factory;
       break;
-    case 'BondFixedTermCDA':
-      factory = BondFixedTermCDA__factory;
+    case "BondFixedTermCDA":
+      factory = BondFixedTermCDA__factory
       break;
-    case 'BondFixedTermFPA':
+    case "BondFixedTermFPA":
       factory = BondFixedTermFPA__factory;
       break;
-    case 'BondFixedTermOFDA':
-      factory = BondFixedTermOFDA__factory;
+    case "BondFixedTermOFDA":
+      factory = BondFixedTermOFDA__factory
       break;
-    case 'BondFixedTermOSDA':
+    case "BondFixedTermOSDA":
       factory = BondFixedTermOSDA__factory;
       break;
     default:
-      throw Error(
-        'Auctioneer Factory Not Found for ' +
-          auctioneerName +
-          ' ' +
-          auctioneerAddress,
-      );
+      throw Error("Auctioneer Factory Not Found for " + auctioneerName + " " + auctioneerAddress);
   }
 
-  return factory.connect(auctioneerAddress, provider);
+  return factory.connect(
+    auctioneerAddress,
+    provider,
+  );
 }

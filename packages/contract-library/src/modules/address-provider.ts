@@ -106,7 +106,6 @@ export const getAddressesForType = (
 
   switch (bondType) {
     case BOND_TYPE.FIXED_EXPIRY_SDA:
-    case BOND_TYPE.FIXED_EXPIRY_DEPRECATED:
       return {
         teller: getAddresses(id).fixedExpiryTeller,
         auctioneer: getAddresses(id).fixedExpirySDAAuctioneer,
@@ -127,7 +126,6 @@ export const getAddressesForType = (
         auctioneer: getAddresses(id).fixedExpiryOSDAAuctioneer,
       };
     case BOND_TYPE.FIXED_TERM_SDA:
-    case BOND_TYPE.FIXED_TERM_DEPRECATED:
       return {
         teller: getAddresses(id).fixedTermTeller,
         auctioneer: getAddresses(id).fixedTermSDAAuctioneer,
