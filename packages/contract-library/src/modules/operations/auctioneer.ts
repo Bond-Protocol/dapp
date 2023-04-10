@@ -60,7 +60,10 @@ export async function createMarket(
   }
 }
 
-export function createMarketMultisig(config: CreateMarketParams, bondType: BOND_TYPE): string {
+export function createMarketMultisig(
+  config: CreateMarketParams,
+  bondType: BOND_TYPE,
+): string {
   try {
     // @ts-ignore
     const auctioneer = new ethers.utils.Interface(auctioneerAbi.abi);
@@ -76,7 +79,9 @@ export function createMarketMultisig(config: CreateMarketParams, bondType: BOND_
 function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
   switch (bondType) {
     case BOND_TYPE.FIXED_EXPIRY_SDA:
+    case BOND_TYPE.FIXED_EXPIRY_DEPRECATED:
     case BOND_TYPE.FIXED_TERM_SDA:
+    case BOND_TYPE.FIXED_TERM_DEPRECATED:
       return ethers.utils.defaultAbiCoder.encode(
         [
           'tuple(address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 conclusion, uint32 depositInterval, int8 scaleAdjustment)',
