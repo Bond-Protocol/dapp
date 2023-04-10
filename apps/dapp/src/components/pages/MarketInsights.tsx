@@ -1,7 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
-import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  calculateTrimDigits,
+  trim,
+} from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
 import { InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
@@ -15,7 +19,7 @@ export const MarketInsights = () => {
   const { id, chainId } = useParams();
   const navigate = useNavigate();
   const markets = Array.from(allMarkets.values());
-  const market = markets.find(
+  const market: CalculatedMarket = markets.find(
     ({ marketId, chainId: marketChainId }) =>
       marketId === Number(id) && marketChainId === chainId
   );
@@ -31,9 +35,10 @@ export const MarketInsights = () => {
       : market.maxPayout;
 
   const formattedPayout = longFormatter.format(
-    Number(trim(maxPayout, calculateTrimDigits(parseFloat(maxPayout))))
+    Number(trim(maxPayout, calculateTrimDigits(parseFloat(String(maxPayout)))))
   );
 
+  console.log({ market });
   const vestingLabel =
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
@@ -90,6 +95,9 @@ export const MarketInsights = () => {
           }
         >
           {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
+        </InfoLabel>
+        <InfoLabel label="Remaing Capacity">
+          {`${market.currentCapacity} ${market.capacityToken}`}
         </InfoLabel>
       </div>
 

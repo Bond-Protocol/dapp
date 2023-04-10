@@ -3,7 +3,7 @@ import { Link, TokenLogo } from "components/atoms";
 export const SummaryLabel = (props: {
   icon?: string;
   value: string;
-  subtext: string;
+  subtext?: string;
   className?: string;
   href?: string;
   small?: boolean;
@@ -20,7 +20,7 @@ export const SummaryLabel = (props: {
         {props.icon && (
           <TokenLogo className="-ml-1 mr-2 w-[24px]" icon={props.icon} />
         )}
-        <p className={props.small ? "" : "text-2xl"}>{props.value}</p>
+        <p className={props.small ? "font-bold" : "text-2xl"}>{props.value}</p>
       </div>
       {props.href ? (
         <Link href={props.href} className="text-light-grey fill-light-grey">
