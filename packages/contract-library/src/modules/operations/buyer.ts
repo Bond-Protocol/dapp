@@ -9,9 +9,7 @@ import {
 } from 'ethers';
 import { Provider } from '@ethersproject/providers';
 import {
-  BOND_TYPE,
-  getAuctioneerFactoryForName,
-  getAuctioneerFactoryForType,
+  BOND_TYPE, getAuctioneerFactoryForName, getAuctioneerFactoryForType,
   getBaseBondTeller,
   getTellerContract,
 } from '../contract-helper';
@@ -118,14 +116,12 @@ export async function redeem(
       case BOND_TYPE.FIXED_EXPIRY_FPA:
       case BOND_TYPE.FIXED_EXPIRY_OFDA:
       case BOND_TYPE.FIXED_EXPIRY_OSDA:
-      case BOND_TYPE.FIXED_EXPIRY_DEPRECATED:
         teller = FixedExpirationTeller__factory.connect(tellerAddress, signer);
         break;
       case BOND_TYPE.FIXED_TERM_SDA:
       case BOND_TYPE.FIXED_TERM_FPA:
       case BOND_TYPE.FIXED_TERM_OFDA:
       case BOND_TYPE.FIXED_TERM_OSDA:
-      case BOND_TYPE.FIXED_TERM_DEPRECATED:
         teller = FixedTermTeller__factory.connect(tellerAddress, signer);
         break;
     }
@@ -256,11 +252,7 @@ export async function calcMarket(
     creationDate: '',
     callbackAddress: market.callbackAddress,
   };
-  const auctioneerContract = getAuctioneerFactoryForName(
-    market.name,
-    market.auctioneer,
-    provider,
-  );
+  const auctioneerContract = getAuctioneerFactoryForName(market.name, market.auctioneer, provider);
 
   const payoutTokenContract = IERC20__factory.connect(
     market.payoutToken.address,
@@ -352,24 +344,20 @@ export async function calcMarket(
     minimumFractionDigits: digits,
   }).format(calculatedMarket.maxPayoutUsd);
 
-  const decimals = markets.capacityInQuote
-    ? market.quoteToken.decimals
-    : market.payoutToken.decimals;
+  const decimals = markets.capacityInQuote ? market.quoteToken.decimals : market.payoutToken.decimals;
   calculatedMarket.currentCapacity =
     Number(currentCapacity) / Math.pow(10, decimals);
 
-  calculatedMarket.capacityToken = markets.capacityInQuote
-    ? market.quoteToken.symbol
-    : market.payoutToken.symbol;
+  calculatedMarket.capacityToken = markets.capacityInQuote ? market.quoteToken.symbol : market.payoutToken.symbol;
 
   // @ts-ignore
   if (market.quoteToken.lpPair != undefined && lpType != undefined) {
     let lpMarketPrice;
-    if ('poolAddress' in market.quoteToken) {
+    if ("poolAddress" in market.quoteToken) {
       lpMarketPrice = await calcBalancerPoolPrice(
         // @ts-ignore
         market.quoteToken,
-        provider,
+        provider
       );
     } else {
       lpMarketPrice = await calcLpPrice(
@@ -409,14 +397,14 @@ export async function calcMarket(
   if (calculatedMarket.isInstantSwap) {
     calculatedMarket.formattedLongVesting = 'Immediate Payout';
     calculatedMarket.formattedShortVesting = 'Immediate';
-  } else if (calculatedMarket.vestingType === 'fixed-term') {
+  } else if (calculatedMarket.vestingType === "fixed-term") {
     calculatedMarket.formattedLongVesting = longVestingPeriod(
       calculatedMarket.vesting,
     );
     calculatedMarket.formattedShortVesting = longVestingPeriod(
       calculatedMarket.vesting,
     );
-  } else if (calculatedMarket.vestingType === 'fixed-expiry') {
+  } else if (calculatedMarket.vestingType === "fixed-expiry") {
     calculatedMarket.formattedLongVesting = format(
       new Date(calculatedMarket.vesting * 1000),
       'do MMM y',
