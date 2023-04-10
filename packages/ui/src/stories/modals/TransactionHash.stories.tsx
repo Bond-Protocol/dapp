@@ -1,8 +1,7 @@
-import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { TransactionHashDialog } from "../../components/modals";
-
 import { ModalDecorator, blockExplorerUrl } from "../decorators";
+
+import { TransactionHashDialog } from "components";
 
 export default {
   title: "Components/Modals/TransactionHash",

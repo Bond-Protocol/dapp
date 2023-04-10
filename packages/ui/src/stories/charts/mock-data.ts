@@ -1679,4 +1679,4 @@ export default [
     discount: -1.685800206795099,
     price: 0.00087352,
   },
-];
+].map((d) => ({ ...d, minPrice: 0.000871, initialPrice: 0.001 }));

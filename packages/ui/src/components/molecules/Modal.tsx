@@ -3,7 +3,7 @@ import ModalUnstyled from "@mui/base/ModalUnstyled";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
 
 type ModalHeaderProps = {
-  onClickClose?: () => void;
+  onClickClose?: (e: React.BaseSyntheticEvent) => void;
   topLeftContent?: string | React.ReactNode;
 };
 
@@ -14,7 +14,7 @@ export type ModalProps = ModalHeaderProps & {
   large?: boolean;
 };
 
-const ModalBackdrop = forwardRef(function ModalContainer(
+export const ModalBackdrop = forwardRef(function ModalContainer(
   props: { children: React.ReactNode },
   ref: React.ForwardedRef<HTMLDivElement>
 ) {
@@ -28,9 +28,9 @@ const ModalBackdrop = forwardRef(function ModalContainer(
   );
 });
 
-const ModalHeader = (props: ModalHeaderProps) => {
+export const ModalHeader = (props: ModalHeaderProps) => {
   return (
-    <div className="text-light-secondary fill-light-secondary flex select-none justify-between p-2 pt-1">
+    <div className="text-light-secondary fill-light-secondary flex select-none items-center justify-between p-2 pt-1">
       <p className="font-fraktion my-auto p-2 font-bold uppercase tracking-wide">
         {props?.topLeftContent}
       </p>
@@ -43,7 +43,11 @@ const ModalHeader = (props: ModalHeaderProps) => {
   );
 };
 
-const ModalBackground = ({ children }: { children: React.ReactNode }) => {
+export const ModalBackground = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <div className="bg-light-black rounded-lg border-transparent">
       {children}
@@ -62,7 +66,7 @@ export const Modal = ({ title, ...props }: ModalProps) => {
     >
       <ModalBackdrop>
         <ModalBackground>
-          <div className={`${props.large ? "w-[576px] pb-20" : "w-[405px]"} `}>
+          <div className={`min-w-[200px] max-w-[650px]`}>
             <ModalHeader
               topLeftContent={title}
               onClickClose={props.onClickClose}

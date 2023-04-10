@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { CreateMarketPage, IssueMarketPage } from "components/organisms";
+import { CreateMarketController } from "components/modules/create-market";
 import { socials, PageHeader, PageNavigation } from "components/common";
+import { CreateMarketProvider } from "ui";
 
 const docsSublink = "/bond-marketplace/deploy-a-bond-market";
 
@@ -33,21 +34,10 @@ export const CreateMarket = (props: CreateMarketProps) => {
         rightText="READ DOCS"
       />
       <PageHeader className="mt-8" title={title} subtitle={subtitle} />
-      <div className="mt-14">
-        {!isPreview ? (
-          <CreateMarketPage
-            initialValues={initialValues}
-            onConfirm={onPreview}
-          />
-        ) : (
-          <IssueMarketPage
-            data={marketData}
-            onEdit={() => setSelected(0)}
-            onExecute={(marketData) => {
-              props.onExecute(marketData);
-            }}
-          />
-        )}
+      <div className="mt-4">
+        <CreateMarketProvider>
+          <CreateMarketController />
+        </CreateMarketProvider>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { FilterBox } from "../../components/molecules/FilterBox";
+import { FilterBox } from "components";
 
 export default {
   title: "Design System/Molecules/FilterBox",

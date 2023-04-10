@@ -90,13 +90,14 @@ export function getMarketData(
     let vestingType = '';
     if (teller === addresses.fixedTermTeller) {
       vestingType = 'fixed-term';
-    } else if (teller === addresses.fixedExpirationTeller) {
+    } else if (teller === addresses.fixedExpiryTeller) {
       vestingType = 'fixed-expiration';
     }
 
     return {
       id: marketId.toString(),
       chainId: chainId,
+      name: "PLACEHOLDER", // TODO: Use auctioneer name
       auctioneer: auctioneer,
       teller: teller,
       owner: marketInfo.owner,

@@ -1,12 +1,12 @@
 import { getProtocol } from "@bond-protocol/bond-library";
-import { Button, Column, DiscountLabel } from "ui";
+import { Button, Column, DiscountLabel, formatDate } from "ui";
 import { add } from "date-fns";
 import {
   longFormatter,
   usdLongFormatter,
   usdFormatter,
 } from "src/utils/format";
-import { formatDate, getTokenDetailsForMarket } from "src/utils";
+import { getTokenDetailsForMarket } from "src/utils";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { CHAINS } from "@bond-protocol/bond-library";

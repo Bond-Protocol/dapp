@@ -20,13 +20,14 @@
     "codegen": "turbo run codegen",
     "storybook": "turbo run storybook",
     "build:storybook": "turbo run build:storybook",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "test:open": "turbo run test:open"
   },
   "devDependencies": {
-    "turbo": "^1.6.3",
+    "eslint": "^8.17.0",
+    "eslint-config-custom": "*",
     "prettier": "^2.7.0",
     "prettier-plugin-tailwindcss": "^0.1.11",
-    "eslint": "^8.17.0",
-    "eslint-config-custom": "*"
+    "turbo": "^1.6.3"
   }
 }

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import {
   LineChart as Chart,
   Line,
@@ -21,10 +22,11 @@ export type BondPriceChartProps = {
   data: Array<BondPriceDatapoint>;
   payoutTokenSymbol: string;
   className?: string;
+  disableTooltip?: boolean;
 };
 
-const getBottomDomain = (min: number) => min - min / 90;
-const getTopDomain = (max: number) => max + max / 90;
+export const getBottomDomain = (min: number) => min - min / 90;
+export const getTopDomain = (max: number) => max + max / 90;
 
 export const BondPriceChart = (props: BondPriceChartProps) => {
   if (!props.data.length) {
@@ -55,12 +57,27 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
             strokeDasharray="6 2"
             strokeWidth={2}
           />
-          <Tooltip
-            wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
-            content={
-              <BondPriceChartTooltip tokenSymbol={props.payoutTokenSymbol} />
-            }
+          <Line
+            dot={false}
+            stroke="#F2A94A"
+            dataKey="initialPrice"
+            strokeDasharray="6 2"
+            strokeWidth={2}
           />
+          <Line
+            dot={false}
+            strokeWidth={1}
+            stroke="#FF0606"
+            dataKey="minPrice"
+          />
+          {!props.disableTooltip && (
+            <Tooltip
+              wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
+              content={
+                <BondPriceChartTooltip tokenSymbol={props.payoutTokenSymbol} />
+              }
+            />
+          )}
         </Chart>
       </ResponsiveContainer>
     </div>

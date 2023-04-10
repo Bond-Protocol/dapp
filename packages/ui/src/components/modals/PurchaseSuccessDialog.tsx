@@ -8,11 +8,11 @@ export type PurchaseSuccessDialogProps = {
 
 export const PurchaseSuccessDialog = (props: PurchaseSuccessDialogProps) => {
   return (
-    <div className="text-center">
+    <div className="min-w-[360px] text-center">
       <p className="mt-5">Thanks for bonding at {props.issuer}</p>
       <div className="mt-8 flex h-[40px] justify-between gap-2">
         <ButtonGroup
-          leftLabel="View Mktplace"
+          leftLabel="View Markets"
           rightLabel="View My Bond"
           onClickLeft={props.goToMarkets}
           onClickRight={props.goToBondDetails}

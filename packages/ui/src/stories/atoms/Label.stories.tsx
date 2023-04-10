@@ -1,7 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { Label } from "../../components/atoms/Label";
-import logo from "../../assets/logo-24.svg";
-import { Link, Tooltip } from "../../components/atoms";
+import logo from "assets/logo-24.svg";
+import { Label, Link, Tooltip } from "components";
 
 export default {
   title: "Design System/Atoms/Label",

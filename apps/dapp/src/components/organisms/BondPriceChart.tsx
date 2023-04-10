@@ -12,6 +12,7 @@ export type BondDiscountChartProps = {
 export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
   const [range, setRange] = useState(7);
   const { dataset, isLoading, purchases } = useBondChartData(market, range);
+  console.log({ dataset });
 
   if (isLoading || !purchases) {
     return <div />;

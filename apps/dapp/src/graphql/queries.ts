@@ -2,7 +2,7 @@ import { gql } from "graphql-request";
 
 export const listMarkets = gql`
   query ListMarkets($addresses: [String!]!, $queryKey: String! = "") {
-    markets(where: { isLive: true, owner_in: $addresses }) {
+    markets(where: { hasClosed: false, owner_in: $addresses }) {
       id
       name
       network
@@ -64,7 +64,7 @@ export const listMarkets = gql`
       vesting
       vestingType
       isInstantSwap
-      isLive
+      hasClosed
       totalBondedAmount
       totalPayoutAmount
       creationBlockTimestamp
@@ -192,7 +192,7 @@ export const listOwnedMarkets = gql`
       vesting
       vestingType
       isInstantSwap
-      isLive
+      hasClosed
       totalBondedAmount
       totalPayoutAmount
       creationBlockTimestamp

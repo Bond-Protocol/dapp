@@ -1,5 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { CreateMarketTermsDialog } from "../../components/modals";
+import { CreateMarketTermsDialog } from "components";
 
 import { ModalDecorator } from "../decorators";
 
