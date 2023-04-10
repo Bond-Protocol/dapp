@@ -33,7 +33,7 @@ import {
 } from 'types';
 
 export enum BOND_TYPE {
-  FIXED_EXPIRY_DEPRECATED = 'fixed-expiry',
+  FIXED_EXPIRY_DEPRECATED = 'fixed-expiration',
   FIXED_EXPIRY_SDA = 'fixed-expiry-sda',
   FIXED_EXPIRY_FPA = 'fixed-expiry-fpa',
   FIXED_EXPIRY_OFDA = 'fixed-expiry-ofda',
