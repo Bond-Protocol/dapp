@@ -7,7 +7,7 @@ import {
   trim,
 } from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
-import { InfoLabel, Loading } from "ui";
+import { dateMath, InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
@@ -43,6 +43,10 @@ export const MarketInsights = () => {
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
       : market.formattedShortVesting;
+
+  const startDate = market.start && new Date(market.start * 1000);
+  const isFutureMarket =
+    !!startDate && dateMath.isBefore(new Date(), startDate);
 
   return (
     <div>
@@ -97,15 +101,17 @@ export const MarketInsights = () => {
           {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
         </InfoLabel>
         <InfoLabel
-          label="Remaing Capacity"
+          label={`${isFutureMarket ? "Total" : "Remaining"} Capacity`}
           tooltip="The remaining amount of tokens to be bonded in this market"
         >
           {`${market.currentCapacity} ${market.capacityToken}`}
         </InfoLabel>
       </div>
 
-      <BondCard market={market} />
-      <TransactionHistory className="mt-20" market={market} />
+      <BondCard market={market} isFutureMarket={isFutureMarket} />
+      {!isFutureMarket && (
+        <TransactionHistory className="mt-20" market={market} />
+      )}
     </div>
   );
 };

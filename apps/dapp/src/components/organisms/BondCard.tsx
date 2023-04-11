@@ -7,15 +7,22 @@ import { formatDate, SummaryLabel } from "ui";
 export type BondCardProps = {
   market: CalculatedMarket;
   className?: string;
+  isFutureMarket?: boolean;
 };
 
 export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
   return (
     <div className={`flex gap-4 ${props.className}`}>
-      <div className="flex w-1/2">
-        <BondPriceChart market={market} />
-      </div>
-      <div className="flex w-1/2 flex-col">
+      {!props.isFutureMarket && (
+        <div className="flex w-1/2">
+          <BondPriceChart market={market} />
+        </div>
+      )}
+      <div
+        className={`flex w-full flex-col justify-center ${
+          props.isFutureMarket ? "w-full" : "w-1/2"
+        }`}
+      >
         <div className="mb-2 flex gap-x-1">
           {market?.start && (
             <SummaryLabel
@@ -40,7 +47,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
             />
           )}
         </div>
-        <BondPurchaseCard market={market} />
+        {!props.isFutureMarket && <BondPurchaseCard market={market} />}
       </div>
     </div>
   );

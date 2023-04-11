@@ -8,6 +8,7 @@ export type InputCardProps = {
   value?: string;
   market: any;
   tokenIcon?: string;
+  disabled?: boolean;
 };
 
 export const InputCard = ({

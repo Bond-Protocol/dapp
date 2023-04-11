@@ -24,6 +24,7 @@ import { getTokenDetails } from "src/utils";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
+  disabled?: boolean;
 };
 
 const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
