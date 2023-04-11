@@ -96,7 +96,10 @@ export const MarketInsights = () => {
         >
           {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
         </InfoLabel>
-        <InfoLabel label="Remaing Capacity">
+        <InfoLabel
+          label="Remaing Capacity"
+          tooltip="The remaining amount of tokens to be bonded in this market"
+        >
           {`${market.currentCapacity} ${market.capacityToken}`}
         </InfoLabel>
       </div>

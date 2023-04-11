@@ -1,36 +1,50 @@
-import { Link, TokenLogo } from "components/atoms";
+import {
+  Link,
+  TokenLogo,
+  Tooltip,
+  TooltipIcon,
+  TooltipWrapper,
+} from "components/atoms";
 
 export const SummaryLabel = (props: {
   icon?: string;
   value: string;
   subtext?: string;
+  tooltip?: string;
   className?: string;
   href?: string;
   small?: boolean;
 }) => {
   return (
-    <div
-      className={`font-fraktion bg-white/5 p-4 pt-3 ${
-        props.small ? "text-center" : ""
-      } ${props.className}`}
-    >
+    <TooltipWrapper content={props.tooltip} className={props.className}>
       <div
-        className={`flex items-center ${props.small ? "justify-center" : ""}`}
+        className={`font-fraktion bg-white/5 p-4 pt-3 ${
+          props.small ? "text-center" : ""
+        } ${props.tooltip ? "" : props.className}`}
       >
-        {props.icon && (
-          <TokenLogo className="-ml-1 mr-2 w-[24px]" icon={props.icon} />
+        <div
+          className={`flex items-center ${props.small ? "justify-center" : ""}`}
+        >
+          {props.icon && (
+            <TokenLogo className="-ml-1 mr-2 w-[24px]" icon={props.icon} />
+          )}
+          <p className={props.small ? "font-bold" : "text-2xl"}>
+            {props.value}
+          </p>
+        </div>
+        {props.href ? (
+          <Link href={props.href} className="text-light-grey fill-light-grey">
+            {props.subtext}
+          </Link>
+        ) : (
+          <div className="flex items-center justify-center">
+            <p className="text-light-grey text-base font-bold leading-none">
+              {props.subtext}
+            </p>
+            {props.tooltip && <TooltipIcon className="fill-light-grey ml-1" />}
+          </div>
         )}
-        <p className={props.small ? "font-bold" : "text-2xl"}>{props.value}</p>
       </div>
-      {props.href ? (
-        <Link href={props.href} className="text-light-grey fill-light-grey">
-          {props.subtext}
-        </Link>
-      ) : (
-        <p className="text-light-grey text-base leading-none">
-          {props.subtext}
-        </p>
-      )}
-    </div>
+    </TooltipWrapper>
   );
 };

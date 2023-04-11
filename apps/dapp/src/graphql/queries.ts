@@ -17,6 +17,7 @@ export const listMarkets = gql`
       minPrice
       scale
       start
+      conclusion
       payoutToken {
         id
         address

@@ -222,7 +222,6 @@ export async function calcMarket(
 ): Promise<CalculatedMarket> {
   const calculatedMarket: CalculatedMarket = {
     id: market.id,
-    start: market.start,
     chainId: market.chainId,
     auctioneer: market.auctioneer,
     teller: market.teller,

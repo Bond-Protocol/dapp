@@ -2,7 +2,7 @@ import { FC } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondPriceChart } from "components/organisms/BondPriceChart";
 import { BondPurchaseCard } from "components/organisms";
-import { InfoLabel, formatDate, SummaryLabel } from "ui";
+import { formatDate, SummaryLabel } from "ui";
 
 export type BondCardProps = {
   market: CalculatedMarket;
@@ -21,15 +21,24 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
             <SummaryLabel
               small
               subtext="MARKET START DATE"
-              value={formatDate.short(new Date())}
+              className="w-full text-center"
+              tooltip={`This market hasn't opened yet and will be open on ${formatDate.long(
+                new Date(market.start * 1000)
+              )}`}
+              value={formatDate.short(new Date(market.start * 1000))}
             />
           )}
-          <SummaryLabel
-            small
-            className="w-full text-center"
-            subtext="MARKET END DATE"
-            value={formatDate.short(new Date())}
-          />
+          {market.conclusion && (
+            <SummaryLabel
+              small
+              className="w-full text-center"
+              subtext="MARKET END DATE"
+              tooltip={`Market will close and no longer be available on ${formatDate.long(
+                new Date(market.conclusion * 1000)
+              )}`}
+              value={formatDate.short(new Date(market.conclusion * 1000))}
+            />
+          )}
         </div>
         <BondPurchaseCard market={market} />
       </div>
