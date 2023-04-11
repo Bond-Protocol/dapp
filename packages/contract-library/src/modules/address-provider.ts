@@ -20,6 +20,31 @@ export type AddressesForType = {
   auctioneer: string;
 };
 
+export type BaseMarketPricing = 'dynamic' | 'static';
+export type OracleMarketPricing = 'oracle-dynamic' | 'oracle-static';
+export type MarketPricing = BaseMarketPricing | OracleMarketPricing;
+
+export const getMarketTypeByAuctioneer = (address: string): MarketPricing => {
+  switch (address.toLowerCase()) {
+    case mainnetAddresses.fixedExpiryFPAAuctioneer.toLowerCase():
+    case mainnetAddresses.fixedTermFPAAuctioneer.toLowerCase():
+      return 'static';
+
+    case mainnetAddresses.fixedExpiryOFDAAuctioneer.toLowerCase():
+    case mainnetAddresses.fixedTermOFDAAuctioneer.toLowerCase():
+      return 'oracle-static';
+
+    case mainnetAddresses.fixedExpiryOSDAAuctioneer.toLowerCase():
+    case mainnetAddresses.fixedTermOSDAAuctioneer.toLowerCase():
+      return 'oracle-dynamic';
+
+    case mainnetAddresses.fixedExpirySDAAuctioneer.toLowerCase():
+    case mainnetAddresses.fixedTermSDAAuctioneer.toLowerCase():
+    default:
+      return 'dynamic';
+  }
+};
+
 const mainnetAddresses: ContractAddresses = {
   authority: '0x007A0F48A4e3d74Ab4234adf9eA9EB32f87b4b14',
   aggregator: '0x007A66A2a13415DB3613C1a4dd1C942A285902d1',

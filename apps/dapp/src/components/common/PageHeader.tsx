@@ -3,31 +3,33 @@ import { TokenLogo, TokenLogoProps } from "ui";
 export interface PageHeaderProps extends TokenLogoProps {
   title?: string;
   subtitle?: string;
+  underTitle?: string;
   className?: string;
 }
 
 export const PageHeader = (props: PageHeaderProps) => {
   return (
-    <>
-      <div
-        className={`flex select-none font-fraktion font-bold uppercase ${props.className}`}
-      >
+    <div className="w-full">
+      <div className={`flex select-none font-bold ${props.className}`}>
         {props.icon && (
-          <TokenLogo {...props} size="lg" className="my-auto pl-0.5" />
+          <TokenLogo {...props} size="lg" className="my-auto mr-2 ml-3" />
         )}
-        {props.title && (
-          <div
-            className={`my-auto text-5xl ${props.icon && "pl-4"} leading-10`}
-          >
-            {props.title}
-          </div>
-        )}
+        <div className="my-auto">
+          {props.title && (
+            <div className={`my-auto font-fraktion text-5xl leading-10`}>
+              {props.title}
+            </div>
+          )}
+          {props.underTitle && (
+            <div className="font-light text-light-grey">{props.underTitle}</div>
+          )}
+        </div>
       </div>
       {props.subtitle && (
         <div className="select-none py-2 font-sans text-[15px] font-extralight">
           {props.subtitle}
         </div>
       )}
-    </>
+    </div>
   );
 };

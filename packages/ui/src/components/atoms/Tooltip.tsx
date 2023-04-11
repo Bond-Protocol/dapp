@@ -76,7 +76,7 @@ export const TooltipWrapper = (props: TooltipProps) => {
         id={id}
         onMouseEnter={handleClick}
         onMouseLeave={onClose}
-        className={"cursor-help" + " " + props.className}
+        className={"w-full cursor-help" + " " + props.className}
       >
         {props.children}
       </div>

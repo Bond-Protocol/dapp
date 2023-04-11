@@ -24,12 +24,12 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         }`}
       >
         <div className="mb-2 flex gap-x-1">
-          {market?.start && (
+          {props.isFutureMarket && market.start && (
             <SummaryLabel
               small
               subtext="MARKET START DATE"
               className="w-full text-center"
-              tooltip={`This market hasn't opened yet and will be open on ${formatDate.long(
+              tooltip={`This market will open on ${formatDate.long(
                 new Date(market.start * 1000)
               )}`}
               value={formatDate.short(new Date(market.start * 1000))}
