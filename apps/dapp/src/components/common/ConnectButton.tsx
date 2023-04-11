@@ -1,6 +1,7 @@
 import { ConnectButton as ConnectButtonUnstyled } from "@rainbow-me/rainbowkit";
 import { Button, Icon } from "ui";
 import arbitrum from "assets/icons/arbitrum.svg";
+import repeatIcon from "assets/icons/loop.svg";
 
 export interface ConnectButtonProps {
   full?: boolean;
@@ -21,7 +22,6 @@ export const ConnectButton = (props: ConnectButtonProps) => {
         // can remove all 'authenticationStatus' checks
         const ready = mounted;
         const connected = ready && account && chain;
-        console.log({ chain });
 
         return (
           <div

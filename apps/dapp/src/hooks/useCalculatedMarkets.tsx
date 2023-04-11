@@ -17,6 +17,7 @@ export function useCalculatedMarkets() {
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
   const [issuers, setIssuers] = useState<string[]>([]);
   const [marketsByIssuer, setMarketsByIssuer] = useState(new Map());
+  console.log({ markets });
 
   const calculateMarket = async (market: Market) => {
     const requestProvider = providers[market.chainId];
@@ -70,6 +71,7 @@ export function useCalculatedMarkets() {
           name: market.name,
           auctioneer: market.auctioneer,
           teller: market.teller,
+          start: market.start,
           owner: market.owner,
           vesting: market.vesting,
           vestingType: market.vestingType,

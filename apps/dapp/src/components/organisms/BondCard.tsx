@@ -16,8 +16,8 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         <BondPriceChart market={market} />
       </div>
       <div className="flex w-1/2 flex-col">
-        <div className="flex gap-x-1">
-          {market?.startDate && (
+        <div className="mb-2 flex gap-x-1">
+          {market?.start && (
             <SummaryLabel
               small
               subtext="MARKET START DATE"
