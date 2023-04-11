@@ -22,7 +22,7 @@ export const CreateMarket = (props: CreateMarketProps) => {
   };
 
   const isPreview = selected === 1;
-  const title = !isPreview ? "Deploy Market" : "Setup Bond Market";
+  const title = !isPreview ? "DEPLOY MARKET" : "SETUP BOND MARKET";
   const subtitle = isPreview
     ? "Confirm and deploy your bond market"
     : "Setup your market and launch it on Bond Protocol";

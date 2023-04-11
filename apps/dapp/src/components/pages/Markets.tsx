@@ -9,7 +9,7 @@ export const Markets = () => {
   return (
     <>
       <PageHeader
-        title={"Live Markets"}
+        title={"LIVE MARKETS"}
         subtitle={"Instantly acquire governance tokens at a discount"}
       />
       <div className="pt-10">

@@ -53,7 +53,7 @@ export const IssuerList = () => {
 
   return (
     <>
-      <PageHeader title="Bond Issuers" />
+      <PageHeader title="BOND ISSUERS" />
       <div className="flex gap-x-4 py-10">
         <InfoLabel
           reverse

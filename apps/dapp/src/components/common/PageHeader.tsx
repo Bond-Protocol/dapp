@@ -3,7 +3,7 @@ import { TokenLogo, TokenLogoProps } from "ui";
 export interface PageHeaderProps extends TokenLogoProps {
   title?: string;
   subtitle?: string;
-  underTitle?: string;
+  underTitle?: string | React.ReactNode;
   className?: string;
 }
 
