@@ -50,9 +50,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   const { getPrice } = useTokens();
 
-  const quotePrice = getPrice(market.quoteToken.id);
-  const payoutPrice = getPrice(market.payoutToken.id);
-
   const { getGasPrice } = useGasPrice();
   const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
   const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
@@ -93,19 +90,42 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     ? NO_REFERRAL_ADDRESS
     : REFERRAL_ADDRESS;
 
-  useEffect(() => {
-    if (gasPrice && estimatedGas) {
-      const estimate = Number(gasPrice.gasPrice) * Number(estimatedGas);
-      const usdEstimate = Number(gasPrice.usdPrice) * Number(estimatedGas);
-      setNetworkFee(trim(estimate, calculateTrimDigits(estimate)));
-      setNetworkFeeUsd(trim(usdEstimate, calculateTrimDigits(usdEstimate)));
-    }
-  }, [gasPrice, estimatedGas]);
+  const setGasFee = () => {
+    const estimate = Number(gasPrice.gasPrice) * Number(estimatedGas);
+    const usdEstimate = Number(gasPrice.usdPrice) * Number(estimatedGas);
+    setNetworkFee(trim(estimate, calculateTrimDigits(estimate)));
+    setNetworkFeeUsd(trim(usdEstimate, calculateTrimDigits(usdEstimate)));
+  };
 
   const vestingLabel =
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
       : market.formattedShortVesting;
+
+  const fetchAndSetGas = async () => {
+    const amountForEstimate = Number(amount) > 0 ? amount : "1";
+    try {
+      const [gas, price] = await Promise.all([
+        estimate(amountForEstimate),
+        getGasPrice(nativeCurrency, nativeCurrencyPrice, provider),
+      ]);
+
+      setEstimatedGas(Number(gas?.toString()));
+      setGasPrice(price);
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    fetchAndSetGas();
+  }, [payout]);
+
+  useEffect(() => {
+    if (signer) fetchAndSetGas();
+  }, [signer]);
+
+  useEffect(() => {
+    if (gasPrice && estimatedGas) setGasFee();
+  }, [gasPrice, estimatedGas]);
 
   useEffect(() => {
     const updatePayout = async () => {
@@ -126,18 +146,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
     void updatePayout();
   }, [amount, getPayoutFor, market.marketId, market.auctioneer]);
-
-  useEffect(() => {
-    void estimate()?.then((result) => {
-      setEstimatedGas(Number(result));
-    });
-
-    void getGasPrice(nativeCurrency, nativeCurrencyPrice, provider).then(
-      (result) => {
-        setGasPrice(result);
-      }
-    );
-  }, [payout]);
 
   const approveSpending = () =>
     approve(
@@ -172,7 +180,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     },
     {
       leftLabel: "Estimated Gas Fee",
-      rightLabel: `${networkFee} ${nativeCurrency.symbol} ($${networkFeeUsd})`,
+      rightLabel: `${networkFee} ${nativeCurrency.symbol}`,
       tooltip:
         "Estimated gas fee for this transaction. NOTE: gas fees fluctuate and the price displayed may not be the price you pay.",
     },
@@ -183,7 +191,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     },
   ];
 
-  const estimate = () => {
+  const estimate = (amount: string) => {
     if (!address) return;
 
     try {

@@ -35,7 +35,6 @@ export const MarketInsights = () => {
 
   if (!market) return <Loading content={meme()} />;
 
-  console.log({ market });
   const { payout } = getTokenDetailsForMarket(market);
   const protocol = getProtocol(market.owner);
 
@@ -62,7 +61,6 @@ export const MarketInsights = () => {
   const type = getMarketTypeByAuctioneer(market.auctioneer);
   const marketTypeLabel = pricingLabels[type];
 
-  console.log({ auctioneer: market.auctioneer, type, marketTypeLabel });
   return (
     <div>
       <PageNavigation
