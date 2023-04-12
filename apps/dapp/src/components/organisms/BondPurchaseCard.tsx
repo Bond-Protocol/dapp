@@ -103,7 +103,11 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
       : market.formattedShortVesting;
 
   const fetchAndSetGas = async () => {
-    const amountForEstimate = Number(amount) > 0 ? amount : "1";
+    const amountForEstimate =
+      Number(amount) > 0
+        ? amount
+        : String(Number(market.maxAmountAccepted) * 0.9);
+
     try {
       const [gas, price] = await Promise.all([
         estimate(amountForEstimate),

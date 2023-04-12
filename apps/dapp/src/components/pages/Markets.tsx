@@ -19,7 +19,7 @@ export const Markets = () => {
       </div>
       <MarketList hideSearchbar filterText={filterText} />
       <ActionCard
-        className="mt-8"
+        className="mt-8 mb-6"
         title="Don't see a bond?"
         leftLabel="Why Bond"
         rightLabel="Issue a bond"

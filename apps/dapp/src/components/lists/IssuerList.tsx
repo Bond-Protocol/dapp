@@ -130,7 +130,7 @@ export const IssuerList = () => {
         </div>
       )}
       <ActionCard
-        className="mt-6"
+        className="my-6"
         title="Do you wanna issue a bond?"
         leftLabel="Why Bond"
         rightLabel="Issue a bond"

@@ -23,7 +23,7 @@ export const App: FC = () => {
         <Providers>
           <AppStatusBanner />
           <div className="flex h-full min-h-[100vh] flex-col justify-between">
-            <div className="h-full overflow-x-hidden pb-16 font-jakarta antialiased">
+            <div className="h-full overflow-x-hidden font-jakarta antialiased">
               <Navbar />
               <AppBackdrop />
               <PolicyRoutes />
