@@ -12,7 +12,7 @@ import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { environment } from "src/environment";
 import { useMultipleTokensFromCoingecko } from "./useCoingecko";
 import { useLoadCustomPriceFunctions } from "./useLoadCustomPriceFunctions";
-import { getTokenDetails } from "src/utils";
+import { getTokenDecimalsFromChain, getTokenDetails } from "src/utils";
 
 export interface PriceDetails {
   price: string;
@@ -23,16 +23,23 @@ export type Price = Record<string, PriceDetails>;
 
 type BondLibraryToken = bondLibrary.Token & { key: string };
 
-const allTokens: Array<BondLibraryToken> = Array.from(bondLibrary.TOKENS.keys())
+const allTokens: Array<
+  BondLibraryToken & { address: string; chainId: string }
+> = Array.from(bondLibrary.TOKENS.keys())
   .filter((key) => {
     const split: string[] = key.split("_");
     let chainId = split[0];
     return providers[chainId] != undefined;
   })
-  .map((key) => ({
-    ...bondLibrary.TOKENS.get(key)!,
-    key,
-  }));
+  .map((key) => {
+    const [chainId, address]: string[] = key.split("_");
+    return {
+      ...bondLibrary.TOKENS.get(key)!,
+      key,
+      chainId,
+      address,
+    };
+  });
 
 const baseTokens = allTokens.filter((t) => !("lpType" in t));
 const lpTokens = allTokens
@@ -48,6 +55,7 @@ export const useTokenPrices = () => {
 
   const subgraphQueries = getSubgraphQueries(useListTokensQuery);
   const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
+  const [allDecimals, setDecimals] = useState<Record<string, number>>({});
 
   const coingeckoQuery = useMultipleTokensFromCoingecko();
   const customPriceQuery = useLoadCustomPriceFunctions();
@@ -237,30 +245,57 @@ export const useTokenPrices = () => {
   }
 
   useEffect(() => {
-    if (tokens.length > 0 && Object.keys(currentPrices).length > 0) {
-      const updatedTokens = tokens.map((t) => {
-        const price = getPrice(t.id);
-        const details = getTokenDetails(t);
+    if (
+      allTokens.length > 0 &&
+      Object.keys(currentPrices).length > 0 &&
+      Object.keys(allDecimals).length > 0
+    ) {
+      const updatedTokens = allTokens.map((t) => {
+        const price = getPrice(t.key);
+        const details = getTokenDetails({ id: t.key, ...t });
 
+        const decimals = allDecimals[t.key];
         const apiId = details.priceSources?.find((s) => s?.apiId)?.apiId;
 
         return {
           ...t,
+          id: t.key,
           icon: details.logoUrl,
-          decimals: Number(t.decimals),
-          chainId: Number(t.chainId),
+          decimals: Number(decimals),
+          chainId: Number(details.chainId),
           price,
           apiId,
           priceSources: details.priceSources,
+          address: t.address,
           addresses: {
-            [t.network]: t.address,
+            [details.chainId]: details.address,
           },
         };
       });
+      //@ts-ignore
       setCreateMarketTokens(updatedTokens);
     }
-  }, [tokens, currentPrices]);
+  }, [tokens, currentPrices, allDecimals]);
 
+  const loadDecimals = async () => {
+    const allDecimals = await Promise.all(
+      allTokens.map(async (t) => {
+        return {
+          key: t.key,
+          decimals: await getTokenDecimalsFromChain(t.address, t.chainId),
+        };
+      })
+    );
+
+    const updated = allDecimals.reduce((acc, ele) => {
+      return { ...acc, [ele.key]: ele.decimals };
+    }, {});
+    setDecimals(updated);
+  };
+
+  useEffect(() => {
+    loadDecimals();
+  }, []);
   /*
   tokens:         An array of all Tokens the Subgraph has picked up on mainnet networks
   currentPrices:  A map with Token ID as key and an array of Price objects ordered by priority as value
@@ -271,6 +306,6 @@ export const useTokenPrices = () => {
     currentPrices,
     getPrice,
     getTokenDetails,
-    isLoading: false,
+    isLoading,
   };
 };
