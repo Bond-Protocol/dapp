@@ -37,11 +37,18 @@ export const SummaryLabel = (props: {
             {props.subtext}
           </Link>
         ) : (
-          <div className="flex items-center justify-center">
+          <div
+            className={
+              "flex items-center" + " " + props.small ? "justify-center" : ""
+            }
+          >
             <p className="text-light-grey text-base font-bold leading-none">
               {props.subtext}
+
+              {props.tooltip && (
+                <TooltipIcon className="fill-light-grey my-auto ml-1 inline-block" />
+              )}
             </p>
-            {props.tooltip && <TooltipIcon className="fill-light-grey ml-1" />}
           </div>
         )}
       </div>

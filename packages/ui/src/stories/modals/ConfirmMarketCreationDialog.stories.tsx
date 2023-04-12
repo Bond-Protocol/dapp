@@ -53,6 +53,6 @@ Primary.args = {
   submitMultisigCreation: () => {},
   submitCreateMarketTransaction: () => {},
   submitApproveSpendingTransaction: () => {},
-  getTeller: () => "",
+  getAuctioneer: () => "",
   getTxBytecode: () => "",
 };
