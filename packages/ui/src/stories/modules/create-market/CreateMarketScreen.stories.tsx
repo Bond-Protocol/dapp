@@ -21,7 +21,7 @@ Primary.args = {
   onSubmitMultisigCreation: () => {},
   projectionData: [],
   fetchAllowance: () => Promise.resolve(1),
-  getTeller: () => "",
+  getAuctioneer: () => "",
   getTxBytecode: () => "",
   chain: "",
   tokens: [],

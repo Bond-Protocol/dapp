@@ -111,12 +111,15 @@ const calculateVestingLabel = (state: CreateMarketState) => {
 //     .concat("/Day");
 // };
 
-// export const calculateDebtBuffer = (state: CreateMarketState) => {
-//   const duration = marketExpiryDays * 24 * 60 * 60;
-//   const depositInterval = (24 * 60 * 60) / (form.bondsPerWeek / 7);
-//   const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
-//   const debtBuffer =
-//     ((form.marketCapacity * 0.25) /
-//       ((form.marketCapacity * decayInterval) / duration)) *
-//     100;
-// };
+export const calculateDebtBuffer = (
+  marketDurationInDays: number,
+  bondsPerWeek: number,
+  capacity: number
+) => {
+  const duration = marketDurationInDays * 24 * 60 * 60;
+  const depositInterval = (24 * 60 * 60) / (bondsPerWeek / 7);
+  const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
+  return Math.round(
+    ((capacity * 0.25) / ((capacity * decayInterval) / duration)) * 100
+  );
+};

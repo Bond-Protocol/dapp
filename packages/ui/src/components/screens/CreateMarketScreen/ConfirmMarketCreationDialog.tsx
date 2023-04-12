@@ -2,10 +2,10 @@ import { Button, SummaryLabel, InfoList, Tooltip, Input } from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { CreateMarketState } from "components";
-import { formatDate } from "utils";
+import { dynamicFormatter, formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { CHAINS } from "@bond-protocol/bond-library/dist/src";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { Copy } from "components/atoms/Copy";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
@@ -53,7 +53,7 @@ const formatMarketState = (state: CreateMarketState) => {
         state.capacityType === "payout"
           ? state.payoutToken.symbol
           : state.quoteToken.symbol,
-      value: state.capacity,
+      value: dynamicFormatter(state.capacity, false),
     },
 
     startDate: formatDate.short(state.startDate as Date),
@@ -73,13 +73,13 @@ export const ConfirmMarketCreationDialog = ({
   submitApproveSpendingTransaction: React.MouseEventHandler<HTMLButtonElement>;
   submitCreateMarketTransaction: React.MouseEventHandler<HTMLButtonElement>;
   submitMultisigCreation: (txHash: string) => void;
-  getTeller: (chain: string, state: CreateMarketState) => string;
+  getAuctioneer: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => string;
 }) => {
   const chainName = CHAINS.get(props.chain)?.displayName;
   const bytecode = props.getTxBytecode(marketState);
-  const teller = props.getTeller(props.chain, marketState);
+  const auctioneer = props.getAuctioneer(props.chain, marketState);
   const formattedState = formatMarketState(marketState);
 
   const [txHash, setTxHash] = useState("");
@@ -89,7 +89,7 @@ export const ConfirmMarketCreationDialog = ({
     const getGasEstimate = async () => {
       const estimate = await props.estimateGas(marketState);
       setGasEstimate(estimate);
-    }
+    };
 
     getGasEstimate();
   }, []);
@@ -116,8 +116,8 @@ export const ConfirmMarketCreationDialog = ({
     { leftLabel: "Chain", rightLabel: chainName },
     {
       leftLabel: "Contract Address",
-      rightLabel: teller,
-      copy: teller,
+      rightLabel: auctioneer,
+      copy: auctioneer,
     },
     {
       leftLabel: "Payout Token",
@@ -230,8 +230,8 @@ export const ConfirmMarketCreationDialog = ({
         <div className="text-fraktion">
           <InfoList fields={multisigFields} />
 
-          <div className="mt-1 text-sm font-extralight bg-white/5">
-            <div className="flex flex-row mx-2">
+          <div className="mt-1 bg-white/5 text-sm font-extralight">
+            <div className="mx-2 flex flex-row">
               <h4 className="text-light-grey py-2.5 text-base font-light">
                 Transaction Bytecode
               </h4>
@@ -241,12 +241,12 @@ export const ConfirmMarketCreationDialog = ({
                 iconClassname={"pb-[1px] ml-0.5 fill-light-secondary-10"}
               />
             </div>
-            <p className="font-fraktion uppercase text-white break-words mx-2 pb-4 text-xs">
+            <p className="font-fraktion mx-2 break-words pb-4 text-xs uppercase text-white">
               {bytecode}
             </p>
           </div>
 
-          <div className="mt-5 px-2 text-sm justify-center font-extralight">
+          <div className="mt-5 justify-center px-2 text-sm font-extralight">
             After executing the transaction, enter the transaction hash below
             for final confirmation.
           </div>
