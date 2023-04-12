@@ -86,7 +86,7 @@ export const Dashboard = () => {
 
   return (
     <>
-      <PageHeader title={"Dashboard"} />
+      <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
         <LoadingIndicator loading={loading}>
           <div className="mt-10 flex gap-4">

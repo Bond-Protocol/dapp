@@ -1,7 +1,7 @@
 import { FC, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { Loading, PaginatedTable, Table } from "ui";
+import { Loading, PaginatedTable } from "ui";
 import { useMarkets } from "hooks";
 import { toTableData } from "src/utils/table";
 import { meme } from "src/utils/words";
@@ -16,6 +16,8 @@ type MarketListProps = {
   issuer?: string;
   allowManagement?: boolean;
   filter?: string[];
+  filterText?: string;
+  hideSearchbar?: boolean;
 };
 
 export const MarketList: FC<MarketListProps> = ({
@@ -34,7 +36,6 @@ export const MarketList: FC<MarketListProps> = ({
     .filter((m) => (issuer ? getProtocol(m.owner)?.id === issuer : true))
     .sort((a, b) => b.discount - a.discount);
 
-  console.log({ filteredMarkets });
   const tableMarkets = useMemo(
     () =>
       filteredMarkets
@@ -58,6 +59,8 @@ export const MarketList: FC<MarketListProps> = ({
 
   return (
     <PaginatedTable
+      hideSearchbar={props.hideSearchbar}
+      filterText={props.filterText}
       defaultSort="discount"
       columns={columns}
       data={tableMarkets}

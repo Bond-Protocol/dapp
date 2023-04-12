@@ -1,28 +1,41 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
-import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  calculateTrimDigits,
+  getMarketTypeByAuctioneer,
+  MarketPricing,
+  trim,
+} from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
-import { InfoLabel, Loading } from "ui";
+import { dateMath, dynamicFormatter, formatDate, InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
 import { getTokenDetailsForMarket } from "src/utils";
 import { longFormatter } from "src/utils/format";
 
+const pricingLabels: Record<MarketPricing, string> = {
+  dynamic: "Dynamic Price Market",
+  static: "Static Price Market",
+  "oracle-static": "Static Oracle Market",
+  "oracle-dynamic": "Dynamic Price Market",
+};
+
 export const MarketInsights = () => {
   const { allMarkets } = useMarkets();
   const { id, chainId } = useParams();
   const navigate = useNavigate();
   const markets = Array.from(allMarkets.values());
-  const market = markets.find(
+  const market: CalculatedMarket = markets.find(
     ({ marketId, chainId: marketChainId }) =>
       marketId === Number(id) && marketChainId === chainId
   );
 
   if (!market) return <Loading content={meme()} />;
 
-  const { quote, payout, lpPair } = getTokenDetailsForMarket(market);
+  const { payout } = getTokenDetailsForMarket(market);
   const protocol = getProtocol(market.owner);
 
   const maxPayout =
@@ -31,13 +44,22 @@ export const MarketInsights = () => {
       : market.maxPayout;
 
   const formattedPayout = longFormatter.format(
-    Number(trim(maxPayout, calculateTrimDigits(parseFloat(maxPayout))))
+    Number(trim(maxPayout, calculateTrimDigits(parseFloat(String(maxPayout)))))
   );
+
+  const vestingDate = formatDate.short(new Date(market.vesting * 1000));
 
   const vestingLabel =
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
-      : market.formattedShortVesting;
+      : vestingDate;
+
+  const startDate = market.start && new Date(market.start * 1000);
+  const isFutureMarket =
+    !!startDate && dateMath.isBefore(new Date(), startDate);
+
+  const type = getMarketTypeByAuctioneer(market.auctioneer);
+  const marketTypeLabel = pricingLabels[type];
 
   return (
     <div>
@@ -45,23 +67,21 @@ export const MarketInsights = () => {
         onClickLeft={() => navigate(-1)}
         onClickRight={() => navigate("/issuers/" + protocol?.id)}
         rightText="View Issuer"
-      />
-      <PageHeader
-        className="mt-5"
-        title={
-          market?.quoteToken.symbol + "-" + market.payoutToken.symbol + " Bond"
-        }
-        icon={quote?.logoUrl}
-        lpPairIcon={lpPair?.logoUrl}
-        pairIcon={payout?.logoUrl}
-      />
+      >
+        <PageHeader
+          title={`${market.payoutToken.symbol} BOND`}
+          icon={payout?.logoUrl}
+          underTitle={marketTypeLabel}
+          className="place-self-start self-start justify-self-start"
+        />
+      </PageNavigation>
       <div className="mt-8 mb-16 flex justify-between gap-4 child:w-full">
         <InfoLabel
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {formattedPayout}{" "}
-          <span className="-ml-2 text-[24px]">{market.payoutToken.symbol}</span>
+          {formattedPayout}
+          <span className="ml-1 text-xl">{market.payoutToken.symbol}</span>
         </InfoLabel>
 
         <InfoLabel
@@ -86,15 +106,24 @@ export const MarketInsights = () => {
           tooltip={
             market.vestingType === "fixed-term"
               ? "Purchase from a fixed term market will vest on the specified number of days after purchase. All bonds vest at midnight UTC."
-              : "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If the date is in the past, they will vest immediately upon purchase."
+              : "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If this date is already in the past, they will vest immediately upon purchase."
           }
         >
           {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
         </InfoLabel>
+        <InfoLabel
+          label={`${isFutureMarket ? "Total" : "Remaining"} Capacity`}
+          tooltip="The remaining amount of tokens to be bonded in this market"
+        >
+          {dynamicFormatter(market.currentCapacity, false)}
+          <span className="ml-1 text-xl">{market.capacityToken}</span>
+        </InfoLabel>
       </div>
 
-      <BondCard market={market} />
-      <TransactionHistory className="mt-20" market={market} />
+      <BondCard market={market} isFutureMarket={isFutureMarket} />
+      {!isFutureMarket && (
+        <TransactionHistory className="mt-20" market={market} />
+      )}
     </div>
   );
 };

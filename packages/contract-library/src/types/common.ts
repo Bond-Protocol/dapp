@@ -106,4 +106,6 @@ export interface CalculatedMarket {
   creationBlockTimestamp: number;
   creationDate: string;
   callbackAddress: string;
+  start?: number;
+  conclusion?: number;
 }

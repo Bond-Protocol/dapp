@@ -102,22 +102,22 @@ export const Pagination = ({
       {!isShowingAll && (
         <div className="flex justify-center gap-x-0.5">
           <Icon
-            className={
+            className={`w-8 ${
               !isFirstPage
                 ? "cursor-pointer rounded-lg hover:border"
                 : "text-white/30"
-            }
+            }`}
             onClick={() => !isFirstPage && handleChangePage(selectedPage - 1)}
           >
             {<CaretDown className="rotate-90" />}
           </Icon>
           {elements}
           <Icon
-            className={
+            className={`w-8 ${
               !isLastPage
                 ? "cursor-pointer rounded-lg hover:border"
                 : "text-white/30"
-            }
+            }`}
             onClick={() => !isLastPage && handleChangePage(selectedPage + 1)}
           >
             <CaretDown className="-rotate-90" />

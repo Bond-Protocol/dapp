@@ -47,26 +47,20 @@ export const IssuerPage: FC = () => {
 
   return (
     <div className="pb-12">
-      <PageNavigation
-        link={protocol?.links.homepage}
-        rightText="Visit Website"
-      />
-      <PageHeader
-        className="mt-4 normal-case"
-        icon={logo()}
-        title={protocol?.name || placeholderProtocol.name}
-      />
-      <div className="flex flex-col">
-        {protocol && (
-          <>
+      <PageNavigation link={protocol?.links.homepage} rightText="Visit Website">
+        <PageHeader
+          icon={logo()}
+          title={protocol?.name || placeholderProtocol.name}
+          underTitle={
             <SocialRow
-              {...protocol.links}
+              {...protocol?.links}
               width={18}
-              className="mt-3 ml-2.5 justify-start gap-4"
+              className="mt-3 ml-2.5 justify-start gap-4 fill-white"
             />
-          </>
-        )}
-
+          }
+        />
+      </PageNavigation>
+      <div className="flex flex-col">
         <div className="mt-2">
           <p className="w-1/2 text-light-grey-400">
             {protocol?.description || placeholderProtocol.description}

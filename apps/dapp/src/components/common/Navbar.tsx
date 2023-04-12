@@ -7,7 +7,7 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="mx-auto flex h-[96px] max-w-[1440px] items-center justify-between px-5">
+    <div className="mx-auto flex h-[96px] w-full max-w-[1440px] items-center justify-between px-5">
       <div className="flex w-1/3" onClick={() => navigate("/")}>
         <ProtocolLogo className="py-6" />
       </div>

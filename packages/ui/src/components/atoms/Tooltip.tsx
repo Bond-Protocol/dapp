@@ -1,4 +1,4 @@
-import { ReactComponent as TooltipIcon } from "assets/icons/tooltip-icon.svg";
+import { ReactComponent as TooltipIconLocal } from "assets/icons/tooltip-icon.svg";
 import { useState } from "react";
 import { PopperUnstyled } from "@mui/base";
 
@@ -32,7 +32,7 @@ export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
         className="my-auto cursor-help"
       >
         {props.children || (
-          <TooltipIcon
+          <TooltipIconLocal
             className={`hover:fill-light-secondary my-auto transition-all ${props.iconClassname}`}
             width={iconWidth}
           />
@@ -46,5 +46,55 @@ export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
         </div>
       </PopperUnstyled>
     </>
+  );
+};
+
+export type TooltipWrapperProps = {
+  content: string | React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+};
+
+export const TooltipWrapper = (props: TooltipProps) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const id = open ? "tooltip-popper" : undefined;
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const onClose = () => {
+    setAnchorEl(null);
+  };
+
+  if (!props.content) return <>{props.children}</>;
+
+  return (
+    <>
+      <div
+        id={id}
+        onMouseEnter={handleClick}
+        onMouseLeave={onClose}
+        className={"w-full cursor-help" + " " + props.className}
+      >
+        {props.children}
+      </div>
+      <PopperUnstyled open={open} anchorEl={anchorEl}>
+        <div
+          className={`bg-light-tooltip font-jakarta max-w-[240px] rounded p-2 text-center text-xs transition-all ${props.className}`}
+        >
+          {props.content}
+        </div>
+      </PopperUnstyled>
+    </>
+  );
+};
+
+export const TooltipIcon = ({ className }: { className?: string }) => {
+  return (
+    <TooltipIconLocal
+      className={`hover:fill-light-secondary my-auto transition-all ${className}`}
+    />
   );
 };

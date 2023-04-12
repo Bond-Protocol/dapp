@@ -8,6 +8,7 @@ import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
 import { useLoadMarkets, useTokens } from "hooks";
 import { getTokenDetails } from "src/utils";
+import { dateMath } from "ui";
 
 export function useCalculatedMarkets() {
   const { getPrice, currentPrices, isLoading: areTokensLoading } = useTokens();
@@ -41,7 +42,15 @@ export function useCalculatedMarkets() {
       requestProvider,
       market.chainId
     );
-    if (!isLive) return;
+
+    //Checks if the market start date is in the future
+    const willOpenInTheFuture =
+      market.start &&
+      dateMath.isBefore(new Date(), new Date(market.start * 1000));
+
+    if (!isLive && !willOpenInTheFuture) {
+      return;
+    }
 
     const purchaseLink = bondLibrary.TOKENS.get(
       market.quoteToken.id
@@ -65,19 +74,7 @@ export function useCalculatedMarkets() {
         requestProvider,
         import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
         {
-          id: market.id,
-          chainId: market.chainId,
-          name: market.name,
-          auctioneer: market.auctioneer,
-          teller: market.teller,
-          owner: market.owner,
-          vesting: market.vesting,
-          vestingType: market.vestingType,
-          isInstantSwap: market.isInstantSwap,
-          totalBondedAmount: market.totalBondedAmount,
-          totalPayoutAmount: market.totalPayoutAmount,
-          creationBlockTimestamp: market.creationBlockTimestamp,
-          callbackAddress: market.callbackAddress,
+          ...market,
           payoutToken: {
             id: payoutToken.id,
             address: payoutToken.address,
@@ -96,7 +93,7 @@ export function useCalculatedMarkets() {
             lpPair: quoteToken.lpPair,
             purchaseLink: purchaseLink,
           },
-        }, //@ts-ignore
+        },
         bondLibrary.TOKENS.get(market.quoteToken.id)
           ? bondLibrary.LP_TYPES.get(
               // @ts-ignore
@@ -104,7 +101,11 @@ export function useCalculatedMarkets() {
             )
           : undefined
       )
-      .then((result: CalculatedMarket) => result)
+      .then((result: CalculatedMarket) => ({
+        ...result,
+        start: market.start,
+        conclusion: market.conclusion,
+      }))
       .catch((e) => {
         console.log("catch", e);
       });

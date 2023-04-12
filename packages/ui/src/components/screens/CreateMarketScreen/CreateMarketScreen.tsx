@@ -222,19 +222,21 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="flex gap-x-4">
-            <InputModal
-              id="cm-start-date-picker"
-              label="Market Start"
-              title="Select start date"
-              value={
-                state.startDate ? formatDate.dateAndTime(state.startDate) : ""
-              }
-              endAdornment={<CalendarIcon className="mr-2 fill-white" />}
-              ModalContent={(props) => <SelectDateDialog {...props} />}
-              onSubmit={(value) =>
-                dispatch({ type: Action.UPDATE_START_DATE, value })
-              }
-            />
+            {state.priceModel !== "dynamic" && (
+              <InputModal
+                id="cm-start-date-picker"
+                label="Market Start"
+                title="Select start date"
+                value={
+                  state.startDate ? formatDate.dateAndTime(state.startDate) : ""
+                }
+                endAdornment={<CalendarIcon className="mr-2 fill-white" />}
+                ModalContent={(props) => <SelectDateDialog {...props} />}
+                onSubmit={(value) =>
+                  dispatch({ type: Action.UPDATE_START_DATE, value })
+                }
+              />
+            )}
             <InputModal
               id="cm-end-date-picker"
               label="Market End"

@@ -16,11 +16,15 @@ export const PageNavigation = (props: PageNavigationProps) => {
   const goBack = () => navigate(-1);
 
   return (
-    <div className={`mx-3 flex justify-between uppercase ${props.className}`}>
-      <ArrowLeft
+    <div
+      className={`flex items-center justify-between pr-3 ${props.className}`}
+    >
+      <div
+        className="my-auto cursor-pointer pl-3 pr-1 hover:text-light-secondary"
         onClick={props.onClickLeft || goBack}
-        className="my-auto hover:cursor-pointer hover:text-light-secondary"
-      />
+      >
+        <ArrowLeft />
+      </div>
       {props.children}
 
       {props.rightText && !props.link && (
@@ -28,7 +32,7 @@ export const PageNavigation = (props: PageNavigationProps) => {
           className="flex font-mono text-sm uppercase text-light-secondary hover:cursor-pointer hover:underline"
           onClick={props.onClickRight}
         >
-          <p className="my-auto mr-1">{props.rightText}</p>
+          <p className="my-auto mr-1 whitespace-nowrap">{props.rightText}</p>
           <ArrowLeft className="my-auto rotate-180" />
         </div>
       )}
@@ -37,7 +41,7 @@ export const PageNavigation = (props: PageNavigationProps) => {
           href={props.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="my-auto font-mono text-sm font-light text-light-secondary hover:cursor-pointer hover:underline"
+          className="my-auto whitespace-nowrap font-mono text-sm font-light text-light-secondary hover:cursor-pointer hover:underline"
           iconClassName="mt-0.5 ml-1 my-auto"
         >
           {props.rightText}
