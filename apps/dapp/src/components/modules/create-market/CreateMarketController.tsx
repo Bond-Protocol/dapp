@@ -237,7 +237,7 @@ export const CreateMarketController = () => {
       setGasEstimate(estimate);
       return estimate.toString();
     } catch (e) {
-      return "Error estimating gas - contact us!"
+      return "Error estimating gas - contact us!";
     }
   };
 
