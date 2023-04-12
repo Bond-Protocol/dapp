@@ -45,8 +45,6 @@ export const IssuerPage: FC = () => {
     setTbv(protocolTbvs[name as string]?.tbv || 0);
   }, [protocolTbvs]);
 
-  if (!protocol) return;
-
   return (
     <div className="pb-12">
       <PageNavigation link={protocol?.links.homepage} rightText="Visit Website">
@@ -55,7 +53,7 @@ export const IssuerPage: FC = () => {
           title={protocol?.name || placeholderProtocol.name}
           underTitle={
             <SocialRow
-              {...protocol.links}
+              {...protocol?.links}
               width={18}
               className="mt-3 ml-2.5 justify-start gap-4 fill-white"
             />
