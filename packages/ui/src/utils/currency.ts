@@ -71,12 +71,12 @@ export const dynamicFormatter = (value: string | number, currency = true) => {
       style: "currency",
       currency: "usd",
       maximumFractionDigits,
-    }).format(parseFloat(num));
+    }).format(Number(num));
   }
 
   return new Intl.NumberFormat("en-us", {
     maximumFractionDigits,
-  }).format(parseFloat(num));
+  }).format(Number(num));
 };
 
 export const formatCurrency = {

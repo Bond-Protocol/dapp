@@ -1,7 +1,7 @@
 import { BondPriceChart as BaseBondPriceChart, Chip } from "ui";
 import { useBondChartData } from "hooks/useBondChartData";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { PlaceholderChart } from "./PlaceholderChart";
+import { PlaceholderChart } from "ui";
 import { useState } from "react";
 
 export type BondDiscountChartProps = {
@@ -12,7 +12,6 @@ export type BondDiscountChartProps = {
 export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
   const [range, setRange] = useState(7);
   const { dataset, isLoading, purchases } = useBondChartData(market, range);
-  console.log({ dataset });
 
   if (isLoading || !purchases) {
     return <div />;

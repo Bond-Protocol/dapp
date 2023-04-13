@@ -1,5 +1,7 @@
 import { ConnectButton as ConnectButtonUnstyled } from "@rainbow-me/rainbowkit";
-import { Button } from "ui";
+import { Button, Icon } from "ui";
+import arbitrum from "assets/icons/arbitrum.svg";
+import repeatIcon from "assets/icons/loop.svg";
 
 export interface ConnectButtonProps {
   full?: boolean;
@@ -57,19 +59,21 @@ export const ConnectButton = (props: ConnectButtonProps) => {
               }
               return (
                 <div className="flex gap-4">
-                  {chain.hasIcon && (
-                    <div onClick={openChainModal} className="my-auto">
-                      {chain.iconUrl && (
-                        <div className="max-h-[40px]">
-                          <img
-                            className="hover:cursor-pointer"
-                            alt={chain.name ?? "Chain icon"}
-                            src={chain.iconUrl}
-                          />
-                        </div>
-                      )}
+                  <div onClick={openChainModal} className="my-auto">
+                    <div className="max-h-[40px]">
+                      <Icon
+                        width={32}
+                        height={32}
+                        className="hover:cursor-pointer"
+                        alt={chain.name ?? "Chain icon"}
+                        src={
+                          chain.id === 421613 //TODO: remove goerli arb icon hack
+                            ? arbitrum
+                            : chain.iconUrl ?? repeatIcon
+                        }
+                      />
                     </div>
-                  )}
+                  </div>
                   <Button
                     variant="ghost"
                     onClick={openAccountModal}

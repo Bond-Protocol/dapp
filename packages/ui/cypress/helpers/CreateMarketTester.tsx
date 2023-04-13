@@ -12,6 +12,7 @@ export const defaultProps: CreateMarketScreenProps = {
   onSubmitCreation: (state) => {
     console.log({ state });
   },
+  estimateGas: () => {},
   onSubmitAllowance: () => {},
   onSubmitMultisigCreation: () => {},
   fetchAllowance: () => Promise.resolve("10000000"),

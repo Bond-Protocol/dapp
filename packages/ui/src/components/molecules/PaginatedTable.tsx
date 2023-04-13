@@ -7,6 +7,8 @@ import { Pagination } from "./Pagination";
 export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   title?: string;
   className?: string;
+  filterText?: string;
+  hideSearchbar?: boolean;
 };
 
 export const PaginatedTable = (props: PaginatedTableProps) => {
@@ -24,17 +26,17 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
     setPage(0);
   };
 
-  const filteredData = useMemo(
-    () =>
-      data?.filter((r) =>
-        Object.values(r).some((v) => {
-          const value = v?.searchValue || v?.value;
+  const filteredData = useMemo(() => {
+    const textToFilter = props.filterText ?? text;
 
-          return String(value).toLowerCase().includes(text.toLowerCase());
-        })
-      ),
-    [text, data]
-  );
+    return data?.filter((r) =>
+      Object.values(r).some((v) => {
+        const value = v?.searchValue || v?.value;
+
+        return String(value).toLowerCase().includes(textToFilter.toLowerCase());
+      })
+    );
+  }, [text, props.filterText, data]);
 
   const totalRows = filteredData?.length || 0;
   const totalPages = Math.ceil(totalRows / Math.abs(rowsPerPage));
@@ -52,11 +54,17 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
 
   return (
     <div className={props.className}>
-      <div className="flex items-center justify-between pb-4">
+      <div className="flex items-center justify-between">
         {props.title && (
           <p className="font-fraktion ml-4 text-2xl uppercase">{props.title}</p>
         )}
-        <SearchBar value={text} onChange={setText} className="max-w-xs" />
+        {!props.hideSearchbar && (
+          <SearchBar
+            value={text}
+            onChange={setText}
+            className="mb-2 max-w-xs"
+          />
+        )}
       </div>
       <Table
         {...props}

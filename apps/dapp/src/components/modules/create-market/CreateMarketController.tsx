@@ -13,11 +13,12 @@ import {
   CreateMarketState,
   useCreateMarket,
 } from "ui";
-import { doPriceMath } from "./helpers";
+import { calculateDebtBuffer, doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
+import { differenceInCalendarDays } from "date-fns";
 
 export const CreateMarketController = () => {
   const { data: signer } = useSigner();
@@ -62,8 +63,8 @@ export const CreateMarketController = () => {
     }
   }
 
-  const getTeller = (chain: string, state: CreateMarketState) => {
-    return getAddressesForType(chain, getBondType(state)).teller;
+  const getAuctioneer = (chain: string, state: CreateMarketState) => {
+    return getAddressesForType(chain, getBondType(state)).auctioneer;
   };
 
   const fetchAllowance = async (state: CreateMarketState) => {
@@ -142,9 +143,12 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    //TODO: REPLACE
-    const debtBuffer = 0.3;
-    const bondsPerWeek = 20;
+    const bondsPerWeek = 7;
+    const days =
+      differenceInCalendarDays(state.endDate, state.startDate ?? new Date()) +
+      1; //TODO: The previous version adds a day to the difference (V1-L290)
+
+    const debtBuffer = calculateDebtBuffer(days, bondsPerWeek, state.capacity);
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
@@ -201,7 +205,6 @@ export const CreateMarketController = () => {
 
   const onSubmit = async (state: CreateMarketState) => {
     const config = configureMarket(state);
-    console.log({ state });
 
     try {
       const tx = await contractLib.createMarket(
@@ -252,7 +255,7 @@ export const CreateMarketController = () => {
         onSubmitMultisigCreation={setCreationHash}
         estimateGas={estimateGas}
         fetchAllowance={fetchAllowance}
-        getTeller={getTeller}
+        getAuctioneer={getAuctioneer}
         getTxBytecode={getTxBytecode}
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}

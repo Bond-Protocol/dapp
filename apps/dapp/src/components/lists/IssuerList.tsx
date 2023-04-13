@@ -1,5 +1,5 @@
 import { PROTOCOLS } from "@bond-protocol/bond-library";
-import { ActionCard, InfoLabel, IssuerCard, Loading } from "ui";
+import { ActionCard, Pagination, InfoLabel, IssuerCard, Loading } from "ui";
 import { useMarkets } from "hooks";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
@@ -51,9 +51,28 @@ export const IssuerList = () => {
     setIssuers(issuers);
   }, [marketsByIssuer, metrics.protocolTbvs]);
 
+  //Pagination Controls
+  const [page, setPage] = useState(0);
+  const [cardsPerPage, setCardsPerPage] = useState(18);
+
+  const handleChangePage = (newPage: number) => setPage(newPage);
+
+  const toggleAll = () => {
+    setCardsPerPage(cardsPerPage === -1 ? 18 : -1);
+    setPage(0);
+  };
+
+  const totalRows = issuers?.length || 0;
+  const totalPages = Math.ceil(totalRows / Math.abs(cardsPerPage));
+
+  const cards =
+    cardsPerPage > 0
+      ? issuers?.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
+      : issuers;
+
   return (
     <>
-      <PageHeader title="Bond Issuers" />
+      <PageHeader title="BOND ISSUERS" />
       <div className="flex gap-x-4 py-10">
         <InfoLabel
           reverse
@@ -79,7 +98,7 @@ export const IssuerList = () => {
       </div>
       {issuers.length && !isSomeLoading ? (
         <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">
-          {issuers.map((issuer) => {
+          {cards.map((issuer) => {
             return (
               <div
                 key={issuer.id}
@@ -94,6 +113,16 @@ export const IssuerList = () => {
               </div>
             );
           })}
+          {totalRows > cardsPerPage && (
+            <Pagination
+              className="mt-4"
+              handleChangePage={handleChangePage}
+              selectedPage={page}
+              totalPages={totalPages}
+              onSeeAll={toggleAll}
+              isShowingAll={cardsPerPage === -1}
+            />
+          )}
         </div>
       ) : (
         <div className="pb-12">
@@ -101,7 +130,7 @@ export const IssuerList = () => {
         </div>
       )}
       <ActionCard
-        className="mt-6"
+        className="my-6"
         title="Do you wanna issue a bond?"
         leftLabel="Why Bond"
         rightLabel="Issue a bond"

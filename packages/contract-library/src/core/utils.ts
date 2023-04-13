@@ -1,6 +1,15 @@
-import {BalancerVault__factory, BalancerWeightedPool__factory, IERC20__factory} from 'src/types';
+import {
+  BalancerVault__factory,
+  BalancerWeightedPool__factory,
+  IERC20__factory,
+} from 'src/types';
 import { Provider } from '@ethersproject/providers';
-import { LpToken, LpType, BalancerWeightedPoolToken, BalancerWeightedPoolConstituent } from '@bond-protocol/bond-library';
+import {
+  LpToken,
+  LpType,
+  BalancerWeightedPoolToken,
+  BalancerWeightedPoolConstituent,
+} from '@bond-protocol/bond-library';
 
 export const trim = (num: number | string, precision: number): string => {
   if (num == undefined) {
@@ -141,8 +150,14 @@ export const calcBalancerPoolPrice = async (
   balancerToken: BalancerWeightedPoolToken,
   provider: Provider,
 ): Promise<number> => {
-  const poolContract = BalancerWeightedPool__factory.connect(balancerToken.poolAddress, provider);
-  const vaultContract = BalancerVault__factory.connect(balancerToken.vaultAddress, provider);
+  const poolContract = BalancerWeightedPool__factory.connect(
+    balancerToken.poolAddress,
+    provider,
+  );
+  const vaultContract = BalancerVault__factory.connect(
+    balancerToken.vaultAddress,
+    provider,
+  );
 
   let baseToken;
   const tokensMap: Map<string, BalancerWeightedPoolConstituent> = new Map();
@@ -151,33 +166,51 @@ export const calcBalancerPoolPrice = async (
     if (!baseToken && balancerToken.constituentTokens[i].price !== undefined) {
       baseToken = balancerToken.constituentTokens[i];
     }
-    tokensMap.set(balancerToken.constituentTokens[i].address, balancerToken.constituentTokens[i]);
+    tokensMap.set(
+      balancerToken.constituentTokens[i].address,
+      balancerToken.constituentTokens[i],
+    );
   }
 
-  if (baseToken === undefined || baseToken.price === undefined) throw Error("At least one token in Balancer Pool " + balancerToken.poolAddress + " must have a known price.");
+  if (baseToken === undefined || baseToken.price === undefined)
+    throw Error(
+      'At least one token in Balancer Pool ' +
+        balancerToken.poolAddress +
+        ' must have a known price.',
+    );
 
-  let [weights, poolId, poolDecimals, poolTotalSupply] =
-    await Promise.all([
-      poolContract.getNormalizedWeights(),
-      poolContract.getPoolId(),
-      poolContract.decimals(),
-      poolContract.totalSupply(),
-    ]);
+  let [weights, poolId, poolDecimals, poolTotalSupply] = await Promise.all([
+    poolContract.getNormalizedWeights(),
+    poolContract.getPoolId(),
+    poolContract.decimals(),
+    poolContract.totalSupply(),
+  ]);
 
   const poolTokens = await vaultContract.getPoolTokens(poolId);
 
   let baseTokenPosition = -1;
   for (let i = 0; i < poolTokens.tokens.length; i++) {
-    if (poolTokens.tokens[i].toString().toLowerCase() === baseToken.address.toLowerCase()) {
+    if (
+      poolTokens.tokens[i].toString().toLowerCase() ===
+      baseToken.address.toLowerCase()
+    ) {
       baseTokenPosition = i;
       break;
     }
   }
 
-  if (baseTokenPosition === -1) throw Error("Token " + baseToken.address + " not found in Balancer Pool " + balancerToken.poolAddress);
+  if (baseTokenPosition === -1)
+    throw Error(
+      'Token ' +
+        baseToken.address +
+        ' not found in Balancer Pool ' +
+        balancerToken.poolAddress,
+    );
 
   const baseTokenWeight = Number(weights[baseTokenPosition]) / Math.pow(10, 18);
-  const baseTokenBalance = Number(poolTokens.balances[baseTokenPosition]) / Math.pow(10, baseToken.decimals);
+  const baseTokenBalance =
+    Number(poolTokens.balances[baseTokenPosition]) /
+    Math.pow(10, baseToken.decimals);
   let poolTotalValue = baseTokenBalance * baseToken.price;
 
   for (let i = 0; i < poolTokens.tokens.length; i++) {
@@ -191,14 +224,20 @@ export const calcBalancerPoolPrice = async (
         constituentToken = {
           address: token,
           decimals: decimals,
-        }
+        };
       }
-      let constituentTokenBalance = Number(poolTokens.balances[i]) / Math.pow(10, constituentToken.decimals);
+      let constituentTokenBalance =
+        Number(poolTokens.balances[i]) /
+        Math.pow(10, constituentToken.decimals);
       let price = constituentToken.price;
       // If price hasn't been defined for a token, calculate it from the pool ratios
       if (!price) {
-        let constituentTokenWeight = Number(weights[i]) / Math.pow(10, poolDecimals);
-        let ratio = ((baseTokenBalance / baseTokenWeight) / (constituentTokenBalance / constituentTokenWeight));
+        let constituentTokenWeight =
+          Number(weights[i]) / Math.pow(10, poolDecimals);
+        let ratio =
+          baseTokenBalance /
+          baseTokenWeight /
+          (constituentTokenBalance / constituentTokenWeight);
         price = ratio * baseToken.price;
       }
       // Add the balance value of each constituent token to the pool total
@@ -208,4 +247,4 @@ export const calcBalancerPoolPrice = async (
 
   const poolSupply = Number(poolTotalSupply) / Math.pow(10, poolDecimals);
   return poolTotalValue / poolSupply;
-}
+};

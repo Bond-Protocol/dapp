@@ -6,6 +6,5 @@ export * from "./BondPriceChart";
 export * from "./CloseMarketCard";
 export * from "./IssuerPage";
 export * from "./IssueMarketPage";
-export * from "./PlaceholderChart";
 export * from "./TokenPriceCard";
 export * from "./TokenPickerCard";
