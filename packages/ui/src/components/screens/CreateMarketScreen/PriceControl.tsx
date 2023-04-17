@@ -44,7 +44,8 @@ export const PriceControl = (props: PriceControlProps) => {
   };
 
   const raiseRate = () => {
-    setValue((prev) => {
+    setValue((incoming) => {
+      let prev = incoming === "" ? "0" : incoming;
       let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
       newRate = props.percentage
         ? Number(getAValidPercentage(newRate)).toFixed(scale)
@@ -56,7 +57,8 @@ export const PriceControl = (props: PriceControlProps) => {
   };
 
   const lowerRate = () => {
-    setValue((prev) => {
+    setValue((incoming) => {
+      let prev = incoming === "" ? "0" : incoming;
       let newRate = (parseFloat(prev) - rateMod).toFixed(scale);
       newRate = props.percentage
         ? Number(getAValidPercentage(newRate)).toFixed(scale)

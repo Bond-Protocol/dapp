@@ -14,6 +14,7 @@ export const useNumericInput = (initialValue = "0", isPercentual?: boolean) => {
     const nextValue = event.target.value;
 
     if (isNaN(nextValue)) {
+      setValue("0");
       return "0";
     }
 
