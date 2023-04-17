@@ -6,8 +6,7 @@ import CreateMarketTester, {
 const component = new CreateMarketTester();
 
 describe("<CreateMarketScreen />", () => {
-  it.only("Creates a dynamic discount market", () => {
-    //cy.spy(defaultProps, "onSubmitCreation")
+  it("Creates a dynamic discount market", () => {
     const onSubmitSpy = cy.spy().as("onSubmitSpy");
 
     component.mount({ ...defaultProps, onSubmitCreation: onSubmitSpy });
@@ -25,6 +24,73 @@ describe("<CreateMarketScreen />", () => {
 
     component.endDateTester.getDatePicker();
     component.endDateTester.nextMonth();
+    component.endDateTester.pickFirstDayOfMonth();
+    component.endDateTester.pickTime();
+    component.endDateTester.confirm();
+
+    component.getConfirmButton().click();
+
+    component
+      .getSubmitDeployButton()
+      .click()
+      .then(() => {
+        const calledWith = onSubmitSpy.getCall(0).args[0] as typeof target;
+
+        expect(calledWith.quoteToken).to.be.deep.equal(target.quoteToken);
+        expect(calledWith.payoutToken).to.be.deep.equal(target.payoutToken);
+
+        expect(calledWith.allowance).to.be.equal(target.allowance);
+        expect(calledWith.bondsPerWeek).to.be.equal(target.bondsPerWeek);
+
+        expect(calledWith.capacityType).to.be.equal(target.capacityType);
+        expect(calledWith.capacity).to.be.equal(target.capacity);
+        expect(calledWith.recommendedAllowance).to.be.equal(
+          target.recommendedAllowance
+        );
+
+        expect(calledWith.recommendedAllowanceDecimalAdjusted).to.be.equal(
+          target.recommendedAllowanceDecimalAdjusted
+        );
+
+        expect(calledWith.isAllowanceSufficient).to.be.equal(
+          target.isAllowanceSufficient
+        );
+
+        expect(calledWith.vesting).to.be.equal(target.vesting);
+        expect(calledWith.vestingType).to.be.equal(target.vestingType);
+        expect(calledWith.vestingString).to.be.equal(target.vestingString);
+        expect(calledWith.priceModel).to.be.equal(target.priceModel);
+
+        //expect(calledWith.maxBondSize).to.be.equal(target.maxBondSize);
+        expect(calledWith.debtBuffer).to.be.equal(target.debtBuffer);
+        expect(calledWith.depositInterval).to.be.equal(target.depositInterval);
+        expect(calledWith.priceModel).to.be.deep.equal(target.priceModel);
+
+        expect(calledWith.oracle).to.be.equal(false);
+
+        //NEEDS BONDS PER WEEK
+        //NEEDS DURATIONS AND DATES
+      });
+  });
+
+  it("Creates a fixed discount market", () => {
+    const onSubmitSpy = cy.spy().as("onSubmitSpy");
+
+    component.mount({ ...defaultProps, onSubmitCreation: onSubmitSpy });
+    component.getPayoutToken().click();
+    cy.contains("OHM").click();
+
+    component.getQuoteToken().click();
+    cy.contains("DAI").click();
+
+    component.getVesting().click();
+    cy.contains("7 days").click();
+
+    component.getCapacity().type("100");
+
+    component.getPriceModelPicker().contains("STATIC").click();
+
+    component.endDateTester.getDatePicker();
     component.endDateTester.nextMonth();
     component.endDateTester.pickFirstDayOfMonth();
     component.endDateTester.pickTime();
@@ -36,33 +102,16 @@ describe("<CreateMarketScreen />", () => {
       .getSubmitDeployButton()
       .click()
       .then(() => {
-        const calledWith = onSubmitSpy.getCall(0).args[0] as typeof args;
+        const calledWith = onSubmitSpy.getCall(0).args[0] as typeof target;
 
-        expect(calledWith.quoteToken).to.be.deep.equal(args.quoteToken);
-        expect(calledWith.payoutToken).to.be.deep.equal(args.payoutToken);
-
-        expect(calledWith.allowance).to.be.equal(args.allowance);
-        expect(calledWith.bondsPerWeek).to.be.equal(args.bondsPerWeek);
-
-        expect(calledWith.capacityType).to.be.equal(args.capacityType);
-        expect(calledWith.capacity).to.be.equal("1");
-        expect(calledWith.recommendedAllowance).to.be.equal(
-          args.recommendedAllowance
-        );
-        expect(calledWith.recommendedAllowanceDecimalAdjusted).to.be.equal(
-          args.recommendedAllowanceDecimalAdjusted
-        );
-        expect(calledWith.isAllowanceSufficient).to.be.equal(
-          args.isAllowanceSufficient
-        );
-
-        cy.log("hello");
-        //expect(onSubmitSpy).to.be.calledOnce;
+        expect(calledWith.priceModel).to.equal("static");
+        //NEEDS BONDS PER WEEK
+        //NEEDS DURATIONS AND DATES
       });
   });
 });
 
-const args = {
+const target = {
   quoteToken: {
     id: "dai",
     name: "DAI",
@@ -140,7 +189,7 @@ const args = {
   priceModel: "dynamic",
   oracleAddress: "",
   bondsPerWeek: 7,
-  maxBondSize: 2.12,
+  maxBondSize: 2.17,
   debtBuffer: 45,
   depositInterval: 24,
   priceModels: {

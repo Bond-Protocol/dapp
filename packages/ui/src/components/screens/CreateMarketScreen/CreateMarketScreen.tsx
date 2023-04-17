@@ -285,7 +285,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-8 flex justify-center gap-x-10">{buttons}</div>
+      <div className="my-8 flex justify-center gap-x-10">{buttons}</div>
       <Modal
         title={
           props.created
