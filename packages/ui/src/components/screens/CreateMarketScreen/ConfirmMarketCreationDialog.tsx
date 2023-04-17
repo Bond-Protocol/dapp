@@ -145,7 +145,7 @@ export const ConfirmMarketCreationDialog = ({
               <SummaryLabel
                 icon={marketState.payoutToken.icon}
                 value={marketState.payoutToken.symbol}
-                subtext="BOND TOKEN"
+                subtext="PAYOUT TOKEN"
               />
               <div className="flex items-center justify-center">
                 <Arrow className="rotate-90" />
@@ -153,7 +153,7 @@ export const ConfirmMarketCreationDialog = ({
               <SummaryLabel
                 icon={marketState.quoteToken.icon}
                 value={marketState.quoteToken.symbol}
-                subtext="GET TOKEN"
+                subtext="QUOTE TOKEN"
               />
             </div>
           </div>

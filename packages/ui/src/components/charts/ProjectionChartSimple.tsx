@@ -55,7 +55,7 @@ export const ProjectionChartSimple = ({
   const shouldRender = prices.length > 0;
 
   return (
-    <div id={props.id} className="h-full w-[35vw]">
+    <div id={props.id} className="h-full w-full">
       {!shouldRender ? (
         <div className="h-[99%] w-full">
           <PlaceholderChart message="Market simulation will appear here" />

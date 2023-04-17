@@ -44,8 +44,8 @@ export type CreateMarketScreenProps = {
 };
 
 const capacityOptions = [
-  { label: "SELL", value: "payout" },
-  { label: "BUY", value: "quote" },
+  { label: "PAYOUT", value: "payout" },
+  { label: "QUOTE", value: "quote" },
 ];
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
@@ -128,7 +128,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <div className="flex w-1/2 gap-x-2 pr-2">
               <InputModal
                 id="cm-payout-token-picker"
-                label="Bond Token"
+                label="Payout Token"
                 title="Select token"
                 value={state.payoutToken.symbol}
                 icon={state.payoutToken.icon}
@@ -159,7 +159,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <div className="w-1/2 pl-2">
               <InputModal
                 id="cm-quote-token-picker"
-                label="Get Token"
+                label="Quote Token"
                 title="Select token"
                 value={state.quoteToken.symbol}
                 icon={state.quoteToken.icon}
@@ -180,6 +180,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <TokenInput
               id="cm-capacity-picker"
               label="Capacity"
+              placeholder="Enter Amount"
               value={state.capacity}
               icon={capacityToken.icon}
               symbol={capacityToken.symbol}
@@ -285,7 +286,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
         </div>
       </div>
-      <div className="mt-8 flex justify-center gap-x-10">{buttons}</div>
+      <div className="my-8 flex justify-center gap-x-10">{buttons}</div>
       <Modal
         title={
           props.created

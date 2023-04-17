@@ -11,7 +11,7 @@ export type TokenInputProps = InputProps & {
 
 export const TokenInput = (props: TokenInputProps) => {
   const [value, setValue] = useState(props.value as string);
-  const [showTokenSymbol, setShowTokenSymbol] = useState(true);
+  const [showTokenSymbol, setShowTokenSymbol] = useState(false);
 
   const onBlur = (_e: React.BaseSyntheticEvent) => {
     let updated = value === "" ? "0" : value;

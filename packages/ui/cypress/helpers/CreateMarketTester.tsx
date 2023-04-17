@@ -6,17 +6,20 @@ import {
   CreateMarketState,
 } from "components";
 import { list } from "utils";
+import DateTester from "./DateModalTester";
 
 export const defaultProps: CreateMarketScreenProps = {
+  //@ts-ignore
   tokens: list,
   onSubmitCreation: (state) => {
     console.log({ state });
+    return "";
   },
-  estimateGas: () => {},
+  estimateGas: () => "",
   onSubmitAllowance: () => {},
   onSubmitMultisigCreation: () => {},
   fetchAllowance: () => Promise.resolve("10000000"),
-  getTeller: () => "",
+  getAuctioneer: () => "",
   getTxBytecode: () => "",
   chain: "1",
   projectionData: [],
@@ -27,9 +30,9 @@ export const defaultProps: CreateMarketScreenProps = {
 
 export default class CreateMarketTester extends BaseTester {
   props: CreateMarketScreenProps;
-  providerProps: any;
+  startDateTester = new DateTester("#cm-start-date-picker");
+  endDateTester = new DateTester("#cm-end-date-picker");
 
-  //@ts-ignore
   constructor(props: CreateMarketScreenProps = defaultProps) {
     super();
     this.props = props;

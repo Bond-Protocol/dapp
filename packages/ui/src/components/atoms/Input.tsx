@@ -33,7 +33,7 @@ export const Input = ({
             } ${rootClassName}`,
           },
           input: {
-            className: `w-full pl-2 h-10 text-white text-[15px] bg-transparent placeholder:text-white/75 focus:outline-none  ${inputClassName}`,
+            className: `w-full pl-2 h-10 text-white text-[15px] bg-transparent placeholder:text-light-secondary focus:outline-none  ${inputClassName}`,
           },
         }}
       />
