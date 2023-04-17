@@ -3,7 +3,7 @@ import { ProtocolDefinition } from "../public-types";
 
 /* Protocol Template */
 export default {
-  name: "MVD", // Your display name, formatted just how you like it
+  name: "Metavault", // Your display name, formatted just how you like it
   description:
     "Metavault DAO is a blockchain-based, community governed investment platform and decentralized venture capital fund.", // A short protocol description
   logoUrl: "https://assets.coingecko.com/coins/images/23899/small/MVD_Coin-simple.png?1681090496",
