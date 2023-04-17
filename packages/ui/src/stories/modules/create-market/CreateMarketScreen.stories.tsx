@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { CreateMarketScreen } from "components";
+import { list } from "src/utils";
 
 export default {
   title: "Modules/CreateMarket",
@@ -23,8 +24,8 @@ Primary.args = {
   fetchAllowance: () => Promise.resolve(1),
   getAuctioneer: () => "",
   getTxBytecode: () => "",
-  chain: "",
-  tokens: [],
+  chain: "5",
+  tokens: list,
   isAllowanceTxPending: false,
   creationHash: "",
   blockExplorerUrl: "",

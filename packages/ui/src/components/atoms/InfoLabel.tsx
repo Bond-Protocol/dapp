@@ -1,17 +1,21 @@
-import { TooltipIcon, TooltipWrapper } from ".";
+import { TokenInput, TokenInputProps, TooltipIcon, TooltipWrapper } from ".";
 
 export type InfoLabelProps = {
   label: string;
   tooltip?: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   reverse?: boolean;
+  editable?: boolean;
   small?: boolean;
-};
+} & Partial<TokenInputProps>;
 
 export const InfoLabel = (props: InfoLabelProps) => {
   const textSize = props.small ? "" : "text-[48px]";
   const height = props.small ? "h-[72px]" : "h-[104px]";
+
+  const className = `font-fraktion select-none font-bold leading-none ${textSize}`;
+
   return (
     <TooltipWrapper className={props.className} content={props.tooltip}>
       <div
@@ -25,15 +29,29 @@ export const InfoLabel = (props: InfoLabelProps) => {
           </h4>
           {props.tooltip && <TooltipIcon className="fill-light-grey-500" />}
         </div>
-
-        <p
-          className={
-            "font-fraktion select-none font-bold leading-none" + " " + textSize
-          }
-        >
-          {props.children}
-        </p>
+        {props.editable ? (
+          <TokenInput
+            className="mb-1"
+            rootClassName="border-none w-full py-1.5"
+            inputClassName={className + " " + "pl-0 bg-transparent text-center"}
+            value={props.value}
+            symbol={props.symbol}
+            onChange={(value) => props.onChange && props.onChange(value)}
+          />
+        ) : (
+          <p className={className}>
+            {props.value
+              ? `${props.value} ${props.symbol ?? ""}`
+              : props.children}
+          </p>
+        )}
       </div>
     </TooltipWrapper>
   );
+};
+
+export const EditableInfoLabel = (
+  props: InfoLabelProps & { value: string; onChange: (v: string) => void }
+) => {
+  return <InfoLabel {...props} label={props.value} />;
 };
