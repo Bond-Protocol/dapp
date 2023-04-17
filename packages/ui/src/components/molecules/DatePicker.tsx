@@ -88,7 +88,7 @@ export const DatePicker = (
       />
       {props.showTime && (
         <Input
-          className="mt-2"
+          className="time-picker mt-2"
           placeholder="00:00"
           errorMessage={isInThePast ? "That date is in the past 👀 " : ""}
           value={time}

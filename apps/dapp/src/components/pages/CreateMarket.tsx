@@ -32,8 +32,9 @@ export const CreateMarket = (props: CreateMarketProps) => {
       <PageNavigation
         link={socials.gitbook + docsSublink}
         rightText="READ DOCS"
-      />
-      <PageHeader className="mt-8" title={title} subtitle={subtitle} />
+      >
+        <PageHeader title={title} subtitle={subtitle} />
+      </PageNavigation>
       <div className="mt-4">
         <CreateMarketProvider>
           <CreateMarketController />
