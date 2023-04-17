@@ -30,6 +30,7 @@ export enum Action {
   UPDATE_START_DATE = "update_start_date",
   UPDATE_END_DATE = "update_end_date",
   RESET = "reset",
+  OVERRIDE_MAX_BOND_SIZE = "OVERRIDE_MAX_BOND_SIZE",
 }
 
 export type PriceModelConfig = {
@@ -385,6 +386,13 @@ export const reducer = (
             ...rates,
           },
         },
+      };
+    }
+
+    case Action.OVERRIDE_MAX_BOND_SIZE: {
+      return {
+        ...state,
+        maxBondSize: value,
       };
     }
 

@@ -268,16 +268,15 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             ) : (
               <>
                 <InfoLabel
-                  tooltip={`Maximum amount of ${
-                    capacityToken?.symbol || "the selected asset"
-                  } that can be ${
-                    state.capacityType === "quote" ? "deposited" : "purchased"
-                  } in a single transaction`}
                   label={"Max Bond Size"}
                   reverse
-                >
-                  {state.maxBondSize} {capacityToken?.symbol}
-                </InfoLabel>
+                  editable={state.priceModel === "static"}
+                  symbol={capacityToken.symbol}
+                  value={state.maxBondSize}
+                  onChange={(value) =>
+                    dispatch({ type: Action.OVERRIDE_MAX_BOND_SIZE, value })
+                  }
+                />
                 <InfoLabel label={"Market Length"} reverse>
                   {state.durationInDays} DAYS
                 </InfoLabel>
