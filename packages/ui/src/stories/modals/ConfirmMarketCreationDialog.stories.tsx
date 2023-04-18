@@ -56,3 +56,9 @@ Primary.args = {
   getAuctioneer: () => "",
   getTxBytecode: () => "",
 };
+
+export const Multisig = Template.bind({});
+Multisig.args = {
+  ...Primary.args,
+  showMultisig: true,
+};

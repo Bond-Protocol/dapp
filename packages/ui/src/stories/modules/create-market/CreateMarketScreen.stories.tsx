@@ -1,5 +1,9 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { CreateMarketScreen } from "components";
+import {
+  CreateMarketProvider,
+  CreateMarketScreen,
+  placeholderState,
+} from "components";
 import { list } from "src/utils";
 
 export default {
@@ -11,7 +15,9 @@ export default {
 
 const Template: ComponentStory<typeof CreateMarketScreen> = (args) => (
   <div className="max-w-[1136px]">
-    <CreateMarketScreen {...args} />
+    <CreateMarketProvider initialState={placeholderState}>
+      <CreateMarketScreen {...args} />
+    </CreateMarketProvider>
   </div>
 );
 
