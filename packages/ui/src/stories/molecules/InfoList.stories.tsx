@@ -3,7 +3,7 @@ import { InfoList } from "components";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "Design System/Molecules/InfoList",
+  title: "Design System/Molecules/SummaryList",
   component: InfoList,
   argTypes: {},
 } as ComponentMeta<typeof InfoList>;
@@ -21,6 +21,7 @@ Primary.args = {
       leftLabel: "Minimum Price",
       rightLabel: "1 OHM per ETH",
       tooltip: "pls mi familia",
+      editable: true,
     },
     {
       leftLabel: "Max Bond Size",

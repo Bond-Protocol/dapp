@@ -7,6 +7,7 @@ export interface ActionInfoProps {
   rightLabel?: string;
   link?: string;
   copy?: string;
+  editable?: boolean;
 }
 
 export interface ActionInfoLabelProps {
@@ -15,6 +16,7 @@ export interface ActionInfoLabelProps {
   link?: string;
   copy?: string;
   className?: string;
+  editable?: boolean;
   linkClassName?: string;
   tooltipClassName?: string;
 }
@@ -23,7 +25,11 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
   return (
     <div className={`text-xs ${props.className}`}>
       <div className="flex justify-between">
-        {!props.link && <div className="my-auto">{props.value}</div>}
+        {!props.link && props.editable ? (
+          <input className="my-auto" value={props.value} />
+        ) : (
+          <div className="my-auto">{props.value}</div>
+        )}
         {props.tooltip && (
           <Tooltip
             content={props.tooltip}
@@ -66,6 +72,7 @@ export const ActionInfo = (props: ActionInfoProps) => {
       <ActionInfoLabel
         value={props.rightLabel}
         link={props.link}
+        editable={props.editable}
         className="font-bold"
       />
     </div>
