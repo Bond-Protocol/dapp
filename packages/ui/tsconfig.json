@@ -37,9 +37,10 @@
     }
   },
   "include": [
-    "src/**/*",
+    "src/**/*.{ts,tsx,js,jsx}",
     "src/main.d.ts",
     "src/cypress.d.ts",
+    ".storybook/**/*.{ts,js, jsx,tsx}"
   ],
   "exclude": [
     "dist",

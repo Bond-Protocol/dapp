@@ -92,32 +92,32 @@ IconOnly.args = {
   icon: true,
 };
 
-export const States = VariantsTemplate.bind({});
-States.args = {
-  buttons: [
-    { children: "Normal", variant: "primary" },
-    { children: "Hover", variant: "primary", id: "hover" },
-    { children: "Disabled", variant: "primary", disabled: true },
-    { children: "Active", variant: "primary", id: "active" },
+// export const States = VariantsTemplate.bind({});
+// States.args = {
+//   buttons: [
+//     { children: "Normal", variant: "primary" },
+//     { children: "Hover", variant: "primary", id: "hover" },
+//     { children: "Disabled", variant: "primary", disabled: true },
+//     { children: "Active", variant: "primary", id: "active" },
 
-    { children: "Normal", variant: "secondary" },
-    { children: "Hover", variant: "secondary", id: "hover" },
-    { children: "Disabled", variant: "secondary", disabled: true },
-    { children: "Active", variant: "secondary", id: "active" },
+//     { children: "Normal", variant: "secondary" },
+//     { children: "Hover", variant: "secondary", id: "hover" },
+//     { children: "Disabled", variant: "secondary", disabled: true },
+//     { children: "Active", variant: "secondary", id: "active" },
 
-    { children: "Normal", variant: "ghost" },
-    { children: "Hover", variant: "ghost", id: "hover" },
-    { children: "Disabled", variant: "ghost", disabled: true },
-    { children: "Active", variant: "ghost", id: "active" },
-  ],
-};
+//     { children: "Normal", variant: "ghost" },
+//     { children: "Hover", variant: "ghost", id: "hover" },
+//     { children: "Disabled", variant: "ghost", disabled: true },
+//     { children: "Active", variant: "ghost", id: "active" },
+//   ],
+// };
 
-States.parameters = {
-  pseudo: {
-    hover: ["#hover"],
-    active: ["#active"],
-  },
-};
+// States.parameters = {
+//   pseudo: {
+//     hover: ["#hover"],
+//     active: ["#active"],
+//   },
+// };
 
 export const Alignment = MultiTemplate.bind({});
 Alignment.args = {

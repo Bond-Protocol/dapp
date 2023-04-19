@@ -17,7 +17,8 @@ export const parameters = {
       { name: "dark", value: "#333333" },
       {
         name: 'test-grad', value: "radial-gradient(circle at 80% -40%, rgb(101, 137, 167, 1) 0%, rgba(255, 255, 255, 0) 50%)"
-      }, ...colors,
+      },
+      ...colors,
     ],
   },
   docs: {
