@@ -14,7 +14,8 @@ export const Primary = {
       { leftLabel: "Initial Price", rightLabel: "3.33 OHM per ETH" },
       {
         leftLabel: "Minimum Price",
-        rightLabel: "1 OHM per ETH",
+        rightLabel: "1",
+        symbol: " OHM per ETH",
         tooltip: "pls mi familia",
         editable: true,
       },

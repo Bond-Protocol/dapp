@@ -1,13 +1,12 @@
+import { InputUnstyled } from "@mui/base";
 import { Link, Tooltip } from "components";
 import { Copy } from "components/atoms/Copy";
+import { ReactComponent as EditIcon } from "assets/icons/edit-icon.svg";
+import { useSymbolInput } from "hooks/use-symbol-input";
 
-export interface ActionInfoProps {
+export interface ActionInfoProps extends ActionInfoLabelProps {
   leftLabel?: string;
-  tooltip?: string;
   rightLabel?: string;
-  link?: string;
-  copy?: string;
-  editable?: boolean;
 }
 
 export interface ActionInfoLabelProps {
@@ -17,16 +16,45 @@ export interface ActionInfoLabelProps {
   copy?: string;
   className?: string;
   editable?: boolean;
+  symbol?: string;
   linkClassName?: string;
   tooltipClassName?: string;
+  onChange?: (value: string) => void;
 }
 
 export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
+  const { value, onBlur, onChange, onFocus } = useSymbolInput(
+    props.value,
+    props.symbol,
+    true
+  );
+
+  const handleChange = (e: React.BaseSyntheticEvent) => {
+    const value = onChange(e);
+    props.onChange && props.onChange(value);
+  };
+
+  const isEdited = value !== props.value + (props.symbol ?? "");
+
   return (
     <div className={`text-xs ${props.className}`}>
       <div className="flex justify-between">
         {!props.link && props.editable ? (
-          <input className="my-auto" value={props.value} />
+          <InputUnstyled
+            onBlur={onBlur}
+            onFocus={onFocus}
+            endAdornment={<EditIcon className="ml-1" />}
+            componentsProps={{
+              root: { className: "flex" },
+              input: {
+                className: `bg-transparent text-right ${
+                  isEdited ? "text-light-secondary" : ""
+                }`,
+              },
+            }}
+            value={value}
+            onChange={handleChange}
+          />
         ) : (
           <div className="my-auto">{props.value}</div>
         )}
@@ -73,6 +101,7 @@ export const ActionInfo = (props: ActionInfoProps) => {
         value={props.rightLabel}
         link={props.link}
         editable={props.editable}
+        symbol={props.symbol}
         className="font-bold"
       />
     </div>

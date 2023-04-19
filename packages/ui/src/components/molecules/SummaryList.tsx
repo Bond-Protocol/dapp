@@ -14,6 +14,8 @@ export const SummaryRow = (props: ActionInfoProps) => {
         value={props.rightLabel}
         link={props.link}
         className="font-fraktion text-base uppercase text-white"
+        editable={props.editable}
+        symbol={props.symbol}
       />
     </div>
   );
