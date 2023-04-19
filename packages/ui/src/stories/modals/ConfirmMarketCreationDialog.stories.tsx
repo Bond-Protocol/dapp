@@ -1,5 +1,5 @@
-import { StoryFn, Meta } from "@storybook/react";
-import { Modal, ConfirmMarketCreationDialog } from "components";
+import { Meta } from "@storybook/react";
+import { ConfirmMarketCreationDialog } from "components";
 import { ModalDecorator } from "../decorators";
 import { list } from "utils";
 const dai = list.find(({ id }) => id === "dai");
@@ -15,8 +15,10 @@ const state = {
   bondsPerWeek: 7,
   maxBondSize: 1,
   durationInDays: 4,
+  depositInterval: 24,
   recommendedAllowanceDecimalAdjusted: "12",
   vestingString: "7 days",
+  debtBuffer: 40,
   priceModels: {
     dynamic: {
       initialPrice: 0.1,
@@ -35,11 +37,10 @@ export default {
   title: "Components/Modals/ConfirmMarketCreation",
   component: ConfirmMarketCreationDialog,
   decorators: [ModalDecorator],
-} as Meta<typeof Modal>;
+} as Meta<typeof ConfirmMarketCreationDialog>;
 
 export const Primary = {
   args: {
-    //@ts-ignore
     marketState: state,
     showMultisig: false,
     chain: "1",

@@ -7,13 +7,13 @@ export const SummaryRow = (props: ActionInfoProps) => {
         value={props.leftLabel}
         tooltip={props.tooltip}
         copy={props.copy}
-        className="text-base font-light"
+        className="font-light"
         tooltipClassName="fill-light-grey"
       />
       <ActionInfoLabel
         value={props.rightLabel}
         link={props.link}
-        className="font-fraktion text-base uppercase text-white"
+        className="font-fraktion uppercase text-white"
         editable={props.editable}
         symbol={props.symbol}
       />
