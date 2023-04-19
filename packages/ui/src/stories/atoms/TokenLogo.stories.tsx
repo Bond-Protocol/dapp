@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { TokenLogo } from "components";
 import logo24 from "assets/logo-24.svg";
 
@@ -8,26 +8,25 @@ const usdcLogo =
 export default {
   title: "Design System/Atoms/TokenLogo",
   component: TokenLogo,
-} as ComponentMeta<typeof TokenLogo>;
+} as Meta<typeof TokenLogo>;
 
-const Template: ComponentStory<typeof TokenLogo> = (args) => (
-  <TokenLogo {...args} />
-);
-
-export const Single = Template.bind({});
-Single.args = {
-  icon: logo24,
+export const Single = {
+  args: {
+    icon: logo24,
+  },
 };
 
-export const Bond = Template.bind({});
-Bond.args = {
-  icon: usdcLogo,
-  pairIcon: logo24,
+export const Bond = {
+  args: {
+    icon: usdcLogo,
+    pairIcon: logo24,
+  },
 };
 
-export const LPBond = Template.bind({});
-LPBond.args = {
-  icon: logo24,
-  pairIcon: logo24,
-  lpPairIcon: usdcLogo,
+export const LPBond = {
+  args: {
+    icon: logo24,
+    pairIcon: logo24,
+    lpPairIcon: usdcLogo,
+  },
 };

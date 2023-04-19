@@ -4,7 +4,7 @@ export * from "./ButtonGroup";
 export * from "./DatePicker";
 export * from "./ExpandableRow";
 export * from "./FilterBox";
-export * from "./InfoList";
+export * from "./SummaryList";
 export * from "./InputCard";
 export * from "./IssuerCard";
 export * from "./Modal";

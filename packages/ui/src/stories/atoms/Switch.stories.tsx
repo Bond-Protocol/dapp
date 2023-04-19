@@ -1,16 +1,15 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { Switch } from "components";
 
 export default {
   title: "Design System/Atoms/Switch",
   component: Switch,
-} as ComponentMeta<typeof Switch>;
+} as Meta<typeof Switch>;
 
-const Template: ComponentStory<typeof Switch> = (args) => <Switch {...args} />;
+export const Primary = {};
 
-export const Primary = Template.bind({});
-
-export const Label = Template.bind({});
-Label.args = {
-  label: "Wagmi",
+export const Label = {
+  args: {
+    label: "Wagmi",
+  },
 };

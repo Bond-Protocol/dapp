@@ -1,15 +1,12 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { FilterBox } from "components";
 
 export default {
   title: "Design System/Molecules/FilterBox",
   component: FilterBox,
   argTypes: {},
-} as ComponentMeta<typeof FilterBox>;
+} as Meta<typeof FilterBox>;
 
-const Template: ComponentStory<typeof FilterBox> = (args) => (
-  <FilterBox {...args} />
-);
-
-export const Primary = Template.bind({});
-Primary.args = {};
+export const Primary = {
+  args: {},
+};

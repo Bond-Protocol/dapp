@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Modal, ConfirmMarketCreationDialog } from "components";
 import { ModalDecorator } from "../decorators";
 import { list } from "utils";
@@ -35,30 +35,27 @@ export default {
   title: "Components/Modals/ConfirmMarketCreation",
   component: ConfirmMarketCreationDialog,
   decorators: [ModalDecorator],
-} as ComponentMeta<typeof Modal>;
+} as Meta<typeof Modal>;
 
-const Template: ComponentStory<typeof ConfirmMarketCreationDialog> = (args) => (
-  <ConfirmMarketCreationDialog {...args} />
-);
-
-export const Primary = Template.bind({});
-
-Primary.args = {
-  //@ts-ignore
-  marketState: state,
-  showMultisig: false,
-  chain: "1",
-  hasAllowance: false,
-  isAllowanceTxPending: false,
-  submitMultisigCreation: () => {},
-  submitCreateMarketTransaction: () => {},
-  submitApproveSpendingTransaction: () => {},
-  getAuctioneer: () => "",
-  getTxBytecode: () => "",
+export const Primary = {
+  args: {
+    //@ts-ignore
+    marketState: state,
+    showMultisig: false,
+    chain: "1",
+    hasAllowance: false,
+    isAllowanceTxPending: false,
+    submitMultisigCreation: () => {},
+    submitCreateMarketTransaction: () => {},
+    submitApproveSpendingTransaction: () => {},
+    getAuctioneer: () => "",
+    getTxBytecode: () => "",
+  },
 };
 
-export const Multisig = Template.bind({});
-Multisig.args = {
-  ...Primary.args,
-  showMultisig: true,
+export const Multisig = {
+  args: {
+    ...Primary.args,
+    showMultisig: true,
+  },
 };

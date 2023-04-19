@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { ActionCard } from "components";
 
 export default {
@@ -6,16 +6,13 @@ export default {
   component: ActionCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof ActionCard>;
+} as Meta<typeof ActionCard>;
 
-const Template: ComponentStory<typeof ActionCard> = (args) => (
-  <ActionCard {...args} />
-);
-
-export const Primary = Template.bind({});
-Primary.args = {
-  title: "Wagmi?",
-  leftLabel: "LESGOOOO",
-  rightLabel: "Fat nope-Nope",
-  onClickRight: () => {},
+export const Primary = {
+  args: {
+    title: "Wagmi?",
+    leftLabel: "LESGOOOO",
+    rightLabel: "Fat nope-Nope",
+    onClickRight: () => {},
+  },
 };

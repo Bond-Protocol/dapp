@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Modal, PurchaseConfirmDialog } from "components";
 
 import { ModalDecorator } from "../decorators";
@@ -7,18 +7,14 @@ export default {
   title: "Components/Modals/PurchaseConfirm",
   component: PurchaseConfirmDialog,
   decorators: [ModalDecorator],
-} as ComponentMeta<typeof Modal>;
+} as Meta<typeof Modal>;
 
-const Template: ComponentStory<typeof PurchaseConfirmDialog> = (args) => (
-  <PurchaseConfirmDialog {...args} />
-);
-
-export const Primary = Template.bind({});
-
-Primary.args = {
-  issuer: "OlympusDAO",
-  amount: "333,333 DAI",
-  payout: "333 GOHM",
-  vestingTime: "12 months",
-  contract: "0x12312312312312312312312311414",
+export const Primary = {
+  args: {
+    issuer: "OlympusDAO",
+    amount: "333,333 DAI",
+    payout: "333 GOHM",
+    vestingTime: "12 months",
+    contract: "0x12312312312312312312312311414",
+  },
 };

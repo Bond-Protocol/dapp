@@ -1,14 +1,11 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { PriceSlider } from "components";
 
 export default {
   title: "Components/Charts/PriceSlider",
   component: PriceSlider,
-} as ComponentMeta<typeof PriceSlider>;
+} as Meta<typeof PriceSlider>;
 
-const Template: ComponentStory<typeof PriceSlider> = (args) => (
-  <PriceSlider {...args} />
-);
-
-export const Primary = Template.bind({});
-Primary.args = {};
+export const Primary = {
+  args: {},
+};

@@ -24,7 +24,7 @@ export interface InfoListProps {
   className?: string;
 }
 
-export const InfoList = (props: InfoListProps) => {
+export const SummaryList = (props: InfoListProps) => {
   return (
     <ol className={`child:mt-1 first:mt-0 ${props.className}`}>
       {props.fields.map((f, i) => (

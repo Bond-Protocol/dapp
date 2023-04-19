@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { ManualVestingTermInput } from "components";
 
 export default {
@@ -11,22 +11,21 @@ export default {
       console.log({ onChangeargs: onChangeArgs });
     },
   },
-} as ComponentMeta<typeof ManualVestingTermInput>;
+} as Meta<typeof ManualVestingTermInput>;
 
-const Template: ComponentStory<typeof ManualVestingTermInput> = (args) => (
-  <ManualVestingTermInput {...args} />
-);
-
-export const Primary = Template.bind({});
-Primary.args = {};
-
-export const Warning = Template.bind({});
-Warning.args = {
-  defaultValue: "80",
+export const Primary = {
+  args: {},
 };
 
-export const Error = Template.bind({});
-Error.args = {
-  limit: 270,
-  defaultValue: "420",
+export const Warning = {
+  args: {
+    defaultValue: "80",
+  },
+};
+
+export const Error = {
+  args: {
+    limit: 270,
+    defaultValue: "420",
+  },
 };

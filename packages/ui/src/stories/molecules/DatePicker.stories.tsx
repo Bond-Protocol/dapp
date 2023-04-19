@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { DatePicker } from "components";
 
 export default {
@@ -6,12 +6,14 @@ export default {
   component: DatePicker,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof DatePicker>;
+} as Meta<typeof DatePicker>;
 
-const Template: ComponentStory<typeof DatePicker> = (args) => (
+const Template: StoryFn<typeof DatePicker> = (args) => (
   <div className="w-min">
     <DatePicker {...args} />
   </div>
 );
 
-export const Primary = Template.bind({});
+export const Primary = {
+  render: Template,
+};

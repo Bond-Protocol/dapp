@@ -1,4 +1,4 @@
-import { Button, SummaryLabel, InfoList, Tooltip, Input } from "components";
+import { Button, SummaryLabel, SummaryList, Tooltip, Input } from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { CreateMarketState } from "components";
@@ -192,7 +192,7 @@ export const ConfirmMarketCreationDialog = ({
             />
           </div>
           <h4 className="font-fraktion mt-4">PRICING</h4>
-          <InfoList fields={fields} />
+          <SummaryList fields={fields} />
           <div className="mt-4">
             {props.hasAllowance ? (
               <Button
@@ -228,7 +228,7 @@ export const ConfirmMarketCreationDialog = ({
         </div>
       ) : (
         <div className="text-fraktion">
-          <InfoList fields={multisigFields} />
+          <SummaryList fields={multisigFields} />
 
           <div className="mt-1 bg-white/5 text-sm font-extralight">
             <div className="mx-2 flex flex-row">
