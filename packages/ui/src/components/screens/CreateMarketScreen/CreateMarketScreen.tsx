@@ -21,6 +21,7 @@ import {
   TransactionHashDialog,
   MarketCreatedDialog,
   PriceData,
+  TooltipWrapper,
 } from "components";
 import { formatDate, vestingOptions } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
@@ -223,7 +224,22 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="flex gap-x-4">
-            {state.priceModel !== "dynamic" && (
+            {state.priceModel === "dynamic" ? (
+              <TooltipWrapper content="Dynamic market scheduling coming soon™">
+                <InputModal
+                  disabled
+                  id="cm-start-date-picker"
+                  label="Market Start"
+                  value="Immediate"
+                  inputClassName="text-light-grey"
+                  endAdornment={<CalendarIcon className="mr-2 fill-white" />}
+                  ModalContent={(props) => <SelectDateDialog {...props} />}
+                  onSubmit={(value) =>
+                    dispatch({ type: Action.UPDATE_START_DATE, value })
+                  }
+                />
+              </TooltipWrapper>
+            ) : (
               <InputModal
                 id="cm-start-date-picker"
                 label="Market Start"

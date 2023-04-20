@@ -34,7 +34,7 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
         disabled={props.disabled}
         placeholder={props.placeholder}
         label={props.label}
-        inputClassName="cursor-pointer"
+        inputClassName={"cursor-pointer" + " " + (props.inputClassName ?? "")}
         value={props.value}
         startAdornment={
           props.icon && (
