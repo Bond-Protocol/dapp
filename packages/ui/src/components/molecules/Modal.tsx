@@ -1,6 +1,7 @@
 import { forwardRef } from "react";
 import ModalUnstyled from "@mui/base/ModalUnstyled";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
+import { ClickAwayListener } from "@mui/base";
 
 type ModalHeaderProps = {
   onClickClose?: (e: React.BaseSyntheticEvent) => void;
@@ -66,15 +67,18 @@ export const Modal = ({ title, ...props }: ModalProps) => {
     >
       <ModalBackdrop>
         <ModalBackground>
-          <div className={`min-w-[200px] max-w-[650px]`}>
-            <ModalHeader
-              topLeftContent={title}
-              onClickClose={props.onClickClose}
-            />
-            <div className="text-light-secondary-10 px-5 pb-6 transition-all">
-              {props.children}
+          {/*@ts-ignore*/}
+          <ClickAwayListener onClickAway={(e) => props.onClickClose(e)}>
+            <div className={`min-w-[200px] max-w-[650px]`}>
+              <ModalHeader
+                topLeftContent={title}
+                onClickClose={props.onClickClose}
+              />
+              <div className="text-light-secondary-10 px-5 pb-6 transition-all">
+                {props.children}
+              </div>
             </div>
-          </div>
+          </ClickAwayListener>
         </ModalBackground>
       </ModalBackdrop>
     </ModalUnstyled>

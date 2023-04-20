@@ -35,6 +35,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
             rootClassName="border-none w-full py-1.5"
             inputClassName={className + " " + "pl-0 bg-transparent text-center"}
             value={props.value}
+            symbolStartsShowing
             symbol={props.symbol}
             onChange={(value) => props.onChange && props.onChange(value)}
           />
