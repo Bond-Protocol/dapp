@@ -5,6 +5,8 @@ import {
   Tooltip,
   SummaryRow,
   Link,
+  useCreateMarket,
+  Action,
 } from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
@@ -64,7 +66,7 @@ const formatMarketState = (state: CreateMarketState) => {
     },
     startDate: formatDate.short(state.startDate as Date),
     endDate: formatDate.short(state.endDate as Date),
-    depositInterval: state.depositInterval,
+    depositInterval: state.depositInterval / 60 / 60,
     debtBuffer: state.debtBuffer,
   };
 };
@@ -101,11 +103,7 @@ const Buttons = (props: { bytecode: string; address: string }) => {
   );
 };
 
-export const ConfirmMarketCreationDialog = ({
-  marketState,
-  ...props
-}: {
-  marketState: CreateMarketState;
+export const ConfirmMarketCreationDialog = (props: {
   showMultisig: boolean;
   chain: string;
   hasAllowance?: boolean;
@@ -118,23 +116,23 @@ export const ConfirmMarketCreationDialog = ({
   getTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => string;
 }) => {
+  const [state, dispatch] = useCreateMarket();
   const chainName = CHAINS.get(props.chain)?.displayName;
-  const bytecode = props.getTxBytecode(marketState);
-  const auctioneer = props.getAuctioneer(props.chain, marketState);
-  const teller = props.getTeller(props.chain, marketState);
-  const formattedState = formatMarketState(marketState);
+  const bytecode = props.getTxBytecode(state);
+  const auctioneer = props.getAuctioneer(props.chain, state);
+  const teller = props.getTeller(props.chain, state);
+  const formattedState = formatMarketState(state);
 
   const fields = [
-    { leftLabel: "Price Model", rightLabel: marketState.priceModel },
-    ...getPriceFields(marketState),
+    { leftLabel: "Price Model", rightLabel: state.priceModel },
+    ...getPriceFields(state),
     {
       leftLabel: "Max Bond Size",
-      rightLabel:
-        marketState.maxBondSize + " " + formattedState.capacity.symbol,
+      rightLabel: state.maxBondSize + " " + formattedState.capacity.symbol,
     },
     {
       leftLabel: "Market Length",
-      rightLabel: marketState.durationInDays.toString() + " DAYS",
+      rightLabel: state.durationInDays.toString() + " DAYS",
     },
   ];
 
@@ -145,16 +143,16 @@ export const ConfirmMarketCreationDialog = ({
           <h4 className="font-fraktion">SETUP</h4>
           <div className="grid grid-cols-[1fr_32px_1fr]">
             <SummaryLabel
-              icon={marketState.payoutToken.icon}
-              value={marketState.payoutToken.symbol}
+              icon={state.payoutToken.icon}
+              value={state.payoutToken.symbol}
               subtext="PAYOUT TOKEN"
             />
             <div className="flex items-center justify-center">
               <Arrow className="rotate-90" />
             </div>
             <SummaryLabel
-              icon={marketState.quoteToken.icon}
-              value={marketState.quoteToken.symbol}
+              icon={state.quoteToken.icon}
+              value={state.quoteToken.symbol}
               subtext="QUOTE TOKEN"
             />
           </div>
@@ -201,6 +199,9 @@ export const ConfirmMarketCreationDialog = ({
             leftLabel="Deposit Interval"
             rightLabel={formattedState.depositInterval?.toString()}
             symbol=" HOURS"
+            onChange={(value) =>
+              dispatch({ type: Action.OVERRIDE_DEPOSIT_INTERVAL, value })
+            }
           />
         </div>
       )}
@@ -213,6 +214,9 @@ export const ConfirmMarketCreationDialog = ({
             leftLabel="Debt Buffer"
             rightLabel={formattedState.debtBuffer?.toString()}
             symbol="%"
+            onChange={(value) =>
+              dispatch({ type: Action.OVERRIDE_DEBT_BUFFER, value })
+            }
           />
         </div>
       )}
@@ -254,7 +258,9 @@ export const ConfirmMarketCreationDialog = ({
       {props.showMultisig && (
         <div className="mt-4 flex gap-x-2">
           <div className="flex w-full flex-col items-center justify-center gap-y-2">
-            <h4 className="font-fraktion text-2xl">APPROVE CAPACITY</h4>
+            <h4 className="font-fraktion whitespace-nowrap text-center text-2xl ">
+              APPROVE CAPACITY
+            </h4>
             <Link
               labelClassname="text-light-grey hover:text-light-secondary"
               className="mb-2 font-mono"
@@ -265,12 +271,14 @@ export const ConfirmMarketCreationDialog = ({
             <Buttons address={teller} />
           </div>
           <div className="flex w-full flex-col items-center justify-center gap-y-2">
-            <h4 className="font-fraktion text-2xl">DEPLOY MARKET</h4>
+            <h4 className="font-fraktion text-center text-2xl ">
+              DEPLOY MARKET
+            </h4>
             <Link
               labelClassname="text-light-grey hover:text-light-secondary"
               className="mb-2 font-mono"
             >
-              AUCTIONEER CONTRACT
+              AUCTION CONTRACT
             </Link>
 
             <Buttons bytecode={bytecode} address={auctioneer} />

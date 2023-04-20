@@ -1,5 +1,5 @@
-import { Meta } from "@storybook/react";
-import { ConfirmMarketCreationDialog } from "components";
+import { Meta, StoryFn } from "@storybook/react";
+import { ConfirmMarketCreationDialog, CreateMarketProvider } from "components";
 import { ModalDecorator } from "../decorators";
 import { list } from "utils";
 const dai = list.find(({ id }) => id === "dai");
@@ -39,7 +39,17 @@ export default {
   decorators: [ModalDecorator],
 } as Meta<typeof ConfirmMarketCreationDialog>;
 
+const Template: StoryFn<typeof ConfirmMarketCreationDialog> = (args) => (
+  <div className="max-w-[1136px]">
+    {/*@ts-ignore*/}
+    <CreateMarketProvider initialState={state}>
+      <ConfirmMarketCreationDialog {...args} />
+    </CreateMarketProvider>
+  </div>
+);
+
 export const Primary = {
+  render: Template,
   args: {
     marketState: state,
     showMultisig: false,
@@ -56,6 +66,7 @@ export const Primary = {
 };
 
 export const Multisig = {
+  render: Template,
   args: {
     ...Primary.args,
     showMultisig: true,

@@ -1,6 +1,11 @@
 import { calculateTrimDigits, trimAsNumber } from "utils/trim";
 import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";
+import { differenceInCalendarDays } from "date-fns";
+
+const DEFAULT_BONDS_PER_WEEK = 7;
+const DEFAULT_DEPOSIT_INTERVAL = 86400;
+const DEFAULT_DEBT_BUFFER = 75;
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
@@ -30,7 +35,9 @@ export enum Action {
   UPDATE_START_DATE = "update_start_date",
   UPDATE_END_DATE = "update_end_date",
   RESET = "reset",
-  OVERRIDE_MAX_BOND_SIZE = "OVERRIDE_MAX_BOND_SIZE",
+  OVERRIDE_MAX_BOND_SIZE = "override_max_bond_size",
+  OVERRIDE_DEPOSIT_INTERVAL = "override_deposit_interval",
+  OVERRIDE_DEBT_BUFFER = "override_debt_buffer",
 }
 
 export type PriceModelConfig = {
@@ -86,10 +93,10 @@ export const placeholderState: CreateMarketState = {
   vestingString: "",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
-  bondsPerWeek: 7,
+  bondsPerWeek: DEFAULT_BONDS_PER_WEEK,
   maxBondSize: 0,
-  debtBuffer: 45,
-  depositInterval: 24,
+  debtBuffer: DEFAULT_DEBT_BUFFER,
+  depositInterval: DEFAULT_DEPOSIT_INTERVAL,
   duration: "",
   durationInDays: 0,
   priceModels: {
@@ -99,7 +106,18 @@ export const placeholderState: CreateMarketState = {
     "oracle-static": {},
   },
 };
-
+export const calculateDebtBuffer = (
+  marketDurationInDays: number,
+  bondsPerWeek: number,
+  capacity: number
+) => {
+  const duration = marketDurationInDays * 24 * 60 * 60;
+  const depositInterval = (24 * 60 * 60) / (bondsPerWeek / 7);
+  const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
+  return Math.round(
+    ((capacity * 0.25) / ((capacity * decayInterval) / duration)) * 100
+  );
+};
 function calculateDuration(endDate?: Date, startDate?: Date) {
   let duration;
   if (endDate && startDate) {
@@ -183,6 +201,16 @@ function calculateAllowance(
     isAllowanceSufficient,
   };
 }
+
+const getDebtBuffer = (state: CreateMarketState) => {
+  const days =
+    differenceInCalendarDays(
+      state.endDate as Date,
+      state.startDate ?? new Date()
+    ) + 1; //TODO: The previous version adds a day to the difference (V1-L290)
+
+  return calculateDebtBuffer(days, state.bondsPerWeek, state.capacity);
+};
 
 export const reducer = (
   state: CreateMarketState,
@@ -279,6 +307,7 @@ export const reducer = (
         state.allowance
       );
 
+      const debtBuffer = getDebtBuffer(state);
       return {
         ...state,
         capacity,
@@ -286,6 +315,7 @@ export const reducer = (
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
         isAllowanceSufficient,
+        debtBuffer,
       };
     }
 
@@ -393,6 +423,23 @@ export const reducer = (
       return {
         ...state,
         maxBondSize: value,
+      };
+    }
+
+    case Action.OVERRIDE_DEPOSIT_INTERVAL: {
+      //Value expected in hours, we save it as minutes
+      const depositInterval = value * 60 * 60;
+
+      return {
+        ...state,
+        depositInterval,
+      };
+    }
+
+    case Action.OVERRIDE_DEBT_BUFFER: {
+      return {
+        ...state,
+        debtBuffer: value,
       };
     }
 

@@ -27,7 +27,6 @@ export const TokenInput = (props: TokenInputProps) => {
     setShowTokenSymbol(false);
     let updated = Number(value.replace(/[^0-9.-]+/g, ""));
     let checked = isNaN(updated) || updated === 0 ? "" : updated.toString();
-
     setValue(checked);
   };
 
