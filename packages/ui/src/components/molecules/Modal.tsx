@@ -4,7 +4,7 @@ import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
 import { ClickAwayListener } from "@mui/base";
 
 type ModalHeaderProps = {
-  onClickClose?: (e: React.BaseSyntheticEvent) => void;
+  onClickClose: (e: React.BaseSyntheticEvent) => void;
   topLeftContent?: string | React.ReactNode;
 };
 
