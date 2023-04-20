@@ -15,6 +15,7 @@ export const SummaryRow = (props: ActionInfoProps) => {
         link={props.link}
         className="font-fraktion uppercase text-white"
         editable={props.editable}
+        onChange={props.onChange}
         symbol={props.symbol}
       />
     </div>

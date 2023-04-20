@@ -33,6 +33,7 @@ export type CreateMarketScreenProps = {
   onSubmitCreation: (state: CreateMarketState) => void;
   onSubmitMultisigCreation: (txHash: string) => void;
   getAuctioneer: (chain: string, state: CreateMarketState) => string;
+  getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => string;
   chain: string;
@@ -340,6 +341,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }
               submitMultisigCreation={props.onSubmitMultisigCreation}
               getAuctioneer={props.getAuctioneer}
+              getTeller={props.getTeller}
               getTxBytecode={props.getTxBytecode}
               estimateGas={props.estimateGas}
             />

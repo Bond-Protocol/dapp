@@ -67,6 +67,10 @@ export const CreateMarketController = () => {
     return getAddressesForType(chain, getBondType(state)).auctioneer;
   };
 
+  const getTeller = (chain: string, state: CreateMarketState) => {
+    return getAddressesForType(chain, getBondType(state)).teller;
+  };
+
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;
 
@@ -250,12 +254,13 @@ export const CreateMarketController = () => {
         tokens={tokens.filter((t) =>
           isConnected ? t.chainId === network.chain?.id : t.chainId === "1"
         )}
-        onSubmitCreation={onSubmit}
         onSubmitAllowance={approveCapacitySpending}
+        onSubmitCreation={onSubmit}
         onSubmitMultisigCreation={setCreationHash}
         estimateGas={estimateGas}
         fetchAllowance={fetchAllowance}
         getAuctioneer={getAuctioneer}
+        getTeller={getTeller}
         getTxBytecode={getTxBytecode}
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}

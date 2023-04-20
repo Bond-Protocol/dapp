@@ -50,6 +50,7 @@ export const Primary = {
     submitCreateMarketTransaction: () => {},
     submitApproveSpendingTransaction: () => {},
     getAuctioneer: () => "",
+    getTeller: () => "",
     getTxBytecode: () => "",
   },
 };

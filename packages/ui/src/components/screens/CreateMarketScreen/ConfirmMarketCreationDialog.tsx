@@ -114,12 +114,14 @@ export const ConfirmMarketCreationDialog = ({
   submitCreateMarketTransaction: React.MouseEventHandler<HTMLButtonElement>;
   submitMultisigCreation: (txHash: string) => void;
   getAuctioneer: (chain: string, state: CreateMarketState) => string;
+  getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => string;
 }) => {
   const chainName = CHAINS.get(props.chain)?.displayName;
   const bytecode = props.getTxBytecode(marketState);
   const auctioneer = props.getAuctioneer(props.chain, marketState);
+  const teller = props.getTeller(props.chain, marketState);
   const formattedState = formatMarketState(marketState);
 
   const fields = [
@@ -260,7 +262,7 @@ export const ConfirmMarketCreationDialog = ({
               TELLER CONTRACT
             </Link>
 
-            <Buttons />
+            <Buttons address={teller} />
           </div>
           <div className="flex w-full flex-col items-center justify-center gap-y-2">
             <h4 className="font-fraktion text-2xl">DEPLOY MARKET</h4>
