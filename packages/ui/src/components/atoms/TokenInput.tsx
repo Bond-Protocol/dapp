@@ -7,11 +7,14 @@ export type TokenInputProps = InputProps & {
   icon?: string;
   labelClassName?: string;
   editing?: boolean;
+  symbolStartsShowing?: boolean;
 };
 
 export const TokenInput = (props: TokenInputProps) => {
   const [value, setValue] = useState(props.value as string);
-  const [showTokenSymbol, setShowTokenSymbol] = useState(false);
+  const [showTokenSymbol, setShowTokenSymbol] = useState(
+    props.symbolStartsShowing
+  );
 
   const onBlur = (_e: React.BaseSyntheticEvent) => {
     let updated = value === "" ? "0" : value;
