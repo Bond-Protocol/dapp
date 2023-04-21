@@ -312,6 +312,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         closeModal={() => setShowModal(false)}
         amount={`${amount} ${market.quoteToken.symbol}`}
         payout={`${Number(payout).toFixed(4)} ${market.payoutToken.symbol}`}
+        discount={market.discount}
         issuer={issuerName}
         vestingTime={vestingLabel}
       />
