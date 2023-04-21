@@ -86,7 +86,7 @@ export const MarketInsights = () => {
 
         <InfoLabel
           label="Current Discount"
-          tooltip="The current discount available from this market."
+          tooltip="The current discount available from this market. Green = discount, buy. Red = premium, do not buy."
         >
           <p
             className={

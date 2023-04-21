@@ -85,6 +85,7 @@ export const BondPurchaseModal = (props: PurchaseBondModalProps) => {
       issuer={props.issuer}
       amount={props.amount}
       payout={props.payout}
+      discount={props.discount}
       vestingTime={props.vestingTime}
       contract={props.contract}
       onCancel={props.closeModal}
