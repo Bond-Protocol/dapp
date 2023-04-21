@@ -105,8 +105,6 @@ describe("<CreateMarketScreen />", () => {
         const calledWith = onSubmitSpy.getCall(0).args[0] as typeof target;
 
         expect(calledWith.priceModel).to.equal("static");
-        //NEEDS BONDS PER WEEK
-        //NEEDS DURATIONS AND DATES
       });
   });
 });

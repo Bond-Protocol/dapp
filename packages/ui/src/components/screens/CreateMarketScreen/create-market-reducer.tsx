@@ -69,6 +69,8 @@ export type CreateMarketState = {
   depositInterval?: number;
   duration: string;
   durationInDays: number;
+  overridenDebtBuffer?: number;
+  overridenDepositInterval?: number;
 };
 
 const placeholderToken = {
@@ -202,14 +204,18 @@ function calculateAllowance(
   };
 }
 
-const getDebtBuffer = (state: CreateMarketState) => {
+const tweakDebtBuffer = (state: CreateMarketState) => {
   const days =
     differenceInCalendarDays(
       state.endDate as Date,
       state.startDate ?? new Date()
     ) + 1; //TODO: The previous version adds a day to the difference (V1-L290)
 
-  return calculateDebtBuffer(days, state.bondsPerWeek, state.capacity);
+  return calculateDebtBuffer(
+    days,
+    state.bondsPerWeek,
+    parseFloat(state.capacity)
+  );
 };
 
 export const reducer = (
@@ -218,7 +224,7 @@ export const reducer = (
 ): CreateMarketState => {
   const { type, value } = action;
 
-  console.log({ type, value });
+  console.log({ type, value, prevState: state });
 
   switch (type) {
     case Action.UPDATE_QUOTE_TOKEN: {
@@ -307,7 +313,8 @@ export const reducer = (
         state.allowance
       );
 
-      const debtBuffer = getDebtBuffer(state);
+      const debtBuffer = tweakDebtBuffer({ ...state, capacity });
+
       return {
         ...state,
         capacity,
@@ -368,12 +375,15 @@ export const reducer = (
         state.capacity
       );
 
+      const debtBuffer = tweakDebtBuffer({ ...state, startDate: value });
+
       return {
         ...state,
         startDate: value,
         duration: duration ? duration.toString() : "",
         durationInDays,
         maxBondSize,
+        debtBuffer,
       };
     }
 
@@ -384,12 +394,15 @@ export const reducer = (
         state.capacity
       );
 
+      const debtBuffer = tweakDebtBuffer({ ...state, endDate: value });
+
       return {
         ...state,
         endDate: value,
         duration: duration ? duration.toString() : "",
         durationInDays,
         maxBondSize,
+        debtBuffer,
       };
     }
 
@@ -428,18 +441,18 @@ export const reducer = (
 
     case Action.OVERRIDE_DEPOSIT_INTERVAL: {
       //Value expected in hours, we save it as minutes
-      const depositInterval = value * 60 * 60;
+      const overridenDepositInterval = value * 60 * 60;
 
       return {
         ...state,
-        depositInterval,
+        overridenDepositInterval,
       };
     }
 
     case Action.OVERRIDE_DEBT_BUFFER: {
       return {
         ...state,
-        debtBuffer: value,
+        overridenDebtBuffer: value,
       };
     }
 

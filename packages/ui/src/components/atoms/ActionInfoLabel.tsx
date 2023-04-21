@@ -2,7 +2,9 @@ import { InputUnstyled } from "@mui/base";
 import { Link, Tooltip } from "components";
 import { Copy } from "components/atoms/Copy";
 import { ReactComponent as EditIcon } from "assets/icons/edit-icon.svg";
+import { ReactComponent as ResetIcon } from "assets/icons/clock-back.svg";
 import { useSymbolInput } from "src/hooks/use-symbol-input";
+import { useRef } from "react";
 
 export interface ActionInfoLabelProps {
   value?: string;
@@ -18,11 +20,22 @@ export interface ActionInfoLabelProps {
 }
 
 export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
+  const inputRef = useRef(null);
+
   const { value, onBlur, onChange, onFocus } = useSymbolInput(
     props.value,
     props.symbol,
     true
   );
+
+  const onClick = () => {
+    console.log({
+      inputRef,
+      current: inputRef?.current,
+      focus: inputRef?.current?.focus,
+    });
+    //inputRef?.current.focus();
+  };
 
   const handleChange = (e: React.BaseSyntheticEvent) => {
     const value = onChange(e);
@@ -47,10 +60,17 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
           </Link>
         )}
         {props.editable && (
+          <ResetIcon
+            onClick={(e: React.BaseSyntheticEvent) => {
+              handleChange({ ...e, target: { value: "" } });
+            }}
+          />
+        )}
+        {props.editable && (
           <InputUnstyled
             onBlur={onBlur}
             onFocus={onFocus}
-            endAdornment={<EditIcon className="ml-1" />}
+            endAdornment={<EditIcon onClick={onClick} className="ml-1" />}
             componentsProps={{
               root: { className: "flex items-center" },
               input: {
@@ -61,6 +81,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
             }}
             value={value}
             onChange={handleChange}
+            inputRef={inputRef}
           />
         )}
         {props.tooltip && (

@@ -20,6 +20,7 @@ export const defaultProps: CreateMarketScreenProps = {
   onSubmitMultisigCreation: () => {},
   fetchAllowance: () => Promise.resolve("10000000"),
   getAuctioneer: () => "",
+  getTeller: () => "",
   getTxBytecode: () => "",
   chain: "1",
   projectionData: [],

@@ -152,7 +152,9 @@ export const CreateMarketController = () => {
       differenceInCalendarDays(state.endDate, state.startDate ?? new Date()) +
       1; //TODO: The previous version adds a day to the difference (V1-L290)
 
-    const debtBuffer = calculateDebtBuffer(days, bondsPerWeek, state.capacity);
+    const debtBuffer = state.overridenDebtBuffer ?? state.debtBuffer;
+    const depositInterval =
+      state.overridenDepositInterval ?? state.depositInterval;
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
@@ -180,7 +182,7 @@ export const CreateMarketController = () => {
         vesting: state.vesting,
         conclusion:
           state.endDate && (state.endDate.getTime() / 1000).toFixed(0),
-        depositInterval: Math.trunc((24 * 60 * 60) / (bondsPerWeek / 7)),
+        depositInterval,
         scaleAdjustment: scaleAdjustment,
         oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
         formattedPrice: formattedInitialPrice.toString(),

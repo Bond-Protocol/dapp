@@ -66,8 +66,9 @@ const formatMarketState = (state: CreateMarketState) => {
     },
     startDate: formatDate.short(state.startDate as Date),
     endDate: formatDate.short(state.endDate as Date),
-    depositInterval: state.depositInterval / 60 / 60,
-    debtBuffer: state.debtBuffer,
+    depositInterval:
+      (state?.overridenDepositInterval ?? state?.depositInterval) / 60 / 60,
+    debtBuffer: state.overridenDebtBuffer ?? state.debtBuffer,
   };
 };
 
