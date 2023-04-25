@@ -31,6 +31,7 @@ export const Primary = {
     projectionData: [],
     fetchAllowance: () => Promise.resolve(1),
     getAuctioneer: () => "",
+    getTeller: () => "",
     getTxBytecode: () => "",
     chain: "5",
     tokens: list,

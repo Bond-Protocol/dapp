@@ -66,9 +66,8 @@ const formatMarketState = (state: CreateMarketState) => {
     },
     startDate: formatDate.short(state.startDate as Date),
     endDate: formatDate.short(state.endDate as Date),
-    depositInterval:
-      (state?.overridenDepositInterval ?? state?.depositInterval) / 60 / 60,
-    debtBuffer: state.overridenDebtBuffer ?? state.debtBuffer,
+    depositInterval: state?.depositInterval / 60 / 60,
+    debtBuffer: state.debtBuffer,
   };
 };
 
@@ -256,6 +255,7 @@ export const ConfirmMarketCreationDialog = (props: {
           )}
         </div>
       )}
+
       {props.showMultisig && (
         <div className="mt-4 flex gap-x-2">
           <div className="flex w-full flex-col items-center justify-center gap-y-2">

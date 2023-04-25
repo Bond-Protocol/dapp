@@ -70,7 +70,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     fetchAllowance();
   }, [state.payoutToken, state.priceModel, state.vestingType]);
 
-  const canSubmit =
+  const canSubmit = //TODO: needs improvement
     parseFloat(state.capacity) > 0 &&
     state.endDate &&
     state.vesting &&

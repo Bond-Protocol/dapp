@@ -147,20 +147,24 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const bondsPerWeek = 7;
-    const days =
-      differenceInCalendarDays(state.endDate, state.startDate ?? new Date()) +
-      1; //TODO: The previous version adds a day to the difference (V1-L290)
+    // const bondsPerWeek = 7;
+    // const days =
+    //   differenceInCalendarDays(state.endDate, state.startDate ?? new Date()) +
+    //   1; //TODO: The previous version adds a day to the difference (V1-L290)
 
-    const debtBuffer = state.overridenDebtBuffer ?? state.debtBuffer;
-    const depositInterval =
-      state.overridenDepositInterval ?? state.depositInterval;
+    const debtBuffer = state.overridenDebtBuffer
+      ? state.overridenDebtBuffer
+      : state.debtBuffer;
+    const depositInterval = state.overridenDepositInterval
+      ? state.overridenDepositInterval
+      : state.depositInterval;
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
     let bondType: string = getBondType(state);
 
+    console.log({ chain });
     return {
       summaryData: { ...state },
       marketParams: {

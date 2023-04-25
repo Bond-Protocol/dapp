@@ -66,7 +66,7 @@ export type CreateMarketState = {
   oracle?: boolean;
   maxBondSize?: number;
   debtBuffer?: number;
-  depositInterval?: number;
+  depositInterval: number;
   duration: string;
   durationInDays: number;
   overridenDebtBuffer?: number;
@@ -135,7 +135,11 @@ function calculateMaxBondSize(capacity: string, durationInDays: number) {
   return trimAsNumber(maxBondSize, calculateTrimDigits(maxBondSize));
 }
 
-function onChangeDate(endDate?: Date, startDate?: Date, capacity?: string) {
+function calculateDurationAndMaxBondSize(
+  endDate?: Date,
+  startDate?: Date,
+  capacity?: string
+) {
   const duration = calculateDuration(endDate, startDate);
   const durationInDays = Math.ceil(Number(duration) / 60 / 60 / 24);
 
@@ -211,11 +215,9 @@ const tweakDebtBuffer = (state: CreateMarketState) => {
       state.startDate ?? new Date()
     ) + 1; //TODO: The previous version adds a day to the difference (V1-L290)
 
-  return calculateDebtBuffer(
-    days,
-    state.bondsPerWeek,
-    parseFloat(state.capacity)
-  );
+  const capacity = parseFloat(state.capacity);
+
+  return calculateDebtBuffer(days, state.bondsPerWeek, capacity);
 };
 
 export const reducer = (
@@ -369,11 +371,8 @@ export const reducer = (
     }
 
     case Action.UPDATE_START_DATE: {
-      const { duration, durationInDays, maxBondSize } = onChangeDate(
-        state.endDate,
-        value,
-        state.capacity
-      );
+      const { duration, durationInDays, maxBondSize } =
+        calculateDurationAndMaxBondSize(state.endDate, value, state.capacity);
 
       const debtBuffer = tweakDebtBuffer({ ...state, startDate: value });
 
@@ -388,11 +387,8 @@ export const reducer = (
     }
 
     case Action.UPDATE_END_DATE: {
-      const { duration, durationInDays, maxBondSize } = onChangeDate(
-        value,
-        state.startDate,
-        state.capacity
-      );
+      const { duration, durationInDays, maxBondSize } =
+        calculateDurationAndMaxBondSize(value, state.startDate, state.capacity);
 
       const debtBuffer = tweakDebtBuffer({ ...state, endDate: value });
 
