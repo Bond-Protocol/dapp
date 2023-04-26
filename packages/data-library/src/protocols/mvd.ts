@@ -23,7 +23,7 @@ export default {
     and you'll deploy the market from like a multisig or other contract, or a wallet
   */
   issuerAddresses: {
-    [CHAIN_ID.ARBITRUM_MAINNET]: ["0xc1048DB8e91E68b468b1d7B513fbB666C6e1622D"],
+    [CHAIN_ID.ARBITRUM_MAINNET]: ["0x4126Bb708458fe7C9126DD7854255F57ac3e1d67"],
   },
   // Tokens specific to your protocol like your governance token or LPs
   // If you're looking to add a strategic asset, stablecoin or an otherwise common base please check the tokens directory
