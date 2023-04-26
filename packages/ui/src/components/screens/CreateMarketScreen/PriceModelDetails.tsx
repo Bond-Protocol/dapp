@@ -26,14 +26,14 @@ const options: Record<PriceModel, any> = {
   },
   static: {
     Image: StaticPriceImage,
-    title: "Fixed Discount",
+    title: "Fixed Price",
     description:
       "enable trial runs for limited quantity of vested tokens. Best for gauging demand for different vesting lengths.",
   },
   ["oracle-dynamic"]: {
     oracle: true,
     Image: DynamicOraclePriceImage,
-    title: "Dynamic Discount",
+    title: "Oracle SDA",
     description:
       "Bond Market are ... Lorem ipsum dolor sit amet consectetur. Facilisis consequat in ut massa quam ut.",
   },
