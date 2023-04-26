@@ -114,6 +114,7 @@ export const ConfirmMarketCreationDialog = (props: {
   getAuctioneer: (chain: string, state: CreateMarketState) => string;
   getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
+  getAllowanceTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => string;
 }) => {
   const [state, dispatch] = useCreateMarket();
@@ -123,6 +124,8 @@ export const ConfirmMarketCreationDialog = (props: {
   const teller = props.getTeller(props.chain, state);
   const formattedState = formatMarketState(state);
 
+  const allowanceBytecode = props.getAllowanceTxBytecode(state);
+  console.log({ allowanceBytecode });
   const fields = [
     { leftLabel: "Price Model", rightLabel: state.priceModel },
     ...getPriceFields(state),
@@ -269,7 +272,12 @@ export const ConfirmMarketCreationDialog = (props: {
               TELLER CONTRACT
             </Link>
 
-            <Buttons address={teller} />
+            <Buttons
+              bytecode={() => {
+                props.getAllowanceTxBytecode(state);
+              }}
+              address={teller}
+            />
           </div>
           <div className="flex w-full flex-col items-center justify-center gap-y-2">
             <h4 className="font-fraktion text-center text-2xl ">

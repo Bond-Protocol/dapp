@@ -85,10 +85,7 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const auctioneer = getAddressesForType(
-      chain,
-      getBondType(state)
-    ).auctioneer;
+    const auctioneer = getAuctioneer(chain.id?.toString(), state);
 
     const allowance = await getTokenAllowance(
       state.payoutToken.address,
@@ -113,10 +110,7 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const auctioneer = getAddressesForType(
-      chain?.id.toString(),
-      getBondType(state)
-    ).auctioneer;
+    const auctioneer = getAuctioneer(chain?.id.toString(), state);
 
     try {
       setAllowanceTx(true);
@@ -155,6 +149,7 @@ export const CreateMarketController = () => {
     const debtBuffer = state.overridenDebtBuffer
       ? state.overridenDebtBuffer
       : state.debtBuffer;
+
     const depositInterval = state.overridenDepositInterval
       ? state.overridenDepositInterval
       : state.depositInterval;
@@ -164,7 +159,6 @@ export const CreateMarketController = () => {
 
     let bondType: string = getBondType(state);
 
-    console.log({ chain });
     return {
       summaryData: { ...state },
       marketParams: {
@@ -210,6 +204,16 @@ export const CreateMarketController = () => {
     return contractLib.createMarketMultisig(
       config?.marketParams,
       config?.bondType
+    );
+  };
+
+  const getAllowanceTxBytecode = (state: CreateMarketState) => {
+    const config = configureMarket(state);
+    const tellerAddress = getTeller(config?.chain);
+
+    return contractLib.getAllowanceTxBytes(
+      tellerAddress,
+      state.recommendedAllowance
     );
   };
 
@@ -268,6 +272,7 @@ export const CreateMarketController = () => {
         getAuctioneer={getAuctioneer}
         getTeller={getTeller}
         getTxBytecode={getTxBytecode}
+        getAllowanceTxBytecode={getAllowanceTxBytecode}
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}
         projectionData={projectionData.prices}
