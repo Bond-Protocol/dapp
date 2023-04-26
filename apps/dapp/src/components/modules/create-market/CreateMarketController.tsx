@@ -43,6 +43,7 @@ export const CreateMarketController = () => {
   });
 
   function getBondType(state: CreateMarketState) {
+    console.log({ state });
     switch (state.priceModel) {
       case "dynamic":
         return state.vestingType === "term"
@@ -209,11 +210,11 @@ export const CreateMarketController = () => {
 
   const getAllowanceTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
-    const tellerAddress = getTeller(config?.chain);
+    const tellerAddress = getTeller(config?.chain, state);
 
     return contractLib.getAllowanceTxBytes(
       tellerAddress,
-      state.recommendedAllowance
+      state.recommendedAllowanceDecimalAdjusted
     );
   };
 
