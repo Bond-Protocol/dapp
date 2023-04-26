@@ -1,3 +1,5 @@
+import {trimAsNumber} from "utils";
+
 export interface PriceData {
   date: number;
   price: number;
@@ -30,12 +32,16 @@ export const getDiscountPercentage = (
 };
 
 export interface ProjectionConfiguration {
+  initialCapacity?: number;
+  targetDiscount?: number;
   initialPrice?: number;
   minPrice?: number;
+  maxBondSize?: number;
+  durationInDays?: number;
   fixedPrice?: number;
-  maxPremium: number;
-  maxDiscount: number;
-  triggerCount: number;
+  maxPremium?: number;
+  maxDiscount?: number;
+  triggerCount?: number;
 }
 
 export function generateDiscountedPrices(
@@ -43,48 +49,61 @@ export function generateDiscountedPrices(
   config: ProjectionConfiguration
 ): DiscountedPriceData[] {
   let discountedPrices: DiscountedPriceData[] = [];
-  let currentTriggerCount = 0;
-  const { maxDiscount, maxPremium, triggerCount } = config;
+  let { initialCapacity, targetDiscount, initialPrice, minPrice, maxBondSize, durationInDays } = config;
 
-  // Calculate the index step for triggers
-  const step = Math.floor(prices.length / (triggerCount + 1));
+  let capacity = initialCapacity;
+  let expectedCapacity = initialCapacity;
+  let decayInterval = 5 * 6;
+  let duration = durationInDays * 6;
+  let decaySpeed = duration / decayInterval;
 
-  for (let i = 0; i < prices.length; i++) {
-    let priceObj = prices[i];
-    let discountedPrice: number;
-    let discount: number;
+  let outputPrices = [{ initialPrice, details: {} }];
+  let offset = 0;
 
-    if (i === 0) {
-      discountedPrice = priceObj.price;
-      discount = 0;
-    } else {
-      if (i % step === 0 && currentTriggerCount < triggerCount) {
-        discountedPrice = priceObj.price * (1 + maxPremium / 100);
-        currentTriggerCount++;
-      } else {
-        const prevTriggerIndex = i - (i % step);
-        const prevTriggerPrice = prices[prevTriggerIndex].price;
-        const slope =
-          (prevTriggerPrice * (1 - maxDiscount / 100) -
-            prevTriggerPrice * (1 + maxPremium / 100)) /
-          step;
-        discountedPrice =
-          prevTriggerPrice * (1 + maxPremium / 100) + slope * (i % step);
-      }
+  let tokenPrices = [prices[0]];
+  for (let i = 1; i < duration; i++) {
+    tokenPrices.push(prices[(i * 4) - 1])
+    // Update expected capacity
+    expectedCapacity = capacity * (duration - i) / duration;
 
-      // Ensure discountedPrice is within the specified range
-      discountedPrice = Math.min(
-        discountedPrice,
-        priceObj.price * (1 + maxPremium / 100)
-      );
-      discountedPrice = Math.max(
-        discountedPrice,
-        priceObj.price * (1 - maxDiscount / 100)
-      );
+    // Decay price
+    let price = (initialPrice * (1 + decaySpeed * (expectedCapacity - capacity) / initialCapacity)) + offset;
 
-      discount = ((priceObj.price - discountedPrice) / priceObj.price) * 100;
+    let usdBondPrice = price * (prices[(i * 4) - 1].quotePriceUsd);
+    let usdMarketPrice = prices[(i * 4) - 1].payoutPriceUsd;
+    let discount = (usdBondPrice - usdMarketPrice) / usdMarketPrice;
+    discount *= 100;
+    discount = trimAsNumber(-discount, 2);
+
+    if (price < minPrice) price = minPrice;
+    outputPrices.push({
+      price,
+      usdBondPrice,
+      usdMarketPrice,
+      discount,
+    details: {
+      initialPrice,
+        decaySpeed,
+        expectedCapacity,
+        capacity,
+        initialCapacity,
+        offset
     }
+  });
 
+    if (price <= (initialPrice / 100) * (100 - targetDiscount)) {
+      capacity -= maxBondSize;
+      offset = offset + (initialPrice - price);// (1 + decaySpeed * (expectedCapacity - capacity) / initialCapacity);
+    }
+  }
+
+  console.log({
+    prices,
+    tokenPrices,
+    outputPrices,
+  })
+
+/*
     discountedPrices.push({
       date: priceObj.date,
       price: priceObj.price,
@@ -92,7 +111,7 @@ export function generateDiscountedPrices(
       discount: discount,
     });
   }
-
+*/
   return discountedPrices;
 }
 

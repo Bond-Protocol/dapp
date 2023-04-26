@@ -13,7 +13,11 @@ import { CreateMarketState, useCreateMarket } from "..";
 export type ProjectionChartProps = {
   data?: PriceData[];
   initialPrice?: number;
+  initialCapacity?: number;
   minPrice?: number;
+  targetDiscount?: number;
+  maxBondSize?: number;
+  durationInDays?: number;
 };
 
 const getProjectionDataset = (
@@ -40,6 +44,12 @@ export const ProjectionChart = ({
     maxDiscount,
     maxPremium,
     triggerCount,
+    initialPrice: props.initialPrice,
+    initialCapacity: props.initialCapacity,
+    minPrice,
+    maxBondSize: props.maxBondSize,
+    durationInDays: props.durationInDays,
+    targetDiscount: props.targetDiscount,
     fixedPrice: state.priceModels.static.initialPrice, //TODO: Update
   });
 

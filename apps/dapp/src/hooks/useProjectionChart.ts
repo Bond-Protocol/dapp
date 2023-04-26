@@ -16,6 +16,8 @@ export const useProjectionChartData = ({ quoteToken, payoutToken }: any) => {
         return {
           ...p,
           price: 1 / (quotePrice / p.price),
+          payoutPriceUsd: p.price,
+          quotePriceUsd: quotePrice,
         };
       });
 

@@ -15,7 +15,7 @@ import {
   PriceModelPicker,
   ConfirmMarketCreationDialog,
   useCreateMarket,
-  ProjectionChartSimple,
+  ProjectionChart,
   CreateMarketState,
   Token,
   TransactionHashDialog,
@@ -215,11 +215,15 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           className="h-fill flex w-1/2 flex-col justify-between pl-2"
         >
           <div className="mt-2 flex h-[290px] w-full">
-            <ProjectionChartSimple
+            <ProjectionChart
               id="cm-projection-chart"
+              targetDiscount={5}
               data={props.projectionData}
-              initialPrice={state.priceModels[state.priceModel].initialPrice}
-              minPrice={state.priceModels[state.priceModel].minPrice}
+              initialPrice={Number(state.priceModels[state.priceModel].initialPrice) || 0}
+              initialCapacity={Number(state.capacity) || 0}
+              minPrice={Number(state.priceModels[state.priceModel].minPrice)}
+              maxBondSize={Number(state.maxBondSize)}
+              durationInDays={state.durationInDays}
               payoutTokenSymbol={state.payoutToken.symbol}
             />
           </div>
