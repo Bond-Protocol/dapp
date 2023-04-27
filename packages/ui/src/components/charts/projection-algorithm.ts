@@ -93,25 +93,10 @@ export function generateDiscountedPrices(
 
     if (price <= (initialPrice / 100) * (100 - targetDiscount)) {
       capacity -= maxBondSize;
-      offset = offset + (initialPrice - price);// (1 + decaySpeed * (expectedCapacity - capacity) / initialCapacity);
+      offset = offset + (initialPrice - price);
     }
   }
 
-  console.log({
-    prices,
-    tokenPrices,
-    outputPrices,
-  })
-
-/*
-    discountedPrices.push({
-      date: priceObj.date,
-      price: priceObj.price,
-      discountedPrice: discountedPrice,
-      discount: discount,
-    });
-  }
-*/
   return discountedPrices;
 }
 
