@@ -1,12 +1,18 @@
 import { Meta, StoryFn } from "@storybook/react";
-import { ConfirmMarketCreationDialog, CreateMarketProvider } from "components";
+import {
+  ConfirmMarketCreationDialog,
+  CreateMarketProvider,
+  CreateMarketState,
+} from "components";
 import { ModalDecorator } from "../decorators";
 import { list } from "utils";
 const dai = list.find(({ id }) => id === "dai");
 const ohm = list.find(({ id }) => id === "olympus");
 
-const state = {
+const state: Partial<CreateMarketState> = {
+  //@ts-ignore
   quoteToken: dai,
+  //@ts-ignore
   payoutToken: ohm,
   capacityType: "payout",
   capacity: "10000000",
@@ -31,6 +37,12 @@ const state = {
   oracle: false,
   startDate: new Date(),
   endDate: new Date(),
+};
+
+const overridenState = {
+  ...state,
+  overridenDepositInterval: 123,
+  overridenDebtBuffer: 10,
 };
 
 export default {
@@ -62,6 +74,7 @@ export const Primary = {
     getAuctioneer: () => "",
     getTeller: () => "",
     getTxBytecode: () => "",
+    getAllowanceTxBytecode: () => "",
   },
 };
 

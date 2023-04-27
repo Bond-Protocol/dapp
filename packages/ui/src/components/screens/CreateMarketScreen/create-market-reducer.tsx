@@ -23,7 +23,7 @@ export type Token = {
   apiId?: string;
 };
 
-export enum Action {
+export enum CreateMarketAction {
   UPDATE_QUOTE_TOKEN = "update_bond_token",
   UPDATE_PAYOUT_TOKEN = "update_payout_token",
   UPDATE_CAPACITY_TYPE = "update_capacity_type",
@@ -222,14 +222,14 @@ const tweakDebtBuffer = (state: CreateMarketState) => {
 
 export const reducer = (
   state: CreateMarketState,
-  action: { type: Action; [key: string]: any }
+  action: { type: CreateMarketAction; [key: string]: any }
 ): CreateMarketState => {
   const { type, value } = action;
 
   console.log({ type, value, prevState: state });
 
   switch (type) {
-    case Action.UPDATE_QUOTE_TOKEN: {
+    case CreateMarketAction.UPDATE_QUOTE_TOKEN: {
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
@@ -251,7 +251,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_PAYOUT_TOKEN: {
+    case CreateMarketAction.UPDATE_PAYOUT_TOKEN: {
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
@@ -273,7 +273,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_ALLOWANCE: {
+    case CreateMarketAction.UPDATE_ALLOWANCE: {
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
@@ -295,7 +295,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_CAPACITY: {
+    case CreateMarketAction.UPDATE_CAPACITY: {
       const capacity = isNaN(Number(value)) ? "" : value;
 
       let maxBondSize = 0;
@@ -328,7 +328,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_CAPACITY_TYPE: {
+    case CreateMarketAction.UPDATE_CAPACITY_TYPE: {
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
@@ -350,7 +350,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_VESTING: {
+    case CreateMarketAction.UPDATE_VESTING: {
       let vesting: string = "";
       let vestingString: string = "";
 
@@ -370,7 +370,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_START_DATE: {
+    case CreateMarketAction.UPDATE_START_DATE: {
       const { duration, durationInDays, maxBondSize } =
         calculateDurationAndMaxBondSize(state.endDate, value, state.capacity);
 
@@ -386,7 +386,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_END_DATE: {
+    case CreateMarketAction.UPDATE_END_DATE: {
       const { duration, durationInDays, maxBondSize } =
         calculateDurationAndMaxBondSize(value, state.startDate, state.capacity);
 
@@ -402,7 +402,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_PRICE_MODEL: {
+    case CreateMarketAction.UPDATE_PRICE_MODEL: {
       const { priceModel, oracle, oracleAddress } = value;
 
       return {
@@ -410,10 +410,11 @@ export const reducer = (
         priceModel,
         oracle,
         oracleAddress,
+        startDate: new Date(), // we have to reset the start date cuz not all markets support a start date atm
       };
     }
 
-    case Action.UPDATE_PRICE_RATES: {
+    case CreateMarketAction.UPDATE_PRICE_RATES: {
       const { priceModel, ...rates } = value;
 
       return {
@@ -428,14 +429,14 @@ export const reducer = (
       };
     }
 
-    case Action.OVERRIDE_MAX_BOND_SIZE: {
+    case CreateMarketAction.OVERRIDE_MAX_BOND_SIZE: {
       return {
         ...state,
         maxBondSize: value,
       };
     }
 
-    case Action.OVERRIDE_DEPOSIT_INTERVAL: {
+    case CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL: {
       //Value expected in hours, we save it as minutes
       const overridenDepositInterval = value * 60 * 60;
 
@@ -445,14 +446,14 @@ export const reducer = (
       };
     }
 
-    case Action.OVERRIDE_DEBT_BUFFER: {
+    case CreateMarketAction.OVERRIDE_DEBT_BUFFER: {
       return {
         ...state,
         overridenDebtBuffer: value,
       };
     }
 
-    case Action.RESET: {
+    case CreateMarketAction.RESET: {
       return placeholderState;
     }
 
@@ -463,7 +464,10 @@ export const reducer = (
 };
 
 export const CreateMarketContext = createContext<
-  [CreateMarketState, Dispatch<{ [key: string]: any; type: Action }>]
+  [
+    CreateMarketState,
+    Dispatch<{ [key: string]: any; type: CreateMarketAction }>
+  ]
 >([placeholderState, () => null]);
 
 export const CreateMarketProvider = ({

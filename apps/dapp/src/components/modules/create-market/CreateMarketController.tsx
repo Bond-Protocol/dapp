@@ -8,17 +8,16 @@ import {
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import {
-  Action,
+  CreateMarketAction,
   CreateMarketScreen,
   CreateMarketState,
   useCreateMarket,
 } from "ui";
-import { calculateDebtBuffer, doPriceMath } from "./helpers";
+import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
-import { differenceInCalendarDays } from "date-fns";
 
 export const CreateMarketController = () => {
   const { data: signer } = useSigner();
@@ -43,7 +42,6 @@ export const CreateMarketController = () => {
   });
 
   function getBondType(state: CreateMarketState) {
-    console.log({ state });
     switch (state.priceModel) {
       case "dynamic":
         return state.vestingType === "term"
@@ -124,7 +122,10 @@ export const CreateMarketController = () => {
       );
 
       await tx.wait(1);
-      dispatch({ type: Action.UPDATE_ALLOWANCE, value: state.capacity });
+      dispatch({
+        type: CreateMarketAction.UPDATE_ALLOWANCE,
+        value: state.capacity,
+      });
     } catch (e) {
       console.log({ e });
     } finally {
@@ -141,11 +142,6 @@ export const CreateMarketController = () => {
       id: network?.chain?.id,
       label: network.chain.name,
     };
-
-    // const bondsPerWeek = 7;
-    // const days =
-    //   differenceInCalendarDays(state.endDate, state.startDate ?? new Date()) +
-    //   1; //TODO: The previous version adds a day to the difference (V1-L290)
 
     const debtBuffer = state.overridenDebtBuffer
       ? state.overridenDebtBuffer
@@ -212,7 +208,7 @@ export const CreateMarketController = () => {
     const config = configureMarket(state);
     const tellerAddress = getTeller(config?.chain, state);
 
-    return contractLib.getAllowanceTxBytes(
+    return contractLib.getApproveTxBytecode(
       tellerAddress,
       state.recommendedAllowanceDecimalAdjusted
     );

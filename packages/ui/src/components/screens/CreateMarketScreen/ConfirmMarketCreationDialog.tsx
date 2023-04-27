@@ -6,7 +6,8 @@ import {
   SummaryRow,
   Link,
   useCreateMarket,
-  Action,
+  CreateMarketAction,
+  Checkbox,
 } from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
@@ -15,7 +16,7 @@ import { CreateMarketState } from "components";
 import { dynamicFormatter, formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { CHAINS } from "@bond-protocol/bond-library/dist/src";
-import { MouseEventHandler } from "react";
+import { MouseEventHandler, useState } from "react";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
@@ -71,12 +72,17 @@ const formatMarketState = (state: CreateMarketState) => {
   };
 };
 
-const Buttons = (props: { bytecode: string; address: string }) => {
+const Buttons = (props: {
+  bytecode: string;
+  address: string;
+  disabled: boolean;
+}) => {
   const copy = (content: string) => navigator.clipboard.writeText(content);
 
   return (
     <>
       <Button
+        disabled={props.disabled}
         icon
         size="lg"
         className="group w-full"
@@ -89,6 +95,7 @@ const Buttons = (props: { bytecode: string; address: string }) => {
         </div>
       </Button>
       <Button
+        disabled={props.disabled}
         size="lg"
         icon
         className="group w-full"
@@ -118,14 +125,16 @@ export const ConfirmMarketCreationDialog = (props: {
   estimateGas: (state: CreateMarketState) => string;
 }) => {
   const [state, dispatch] = useCreateMarket();
-  const chainName = CHAINS.get(props.chain)?.displayName;
-  const bytecode = props.getTxBytecode(state);
   const auctioneer = props.getAuctioneer(props.chain, state);
   const teller = props.getTeller(props.chain, state);
   const formattedState = formatMarketState(state);
+  const chain = CHAINS.get(props.chain);
+  const blockExplorerUrl = chain?.blockExplorerUrls[0];
+  const [accepted, setAccepted] = useState(false);
 
+  const createMarketBytecode = props.getTxBytecode(state);
   const allowanceBytecode = props.getAllowanceTxBytecode(state);
-  console.log({ allowanceBytecode });
+
   const fields = [
     { leftLabel: "Price Model", rightLabel: state.priceModel },
     ...getPriceFields(state),
@@ -138,6 +147,11 @@ export const ConfirmMarketCreationDialog = (props: {
       rightLabel: state.durationInDays.toString() + " DAYS",
     },
   ];
+
+  const edited = !!(
+    state.overridenDebtBuffer || state.overridenDepositInterval
+  );
+  const disabled = edited && !accepted;
 
   return (
     <div id="cm-confirm-modal">
@@ -203,7 +217,10 @@ export const ConfirmMarketCreationDialog = (props: {
             rightLabel={formattedState.depositInterval?.toString()}
             symbol=" HOURS"
             onChange={(value) =>
-              dispatch({ type: Action.OVERRIDE_DEPOSIT_INTERVAL, value })
+              dispatch({
+                type: CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL,
+                value,
+              })
             }
           />
         </div>
@@ -218,7 +235,7 @@ export const ConfirmMarketCreationDialog = (props: {
             rightLabel={formattedState.debtBuffer?.toString()}
             symbol="%"
             onChange={(value) =>
-              dispatch({ type: Action.OVERRIDE_DEBT_BUFFER, value })
+              dispatch({ type: CreateMarketAction.OVERRIDE_DEBT_BUFFER, value })
             }
           />
         </div>
@@ -259,6 +276,20 @@ export const ConfirmMarketCreationDialog = (props: {
         </div>
       )}
 
+      {props.showMultisig && edited && (
+        <div className="mt-4 flex flex-col">
+          <Checkbox
+            onChange={setAccepted}
+            labelClassname="font-bold"
+            label="I understand"
+          />
+          <p className="text-light-grey-400 mt-1 w-full max-w-[340px] self-center font-mono text-sm">
+            You have edited advanced configuration. Make sure you are aware of
+            their impact on the bond market.
+          </p>
+        </div>
+      )}
+
       {props.showMultisig && (
         <div className="mt-4 flex gap-x-2">
           <div className="flex w-full flex-col items-center justify-center gap-y-2">
@@ -266,17 +297,18 @@ export const ConfirmMarketCreationDialog = (props: {
               APPROVE CAPACITY
             </h4>
             <Link
+              target="_blank"
               labelClassname="text-light-grey hover:text-light-secondary"
               className="mb-2 font-mono"
+              href={blockExplorerUrl + "address/" + teller}
             >
               TELLER CONTRACT
             </Link>
 
             <Buttons
-              bytecode={() => {
-                props.getAllowanceTxBytecode(state);
-              }}
-              address={teller}
+              disabled={disabled}
+              bytecode={allowanceBytecode}
+              address={state.payoutToken.address as string}
             />
           </div>
           <div className="flex w-full flex-col items-center justify-center gap-y-2">
@@ -284,13 +316,19 @@ export const ConfirmMarketCreationDialog = (props: {
               DEPLOY MARKET
             </h4>
             <Link
+              target="_blank"
               labelClassname="text-light-grey hover:text-light-secondary"
               className="mb-2 font-mono"
+              href={blockExplorerUrl + "address/" + auctioneer}
             >
               AUCTION CONTRACT
             </Link>
 
-            <Buttons bytecode={bytecode} address={auctioneer} />
+            <Buttons
+              disabled={disabled}
+              bytecode={createMarketBytecode}
+              address={auctioneer}
+            />
           </div>
         </div>
       )}
