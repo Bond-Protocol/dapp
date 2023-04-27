@@ -11,8 +11,8 @@ type Story = StoryObj<typeof ActionInfo>;
 export const Primary: Story = {
   args: {
     editable: true,
-    rightLabel: "24",
-    leftLabel: "Rug Intensity",
+    rightLabel: "Reis👑",
+    leftLabel: "Bom dia",
     symbol: "%",
   },
 };

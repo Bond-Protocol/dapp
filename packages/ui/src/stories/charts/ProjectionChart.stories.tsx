@@ -10,8 +10,8 @@ export default {
 } as Meta<typeof ProjectionChart>;
 
 const Template: StoryFn<typeof ProjectionChart> = (args) => (
-  <div className="">
-    <ProjectionChart {...args} className="h-[30vh] w-[35vw]" />
+  <div className="h-[80vh] w-[85vw]">
+    <ProjectionChart {...args} className="" />
   </div>
 );
 

@@ -12,7 +12,7 @@ export const Primary = {
   args: {
     title: "Wagmi?",
     leftLabel: "LESGOOOO",
-    rightLabel: "Fat nope-Nope",
+    rightLabel: "Thats whats up",
     onClickRight: () => {},
   },
 };

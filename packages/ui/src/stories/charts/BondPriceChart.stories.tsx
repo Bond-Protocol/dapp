@@ -10,8 +10,8 @@ export default {
 } as Meta<typeof BondPriceChart>;
 
 const Template: StoryFn<typeof BondPriceChart> = (args) => (
-  <div className="">
-    <BondPriceChart {...args} className="h-[30vh] w-[35vw]" />
+  <div className="h-[80vh] w-[85vw]">
+    <BondPriceChart {...args} />
   </div>
 );
 
