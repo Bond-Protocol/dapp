@@ -31,7 +31,6 @@ export const InfoLabel = (props: InfoLabelProps) => {
         </div>
         {props.editable ? (
           <TokenInput
-            showSymbol
             className="mb-1"
             rootClassName="border-none w-full py-1.5"
             inputClassName={className + " " + "pl-0 bg-transparent text-center"}

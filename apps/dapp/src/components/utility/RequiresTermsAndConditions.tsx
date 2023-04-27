@@ -19,7 +19,8 @@ export const RequireTermsAndConditions = ({
 
   if (accepted) return children;
   return (
-    <Modal open={!hasAccepted}>
+    <Modal open={!hasAccepted} onClickClose={() => {}}>
+      {/*TODO: FIX*/}
       <GeneralTermsDialog onAccept={() => setAccepted(true)} />
     </Modal>
   );
