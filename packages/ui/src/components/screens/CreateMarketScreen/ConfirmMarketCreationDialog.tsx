@@ -121,7 +121,7 @@ export const ConfirmMarketCreationDialog = (props: {
   getAuctioneer: (chain: string, state: CreateMarketState) => string;
   getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
-  getAllowanceTxBytecode: (state: CreateMarketState) => string;
+  getApproveTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => string;
 }) => {
   const [state, dispatch] = useCreateMarket();
@@ -133,7 +133,7 @@ export const ConfirmMarketCreationDialog = (props: {
   const [accepted, setAccepted] = useState(false);
 
   const createMarketBytecode = props.getTxBytecode(state);
-  const allowanceBytecode = props.getAllowanceTxBytecode(state);
+  const allowanceBytecode = props.getApproveTxBytecode(state);
 
   const fields = [
     { leftLabel: "Price Model", rightLabel: state.priceModel },

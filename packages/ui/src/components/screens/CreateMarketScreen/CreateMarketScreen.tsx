@@ -35,7 +35,7 @@ export type CreateMarketScreenProps = {
   getAuctioneer: (chain: string, state: CreateMarketState) => string;
   getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
-  getAllowanceTxBytecode: (state: CreateMarketState) => string;
+  getApproveTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => string;
   chain: string;
   tokens: Token[];
@@ -361,7 +361,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               getAuctioneer={props.getAuctioneer}
               getTeller={props.getTeller}
               getTxBytecode={props.getTxBytecode}
-              getAllowanceTxBytecode={props.getAllowanceTxBytecode}
+              getApproveTxBytecode={props.getApproveTxBytecode}
               estimateGas={props.estimateGas}
             />
           )

@@ -22,6 +22,7 @@ export const defaultProps: CreateMarketScreenProps = {
   getAuctioneer: () => "",
   getTeller: () => "",
   getTxBytecode: () => "",
+  getApproveTxBytecode: () => "",
   chain: "1",
   projectionData: [],
   creationHash: "",

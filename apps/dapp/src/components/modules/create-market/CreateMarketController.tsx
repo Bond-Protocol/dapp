@@ -204,7 +204,7 @@ export const CreateMarketController = () => {
     );
   };
 
-  const getAllowanceTxBytecode = (state: CreateMarketState) => {
+  const getApproveTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
     const tellerAddress = getTeller(config?.chain, state);
 
@@ -269,7 +269,7 @@ export const CreateMarketController = () => {
         getAuctioneer={getAuctioneer}
         getTeller={getTeller}
         getTxBytecode={getTxBytecode}
-        getAllowanceTxBytecode={getAllowanceTxBytecode}
+        getApproveTxBytecode={getApproveTxBytecode}
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}
         projectionData={projectionData.prices}

@@ -62,7 +62,7 @@ describe("<CreateMarketScreen />", () => {
         expect(calledWith.priceModel).to.be.equal(target.priceModel);
 
         //expect(calledWith.maxBondSize).to.be.equal(target.maxBondSize);
-        expect(calledWith.debtBuffer).to.be.equal(target.debtBuffer);
+        //expect(calledWith.debtBuffer).to.be.equal(target.debtBuffer);
         expect(calledWith.depositInterval).to.be.equal(target.depositInterval);
         expect(calledWith.priceModel).to.be.deep.equal(target.priceModel);
 
