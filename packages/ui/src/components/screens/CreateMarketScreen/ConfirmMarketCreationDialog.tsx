@@ -13,21 +13,34 @@ import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
 import { CreateMarketState } from "components";
-import { dynamicFormatter, formatDate } from "utils";
+import { dynamicFormatter, formatCurrency, formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { CHAINS } from "@bond-protocol/bond-library/dist/src";
 import { MouseEventHandler, useState } from "react";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
+
+  const initialPrice = formatCurrency.dynamicFormatter(
+    state.priceModels.dynamic.initialPrice,
+    false
+  );
+
+  const minPrice = formatCurrency.dynamicFormatter(
+    state.priceModels.dynamic.minPrice,
+    false
+  );
+
+  console.log({ initialPrice, minPrice });
+
   return [
     {
       leftLabel: "Initial Price",
-      rightLabel: `${state.priceModels.dynamic.initialPrice} ${tokenSymbols}`,
+      rightLabel: `${initialPrice} ${tokenSymbols}`,
     },
     {
       leftLabel: "Minimum Price",
-      rightLabel: `${state.priceModels.dynamic.minPrice} ${tokenSymbols}`,
+      rightLabel: `${minPrice} ${tokenSymbols}`,
     },
   ];
 };
@@ -37,7 +50,10 @@ const getStaticPriceFields = (state: CreateMarketState) => {
   return [
     {
       leftLabel: "Fixed Price",
-      rightLabel: `${state.priceModels.static.initialPrice} ${tokenSymbols}`,
+      rightLabel: `${formatCurrency.dynamicFormatter(
+        state.priceModels.static.initialPrice,
+        false
+      )} ${tokenSymbols}`,
     },
   ];
 };
