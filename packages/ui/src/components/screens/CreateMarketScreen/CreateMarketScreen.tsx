@@ -306,6 +306,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   reverse
                   symbol={capacityToken.symbol}
                   icon={capacityToken.icon}
+                  editable={state.priceModel === "static"}
                   value={formatCurrency.trimToLengthSymbol(
                     state.overriden.maxBondSize
                       ? state.overriden.maxBondSize

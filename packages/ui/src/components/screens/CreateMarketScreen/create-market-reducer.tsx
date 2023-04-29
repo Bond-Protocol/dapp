@@ -428,8 +428,13 @@ export const reducer = (
     }
 
     case CreateMarketAction.OVERRIDE_MAX_BOND_SIZE: {
+      const depositInterval = Math.trunc(
+        Number(state.duration) / (Number(state.capacity) / value)
+      );
+
       return {
         ...state,
+        depositInterval,
         overriden: {
           ...state.overriden,
           maxBondSize: value,
