@@ -45,7 +45,13 @@ export type PriceModelConfig = {
   [key: string]: any;
 };
 
-export type CreateMarketState = {
+type OverridableCreateMarketParams = {
+  maxBondSize: number;
+  debtBuffer: number;
+  depositInterval: number;
+};
+
+export type CreateMarketState = OverridableCreateMarketParams & {
   quoteToken: Token;
   payoutToken: Token;
   capacityType: CapacityOption;
@@ -57,20 +63,15 @@ export type CreateMarketState = {
   vesting: string;
   vestingType: VestingType;
   vestingString: string;
-  bondsPerWeek: number;
   priceModel: PriceModel;
   priceModels: Record<PriceModel, PriceModelConfig>;
   startDate?: Date;
   endDate?: Date;
   oracleAddress?: string;
   oracle?: boolean;
-  maxBondSize?: number;
-  debtBuffer?: number;
-  depositInterval: number;
   duration: string;
   durationInDays: number;
-  overridenDebtBuffer?: number;
-  overridenDepositInterval?: number;
+  overriden: Partial<OverridableCreateMarketParams>;
 };
 
 const placeholderToken = {
@@ -95,7 +96,6 @@ export const placeholderState: CreateMarketState = {
   vestingString: "",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
-  bondsPerWeek: DEFAULT_BONDS_PER_WEEK,
   maxBondSize: 0,
   debtBuffer: DEFAULT_DEBT_BUFFER,
   depositInterval: DEFAULT_DEPOSIT_INTERVAL,
@@ -107,14 +107,14 @@ export const placeholderState: CreateMarketState = {
     "oracle-dynamic": {},
     "oracle-static": {},
   },
+  overriden: {},
 };
 export const calculateDebtBuffer = (
   marketDurationInDays: number,
-  bondsPerWeek: number,
+  depositInterval: number,
   capacity: number
 ) => {
   const duration = marketDurationInDays * 24 * 60 * 60;
-  const depositInterval = (24 * 60 * 60) / (bondsPerWeek / 7);
   const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
   return Math.round(
     ((capacity * 0.25) / ((capacity * decayInterval) / duration)) * 100
@@ -217,7 +217,7 @@ const tweakDebtBuffer = (state: CreateMarketState) => {
 
   const capacity = parseFloat(state.capacity);
 
-  return calculateDebtBuffer(days, state.bondsPerWeek, capacity);
+  return calculateDebtBuffer(days, state.depositInterval, capacity);
 };
 
 export const reducer = (
@@ -225,8 +225,6 @@ export const reducer = (
   action: { type: CreateMarketAction; [key: string]: any }
 ): CreateMarketState => {
   const { type, value } = action;
-
-  console.log({ type, value, prevState: state });
 
   switch (type) {
     case CreateMarketAction.UPDATE_QUOTE_TOKEN: {
@@ -432,24 +430,33 @@ export const reducer = (
     case CreateMarketAction.OVERRIDE_MAX_BOND_SIZE: {
       return {
         ...state,
-        maxBondSize: value,
+        overriden: {
+          ...state.overriden,
+          maxBondSize: value,
+        },
       };
     }
 
     case CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL: {
       //Value expected in hours, we save it as minutes
-      const overridenDepositInterval = value * 60 * 60;
+      const depositInterval = value * 60 * 60;
 
       return {
         ...state,
-        overridenDepositInterval,
+        overriden: {
+          ...state.overriden,
+          depositInterval,
+        },
       };
     }
 
     case CreateMarketAction.OVERRIDE_DEBT_BUFFER: {
       return {
         ...state,
-        overridenDebtBuffer: value,
+        overriden: {
+          ...state.overriden,
+          debtBuffer: value,
+        },
       };
     }
 

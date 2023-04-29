@@ -19,6 +19,35 @@ import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
 
+function getBondType(state: CreateMarketState) {
+  switch (state.priceModel) {
+    case "dynamic":
+      return state.vestingType === "term"
+        ? contractLib.BOND_TYPE.FIXED_TERM_SDA
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
+    case "static":
+      return state.vestingType === "term"
+        ? contractLib.BOND_TYPE.FIXED_TERM_FPA
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_FPA;
+    case "oracle-dynamic":
+      return state.vestingType === "term"
+        ? contractLib.BOND_TYPE.FIXED_TERM_OSDA
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA;
+    case "oracle-static":
+      return state.vestingType === "term"
+        ? contractLib.BOND_TYPE.FIXED_TERM_OFDA
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA;
+  }
+}
+
+const getAuctioneer = (chain: string, state: CreateMarketState) => {
+  return getAddressesForType(chain, getBondType(state)).auctioneer;
+};
+
+const getTeller = (chain: string, state: CreateMarketState) => {
+  return getAddressesForType(chain, getBondType(state)).teller;
+};
+
 export const CreateMarketController = () => {
   const { data: signer } = useSigner();
   const { isConnected } = useAccount();
@@ -40,35 +69,6 @@ export const CreateMarketController = () => {
     quoteToken: state.quoteToken,
     payoutToken: state.payoutToken,
   });
-
-  function getBondType(state: CreateMarketState) {
-    switch (state.priceModel) {
-      case "dynamic":
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_SDA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
-      case "static":
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_FPA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_FPA;
-      case "oracle-dynamic":
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_OSDA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA;
-      case "oracle-static":
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_OFDA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA;
-    }
-  }
-
-  const getAuctioneer = (chain: string, state: CreateMarketState) => {
-    return getAddressesForType(chain, getBondType(state)).auctioneer;
-  };
-
-  const getTeller = (chain: string, state: CreateMarketState) => {
-    return getAddressesForType(chain, getBondType(state)).teller;
-  };
 
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;
@@ -143,12 +143,12 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const debtBuffer = state.overridenDebtBuffer
-      ? state.overridenDebtBuffer
+    const debtBuffer = state.overriden.debtBuffer
+      ? state.overriden.debtBuffer
       : state.debtBuffer;
 
-    const depositInterval = state.overridenDepositInterval
-      ? state.overridenDepositInterval
+    const depositInterval = state.overriden.depositInterval
+      ? state.overriden.depositInterval
       : state.depositInterval;
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
@@ -156,7 +156,7 @@ export const CreateMarketController = () => {
 
     let bondType: string = getBondType(state);
 
-    return {
+    const config = {
       summaryData: { ...state },
       marketParams: {
         quoteToken: state.quoteToken.address,
@@ -193,6 +193,8 @@ export const CreateMarketController = () => {
       bondType: bondType,
       chain: chain?.id,
     };
+
+    return config;
   };
 
   const getTxBytecode = (state: CreateMarketState) => {

@@ -79,9 +79,21 @@ export const dynamicFormatter = (value: string | number, currency = true) => {
   }).format(Number(num));
 };
 
+export const trimToLengthSymbol = (num: number) => {
+  if (num < 1) return num;
+  const symbols = ["", "K", "M", "B", "T", "Q", "GMI"]; // array of symbols to use for each magnitude of number
+  const sign = Math.sign(num); // determine if the number is negative or positive
+  num = Math.abs(num); // get the absolute value of the number
+  //const mag = Math.floor(Math.log10(num) / 3); // calculate the magnitude of the number in units of 3
+  const mag = Math.min(Math.floor(Math.log10(num) / 3), symbols.length - 1); // use Math.min to handle numbers greater than quadrillions
+  const shortNum = Number((num / Math.pow(10, mag * 3)).toFixed(1)) * sign; // truncate the number to 1 decimal place and multiply by the sign
+  return `${shortNum}${symbols[mag]}`;
+};
+
 export const formatCurrency = {
   dynamicFormatter,
   longFormatter,
   usdFormatter,
   usdLongFormatter,
+  trimToLengthSymbol,
 };

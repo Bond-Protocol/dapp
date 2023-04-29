@@ -23,7 +23,7 @@ import {
   PriceData,
   TooltipWrapper,
 } from "components";
-import { formatDate, vestingOptions } from "utils";
+import { formatCurrency, formatDate, vestingOptions } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 
 export type CreateMarketScreenProps = {
@@ -304,9 +304,13 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 <InfoLabel
                   label={"Max Bond Size"}
                   reverse
-                  editable={state.priceModel === "static"}
                   symbol={capacityToken.symbol}
-                  value={state.maxBondSize}
+                  icon={capacityToken.icon}
+                  value={formatCurrency.trimToLengthSymbol(
+                    state.overriden.maxBondSize
+                      ? state.overriden.maxBondSize
+                      : state.maxBondSize
+                  )}
                   onChange={(value) =>
                     dispatch({
                       type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,

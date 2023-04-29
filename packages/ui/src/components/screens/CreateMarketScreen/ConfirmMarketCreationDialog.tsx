@@ -149,7 +149,7 @@ export const ConfirmMarketCreationDialog = (props: {
   ];
 
   const edited = !!(
-    state.overridenDebtBuffer || state.overridenDepositInterval
+    state.overriden.debtBuffer || state.overriden.depositInterval
   );
   const disabled = edited && !accepted;
 
