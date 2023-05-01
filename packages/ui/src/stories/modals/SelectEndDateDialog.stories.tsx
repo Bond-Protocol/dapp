@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Modal } from "components";
 
 import { SelectEndDateDialog } from "components";
@@ -9,15 +9,11 @@ export default {
   title: "Components/Modals/SelectEndDate",
   component: SelectEndDateDialog,
   decorators: [ModalDecorator],
-} as ComponentMeta<typeof Modal>;
+} as Meta<typeof Modal>;
 
-const Template: ComponentStory<typeof SelectEndDateDialog> = (args) => (
-  <SelectEndDateDialog {...args} />
-);
-
-export const Primary = Template.bind({});
-
-Primary.args = {
-  startDate: new Date(),
-  onSubmit: () => {},
+export const Primary = {
+  args: {
+    startDate: new Date(),
+    onSubmit: () => {},
+  },
 };

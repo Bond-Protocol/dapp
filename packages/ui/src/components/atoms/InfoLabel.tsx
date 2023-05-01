@@ -16,6 +16,12 @@ export const InfoLabel = (props: InfoLabelProps) => {
 
   const className = `font-fraktion select-none font-bold leading-none ${textSize}`;
 
+  const content = (
+    <h4>
+      {props.value} <p className="inline text-xl">{props.symbol ?? ""}</p>
+    </h4>
+  );
+
   return (
     <TooltipWrapper className={props.className} content={props.tooltip}>
       <div
@@ -40,11 +46,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
             onChange={(value) => props.onChange && props.onChange(value)}
           />
         ) : (
-          <p className={className}>
-            {props.value
-              ? `${props.value} ${props.symbol ?? ""}`
-              : props.children}
-          </p>
+          <p className={className}>{props.value ? content : props.children}</p>
         )}
       </div>
     </TooltipWrapper>

@@ -1,5 +1,9 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { CreateMarketScreen } from "components";
+import { Meta, StoryFn } from "@storybook/react";
+import {
+  CreateMarketProvider,
+  CreateMarketScreen,
+  placeholderState,
+} from "components";
 import { list } from "src/utils";
 
 export default {
@@ -7,27 +11,33 @@ export default {
   component: CreateMarketScreen,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof CreateMarketScreen>;
+} as Meta<typeof CreateMarketScreen>;
 
-const Template: ComponentStory<typeof CreateMarketScreen> = (args) => (
+const Template: StoryFn<typeof CreateMarketScreen> = (args) => (
   <div className="max-w-[1136px]">
-    <CreateMarketScreen {...args} />
+    <CreateMarketProvider initialState={placeholderState}>
+      <CreateMarketScreen {...args} />
+    </CreateMarketProvider>
   </div>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
-  onSubmitCreation: (state) => console.log({ state }),
-  onSubmitAllowance: (state) => console.log({ state }),
-  onSubmitMultisigCreation: () => {},
-  projectionData: [],
-  fetchAllowance: () => Promise.resolve(1),
-  getAuctioneer: () => "",
-  getTxBytecode: () => "",
-  chain: "5",
-  tokens: list,
-  isAllowanceTxPending: false,
-  creationHash: "",
-  blockExplorerUrl: "",
-  blockExplorerName: "",
+export const Primary = {
+  render: Template,
+
+  args: {
+    onSubmitCreation: (state) => console.log({ state }),
+    onSubmitAllowance: (state) => console.log({ state }),
+    onSubmitMultisigCreation: () => {},
+    projectionData: [],
+    fetchAllowance: () => Promise.resolve(1),
+    getAuctioneer: () => "",
+    getTeller: () => "",
+    getTxBytecode: () => "",
+    chain: "5",
+    tokens: list,
+    isAllowanceTxPending: false,
+    creationHash: "",
+    blockExplorerUrl: "",
+    blockExplorerName: "",
+  },
 };

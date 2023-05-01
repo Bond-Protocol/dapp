@@ -11,7 +11,7 @@ import {
   SelectEndDateDialog,
   TokenInput,
   Modal,
-  Action,
+  CreateMarketAction,
   PriceModelPicker,
   ConfirmMarketCreationDialog,
   useCreateMarket,
@@ -23,7 +23,7 @@ import {
   PriceData,
   TooltipWrapper,
 } from "components";
-import { formatDate, vestingOptions } from "utils";
+import { formatCurrency, formatDate, vestingOptions } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 
 export type CreateMarketScreenProps = {
@@ -33,7 +33,9 @@ export type CreateMarketScreenProps = {
   onSubmitCreation: (state: CreateMarketState) => void;
   onSubmitMultisigCreation: (txHash: string) => void;
   getAuctioneer: (chain: string, state: CreateMarketState) => string;
+  getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
+  getApproveTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => string;
   chain: string;
   tokens: Token[];
@@ -63,13 +65,13 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   useEffect(() => {
     const fetchAllowance = async () => {
       const allowance = await props.fetchAllowance(state);
-      dispatch({ type: Action.UPDATE_ALLOWANCE, value: allowance });
+      dispatch({ type: CreateMarketAction.UPDATE_ALLOWANCE, value: allowance });
     };
 
     fetchAllowance();
   }, [state.payoutToken, state.priceModel, state.vestingType]);
 
-  const canSubmit =
+  const canSubmit = //TODO: needs improvement
     parseFloat(state.capacity) > 0 &&
     state.endDate &&
     state.vesting &&
@@ -115,7 +117,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       <div id="cm-top-control" className="flex items-center justify-end">
         <div
           onClick={() => {
-            dispatch({ type: Action.RESET });
+            dispatch({ type: CreateMarketAction.RESET });
             setIndex((i) => ++i); //TODO: (afx) :pepe_gun: but its valid react so
           }}
           className="hover:text-light-secondary font-fraktion mr-2 cursor-pointer px-8 text-sm tracking-widest"
@@ -141,7 +143,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   />
                 )}
                 onSubmit={({ value }) => {
-                  dispatch({ type: Action.UPDATE_PAYOUT_TOKEN, value });
+                  dispatch({
+                    type: CreateMarketAction.UPDATE_PAYOUT_TOKEN,
+                    value,
+                  });
                 }}
               />
 
@@ -152,7 +157,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 options={vestingOptions}
                 ModalContent={SelectVestingDialog}
                 onSubmit={({ value }) =>
-                  dispatch({ type: Action.UPDATE_VESTING, value })
+                  dispatch({ type: CreateMarketAction.UPDATE_VESTING, value })
                 }
               />
             </div>
@@ -172,7 +177,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   />
                 )}
                 onSubmit={({ value }) =>
-                  dispatch({ type: Action.UPDATE_QUOTE_TOKEN, value })
+                  dispatch({
+                    type: CreateMarketAction.UPDATE_QUOTE_TOKEN,
+                    value,
+                  })
                 }
               />
             </div>
@@ -186,7 +194,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               icon={capacityToken.icon}
               symbol={capacityToken.symbol}
               onChange={(value) =>
-                dispatch({ type: Action.UPDATE_CAPACITY, value })
+                dispatch({ type: CreateMarketAction.UPDATE_CAPACITY, value })
               }
             />
 
@@ -194,7 +202,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               id="cm-capacity-type-picker"
               options={capacityOptions}
               onChange={(value) =>
-                dispatch({ type: Action.UPDATE_CAPACITY_TYPE, value })
+                dispatch({
+                  type: CreateMarketAction.UPDATE_CAPACITY_TYPE,
+                  value,
+                })
               }
             />
           </div>
@@ -203,10 +214,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
             onChange={(value) =>
-              dispatch({ type: Action.UPDATE_PRICE_MODEL, value })
+              dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value })
             }
             onRateChange={(value) =>
-              dispatch({ type: Action.UPDATE_PRICE_RATES, value })
+              dispatch({ type: CreateMarketAction.UPDATE_PRICE_RATES, value })
             }
           />
         </div>
@@ -235,7 +246,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   endAdornment={<CalendarIcon className="mr-2 fill-white" />}
                   ModalContent={(props) => <SelectDateDialog {...props} />}
                   onSubmit={(value) =>
-                    dispatch({ type: Action.UPDATE_START_DATE, value })
+                    dispatch({
+                      type: CreateMarketAction.UPDATE_START_DATE,
+                      value,
+                    })
                   }
                 />
               </TooltipWrapper>
@@ -250,7 +264,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 endAdornment={<CalendarIcon className="mr-2 fill-white" />}
                 ModalContent={(props) => <SelectDateDialog {...props} />}
                 onSubmit={(value) =>
-                  dispatch({ type: Action.UPDATE_START_DATE, value })
+                  dispatch({
+                    type: CreateMarketAction.UPDATE_START_DATE,
+                    value,
+                  })
                 }
               />
             )}
@@ -268,7 +285,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 />
               )}
               onSubmit={(value) =>
-                dispatch({ type: Action.UPDATE_END_DATE, value })
+                dispatch({ type: CreateMarketAction.UPDATE_END_DATE, value })
               }
             />
           </div>
@@ -287,11 +304,19 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 <InfoLabel
                   label={"Max Bond Size"}
                   reverse
-                  editable={state.priceModel === "static"}
                   symbol={capacityToken.symbol}
-                  value={state.maxBondSize}
+                  icon={capacityToken.icon}
+                  editable={state.priceModel === "static"}
+                  value={formatCurrency.trimToLengthSymbol(
+                    state.overriden.maxBondSize
+                      ? state.overriden.maxBondSize
+                      : state.maxBondSize
+                  )}
                   onChange={(value) =>
-                    dispatch({ type: Action.OVERRIDE_MAX_BOND_SIZE, value })
+                    dispatch({
+                      type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
+                      value,
+                    })
                   }
                 />
                 <InfoLabel label={"Market Length"} reverse>
@@ -327,7 +352,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         ) : (
           !props.created && (
             <ConfirmMarketCreationDialog
-              marketState={state}
               showMultisig={showMultisig}
               chain={chain}
               hasAllowance={state.isAllowanceSufficient}
@@ -340,7 +364,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }
               submitMultisigCreation={props.onSubmitMultisigCreation}
               getAuctioneer={props.getAuctioneer}
+              getTeller={props.getTeller}
               getTxBytecode={props.getTxBytecode}
+              getApproveTxBytecode={props.getApproveTxBytecode}
               estimateGas={props.estimateGas}
             />
           )

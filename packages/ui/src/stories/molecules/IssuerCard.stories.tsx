@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { IssuerCard } from "components";
 import logo from "assets/logo-24.svg";
 
@@ -16,10 +16,6 @@ export default {
       logoUrl: logo,
     },
   },
-} as ComponentMeta<typeof IssuerCard>;
+} as Meta<typeof IssuerCard>;
 
-const Template: ComponentStory<typeof IssuerCard> = (args) => (
-  <IssuerCard {...args} />
-);
-
-export const Primary = Template.bind({});
+export const Primary = {};

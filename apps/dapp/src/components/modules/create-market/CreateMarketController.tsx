@@ -8,17 +8,45 @@ import {
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import {
-  Action,
+  CreateMarketAction,
   CreateMarketScreen,
   CreateMarketState,
   useCreateMarket,
 } from "ui";
-import { calculateDebtBuffer, doPriceMath } from "./helpers";
+import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
-import { differenceInCalendarDays } from "date-fns";
+
+function getBondType(state: CreateMarketState) {
+  switch (state.priceModel) {
+    case "dynamic":
+      return state.vestingType === "term"
+        ? contractLib.BOND_TYPE.FIXED_TERM_SDA
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
+    case "static":
+      return state.vestingType === "term"
+        ? contractLib.BOND_TYPE.FIXED_TERM_FPA
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_FPA;
+    case "oracle-dynamic":
+      return state.vestingType === "term"
+        ? contractLib.BOND_TYPE.FIXED_TERM_OSDA
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA;
+    case "oracle-static":
+      return state.vestingType === "term"
+        ? contractLib.BOND_TYPE.FIXED_TERM_OFDA
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA;
+  }
+}
+
+const getAuctioneer = (chain: string, state: CreateMarketState) => {
+  return getAddressesForType(chain, getBondType(state)).auctioneer;
+};
+
+const getTeller = (chain: string, state: CreateMarketState) => {
+  return getAddressesForType(chain, getBondType(state)).teller;
+};
 
 export const CreateMarketController = () => {
   const { data: signer } = useSigner();
@@ -42,31 +70,6 @@ export const CreateMarketController = () => {
     payoutToken: state.payoutToken,
   });
 
-  function getBondType(state: CreateMarketState) {
-    switch (state.priceModel) {
-      case "dynamic":
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_SDA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
-      case "static":
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_FPA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_FPA;
-      case "oracle-dynamic":
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_OSDA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA;
-      case "oracle-static":
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_OFDA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA;
-    }
-  }
-
-  const getAuctioneer = (chain: string, state: CreateMarketState) => {
-    return getAddressesForType(chain, getBondType(state)).auctioneer;
-  };
-
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;
 
@@ -81,10 +84,7 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const auctioneer = getAddressesForType(
-      chain,
-      getBondType(state)
-    ).auctioneer;
+    const auctioneer = getAuctioneer(chain.id?.toString(), state);
 
     const allowance = await getTokenAllowance(
       state.payoutToken.address,
@@ -109,10 +109,7 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const auctioneer = getAddressesForType(
-      chain?.id.toString(),
-      getBondType(state)
-    ).auctioneer;
+    const auctioneer = getAuctioneer(chain?.id.toString(), state);
 
     try {
       setAllowanceTx(true);
@@ -125,7 +122,10 @@ export const CreateMarketController = () => {
       );
 
       await tx.wait(1);
-      dispatch({ type: Action.UPDATE_ALLOWANCE, value: state.capacity });
+      dispatch({
+        type: CreateMarketAction.UPDATE_ALLOWANCE,
+        value: state.capacity,
+      });
     } catch (e) {
       console.log({ e });
     } finally {
@@ -143,19 +143,20 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const bondsPerWeek = 7;
-    const days =
-      differenceInCalendarDays(state.endDate, state.startDate ?? new Date()) +
-      1; //TODO: The previous version adds a day to the difference (V1-L290)
+    const debtBuffer = state.overriden.debtBuffer
+      ? state.overriden.debtBuffer
+      : state.debtBuffer;
 
-    const debtBuffer = calculateDebtBuffer(days, bondsPerWeek, state.capacity);
+    const depositInterval = state.overriden.depositInterval
+      ? state.overriden.depositInterval
+      : state.depositInterval;
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
     let bondType: string = getBondType(state);
 
-    return {
+    const config = {
       summaryData: { ...state },
       marketParams: {
         quoteToken: state.quoteToken.address,
@@ -176,7 +177,7 @@ export const CreateMarketController = () => {
         vesting: state.vesting,
         conclusion:
           state.endDate && (state.endDate.getTime() / 1000).toFixed(0),
-        depositInterval: Math.trunc((24 * 60 * 60) / (bondsPerWeek / 7)),
+        depositInterval,
         scaleAdjustment: scaleAdjustment,
         oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
         formattedPrice: formattedInitialPrice.toString(),
@@ -192,6 +193,8 @@ export const CreateMarketController = () => {
       bondType: bondType,
       chain: chain?.id,
     };
+
+    return config;
   };
 
   const getTxBytecode = (state: CreateMarketState) => {
@@ -200,6 +203,16 @@ export const CreateMarketController = () => {
     return contractLib.createMarketMultisig(
       config?.marketParams,
       config?.bondType
+    );
+  };
+
+  const getApproveTxBytecode = (state: CreateMarketState) => {
+    const config = configureMarket(state);
+    const tellerAddress = getTeller(config?.chain, state);
+
+    return contractLib.getApproveTxBytecode(
+      tellerAddress,
+      state.recommendedAllowanceDecimalAdjusted
     );
   };
 
@@ -250,13 +263,15 @@ export const CreateMarketController = () => {
         tokens={tokens.filter((t) =>
           isConnected ? t.chainId === network.chain?.id : t.chainId === "1"
         )}
-        onSubmitCreation={onSubmit}
         onSubmitAllowance={approveCapacitySpending}
+        onSubmitCreation={onSubmit}
         onSubmitMultisigCreation={setCreationHash}
         estimateGas={estimateGas}
         fetchAllowance={fetchAllowance}
         getAuctioneer={getAuctioneer}
+        getTeller={getTeller}
         getTxBytecode={getTxBytecode}
+        getApproveTxBytecode={getApproveTxBytecode}
         provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}
         projectionData={projectionData.prices}

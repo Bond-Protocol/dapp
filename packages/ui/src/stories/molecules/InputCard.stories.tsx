@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { InputCard } from "components";
 
 export default {
@@ -6,11 +6,7 @@ export default {
   component: InputCard,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof InputCard>;
-
-const Template: ComponentStory<typeof InputCard> = (args) => (
-  <InputCard {...args} />
-);
+} as Meta<typeof InputCard>;
 
 const market = {
   maxAmountAccepted: "123",
@@ -21,7 +17,8 @@ const market = {
   },
 };
 
-export const Primary = Template.bind({});
-Primary.args = {
-  market,
+export const Primary = {
+  args: {
+    market,
+  },
 };

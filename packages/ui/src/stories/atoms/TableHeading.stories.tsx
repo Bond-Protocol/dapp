@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { TableHeading } from "components";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -7,9 +7,9 @@ export default {
   component: TableHeading,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof TableHeading>;
+} as Meta<typeof TableHeading>;
 
-const Template: ComponentStory<typeof TableHeading> = (args) => (
+const Template: StoryFn<typeof TableHeading> = (args) => (
   <table>
     <thead>
       <tr>
@@ -19,7 +19,7 @@ const Template: ComponentStory<typeof TableHeading> = (args) => (
   </table>
 );
 
-const Multiple: ComponentStory<typeof TableHeading> = (args) => (
+const Multiple: StoryFn<typeof TableHeading> = (args) => (
   <table>
     <tr className="child:px-4">
       <TableHeading {...args} />
@@ -30,17 +30,25 @@ const Multiple: ComponentStory<typeof TableHeading> = (args) => (
   </table>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
-  children: "LABEL",
-  onClick: () => {},
+export const Primary = {
+  render: Template,
+
+  args: {
+    children: "LABEL",
+    onClick: () => {},
+  },
 };
 
-export const Tooltip = Template.bind({});
-Tooltip.args = {
-  children: "LABEL",
-  tooltip: "Line 577?",
+export const Tooltip = {
+  render: Template,
+
+  args: {
+    children: "LABEL",
+    tooltip: "Line 577?",
+  },
 };
 
-export const Row = Multiple.bind({});
-Row.args = Tooltip.args;
+export const Row = {
+  render: Multiple,
+  args: Tooltip.args,
+};

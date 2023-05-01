@@ -1,4 +1,5 @@
 export * from './ActionInfo'
+export * from './ActionInfoLabel'
 export * from './ActionInfoList'
 export * from './AppBackground'
 export * from './Button'

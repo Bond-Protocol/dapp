@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { Button } from "components/atoms/Button";
 import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
 import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
@@ -9,12 +9,9 @@ export default {
   component: Button,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof Button>;
+} as Meta<typeof Button>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
-
-const MultiTemplate: ComponentStory<any> = ({ buttons, ...args }) => {
+const MultiTemplate: StoryFn<any> = ({ buttons, ...args }) => {
   return (
     <div className="">
       {buttons.map((b: any, i: number) => (
@@ -27,7 +24,7 @@ const MultiTemplate: ComponentStory<any> = ({ buttons, ...args }) => {
   );
 };
 
-const VariantsTemplate: ComponentStory<any> = (args) => {
+const VariantsTemplate: StoryFn<any> = (args) => {
   return (
     <>
       <div className="flex w-1/3 justify-around">
@@ -57,99 +54,82 @@ const sample = {
   ),
 };
 
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-export const Primary = Template.bind({});
-Primary.args = {
-  children: sample.text,
-  variant: "primary",
-};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  children: <sample.Element />,
-  variant: "secondary",
-};
-
-export const Ghost = Template.bind({});
-Ghost.args = {
-  children: <sample.Element />,
-  variant: "ghost",
-};
-
-export const WithIcon = Template.bind({});
-WithIcon.args = {
-  children: <sample.Complex />,
-};
-
-export const IconOnly = Template.bind({});
-IconOnly.args = {
-  variant: "ghost",
-  children: (
-    <div className="my-[2px] flex h-4 w-4 items-center justify-center transition-all duration-300">
-      <PlusIcon className="group-hover/button:fill-light-secondary fill-white" />
-    </div>
-  ),
-  icon: true,
-};
-
-export const States = VariantsTemplate.bind({});
-States.args = {
-  buttons: [
-    { children: "Normal", variant: "primary" },
-    { children: "Hover", variant: "primary", id: "hover" },
-    { children: "Disabled", variant: "primary", disabled: true },
-    { children: "Active", variant: "primary", id: "active" },
-
-    { children: "Normal", variant: "secondary" },
-    { children: "Hover", variant: "secondary", id: "hover" },
-    { children: "Disabled", variant: "secondary", disabled: true },
-    { children: "Active", variant: "secondary", id: "active" },
-
-    { children: "Normal", variant: "ghost" },
-    { children: "Hover", variant: "ghost", id: "hover" },
-    { children: "Disabled", variant: "ghost", disabled: true },
-    { children: "Active", variant: "ghost", id: "active" },
-  ],
-};
-
-States.parameters = {
-  pseudo: {
-    hover: ["#hover"],
-    active: ["#active"],
+export const Primary = {
+  args: {
+    children: sample.text,
+    variant: "primary",
   },
 };
 
-export const Alignment = MultiTemplate.bind({});
-Alignment.args = {
-  buttons: [
-    {
-      children: "left",
-      align: "left",
-    },
-    {
-      children: "center",
-      align: "left",
-    },
-    {
-      children: "right",
-      align: "right",
-    },
-  ],
+export const Secondary = {
+  args: {
+    children: <sample.Element />,
+    variant: "secondary",
+  },
 };
 
-export const Sizes = MultiTemplate.bind({});
-Sizes.args = {
-  buttons: [
-    {
-      children: "smol",
-      size: "sm",
-    },
-    {
-      children: "medium",
-    },
-    {
-      children: "chonky",
-      size: "lg",
-    },
-  ],
+export const Ghost = {
+  args: {
+    children: <sample.Element />,
+    variant: "ghost",
+  },
+};
+
+export const WithIcon = {
+  args: {
+    children: <sample.Complex />,
+  },
+};
+
+export const IconOnly = {
+  args: {
+    variant: "ghost",
+    children: (
+      <div className="my-[2px] flex h-4 w-4 items-center justify-center transition-all duration-300">
+        <PlusIcon className="group-hover/button:fill-light-secondary fill-white" />
+      </div>
+    ),
+    icon: true,
+  },
+};
+
+export const Alignment = {
+  render: MultiTemplate,
+
+  args: {
+    buttons: [
+      {
+        children: "left",
+        align: "left",
+      },
+      {
+        children: "center",
+        align: "left",
+      },
+      {
+        children: "right",
+        align: "right",
+      },
+    ],
+  },
+};
+
+export const Sizes = {
+  render: MultiTemplate,
+
+  args: {
+    buttons: [
+      {
+        children: "smol",
+        size: "sm",
+      },
+      {
+        children: "medium",
+      },
+      {
+        children: "chonky",
+        size: "lg",
+      },
+    ],
+  },
 };
