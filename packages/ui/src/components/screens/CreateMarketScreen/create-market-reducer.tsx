@@ -353,8 +353,8 @@ export const reducer = (
       let vestingString: string = "";
 
       if (value.type === "term") {
-        vesting = (value.value * 24 * 60 * 60).toString();
-        vestingString = value.value + " DAYS";
+        vesting = (parseFloat(value.value) * 24 * 60 * 60).toString();
+        vestingString = parseFloat(value.value) + " DAYS";
       } else if (value.type === "date") {
         vesting = (value.value.getTime() / 1000).toString();
         vestingString = formatDate.short(value.value as Date);
