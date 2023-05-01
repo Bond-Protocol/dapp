@@ -85,15 +85,18 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
 
   return (
     <>
+      {/*@ts-ignore*/}
       <IssueMarketModal
         open={isModalOpen}
         onAccept={onConfirm}
         onReject={() => setIsModalOpen(false)}
+        onClickClose={() => setIsModalOpen(false)}
       />
       <IssueMarketMultisigModal
         open={isMultisigModalOpen}
         txnBytecode={txnBytecode}
         chain={props.data.chain}
+        onClickClose={() => setIsModalOpen(false)}
         address={
           contractLibrary.getAddressesForType(
             props.data.chain,

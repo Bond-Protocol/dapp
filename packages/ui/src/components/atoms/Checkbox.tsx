@@ -1,5 +1,5 @@
 import { ReactComponent as CheckmarkIcon } from "assets/icons/checkmark.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export type CheckboxProps = {
   label?: string;
@@ -7,6 +7,7 @@ export type CheckboxProps = {
   startChecked?: boolean;
   onChange?: (checked: boolean) => void;
   className?: string;
+  labelClassname?: string;
   id?: string;
 };
 export const Checkbox = ({
@@ -15,6 +16,7 @@ export const Checkbox = ({
   disabled,
   onChange,
   className,
+  labelClassname,
   label,
 }: CheckboxProps) => {
   const [checked, setChecked] = useState(startChecked);
@@ -46,7 +48,9 @@ export const Checkbox = ({
           <CheckmarkIcon className="fill-white" />
         </div>
       </div>
-      {label && <p className="pl-2 text-sm">{label}</p>}
+      {label && (
+        <p className={"pl-2 text-sm" + " " + labelClassname}>{label}</p>
+      )}
     </div>
   );
 };

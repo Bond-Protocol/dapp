@@ -8,7 +8,7 @@ export type CreateMarketModalProps = ModalProps & {
 export const CreateMarketModal = (props: CreateMarketModalProps) => {
   //TODO: Could add a don't show again button
   return (
-    <Modal large open={props.open}>
+    <Modal large {...props}>
       <CreateMarketTermsDialog
         onAccept={props.onAccept}
         onReject={props.onReject}

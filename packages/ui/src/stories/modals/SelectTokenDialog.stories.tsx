@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { Modal, SelectTokenDialog } from "components";
 
 import { ModalDecorator } from "../decorators";
@@ -8,20 +8,16 @@ export default {
   title: "Components/Modals/SelectToken",
   component: SelectTokenDialog,
   decorators: [ModalDecorator],
-} as ComponentMeta<typeof Modal>;
+} as Meta<typeof Modal>;
 
-const Template: ComponentStory<typeof SelectTokenDialog> = (args) => (
-  <SelectTokenDialog {...args} />
-);
-
-export const Primary = Template.bind({});
-
-Primary.args = {
-  tokens: [
-    ...tokenList,
-    ...tokenList,
-    ...tokenList,
-    ...tokenList,
-    ...tokenList,
-  ],
+export const Primary = {
+  args: {
+    tokens: [
+      ...tokenList,
+      ...tokenList,
+      ...tokenList,
+      ...tokenList,
+      ...tokenList,
+    ],
+  },
 };

@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { ModalDecorator } from "../decorators";
 
 import { MarketCreatedDialog } from "components";
@@ -7,12 +7,13 @@ export default {
   title: "Components/Modals/MarketCreated",
   component: MarketCreatedDialog,
   decorators: [ModalDecorator],
-} as ComponentMeta<typeof MarketCreatedDialog>;
+} as Meta<typeof MarketCreatedDialog>;
 
-const Template: ComponentStory<typeof MarketCreatedDialog> = (args) => (
+const Template: StoryFn<typeof MarketCreatedDialog> = (args) => (
   <MarketCreatedDialog />
 );
 
-export const Primary = Template.bind({});
-
-Primary.args = {};
+export const Primary = {
+  render: Template,
+  args: {},
+};

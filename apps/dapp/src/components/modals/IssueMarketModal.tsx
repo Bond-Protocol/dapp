@@ -1,6 +1,6 @@
 import { Modal, CreateMarketConfirmDialog, ModalProps } from "ui";
 
-export type IssueMarketModalProps = Partial<ModalProps> & {
+export type IssueMarketModalProps = ModalProps & {
   onAccept: () => void;
   onReject: () => void;
 };
@@ -8,7 +8,7 @@ export type IssueMarketModalProps = Partial<ModalProps> & {
 export const IssueMarketModal = (props: IssueMarketModalProps) => {
   //TODO: Could add a don't show again button
   return (
-    <Modal title="Market Setup" open={!!props.open}>
+    <Modal title="Market Setup" {...props}>
       <CreateMarketConfirmDialog
         onAccept={props.onAccept}
         onReject={props.onReject}

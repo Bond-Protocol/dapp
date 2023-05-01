@@ -7,7 +7,7 @@ export interface ActionInfoListProps {
 
 export const ActionInfoList = (props: ActionInfoListProps) => {
   return (
-    <ol className={`child:mt-2 first:mt-0 ${props.className}`}>
+    <ol className={`child:text-xs child:mt-2 first:mt-0 ${props.className}`}>
       {props.fields.map((f, i) => (
         <ActionInfo {...f} key={i} />
       ))}

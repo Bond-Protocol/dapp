@@ -1,3 +1,3 @@
-export * from './utils';
 export * from './format';
 export * from './getBlockExplorer';
+export * from './utils';

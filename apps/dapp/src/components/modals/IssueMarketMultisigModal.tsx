@@ -34,7 +34,7 @@ export const IssueMarketMultisigModal = (
   };
 
   return (
-    <Modal open={!!props.open} large={true}>
+    <Modal onClickClose={props.onReject} open={!!props.open} large={true}>
       {!isAccepted ? (
         <CreateMarketTermsDialog
           onAccept={() => setIsAccepted(true)}
