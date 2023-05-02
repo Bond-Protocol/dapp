@@ -226,6 +226,7 @@ export const reducer = (
 ): CreateMarketState => {
   const { type, value } = action;
 
+  console.log({ previousState: state, type, value });
   switch (type) {
     case CreateMarketAction.UPDATE_QUOTE_TOKEN: {
       const {
@@ -408,7 +409,6 @@ export const reducer = (
         priceModel,
         oracle,
         oracleAddress,
-        startDate: new Date(), // we have to reset the start date cuz not all markets support a start date atm
       };
     }
 
