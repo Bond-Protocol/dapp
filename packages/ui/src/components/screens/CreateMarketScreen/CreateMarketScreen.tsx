@@ -238,7 +238,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             <InputModal
               id="cm-start-date-picker"
               label="Market Start"
-              value="Immediate"
+              value={
+                state.startDate
+                  ? formatDate.dateAndTime(state.startDate)
+                  : "Immediate"
+              }
               inputClassName="text-light-grey"
               endAdornment={<CalendarIcon className="mr-2 fill-white" />}
               ModalContent={(props) => <SelectDateDialog {...props} />}
