@@ -236,7 +236,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <div className="flex gap-x-4">
             <InputModal
-              disabled
               id="cm-start-date-picker"
               label="Market Start"
               value="Immediate"
