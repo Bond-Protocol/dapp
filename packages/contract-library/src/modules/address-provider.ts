@@ -64,11 +64,13 @@ const goerliAddresses: ContractAddresses = {
   authority: '0x007A0F48A4e3d74Ab4234adf9eA9EB32f87b4b14',
   aggregator: '0x007A66A2a13415DB3613C1a4dd1C942A285902d1',
   fixedExpiryTeller: '0x007FE70dc9797C4198528aE43d8195ffF82Bdc95',
+  //fixedExpirySDAAuctioneer: '0x007FEA32545a39Ff558a1367BBbC1A22bc7ABEfD', //V1
   fixedExpirySDAAuctioneer: '0xFE5DA6ad5720237D19229e7416791d390255E9AA', //V2
   fixedExpiryFPAAuctioneer: '0xFEF9A527ac84836DC9939Ad75eb8ce325bBE0E54',
   fixedExpiryOFDAAuctioneer: '0xaAdb8904C8E83C00848f9eC519ad4833227BE47B',
   fixedExpiryOSDAAuctioneer: '0x2E579f046c1474166cc3cc4c7Ab5fAD0B0E05e50',
   fixedTermTeller: '0x007F7735baF391e207E3aA380bb53c4Bd9a5Fed6',
+  //fixedTermSDAAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222', //V1
   fixedTermSDAAuctioneer: '0xF75DAFffaF63f5D935f8A481EE827d68974FD992', //V2
   fixedTermFPAAuctioneer: '0xF7F9Ae2415F8Cb89BEebf9662A19f2393e7065e0',
   fixedTermOFDAAuctioneer: '0x56A07e0b05D60EF41318c60935c57924804d4541',
@@ -124,10 +126,10 @@ export const getAddresses = (chainId: string): ContractAddresses => {
 };
 
 export const getAddressesForType = (
-  chain_id: string | { id: string; label: string },
+  chain_id: number | string | { id: string; label: string },
   bondType: BOND_TYPE,
 ): AddressesForType => {
-  let id = typeof chain_id === 'string' ? chain_id : chain_id?.id;
+  let id = typeof chain_id === 'object' ? chain_id.id : String(chain_id);
 
   switch (bondType) {
     case BOND_TYPE.FIXED_EXPIRY_SDA:
