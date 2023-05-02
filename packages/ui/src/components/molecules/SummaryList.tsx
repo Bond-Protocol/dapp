@@ -7,13 +7,16 @@ export const SummaryRow = (props: ActionInfoProps) => {
         value={props.leftLabel}
         tooltip={props.tooltip}
         copy={props.copy}
-        className="text-base font-light"
+        className="font-light"
         tooltipClassName="fill-light-grey"
       />
       <ActionInfoLabel
         value={props.rightLabel}
         link={props.link}
-        className="font-fraktion text-base uppercase text-white"
+        className="font-fraktion uppercase text-white"
+        editable={props.editable}
+        onChange={props.onChange}
+        symbol={props.symbol}
       />
     </div>
   );
@@ -24,7 +27,7 @@ export interface InfoListProps {
   className?: string;
 }
 
-export const InfoList = (props: InfoListProps) => {
+export const SummaryList = (props: InfoListProps) => {
   return (
     <ol className={`child:mt-1 first:mt-0 ${props.className}`}>
       {props.fields.map((f, i) => (

@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { ProjectionChart } from "components";
 
 import data from "./btc-price";
@@ -7,16 +7,19 @@ export default {
   title: "Components/Charts/ProjectionChart",
   component: ProjectionChart,
   argTypes: {},
-} as ComponentMeta<typeof ProjectionChart>;
+} as Meta<typeof ProjectionChart>;
 
-const Template: ComponentStory<typeof ProjectionChart> = (args) => (
-  <div className="">
-    <ProjectionChart {...args} className="h-[30vh] w-[35vw]" />
+const Template: StoryFn<typeof ProjectionChart> = (args) => (
+  <div className="h-[80vh] w-[85vw]">
+    <ProjectionChart {...args} className="" />
   </div>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
-  payoutTokenSymbol: "AFX",
-  data,
+export const Primary = {
+  render: Template,
+
+  args: {
+    payoutTokenSymbol: "AFX",
+    data,
+  },
 };

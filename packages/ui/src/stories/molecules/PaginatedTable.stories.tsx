@@ -1,5 +1,5 @@
 //@ts-nocheck
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { data } from "../mock-data/table";
 import { DiscountLabel, PaginatedTable, Button } from "components";
 import { MouseEventHandler } from "react";
@@ -66,22 +66,20 @@ export default {
   component: PaginatedTable,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof PaginatedTable>;
+} as Meta<typeof PaginatedTable>;
 
-const Base: ComponentStory<typeof PaginatedTable> = (args) => (
-  <PaginatedTable {...args} />
-);
-
-export const Primary = Base.bind({});
-Primary.args = {
-  data: tableData,
-  columns: cols,
-  defaultSort: "creationDate",
+export const Primary = {
+  args: {
+    data: tableData,
+    columns: cols,
+    defaultSort: "creationDate",
+  },
 };
 
-export const Sorting = Base.bind({});
-Sorting.args = {
-  data: sortableData,
-  columns: cols,
-  defaultSort: "creationDate",
+export const Sorting = {
+  args: {
+    data: sortableData,
+    columns: cols,
+    defaultSort: "creationDate",
+  },
 };

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { TableCell } from "components";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
@@ -7,9 +7,9 @@ export default {
   component: TableCell,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof TableCell>;
+} as Meta<typeof TableCell>;
 
-const Template: ComponentStory<typeof TableCell> = (args) => (
+const Template: StoryFn<typeof TableCell> = (args) => (
   <table>
     <thead>
       <tr>
@@ -19,7 +19,10 @@ const Template: ComponentStory<typeof TableCell> = (args) => (
   </table>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
-  children: "LABEL",
+export const Primary = {
+  render: Template,
+
+  args: {
+    children: "LABEL",
+  },
 };

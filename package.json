@@ -4,6 +4,7 @@
   "engines": {
     "node": ">=16.19"
   },
+  "packageManager": "yarn",
   "workspaces": [
     "apps/*",
     "packages/*",

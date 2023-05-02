@@ -1,6 +1,11 @@
 import { calculateTrimDigits, trimAsNumber } from "utils/trim";
 import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";
+import { differenceInCalendarDays } from "date-fns";
+
+const DEFAULT_BONDS_PER_WEEK = 7;
+const DEFAULT_DEPOSIT_INTERVAL = 86400;
+const DEFAULT_DEBT_BUFFER = 75;
 
 export type PriceType = "dynamic" | "static";
 export type PriceModel = PriceType | "oracle-dynamic" | "oracle-static";
@@ -18,7 +23,7 @@ export type Token = {
   apiId?: string;
 };
 
-export enum Action {
+export enum CreateMarketAction {
   UPDATE_QUOTE_TOKEN = "update_bond_token",
   UPDATE_PAYOUT_TOKEN = "update_payout_token",
   UPDATE_CAPACITY_TYPE = "update_capacity_type",
@@ -30,7 +35,9 @@ export enum Action {
   UPDATE_START_DATE = "update_start_date",
   UPDATE_END_DATE = "update_end_date",
   RESET = "reset",
-  OVERRIDE_MAX_BOND_SIZE = "OVERRIDE_MAX_BOND_SIZE",
+  OVERRIDE_MAX_BOND_SIZE = "override_max_bond_size",
+  OVERRIDE_DEPOSIT_INTERVAL = "override_deposit_interval",
+  OVERRIDE_DEBT_BUFFER = "override_debt_buffer",
 }
 
 export type PriceModelConfig = {
@@ -38,7 +45,13 @@ export type PriceModelConfig = {
   [key: string]: any;
 };
 
-export type CreateMarketState = {
+type OverridableCreateMarketParams = {
+  maxBondSize: number;
+  debtBuffer: number;
+  depositInterval: number;
+};
+
+export type CreateMarketState = OverridableCreateMarketParams & {
   quoteToken: Token;
   payoutToken: Token;
   capacityType: CapacityOption;
@@ -50,18 +63,15 @@ export type CreateMarketState = {
   vesting: string;
   vestingType: VestingType;
   vestingString: string;
-  bondsPerWeek: number;
   priceModel: PriceModel;
   priceModels: Record<PriceModel, PriceModelConfig>;
   startDate?: Date;
   endDate?: Date;
   oracleAddress?: string;
   oracle?: boolean;
-  maxBondSize?: number;
-  debtBuffer?: number;
-  depositInterval?: number;
   duration: string;
   durationInDays: number;
+  overriden: Partial<OverridableCreateMarketParams>;
 };
 
 const placeholderToken = {
@@ -86,10 +96,9 @@ export const placeholderState: CreateMarketState = {
   vestingString: "",
   priceModel: "dynamic" as PriceModel,
   oracleAddress: "",
-  bondsPerWeek: 7,
   maxBondSize: 0,
-  debtBuffer: 45,
-  depositInterval: 24,
+  debtBuffer: DEFAULT_DEBT_BUFFER,
+  depositInterval: DEFAULT_DEPOSIT_INTERVAL,
   duration: "",
   durationInDays: 0,
   priceModels: {
@@ -98,8 +107,19 @@ export const placeholderState: CreateMarketState = {
     "oracle-dynamic": {},
     "oracle-static": {},
   },
+  overriden: {},
 };
-
+export const calculateDebtBuffer = (
+  marketDurationInDays: number,
+  depositInterval: number,
+  capacity: number
+) => {
+  const duration = marketDurationInDays * 24 * 60 * 60;
+  const decayInterval = Math.max(5 * depositInterval, 3 * 24 * 24 * 60);
+  return Math.round(
+    ((capacity * 0.25) / ((capacity * decayInterval) / duration)) * 100
+  );
+};
 function calculateDuration(endDate?: Date, startDate?: Date) {
   let duration;
   if (endDate && startDate) {
@@ -115,7 +135,11 @@ function calculateMaxBondSize(capacity: string, durationInDays: number) {
   return trimAsNumber(maxBondSize, calculateTrimDigits(maxBondSize));
 }
 
-function onChangeDate(endDate?: Date, startDate?: Date, capacity?: string) {
+function calculateDurationAndMaxBondSize(
+  endDate?: Date,
+  startDate?: Date,
+  capacity?: string
+) {
   const duration = calculateDuration(endDate, startDate);
   const durationInDays = Math.ceil(Number(duration) / 60 / 60 / 24);
 
@@ -184,16 +208,26 @@ function calculateAllowance(
   };
 }
 
+const tweakDebtBuffer = (state: CreateMarketState) => {
+  const days =
+    differenceInCalendarDays(
+      state.endDate as Date,
+      state.startDate ?? new Date()
+    ) + 1; //TODO: The previous version adds a day to the difference (V1-L290)
+
+  const capacity = parseFloat(state.capacity);
+
+  return calculateDebtBuffer(days, state.depositInterval, capacity);
+};
+
 export const reducer = (
   state: CreateMarketState,
-  action: { type: Action; [key: string]: any }
+  action: { type: CreateMarketAction; [key: string]: any }
 ): CreateMarketState => {
   const { type, value } = action;
 
-  console.log({ type, value });
-
   switch (type) {
-    case Action.UPDATE_QUOTE_TOKEN: {
+    case CreateMarketAction.UPDATE_QUOTE_TOKEN: {
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
@@ -215,7 +249,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_PAYOUT_TOKEN: {
+    case CreateMarketAction.UPDATE_PAYOUT_TOKEN: {
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
@@ -237,7 +271,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_ALLOWANCE: {
+    case CreateMarketAction.UPDATE_ALLOWANCE: {
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
@@ -259,7 +293,7 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_CAPACITY: {
+    case CreateMarketAction.UPDATE_CAPACITY: {
       const capacity = isNaN(Number(value)) ? "" : value;
 
       let maxBondSize = 0;
@@ -279,6 +313,8 @@ export const reducer = (
         state.allowance
       );
 
+      const debtBuffer = tweakDebtBuffer({ ...state, capacity });
+
       return {
         ...state,
         capacity,
@@ -286,10 +322,11 @@ export const reducer = (
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
         isAllowanceSufficient,
+        debtBuffer,
       };
     }
 
-    case Action.UPDATE_CAPACITY_TYPE: {
+    case CreateMarketAction.UPDATE_CAPACITY_TYPE: {
       const {
         recommendedAllowance,
         recommendedAllowanceDecimalAdjusted,
@@ -311,13 +348,13 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_VESTING: {
+    case CreateMarketAction.UPDATE_VESTING: {
       let vesting: string = "";
       let vestingString: string = "";
 
       if (value.type === "term") {
-        vesting = (value.value * 24 * 60 * 60).toString();
-        vestingString = value.value + " DAYS";
+        vesting = (parseFloat(value.value) * 24 * 60 * 60).toString();
+        vestingString = parseFloat(value.value) + " DAYS";
       } else if (value.type === "date") {
         vesting = (value.value.getTime() / 1000).toString();
         vestingString = formatDate.short(value.value as Date);
@@ -331,12 +368,11 @@ export const reducer = (
       };
     }
 
-    case Action.UPDATE_START_DATE: {
-      const { duration, durationInDays, maxBondSize } = onChangeDate(
-        state.endDate,
-        value,
-        state.capacity
-      );
+    case CreateMarketAction.UPDATE_START_DATE: {
+      const { duration, durationInDays, maxBondSize } =
+        calculateDurationAndMaxBondSize(state.endDate, value, state.capacity);
+
+      const debtBuffer = tweakDebtBuffer({ ...state, startDate: value });
 
       return {
         ...state,
@@ -344,15 +380,15 @@ export const reducer = (
         duration: duration ? duration.toString() : "",
         durationInDays,
         maxBondSize,
+        debtBuffer,
       };
     }
 
-    case Action.UPDATE_END_DATE: {
-      const { duration, durationInDays, maxBondSize } = onChangeDate(
-        value,
-        state.startDate,
-        state.capacity
-      );
+    case CreateMarketAction.UPDATE_END_DATE: {
+      const { duration, durationInDays, maxBondSize } =
+        calculateDurationAndMaxBondSize(value, state.startDate, state.capacity);
+
+      const debtBuffer = tweakDebtBuffer({ ...state, endDate: value });
 
       return {
         ...state,
@@ -360,10 +396,11 @@ export const reducer = (
         duration: duration ? duration.toString() : "",
         durationInDays,
         maxBondSize,
+        debtBuffer,
       };
     }
 
-    case Action.UPDATE_PRICE_MODEL: {
+    case CreateMarketAction.UPDATE_PRICE_MODEL: {
       const { priceModel, oracle, oracleAddress } = value;
 
       return {
@@ -371,10 +408,11 @@ export const reducer = (
         priceModel,
         oracle,
         oracleAddress,
+        startDate: new Date(), // we have to reset the start date cuz not all markets support a start date atm
       };
     }
 
-    case Action.UPDATE_PRICE_RATES: {
+    case CreateMarketAction.UPDATE_PRICE_RATES: {
       const { priceModel, ...rates } = value;
 
       return {
@@ -389,14 +427,45 @@ export const reducer = (
       };
     }
 
-    case Action.OVERRIDE_MAX_BOND_SIZE: {
+    case CreateMarketAction.OVERRIDE_MAX_BOND_SIZE: {
+      const depositInterval = Math.trunc(
+        Number(state.duration) / (Number(state.capacity) / value)
+      );
+
       return {
         ...state,
-        maxBondSize: value,
+        depositInterval,
+        overriden: {
+          ...state.overriden,
+          maxBondSize: value,
+        },
       };
     }
 
-    case Action.RESET: {
+    case CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL: {
+      //Value expected in hours, we save it as minutes
+      const depositInterval = value * 60 * 60;
+
+      return {
+        ...state,
+        overriden: {
+          ...state.overriden,
+          depositInterval,
+        },
+      };
+    }
+
+    case CreateMarketAction.OVERRIDE_DEBT_BUFFER: {
+      return {
+        ...state,
+        overriden: {
+          ...state.overriden,
+          debtBuffer: value,
+        },
+      };
+    }
+
+    case CreateMarketAction.RESET: {
       return placeholderState;
     }
 
@@ -407,7 +476,10 @@ export const reducer = (
 };
 
 export const CreateMarketContext = createContext<
-  [CreateMarketState, Dispatch<{ [key: string]: any; type: Action }>]
+  [
+    CreateMarketState,
+    Dispatch<{ [key: string]: any; type: CreateMarketAction }>
+  ]
 >([placeholderState, () => null]);
 
 export const CreateMarketProvider = ({

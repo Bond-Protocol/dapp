@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { PriceModelPicker } from "components";
 
 export default {
@@ -6,12 +6,14 @@ export default {
   component: PriceModelPicker,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof PriceModelPicker>;
+} as Meta<typeof PriceModelPicker>;
 
-const Template: ComponentStory<typeof PriceModelPicker> = (args) => (
+const Template: StoryFn<typeof PriceModelPicker> = (args) => (
   <div className="">
     <PriceModelPicker {...args} />
   </div>
 );
 
-export const Primary = Template.bind({});
+export const Primary = {
+  render: Template,
+};

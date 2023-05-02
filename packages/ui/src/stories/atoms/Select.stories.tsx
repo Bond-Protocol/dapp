@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { Select } from "components";
 import baseLogo from "assets/logo-24.svg";
 
@@ -7,9 +7,7 @@ export default {
   component: Select,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof Select>;
-
-const Template: ComponentStory<typeof Select> = (args) => <Select {...args} />;
+} as Meta<typeof Select>;
 
 const tokenOptions = [
   { logo: baseLogo, symbol: "BTC", id: "1" },
@@ -21,7 +19,8 @@ const tokenOptions = [
 
 export const options = tokenOptions.map((t) => ({ ...t, label: t.symbol }));
 
-export const Primary = Template.bind({});
-Primary.args = {
-  options: options,
+export const Primary = {
+  args: {
+    options: options,
+  },
 };

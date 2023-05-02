@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react";
 import { BondPriceChart } from "components";
 
 import data from "./mock-data";
@@ -7,16 +7,19 @@ export default {
   title: "Components/Charts/BondPriceChart",
   component: BondPriceChart,
   argTypes: {},
-} as ComponentMeta<typeof BondPriceChart>;
+} as Meta<typeof BondPriceChart>;
 
-const Template: ComponentStory<typeof BondPriceChart> = (args) => (
-  <div className="">
-    <BondPriceChart {...args} className="h-[30vh] w-[35vw]" />
+const Template: StoryFn<typeof BondPriceChart> = (args) => (
+  <div className="h-[80vh] w-[85vw]">
+    <BondPriceChart {...args} />
   </div>
 );
 
-export const Primary = Template.bind({});
-Primary.args = {
-  payoutTokenSymbol: "GMX",
-  data,
+export const Primary = {
+  render: Template,
+
+  args: {
+    payoutTokenSymbol: "GMX",
+    data,
+  },
 };

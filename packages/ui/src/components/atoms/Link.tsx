@@ -32,7 +32,7 @@ export const Link = forwardRef(function Button(
       component="a"
       ref={ref}
       componentsProps={{
-        root: (state: ButtonUnstyledOwnerState) => ({
+        root: (_state: ButtonUnstyledOwnerState) => ({
           className: `leading-[11px] select-none flex transition-all duration-300 ease-in-out ${style} ${props.className}`,
         }),
       }}

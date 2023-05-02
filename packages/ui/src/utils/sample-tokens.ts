@@ -382,14 +382,18 @@ const samplePrices = {
 export const list = aphexTokens.map((token) => {
   const apiId = token.priceSources[0]?.apiId;
   const price = samplePrices[apiId]?.usd ?? 0;
+  const chainId = 1;
 
   return {
     id: apiId,
+    key: apiId,
     name: token.name,
     symbol: token.symbol,
+    logoUrl: token.logoUrl || "",
     icon: token.logoUrl || "",
     addresses: token.addresses,
-    address: token.addresses["5"],
+    address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+    chainId,
     apiId,
     price,
     priceSources: token.priceSources,

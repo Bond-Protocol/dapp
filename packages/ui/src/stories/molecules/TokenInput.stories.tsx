@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import { TokenInput } from "components";
 import baseIcon from "assets/logo-24.svg";
 
@@ -7,14 +7,11 @@ export default {
   component: TokenInput,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as ComponentMeta<typeof TokenInput>;
+} as Meta<typeof TokenInput>;
 
-const Base: ComponentStory<typeof TokenInput> = (args) => (
-  <TokenInput {...args} />
-);
-
-export const Primary = Base.bind({});
-Primary.args = {
-  symbol: "OHM",
-  logo: baseIcon,
+export const Primary = {
+  args: {
+    symbol: "OHM",
+    logo: baseIcon,
+  },
 };
