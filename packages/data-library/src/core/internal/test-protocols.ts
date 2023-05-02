@@ -11,15 +11,19 @@ const links = {
 export const protocols: ProtocolDefinition[] = [
   {
     name: "AphexProtocol",
-    description: "We help aphex own his liquidity",
+    description: "We help aphex debug his frontend",
     links,
     logoUrl: "/logo-24.svg",
     issuerAddresses: {
       [CHAIN_ID.GOERLI_TESTNET]: "0x62A665d3f9fc9a968dC35a789122981d9109349a",
-      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0x62A665d3f9fc9a968dC35a789122981d9109349a",
-      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]: "0x62A665d3f9fc9a968dC35a789122981d9109349a",
-      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]: "0x62A665d3f9fc9a968dC35a789122981d9109349a",
-      [CHAIN_ID.AVALANCHE_FUJI_TESTNET]: "0x62A665d3f9fc9a968dC35a789122981d9109349a",
+      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
+        "0x62A665d3f9fc9a968dC35a789122981d9109349a",
+      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
+        "0x62A665d3f9fc9a968dC35a789122981d9109349a",
+      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
+        "0x62A665d3f9fc9a968dC35a789122981d9109349a",
+      [CHAIN_ID.AVALANCHE_FUJI_TESTNET]:
+        "0x62A665d3f9fc9a968dC35a789122981d9109349a",
     },
     tokens: [
       {
@@ -44,10 +48,14 @@ export const protocols: ProtocolDefinition[] = [
     logoUrl: "/logo-24.svg",
     issuerAddresses: {
       [CHAIN_ID.GOERLI_TESTNET]: "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
-      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
-      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]: "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
-      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]: "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
-      [CHAIN_ID.AVALANCHE_FUJI_TESTNET]: "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
+      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
+        "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
+      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
+        "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
+      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
+        "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
+      [CHAIN_ID.AVALANCHE_FUJI_TESTNET]:
+        "0x72A0363bbd9dE17435A57d6a6F2f89102F1EBE8b",
     },
   },
   {
@@ -95,13 +103,13 @@ export const protocols: ProtocolDefinition[] = [
       {
         name: "Test Link",
         symbol: "LINK",
-        priceSources: [
-          { source: "coingecko", apiId: "chainlink" },
-        ],
+        priceSources: [{ source: "coingecko", apiId: "chainlink" }],
         purchaseLinks: {
-          [CHAIN_ID.GOERLI_TESTNET]: "https://goerli.etherscan.io/address/0x20be9a427F3BB6bC15873420644d1f5F4db31CC0#writeContract",
+          [CHAIN_ID.GOERLI_TESTNET]:
+            "https://goerli.etherscan.io/address/0x20be9a427F3BB6bC15873420644d1f5F4db31CC0#writeContract",
         },
-        logoUrl: "https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png?1547034700",
+        logoUrl:
+          "https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png?1547034700",
         addresses: {
           [CHAIN_ID.GOERLI_TESTNET]:
             "0x20be9a427F3BB6bC15873420644d1f5F4db31CC0",
@@ -134,8 +142,14 @@ export const protocols: ProtocolDefinition[] = [
         poolAddress: "0x9F1F16B025F703eE985B58cEd48dAf93daD2f7EF",
         vaultAddress: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
         constituentTokens: [
-          { address: "0xdFCeA9088c8A88A76FF74892C1457C17dfeef9C1", decimals: 18 },
-          { address: "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb", decimals: 6 },
+          {
+            address: "0xdFCeA9088c8A88A76FF74892C1457C17dfeef9C1",
+            decimals: 18,
+          },
+          {
+            address: "0xe0C9275E44Ea80eF17579d33c55136b7DA269aEb",
+            decimals: 6,
+          },
         ],
         priceSources: [],
       },
@@ -151,8 +165,14 @@ export const protocols: ProtocolDefinition[] = [
         poolAddress: "0x89EA4363Bd541d27d9811E4Df1209dAa73154472",
         vaultAddress: "0xBA12222222228d8Ba445958a75a0704d566BF2C8",
         constituentTokens: [
-          { address: "0x73651AD693531F9937528009cC204a4d9b696a68", decimals: 18 },
-          { address: "0x5631d8eA427129e15bDa68F0F9227C149bD29Dcf", decimals: 18 },
+          {
+            address: "0x73651AD693531F9937528009cC204a4d9b696a68",
+            decimals: 18,
+          },
+          {
+            address: "0x5631d8eA427129e15bDa68F0F9227C149bD29Dcf",
+            decimals: 18,
+          },
         ],
         priceSources: [],
       },
@@ -160,7 +180,7 @@ export const protocols: ProtocolDefinition[] = [
   },
   {
     name: "DevoltaireProtocol",
-    description: "We help devoltaire own his liquidity",
+    description: "We help devoltaire help others",
     links,
     logoUrl: "/logo-24.svg",
     issuerAddresses: {
@@ -188,15 +208,19 @@ export const protocols: ProtocolDefinition[] = [
   },
   {
     name: "TexProtocol",
-    description: "We help tex own his liquidity",
+    description: "We help tex test his product",
     links,
     logoUrl: "/logo-24.svg",
     issuerAddresses: {
       [CHAIN_ID.GOERLI_TESTNET]: "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
-      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
-      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]: "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
-      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]: "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
-      [CHAIN_ID.AVALANCHE_FUJI_TESTNET]: "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
+      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
+        "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
+      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
+        "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
+      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
+        "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
+      [CHAIN_ID.AVALANCHE_FUJI_TESTNET]:
+        "0xE5e93C4CBA55e98cCAa2618AC0772CD6fEEB43C5",
     },
   },
   {
@@ -206,9 +230,27 @@ export const protocols: ProtocolDefinition[] = [
     logoUrl: "/logo-24.svg",
     issuerAddresses: {
       [CHAIN_ID.GOERLI_TESTNET]: ["0xcB6E1613029d790C00f89296808f278d6dc25B2f"],
-      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0xcB6E1613029d790C00f89296808f278d6dc25B2f",
-      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]: "0xcB6E1613029d790C00f89296808f278d6dc25B2f",
-      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]: "0xcB6E1613029d790C00f89296808f278d6dc25B2f",
+      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
+        "0xcB6E1613029d790C00f89296808f278d6dc25B2f",
+      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
+        "0xcB6E1613029d790C00f89296808f278d6dc25B2f",
+      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
+        "0xcB6E1613029d790C00f89296808f278d6dc25B2f",
+    },
+  },
+  {
+    name: "OightyProtocol",
+    description: "We help Oighty test his contracts",
+    links,
+    logoUrl: "/logo-24.svg",
+    issuerAddresses: {
+      [CHAIN_ID.GOERLI_TESTNET]: ["0x19518E4D4E542f4b0Fc27366C23FaC7a0bA491Da"],
+      [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
+        "0x19518E4D4E542f4b0Fc27366C23FaC7a0bA491Da",
+      [CHAIN_ID.OPTIMISM_GOERLI_TESTNET]:
+        "0x19518E4D4E542f4b0Fc27366C23FaC7a0bA491Da",
+      [CHAIN_ID.POLYGON_MUMBAI_TESTNET]:
+        "0x19518E4D4E542f4b0Fc27366C23FaC7a0bA491Da",
     },
   },
 ];
