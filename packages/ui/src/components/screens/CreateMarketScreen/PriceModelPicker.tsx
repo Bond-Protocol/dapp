@@ -35,27 +35,56 @@ const priceControlConfig: Record<
   Array<Partial<PriceControlProps> & { property: string }>
 > = {
   dynamic: [
-    { property: "initialPrice", topLabel: "Initial Price" },
-    { property: "minPrice", topLabel: "Min Price" },
+    {
+      property: "initialPrice",
+      topLabel: "Initial Discount",
+      display: "percentage",
+      exchangeRateOrder: "quote_per_payout",
+    },
+    {
+      property: "minPrice",
+      topLabel: "Min Price",
+      display: "exchange_rate",
+      exchangeRateOrder: "quote_per_payout",
+    },
   ],
-  static: [{ property: "initialPrice", topLabel: "Fixed Price" }],
+  static: [
+    {
+      property: "initialPrice",
+      topLabel: "Fixed Price",
+      display: "percentage",
+      exchangeRateOrder: "quote_per_payout",
+    }
+  ],
   ["oracle-dynamic"]: [
     {
       property: "initialDiscount",
       bottomLabel: "From Oracle Price",
       topLabel: "Initial Discount",
-      percentage: true,
+      display: "percentage",
+      exchangeRateOrder: "quote_per_payout",
     },
-    { property: "minPrice", topLabel: "Min Price" },
+    {
+      property: "minPrice",
+      topLabel: "Min Price",
+      display: "exchange_rate",
+      exchangeRateOrder: "quote_per_payout",
+    },
   ],
   ["oracle-static"]: [
     {
       property: "initialDiscount",
       bottomLabel: "From Oracle Price",
       topLabel: "Fixed Discount",
-      percentage: true,
+      display: "percentage",
+      exchangeRateOrder: "quote_per_payout",
     },
-    { property: "minPrice", topLabel: "Min Price" },
+    {
+      property: "minPrice",
+      topLabel: "Min Price",
+      display: "exchange_rate",
+      exchangeRateOrder: "quote_per_payout",
+    },
   ],
 };
 

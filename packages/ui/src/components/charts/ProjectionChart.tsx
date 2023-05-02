@@ -53,10 +53,6 @@ export const ProjectionChart = ({
     fixedPrice: state.priceModels.static.initialPrice, //TODO: Update
   });
 
-  // const edges = findEdges(prices);
-  // edges.max = getTopDomain(edges.max);
-  // edges.min = getBottomDomain(edges.min);
-
   useEffect(() => {
     const initialPrice = props.initialPrice || prices[0]?.price;
     const discount = getDiscountPercentage(initialPrice, minPrice);

@@ -228,7 +228,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           <div className="mt-2 flex h-[290px] w-full">
             <ProjectionChart
               id="cm-projection-chart"
-              targetDiscount={5}
+              targetDiscount={3}
               data={props.projectionData}
               initialPrice={Number(state.priceModels[state.priceModel].initialPrice) || 0}
               initialCapacity={Number(state.capacity) || 0}

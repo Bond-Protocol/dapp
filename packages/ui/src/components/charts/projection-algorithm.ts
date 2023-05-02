@@ -3,6 +3,8 @@ import {trimAsNumber} from "utils";
 export interface PriceData {
   date: number;
   price: number;
+  quotePriceUsd: number;
+  payoutPriceUsd: number;
 }
 
 export interface DiscountedPriceData extends PriceData {
@@ -48,53 +50,43 @@ export function generateDiscountedPrices(
   prices: PriceData[],
   config: ProjectionConfiguration
 ): DiscountedPriceData[] {
+  if (!prices || prices.length === 0) return [];
+
   let discountedPrices: DiscountedPriceData[] = [];
   let { initialCapacity, targetDiscount, initialPrice, minPrice, maxBondSize, durationInDays } = config;
 
-  let capacity = initialCapacity;
-  let expectedCapacity = initialCapacity;
-  let decayInterval = 5 * 6;
-  let duration = durationInDays * 6;
-  let decaySpeed = duration / decayInterval;
+  if (!initialCapacity || !durationInDays) return [];
 
-  let outputPrices = [{ initialPrice, details: {} }];
+  initialPrice = prices[0].price;
+
   let offset = 0;
+  let duration = durationInDays * 24;
 
-  let tokenPrices = [prices[0]];
-  for (let i = 1; i < duration; i++) {
-    tokenPrices.push(prices[(i * 4) - 1])
-    // Update expected capacity
-    expectedCapacity = capacity * (duration - i) / duration;
-
-    // Decay price
-    let price = (initialPrice * (1 + decaySpeed * (expectedCapacity - capacity) / initialCapacity)) + offset;
-
-    let usdBondPrice = price * (prices[(i * 4) - 1].quotePriceUsd);
-    let usdMarketPrice = prices[(i * 4) - 1].payoutPriceUsd;
+  let price = initialPrice;
+  for (let i = 0; i < duration; i++) {
+    let date = prices[i].date;
+    let usdBondPrice = price * (prices[i].quotePriceUsd);
+    let usdMarketPrice = prices[i].payoutPriceUsd;
     let discount = (usdBondPrice - usdMarketPrice) / usdMarketPrice;
     discount *= 100;
     discount = trimAsNumber(-discount, 2);
 
-    if (price < minPrice) price = minPrice;
-    outputPrices.push({
-      price,
-      usdBondPrice,
-      usdMarketPrice,
-      discount,
-    details: {
-      initialPrice,
-        decaySpeed,
-        expectedCapacity,
-        capacity,
-        initialCapacity,
-        offset
-    }
-  });
+    discountedPrices.push({
+      date: date,
+      price: usdMarketPrice,
+      discountedPrice: usdBondPrice,
+      discount: discount,
+      quotePriceUsd: prices[i].quotePriceUsd,
+      payoutPriceUsd: prices[i].payoutPriceUsd
+    });
 
-    if (price <= (initialPrice / 100) * (100 - targetDiscount)) {
-      capacity -= maxBondSize;
-      offset = offset + (initialPrice - price);
+    if (usdBondPrice <= (usdMarketPrice / 100) * (100 - targetDiscount)) {
+      offset = (price / 100) * 20;
+      price = initialPrice + offset;
     }
+
+    price *= 0.9905;
+    if (price < minPrice) price = minPrice;
   }
 
   return discountedPrices;
