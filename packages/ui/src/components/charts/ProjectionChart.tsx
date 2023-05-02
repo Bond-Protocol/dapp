@@ -1,6 +1,5 @@
-//@ts-nocheck
-import {useEffect, useState} from "react";
-import {BondPriceChart, BondPriceChartProps, PlaceholderChart} from "./";
+import { useEffect, useState } from "react";
+import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
 import {
   generateDiscountedPrices,
   generateFixedDiscountPrice,
@@ -8,7 +7,8 @@ import {
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
-import {CreateMarketState, Input, useCreateMarket} from "..";
+import { CreateMarketState, Input, TooltipWrapper, useCreateMarket } from "..";
+import { useNumericInput } from "hooks/use-numeric-input";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
@@ -31,11 +31,16 @@ const getProjectionDataset = (
 };
 
 export const ProjectionChart = ({
-                                  minPrice = 0,
-                                  ...props
-                                }: BondPriceChartProps & ProjectionChartProps) => {
-  const [maxDiscount, setMaxDiscount] = useState(3);
-  const [targetDiscount, setTargetDiscount] = useState(3);
+  minPrice = 0,
+  ...props
+}: BondPriceChartProps & ProjectionChartProps) => {
+  const [maxDiscount, setMaxDiscount] = useState<number>();
+  const {
+    value: targetDiscount,
+    onChange: setTargetDiscount,
+    onBlur,
+    onFocus,
+  } = useNumericInput("3", true);
   const [state] = useCreateMarket();
 
   let maxPremium = 8; // The max premium a bond can get, in %
@@ -50,7 +55,7 @@ export const ProjectionChart = ({
     minPrice,
     maxBondSize: props.maxBondSize,
     durationInDays: props.durationInDays,
-    targetDiscount: targetDiscount,
+    targetDiscount: parseFloat(targetDiscount),
     fixedPrice: state.priceModels.static.initialPrice, //TODO: Update
   });
 
@@ -64,26 +69,39 @@ export const ProjectionChart = ({
   const shouldRender = prices.length > 0;
 
   return (
-    <>
-
-      <Input
-        id="cm-target-discount-input"
-        className="mb-[-48px] 2 max-w-[48px]"
-        value={targetDiscount}
-        onChange={(e) => setTargetDiscount(e.target.value)}
-      />
-    <div className="h-full w-[35vw]">
-      {!shouldRender ? (
-        <div className="h-[99%] w-full">
-          <PlaceholderChart message="Market simulation will appear here" />
+    <div className="flex w-full flex-col">
+      {shouldRender && (
+        <div className="pb-1">
+          <TooltipWrapper content="it's basically just to get a rough idea of how things will look, it is based on past token prices and roughly estimated bond prices, it's never going to be accurate enough to worry about the difference between targeting 3.5% and 3.51%, also \&quot;target\&quot; maybe implies more control than actually exists, it's just a tool to see what would have happened assuming people bought at x% discount last week">
+            <div className="flex items-center justify-end">
+              <p className="text-light-secondary mr-2 font-mono text-sm uppercase">
+                Discount
+              </p>
+              <Input
+                id="cm-target-discount-input"
+                className="h-[60%] w-[11%] self-end"
+                inputClassName="text-center mr-1.5 mb-0.5"
+                rootClassName="text-center justify-end h-[28px]"
+                value={targetDiscount}
+                onChange={setTargetDiscount}
+                onBlur={onBlur}
+                onFocus={onFocus}
+              />
+            </div>
+          </TooltipWrapper>
         </div>
-      ) : (
+      )}
+      <div className="h-full w-full">
+        {!shouldRender ? (
+          <div className="h-[99%] w-full">
+            <PlaceholderChart message="Market simulation will appear here" />
+          </div>
+        ) : (
           <div className="h-[99%] w-full">
             <BondPriceChart {...props} data={prices} />
           </div>
-      )}
+        )}
+      </div>
     </div>
-    </>
-
   );
 };
