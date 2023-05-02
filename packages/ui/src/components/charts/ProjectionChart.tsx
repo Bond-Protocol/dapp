@@ -1,14 +1,14 @@
 //@ts-nocheck
-import { useEffect, useState } from "react";
-import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
+import {useEffect, useState} from "react";
+import {BondPriceChart, BondPriceChartProps, PlaceholderChart} from "./";
 import {
   generateDiscountedPrices,
+  generateFixedDiscountPrice,
   getDiscountPercentage,
   PriceData,
-  generateFixedDiscountPrice,
   ProjectionConfiguration,
 } from "./projection-algorithm";
-import { CreateMarketState, useCreateMarket } from "..";
+import {CreateMarketState, Input, useCreateMarket} from "..";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
@@ -31,10 +31,11 @@ const getProjectionDataset = (
 };
 
 export const ProjectionChart = ({
-  minPrice = 0,
-  ...props
-}: BondPriceChartProps & ProjectionChartProps) => {
+                                  minPrice = 0,
+                                  ...props
+                                }: BondPriceChartProps & ProjectionChartProps) => {
   const [maxDiscount, setMaxDiscount] = useState(3);
+  const [targetDiscount, setTargetDiscount] = useState(3);
   const [state] = useCreateMarket();
 
   let maxPremium = 8; // The max premium a bond can get, in %
@@ -49,7 +50,7 @@ export const ProjectionChart = ({
     minPrice,
     maxBondSize: props.maxBondSize,
     durationInDays: props.durationInDays,
-    targetDiscount: props.targetDiscount,
+    targetDiscount: targetDiscount,
     fixedPrice: state.priceModels.static.initialPrice, //TODO: Update
   });
 
@@ -63,14 +64,26 @@ export const ProjectionChart = ({
   const shouldRender = prices.length > 0;
 
   return (
+    <>
+
+      <Input
+        id="cm-target-discount-input"
+        className="mb-[-48px] 2 max-w-[48px]"
+        value={targetDiscount}
+        onChange={(e) => setTargetDiscount(e.target.value)}
+      />
     <div className="h-full w-[35vw]">
       {!shouldRender ? (
         <div className="h-[99%] w-full">
           <PlaceholderChart message="Market simulation will appear here" />
         </div>
       ) : (
-        <BondPriceChart {...props} data={prices} />
+          <div className="h-[99%] w-full">
+            <BondPriceChart {...props} data={prices} />
+          </div>
       )}
     </div>
+    </>
+
   );
 };

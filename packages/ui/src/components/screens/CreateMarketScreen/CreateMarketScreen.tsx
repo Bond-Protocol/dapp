@@ -21,10 +21,12 @@ import {
   TransactionHashDialog,
   MarketCreatedDialog,
   PriceData,
-  TooltipWrapper,
+  TooltipWrapper, Input,
 } from "components";
 import { formatCurrency, formatDate, vestingOptions } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import {Icon} from "../../../../dist";
+import {ReactComponent as ArrowDownIcon} from "assets/icons/arrow-icon.svg";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -228,7 +230,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           <div className="mt-2 flex h-[290px] w-full">
             <ProjectionChart
               id="cm-projection-chart"
-              targetDiscount={3}
               data={props.projectionData}
               initialPrice={Number(state.priceModels[state.priceModel].initialPrice) || 0}
               initialCapacity={Number(state.capacity) || 0}
