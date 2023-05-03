@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Tooltip, Button } from "components";
-import { getPriceScale } from "utils";
+import { calculateTrimDigits, getPriceScale, getRateMod, trim } from "utils";
 import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
 import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
 import { useNumericInput } from "hooks/use-numeric-input";
@@ -25,36 +25,37 @@ export const PriceControl = (props: PriceControlProps) => {
 
   const [rate, setRate] = useState();
   const [payoutPerQuote, setPayoutPerQuote] = useState();
+  const [exchangeLabel, setExchangeLabel] = useState();
 
   const [rateMod, setRateMod] = useState(0.25); // Default rate mod for percentages;
   const [scale, setScale] = useState(2); // Default scale for percentages;
 
-  const [showQuotePerPayout, setShowQuotePerPayout] = useState(true);
-
   useEffect(() => {
-
-  }, [showQuotePerPayout]);
-
-  useEffect(() => {
+    if (!rate) return;
+    const displayRate = trim(rate, calculateTrimDigits(rate));
+    const exchangeLabel = displayRate + " " + props.quoteToken?.symbol + " per " + props.payoutToken?.symbol;
+    setExchangeLabel(exchangeLabel);
     props.onRateChange && props.onRateChange(rate);
   }, [rate]);
 
   useEffect(() => {
     if (!(props.quoteToken && props.payoutToken)) return;
 
-    const payoutPerQuote = props.quoteToken?.price / props.payoutToken?.price;
-    const rate = 1 / payoutPerQuote;
-
-    const { rateMod, scale } = getPriceScale(rate);
-    setRate(rate.toFixed(scale));
-
-    const { scale: ppqScale } = getPriceScale(1 / rate);
-    setPayoutPerQuote(payoutPerQuote.toFixed(ppqScale));
+    const rate = props.payoutToken?.price / props.quoteToken.price;
 
     if (!(props.display === "percentage")) {
+      const rateMod = getRateMod(rate);
+      const scale = getPriceScale(rate);
+      setRate(rate);
+      setPayoutPerQuote(1 / rate);
+
       setValue(rate.toFixed(scale));
       setRateMod(rateMod);
       setScale(scale);
+    } else {
+      const underlyingRate = (rate / 100) * (100 - rateMod);
+      setRate(underlyingRate);
+      setPayoutPerQuote(1 / underlyingRate);
     }
   }, [props.payoutToken, props.quoteToken]);
 
@@ -76,12 +77,6 @@ export const PriceControl = (props: PriceControlProps) => {
       if (!(props.quoteToken && props.payoutToken)) return "";
 
       let prev = incoming === "" ? "0" : incoming;
-      const { rateMod, scale } = getPriceScale(
-        showQuotePerPayout
-          ? rate
-          : payoutPerQuote
-      );
-
       let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
 
       if (props.display === "percentage") {
@@ -96,9 +91,7 @@ export const PriceControl = (props: PriceControlProps) => {
 
       setRate(newRate);
       setPayoutPerQuote(1 / newRate);
-      return showQuotePerPayout
-        ? newRate
-        : 1 / newRate;
+      return newRate;
     });
   };
 
@@ -107,13 +100,11 @@ export const PriceControl = (props: PriceControlProps) => {
       if (!(props.quoteToken && props.payoutToken)) return "";
 
       let prev = incoming === "" ? "0" : incoming;
-      const { rateMod, scale } = getPriceScale(
-        showQuotePerPayout
-          ? rate
-          : payoutPerQuote
-      );
-
       let newRate = (parseFloat(prev) - rateMod).toFixed(scale);
+
+      if (Number(newRate) < 0) {
+        newRate = "0";
+      }
 
       if (props.display === "percentage") {
         const initialRate = props.payoutToken?.price / props.quoteToken.price;
@@ -127,15 +118,9 @@ export const PriceControl = (props: PriceControlProps) => {
 
       setRate(newRate);
       setPayoutPerQuote(1 / newRate);
-      return showQuotePerPayout
-        ? newRate
-        : 1 / newRate;
+      return newRate;
     });
   };
-
-  const exchangeLabel = showQuotePerPayout
-    ? rate + " " + props.quoteToken?.symbol + " per " + props.payoutToken?.symbol
-    : payoutPerQuote + " " + props.payoutToken?.symbol + " per " + props.quoteToken?.symbol;
 
   return (
     <div
@@ -162,11 +147,7 @@ export const PriceControl = (props: PriceControlProps) => {
         <div className="font-fraktion text-[25px] text-white">
           <input
             {...numericInput}
-            value={
-              showQuotePerPayout
-                ? value
-                : payoutPerQuote
-            }
+            value={value}
             onChange={onChange}
             className="w-[170px] bg-transparent text-center"
           />
@@ -177,7 +158,6 @@ export const PriceControl = (props: PriceControlProps) => {
           }`}
           onClick={(e) => {
             e.preventDefault();
-            setShowQuotePerPayout((prev) => !prev);
           }}
         >
           {exchangeLabel}
