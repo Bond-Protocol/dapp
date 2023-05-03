@@ -15,7 +15,7 @@ import {
   BondFixedExpOFDA,
   BondFixedExpOFDA__factory,
   BondFixedExpOSDA,
-  BondFixedExpOSDA__factory,
+  BondFixedExpOSDA__factory, BondFixedExpSDAv2, BondFixedExpSDAv2__factory,
   BondFixedTermCDA,
   BondFixedTermCDA__factory,
   BondFixedTermFPA,
@@ -23,7 +23,7 @@ import {
   BondFixedTermOFDA,
   BondFixedTermOFDA__factory,
   BondFixedTermOSDA,
-  BondFixedTermOSDA__factory,
+  BondFixedTermOSDA__factory, BondFixedTermSDAv2, BondFixedTermSDAv2__factory,
   BondTeller,
   BondTeller__factory,
   FixedExpirationTeller,
@@ -35,11 +35,13 @@ import {
 export enum BOND_TYPE {
   FIXED_EXPIRY_DEPRECATED = 'fixed-expiration',
   FIXED_EXPIRY_SDA = 'fixed-expiry-sda',
+  FIXED_EXPIRY_SDA_V2 = 'fixed-expiry-sda-v2',
   FIXED_EXPIRY_FPA = 'fixed-expiry-fpa',
   FIXED_EXPIRY_OFDA = 'fixed-expiry-ofda',
   FIXED_EXPIRY_OSDA = 'fixed-expiry-osda',
   FIXED_TERM_DEPRECATED = 'fixed-term',
   FIXED_TERM_SDA = 'fixed-term-sda',
+  FIXED_TERM_SDA_V2 = 'fixed-term-sda-v2',
   FIXED_TERM_FPA = 'fixed-term-fpa',
   FIXED_TERM_OFDA = 'fixed-term-ofda',
   FIXED_TERM_OSDA = 'fixed-term-osda',
@@ -79,6 +81,7 @@ export function getTellerContract(
 ): FixedExpirationTeller | FixedTermTeller {
   switch (bondType) {
     case BOND_TYPE.FIXED_EXPIRY_SDA:
+    case BOND_TYPE.FIXED_EXPIRY_SDA_V2:
     case BOND_TYPE.FIXED_EXPIRY_FPA:
     case BOND_TYPE.FIXED_EXPIRY_OFDA:
     case BOND_TYPE.FIXED_EXPIRY_OSDA:
@@ -88,6 +91,7 @@ export function getTellerContract(
         providerOrSigner,
       );
     case BOND_TYPE.FIXED_TERM_SDA:
+    case BOND_TYPE.FIXED_TERM_SDA_V2:
     case BOND_TYPE.FIXED_TERM_FPA:
     case BOND_TYPE.FIXED_TERM_OFDA:
     case BOND_TYPE.FIXED_TERM_OSDA:
@@ -105,10 +109,12 @@ export function getAuctioneerForCreate(
   chainId: string,
 ):
   | BondFixedExpCDA
+  | BondFixedExpSDAv2
   | BondFixedExpFPA
   | BondFixedExpOFDA
   | BondFixedExpOSDA
   | BondFixedTermCDA
+  | BondFixedTermSDAv2
   | BondFixedTermFPA
   | BondFixedTermOFDA
   | BondFixedTermOSDA {
@@ -134,6 +140,8 @@ export function getAuctioneerFactoryForType(bondType: BOND_TYPE) {
     case BOND_TYPE.FIXED_EXPIRY_SDA:
     case BOND_TYPE.FIXED_EXPIRY_DEPRECATED:
       return BondFixedExpCDA__factory;
+    case BOND_TYPE.FIXED_EXPIRY_SDA_V2:
+      return BondFixedExpSDAv2__factory;
     case BOND_TYPE.FIXED_EXPIRY_FPA:
       return BondFixedExpFPA__factory;
     case BOND_TYPE.FIXED_EXPIRY_OFDA:
@@ -143,6 +151,8 @@ export function getAuctioneerFactoryForType(bondType: BOND_TYPE) {
     case BOND_TYPE.FIXED_TERM_SDA:
     case BOND_TYPE.FIXED_TERM_DEPRECATED:
       return BondFixedTermCDA__factory;
+    case BOND_TYPE.FIXED_TERM_SDA_V2:
+      return BondFixedTermSDAv2__factory;
     case BOND_TYPE.FIXED_TERM_FPA:
       return BondFixedTermFPA__factory;
     case BOND_TYPE.FIXED_TERM_OFDA:
@@ -162,6 +172,9 @@ export function getAuctioneerFactoryForName(
     case 'BondFixedExpCDA':
       factory = BondFixedExpCDA__factory;
       break;
+    case 'BondFixedExpSDAv2':
+      factory = BondFixedExpSDAv2__factory;
+      break;
     case 'BondFixedExpFPA':
       factory = BondFixedExpFPA__factory;
       break;
@@ -173,6 +186,9 @@ export function getAuctioneerFactoryForName(
       break;
     case 'BondFixedTermCDA':
       factory = BondFixedTermCDA__factory;
+      break;
+    case 'BondFixedTermSDAv2':
+      factory = BondFixedTermSDAv2__factory;
       break;
     case 'BondFixedTermFPA':
       factory = BondFixedTermFPA__factory;

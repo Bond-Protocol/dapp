@@ -115,6 +115,7 @@ export async function redeem(
   if (tellerAddress) {
     switch (bondType) {
       case BOND_TYPE.FIXED_EXPIRY_SDA:
+      case BOND_TYPE.FIXED_EXPIRY_SDA_V2:
       case BOND_TYPE.FIXED_EXPIRY_FPA:
       case BOND_TYPE.FIXED_EXPIRY_OFDA:
       case BOND_TYPE.FIXED_EXPIRY_OSDA:
@@ -122,6 +123,7 @@ export async function redeem(
         teller = FixedExpirationTeller__factory.connect(tellerAddress, signer);
         break;
       case BOND_TYPE.FIXED_TERM_SDA:
+      case BOND_TYPE.FIXED_TERM_SDA_V2:
       case BOND_TYPE.FIXED_TERM_FPA:
       case BOND_TYPE.FIXED_TERM_OFDA:
       case BOND_TYPE.FIXED_TERM_OSDA:
@@ -276,6 +278,7 @@ export async function calcMarket(
     isLive,
     ownerPayoutBalance,
     ownerPayoutAllowance,
+    // @ts-ignore
   ] = await Promise.all([
     auctioneerContract.currentCapacity(calculatedMarket.marketId),
     auctioneerContract.marketPrice(calculatedMarket.marketId),
@@ -295,6 +298,7 @@ export async function calcMarket(
 
   const markets: any = auctioneerContract.markets(calculatedMarket.marketId);
 
+  // @ts-ignore
   calculatedMarket.isLive = isLive;
 
   const baseScale = BigNumber.from('10').pow(
@@ -324,6 +328,7 @@ export async function calcMarket(
   );
 
   const maxPayout =
+    // @ts-ignore
     Number(marketInfo.maxPayout) / Math.pow(10, market.payoutToken.decimals);
   calculatedMarket.maxPayout = trim(maxPayout, calculateTrimDigits(maxPayout));
   calculatedMarket.maxPayoutUsd = maxPayout * market.payoutToken.price;
