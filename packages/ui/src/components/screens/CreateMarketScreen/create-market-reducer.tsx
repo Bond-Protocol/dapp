@@ -445,12 +445,14 @@ export const reducer = (
     case CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL: {
       //Value expected in hours, we save it as minutes
       const depositInterval = value * 60 * 60;
+      const debtBuffer = tweakDebtBuffer({ ...state, depositInterval });
 
       return {
         ...state,
         overriden: {
           ...state.overriden,
           depositInterval,
+          debtBuffer,
         },
       };
     }
