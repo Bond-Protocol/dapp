@@ -31,8 +31,6 @@ const getDynamicPriceFields = (state: CreateMarketState) => {
     false
   );
 
-  console.log({ initialPrice, minPrice });
-
   return [
     {
       leftLabel: "Initial Price",
@@ -65,6 +63,11 @@ const getPriceFields = (state: CreateMarketState) => {
 };
 
 const formatMarketState = (state: CreateMarketState) => {
+  const debtBuffer = state.overriden.debtBuffer ?? state.debtBuffer;
+  const depositInterval =
+    state.overriden.depositInterval ?? state.depositInterval;
+  const maxBondSize = state.overriden.maxBondSize ?? state.maxBondSize;
+
   return {
     vesting: {
       icon: fastVesting,
@@ -83,8 +86,9 @@ const formatMarketState = (state: CreateMarketState) => {
     },
     startDate: formatDate.short(state.startDate as Date),
     endDate: formatDate.short(state.endDate as Date),
-    depositInterval: Math.trunc(state?.depositInterval / 60 / 60),
-    debtBuffer: state.debtBuffer,
+    depositInterval: Math.trunc(depositInterval / 60 / 60) + " HOURS",
+    debtBuffer: debtBuffer + "%",
+    maxBondSize,
   };
 };
 
@@ -156,7 +160,8 @@ export const ConfirmMarketCreationDialog = (props: {
     ...getPriceFields(state),
     {
       leftLabel: "Max Bond Size",
-      rightLabel: state.maxBondSize + " " + formattedState.capacity.symbol,
+      rightLabel:
+        formattedState.maxBondSize + " " + formattedState.capacity.symbol,
     },
     {
       leftLabel: "Market Length",
