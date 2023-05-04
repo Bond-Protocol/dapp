@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Tooltip, Button } from "components";
-import { getPriceScale } from "utils";
+import { calculateTrimDigits, getPriceScale, getRateMod, trim } from "utils";
 import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
 import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
 import { useNumericInput } from "hooks/use-numeric-input";
@@ -14,65 +14,113 @@ export type PriceControlProps = {
   exchangeRate: number;
   onRateChange: (exchangeRate: any) => any;
   tooltip?: React.ReactNode;
-  percentage?: boolean;
+  display: "percentage" | "exchange_rate";
+  exchangeRateOrder: "payout_per_quote" | "quote_per_payout",
   className?: string;
 };
 
 export const PriceControl = (props: PriceControlProps) => {
   const { value, setValue, getAValidPercentage, ...numericInput } =
-    useNumericInput("0.25", props.percentage);
-  const [rateMod, setRateMod] = useState(0.25); // Default rate mod for percetages;
+    useNumericInput("0.25", props.display === "percentage");
+
+  const [rate, setRate] = useState<number>();
+  const [payoutPerQuote, setPayoutPerQuote] = useState<number>();
+  const [exchangeLabel, setExchangeLabel] = useState<string>();
+
+  const [rateMod, setRateMod] = useState(0.25); // Default rate mod for percentages;
   const [scale, setScale] = useState(2); // Default scale for percentages;
 
-  const [reverseExchangeRate, setReverseExchangeRate] = useState(true);
+  useEffect(() => {
+    if (!rate) return;
+    const displayRate = trim(rate, calculateTrimDigits(rate));
+    const exchangeLabel = displayRate + " " + props.quoteToken?.symbol + " per " + props.payoutToken?.symbol;
+    setExchangeLabel(exchangeLabel);
+    props.onRateChange && props.onRateChange(rate);
+  }, [rate]);
 
   useEffect(() => {
-    if (props.quoteToken && props.payoutToken && !props.percentage) {
-      const initialRate = props.quoteToken?.price / props.payoutToken.price;
-      const rate = reverseExchangeRate ? 1 / initialRate : initialRate;
-      const { rateMod, scale } = getPriceScale(rate);
+    if (!(props.quoteToken && props.payoutToken)) return;
+
+    const rate = props.payoutToken?.price / props.quoteToken?.price;
+
+    if (props.display !== "percentage") {
+      const rateMod = getRateMod(rate);
+      const scale = getPriceScale(rate);
+      setRate(rate);
+      setPayoutPerQuote(1 / rate);
+
       setValue(rate.toFixed(scale));
       setRateMod(rateMod);
       setScale(scale);
-      props.onRateChange(rate);
+    } else {
+      const underlyingRate = (rate / 100) * (100 - rateMod);
+      setRate(underlyingRate);
+      setPayoutPerQuote(1 / underlyingRate);
     }
-  }, [reverseExchangeRate, props.quoteToken, props.payoutToken]);
+  }, [props.payoutToken, props.quoteToken]);
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     const updated = numericInput.onChange(e);
-    props.onRateChange && props.onRateChange(updated);
+    if (props.quoteToken && props.payoutToken && (props.display === "percentage")) {
+      const initialRate = props.payoutToken?.price / props.quoteToken.price;
+      const underlyingRate = (initialRate / 100) * (100 - updated);
+      setRate(underlyingRate);
+      setPayoutPerQuote(1 / underlyingRate);
+      props.onRateChange && props.onRateChange(underlyingRate);
+    } else {
+      props.onRateChange && props.onRateChange(updated);
+    }
   };
 
   const raiseRate = () => {
     setValue((incoming) => {
+      if (!(props.quoteToken && props.payoutToken)) return "";
+
       let prev = incoming === "" ? "0" : incoming;
       let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
-      newRate = props.percentage
-        ? Number(getAValidPercentage(newRate)).toFixed(scale)
-        : newRate;
 
-      props.onRateChange && props.onRateChange(newRate);
-      return props.percentage ? newRate + "%" : newRate;
+      if (props.display === "percentage") {
+        const initialRate = props.payoutToken?.price / props.quoteToken.price;
+        const underlyingRate = (initialRate / 100) * (100 - Number(newRate));
+        setRate(underlyingRate);
+        setPayoutPerQuote(1 / underlyingRate);
+
+        newRate = Number(getAValidPercentage(newRate)).toFixed(scale);
+        return newRate + "%";
+      }
+
+      setRate(Number(newRate));
+      setPayoutPerQuote(1 / Number(newRate));
+      return newRate;
     });
   };
 
   const lowerRate = () => {
     setValue((incoming) => {
+      if (!(props.quoteToken && props.payoutToken)) return "";
+
       let prev = incoming === "" ? "0" : incoming;
       let newRate = (parseFloat(prev) - rateMod).toFixed(scale);
-      newRate = props.percentage
-        ? Number(getAValidPercentage(newRate)).toFixed(scale)
-        : newRate;
-      props.onRateChange && props.onRateChange(newRate);
-      return props.percentage ? newRate + "%" : newRate;
+
+      if (Number(newRate) < 0) {
+        newRate = "0.00";
+      }
+
+      if (props.display === "percentage") {
+        const initialRate = props.payoutToken?.price / props.quoteToken.price;
+        const underlyingRate = (initialRate / 100) * (100 - Number(newRate));
+        setRate(underlyingRate);
+        setPayoutPerQuote(1 / underlyingRate);
+
+        newRate = Number(getAValidPercentage(newRate)).toFixed(scale);
+        return newRate + "%";
+      }
+
+      setRate(Number(newRate));
+      setPayoutPerQuote(1 / Number(newRate));
+      return newRate;
     });
   };
-  const exchangeLabel =
-    props.quoteToken?.symbol && props.payoutToken?.symbol
-      ? `${props.payoutToken?.symbol || "???"} per ${
-          props.quoteToken?.symbol || "???"
-        }`
-      : "";
 
   return (
     <div
@@ -106,17 +154,13 @@ export const PriceControl = (props: PriceControlProps) => {
         </div>
         <div
           className={`flex select-none text-[14px] ${
-            props.percentage ? "" : "cursor-pointer"
+            props.display === "percentage" ? "" : "cursor-pointer"
           }`}
           onClick={(e) => {
             e.preventDefault();
-            //setReverseExchangeRate((prev) => !prev);
           }}
         >
-          {props.bottomLabel ??
-            (reverseExchangeRate
-              ? exchangeLabel.split(" ").reverse().join(" ")
-              : exchangeLabel)}
+          {exchangeLabel}
         </div>
       </div>
       <div className="flex items-center justify-center ">
