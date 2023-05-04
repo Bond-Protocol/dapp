@@ -68,6 +68,7 @@ export const CreateMarketController = () => {
   const projectionData = useProjectionChartData({
     quoteToken: state.quoteToken,
     payoutToken: state.payoutToken,
+    dayRange: state.durationInDays,
   });
 
   const fetchAllowance = async (state: CreateMarketState) => {

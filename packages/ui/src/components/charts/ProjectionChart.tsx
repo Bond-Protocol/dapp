@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
 import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
 import {
   generateDiscountedPrices,
   generateFixedDiscountPrice,
-  getDiscountPercentage,
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
@@ -54,7 +52,7 @@ export const ProjectionChart = ({
     <div className="flex w-full flex-col">
       {shouldRender && (
         <div className="pb-1">
-          <TooltipWrapper content="it's basically just to get a rough idea of how things will look, it is based on past token prices and roughly estimated bond prices, it's never going to be accurate enough to worry about the difference between targeting 3.5% and 3.51%, also \&quot;target\&quot; maybe implies more control than actually exists, it's just a tool to see what would have happened assuming people bought at x% discount last week">
+          <TooltipWrapper content="The market simulation provides a rough estimate of how bond prices and sales are likely to occur, applying the current price settings to historical token prices. It is not intended to be extremely accurate, just to give an idea of how different settings could affect bond sales. The 'DISCOUNT' box above, allows you to compare market performance with different assumptions of the discount at which users will be interested in purchasing bonds.">
             <div className="flex items-center justify-end">
               <p className="text-light-secondary mr-2 font-mono text-sm uppercase">
                 Discount
