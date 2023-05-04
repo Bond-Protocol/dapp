@@ -37,6 +37,7 @@ const state: Partial<CreateMarketState> = {
   oracle: false,
   startDate: new Date(),
   endDate: new Date(),
+  overriden: {},
 };
 
 const overridenState = {
@@ -74,7 +75,7 @@ export const Primary = {
     getAuctioneer: () => "",
     getTeller: () => "",
     getTxBytecode: () => "",
-    getAllowanceTxBytecode: () => "",
+    getApproveTxBytecode: () => "",
   },
 };
 
