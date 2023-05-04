@@ -58,9 +58,14 @@ export function generateDiscountedPrices(
 
   let price = initialPrice;
   for (let i = 0; i < duration; i++) {
-    const date = prices[i].date;
-    const usdBondPrice = price * (prices[i].quotePriceUsd);
-    const usdMarketPrice = prices[i].payoutPriceUsd;
+    const date = prices[i]?.date;
+    const usdBondPrice = price * (prices[i]?.quotePriceUsd);
+    const usdMarketPrice = prices[i]?.payoutPriceUsd;
+
+    if (!date || !usdBondPrice || !usdMarketPrice) {
+      return discountedPrices;
+    }
+
     let discount = (usdBondPrice - usdMarketPrice) / usdMarketPrice;
     discount *= 100;
     discount = trimAsNumber(-discount, 2);
@@ -70,8 +75,8 @@ export function generateDiscountedPrices(
       price: usdMarketPrice,
       discountedPrice: usdBondPrice,
       discount: discount,
-      quotePriceUsd: prices[i].quotePriceUsd,
-      payoutPriceUsd: prices[i].payoutPriceUsd
+      quotePriceUsd: prices[i]?.quotePriceUsd,
+      payoutPriceUsd: prices[i]?.payoutPriceUsd
     });
 
     if (usdBondPrice <= (usdMarketPrice / 100) * (100 - targetDiscount)) {

@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
 import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
 import {
   generateDiscountedPrices,
   generateFixedDiscountPrice,
-  getDiscountPercentage,
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
