@@ -16,15 +16,16 @@ export const longFormatter = new Intl.NumberFormat("en-US", {
 });
 
 export const getRateMod = (value: string | number) => {
-  if (value == 0) return 0.1;
   let rateMod;
 
-  if (value >= 1 && value < 10) {
+  if (value > 0.1 && value <= 1) {
+    rateMod = 0.01;
+  } else if (value > 1 && value < 100) {
     rateMod = 0.1
-  } else if (value >= 10) {
+  } else if (value >= 100) {
     rateMod = Math.pow(10, Math.floor(Number(value) / 100).toString().length - 1);
   } else {
-    const numZeroes = 1 - Math.floor(Math.log(Number(value)) / Math.log(10)) - 2
+    const numZeroes = 1 - Math.floor(Math.log(Number(value)) / Math.log(10)) - 1;
 
     rateMod = "0.";
     for (let i = 0; i < numZeroes; i++) {

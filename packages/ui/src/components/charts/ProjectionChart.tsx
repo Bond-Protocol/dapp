@@ -12,11 +12,9 @@ import { useNumericInput } from "hooks/use-numeric-input";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
-  initialPrice?: number;
   initialCapacity?: number;
   minPrice?: number;
   targetDiscount?: number;
-  maxBondSize?: number;
   durationInDays?: number;
 };
 
@@ -34,7 +32,6 @@ export const ProjectionChart = ({
   minPrice = 0,
   ...props
 }: BondPriceChartProps & ProjectionChartProps) => {
-  const [maxDiscount, setMaxDiscount] = useState<number>();
   const {
     value: targetDiscount,
     onChange: setTargetDiscount,
@@ -43,28 +40,13 @@ export const ProjectionChart = ({
   } = useNumericInput("3", true);
   const [state] = useCreateMarket();
 
-  let maxPremium = 8; // The max premium a bond can get, in %
-  let triggerCount = 4; // The amount of bonds purchased -> not yet accurate
-
   const prices = getProjectionDataset(state, props.data, {
-    maxDiscount,
-    maxPremium,
-    triggerCount,
-    initialPrice: props.initialPrice,
     initialCapacity: props.initialCapacity,
     minPrice,
-    maxBondSize: props.maxBondSize,
     durationInDays: props.durationInDays,
     targetDiscount: parseFloat(targetDiscount),
     fixedPrice: state.priceModels.static.initialPrice, //TODO: Update
   });
-
-  useEffect(() => {
-    const initialPrice = props.initialPrice || prices[0]?.price;
-    const discount = getDiscountPercentage(initialPrice, minPrice);
-    if (discount < 0) return;
-    setMaxDiscount(discount);
-  }, [minPrice, props.initialPrice]);
 
   const shouldRender = prices.length > 0;
 

@@ -23,9 +23,9 @@ export const PriceControl = (props: PriceControlProps) => {
   const { value, setValue, getAValidPercentage, ...numericInput } =
     useNumericInput("0.25", props.display === "percentage");
 
-  const [rate, setRate] = useState();
-  const [payoutPerQuote, setPayoutPerQuote] = useState();
-  const [exchangeLabel, setExchangeLabel] = useState();
+  const [rate, setRate] = useState<number>();
+  const [payoutPerQuote, setPayoutPerQuote] = useState<number>();
+  const [exchangeLabel, setExchangeLabel] = useState<string>();
 
   const [rateMod, setRateMod] = useState(0.25); // Default rate mod for percentages;
   const [scale, setScale] = useState(2); // Default scale for percentages;
@@ -41,9 +41,9 @@ export const PriceControl = (props: PriceControlProps) => {
   useEffect(() => {
     if (!(props.quoteToken && props.payoutToken)) return;
 
-    const rate = props.payoutToken?.price / props.quoteToken.price;
+    const rate = props.payoutToken?.price / props.quoteToken?.price;
 
-    if (!(props.display === "percentage")) {
+    if (props.display !== "percentage") {
       const rateMod = getRateMod(rate);
       const scale = getPriceScale(rate);
       setRate(rate);
@@ -81,7 +81,7 @@ export const PriceControl = (props: PriceControlProps) => {
 
       if (props.display === "percentage") {
         const initialRate = props.payoutToken?.price / props.quoteToken.price;
-        const underlyingRate = (initialRate / 100) * (100 - newRate);
+        const underlyingRate = (initialRate / 100) * (100 - Number(newRate));
         setRate(underlyingRate);
         setPayoutPerQuote(1 / underlyingRate);
 
@@ -89,8 +89,8 @@ export const PriceControl = (props: PriceControlProps) => {
         return newRate + "%";
       }
 
-      setRate(newRate);
-      setPayoutPerQuote(1 / newRate);
+      setRate(Number(newRate));
+      setPayoutPerQuote(1 / Number(newRate));
       return newRate;
     });
   };
@@ -103,12 +103,12 @@ export const PriceControl = (props: PriceControlProps) => {
       let newRate = (parseFloat(prev) - rateMod).toFixed(scale);
 
       if (Number(newRate) < 0) {
-        newRate = "0";
+        newRate = "0.00";
       }
 
       if (props.display === "percentage") {
         const initialRate = props.payoutToken?.price / props.quoteToken.price;
-        const underlyingRate = (initialRate / 100) * (100 - newRate);
+        const underlyingRate = (initialRate / 100) * (100 - Number(newRate));
         setRate(underlyingRate);
         setPayoutPerQuote(1 / underlyingRate);
 
@@ -116,8 +116,8 @@ export const PriceControl = (props: PriceControlProps) => {
         return newRate + "%";
       }
 
-      setRate(newRate);
-      setPayoutPerQuote(1 / newRate);
+      setRate(Number(newRate));
+      setPayoutPerQuote(1 / Number(newRate));
       return newRate;
     });
   };
