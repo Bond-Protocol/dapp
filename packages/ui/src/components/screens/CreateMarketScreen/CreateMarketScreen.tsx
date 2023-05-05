@@ -245,9 +245,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value });
               updateMaxBond(state.capacity, state.durationInDays, value.priceModel);
             }}
-            onRateChange={(value) =>
-              dispatch({ type: CreateMarketAction.UPDATE_PRICE_RATES, value })
-            }
+            onRateChange={(value) => {
+              dispatch({type: CreateMarketAction.UPDATE_PRICE_RATES, value});
+            }}
           />
         </div>
         <div
