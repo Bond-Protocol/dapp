@@ -21,7 +21,7 @@ import {
   TransactionHashDialog,
   MarketCreatedDialog,
   PriceData,
-  TooltipWrapper,
+  TooltipWrapper, calculateDuration,
 } from "components";
 import {
   calculateTrimDigits,
@@ -82,6 +82,28 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     state.vesting &&
     state.quoteToken.address &&
     state.payoutToken.address;
+
+  const updateMaxBond = (capacity?: any, durationInDays?: number, priceModel: string) => {
+    let cap = Number(capacity);
+    if (!cap) return 0;
+
+    if (priceModel === "dynamic" || priceModel === "oracle-dynamic") {
+      if (!durationInDays) return 0;
+
+      let maxBondSize = cap / durationInDays;
+      maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(Number(maxBondSize)));
+
+      dispatch({
+        type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
+        value: maxBondSize,
+      });
+    } else {
+      dispatch({
+        type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
+        value: cap,
+      });
+    }
+  }
 
   const buttons = (
     <>
@@ -200,16 +222,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               symbol={capacityToken.symbol}
               onChange={(value) => {
                 dispatch({ type: CreateMarketAction.UPDATE_CAPACITY, value });
-
-                if (state.durationInDays) {
-                  let maxBondSize = Number(value) / state.durationInDays;
-                  maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(Number(maxBondSize)));
-
-                  dispatch({
-                    type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
-                    value: maxBondSize,
-                  });
-                }
+                updateMaxBond(value, state.durationInDays, state.priceModel);
               }}
             />
 
@@ -228,9 +241,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             id="cm-price-model-picker"
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
-            onChange={(value) =>
-              dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value })
-            }
+            onChange={(value) => {
+              dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value });
+              updateMaxBond(state.capacity, state.durationInDays, value.priceModel);
+            }}
             onRateChange={(value) =>
               dispatch({ type: CreateMarketAction.UPDATE_PRICE_RATES, value })
             }
@@ -267,14 +281,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                       value,
                     });
 
-                    if (state.capacity && state.durationInDays) {
-                      let maxBondSize = Number(state.capacity) / state.durationInDays;
-                      maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(Number(maxBondSize)));
-
-                      dispatch({
-                        type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
-                        value: maxBondSize,
-                      });
+                    const durationInDays = Math.ceil(
+                      Number(calculateDuration(state.endDate, value)) / 60 / 60 / 24
+                    );
+                    if (durationInDays) {
+                      updateMaxBond(state.capacity, durationInDays, state.priceModel);
                     }
                   }}
                 />
@@ -294,16 +305,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                     type: CreateMarketAction.UPDATE_START_DATE,
                     value,
                   });
-
-                  if (state.capacity && state.durationInDays) {
-                    let maxBondSize = Number(state.capacity) / state.durationInDays;
-                    maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(Number(maxBondSize)));
-
-                    dispatch({
-                      type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
-                      value: maxBondSize,
-                    });
-                  }
                 }}
               />
             )}
@@ -323,14 +324,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               onSubmit={(value) => {
                 dispatch({ type: CreateMarketAction.UPDATE_END_DATE, value });
 
-                if (state.capacity && state.durationInDays) {
-                  let maxBondSize = Number(state.capacity) / state.durationInDays;
-                  maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(Number(maxBondSize)));
-
-                  dispatch({
-                    type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
-                    value: maxBondSize,
-                  });
+                const durationInDays = Math.ceil(
+                  Number(calculateDuration(value, state.startDate)) / 60 / 60 / 24
+                );
+                if (durationInDays) {
+                  updateMaxBond(state.capacity, durationInDays, state.priceModel);
                 }
               }}
             />
@@ -376,10 +374,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           props.created
             ? "Success!"
             : props.creationHash
-            ? "Transaction Submitted"
-            : showMultisig
-            ? "Transaction Details"
-            : "Confirm Market Creation"
+              ? "Transaction Submitted"
+              : showMultisig
+                ? "Transaction Details"
+                : "Confirm Market Creation"
         }
         open={open}
         onClickClose={() => setOpen(false)}

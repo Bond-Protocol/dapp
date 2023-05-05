@@ -122,7 +122,7 @@ export const calculateDebtBuffer = (
   );
 };
 
-function calculateDuration(endDate?: Date, startDate?: Date) {
+export function calculateDuration(endDate?: Date, startDate?: Date) {
   let duration;
   if (endDate && startDate) {
     duration = endDate.getTime() / 1000 - startDate.getTime() / 1000;
@@ -441,7 +441,6 @@ export const reducer = (
         depositInterval,
         debtBuffer,
         maxBondSize: value,
-        overridden: true,
       };
     }
 
