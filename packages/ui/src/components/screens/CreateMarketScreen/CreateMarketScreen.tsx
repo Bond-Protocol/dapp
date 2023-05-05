@@ -83,7 +83,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     state.quoteToken.address &&
     state.payoutToken.address;
 
-  const updateMaxBond = (capacity?: any, durationInDays?: number, priceModel: string) => {
+  const updateMaxBond = (capacity?: any, durationInDays?: number, priceModel?: string) => {
     let cap = Number(capacity);
     if (!cap) return 0;
 

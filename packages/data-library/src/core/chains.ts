@@ -12,7 +12,7 @@ const ethereumMainnet: Chain = {
     decimals: 18,
   },
   rpcUrls: [""],
-  blockExplorerUrls: ["https://etherscan.io/"],
+  blockExplorerUrls: ["https://etherscan.io/#/"],
   blockExplorerName: "Etherscan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
@@ -30,7 +30,7 @@ const goerliTestnet: Chain = {
     decimals: 18,
   },
   rpcUrls: [""],
-  blockExplorerUrls: ["https://goerli.etherscan.io/"],
+  blockExplorerUrls: ["https://goerli.etherscan.io/#/"],
   blockExplorerName: "Etherscan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",

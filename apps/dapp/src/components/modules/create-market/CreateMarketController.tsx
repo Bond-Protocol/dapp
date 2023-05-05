@@ -200,8 +200,8 @@ export const CreateMarketController = () => {
 
   const getTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
-  //  console.log("marketparams:")
-  //  console.log(config.marketParams);
+    console.log("marketparams:")
+    console.log(config.marketParams);
     return contractLib.createMarketMultisig(
       config?.marketParams,
       config?.bondType

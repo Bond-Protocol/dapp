@@ -44,7 +44,9 @@ export const TokenInput = (props: TokenInputProps) => {
     const updated = trimAsNumber(e.target.value, calculateTrimDigits(e.target.value));
 
     if (!isNaN(updated)) {
+      // @ts-ignore
       props.onChange && props.onChange(updated);
+      // @ts-ignore
       setValue(updated);
     }
   };

@@ -15,8 +15,8 @@ import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
 import { CreateMarketState } from "components";
 import { dynamicFormatter, formatCurrency, formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
-import { CHAINS } from "@bond-protocol/bond-library/dist/src";
 import { useState } from "react";
+import {getBlockExplorer} from "@bond-protocol/contract-library";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
@@ -143,9 +143,12 @@ export const ConfirmMarketCreationDialog = (props: {
   const auctioneer = props.getAuctioneer(props.chain, state);
   const teller = props.getTeller(props.chain, state);
   const formattedState = formatMarketState(state);
-  const chain = CHAINS.get(props.chain);
-  const blockExplorerUrl = chain?.blockExplorerUrls[0];
   const [accepted, setAccepted] = useState(false);
+
+  const { blockExplorerUrl } = getBlockExplorer(
+    props.chain,
+    "address"
+  );
 
   const createMarketBytecode = props.getTxBytecode(state);
   const allowanceBytecode = props.getApproveTxBytecode(state);
@@ -317,7 +320,7 @@ export const ConfirmMarketCreationDialog = (props: {
               target="_blank"
               labelClassname="text-light-grey hover:text-light-secondary"
               className="mb-2 font-mono"
-              href={blockExplorerUrl + "address/" + teller}
+              href={blockExplorerUrl + teller}
             >
               TELLER CONTRACT
             </Link>
@@ -336,7 +339,7 @@ export const ConfirmMarketCreationDialog = (props: {
               target="_blank"
               labelClassname="text-light-grey hover:text-light-secondary"
               className="mb-2 font-mono"
-              href={blockExplorerUrl + "address/" + auctioneer}
+              href={blockExplorerUrl + auctioneer}
             >
               AUCTION CONTRACT
             </Link>
