@@ -157,6 +157,16 @@ export const CreateMarketController = () => {
 
     let bondType: string = getBondType(state);
 
+    let startDate;
+
+    if (state.startDate && state.startDate.getTime() <= Date.now()) {
+      startDate = 0;
+    } else {
+      startDate = state.startDate
+        ? (state.startDate.getTime() / 1000).toFixed(0)
+        : 0;
+    }
+
     const config = {
       summaryData: { ...state },
       marketParams: {
@@ -186,9 +196,7 @@ export const CreateMarketController = () => {
         maxDiscountFromCurrent: BigNumber.from("10000").toString(),
         baseDiscount: BigNumber.from("5000").toString(),
         targetIntervalDiscount: BigNumber.from("1000").toString(),
-        start: state.startDate
-          ? (state.startDate.getTime() / 1000).toFixed(0)
-          : 0,
+        start: startDate,
         duration: state.duration,
       },
       bondType: bondType,
