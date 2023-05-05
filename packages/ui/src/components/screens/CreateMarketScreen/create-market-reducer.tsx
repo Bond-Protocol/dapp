@@ -71,7 +71,7 @@ export type CreateMarketState = OverridableCreateMarketParams & {
   oracle?: boolean;
   duration: string;
   durationInDays: number;
-  overriden: Partial<OverridableCreateMarketParams>;
+  overridden: boolean; // Partial<OverridableCreateMarketParams>;
 };
 
 const placeholderToken = {
@@ -107,8 +107,9 @@ export const placeholderState: CreateMarketState = {
     "oracle-dynamic": {},
     "oracle-static": {},
   },
-  overriden: {},
+  overridden: false,
 };
+
 export const calculateDebtBuffer = (
   marketDurationInDays: number,
   depositInterval: number,
@@ -120,7 +121,8 @@ export const calculateDebtBuffer = (
     ((capacity * 0.25) / ((capacity * decayInterval) / duration)) * 100
   );
 };
-function calculateDuration(endDate?: Date, startDate?: Date) {
+
+export function calculateDuration(endDate?: Date, startDate?: Date) {
   let duration;
   if (endDate && startDate) {
     duration = endDate.getTime() / 1000 - startDate.getTime() / 1000;
@@ -432,38 +434,37 @@ export const reducer = (
         Number(state.duration) / (Number(state.capacity) / value)
       );
 
-      return {
-        ...state,
-        depositInterval,
-        overriden: {
-          ...state.overriden,
-          maxBondSize: value,
-        },
-      };
-    }
-
-    case CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL: {
-      //Value expected in hours, we save it as minutes
-      const depositInterval = value * 60 * 60;
       const debtBuffer = tweakDebtBuffer({ ...state, depositInterval });
 
       return {
         ...state,
-        overriden: {
-          ...state.overriden,
-          depositInterval,
-          debtBuffer,
-        },
+        depositInterval,
+        debtBuffer,
+        maxBondSize: value,
+      };
+    }
+
+    case CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL: {
+      // Value provided in hours, we save it as seconds
+      const depositInterval = value * 60 * 60;
+      const debtBuffer = tweakDebtBuffer({ ...state, depositInterval });
+      let maxBondSize = (Number(state.capacity) * depositInterval) / Number(state.duration);
+      maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(maxBondSize));
+
+      return {
+        ...state,
+        maxBondSize,
+        depositInterval,
+        debtBuffer,
+        overridden: true,
       };
     }
 
     case CreateMarketAction.OVERRIDE_DEBT_BUFFER: {
       return {
         ...state,
-        overriden: {
-          ...state.overriden,
-          debtBuffer: value,
-        },
+        debtBuffer: value,
+        overridden: true,
       };
     }
 

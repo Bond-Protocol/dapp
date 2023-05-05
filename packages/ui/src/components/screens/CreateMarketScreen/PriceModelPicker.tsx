@@ -39,13 +39,11 @@ const priceControlConfig: Record<
       property: "initialPrice",
       topLabel: "Initial Discount",
       display: "percentage",
-      exchangeRateOrder: "quote_per_payout",
     },
     {
       property: "minPrice",
       topLabel: "Min Price",
       display: "exchange_rate",
-      exchangeRateOrder: "quote_per_payout",
     },
   ],
   static: [
@@ -53,7 +51,6 @@ const priceControlConfig: Record<
       property: "initialPrice",
       topLabel: "Fixed Price",
       display: "percentage",
-      exchangeRateOrder: "quote_per_payout",
     }
   ],
   ["oracle-dynamic"]: [
@@ -62,13 +59,11 @@ const priceControlConfig: Record<
       bottomLabel: "From Oracle Price",
       topLabel: "Initial Discount",
       display: "percentage",
-      exchangeRateOrder: "quote_per_payout",
     },
     {
       property: "minPrice",
       topLabel: "Min Price",
       display: "exchange_rate",
-      exchangeRateOrder: "quote_per_payout",
     },
   ],
   ["oracle-static"]: [
@@ -77,13 +72,11 @@ const priceControlConfig: Record<
       bottomLabel: "From Oracle Price",
       topLabel: "Fixed Discount",
       display: "percentage",
-      exchangeRateOrder: "quote_per_payout",
     },
     {
       property: "minPrice",
       topLabel: "Min Price",
       display: "exchange_rate",
-      exchangeRateOrder: "quote_per_payout",
     },
   ],
 };

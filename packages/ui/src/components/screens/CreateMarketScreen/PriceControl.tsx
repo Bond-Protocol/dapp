@@ -15,7 +15,6 @@ export type PriceControlProps = {
   onRateChange: (exchangeRate: any) => any;
   tooltip?: React.ReactNode;
   display: "percentage" | "exchange_rate";
-  exchangeRateOrder: "payout_per_quote" | "quote_per_payout",
   className?: string;
 };
 

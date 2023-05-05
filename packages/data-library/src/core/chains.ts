@@ -12,7 +12,7 @@ const ethereumMainnet: Chain = {
     decimals: 18,
   },
   rpcUrls: [""],
-  blockExplorerUrls: ["https://etherscan.io/"],
+  blockExplorerUrls: ["https://etherscan.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Etherscan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
@@ -30,7 +30,7 @@ const goerliTestnet: Chain = {
     decimals: 18,
   },
   rpcUrls: [""],
-  blockExplorerUrls: ["https://goerli.etherscan.io/"],
+  blockExplorerUrls: ["https://goerli.etherscan.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Etherscan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
@@ -48,7 +48,7 @@ const polygonMainnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://polygon-rpc.com/"],
-  blockExplorerUrls: ["https://polygonscan.com/#/"],
+  blockExplorerUrls: ["https://polygonscan.com/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Polygonscan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/POLYGON.png",
@@ -66,7 +66,7 @@ const polygonMumbaiTestnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://rpc-mumbai.maticvigil.com/"],
-  blockExplorerUrls: ["https://mumbai.polygonscan.com/#/"],
+  blockExplorerUrls: ["https://mumbai.polygonscan.com/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Polygonscan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/POLYGON.png",
@@ -84,7 +84,7 @@ const fantomMainnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://rpc.ftm.tools"],
-  blockExplorerUrls: ["https://ftmscan.com/#/"],
+  blockExplorerUrls: ["https://ftmscan.com/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "FTMScan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/FANTOM.png",
@@ -102,7 +102,7 @@ const avalancheMainnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://api.avax.network/ext/bc/C/rpc"],
-  blockExplorerUrls: ["https://snowtrace.io/#/"],
+  blockExplorerUrls: ["https://snowtrace.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Snowtrace",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/AVALANCHE.png",
@@ -119,7 +119,7 @@ const avalancheFujiTestnet: Chain = {
     symbol: "AVAX",
   },
   rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
-  blockExplorerUrls: ["https://testnet.snowtrace.io/#/"],
+  blockExplorerUrls: ["https://testnet.snowtrace.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Snowtrace",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/AVALANCHE.png",
@@ -137,7 +137,7 @@ const bscMainnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://rpc.ankr.com/bsc"],
-  blockExplorerUrls: ["https://bscscan.com/#/"],
+  blockExplorerUrls: ["https://bscscan.com/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "BscScan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/BSC.png",
@@ -155,7 +155,7 @@ const arbitrumMainnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://arb1.arbitrum.io/rpc"],
-  blockExplorerUrls: ["https://arbiscan.io/#/"],
+  blockExplorerUrls: ["https://arbiscan.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Arbiscan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
@@ -173,7 +173,7 @@ const arbitrumGoerliTestnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://goerli-rollup.arbitrum.io/rpc"],
-  blockExplorerUrls: ["https://goerli.arbiscan.io/#/"],
+  blockExplorerUrls: ["https://goerli.arbiscan.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Arbiscan",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
@@ -191,7 +191,7 @@ const optimismMainnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://mainnet.optimism.io"],
-  blockExplorerUrls: ["https://optimistic.etherscan.io/#/"],
+  blockExplorerUrls: ["https://optimistic.etherscan.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Optimism Explorer",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",
@@ -209,7 +209,7 @@ const optimismGoerliTestnet: Chain = {
     decimals: 18,
   },
   rpcUrls: ["https://goerli.optimism.io"],
-  blockExplorerUrls: ["https://goerli-optimism.etherscan.io/#/"],
+  blockExplorerUrls: ["https://goerli-optimism.etherscan.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
   blockExplorerName: "Optimism Goerli Explorer",
   image:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",

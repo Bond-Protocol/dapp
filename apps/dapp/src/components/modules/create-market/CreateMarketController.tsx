@@ -119,7 +119,7 @@ export const CreateMarketController = () => {
         state.payoutToken.decimals,
         auctioneer,
         signer,
-        state.capacity
+        state.capacity.toString()
       );
 
       await tx.wait(1);
@@ -144,18 +144,28 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const debtBuffer = state.overriden.debtBuffer
-      ? state.overriden.debtBuffer
+    const debtBuffer = state.overridden.debtBuffer
+      ? state.overridden.debtBuffer
       : state.debtBuffer;
 
-    const depositInterval = state.overriden.depositInterval
-      ? state.overriden.depositInterval
+    const depositInterval = state.overridden.depositInterval
+      ? state.overridden.depositInterval
       : state.depositInterval;
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
     let bondType: string = getBondType(state);
+
+    let startDate;
+
+    if (state.startDate && state.startDate.getTime() <= Date.now()) {
+      startDate = 0;
+    } else {
+      startDate = state.startDate
+        ? (state.startDate.getTime() / 1000).toFixed(0)
+        : 0;
+    }
 
     const config = {
       summaryData: { ...state },
@@ -186,9 +196,7 @@ export const CreateMarketController = () => {
         maxDiscountFromCurrent: BigNumber.from("10000").toString(),
         baseDiscount: BigNumber.from("5000").toString(),
         targetIntervalDiscount: BigNumber.from("1000").toString(),
-        start: state.startDate
-          ? (state.startDate.getTime() / 1000).toFixed(0)
-          : 0,
+        start: startDate,
         duration: state.duration,
       },
       bondType: bondType,
