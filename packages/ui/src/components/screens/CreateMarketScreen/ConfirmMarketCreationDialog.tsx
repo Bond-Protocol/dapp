@@ -246,7 +246,7 @@ export const ConfirmMarketCreationDialog = (props: {
 
       <h4 className="font-fraktion mt-4">PRICING</h4>
       <SummaryList fields={fields} />
-      {props.showMultisig && (
+      {props.showMultisig && state.priceModel === "dynamic" && (
         <div className="mt-1">
           <SummaryRow
             editable={state.priceModel === "dynamic"}
