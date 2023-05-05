@@ -37,7 +37,7 @@ const state: Partial<CreateMarketState> = {
   oracle: false,
   startDate: new Date(),
   endDate: new Date(),
-  overriden: {},
+  overridden: {},
 };
 
 const overridenState = {

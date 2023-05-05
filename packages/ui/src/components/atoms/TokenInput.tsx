@@ -1,6 +1,6 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { Icon, Input, InputProps } from "..";
-import { longFormatter } from "utils";
+import {calculateTrimDigits, longFormatter, trim, trimAsNumber} from "utils";
 
 export type TokenInputProps = InputProps & {
   symbol?: string;
@@ -11,10 +11,18 @@ export type TokenInputProps = InputProps & {
 };
 
 export const TokenInput = (props: TokenInputProps) => {
-  const [value, setValue] = useState(props.value as string);
+  const [value, setValue] = useState(trimAsNumber(props.value as number, calculateTrimDigits(props.value as number)).toString());
   const [showTokenSymbol, setShowTokenSymbol] = useState(
     props.symbolStartsShowing
   );
+
+  useEffect(() => {
+    setValue(trimAsNumber(props.value as number, calculateTrimDigits(props.value as number)).toString());
+  }, [props.value]);
+
+  useEffect(() => {
+    setValue(trim(value, calculateTrimDigits(Number(value))).toString());
+  }, [value]);
 
   const onBlur = (_e: React.BaseSyntheticEvent) => {
     let updated = value === "" ? "0" : value;
@@ -33,7 +41,7 @@ export const TokenInput = (props: TokenInputProps) => {
   const onChange = (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
 
-    const updated = e.target.value;
+    const updated = trimAsNumber(e.target.value, calculateTrimDigits(e.target.value));
 
     if (!isNaN(updated)) {
       props.onChange && props.onChange(updated);

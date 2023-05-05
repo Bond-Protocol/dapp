@@ -144,12 +144,12 @@ export const CreateMarketController = () => {
       label: network.chain.name,
     };
 
-    const debtBuffer = state.overriden.debtBuffer
-      ? state.overriden.debtBuffer
+    const debtBuffer = state.overridden.debtBuffer
+      ? state.overridden.debtBuffer
       : state.debtBuffer;
 
-    const depositInterval = state.overriden.depositInterval
-      ? state.overriden.depositInterval
+    const depositInterval = state.overridden.depositInterval
+      ? state.overridden.depositInterval
       : state.depositInterval;
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
@@ -200,7 +200,8 @@ export const CreateMarketController = () => {
 
   const getTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
-
+  //  console.log("marketparams:")
+  //  console.log(config.marketParams);
     return contractLib.createMarketMultisig(
       config?.marketParams,
       config?.bondType

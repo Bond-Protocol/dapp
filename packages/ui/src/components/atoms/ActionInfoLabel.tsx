@@ -53,7 +53,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
     <div className={`${props.className}`}>
       <div className="flex justify-between">
         {!props.editable && !props.link && (
-          <div className="my-auto">{props.value}</div>
+          <div className={`my-auto ${isEdited ? "text-light-secondary" : ""}`}>{props.value}</div>
         )}
         {props.link && (
           <Link

@@ -16,7 +16,7 @@ import { CreateMarketState } from "components";
 import { dynamicFormatter, formatCurrency, formatDate } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { CHAINS } from "@bond-protocol/bond-library/dist/src";
-import { MouseEventHandler, useState } from "react";
+import { useState } from "react";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
@@ -63,11 +63,6 @@ const getPriceFields = (state: CreateMarketState) => {
 };
 
 const formatMarketState = (state: CreateMarketState) => {
-  const debtBuffer = state.overriden.debtBuffer ?? state.debtBuffer;
-  const depositInterval =
-    state.overriden.depositInterval ?? state.depositInterval;
-  const maxBondSize = state.overriden.maxBondSize ?? state.maxBondSize;
-
   return {
     vesting: {
       icon: fastVesting,
@@ -86,9 +81,9 @@ const formatMarketState = (state: CreateMarketState) => {
     },
     startDate: formatDate.short(state.startDate as Date),
     endDate: formatDate.short(state.endDate as Date),
-    depositInterval: Math.trunc(depositInterval / 60 / 60) + " HOURS",
-    debtBuffer: debtBuffer + "%",
-    maxBondSize,
+    depositInterval: Math.trunc(state.depositInterval / 60 / 60) + " HOURS",
+    debtBuffer: state.debtBuffer + "%",
+    maxBondSize: formatCurrency.trimToLengthSymbol(state.maxBondSize),
   };
 };
 
@@ -169,9 +164,7 @@ export const ConfirmMarketCreationDialog = (props: {
     },
   ];
 
-  const edited = !!(
-    state.overriden.debtBuffer || state.overriden.depositInterval
-  );
+  const edited = state.overridden === true;
   const disabled = edited && !accepted;
 
   return (
@@ -233,31 +226,34 @@ export const ConfirmMarketCreationDialog = (props: {
       {props.showMultisig && (
         <div className="mt-1">
           <SummaryRow
-            editable
+            editable={state.priceModel === "dynamic"}
             leftLabel="Deposit Interval"
-            rightLabel={formattedState.depositInterval?.toString()}
+            rightLabel={formattedState.depositInterval}
             symbol=" HOURS"
-            onChange={(value) =>
+            onChange={(value) =>{
+              if (!value) return;
               dispatch({
                 type: CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL,
                 value,
               })
-            }
+            }}
           />
         </div>
       )}
+
       <h4 className="font-fraktion mt-4">PRICING</h4>
       <SummaryList fields={fields} />
       {props.showMultisig && (
         <div className="mt-1">
           <SummaryRow
-            editable
+            editable={state.priceModel === "dynamic"}
             leftLabel="Debt Buffer"
-            rightLabel={formattedState.debtBuffer?.toString()}
+            rightLabel={formattedState.debtBuffer}
             symbol="%"
-            onChange={(value) =>
-              dispatch({ type: CreateMarketAction.OVERRIDE_DEBT_BUFFER, value })
-            }
+            onChange={(value) => {
+              if (!value) return;
+              dispatch({type: CreateMarketAction.OVERRIDE_DEBT_BUFFER, value})
+            }}
           />
         </div>
       )}
