@@ -119,7 +119,7 @@ export const CreateMarketController = () => {
         state.payoutToken.decimals,
         auctioneer,
         signer,
-        state.capacity
+        state.capacity.toString()
       );
 
       await tx.wait(1);
