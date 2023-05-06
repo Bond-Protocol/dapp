@@ -116,8 +116,8 @@ function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
           ],
         ],
       );
-    case BOND_TYPE.FIXED_EXPIRY_SDA_V2:
-    case BOND_TYPE.FIXED_TERM_SDA_V2:
+    case BOND_TYPE.FIXED_EXPIRY_SDA_V1_1:
+    case BOND_TYPE.FIXED_TERM_SDA_V1_1:
       return ethers.utils.defaultAbiCoder.encode(
         [
           'tuple(address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 start, uint32 duration, uint32 depositInterval, int8 scaleAdjustment)',

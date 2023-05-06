@@ -5,13 +5,13 @@ export type ContractAddresses = {
   aggregator: string;
   fixedExpiryTeller: string;
   fixedExpirySDAAuctioneer: string;
-  fixedExpirySDAv2Auctioneer: string;
+  fixedExpirySDAv1_1Auctioneer: string;
   fixedExpiryFPAAuctioneer: string;
   fixedExpiryOFDAAuctioneer: string;
   fixedExpiryOSDAAuctioneer: string;
   fixedTermTeller: string;
   fixedTermSDAAuctioneer: string;
-  fixedTermSDAv2Auctioneer: string;
+  fixedTermSDAv1_1Auctioneer: string;
   fixedTermFPAAuctioneer: string;
   fixedTermOFDAAuctioneer: string;
   fixedTermOSDAAuctioneer: string;
@@ -52,13 +52,13 @@ const mainnetAddresses: ContractAddresses = {
   aggregator: '0x007A66A2a13415DB3613C1a4dd1C942A285902d1',
   fixedExpiryTeller: '0x007FE70dc9797C4198528aE43d8195ffF82Bdc95',
   fixedExpirySDAAuctioneer: '0x007FEA32545a39Ff558a1367BBbC1A22bc7ABEfD',
-  fixedExpirySDAv2Auctioneer: '',
+  fixedExpirySDAv1_1Auctioneer: '',
   fixedExpiryFPAAuctioneer: '0xFEF9A527ac84836DC9939Ad75eb8ce325bBE0E54',
   fixedExpiryOFDAAuctioneer: '',
   fixedExpiryOSDAAuctioneer: '',
   fixedTermTeller: '0x007F7735baF391e207E3aA380bb53c4Bd9a5Fed6',
   fixedTermSDAAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222',
-  fixedTermSDAv2Auctioneer: '',
+  fixedTermSDAv1_1Auctioneer: '',
   fixedTermFPAAuctioneer: '0xF7F9Ae2415F8Cb89BEebf9662A19f2393e7065e0',
   fixedTermOFDAAuctioneer: '',
   fixedTermOSDAAuctioneer: '',
@@ -69,13 +69,13 @@ const goerliAddresses: ContractAddresses = {
   aggregator: '0x007A66A2a13415DB3613C1a4dd1C942A285902d1',
   fixedExpiryTeller: '0x007FE70dc9797C4198528aE43d8195ffF82Bdc95',
   fixedExpirySDAAuctioneer: '0x007FEA32545a39Ff558a1367BBbC1A22bc7ABEfD',
-  fixedExpirySDAv2Auctioneer: '0xFE5DA6ad5720237D19229e7416791d390255E9AA',
+  fixedExpirySDAv1_1Auctioneer: '0xFE5DA6ad5720237D19229e7416791d390255E9AA',
   fixedExpiryFPAAuctioneer: '0xFEF9A527ac84836DC9939Ad75eb8ce325bBE0E54',
   fixedExpiryOFDAAuctioneer: '0xaAdb8904C8E83C00848f9eC519ad4833227BE47B',
   fixedExpiryOSDAAuctioneer: '0x2E579f046c1474166cc3cc4c7Ab5fAD0B0E05e50',
   fixedTermTeller: '0x007F7735baF391e207E3aA380bb53c4Bd9a5Fed6',
   fixedTermSDAAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222',
-  fixedTermSDAv2Auctioneer: '0xF75DAFffaF63f5D935f8A481EE827d68974FD992',
+  fixedTermSDAv1_1Auctioneer: '0xF75DAFffaF63f5D935f8A481EE827d68974FD992',
   fixedTermFPAAuctioneer: '0xF7F9Ae2415F8Cb89BEebf9662A19f2393e7065e0',
   fixedTermOFDAAuctioneer: '0x56A07e0b05D60EF41318c60935c57924804d4541',
   fixedTermOSDAAuctioneer: '0xF1d4fef484b50eB66Eb7c5cF4FAA04166573317C',
@@ -86,13 +86,13 @@ const arbitrumMainnetAddresses: ContractAddresses = {
   aggregator: '0x007A66A2a13415DB3613C1a4dd1C942A285902d1',
   fixedExpiryTeller: '0x007FE70dc9797C4198528aE43d8195ffF82Bdc95',
   fixedExpirySDAAuctioneer: '0x007FEA32545a39Ff558a1367BBbC1A22bc7ABEfD',
-  fixedExpirySDAv2Auctioneer: '',
+  fixedExpirySDAv1_1Auctioneer: '',
   fixedExpiryFPAAuctioneer: '0xFEF9A527ac84836DC9939Ad75eb8ce325bBE0E54',
   fixedExpiryOFDAAuctioneer: '',
   fixedExpiryOSDAAuctioneer: '',
   fixedTermTeller: '0x007F7735baF391e207E3aA380bb53c4Bd9a5Fed6',
   fixedTermSDAAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222',
-  fixedTermSDAv2Auctioneer: '',
+  fixedTermSDAv1_1Auctioneer: '',
   fixedTermFPAAuctioneer: '0xF7F9Ae2415F8Cb89BEebf9662A19f2393e7065e0',
   fixedTermOFDAAuctioneer: '',
   fixedTermOSDAAuctioneer: '',
@@ -103,13 +103,13 @@ const arbitrumGoerliAddresses: ContractAddresses = {
   aggregator: '0x007A66A2a13415DB3613C1a4dd1C942A285902d1',
   fixedExpiryTeller: '0x007FE70dc9797C4198528aE43d8195ffF82Bdc95',
   fixedExpirySDAAuctioneer: '0x007FEA32545a39Ff558a1367BBbC1A22bc7ABEfD',
-  fixedExpirySDAv2Auctioneer: '',
+  fixedExpirySDAv1_1Auctioneer: '',
   fixedExpiryFPAAuctioneer: '0xFEF9A527ac84836DC9939Ad75eb8ce325bBE0E54',
   fixedExpiryOFDAAuctioneer: '',
   fixedExpiryOSDAAuctioneer: '',
   fixedTermTeller: '0x007F7735baF391e207E3aA380bb53c4Bd9a5Fed6',
   fixedTermSDAAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222',
-  fixedTermSDAv2Auctioneer: '',
+  fixedTermSDAv1_1Auctioneer: '',
   fixedTermFPAAuctioneer: '0xF7F9Ae2415F8Cb89BEebf9662A19f2393e7065e0',
   fixedTermOFDAAuctioneer: '',
   fixedTermOSDAAuctioneer: '',
@@ -146,10 +146,10 @@ export const getAddressesForType = (
         teller: getAddresses(id).fixedExpiryTeller,
         auctioneer: getAddresses(id).fixedExpirySDAAuctioneer,
       };
-    case BOND_TYPE.FIXED_EXPIRY_SDA_V2:
+    case BOND_TYPE.FIXED_EXPIRY_SDA_V1_1:
       return {
         teller: getAddresses(id).fixedExpiryTeller,
-        auctioneer: getAddresses(id).fixedExpirySDAv2Auctioneer,
+        auctioneer: getAddresses(id).fixedExpirySDAv1_1Auctioneer,
       };
     case BOND_TYPE.FIXED_EXPIRY_FPA:
       return {
@@ -172,10 +172,10 @@ export const getAddressesForType = (
         teller: getAddresses(id).fixedTermTeller,
         auctioneer: getAddresses(id).fixedTermSDAAuctioneer,
       };
-    case BOND_TYPE.FIXED_TERM_SDA_V2:
+    case BOND_TYPE.FIXED_TERM_SDA_V1_1:
       return {
         teller: getAddresses(id).fixedTermTeller,
-        auctioneer: getAddresses(id).fixedTermSDAv2Auctioneer,
+        auctioneer: getAddresses(id).fixedTermSDAv1_1Auctioneer,
       };
     case BOND_TYPE.FIXED_TERM_FPA:
       return {

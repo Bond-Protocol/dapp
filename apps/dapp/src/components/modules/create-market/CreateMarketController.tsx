@@ -23,8 +23,8 @@ function getBondType(state: CreateMarketState) {
   switch (state.priceModel) {
     case "dynamic":
       return state.vestingType === "term"
-        ? contractLib.BOND_TYPE.FIXED_TERM_SDA_V2
-        : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA_V2;
+        ? contractLib.BOND_TYPE.FIXED_TERM_SDA_V1_1
+        : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA_V1_1;
     case "static":
       return state.vestingType === "term"
         ? contractLib.BOND_TYPE.FIXED_TERM_FPA

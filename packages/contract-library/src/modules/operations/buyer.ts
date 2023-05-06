@@ -115,7 +115,7 @@ export async function redeem(
   if (tellerAddress) {
     switch (bondType) {
       case BOND_TYPE.FIXED_EXPIRY_SDA:
-      case BOND_TYPE.FIXED_EXPIRY_SDA_V2:
+      case BOND_TYPE.FIXED_EXPIRY_SDA_V1_1:
       case BOND_TYPE.FIXED_EXPIRY_FPA:
       case BOND_TYPE.FIXED_EXPIRY_OFDA:
       case BOND_TYPE.FIXED_EXPIRY_OSDA:
@@ -123,7 +123,7 @@ export async function redeem(
         teller = FixedExpirationTeller__factory.connect(tellerAddress, signer);
         break;
       case BOND_TYPE.FIXED_TERM_SDA:
-      case BOND_TYPE.FIXED_TERM_SDA_V2:
+      case BOND_TYPE.FIXED_TERM_SDA_V1_1:
       case BOND_TYPE.FIXED_TERM_FPA:
       case BOND_TYPE.FIXED_TERM_OFDA:
       case BOND_TYPE.FIXED_TERM_OSDA:
