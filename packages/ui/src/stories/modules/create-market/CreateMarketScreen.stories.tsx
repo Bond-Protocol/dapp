@@ -33,6 +33,7 @@ export const Primary = {
     getAuctioneer: () => "",
     getTeller: () => "",
     getTxBytecode: () => "",
+    getApproveTxBytecode: () => "",
     chain: "5",
     tokens: list,
     isAllowanceTxPending: false,
