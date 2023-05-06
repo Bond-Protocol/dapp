@@ -107,12 +107,14 @@ export const protocols: ProtocolDefinition[] = [
         purchaseLinks: {
           [CHAIN_ID.GOERLI_TESTNET]:
             "https://goerli.etherscan.io/address/0x20be9a427F3BB6bC15873420644d1f5F4db31CC0#writeContract",
+          [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]:
+            "https://goerli.arbiscan.io/address/0xd518614C390e02741F3B0EE24486b09Ce53E6d39",
         },
         logoUrl:
           "https://assets.coingecko.com/coins/images/877/small/chainlink-new-logo.png?1547034700",
         addresses: {
-          [CHAIN_ID.GOERLI_TESTNET]:
-            "0x20be9a427F3BB6bC15873420644d1f5F4db31CC0",
+          [CHAIN_ID.GOERLI_TESTNET]: "0x20be9a427F3BB6bC15873420644d1f5F4db31CC0",
+          [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: "0xd518614C390e02741F3B0EE24486b09Ce53E6d39",
         },
       },
       {
