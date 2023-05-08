@@ -1,6 +1,10 @@
+import {trimAsNumber} from "utils";
+
 export interface PriceData {
   date: number;
   price: number;
+  quotePriceUsd: number;
+  payoutPriceUsd: number;
 }
 
 export interface DiscountedPriceData extends PriceData {
@@ -25,72 +29,63 @@ export const getDiscountPercentage = (
   discountedPrice: number
 ) => {
   const discount = price - discountedPrice;
-  const discountPercentage = (discount / price) * 100;
-  return discountPercentage;
+  return (discount / price) * 100;
 };
 
 export interface ProjectionConfiguration {
-  initialPrice?: number;
-  minPrice?: number;
+  targetDiscount: number;
+  minPrice: number;
+  initialCapacity?: number;
+  durationInDays?: number;
   fixedPrice?: number;
-  maxPremium: number;
-  maxDiscount: number;
-  triggerCount: number;
 }
 
 export function generateDiscountedPrices(
   prices: PriceData[],
   config: ProjectionConfiguration
 ): DiscountedPriceData[] {
-  let discountedPrices: DiscountedPriceData[] = [];
-  let currentTriggerCount = 0;
-  const { maxDiscount, maxPremium, triggerCount } = config;
+  if (!prices || prices.length === 0) return [];
 
-  // Calculate the index step for triggers
-  const step = Math.floor(prices.length / (triggerCount + 1));
+  const discountedPrices: DiscountedPriceData[] = [];
+  const { initialCapacity, targetDiscount, minPrice, durationInDays } = config;
 
-  for (let i = 0; i < prices.length; i++) {
-    let priceObj = prices[i];
-    let discountedPrice: number;
-    let discount: number;
+  if (!initialCapacity || !durationInDays) return [];
 
-    if (i === 0) {
-      discountedPrice = priceObj.price;
-      discount = 0;
-    } else {
-      if (i % step === 0 && currentTriggerCount < triggerCount) {
-        discountedPrice = priceObj.price * (1 + maxPremium / 100);
-        currentTriggerCount++;
-      } else {
-        const prevTriggerIndex = i - (i % step);
-        const prevTriggerPrice = prices[prevTriggerIndex].price;
-        const slope =
-          (prevTriggerPrice * (1 - maxDiscount / 100) -
-            prevTriggerPrice * (1 + maxPremium / 100)) /
-          step;
-        discountedPrice =
-          prevTriggerPrice * (1 + maxPremium / 100) + slope * (i % step);
-      }
+  const initialPrice = prices[0].price;
 
-      // Ensure discountedPrice is within the specified range
-      discountedPrice = Math.min(
-        discountedPrice,
-        priceObj.price * (1 + maxPremium / 100)
-      );
-      discountedPrice = Math.max(
-        discountedPrice,
-        priceObj.price * (1 - maxDiscount / 100)
-      );
+  let offset = 0;
+  const duration = durationInDays * 24;
 
-      discount = ((priceObj.price - discountedPrice) / priceObj.price) * 100;
+  let price = initialPrice;
+  for (let i = 0; i < duration; i++) {
+    const date = prices[i]?.date;
+    const usdBondPrice = price * (prices[i]?.quotePriceUsd);
+    const usdMarketPrice = prices[i]?.payoutPriceUsd;
+
+    if (!date || !usdBondPrice || !usdMarketPrice) {
+      return discountedPrices;
     }
 
+    let discount = (usdBondPrice - usdMarketPrice) / usdMarketPrice;
+    discount *= 100;
+    discount = trimAsNumber(-discount, 2);
+
     discountedPrices.push({
-      date: priceObj.date,
-      price: priceObj.price,
-      discountedPrice: discountedPrice,
+      date: date,
+      price: usdMarketPrice,
+      discountedPrice: usdBondPrice,
       discount: discount,
+      quotePriceUsd: prices[i]?.quotePriceUsd,
+      payoutPriceUsd: prices[i]?.payoutPriceUsd
     });
+
+    if (usdBondPrice <= (usdMarketPrice / 100) * (100 - targetDiscount)) {
+      offset = (price / 100) * 20;
+      price = initialPrice + offset;
+    }
+
+    price *= 0.9905;
+    if (price < minPrice) price = minPrice;
   }
 
   return discountedPrices;
@@ -105,11 +100,4 @@ export const generateFixedDiscountPrice = (
     discountedPrice: fixedPrice || 0,
     discount: getDiscountPercentage(p.price, fixedPrice || 0),
   }));
-};
-
-export const generatedDiscountedPricesSimple = (
-  prices: PriceData[],
-  { minPrice, initialPrice }: ProjectionConfiguration
-) => {
-  return prices.map((p) => ({ ...p, initialPrice, minPrice }));
 };

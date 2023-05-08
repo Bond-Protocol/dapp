@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useCoingeckoTokenHistory } from "./useTokenPricesHistory";
 
-export const useProjectionChartData = ({ quoteToken, payoutToken }: any) => {
+export const useProjectionChartData = ({ quoteToken, payoutToken, dayRange }: any) => {
   const [prices, setPrices] = useState([]);
-  const quoteRes = useCoingeckoTokenHistory(quoteToken, 7);
-  const payoutRes = useCoingeckoTokenHistory(payoutToken, 7);
+  const quoteRes = useCoingeckoTokenHistory(quoteToken, dayRange);
+  const payoutRes = useCoingeckoTokenHistory(payoutToken, dayRange);
 
   useEffect(() => {
     if (!quoteToken || !payoutToken) return;
@@ -16,6 +16,8 @@ export const useProjectionChartData = ({ quoteToken, payoutToken }: any) => {
         return {
           ...p,
           price: 1 / (quotePrice / p.price),
+          payoutPriceUsd: p.price,
+          quotePriceUsd: quotePrice,
         };
       });
 

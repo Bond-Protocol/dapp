@@ -42,6 +42,9 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
             tickFormatter={formatDate.dayMonthTime}
             tickLine={false}
             minTickGap={80}
+            type={"number"}
+            scale={"time"}
+            domain={["auto", "auto"]}
           />
           <YAxis
             tickLine={false}

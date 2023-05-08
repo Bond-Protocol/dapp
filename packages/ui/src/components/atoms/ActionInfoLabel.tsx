@@ -3,7 +3,7 @@ import { Link, Tooltip } from "components";
 import { Copy } from "components/atoms/Copy";
 import { ReactComponent as EditIcon } from "assets/icons/edit-icon.svg";
 import { useSymbolInput } from "src/hooks/use-symbol-input";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export interface ActionInfoLabelProps {
   value?: string;
@@ -24,6 +24,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
     props.symbol,
     true
   );
+  const [editing, setEditing] = useState(false);
 
   const handleChange = (e: React.BaseSyntheticEvent) => {
     const value = onChange(e);
@@ -38,11 +39,21 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
     };
   }, []);
 
+  const handleBlur = (args: any) => {
+    onBlur(args);
+    setEditing(false);
+  };
+
+  const handleFocus = (args: any) => {
+    onFocus(args);
+    setEditing(true);
+  };
+
   return (
     <div className={`${props.className}`}>
       <div className="flex justify-between">
         {!props.editable && !props.link && (
-          <div className="my-auto">{props.value}</div>
+          <div className={`my-auto ${isEdited ? "text-light-secondary" : ""}`}>{props.value}</div>
         )}
         {props.link && (
           <Link
@@ -62,9 +73,9 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
         {/* )} */}
         {props.editable && (
           <InputUnstyled
-            value={value}
-            onBlur={onBlur}
-            onFocus={onFocus}
+            value={editing ? value : props.value}
+            onBlur={handleBlur}
+            onFocus={handleFocus}
             onChange={handleChange}
             endAdornment={<EditIcon className="ml-1" />}
             componentsProps={{

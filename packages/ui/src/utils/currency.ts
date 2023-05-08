@@ -15,32 +15,44 @@ export const longFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
-export const getPriceScale = (value: string | number) => {
-  let num = String(value);
+export const getRateMod = (value: string | number) => {
+  let rateMod;
 
-  let rateMod = 0.001;
-  let scale = 2;
-  let [single, decimal] = num.split(".").map((n) => parseFloat(n));
-
-  if (decimal > 1000) {
-    rateMod = 0.001;
-    scale = 6;
-  }
-
-  if (decimal > 100) {
+  if (value > 0.1 && value <= 1) {
     rateMod = 0.01;
-    scale = 5;
+  } else if (value > 1 && value < 100) {
+    rateMod = 0.1
+  } else if (value >= 100) {
+    rateMod = Math.pow(10, Math.floor(Number(value) / 100).toString().length - 1);
+  } else {
+    const numZeroes = 1 - Math.floor(Math.log(Number(value)) / Math.log(10)) - 1;
+
+    rateMod = "0.";
+    for (let i = 0; i < numZeroes; i++) {
+      rateMod = rateMod.concat("0");
+    }
+    rateMod = Number(rateMod.concat("1"));
   }
 
-  if (single > 0) {
-    rateMod = 0.1;
+  return rateMod;
+}
+
+export const getPriceScale = (value: string | number) => {
+  let scale;
+
+  if (value >= 1000) {
+    scale = 0;
+  } else if (value >= 100) {
+    scale = 2;
+  } else if (value >= 1) {
+    scale = 2;
+  } else {
+    let str = value.toString();
+    let str2 = str.replace(/\.(0+)?/, '');
+    scale = str.length - str2.length + 1;
   }
 
-  if (single > 100) {
-    rateMod = 1;
-  }
-
-  return { rateMod, scale };
+  return scale;
 };
 
 export const dynamicFormatter = (value: string | number, currency = true) => {
