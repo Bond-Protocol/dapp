@@ -190,7 +190,7 @@ export const CreateMarketController = () => {
           state.endDate && (state.endDate.getTime() / 1000).toFixed(0),
         depositInterval,
         scaleAdjustment: scaleAdjustment,
-        oracle: "0xcef020dffc3adf63bb22149bf838fb4e5d9b130e",
+        oracle: state.oracleAddress ?? "",
         formattedPrice: formattedInitialPrice.toString(),
         fixedDiscount: formattedInitialPrice.toString(),
         maxDiscountFromCurrent: BigNumber.from("10000").toString(),
