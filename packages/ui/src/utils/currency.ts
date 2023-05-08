@@ -21,11 +21,15 @@ export const getRateMod = (value: string | number) => {
   if (value > 0.1 && value <= 1) {
     rateMod = 0.01;
   } else if (value > 1 && value < 100) {
-    rateMod = 0.1
+    rateMod = 0.1;
   } else if (value >= 100) {
-    rateMod = Math.pow(10, Math.floor(Number(value) / 100).toString().length - 1);
+    rateMod = Math.pow(
+      10,
+      Math.floor(Number(value) / 100).toString().length - 1
+    );
   } else {
-    const numZeroes = 1 - Math.floor(Math.log(Number(value)) / Math.log(10)) - 1;
+    const numZeroes =
+      1 - Math.floor(Math.log(Number(value)) / Math.log(10)) - 1;
 
     rateMod = "0.";
     for (let i = 0; i < numZeroes; i++) {
@@ -35,7 +39,7 @@ export const getRateMod = (value: string | number) => {
   }
 
   return rateMod;
-}
+};
 
 export const getPriceScale = (value: string | number) => {
   let scale;
@@ -48,7 +52,7 @@ export const getPriceScale = (value: string | number) => {
     scale = 2;
   } else {
     let str = value.toString();
-    let str2 = str.replace(/\.(0+)?/, '');
+    let str2 = str.replace(/\.(0+)?/, "");
     scale = str.length - str2.length + 1;
   }
 
@@ -93,12 +97,13 @@ export const dynamicFormatter = (value: string | number, currency = true) => {
 
 export const trimToLengthSymbol = (num: number) => {
   if (num < 1) return num;
-  const symbols = ["", "K", "M", "B", "T", "Q", "GMI"]; // array of symbols to use for each magnitude of number
+  const symbols = ["", "k", "M", "B", "T", "Q", "GMI"]; // array of symbols to use for each magnitude of number
   const sign = Math.sign(num); // determine if the number is negative or positive
   num = Math.abs(num); // get the absolute value of the number
   //const mag = Math.floor(Math.log10(num) / 3); // calculate the magnitude of the number in units of 3
   const mag = Math.min(Math.floor(Math.log10(num) / 3), symbols.length - 1); // use Math.min to handle numbers greater than quadrillions
   const shortNum = Number((num / Math.pow(10, mag * 3)).toFixed(1)) * sign; // truncate the number to 1 decimal place and multiply by the sign
+  if (mag < 2) return num; //skip K for now
   return `${shortNum}${symbols[mag]}`;
 };
 

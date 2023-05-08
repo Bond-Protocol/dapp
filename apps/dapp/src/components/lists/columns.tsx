@@ -1,5 +1,5 @@
 import { getProtocol } from "@bond-protocol/bond-library";
-import { Button, Column, DiscountLabel, formatDate } from "ui";
+import { Button, Column, DiscountLabel, formatCurrency, formatDate } from "ui";
 import { add } from "date-fns";
 import {
   longFormatter,
@@ -38,8 +38,8 @@ const bondPrice: Column<CalculatedMarket> = {
 
     return {
       icon: payout?.logoUrl,
-      value: market.formattedDiscountedPrice,
-      subtext: market.formattedFullPrice + " Market",
+      value: formatCurrency.dynamicFormatter(market.discountedPrice),
+      subtext: formatCurrency.dynamicFormatter(market.fullPrice),
     };
   },
 };
