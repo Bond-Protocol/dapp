@@ -103,7 +103,7 @@ export const trimToLengthSymbol = (num: number) => {
   //const mag = Math.floor(Math.log10(num) / 3); // calculate the magnitude of the number in units of 3
   const mag = Math.min(Math.floor(Math.log10(num) / 3), symbols.length - 1); // use Math.min to handle numbers greater than quadrillions
   const shortNum = Number((num / Math.pow(10, mag * 3)).toFixed(1)) * sign; // truncate the number to 1 decimal place and multiply by the sign
-  if (mag < 2) return num; //skip K for now
+  if (mag < 2) return formatCurrency.dynamicFormatter(num, false); //skip K for now
   return `${shortNum}${symbols[mag]}`;
 };
 

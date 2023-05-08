@@ -12,7 +12,14 @@ import {
   useTokenAllowance,
   useTokens,
 } from "hooks";
-import { Button, InputCard, ActionInfoList, formatDate } from "ui";
+import {
+  Button,
+  InputCard,
+  ActionInfoList,
+  formatDate,
+  dynamicFormatter,
+  formatCurrency,
+} from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
 import { useAccount, useSigner } from "wagmi";
@@ -170,7 +177,9 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const summaryFields = [
     {
       leftLabel: "You will get",
-      rightLabel: `${payout} ${market.payoutToken.symbol}`,
+      rightLabel: `${formatCurrency.dynamicFormatter(payout, false)} ${
+        market.payoutToken.symbol
+      }`,
     },
     {
       leftLabel: "Vested on",
@@ -179,7 +188,10 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     },
     {
       leftLabel: "Max Bondable",
-      rightLabel: `${market.maxAmountAccepted} ${market.quoteToken.symbol}`,
+      rightLabel: `${formatCurrency.dynamicFormatter(
+        market.maxAmountAccepted,
+        false
+      )} ${market.quoteToken.symbol}`,
       tooltip: `The maximum amount of ${market.quoteToken.symbol} accepted in a single transaction.`,
     },
     {
