@@ -23,7 +23,7 @@ export default {
     to spend your payout tokens. This can be a multisig or other contract, or a wallet.
   */
   issuerAddresses: {
-    [CHAIN_ID.ETHEREUM_MAINNET]: ["0x197586555074F43984D2E5c24f7E2e239eDca4A9"],
+    [CHAIN_ID.ETHEREUM_MAINNET]: ["0xa40FD6903F7bd9a3590A84861ccD5b600d3a5121"],
   },
   /*
    Tokens specific to your protocol like your governance token or LPs can be added here.
