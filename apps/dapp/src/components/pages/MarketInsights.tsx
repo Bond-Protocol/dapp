@@ -9,7 +9,14 @@ import {
   trim,
 } from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
-import { dateMath, dynamicFormatter, formatDate, InfoLabel, Loading } from "ui";
+import {
+  dateMath,
+  dynamicFormatter,
+  formatCurrency,
+  formatDate,
+  InfoLabel,
+  Loading,
+} from "ui";
 import { TransactionHistory } from "components/lists";
 import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
@@ -42,10 +49,6 @@ export const MarketInsights = () => {
     market.currentCapacity < Number(market.maxPayout)
       ? market.currentCapacity
       : market.maxPayout;
-
-  const formattedPayout = longFormatter.format(
-    Number(trim(maxPayout, calculateTrimDigits(parseFloat(String(maxPayout)))))
-  );
 
   const vestingDate = formatDate.short(new Date(market.vesting * 1000));
 
@@ -80,7 +83,7 @@ export const MarketInsights = () => {
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {formattedPayout}
+          {formatCurrency.trimToLengthSymbol(Number(maxPayout))}
           <span className="ml-1 text-xl">{market.payoutToken.symbol}</span>
         </InfoLabel>
 
@@ -115,7 +118,7 @@ export const MarketInsights = () => {
           label={`${isFutureMarket ? "Total" : "Remaining"} Capacity`}
           tooltip="The remaining amount of tokens to be bonded in this market"
         >
-          {dynamicFormatter(market.currentCapacity, false)}
+          {formatCurrency.trimToLengthSymbol(market.currentCapacity)}
           <span className="ml-1 text-xl">{market.capacityToken}</span>
         </InfoLabel>
       </div>
