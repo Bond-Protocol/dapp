@@ -50,8 +50,8 @@ const priceControlConfig: Record<
     {
       property: "initialPrice",
       topLabel: "Fixed Price",
-      display: "percentage",
-    }
+      display: "exchange_rate",
+    },
   ],
   ["oracle-dynamic"]: [
     {
