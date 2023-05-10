@@ -34,7 +34,7 @@ export const getDiscountPercentage = (
 
 export interface ProjectionConfiguration {
   targetDiscount: number;
-  minPrice: number;
+  minPrice?: number;
   initialCapacity?: number;
   durationInDays?: number;
   fixedPrice?: number;
@@ -67,7 +67,7 @@ export function generateDiscountedPrices(
     const usdBondPrice = price * (prices[i]?.quotePriceUsd);
     const usdMarketPrice = prices[i]?.payoutPriceUsd;
 
-    if (!date || !usdBondPrice || !usdMarketPrice) {
+    if (!date || !usdBondPrice || !usdMarketPrice || !minPrice) {
       return discountedPrices;
     }
 
@@ -105,7 +105,7 @@ export function generateOracleDiscountedPrices(
   }
   const discountedPrices: DiscountedPriceData[] = [];
   const { targetDiscount, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval } = config;
-console.log({ targetDiscount, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval })
+
   if (!initialCapacity || !durationInDays || !maxDiscountFromCurrent || !depositInterval || !baseDiscount || !targetIntervalDiscount) return [];
 
   const initialPrice = prices[0].price;
@@ -147,7 +147,7 @@ console.log({ targetDiscount, initialCapacity, baseDiscount, targetIntervalDisco
     if (price < minPrice) price = minPrice;
     currentDiscount += hourlyDiscount;
   }
-console.log(discountedPrices)
+
   return discountedPrices;
 }
 
@@ -166,6 +166,8 @@ export const generateOracleFixedDiscountPrice = (
   prices: PriceData[],
   { fixedDiscount, maxDiscountFromCurrent }: ProjectionConfiguration
 ): DiscountedPriceData[] => {
+  if (!fixedDiscount || !maxDiscountFromCurrent) return [];
+
   return prices.map((p) => {
     let discountedPrice = (p.payoutPriceUsd / 100) * (100 - fixedDiscount);
     const minPrice = (prices[0].payoutPriceUsd / 100) * (100 - maxDiscountFromCurrent);

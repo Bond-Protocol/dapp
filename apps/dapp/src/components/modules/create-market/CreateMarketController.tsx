@@ -63,7 +63,6 @@ export const CreateMarketController = () => {
   const [gasEstimate, setGasEstimate] = useState(0);
   const [isOraclePairValid, setIsOraclePairValid] = useState(false);
   const [oraclePrice, setOraclePrice] = useState<BigNumber>();
-  const [oracleDecimals, setOracleDecimals] = useState();
 
   const blockExplorer = getBlockExplorer(
     String(network?.chain?.id) || "1",
@@ -93,7 +92,10 @@ export const CreateMarketController = () => {
   }, [state.oracleAddress, state.payoutToken, state.quoteToken]);
 
   useEffect(() => {
-    if (!isOraclePairValid) return;
+    if (!isOraclePairValid) {
+      setOraclePrice(0);
+      return;
+    }
 
     async function checkOracle() {
       const price = await getOraclePrice(
@@ -103,7 +105,6 @@ export const CreateMarketController = () => {
         state.quoteToken.address,
         providers[network?.chain?.id]
       );
-      console.log(Number(price));
 
       const decimals = await getOracleDecimals(
         // @ts-ignore
@@ -112,13 +113,20 @@ export const CreateMarketController = () => {
         state.quoteToken.address,
         providers[network?.chain?.id]
       );
-      console.log(decimals);
+      const adjustedPrice = ethers.utils.formatUnits(price, decimals);
 
-      setOraclePrice(price);
-      setOracleDecimals(decimals);
+      dispatch({
+        type: CreateMarketAction.UPDATE_PRICE_RATES,
+        value: {
+          priceModel: state.priceModel,
+          rate: adjustedPrice.toString(),
+        },
+      });
+
+      setOraclePrice(adjustedPrice);
     }
     checkOracle();
-  }, [isOraclePairValid]);
+  }, [isOraclePairValid, state.oracleAddress]);
 
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;
@@ -216,12 +224,6 @@ export const CreateMarketController = () => {
         : 0;
     }
 
-    let maxDiscountFromCurrent;
-    if (state.priceModel === "oracle-dynamic" || state.priceModel === "oracle-static") {
-      const minPrice = BigNumber.from(parseUnits(state.priceModels[state.priceModel].minPrice.toString(), oracleDecimals));
-      maxDiscountFromCurrent = (((oraclePrice - minPrice) / oraclePrice) * 100000).toFixed(0);
-    }
-
     const config = {
       summaryData: { ...state },
       marketParams: {
@@ -248,7 +250,7 @@ export const CreateMarketController = () => {
         oracle: state.oracleAddress ?? "",
         formattedPrice: formattedInitialPrice.toString(),
         fixedDiscount: (state.priceModels[state.priceModel].fixedDiscount * 1000).toFixed(0),
-        maxDiscountFromCurrent: maxDiscountFromCurrent,
+        maxDiscountFromCurrent: (state.priceModels[state.priceModel].maxDiscountFromCurrent * 1000).toFixed(0),
         baseDiscount: (state.priceModels[state.priceModel].baseDiscount * 1000).toFixed(0),
         targetIntervalDiscount: (state.priceModels[state.priceModel].targetIntervalDiscount * 1000).toFixed(0),
         start: startDate,
@@ -344,6 +346,7 @@ export const CreateMarketController = () => {
         blockExplorerName={blockExplorer.blockExplorerName}
         blockExplorerUrl={blockExplorer.blockExplorerUrl}
         created={created}
+        oraclePrice={oraclePrice}
       />
     </>
   );

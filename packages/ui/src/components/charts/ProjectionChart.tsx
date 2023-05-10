@@ -18,9 +18,10 @@ export type ProjectionChartProps = {
   durationInDays?: number;
   depositInterval?: number;
   fixedDiscount?: number;
-  maxDiscountFromCurrent?: number;
   baseDiscount?: number;
   targetIntervalDiscount?: number;
+  fixedPrice?: number;
+  maxDiscountFromCurrent?: number;
 };
 
 const getProjectionDataset = (
@@ -41,7 +42,6 @@ const getProjectionDataset = (
 };
 
 export const ProjectionChart = ({
-  minPrice = 0,
   ...props
 }: BondPriceChartProps & ProjectionChartProps) => {
   const {
@@ -54,15 +54,15 @@ export const ProjectionChart = ({
 
   const prices = getProjectionDataset(state, props.data, {
     initialCapacity: props.initialCapacity,
-    minPrice,
+    minPrice: props.minPrice,
     durationInDays: props.durationInDays,
     targetDiscount: parseFloat(targetDiscount),
     depositInterval: props.depositInterval,
     fixedDiscount: props.fixedDiscount,
-    maxDiscountFromCurrent: props.maxDiscountFromCurrent,
     baseDiscount: props.baseDiscount,
     targetIntervalDiscount: props.targetIntervalDiscount,
-    fixedPrice: state.priceModels[state.priceModel].initialPrice, //TODO: Update
+    fixedPrice: props.fixedPrice,
+    maxDiscountFromCurrent: props.maxDiscountFromCurrent,
   });
 
   const shouldRender = prices.length > 0;

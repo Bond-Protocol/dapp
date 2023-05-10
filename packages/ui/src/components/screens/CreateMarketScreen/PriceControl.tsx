@@ -11,6 +11,7 @@ export type PriceControlProps = {
   topLabel?: string;
   quoteToken?: Token;
   payoutToken?: Token;
+  oraclePrice?: number;
   exchangeRate: number;
   onRateChange: (exchangeRate: any) => any;
   tooltip?: React.ReactNode;
@@ -44,9 +45,11 @@ export const PriceControl = (props: PriceControlProps) => {
   }, [rate]);
 
   useEffect(() => {
-    if (!(props.quoteToken && props.payoutToken)) return;
+    if (!(props.quoteToken?.price && props.payoutToken?.price)) return;
 
-    const rate = props.payoutToken?.price / props.quoteToken?.price;
+    let rate = props.oraclePrice
+      ? Number(props.oraclePrice)
+      : props.payoutToken?.price / props.quoteToken?.price;
 
     if (props.display !== "percentage") {
       const rateMod = getRateMod(rate);
@@ -62,12 +65,15 @@ export const PriceControl = (props: PriceControlProps) => {
       setRate(underlyingRate);
       setPayoutPerQuote(1 / underlyingRate);
     }
-  }, [props.payoutToken, props.quoteToken]);
+  }, [props.payoutToken, props.quoteToken, props.oraclePrice]);
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     const updated = numericInput.onChange(e);
     if (props.quoteToken && props.payoutToken && (props.display === "percentage")) {
-      const initialRate = props.payoutToken?.price / props.quoteToken.price;
+      const initialRate = props.oraclePrice
+        ? props.oraclePrice
+        : props.payoutToken?.price / props.quoteToken?.price;
+
       const underlyingRate = (initialRate / 100) * (100 - updated);
       setRate(underlyingRate);
       setPayoutPerQuote(1 / underlyingRate);
@@ -90,7 +96,10 @@ export const PriceControl = (props: PriceControlProps) => {
       let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
 
       if (props.display === "percentage") {
-        const initialRate = props.payoutToken?.price / props.quoteToken.price;
+        const initialRate = props.oraclePrice
+          ? props.oraclePrice
+          : props.payoutToken?.price / props.quoteToken?.price;
+
         const underlyingRate = (initialRate / 100) * (100 - Number(newRate));
         setRate(underlyingRate);
         setPayoutPerQuote(1 / underlyingRate);
@@ -117,7 +126,10 @@ export const PriceControl = (props: PriceControlProps) => {
       }
 
       if (props.display === "percentage") {
-        const initialRate = props.payoutToken?.price / props.quoteToken.price;
+        const initialRate = props.oraclePrice
+          ? props.oraclePrice
+          : props.payoutToken?.price / props.quoteToken?.price;
+
         const underlyingRate = (initialRate / 100) * (100 - Number(newRate));
         setRate(underlyingRate);
         setPayoutPerQuote(1 / underlyingRate);

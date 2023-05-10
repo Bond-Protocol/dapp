@@ -59,11 +59,6 @@ const getStaticPriceFields = (state: CreateMarketState) => {
 const getOracleDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
 
-  const minPrice = formatCurrency.dynamicFormatter(
-    state.priceModels["oracle-dynamic"].minPrice,
-    false
-  );
-
   return [
     {
       leftLabel: "Base Discount",
@@ -74,8 +69,8 @@ const getOracleDynamicPriceFields = (state: CreateMarketState) => {
       rightLabel: `${state.priceModels["oracle-dynamic"].targetIntervalDiscount}%`,
     },
     {
-      leftLabel: "Minimum Price",
-      rightLabel: `${minPrice} ${tokenSymbols}`,
+      leftLabel: "Maximum Discount",
+      rightLabel: `${state.priceModels["oracle-dynamic"].maxDiscountFromCurrent}%`,
     },
   ];
 };
@@ -83,22 +78,14 @@ const getOracleDynamicPriceFields = (state: CreateMarketState) => {
 const getOracleStaticPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
 
-  const minPrice = formatCurrency.dynamicFormatter(
-    state.priceModels["oracle-static"].minPrice,
-    false
-  );
-
   return [
     {
       leftLabel: "Fixed Discount",
-      rightLabel: `${formatCurrency.dynamicFormatter(
-        state.priceModels["oracle-static"].fixedDiscount,
-        false
-      )} ${tokenSymbols}`,
+      rightLabel: `${state.priceModels["oracle-static"].fixedDiscount}%`,
     },
     {
-      leftLabel: "Minimum Price",
-      rightLabel: `${minPrice} ${tokenSymbols}`,
+      leftLabel: "Maximum Discount",
+      rightLabel: `${state.priceModels["oracle-static"].maxDiscountFromCurrent}%`,
     },
   ];
 };

@@ -6,8 +6,6 @@ import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
 import { PriceModelDetails } from "./PriceModelDetails";
 import { PriceModel, PriceType } from "./create-market-reducer";
 import { PriceControl, PriceControlProps } from "./PriceControl";
-import { checkOraclePairValidity } from "@bond-protocol/contract-library";
-import { providers } from "dapp/src/services";
 
 export type PriceModelPickerProps = {
   onChange: (args: {
@@ -17,6 +15,7 @@ export type PriceModelPickerProps = {
   }) => any;
   id?: string;
   chain: string;
+  oraclePrice?: number;
 } & Partial<PriceControlProps>;
 
 const options = [
@@ -72,10 +71,10 @@ const priceControlConfig: Record<
       returnValue: "percentage",
     },
     {
-      property: "minPrice",
-      topLabel: "Min Price",
-      display: "exchange_rate",
-      returnValue: "exchange_rate",
+      property: "maxDiscountFromCurrent",
+      topLabel: "Max Discount From Start",
+      display: "percentage",
+      returnValue: "percentage",
     },
   ],
   ["oracle-static"]: [
@@ -86,10 +85,10 @@ const priceControlConfig: Record<
       returnValue: "percentage",
     },
     {
-      property: "minPrice",
-      topLabel: "Min Price",
-      display: "exchange_rate",
-      returnValue: "exchange_rate",
+      property: "maxDiscountFromCurrent",
+      topLabel: "Max Discount From Start",
+      display: "percentage",
+      returnValue: "percentage",
     },
   ],
 };
@@ -146,6 +145,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
                 key={`${priceModel}-${p.property}`}
                 payoutToken={props.payoutToken}
                 quoteToken={props.quoteToken}
+                oraclePrice={props.oraclePrice}
                 onRateChange={(rate: any, reversed: boolean) => {
                   props.onRateChange &&
                     props.onRateChange({

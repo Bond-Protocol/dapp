@@ -51,6 +51,7 @@ export type CreateMarketScreenProps = {
   blockExplorerUrl: string;
   blockExplorerName: string;
   created: boolean;
+  oraclePrice: number;
 };
 
 const capacityOptions = [
@@ -245,8 +246,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             chain={chain}
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
+            oraclePrice={props.oraclePrice}
             onChange={(value) => {
-              console.log(value)
               dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value });
               updateMaxBond(state.capacity, state.durationInDays, value.priceModel);
             }}
@@ -269,9 +270,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               durationInDays={state.durationInDays}
               depositInterval={state.depositInterval}
               fixedDiscount={Number(state.priceModels[state.priceModel].fixedDiscount)}
-              maxDiscountFromCurrent={Number(state.priceModels[state.priceModel].maxDiscountFromCurrent)}
               baseDiscount={Number(state.priceModels[state.priceModel].baseDiscount)}
               targetIntervalDiscount={Number(state.priceModels[state.priceModel].targetIntervalDiscount)}
+              fixedPrice={Number(state.priceModels[state.priceModel].initialPrice)}
+              maxDiscountFromCurrent={Number(state.priceModels[state.priceModel].maxDiscountFromCurrent)}
             />
           </div>
           <div className="flex gap-x-4">

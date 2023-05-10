@@ -420,7 +420,7 @@ export const reducer = (
 
     case CreateMarketAction.UPDATE_PRICE_RATES: {
       const { priceModel, ...rates } = value;
-
+console.log(value)
       return {
         ...state,
         priceModels: {
