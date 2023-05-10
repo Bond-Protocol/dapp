@@ -56,10 +56,64 @@ const getStaticPriceFields = (state: CreateMarketState) => {
   ];
 };
 
+const getOracleDynamicPriceFields = (state: CreateMarketState) => {
+  const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
+
+  const minPrice = formatCurrency.dynamicFormatter(
+    state.priceModels["oracle-dynamic"].minPrice,
+    false
+  );
+
+  return [
+    {
+      leftLabel: "Base Discount",
+      rightLabel: `${state.priceModels["oracle-dynamic"].baseDiscount}%`,
+    },
+    {
+      leftLabel: "Target Interval Discount",
+      rightLabel: `${state.priceModels["oracle-dynamic"].targetIntervalDiscount}%`,
+    },
+    {
+      leftLabel: "Minimum Price",
+      rightLabel: `${minPrice} ${tokenSymbols}`,
+    },
+  ];
+};
+
+const getOracleStaticPriceFields = (state: CreateMarketState) => {
+  const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
+
+  const minPrice = formatCurrency.dynamicFormatter(
+    state.priceModels["oracle-static"].minPrice,
+    false
+  );
+
+  return [
+    {
+      leftLabel: "Fixed Discount",
+      rightLabel: `${formatCurrency.dynamicFormatter(
+        state.priceModels["oracle-static"].fixedDiscount,
+        false
+      )} ${tokenSymbols}`,
+    },
+    {
+      leftLabel: "Minimum Price",
+      rightLabel: `${minPrice} ${tokenSymbols}`,
+    },
+  ];
+};
+
 const getPriceFields = (state: CreateMarketState) => {
-  return state.priceModel === "dynamic"
-    ? getDynamicPriceFields(state)
-    : getStaticPriceFields(state);
+  switch (state.priceModel) {
+    case "dynamic":
+      return getDynamicPriceFields(state);
+    case "static":
+      return getStaticPriceFields(state);
+    case "oracle-dynamic":
+      return getOracleDynamicPriceFields(state);
+    case "oracle-static":
+      return getOracleStaticPriceFields(state);
+  }
 };
 
 const formatMarketState = (state: CreateMarketState) => {
@@ -229,7 +283,7 @@ export const ConfirmMarketCreationDialog = (props: {
       {props.showMultisig && (
         <div className="mt-1">
           <SummaryRow
-            editable={state.priceModel === "dynamic"}
+            editable={state.priceModel === "dynamic" || state.priceModel === "oracle-dynamic"}
             leftLabel="Deposit Interval"
             rightLabel={formattedState.depositInterval}
             symbol=" HOURS"

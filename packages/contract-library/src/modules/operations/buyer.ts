@@ -16,7 +16,7 @@ import {
   getTellerContract,
 } from '../contract-helper';
 import {
-  Auctioneer__factory,
+  Auctioneer__factory, BondChainlinkOracle__factory,
   CalculatedMarket,
   ERC1155__factory,
   FixedExpirationTeller__factory,
@@ -210,6 +210,54 @@ export async function changeApproval(
       tellerAddress,
       ethers.utils.parseUnits(value, tokenDecimals).toString(),
     );
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function checkOraclePairValidity(
+  oracleAddress: string,
+  payoutTokenAddress: string,
+  quoteTokenAddress: string,
+  provider: Provider,
+): Promise<boolean> {
+  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+
+  try {
+    return oracle.supportedPairs(payoutTokenAddress, quoteTokenAddress, {});
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function getOraclePrice(
+  oracleAddress: string,
+  payoutTokenAddress: string,
+  quoteTokenAddress: string,
+  provider: Provider,
+): Promise<BigNumberish> {
+  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+
+  try {
+    return oracle["currentPrice(address,address)"](quoteTokenAddress, payoutTokenAddress);
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function getOracleDecimals(
+  oracleAddress: string,
+  payoutTokenAddress: string,
+  quoteTokenAddress: string,
+  provider: Provider,
+): Promise<BigNumberish> {
+  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+
+  try {
+    return oracle["decimals(address,address)"](quoteTokenAddress, payoutTokenAddress);
   } catch (e) {
     console.log(e);
     throw e;

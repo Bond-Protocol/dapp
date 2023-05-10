@@ -38,6 +38,11 @@ export interface ProjectionConfiguration {
   initialCapacity?: number;
   durationInDays?: number;
   fixedPrice?: number;
+  fixedDiscount?: number;
+  baseDiscount?: number;
+  targetIntervalDiscount?: number;
+  maxDiscountFromCurrent?: number;
+  depositInterval?: number;
 }
 
 export function generateDiscountedPrices(
@@ -91,6 +96,61 @@ export function generateDiscountedPrices(
   return discountedPrices;
 }
 
+export function generateOracleDiscountedPrices(
+  prices: PriceData[],
+  config: ProjectionConfiguration
+): DiscountedPriceData[] {
+  if (!prices || prices.length === 0) {
+    return [];
+  }
+  const discountedPrices: DiscountedPriceData[] = [];
+  const { targetDiscount, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval } = config;
+console.log({ targetDiscount, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval })
+  if (!initialCapacity || !durationInDays || !maxDiscountFromCurrent || !depositInterval || !baseDiscount || !targetIntervalDiscount) return [];
+
+  const initialPrice = prices[0].price;
+  const minPrice = (prices[0].price / 100) * (100 - maxDiscountFromCurrent);
+
+  const duration = durationInDays * 24;
+
+  const depositIntervalHours = depositInterval / 60 / 60;
+  const hourlyDiscount = (baseDiscount + targetIntervalDiscount) / depositIntervalHours;
+  let currentDiscount = baseDiscount;
+
+  let price = (initialPrice / 100) * (100 - currentDiscount);
+
+  for (let i = 0; i < duration; i++) {
+    const date = prices[i]?.date;
+    const usdMarketPrice = prices[i]?.payoutPriceUsd;
+
+    if (!date || !usdMarketPrice) {
+      return discountedPrices;
+    }
+
+    let discount = trimAsNumber(currentDiscount, 2);
+
+    discountedPrices.push({
+      date: date,
+      price: usdMarketPrice,
+      discountedPrice: price,
+      discount: discount,
+      quotePriceUsd: prices[i]?.quotePriceUsd,
+      payoutPriceUsd: prices[i]?.payoutPriceUsd
+    });
+
+    if (currentDiscount >= targetDiscount) {
+      price = prices[0]?.payoutPriceUsd;
+      currentDiscount = 0;
+    }
+
+    price = (prices[i]?.payoutPriceUsd / 100) * (100 - currentDiscount);
+    if (price < minPrice) price = minPrice;
+    currentDiscount += hourlyDiscount;
+  }
+console.log(discountedPrices)
+  return discountedPrices;
+}
+
 export const generateFixedDiscountPrice = (
   prices: PriceData[],
   { fixedPrice }: ProjectionConfiguration
@@ -100,4 +160,21 @@ export const generateFixedDiscountPrice = (
     discountedPrice: fixedPrice || 0,
     discount: getDiscountPercentage(p.price, fixedPrice || 0),
   }));
+};
+
+export const generateOracleFixedDiscountPrice = (
+  prices: PriceData[],
+  { fixedDiscount, maxDiscountFromCurrent }: ProjectionConfiguration
+): DiscountedPriceData[] => {
+  return prices.map((p) => {
+    let discountedPrice = (p.payoutPriceUsd / 100) * (100 - fixedDiscount);
+    const minPrice = (prices[0].payoutPriceUsd / 100) * (100 - maxDiscountFromCurrent);
+    discountedPrice = Math.max(discountedPrice, minPrice);
+
+    return ({
+      ...p,
+      discountedPrice: discountedPrice,
+      discount: getDiscountPercentage(p.price, discountedPrice || 0),
+    })
+  });
 };

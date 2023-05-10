@@ -6,6 +6,8 @@ import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
 import { PriceModelDetails } from "./PriceModelDetails";
 import { PriceModel, PriceType } from "./create-market-reducer";
 import { PriceControl, PriceControlProps } from "./PriceControl";
+import { checkOraclePairValidity } from "@bond-protocol/contract-library";
+import { providers } from "dapp/src/services";
 
 export type PriceModelPickerProps = {
   onChange: (args: {
@@ -14,6 +16,7 @@ export type PriceModelPickerProps = {
     oracleAddress: string;
   }) => any;
   id?: string;
+  chain: string;
 } & Partial<PriceControlProps>;
 
 const options = [
@@ -38,11 +41,13 @@ const priceControlConfig: Record<
       property: "initialPrice",
       topLabel: "Initial Discount",
       display: "percentage",
+      returnValue: "exchange_rate",
     },
     {
       property: "minPrice",
       topLabel: "Min Price",
       display: "exchange_rate",
+      returnValue: "exchange_rate",
     },
   ],
   static: [
@@ -50,32 +55,41 @@ const priceControlConfig: Record<
       property: "initialPrice",
       topLabel: "Fixed Price",
       display: "percentage",
+      returnValue: "exchange_rate",
     },
   ],
   ["oracle-dynamic"]: [
     {
-      property: "initialDiscount",
-      bottomLabel: "From Oracle Price",
+      property: "baseDiscount",
       topLabel: "Initial Discount",
       display: "percentage",
+      returnValue: "percentage",
+    },
+    {
+      property: "targetIntervalDiscount",
+      topLabel: "Target Interval Discount",
+      display: "percentage",
+      returnValue: "percentage",
     },
     {
       property: "minPrice",
       topLabel: "Min Price",
       display: "exchange_rate",
+      returnValue: "exchange_rate",
     },
   ],
   ["oracle-static"]: [
     {
-      property: "initialDiscount",
-      bottomLabel: "From Oracle Price",
+      property: "fixedDiscount",
       topLabel: "Fixed Discount",
       display: "percentage",
+      returnValue: "percentage",
     },
     {
       property: "minPrice",
       topLabel: "Min Price",
       display: "exchange_rate",
+      returnValue: "exchange_rate",
     },
   ],
 };

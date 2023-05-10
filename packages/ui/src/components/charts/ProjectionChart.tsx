@@ -1,7 +1,9 @@
-import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
+import {BondPriceChart, BondPriceChartProps, PlaceholderChart} from "./";
 import {
   generateDiscountedPrices,
   generateFixedDiscountPrice,
+  generateOracleDiscountedPrices,
+  generateOracleFixedDiscountPrice,
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
@@ -14,6 +16,11 @@ export type ProjectionChartProps = {
   minPrice?: number;
   targetDiscount?: number;
   durationInDays?: number;
+  depositInterval?: number;
+  fixedDiscount?: number;
+  maxDiscountFromCurrent?: number;
+  baseDiscount?: number;
+  targetIntervalDiscount?: number;
 };
 
 const getProjectionDataset = (
@@ -21,9 +28,16 @@ const getProjectionDataset = (
   data: PriceData[],
   args: ProjectionConfiguration
 ) => {
-  return state.priceModel === "dynamic"
-    ? generateDiscountedPrices(data, args)
-    : generateFixedDiscountPrice(data, args);
+  switch (state.priceModel) {
+    case "dynamic":
+      return generateDiscountedPrices(data, args);
+    case "static":
+      return generateFixedDiscountPrice(data, args);
+    case "oracle-dynamic":
+      return generateOracleDiscountedPrices(data, args);
+    case "oracle-static":
+      return generateOracleFixedDiscountPrice(data, args);
+  }
 };
 
 export const ProjectionChart = ({
@@ -43,7 +57,12 @@ export const ProjectionChart = ({
     minPrice,
     durationInDays: props.durationInDays,
     targetDiscount: parseFloat(targetDiscount),
-    fixedPrice: state.priceModels.static.initialPrice, //TODO: Update
+    depositInterval: props.depositInterval,
+    fixedDiscount: props.fixedDiscount,
+    maxDiscountFromCurrent: props.maxDiscountFromCurrent,
+    baseDiscount: props.baseDiscount,
+    targetIntervalDiscount: props.targetIntervalDiscount,
+    fixedPrice: state.priceModels[state.priceModel].initialPrice, //TODO: Update
   });
 
   const shouldRender = prices.length > 0;

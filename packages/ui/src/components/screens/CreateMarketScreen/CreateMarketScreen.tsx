@@ -21,7 +21,7 @@ import {
   TransactionHashDialog,
   MarketCreatedDialog,
   PriceData,
-  TooltipWrapper, calculateDuration,
+  calculateDuration,
 } from "components";
 import {
   calculateTrimDigits,
@@ -30,6 +30,8 @@ import {
   vestingOptions
 } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import {checkOraclePairValidity} from "@bond-protocol/contract-library";
+import {providers} from "dapp/src/services";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -81,7 +83,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     state.endDate &&
     state.vesting &&
     state.quoteToken.address &&
-    state.payoutToken.address;
+    state.payoutToken.address &&
+    (state.oracle ? state.oracleAddress : true);
 
   const updateMaxBond = (capacity?: any, durationInDays?: number, priceModel?: string) => {
     let cap = Number(capacity);
@@ -239,9 +242,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <PriceModelPicker
             id="cm-price-model-picker"
+            chain={chain}
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
             onChange={(value) => {
+              console.log(value)
               dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value });
               updateMaxBond(state.capacity, state.durationInDays, value.priceModel);
             }}
@@ -262,6 +267,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               initialCapacity={Number(state.capacity) || 0}
               minPrice={Number(state.priceModels[state.priceModel].minPrice)}
               durationInDays={state.durationInDays}
+              depositInterval={state.depositInterval}
+              fixedDiscount={Number(state.priceModels[state.priceModel].fixedDiscount)}
+              maxDiscountFromCurrent={Number(state.priceModels[state.priceModel].maxDiscountFromCurrent)}
+              baseDiscount={Number(state.priceModels[state.priceModel].baseDiscount)}
+              targetIntervalDiscount={Number(state.priceModels[state.priceModel].targetIntervalDiscount)}
             />
           </div>
           <div className="flex gap-x-4">
@@ -349,6 +359,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               </div>
             ) : (
               <>
+                <InfoLabel className={`${state.priceModel === "oracle-dynamic" ? "invisible" : ""}`} label={"Market Length"} reverse>
+                  {state.durationInDays} DAYS
+                </InfoLabel>
+
                 <InfoLabel
                   label={"Max Bond Size"}
                   reverse
@@ -364,9 +378,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                     })
                   }}
                 />
-                <InfoLabel label={"Market Length"} reverse>
-                  {state.durationInDays} DAYS
-                </InfoLabel>
               </>
             )}
           </div>

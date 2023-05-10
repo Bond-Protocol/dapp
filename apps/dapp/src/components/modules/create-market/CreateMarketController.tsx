@@ -1,11 +1,12 @@
 //@ts-nocheck
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 import * as contractLib from "@bond-protocol/contract-library";
 import {
+  checkOraclePairValidity,
   getAddressesForType,
-  getBlockExplorer,
+  getBlockExplorer, getOracleDecimals, getOraclePrice,
 } from "@bond-protocol/contract-library";
 import {
   CreateMarketAction,
@@ -18,6 +19,7 @@ import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
+import {parseUnits} from "ethers/lib/utils";
 
 function getBondType(state: CreateMarketState) {
   switch (state.priceModel) {
@@ -59,6 +61,9 @@ export const CreateMarketController = () => {
   const [creationHash, setCreationHash] = useState("");
   const [created, setCreated] = useState(false);
   const [gasEstimate, setGasEstimate] = useState(0);
+  const [isOraclePairValid, setIsOraclePairValid] = useState(false);
+  const [oraclePrice, setOraclePrice] = useState<BigNumber>();
+  const [oracleDecimals, setOracleDecimals] = useState();
 
   const blockExplorer = getBlockExplorer(
     String(network?.chain?.id) || "1",
@@ -70,6 +75,50 @@ export const CreateMarketController = () => {
     payoutToken: state.payoutToken,
     dayRange: state.durationInDays,
   });
+
+  useEffect(() => {
+    if (!state.payoutToken || !state.quoteToken || !state.oracleAddress) return;
+
+    async function checkOracle() {
+      const valid = await checkOraclePairValidity(
+        // @ts-ignore
+        state.oracleAddress,
+        state.payoutToken.address,
+        state.quoteToken.address,
+        providers[network?.chain?.id]
+      );
+      setIsOraclePairValid(valid);
+    }
+    checkOracle();
+  }, [state.oracleAddress, state.payoutToken, state.quoteToken]);
+
+  useEffect(() => {
+    if (!isOraclePairValid) return;
+
+    async function checkOracle() {
+      const price = await getOraclePrice(
+        // @ts-ignore
+        state.oracleAddress,
+        state.payoutToken.address,
+        state.quoteToken.address,
+        providers[network?.chain?.id]
+      );
+      console.log(Number(price));
+
+      const decimals = await getOracleDecimals(
+        // @ts-ignore
+        state.oracleAddress,
+        state.payoutToken.address,
+        state.quoteToken.address,
+        providers[network?.chain?.id]
+      );
+      console.log(decimals);
+
+      setOraclePrice(price);
+      setOracleDecimals(decimals);
+    }
+    checkOracle();
+  }, [isOraclePairValid]);
 
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;
@@ -167,6 +216,12 @@ export const CreateMarketController = () => {
         : 0;
     }
 
+    let maxDiscountFromCurrent;
+    if (state.priceModel === "oracle-dynamic" || state.priceModel === "oracle-static") {
+      const minPrice = BigNumber.from(parseUnits(state.priceModels[state.priceModel].minPrice.toString(), oracleDecimals));
+      maxDiscountFromCurrent = (((oraclePrice - minPrice) / oraclePrice) * 100000).toFixed(0);
+    }
+
     const config = {
       summaryData: { ...state },
       marketParams: {
@@ -192,10 +247,10 @@ export const CreateMarketController = () => {
         scaleAdjustment: scaleAdjustment,
         oracle: state.oracleAddress ?? "",
         formattedPrice: formattedInitialPrice.toString(),
-        fixedDiscount: formattedInitialPrice.toString(),
-        maxDiscountFromCurrent: BigNumber.from("10000").toString(),
-        baseDiscount: BigNumber.from("5000").toString(),
-        targetIntervalDiscount: BigNumber.from("1000").toString(),
+        fixedDiscount: (state.priceModels[state.priceModel].fixedDiscount * 1000).toFixed(0),
+        maxDiscountFromCurrent: maxDiscountFromCurrent,
+        baseDiscount: (state.priceModels[state.priceModel].baseDiscount * 1000).toFixed(0),
+        targetIntervalDiscount: (state.priceModels[state.priceModel].targetIntervalDiscount * 1000).toFixed(0),
         start: startDate,
         duration: state.duration,
       },

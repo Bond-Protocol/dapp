@@ -53,13 +53,6 @@ export async function createMarket(
 ): Promise<ContractTransaction> {
   const auctioneer = getAuctioneerForCreate(signer, bondType, chainId);
   try {
-    console.log({
-      config,
-      bondType,
-      chainId,
-      signer,
-      overrides,
-    })
     const bytes = getBytes(config, bondType);
     // @ts-ignore
     return auctioneer.createMarket(bytes, overrides);
@@ -74,10 +67,6 @@ export function createMarketMultisig(
   bondType: BOND_TYPE,
 ): string {
   try {
-    console.log({
-      config,
-      bondType,
-    })
     // @ts-ignore
     const auctioneer = new ethers.utils.Interface(auctioneerAbi.abi);
     const bytes = getBytes(config, bondType);
@@ -166,7 +155,7 @@ function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
     case BOND_TYPE.FIXED_TERM_OFDA:
       return ethers.utils.defaultAbiCoder.encode(
         [
-          'tuple(address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 fixedDiscount, uint48 maxDiscountFromCurrent, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 conclusion)',
+          'tuple(address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 fixedDiscount, uint48 maxDiscountFromCurrent, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration)',
         ],
         [
           [
@@ -180,7 +169,8 @@ function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
             config.capacity,
             config.depositInterval,
             config.vesting,
-            config.conclusion,
+            config.start,
+            config.duration,
           ],
         ],
       );
@@ -188,7 +178,7 @@ function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
     case BOND_TYPE.FIXED_TERM_OSDA:
       return ethers.utils.defaultAbiCoder.encode(
         [
-          'tuple(address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 baseDiscount, uint48 maxDiscountFromCurrent, uint48 targetIntervalDiscount, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 conclusion)',
+          'tuple(address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 baseDiscount, uint48 maxDiscountFromCurrent, uint48 targetIntervalDiscount, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration)',
         ],
         [
           [
@@ -203,7 +193,8 @@ function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
             config.capacity,
             config.depositInterval,
             config.vesting,
-            config.conclusion,
+            config.start,
+            config.duration,
           ],
         ],
       );

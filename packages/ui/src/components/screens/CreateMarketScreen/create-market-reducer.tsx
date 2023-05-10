@@ -71,7 +71,11 @@ export type CreateMarketState = OverridableCreateMarketParams & {
   oracle?: boolean;
   duration: string;
   durationInDays: number;
-  overridden: boolean; // Partial<OverridableCreateMarketParams>;
+  fixedDiscount?: number;
+  maxDiscountFromCurrent?: number;
+  baseDiscount?: number;
+  targetIntervalDiscount?: number;
+  overridden: boolean;
 };
 
 const placeholderToken = {
@@ -228,7 +232,7 @@ export const reducer = (
 ): CreateMarketState => {
   const { type, value } = action;
 
-  console.log({ previousState: state, type, value });
+  //console.log({ previousState: state, type, value });
   switch (type) {
     case CreateMarketAction.UPDATE_QUOTE_TOKEN: {
       const {

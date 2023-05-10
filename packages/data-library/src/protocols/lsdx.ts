@@ -3,27 +3,24 @@ import { ProtocolDefinition } from "../public-types";
 
 /* Protocol Template */
 export default {
-  name: "Shib Original Vision", // Your protocol's display name, formatted as it will appear in the BondProtocol dApp
-  description: "Shib Original Vision ($SOV) fixes the corruption behind $SHIB by fairly distributing $SOV to those who believe in the genuine Shiba Inu community. $SOV was developed by true devotees in the dream that was once Shiba. They intend for $SOV to be distributed in a manner that is equitable, righteous, and transparent.", // A short protocol description
-  logoUrl: "https://assets.coingecko.com/coins/images/29601/small/photo_2023-03-19_19-07-40_2.png",
+  name: "LSDx", // Your protocol's display name, formatted as it will appear in the BondProtocol dApp
+  description: "An ultra-liquid protocol for all LSD.", // A short protocol description
+  logoUrl: "https://pbs.twimg.com/profile_images/1631562250933899265/KPaZC0_e_normal.jpg",
   // Links to landing page, socials and docs
   links: {
-    // NOTE: bonding is inscribed on the whitepaper prior to TGE.
     governanceVote: "", // A governance proposal related to bonds
-    homepage: "https://www.shiboriginalvision.com/",
-    twitter: "https://twitter.com/ShibSOV",
-    github: "",
-    medium: "https://medium.com/@shiboriginalvision",
-    discord: "https://discord.com/invite/rmbTWHF5JW",
-    telegram: "https://t.me/ShibOriginalVision",
-    everipedia: "",
+    homepage: "https://lsdx.finance/",
+    staking: "https://www.lsdx.finance/farm",
+    twitter: "https://twitter.com/LSDxfinance",
+    medium: "https://medium.com/@LSDxfinance",
+    discord: "https://discord.com/invite/GnXWfsz8Dm",
   },
   /*
     The address that you will use to execute the create market transaction, and which will be allowed
     to spend your payout tokens. This can be a multisig or other contract, or a wallet.
   */
   issuerAddresses: {
-    [CHAIN_ID.ETHEREUM_MAINNET]: ["0xa40FD6903F7bd9a3590A84861ccD5b600d3a5121"],
+    [CHAIN_ID.ETHEREUM_MAINNET]: ["0xd2db549fF9933953c8A884cCC761700dEff689c2"],
   },
   /*
    Tokens specific to your protocol like your governance token or LPs can be added here.
@@ -33,21 +30,21 @@ export default {
   */
   tokens: [
     {
-      name: "ShibOriginalVision",
-      symbol: "SOV",
-      logoUrl: "https://assets.coingecko.com/coins/images/29601/small/photo_2023-03-19_19-07-40_2.png",
+      name: "LSD Coin",
+      symbol: "LSD",
+      logoUrl: "https://assets.coingecko.com/coins/images/29519/small/logo.png?1679448801",
       // Token contract addresses
       addresses: {
-        [CHAIN_ID.ETHEREUM_MAINNET]: "0x2C5BC2Ba3614fD27FCc7022eA71d9172E2632c16",
+        [CHAIN_ID.ETHEREUM_MAINNET]: "0xfAC77A24E52B463bA9857d6b758ba41aE20e31FF",
       },
-      purchaseLinks: { [CHAIN_ID.ETHEREUM_MAINNET]: "https://app.uniswap.org/#/swap" }, // Where to acquire your token
+      purchaseLinks: { [CHAIN_ID.ETHEREUM_MAINNET]: "https://app.uniswap.org/#/swap?inputCurrency=ETH&outputCurrency=0xfAC77A24E52B463bA9857d6b758ba41aE20e31FF" }, // Where to acquire your token
       priceSources: [
         /*
            Check out our docs for supported price sources and their usage.
            Although custom price feeds are supported, some features such as bond price history charts
            do not currently support custom price feeds.
         */
-        { source: "coingecko", apiId: "shib-original-vision" },
+        { source: "coingecko", apiId: "lsdx-finance" },
         /*
           If you need to add a custom price function please add it in ../custom-price-feeds.ts
           then uncomment the following line and refer to it using the name you set in the

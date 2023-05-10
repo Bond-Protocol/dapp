@@ -15,6 +15,7 @@ export type PriceControlProps = {
   onRateChange: (exchangeRate: any) => any;
   tooltip?: React.ReactNode;
   display: "percentage" | "exchange_rate";
+  returnValue: "percentage" | "exchange_rate";
   className?: string;
 };
 
@@ -34,7 +35,12 @@ export const PriceControl = (props: PriceControlProps) => {
     const displayRate = trim(rate, calculateTrimDigits(rate));
     const exchangeLabel = displayRate + " " + props.quoteToken?.symbol + " per " + props.payoutToken?.symbol;
     setExchangeLabel(exchangeLabel);
-    props.onRateChange && props.onRateChange(rate);
+
+    if (props.returnValue === "exchange_rate") {
+      props.onRateChange && props.onRateChange(rate);
+    } else {
+      props.onRateChange && props.onRateChange(value.replace("%", ""));
+    }
   }, [rate]);
 
   useEffect(() => {
@@ -65,7 +71,12 @@ export const PriceControl = (props: PriceControlProps) => {
       const underlyingRate = (initialRate / 100) * (100 - updated);
       setRate(underlyingRate);
       setPayoutPerQuote(1 / underlyingRate);
-      props.onRateChange && props.onRateChange(underlyingRate);
+
+      if (props.returnValue === "exchange_rate") {
+        props.onRateChange && props.onRateChange(underlyingRate);
+      } else {
+        props.onRateChange && props.onRateChange(value.replace("%", ""));
+      }
     } else {
       props.onRateChange && props.onRateChange(updated);
     }
