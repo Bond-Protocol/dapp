@@ -1,12 +1,14 @@
 //@ts-nocheck
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 import * as contractLib from "@bond-protocol/contract-library";
 import {
   checkOraclePairValidity,
   getAddressesForType,
-  getBlockExplorer, getOracleDecimals, getOraclePrice,
+  getBlockExplorer,
+  getOracleDecimals,
+  getOraclePrice,
 } from "@bond-protocol/contract-library";
 import {
   CreateMarketAction,
@@ -19,7 +21,7 @@ import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
-import {parseUnits} from "ethers/lib/utils";
+import { parseUnits } from "ethers/lib/utils";
 
 function getBondType(state: CreateMarketState) {
   switch (state.priceModel) {
@@ -249,10 +251,18 @@ export const CreateMarketController = () => {
         scaleAdjustment: scaleAdjustment,
         oracle: state.oracleAddress ?? "",
         formattedPrice: formattedInitialPrice.toString(),
-        fixedDiscount: (state.priceModels[state.priceModel].fixedDiscount * 1000).toFixed(0),
-        maxDiscountFromCurrent: (state.priceModels[state.priceModel].maxDiscountFromCurrent * 1000).toFixed(0),
-        baseDiscount: (state.priceModels[state.priceModel].baseDiscount * 1000).toFixed(0),
-        targetIntervalDiscount: (state.priceModels[state.priceModel].targetIntervalDiscount * 1000).toFixed(0),
+        fixedDiscount: (
+          state.priceModels[state.priceModel].fixedDiscount * 1000
+        ).toFixed(0),
+        maxDiscountFromCurrent: (
+          state.priceModels[state.priceModel].maxDiscountFromCurrent * 1000
+        ).toFixed(0),
+        baseDiscount: (
+          state.priceModels[state.priceModel].baseDiscount * 1000
+        ).toFixed(0),
+        targetIntervalDiscount: (
+          state.priceModels[state.priceModel].targetIntervalDiscount * 1000
+        ).toFixed(0),
         start: startDate,
         duration: state.duration,
       },
@@ -327,7 +337,7 @@ export const CreateMarketController = () => {
     <>
       <CreateMarketScreen
         tokens={tokens.filter((t) =>
-          isConnected ? t.chainId === network.chain?.id : t.chainId === "1"
+          isConnected ? t.chainId === network.chain?.id : t.chainId === 1
         )}
         onSubmitAllowance={approveCapacitySpending}
         onSubmitCreation={onSubmit}
