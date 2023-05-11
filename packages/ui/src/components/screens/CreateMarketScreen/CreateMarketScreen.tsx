@@ -27,11 +27,9 @@ import {
   calculateTrimDigits,
   formatDate,
   trimAsNumber,
-  vestingOptions
+  vestingOptions,
 } from "utils";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
-import {checkOraclePairValidity} from "@bond-protocol/contract-library";
-import {providers} from "dapp/src/services";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -87,7 +85,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     state.payoutToken.address &&
     (state.oracle ? state.oracleAddress : true);
 
-  const updateMaxBond = (capacity?: any, durationInDays?: number, priceModel?: string) => {
+  const updateMaxBond = (
+    capacity?: any,
+    durationInDays?: number,
+    priceModel?: string
+  ) => {
     let cap = Number(capacity);
     if (!cap) return 0;
 
@@ -95,7 +97,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       if (!durationInDays) return 0;
 
       let maxBondSize = cap / durationInDays;
-      maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(Number(maxBondSize)));
+      maxBondSize = trimAsNumber(
+        maxBondSize,
+        calculateTrimDigits(Number(maxBondSize))
+      );
 
       dispatch({
         type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
@@ -107,7 +112,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         value: cap,
       });
     }
-  }
+  };
 
   const buttons = (
     <>
@@ -249,10 +254,14 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             oraclePrice={props.oraclePrice}
             onChange={(value) => {
               dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value });
-              updateMaxBond(state.capacity, state.durationInDays, value.priceModel);
+              updateMaxBond(
+                state.capacity,
+                state.durationInDays,
+                value.priceModel
+              );
             }}
             onRateChange={(value) => {
-              dispatch({type: CreateMarketAction.UPDATE_PRICE_RATES, value});
+              dispatch({ type: CreateMarketAction.UPDATE_PRICE_RATES, value });
             }}
           />
         </div>
@@ -269,11 +278,21 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               minPrice={Number(state.priceModels[state.priceModel].minPrice)}
               durationInDays={state.durationInDays}
               depositInterval={state.depositInterval}
-              fixedDiscount={Number(state.priceModels[state.priceModel].fixedDiscount)}
-              baseDiscount={Number(state.priceModels[state.priceModel].baseDiscount)}
-              targetIntervalDiscount={Number(state.priceModels[state.priceModel].targetIntervalDiscount)}
-              fixedPrice={Number(state.priceModels[state.priceModel].initialPrice)}
-              maxDiscountFromCurrent={Number(state.priceModels[state.priceModel].maxDiscountFromCurrent)}
+              fixedDiscount={Number(
+                state.priceModels[state.priceModel].fixedDiscount
+              )}
+              baseDiscount={Number(
+                state.priceModels[state.priceModel].baseDiscount
+              )}
+              targetIntervalDiscount={Number(
+                state.priceModels[state.priceModel].targetIntervalDiscount
+              )}
+              fixedPrice={Number(
+                state.priceModels[state.priceModel].initialPrice
+              )}
+              maxDiscountFromCurrent={Number(
+                state.priceModels[state.priceModel].maxDiscountFromCurrent
+              )}
             />
           </div>
           <div className="flex gap-x-4">
@@ -297,10 +316,17 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   });
 
                   const durationInDays = Math.ceil(
-                    Number(calculateDuration(state.endDate, value)) / 60 / 60 / 24
+                    Number(calculateDuration(state.endDate, value)) /
+                      60 /
+                      60 /
+                      24
                   );
                   if (durationInDays) {
-                    updateMaxBond(state.capacity, durationInDays, state.priceModel);
+                    updateMaxBond(
+                      state.capacity,
+                      durationInDays,
+                      state.priceModel
+                    );
                   }
                 }}
               />
@@ -341,10 +367,17 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 dispatch({ type: CreateMarketAction.UPDATE_END_DATE, value });
 
                 const durationInDays = Math.ceil(
-                  Number(calculateDuration(value, state.startDate)) / 60 / 60 / 24
+                  Number(calculateDuration(value, state.startDate)) /
+                    60 /
+                    60 /
+                    24
                 );
                 if (durationInDays) {
-                  updateMaxBond(state.capacity, durationInDays, state.priceModel);
+                  updateMaxBond(
+                    state.capacity,
+                    durationInDays,
+                    state.priceModel
+                  );
                 }
               }}
             />
@@ -361,7 +394,13 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               </div>
             ) : (
               <>
-                <InfoLabel className={`${state.priceModel === "oracle-dynamic" ? "invisible" : ""}`} label={"Market Length"} reverse>
+                <InfoLabel
+                  className={`${
+                    state.priceModel === "oracle-dynamic" ? "invisible" : ""
+                  }`}
+                  label={"Market Length"}
+                  reverse
+                >
                   {state.durationInDays} DAYS
                 </InfoLabel>
 
@@ -377,7 +416,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                     dispatch({
                       type: CreateMarketAction.OVERRIDE_MAX_BOND_SIZE,
                       value,
-                    })
+                    });
                   }}
                 />
               </>
@@ -391,10 +430,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           props.created
             ? "Success!"
             : props.creationHash
-              ? "Transaction Submitted"
-              : showMultisig
-                ? "Transaction Details"
-                : "Confirm Market Creation"
+            ? "Transaction Submitted"
+            : showMultisig
+            ? "Transaction Details"
+            : "Confirm Market Creation"
         }
         open={open}
         onClickClose={() => setOpen(false)}
