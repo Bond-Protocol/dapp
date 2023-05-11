@@ -382,10 +382,18 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }}
             />
           </div>
-          <div className="mt-4 flex gap-x-4">
+          <div className="mt-4 flex flex-row-reverse gap-x-4">
             {!state.durationInDays ? (
               <div
-                className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md`}
+                className={
+                `flex max-h-[104px] justify-center bg-white/5 p-4 backdrop-blur-md ${
+                  (
+                    state.payoutToken.symbol && 
+                    state.quoteToken?.symbol && 
+                    state.priceModel === "oracle-dynamic"
+                  ) ? "w-1/2" : "w-full"
+                }`
+              }
               >
                 <div className="text-light-grey flex items-center justify-center py-4 text-sm">
                   <CalendarIcon className="fill-light-grey text-light-grey h-12 w-12 pr-2" />
