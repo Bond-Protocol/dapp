@@ -383,7 +383,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="mt-4 flex flex-row-reverse gap-x-4">
-            {!state.durationInDays ? (
+            {!(state.durationInDays && state.capacity)? (
               <div
                 className={
                 `flex max-h-[104px] justify-center bg-white/5 p-4 backdrop-blur-md ${
@@ -397,21 +397,11 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               >
                 <div className="text-light-grey flex items-center justify-center py-4 text-sm">
                   <CalendarIcon className="fill-light-grey text-light-grey h-12 w-12 pr-2" />
-                  Select dates to view market duration
+                  Select capacity and dates to view market duration
                 </div>
               </div>
             ) : (
               <>
-                <InfoLabel
-                  className={`${
-                    state.priceModel === "oracle-dynamic" ? "invisible" : ""
-                  }`}
-                  label={"Market Length"}
-                  reverse
-                >
-                  {state.durationInDays} DAYS
-                </InfoLabel>
-
                 <InfoLabel
                   label={"Max Bond Size"}
                   reverse
@@ -427,6 +417,16 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                     });
                   }}
                 />
+
+                <InfoLabel
+                  className={`${
+                    state.priceModel === "oracle-dynamic" ? "invisible" : ""
+                  }`}
+                  label={"Market Length"}
+                  reverse
+                >
+                  {state.durationInDays} DAYS
+                </InfoLabel>
               </>
             )}
           </div>
