@@ -155,7 +155,7 @@ export const PriceControl = (props: PriceControlProps) => {
 
   return (
     <div
-      className={`text-light-grey-400 bg-white/5 p-4 backdrop-blur-md ${props.className}`}
+      className={`max-h-[104px] text-light-grey-400 bg-white/5 py-3 px-4 backdrop-blur-md ${props.className}`}
     >
       <TooltipWrapper content={props.tooltip}>
         <div className="font-fraktion flex justify-center font-bold uppercase">
