@@ -34,6 +34,7 @@ export const getDiscountPercentage = (
 
 export interface ProjectionConfiguration {
   targetDiscount: number;
+  tokenPrices: boolean;
   initialPrice?: number;
   minPrice?: number;
   initialCapacity?: number;
@@ -46,59 +47,62 @@ export interface ProjectionConfiguration {
   depositInterval?: number;
 }
 
-export function generateDiscountedPrices(
+export function generateSDAChartData(
   prices: PriceData[],
   config: ProjectionConfiguration
 ): DiscountedPriceData[] {
   if (!prices || prices.length === 0) return [];
 
   const discountedPrices: DiscountedPriceData[] = [];
-  const { initialCapacity, initialPrice, depositInterval, targetDiscount, minPrice, durationInDays } = config;
+  const { tokenPrices, initialCapacity, initialPrice, depositInterval, targetDiscount, minPrice, durationInDays } = config;
 
   if (!minPrice || !initialCapacity || !durationInDays || !depositInterval || !initialPrice) return [];
 
-  const startPrice = initialPrice * (prices[0]?.quotePriceUsd);
-  const usdMinPrice = minPrice * prices[0]?.quotePriceUsd;
-
   const duration = durationInDays * 24;
-
   const depositIntervalHours = depositInterval / 60 / 60;
   const hourlyDiscount = 20 / depositIntervalHours;
 
-  let price = startPrice;
+  let discountedPrice = initialPrice;
   for (let i = 0; i < duration; i++) {
     const date = prices[i]?.date;
+    const marketPrice = prices[i]?.price;
     const usdMarketPrice = prices[i]?.payoutPriceUsd;
+    const usdDiscountedPrice = discountedPrice * prices[i]?.quotePriceUsd;
+    const usdTargetPrice = (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount);
 
-    if (!date || !usdMarketPrice || !minPrice) {
+    if (!date || !marketPrice || !usdMarketPrice || !minPrice) {
       return discountedPrices;
     }
 
-    let discount = trimAsNumber(getDiscountPercentage(prices[i].payoutPriceUsd, price), 2);
+    let discount = trimAsNumber(getDiscountPercentage(usdMarketPrice, usdDiscountedPrice), 2);
 
     discountedPrices.push({
       date: date,
-      price: usdMarketPrice,
-      discountedPrice: price,
+      price: tokenPrices
+        ? marketPrice
+        : usdMarketPrice,
+      discountedPrice: tokenPrices
+        ? discountedPrice
+        : usdDiscountedPrice,
       discount: discount,
       quotePriceUsd: prices[i]?.quotePriceUsd,
       payoutPriceUsd: prices[i]?.payoutPriceUsd
     });
 
-    if (price <= (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount)) {
-      let offset = (prices[0]?.payoutPriceUsd / 100) * 20;
-      price = prices[0]?.payoutPriceUsd + offset;
+    if (usdDiscountedPrice <= usdTargetPrice) {
+      let offset = (prices[0]?.price / 100) * 20;
+      discountedPrice = prices[0]?.price + offset;
     } else {
-      price = (price / 100) * (100 - hourlyDiscount);
+      discountedPrice = (discountedPrice / 100) * (100 - hourlyDiscount);
     }
 
-    if (price < usdMinPrice) price = usdMinPrice;
+    if (discountedPrice < minPrice) discountedPrice = minPrice;
   }
 
   return discountedPrices;
 }
 
-export function generateOracleDiscountedPrices(
+export function generateOSDAChartData(
   prices: PriceData[],
   config: ProjectionConfiguration
 ): DiscountedPriceData[] {
@@ -106,83 +110,113 @@ export function generateOracleDiscountedPrices(
     return [];
   }
   const discountedPrices: DiscountedPriceData[] = [];
-  const { targetDiscount, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval } = config;
+  const { tokenPrices, targetDiscount, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval } = config;
 
-  if (!initialCapacity || !durationInDays || !maxDiscountFromCurrent || !depositInterval || !baseDiscount || !targetIntervalDiscount) return [];
+  if (!initialCapacity || !durationInDays || !depositInterval || maxDiscountFromCurrent === undefined || targetIntervalDiscount === undefined || baseDiscount === undefined) return [];
 
-  const initialPrice = prices[0].price * prices[0]?.quotePriceUsd;
-  const minPrice = ((prices[0].price * prices[0]?.quotePriceUsd) / 100) * (100 - maxDiscountFromCurrent);
+  const initialPrice = prices[0].price;
+  const minPrice = (prices[0].price / 100) * (100 - maxDiscountFromCurrent);
 
   const duration = durationInDays * 24;
 
   const depositIntervalHours = depositInterval / 60 / 60;
-  const hourlyDiscount = (baseDiscount + targetIntervalDiscount) / depositIntervalHours;
-  let currentDiscount = baseDiscount;
+  const hourlyDiscount = targetIntervalDiscount / depositIntervalHours;
+  let currentDiscount = 0;
 
-  let discountedPrice = (initialPrice / 100) * (100 - currentDiscount);
+  let actualDiscount = (1 - (1 - (baseDiscount / 100)) * (1 - (currentDiscount / 100))) * 100;
+
+  let discountedPrice = (initialPrice / 100) * (100 - actualDiscount);
 
   for (let i = 0; i < duration; i++) {
     const date = prices[i]?.date;
-    const usdMarketPrice = prices[i]?.payoutPriceUsd;
+    const tokenMarketPrice = prices[i]?.price;
 
-    if (!date || !usdMarketPrice) {
+    const usdMarketPrice = prices[i]?.payoutPriceUsd;
+    const usdDiscountedPrice = discountedPrice * prices[i]?.quotePriceUsd;
+    const usdTargetPrice = (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount);
+
+    if (!date || !tokenMarketPrice) {
       return discountedPrices;
     }
 
-    const discount = trimAsNumber(getDiscountPercentage(prices[i].payoutPriceUsd, discountedPrice), 2);
+    const discount = trimAsNumber(getDiscountPercentage(usdMarketPrice, usdDiscountedPrice), 2);
 
     discountedPrices.push({
       date: date,
-      price: usdMarketPrice,
-      discountedPrice: discountedPrice,
+      price: tokenPrices
+        ? tokenMarketPrice
+        : usdMarketPrice,
+      discountedPrice: tokenPrices
+        ? discountedPrice
+        : usdDiscountedPrice,
       discount: discount,
       quotePriceUsd: prices[i]?.quotePriceUsd,
       payoutPriceUsd: prices[i]?.payoutPriceUsd
     });
 
-    if (discountedPrice <= (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount)) {
-      discountedPrice = prices[0]?.payoutPriceUsd;
+    if (usdDiscountedPrice <= usdTargetPrice) {
       currentDiscount = 0;
+    } else {
+      currentDiscount += hourlyDiscount;
     }
-
-    discountedPrice = (prices[i]?.payoutPriceUsd / 100) * (100 - currentDiscount);
+    actualDiscount = (1 - (1 - (baseDiscount / 100)) * (1 - (currentDiscount / 100))) * 100;
+    discountedPrice = (prices[i]?.price / 100) * (100 - actualDiscount);
     if (discountedPrice < minPrice) discountedPrice = minPrice;
-    currentDiscount += hourlyDiscount;
   }
 
   return discountedPrices;
 }
 
-export const generateFixedDiscountPrice = (
+export const generateFPAChartData = (
   prices: PriceData[],
-  { fixedPrice }: ProjectionConfiguration
+  { tokenPrices, fixedPrice }: ProjectionConfiguration
 ): DiscountedPriceData[] => {
   if (!fixedPrice) return [];
 
-  return prices.map((p) => ({
-    ...p,
-    price: p.payoutPriceUsd,
-    discountedPrice: fixedPrice * p.quotePriceUsd,
-    discount: getDiscountPercentage(p.price, fixedPrice || 0),
-  }));
+  return prices.map((p) => {
+    const price = tokenPrices
+      ? p.price
+      : p.payoutPriceUsd;
+
+    const discountedPrice = tokenPrices
+      ? fixedPrice
+      : fixedPrice * p.quotePriceUsd;
+
+    return ({
+      ...p,
+      price: price,
+      discountedPrice: discountedPrice,
+      discount: getDiscountPercentage(price, discountedPrice),
+    });
+  });
 };
 
-export const generateOracleFixedDiscountPrice = (
+export const generateOFDAChartData = (
   prices: PriceData[],
-  { fixedDiscount, maxDiscountFromCurrent }: ProjectionConfiguration
+  { tokenPrices, fixedDiscount, maxDiscountFromCurrent }: ProjectionConfiguration
 ): DiscountedPriceData[] => {
   if (!fixedDiscount || !maxDiscountFromCurrent) return [];
 
   return prices.map((p) => {
-    let discountedPrice = (p.payoutPriceUsd / 100) * (100 - fixedDiscount);
-    const minPrice = (prices[0].payoutPriceUsd / 100) * (100 - maxDiscountFromCurrent);
+    let discountedPrice = tokenPrices
+      ? (p.price / 100) * (100 - fixedDiscount)
+      : (p.payoutPriceUsd / 100) * (100 - fixedDiscount);
+
+    const minPrice = tokenPrices
+      ? ((prices[0].payoutPriceUsd / prices[0].quotePriceUsd) / 100) * (100 - maxDiscountFromCurrent)
+      : (prices[0].payoutPriceUsd / 100) * (100 - maxDiscountFromCurrent);
+
     discountedPrice = Math.max(discountedPrice, minPrice);
+
+    const price = tokenPrices
+      ? p.price
+      : p.payoutPriceUsd;
 
     return ({
       ...p,
-      price: p.payoutPriceUsd,
+      price: price,
       discountedPrice: discountedPrice,
-      discount: trimAsNumber(getDiscountPercentage(p.payoutPriceUsd, discountedPrice), 2),
-    })
+      discount: trimAsNumber(getDiscountPercentage(price, discountedPrice), 2),
+    });
   });
 };

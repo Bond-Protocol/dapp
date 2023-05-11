@@ -1,9 +1,9 @@
 import {BondPriceChart, BondPriceChartProps, PlaceholderChart} from "./";
 import {
-  generateDiscountedPrices,
-  generateFixedDiscountPrice,
-  generateOracleDiscountedPrices,
-  generateOracleFixedDiscountPrice,
+  generateSDAChartData,
+  generateFPAChartData,
+  generateOSDAChartData,
+  generateOFDAChartData,
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
@@ -12,6 +12,7 @@ import { useNumericInput } from "hooks/use-numeric-input";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
+  tokenPrices: boolean;
   payoutTokenSymbol: string;
   initialCapacity?: number;
   initialPrice?: number;
@@ -33,13 +34,13 @@ const getProjectionDataset = (
 ) => {
   switch (state.priceModel) {
     case "dynamic":
-      return generateDiscountedPrices(data, args);
+      return generateSDAChartData(data, args);
     case "static":
-      return generateFixedDiscountPrice(data, args);
+      return generateFPAChartData(data, args);
     case "oracle-dynamic":
-      return generateOracleDiscountedPrices(data, args);
+      return generateOSDAChartData(data, args);
     case "oracle-static":
-      return generateOracleFixedDiscountPrice(data, args);
+      return generateOFDAChartData(data, args);
   }
 };
 
@@ -55,6 +56,7 @@ export const ProjectionChart = ({
   const [state] = useCreateMarket();
 
   const prices = getProjectionDataset(state, props.data, {
+    tokenPrices: props.tokenPrices,
     initialCapacity: props.initialCapacity,
     initialPrice: props.initialPrice,
     minPrice: props.minPrice,

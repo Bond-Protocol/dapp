@@ -357,6 +357,7 @@ export const CreateMarketController = () => {
         blockExplorerUrl={blockExplorer.blockExplorerUrl}
         created={created}
         oraclePrice={oraclePrice}
+        tokenPrices={false}
       />
     </>
   );
