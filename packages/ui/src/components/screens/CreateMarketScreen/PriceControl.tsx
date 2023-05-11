@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Tooltip, Button } from "components";
+import { Tooltip, Button, TooltipWrapper, TooltipIcon } from "components";
 import { calculateTrimDigits, getPriceScale, getRateMod, trim } from "utils";
 import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
 import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
@@ -34,7 +34,12 @@ export const PriceControl = (props: PriceControlProps) => {
   useEffect(() => {
     if (!rate) return;
     const displayRate = trim(rate, calculateTrimDigits(rate));
-    const exchangeLabel = displayRate + " " + props.quoteToken?.symbol + " per " + props.payoutToken?.symbol;
+    const exchangeLabel =
+      displayRate +
+      " " +
+      props.quoteToken?.symbol +
+      " per " +
+      props.payoutToken?.symbol;
     setExchangeLabel(exchangeLabel);
 
     if (props.returnValue === "exchange_rate") {
@@ -69,7 +74,11 @@ export const PriceControl = (props: PriceControlProps) => {
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     const updated = numericInput.onChange(e);
-    if (props.quoteToken && props.payoutToken && (props.display === "percentage")) {
+    if (
+      props.quoteToken &&
+      props.payoutToken &&
+      props.display === "percentage"
+    ) {
       const initialRate = props.oraclePrice
         ? props.oraclePrice
         : props.payoutToken?.price / props.quoteToken?.price;
@@ -146,51 +155,54 @@ export const PriceControl = (props: PriceControlProps) => {
 
   return (
     <div
-      className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md ${props.className}`}
+      className={`text-light-grey-400 bg-white/5 p-4 backdrop-blur-md ${props.className}`}
     >
-      <div className="flex items-center justify-center">
-        <Button icon variant="ghost" onClick={lowerRate}>
-          <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
-            <MinusIcon className="group-hover/button:fill-light-secondary fill-white" />
-          </div>
-        </Button>
-      </div>
-      <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
-        <div className="font-fraktion flex font-bold uppercase">
+      <TooltipWrapper content={props.tooltip}>
+        <div className="font-fraktion flex justify-center font-bold uppercase">
           {props.topLabel}
           {props.tooltip && (
-            <Tooltip
-              content={props.tooltip}
-              iconClassname="ml-1 fill-light-grey-500"
-            />
+            <TooltipIcon className="fill-light-grey-400 ml-1" />
           )}
         </div>
+      </TooltipWrapper>
 
-        <div className="font-fraktion text-[25px] text-white">
-          <input
-            {...numericInput}
-            value={value}
-            onChange={onChange}
-            className="w-[170px] bg-transparent text-center"
-          />
+      <div
+        className={`flex max-h-[104px] w-full justify-center ${props.className}`}
+      >
+        <div className="flex items-center justify-center">
+          <Button icon variant="ghost" onClick={lowerRate}>
+            <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
+              <MinusIcon className="group-hover/button:fill-light-secondary fill-white" />
+            </div>
+          </Button>
         </div>
-        <div
-          className={`flex select-none text-[14px] ${
-            props.display === "percentage" ? "" : "cursor-pointer"
-          }`}
-          onClick={(e) => {
-            e.preventDefault();
-          }}
-        >
-          {exchangeLabel}
+        <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
+          <div className="font-fraktion text-[25px] text-white">
+            <input
+              {...numericInput}
+              value={value}
+              onChange={onChange}
+              className="w-[170px] bg-transparent text-center"
+            />
+          </div>
+        </div>
+        <div className="flex items-center justify-center ">
+          <Button icon variant="ghost" onClick={raiseRate}>
+            <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
+              <PlusIcon className="group-hover/button:fill-light-secondary fill-white" />
+            </div>
+          </Button>
         </div>
       </div>
-      <div className="flex items-center justify-center ">
-        <Button icon variant="ghost" onClick={raiseRate}>
-          <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
-            <PlusIcon className="group-hover/button:fill-light-secondary fill-white" />
-          </div>
-        </Button>
+      <div
+        className={`text-light-grey-400 flex select-none justify-center text-[14px] ${
+          props.display === "percentage" ? "" : "cursor-pointer"
+        }`}
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      >
+        {exchangeLabel}
       </div>
     </div>
   );
