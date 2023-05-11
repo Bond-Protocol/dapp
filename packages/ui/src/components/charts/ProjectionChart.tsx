@@ -12,6 +12,7 @@ import { useNumericInput } from "hooks/use-numeric-input";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
+  payoutTokenSymbol: string;
   initialCapacity?: number;
   minPrice?: number;
   targetDiscount?: number;

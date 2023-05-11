@@ -274,6 +274,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               // @ts-ignore
               id="cm-projection-chart"
               data={props.projectionData}
+              payoutTokenSymbol={state.payoutToken.symbol}
               initialCapacity={Number(state.capacity) || 0}
               minPrice={Number(state.priceModels[state.priceModel].minPrice)}
               durationInDays={state.durationInDays}
