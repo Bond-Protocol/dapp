@@ -22,6 +22,7 @@ import {
   MarketCreatedDialog,
   PriceData,
   calculateDuration,
+  TokenQuantityInput,
 } from "components";
 import {
   calculateTrimDigits,
@@ -222,7 +223,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             </div>
           </div>
           <div className="flex gap-x-4 py-4">
-            <TokenInput
+            <TokenQuantityInput
               id="cm-capacity-picker"
               label="Capacity"
               placeholder="Enter Amount"
@@ -298,60 +299,38 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="flex gap-x-4">
-            {state.priceModel === "dynamic" ? (
-              <InputModal
-                disabled
-                id="cm-start-date-picker"
-                label="Market Start"
-                value={
-                  state.startDate
-                    ? formatDate.dateAndTime(state.startDate)
-                    : "Immediate"
-                }
-                inputClassName="text-light-grey"
-                endAdornment={<CalendarIcon className="mr-2 fill-white" />}
-                ModalContent={(props) => <SelectDateDialog {...props} />}
-                onSubmit={(value) => {
-                  dispatch({
-                    type: CreateMarketAction.UPDATE_START_DATE,
-                    value,
-                  });
+            <InputModal
+              id="cm-start-date-picker"
+              label="Market Start"
+              title="Select start date"
+              value={
+                state.startDate
+                  ? formatDate.dateAndTime(state.startDate)
+                  : state.priceModel.includes("static")
+                  ? ""
+                  : "Immediate"
+              }
+              inputClassName="text-light-grey"
+              endAdornment={<CalendarIcon className="mr-2 fill-white" />}
+              ModalContent={(props) => <SelectDateDialog {...props} />}
+              onSubmit={(value) => {
+                dispatch({
+                  type: CreateMarketAction.UPDATE_START_DATE,
+                  value,
+                });
 
-                  const durationInDays = Math.ceil(
-                    Number(calculateDuration(state.endDate, value)) /
-                      60 /
-                      60 /
-                      24
+                const durationInDays = Math.ceil(
+                  Number(calculateDuration(state.endDate, value)) / 60 / 60 / 24
+                );
+                if (durationInDays) {
+                  updateMaxBond(
+                    state.capacity,
+                    durationInDays,
+                    state.priceModel
                   );
-                  if (durationInDays) {
-                    updateMaxBond(
-                      state.capacity,
-                      durationInDays,
-                      state.priceModel
-                    );
-                  }
-                }}
-              />
-            ) : (
-              <InputModal
-                id="cm-start-date-picker"
-                label="Market Start"
-                title="Select start date"
-                value={
-                  state.startDate
-                    ? formatDate.dateAndTime(state.startDate)
-                    : "Immediate"
                 }
-                endAdornment={<CalendarIcon className="mr-2 fill-white" />}
-                ModalContent={(props) => <SelectDateDialog {...props} />}
-                onSubmit={(value) => {
-                  dispatch({
-                    type: CreateMarketAction.UPDATE_START_DATE,
-                    value,
-                  });
-                }}
-              />
-            )}
+              }}
+            />
             <InputModal
               id="cm-end-date-picker"
               label="Market End"
@@ -387,15 +366,13 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           <div className="mt-4 flex flex-row-reverse gap-x-4">
             {!(state.durationInDays && state.capacity)? (
               <div
-                className={
-                `flex max-h-[104px] justify-center bg-white/5 p-4 backdrop-blur-md ${
-                  (
-                    state.payoutToken.symbol && 
-                    state.quoteToken?.symbol && 
-                    state.priceModel === "oracle-dynamic"
-                  ) ? "w-1/2" : "w-full"
-                }`
-              }
+                className={`flex max-h-[104px] justify-center bg-white/5 p-4 backdrop-blur-md ${
+                  state.payoutToken.symbol &&
+                  state.quoteToken?.symbol &&
+                  state.priceModel === "oracle-dynamic"
+                    ? "w-1/2"
+                    : "w-full"
+                }`}
               >
                 <div className="text-light-grey flex items-center justify-center py-4 text-sm">
                   <CalendarIcon className="fill-light-grey text-light-grey h-12 w-12 pr-2" />
