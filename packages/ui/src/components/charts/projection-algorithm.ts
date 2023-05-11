@@ -34,6 +34,7 @@ export const getDiscountPercentage = (
 
 export interface ProjectionConfiguration {
   targetDiscount: number;
+  initialPrice?: number;
   minPrice?: number;
   initialCapacity?: number;
   durationInDays?: number;
@@ -52,44 +53,46 @@ export function generateDiscountedPrices(
   if (!prices || prices.length === 0) return [];
 
   const discountedPrices: DiscountedPriceData[] = [];
-  const { initialCapacity, targetDiscount, minPrice, durationInDays } = config;
+  const { initialCapacity, initialPrice, depositInterval, targetDiscount, minPrice, durationInDays } = config;
 
-  if (!initialCapacity || !durationInDays) return [];
+  console.log({ initialCapacity, initialPrice, depositInterval, targetDiscount, minPrice, durationInDays })
 
-  const initialPrice = prices[0].price;
+  if (!initialCapacity || !durationInDays || !depositInterval || !initialPrice) return [];
 
-  let offset = 0;
+  const startPrice = initialPrice * (prices[0]?.quotePriceUsd);
+
   const duration = durationInDays * 24;
 
-  let price = initialPrice;
+  const depositIntervalHours = depositInterval / 60 / 60;
+  const hourlyDiscount = 20 / depositIntervalHours;
+
+  let price = startPrice;
   for (let i = 0; i < duration; i++) {
     const date = prices[i]?.date;
-    const usdBondPrice = price * (prices[i]?.quotePriceUsd);
     const usdMarketPrice = prices[i]?.payoutPriceUsd;
 
-    if (!date || !usdBondPrice || !usdMarketPrice || !minPrice) {
+    if (!date || !usdMarketPrice || !minPrice) {
       return discountedPrices;
     }
 
-    let discount = (usdBondPrice - usdMarketPrice) / usdMarketPrice;
-    discount *= 100;
-    discount = trimAsNumber(-discount, 2);
+    let discount = trimAsNumber(getDiscountPercentage(prices[i].payoutPriceUsd, price), 2);
 
     discountedPrices.push({
       date: date,
       price: usdMarketPrice,
-      discountedPrice: usdBondPrice,
+      discountedPrice: price,
       discount: discount,
       quotePriceUsd: prices[i]?.quotePriceUsd,
       payoutPriceUsd: prices[i]?.payoutPriceUsd
     });
 
-    if (usdBondPrice <= (usdMarketPrice / 100) * (100 - targetDiscount)) {
-      offset = (price / 100) * 20;
-      price = initialPrice + offset;
+    if (price <= (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount)) {
+      let offset = (prices[0]?.payoutPriceUsd / 100) * 20;
+      price = prices[0]?.payoutPriceUsd + offset;
+    } else {
+      price = (price / 100) * (100 - hourlyDiscount);
     }
 
-    price *= 0.9905;
     if (price < minPrice) price = minPrice;
   }
 
@@ -108,7 +111,7 @@ export function generateOracleDiscountedPrices(
 
   if (!initialCapacity || !durationInDays || !maxDiscountFromCurrent || !depositInterval || !baseDiscount || !targetIntervalDiscount) return [];
 
-  const initialPrice = prices[0].price;
+  const initialPrice = prices[0].price * prices[0]?.quotePriceUsd;
   const minPrice = (prices[0].price / 100) * (100 - maxDiscountFromCurrent);
 
   const duration = durationInDays * 24;
@@ -117,7 +120,7 @@ export function generateOracleDiscountedPrices(
   const hourlyDiscount = (baseDiscount + targetIntervalDiscount) / depositIntervalHours;
   let currentDiscount = baseDiscount;
 
-  let price = (initialPrice / 100) * (100 - currentDiscount);
+  let discountedPrice = (initialPrice / 100) * (100 - currentDiscount);
 
   for (let i = 0; i < duration; i++) {
     const date = prices[i]?.date;
@@ -132,19 +135,19 @@ export function generateOracleDiscountedPrices(
     discountedPrices.push({
       date: date,
       price: usdMarketPrice,
-      discountedPrice: price,
+      discountedPrice: discountedPrice,
       discount: discount,
       quotePriceUsd: prices[i]?.quotePriceUsd,
       payoutPriceUsd: prices[i]?.payoutPriceUsd
     });
 
     if (currentDiscount >= targetDiscount) {
-      price = prices[0]?.payoutPriceUsd;
+      discountedPrice = prices[0]?.payoutPriceUsd;
       currentDiscount = 0;
     }
 
-    price = (prices[i]?.payoutPriceUsd / 100) * (100 - currentDiscount);
-    if (price < minPrice) price = minPrice;
+    discountedPrice = (prices[i]?.payoutPriceUsd / 100) * (100 - currentDiscount);
+    if (discountedPrice < minPrice) discountedPrice = minPrice;
     currentDiscount += hourlyDiscount;
   }
 
@@ -155,9 +158,12 @@ export const generateFixedDiscountPrice = (
   prices: PriceData[],
   { fixedPrice }: ProjectionConfiguration
 ): DiscountedPriceData[] => {
+  if (!fixedPrice) return [];
+
   return prices.map((p) => ({
     ...p,
-    discountedPrice: fixedPrice || 0,
+    price: p.payoutPriceUsd,
+    discountedPrice: fixedPrice * p.quotePriceUsd,
     discount: getDiscountPercentage(p.price, fixedPrice || 0),
   }));
 };
@@ -175,8 +181,9 @@ export const generateOracleFixedDiscountPrice = (
 
     return ({
       ...p,
+      price: p.payoutPriceUsd,
       discountedPrice: discountedPrice,
-      discount: getDiscountPercentage(p.price, discountedPrice || 0),
+      discount: trimAsNumber(getDiscountPercentage(p.payoutPriceUsd, discountedPrice), 2),
     })
   });
 };

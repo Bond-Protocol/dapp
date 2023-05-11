@@ -276,6 +276,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               data={props.projectionData}
               payoutTokenSymbol={state.payoutToken.symbol}
               initialCapacity={Number(state.capacity) || 0}
+              initialPrice={Number(state.priceModels[state.priceModel].initialPrice)}
               minPrice={Number(state.priceModels[state.priceModel].minPrice)}
               durationInDays={state.durationInDays}
               depositInterval={state.depositInterval}

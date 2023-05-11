@@ -14,6 +14,7 @@ export type ProjectionChartProps = {
   data?: PriceData[];
   payoutTokenSymbol: string;
   initialCapacity?: number;
+  initialPrice?: number;
   minPrice?: number;
   targetDiscount?: number;
   durationInDays?: number;
@@ -55,6 +56,7 @@ export const ProjectionChart = ({
 
   const prices = getProjectionDataset(state, props.data, {
     initialCapacity: props.initialCapacity,
+    initialPrice: props.initialPrice,
     minPrice: props.minPrice,
     durationInDays: props.durationInDays,
     targetDiscount: parseFloat(targetDiscount),

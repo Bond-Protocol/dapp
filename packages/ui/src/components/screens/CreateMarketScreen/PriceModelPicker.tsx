@@ -38,8 +38,8 @@ const priceControlConfig: Record<
   dynamic: [
     {
       property: "initialPrice",
-      topLabel: "Initial Discount",
-      display: "percentage",
+      topLabel: "Initial Price",
+      display: "exchange_rate",
       returnValue: "exchange_rate",
     },
     {
@@ -53,7 +53,7 @@ const priceControlConfig: Record<
     {
       property: "initialPrice",
       topLabel: "Fixed Price",
-      display: "percentage",
+      display: "exchange_rate",
       returnValue: "exchange_rate",
     },
   ],
