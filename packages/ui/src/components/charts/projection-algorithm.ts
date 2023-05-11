@@ -55,11 +55,10 @@ export function generateDiscountedPrices(
   const discountedPrices: DiscountedPriceData[] = [];
   const { initialCapacity, initialPrice, depositInterval, targetDiscount, minPrice, durationInDays } = config;
 
-  console.log({ initialCapacity, initialPrice, depositInterval, targetDiscount, minPrice, durationInDays })
-
-  if (!initialCapacity || !durationInDays || !depositInterval || !initialPrice) return [];
+  if (!minPrice || !initialCapacity || !durationInDays || !depositInterval || !initialPrice) return [];
 
   const startPrice = initialPrice * (prices[0]?.quotePriceUsd);
+  const usdMinPrice = minPrice * prices[0]?.quotePriceUsd;
 
   const duration = durationInDays * 24;
 
@@ -93,7 +92,7 @@ export function generateDiscountedPrices(
       price = (price / 100) * (100 - hourlyDiscount);
     }
 
-    if (price < minPrice) price = minPrice;
+    if (price < usdMinPrice) price = usdMinPrice;
   }
 
   return discountedPrices;
@@ -112,7 +111,7 @@ export function generateOracleDiscountedPrices(
   if (!initialCapacity || !durationInDays || !maxDiscountFromCurrent || !depositInterval || !baseDiscount || !targetIntervalDiscount) return [];
 
   const initialPrice = prices[0].price * prices[0]?.quotePriceUsd;
-  const minPrice = (prices[0].price / 100) * (100 - maxDiscountFromCurrent);
+  const minPrice = ((prices[0].price * prices[0]?.quotePriceUsd) / 100) * (100 - maxDiscountFromCurrent);
 
   const duration = durationInDays * 24;
 
@@ -130,7 +129,7 @@ export function generateOracleDiscountedPrices(
       return discountedPrices;
     }
 
-    let discount = trimAsNumber(currentDiscount, 2);
+    const discount = trimAsNumber(getDiscountPercentage(prices[i].payoutPriceUsd, discountedPrice), 2);
 
     discountedPrices.push({
       date: date,
@@ -141,7 +140,7 @@ export function generateOracleDiscountedPrices(
       payoutPriceUsd: prices[i]?.payoutPriceUsd
     });
 
-    if (currentDiscount >= targetDiscount) {
+    if (discountedPrice <= (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount)) {
       discountedPrice = prices[0]?.payoutPriceUsd;
       currentDiscount = 0;
     }
