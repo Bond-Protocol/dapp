@@ -60,7 +60,7 @@ const priceControlConfig: Record<
   ["oracle-dynamic"]: [
     {
       property: "baseDiscount",
-      topLabel: "Initial Discount",
+      topLabel: "Base Discount",
       display: "percentage",
       returnValue: "percentage",
     },
