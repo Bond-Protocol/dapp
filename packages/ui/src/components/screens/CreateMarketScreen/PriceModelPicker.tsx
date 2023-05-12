@@ -16,6 +16,8 @@ export type PriceModelPickerProps = {
   id?: string;
   chain: string;
   oraclePrice?: number;
+  oracleMessage: string;
+  isOracleValid?: boolean;
 } & Partial<PriceControlProps>;
 
 const options = [
@@ -112,7 +114,10 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
     <div id={props.id} className="w-full">
       <div className="flex items-center justify-between">
         <p className="text-light-grey-400 text-sm">Price Model</p>
-        <Switch label="Oracle" onChange={(e) => setOracle(e.target.checked)} />
+        <Switch label="Oracle" onChange={(e) => {
+          setOracle(e.target.checked);
+          if (!e.target.checked) setOracleAddress("");
+        }} />
       </div>
 
       <FlatSelect
@@ -126,6 +131,8 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
         oracle={oracle}
         type={type}
         onOracleChange={setOracleAddress}
+        oracleMessage={props.oracleMessage}
+        isOracleValid={props.isOracleValid}
       />
       <div className="flex justify-between gap-x-4 pt-4">
         {!shouldRender ? (

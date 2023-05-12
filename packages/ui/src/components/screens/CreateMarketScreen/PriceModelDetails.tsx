@@ -10,6 +10,8 @@ export type PriceModelDetailsProps = {
   onOracleChange: (e: any) => void;
   className?: string;
   oracle?: boolean;
+  oracleMessage: string;
+  isOracleValid?: boolean;
 };
 
 const options: Record<PriceModel, any> = {
@@ -55,7 +57,7 @@ export const PriceModelDetails = ({
 
   return (
     <div
-      className={`flex h-[160px] items-center justify-center bg-white/5 py-4 ${props.className}`}
+      className={`flex h-[168px] items-center justify-center bg-white/5 py-4 px-3 ${props.className}`}
     >
       <div className="w-min px-3 pr-2">
         <option.Image className="stroke-white" />
@@ -70,6 +72,8 @@ export const PriceModelDetails = ({
           <Input
             label="Oracle Address"
             className="mt-2"
+            subText={props.oracleMessage}
+            subTextClassName={`${props.isOracleValid ? "text-green-500" : "text-red-500"}`}
             onChange={(e) => props.onOracleChange(e.target.value)}
           />
         )}

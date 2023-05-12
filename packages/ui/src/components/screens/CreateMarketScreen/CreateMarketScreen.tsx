@@ -51,6 +51,8 @@ export type CreateMarketScreenProps = {
   blockExplorerName: string;
   created: boolean;
   oraclePrice: number;
+  oracleMessage: string;
+  isOracleValid: boolean;
   tokenPrices: boolean;
 };
 
@@ -85,7 +87,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     state.vesting &&
     state.quoteToken.address &&
     state.payoutToken.address &&
-    (state.oracle ? state.oracleAddress : true);
+    (state.oracle ? props.isOracleValid : true);
 
   const updateMaxBond = (
     capacity?: any,
@@ -254,6 +256,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
             oraclePrice={props.oraclePrice}
+            oracleMessage={props.oracleMessage}
+            isOracleValid={props.isOracleValid}
             onChange={(value) => {
               dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value });
               updateMaxBond(

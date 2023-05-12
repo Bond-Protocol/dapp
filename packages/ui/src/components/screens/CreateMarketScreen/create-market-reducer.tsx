@@ -414,13 +414,15 @@ export const reducer = (
         ...state,
         priceModel,
         oracle,
-        oracleAddress,
+        oracleAddress: oracle
+          ? oracleAddress
+          : "",
       };
     }
 
     case CreateMarketAction.UPDATE_PRICE_RATES: {
       const { priceModel, ...rates } = value;
-console.log(value)
+
       return {
         ...state,
         priceModels: {

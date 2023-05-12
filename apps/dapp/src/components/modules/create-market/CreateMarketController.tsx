@@ -21,7 +21,6 @@ import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
-import { parseUnits } from "ethers/lib/utils";
 
 function getBondType(state: CreateMarketState) {
   switch (state.priceModel) {
@@ -65,6 +64,7 @@ export const CreateMarketController = () => {
   const [gasEstimate, setGasEstimate] = useState(0);
   const [isOraclePairValid, setIsOraclePairValid] = useState(false);
   const [oraclePrice, setOraclePrice] = useState<BigNumber>();
+  const [oracleMessage, setOracleMessage] = useState("");
 
   const blockExplorer = getBlockExplorer(
     String(network?.chain?.id) || "1",
@@ -78,24 +78,38 @@ export const CreateMarketController = () => {
   });
 
   useEffect(() => {
-    if (!state.payoutToken || !state.quoteToken || !state.oracleAddress) return;
+    if (!state.oracle || !state.payoutToken || !state.quoteToken || !state.oracleAddress || state.oracleAddress === "") {
+      setOracleMessage("");
+      setIsOraclePairValid(false);
+      return;
+    }
+
+    setOracleMessage("");
+    setIsOraclePairValid(false);
 
     async function checkOracle() {
-      const valid = await checkOraclePairValidity(
-        // @ts-ignore
-        state.oracleAddress,
-        state.payoutToken.address,
-        state.quoteToken.address,
-        providers[network?.chain?.id]
-      );
-      setIsOraclePairValid(valid);
+      try {
+        const valid = await checkOraclePairValidity(
+          // @ts-ignore
+          state.oracleAddress,
+          state.payoutToken.address,
+          state.quoteToken.address,
+          providers[network?.chain?.id]
+        );
+        setIsOraclePairValid(valid);
+        if (!valid) setOracleMessage("Unsupported Token Pair!");
+      } catch (e) {
+        setIsOraclePairValid(false);
+        setOracleMessage("Invalid Oracle Address!");
+      }
     }
     checkOracle();
-  }, [state.oracleAddress, state.payoutToken, state.quoteToken]);
+  }, [state.oracle, state.oracleAddress, state.payoutToken, state.quoteToken]);
 
   useEffect(() => {
     if (!isOraclePairValid) {
       setOraclePrice(0);
+      setOracleMessage("");
       return;
     }
 
@@ -126,9 +140,10 @@ export const CreateMarketController = () => {
       });
 
       setOraclePrice(adjustedPrice);
+      setOracleMessage("Using Oracle Price!");
     }
     checkOracle();
-  }, [isOraclePairValid, state.oracleAddress]);
+  }, [isOraclePairValid]);
 
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;
@@ -357,6 +372,8 @@ export const CreateMarketController = () => {
         blockExplorerUrl={blockExplorer.blockExplorerUrl}
         created={created}
         oraclePrice={oraclePrice}
+        oracleMessage={oracleMessage}
+        isOracleValid={isOraclePairValid}
         tokenPrices={false}
       />
     </>
