@@ -73,6 +73,8 @@ export const PriceControl = (props: PriceControlProps) => {
   }, [props.payoutToken, props.quoteToken, props.oraclePrice]);
 
   const onChange = (e: React.BaseSyntheticEvent) => {
+    if (e.toString().charAt(e.toString().length - 1) === ".") return;
+
     const updated = numericInput.onChange(e);
     if (
       props.quoteToken &&
@@ -93,6 +95,8 @@ export const PriceControl = (props: PriceControlProps) => {
         props.onRateChange && props.onRateChange(value.replace("%", ""));
       }
     } else {
+      setRate(Number(updated));
+      setPayoutPerQuote(1 / Number(updated));
       props.onRateChange && props.onRateChange(updated);
     }
   };
