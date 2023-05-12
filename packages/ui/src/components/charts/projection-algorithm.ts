@@ -59,6 +59,7 @@ export function generateSDAChartData(
   if (!minPrice || !initialCapacity || !durationInDays || !depositInterval || !initialPrice) return [];
 
   const duration = durationInDays * 24;
+  if (duration > prices.length) return [];
   const depositIntervalHours = depositInterval / 60 / 60;
   const hourlyDiscount = 20 / depositIntervalHours;
 
@@ -118,13 +119,12 @@ export function generateOSDAChartData(
   const minPrice = (prices[0].price / 100) * (100 - maxDiscountFromCurrent);
 
   const duration = durationInDays * 24;
-
+  if (duration > prices.length) return [];
   const depositIntervalHours = depositInterval / 60 / 60;
   const hourlyDiscount = targetIntervalDiscount / depositIntervalHours;
+
   let currentDiscount = 0;
-
   let actualDiscount = (1 - (1 - (baseDiscount / 100)) * (1 - (currentDiscount / 100))) * 100;
-
   let discountedPrice = (initialPrice / 100) * (100 - actualDiscount);
 
   for (let i = 0; i < duration; i++) {
