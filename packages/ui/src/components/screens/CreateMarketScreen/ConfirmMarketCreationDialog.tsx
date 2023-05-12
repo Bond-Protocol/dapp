@@ -121,7 +121,7 @@ const formatMarketState = (state: CreateMarketState) => {
     },
     startDate: formatDate.short(state.startDate as Date),
     endDate: formatDate.short(state.endDate as Date),
-    depositInterval: Math.trunc(state.depositInterval / 60 / 60) + " HOURS",
+    depositInterval: Math.round(state.depositInterval / 60 / 60) + " HOURS",
     debtBuffer: state.debtBuffer + "%",
     maxBondSize: formatCurrency.trimToLengthSymbol(state.maxBondSize),
   };
