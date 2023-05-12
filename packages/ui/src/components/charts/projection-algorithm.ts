@@ -111,13 +111,13 @@ export function generateOSDAChartData(
     return [];
   }
   const discountedPrices: DiscountedPriceData[] = [];
-  const { tokenPrices, targetDiscount, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval } = config;
+  const { tokenPrices, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval } = config;
 
   if (!initialCapacity || !durationInDays || !depositInterval || maxDiscountFromCurrent === undefined || targetIntervalDiscount === undefined || baseDiscount === undefined) return [];
 
   const initialPrice = prices[0].price;
   const minPrice = (prices[0].price / 100) * (100 - maxDiscountFromCurrent);
-
+  const targetDiscount = (1 - (1 - (baseDiscount / 100)) * (1 - (targetIntervalDiscount / 100))) * 100;
   const duration = durationInDays * 24;
   if (duration > prices.length) return [];
   const depositIntervalHours = depositInterval / 60 / 60;
@@ -195,7 +195,7 @@ export const generateOFDAChartData = (
   prices: PriceData[],
   { tokenPrices, fixedDiscount, maxDiscountFromCurrent }: ProjectionConfiguration
 ): DiscountedPriceData[] => {
-  if (!fixedDiscount || !maxDiscountFromCurrent) return [];
+  if (fixedDiscount === undefined || !maxDiscountFromCurrent) return [];
 
   return prices.map((p) => {
     let discountedPrice = tokenPrices

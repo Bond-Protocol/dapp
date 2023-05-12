@@ -65,18 +65,21 @@ const priceControlConfig: Record<
       topLabel: "Base Discount",
       display: "percentage",
       returnValue: "percentage",
+      initialValue: "5",
     },
     {
       property: "targetIntervalDiscount",
       topLabel: "Target Interval Discount",
       display: "percentage",
       returnValue: "percentage",
+      initialValue: "10",
     },
     {
       property: "maxDiscountFromCurrent",
       topLabel: "Max Discount From Start",
       display: "percentage",
       returnValue: "percentage",
+      initialValue: "20",
     },
   ],
   ["oracle-static"]: [
@@ -91,6 +94,7 @@ const priceControlConfig: Record<
       topLabel: "Max Discount From Start",
       display: "percentage",
       returnValue: "percentage",
+      initialValue: "20",
     },
   ],
 };

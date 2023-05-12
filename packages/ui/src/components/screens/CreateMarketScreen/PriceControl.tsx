@@ -17,12 +17,13 @@ export type PriceControlProps = {
   tooltip?: React.ReactNode;
   display: "percentage" | "exchange_rate";
   returnValue: "percentage" | "exchange_rate";
+  initialValue?: string;
   className?: string;
 };
 
 export const PriceControl = (props: PriceControlProps) => {
   const { value, setValue, getAValidPercentage, ...numericInput } =
-    useNumericInput("0.25", props.display === "percentage");
+    useNumericInput(props.initialValue, props.display === "percentage");
 
   const [rate, setRate] = useState<number>();
   const [payoutPerQuote, setPayoutPerQuote] = useState<number>();

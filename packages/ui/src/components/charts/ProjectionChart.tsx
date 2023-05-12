@@ -48,13 +48,15 @@ const getProjectionDataset = (
 export const ProjectionChart = ({
                                   ...props
                                 }: BondPriceChartProps & ProjectionChartProps) => {
+  const [state] = useCreateMarket();
+
   const {
     value: targetDiscount,
     onChange: setTargetDiscount,
     onBlur,
     onFocus,
   } = useNumericInput("5", true);
-  const [state] = useCreateMarket();
+
   const [useTokenPrices, setUseTokenPrices] = useState(false);
 
   const prices = getProjectionDataset(state, props.data, {
@@ -80,6 +82,23 @@ export const ProjectionChart = ({
         <div className="pb-1">
           <TooltipWrapper content="The market simulation provides a rough estimate of how bond prices and sales are likely to occur, applying the current price settings to historical token prices. It is not intended to be extremely accurate, just to give an idea of how different settings could affect bond sales. The 'DISCOUNT' box above, allows you to compare market performance with different assumptions of the discount at which users will be interested in purchasing bonds.">
             <div className="flex items-center justify-end">
+              {state.priceModel === "dynamic" && (
+                <>
+                  <p className="text-light-secondary mr-2 font-mono text-sm uppercase">
+                    Discount
+                  </p>
+                  <Input
+                    id="cm-target-discount-input"
+                    className="h-[60%] w-[11%] self-end"
+                    inputClassName="text-center mr-1.5 mb-0.5"
+                    rootClassName="text-center justify-end h-[28px]"
+                    value={targetDiscount}
+                    onChange={setTargetDiscount}
+                    onBlur={onBlur}
+                    onFocus={onFocus}
+                  />
+                </>
+              )}
               <div className="mr-2">
                 <Switch
                   label="Token Ratio"
@@ -88,19 +107,6 @@ export const ProjectionChart = ({
                   }}
                 />
               </div>
-              <p className="text-light-secondary mr-2 font-mono text-sm uppercase">
-                Discount
-              </p>
-              <Input
-                id="cm-target-discount-input"
-                className="h-[60%] w-[11%] self-end"
-                inputClassName="text-center mr-1.5 mb-0.5"
-                rootClassName="text-center justify-end h-[28px]"
-                value={targetDiscount}
-                onChange={setTargetDiscount}
-                onBlur={onBlur}
-                onFocus={onFocus}
-              />
             </div>
           </TooltipWrapper>
         </div>
