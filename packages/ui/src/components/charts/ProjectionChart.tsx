@@ -52,7 +52,7 @@ export const ProjectionChart = ({
     onChange: setTargetDiscount,
     onBlur,
     onFocus,
-  } = useNumericInput("3", true);
+  } = useNumericInput("5", true);
   const [state] = useCreateMarket();
 
   const prices = getProjectionDataset(state, props.data, {
