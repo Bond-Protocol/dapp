@@ -22,7 +22,7 @@ import {
   MarketCreatedDialog,
   PriceData,
   calculateDuration,
-  TokenQuantityInput,
+  TokenQuantityInput, SelectStartDateDialog,
 } from "components";
 import {
   calculateTrimDigits,
@@ -67,6 +67,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const [open, setOpen] = useState(false);
   const [showMultisig, setShowMultisig] = useState(false);
   const [state, dispatch] = useCreateMarket();
+  const [hasConfirmedStart, setHasConfirmedStart] = useState(false);
 
   const capacityToken =
     state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
@@ -82,6 +83,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
 
   const canSubmit = //TODO: needs improvement
     parseFloat(state.capacity) > 0 &&
+    hasConfirmedStart &&
     state.endDate &&
     state.vesting &&
     state.quoteToken.address &&
@@ -156,6 +158,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       <div id="cm-top-control" className="flex items-center justify-end">
         <div
           onClick={() => {
+            setHasConfirmedStart(false);
             dispatch({ type: CreateMarketAction.RESET });
             setIndex((i) => ++i); //TODO: (afx) :pepe_gun: but its valid react so
           }}
@@ -311,13 +314,21 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               value={
                 state.startDate
                   ? formatDate.dateAndTime(state.startDate)
-                  : state.priceModel.includes("static")
-                  ? ""
-                  : "Immediate"
+                  : (
+                    hasConfirmedStart
+                      ? "Immediate"
+                      : ""
+                  )
               }
               inputClassName="text-light-grey"
               endAdornment={<CalendarIcon className="mr-2 fill-white" />}
-              ModalContent={(props) => <SelectDateDialog {...props} />}
+              ModalContent={(props) => (
+                <SelectStartDateDialog
+                  {...props}
+                  id="cm-start-date-dialog"
+                  onConfirmImmediate={() => setHasConfirmedStart(true)}
+                />
+              )}
               onSubmit={(value) => {
                 dispatch({
                   type: CreateMarketAction.UPDATE_START_DATE,
