@@ -13,7 +13,7 @@ import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
 import { CreateMarketState } from "components";
-import { dynamicFormatter, formatCurrency, formatDate } from "utils";
+import {calculateTrimDigits, dynamicFormatter, formatCurrency, formatDate, trim} from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { useState } from "react";
 import {getBlockExplorer} from "@bond-protocol/contract-library";
@@ -21,14 +21,14 @@ import {getBlockExplorer} from "@bond-protocol/contract-library";
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
 
-  const initialPrice = formatCurrency.dynamicFormatter(
-    state.priceModels.dynamic.initialPrice,
-    false
+  const initialPrice = trim(
+    state.priceModels[state.priceModel].initialPrice,
+    calculateTrimDigits(state.priceModels[state.priceModel].initialPrice)
   );
 
-  const minPrice = formatCurrency.dynamicFormatter(
-    state.priceModels.dynamic.minPrice,
-    false
+  const minPrice = trim(
+    state.priceModels[state.priceModel].minPrice,
+    calculateTrimDigits(state.priceModels[state.priceModel].minPrice)
   );
 
   return [
@@ -45,20 +45,21 @@ const getDynamicPriceFields = (state: CreateMarketState) => {
 
 const getStaticPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
+
+  const initialPrice = trim(
+    state.priceModels[state.priceModel].initialPrice,
+    calculateTrimDigits(state.priceModels[state.priceModel].initialPrice)
+  );
+
   return [
     {
       leftLabel: "Fixed Price",
-      rightLabel: `${formatCurrency.dynamicFormatter(
-        state.priceModels.static.initialPrice,
-        false
-      )} ${tokenSymbols}`,
+      rightLabel: `${initialPrice} ${tokenSymbols}`,
     },
   ];
 };
 
 const getOracleDynamicPriceFields = (state: CreateMarketState) => {
-  const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
-
   return [
     {
       leftLabel: "Base Discount",
@@ -76,8 +77,6 @@ const getOracleDynamicPriceFields = (state: CreateMarketState) => {
 };
 
 const getOracleStaticPriceFields = (state: CreateMarketState) => {
-  const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
-
   return [
     {
       leftLabel: "Fixed Discount",
