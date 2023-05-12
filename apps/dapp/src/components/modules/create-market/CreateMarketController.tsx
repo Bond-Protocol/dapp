@@ -374,7 +374,6 @@ export const CreateMarketController = () => {
         oraclePrice={oraclePrice}
         oracleMessage={oracleMessage}
         isOracleValid={isOraclePairValid}
-        tokenPrices={false}
       />
     </>
   );

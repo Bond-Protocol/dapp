@@ -53,7 +53,6 @@ export type CreateMarketScreenProps = {
   oraclePrice: number;
   oracleMessage: string;
   isOracleValid: boolean;
-  tokenPrices: boolean;
 };
 
 const capacityOptions = [
@@ -280,8 +279,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               // @ts-ignore
               id="cm-projection-chart"
               data={props.projectionData}
-              tokenPrices={props.tokenPrices}
               payoutTokenSymbol={state.payoutToken.symbol}
+              quoteTokenSymbol={state.quoteToken.symbol}
               initialCapacity={Number(state.capacity) || 0}
               initialPrice={Number(state.priceModels[state.priceModel].initialPrice)}
               minPrice={Number(state.priceModels[state.priceModel].minPrice)}

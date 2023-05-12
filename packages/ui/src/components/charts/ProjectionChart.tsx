@@ -7,13 +7,14 @@ import {
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
-import { CreateMarketState, Input, TooltipWrapper, useCreateMarket } from "..";
+import {CreateMarketState, Input, Switch, TooltipWrapper, useCreateMarket} from "..";
 import { useNumericInput } from "hooks/use-numeric-input";
+import {useState} from "react";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
-  tokenPrices: boolean;
   payoutTokenSymbol: string;
+  quoteTokenSymbol: string;
   initialCapacity?: number;
   initialPrice?: number;
   minPrice?: number;
@@ -45,8 +46,8 @@ const getProjectionDataset = (
 };
 
 export const ProjectionChart = ({
-  ...props
-}: BondPriceChartProps & ProjectionChartProps) => {
+                                  ...props
+                                }: BondPriceChartProps & ProjectionChartProps) => {
   const {
     value: targetDiscount,
     onChange: setTargetDiscount,
@@ -54,9 +55,10 @@ export const ProjectionChart = ({
     onFocus,
   } = useNumericInput("5", true);
   const [state] = useCreateMarket();
+  const [useTokenPrices, setUseTokenPrices] = useState(false);
 
   const prices = getProjectionDataset(state, props.data, {
-    tokenPrices: props.tokenPrices,
+    tokenPrices: useTokenPrices,
     initialCapacity: props.initialCapacity,
     initialPrice: props.initialPrice,
     minPrice: props.minPrice,
@@ -78,6 +80,14 @@ export const ProjectionChart = ({
         <div className="pb-1">
           <TooltipWrapper content="The market simulation provides a rough estimate of how bond prices and sales are likely to occur, applying the current price settings to historical token prices. It is not intended to be extremely accurate, just to give an idea of how different settings could affect bond sales. The 'DISCOUNT' box above, allows you to compare market performance with different assumptions of the discount at which users will be interested in purchasing bonds.">
             <div className="flex items-center justify-end">
+              <div className="mr-2">
+                <Switch
+                  label="Token Ratio"
+                  onChange={(e) => {
+                    setUseTokenPrices(e.target.checked);
+                  }}
+                />
+              </div>
               <p className="text-light-secondary mr-2 font-mono text-sm uppercase">
                 Discount
               </p>
@@ -102,7 +112,10 @@ export const ProjectionChart = ({
           </div>
         ) : (
           <div className="h-[99%] w-full">
-            <BondPriceChart {...props} data={prices} />
+            <BondPriceChart {...props}
+                            data={prices}
+                            useTokenRatio={useTokenPrices}
+            />
           </div>
         )}
       </div>
