@@ -15,7 +15,7 @@ import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
 import { CreateMarketState } from "components";
 import {calculateTrimDigits, dynamicFormatter, formatCurrency, formatDate, trim} from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {getBlockExplorer} from "@bond-protocol/contract-library";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
@@ -177,13 +177,14 @@ export const ConfirmMarketCreationDialog = (props: {
   getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
   getApproveTxBytecode: (state: CreateMarketState) => string;
-  estimateGas: (state: CreateMarketState) => string;
+  estimateGas: (state: CreateMarketState) => Promise<string>;
 }) => {
   const [state, dispatch] = useCreateMarket();
   const auctioneer = props.getAuctioneer(props.chain, state);
   const teller = props.getTeller(props.chain, state);
   const formattedState = formatMarketState(state);
   const [accepted, setAccepted] = useState(false);
+  const [gasEstimate, setGasEstimate]= useState("");
 
   const { blockExplorerUrl } = getBlockExplorer(
     props.chain,
@@ -209,6 +210,14 @@ export const ConfirmMarketCreationDialog = (props: {
 
   const edited = state.overridden === true;
   const disabled = edited && !accepted;
+
+  useEffect(() => {
+    async function estimateGas() {
+      const gasEstimate = await props.estimateGas(state);
+      setGasEstimate(gasEstimate);
+    }
+    estimateGas();
+  }, []);
 
   return (
     <div id="cm-confirm-modal">
@@ -300,6 +309,12 @@ export const ConfirmMarketCreationDialog = (props: {
           />
         </div>
       )}
+      <div className="mt-1">
+        <SummaryRow
+          leftLabel="Gas Estimate"
+          rightLabel={gasEstimate}
+        />
+      </div>
 
       {!props.showMultisig && (
         <div className="mt-4">

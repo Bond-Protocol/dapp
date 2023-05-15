@@ -61,7 +61,6 @@ export const CreateMarketController = () => {
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");
   const [created, setCreated] = useState(false);
-  const [gasEstimate, setGasEstimate] = useState(0);
   const [isOraclePairValid, setIsOraclePairValid] = useState(false);
   const [oraclePrice, setOraclePrice] = useState<BigNumber>();
   const [oracleMessage, setOracleMessage] = useState("");
@@ -309,6 +308,7 @@ export const CreateMarketController = () => {
 
   const onSubmit = async (state: CreateMarketState) => {
     const config = configureMarket(state);
+    const gasEstimate = await estimateGas(state);
 
     try {
       const tx = await contractLib.createMarket(
@@ -341,7 +341,6 @@ export const CreateMarketController = () => {
         signer,
         {}
       );
-      setGasEstimate(estimate);
       return estimate.toString();
     } catch (e) {
       return "Error estimating gas - contact us!";

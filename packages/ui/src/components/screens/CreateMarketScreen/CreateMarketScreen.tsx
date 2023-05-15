@@ -330,6 +330,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 />
               )}
               onSubmit={(value) => {
+                setHasConfirmedStart(true);
                 dispatch({
                   type: CreateMarketAction.UPDATE_START_DATE,
                   value,
