@@ -15,7 +15,7 @@ export type PriceModelDetailsProps = {
 const options: Record<PriceModel, any> = {
   dynamic: {
     Image: DynamicPriceImage,
-    title: "Sequential Dutch Auction",
+    title: "Sequential Dutch Auctions",
     description: (
       <>
         enable protocols to issue tokens over time by controlling price and
@@ -26,23 +26,23 @@ const options: Record<PriceModel, any> = {
   },
   static: {
     Image: StaticPriceImage,
-    title: "Fixed Price",
+    title: "Fixed Price Bonds",
     description:
       "enable trial runs for limited quantity of vested tokens. Best for gauging demand for different vesting lengths.",
   },
   ["oracle-dynamic"]: {
     oracle: true,
     Image: DynamicOraclePriceImage,
-    title: "Oracle SDA",
+    title: "Oracle SDAs",
     description:
-      "Bond Market are ... Lorem ipsum dolor sit amet consectetur. Facilisis consequat in ut massa quam ut.",
+      "track token price more closely and enable granular control over discount speed.",
   },
   ["oracle-static"]: {
     oracle: true,
     Image: StaticOraclePriceImage,
-    title: "Fixed Discount",
+    title: "Fixed Discount Bonds",
     description:
-      "Bond Market are ... Lorem ipsum dolor sit amet consectetur. Facilisis consequat in ut massa quam ut.",
+      "enable protocols to issue tokens at a fixed discount from oracle price.",
   },
 };
 
