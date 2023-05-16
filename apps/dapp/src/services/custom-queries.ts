@@ -2,6 +2,7 @@ import { sub, getUnixTime } from "date-fns";
 
 export const generateFetcher = (url: string) => {
   return async () => {
+    /*
     const proxyUrl = import.meta.env.VITE_COINGECKO_PRO_PROXY_URL;
     let isError = false;
     let result;
@@ -14,9 +15,11 @@ export const generateFetcher = (url: string) => {
     }
 
     if (!proxyUrl || proxyUrl.length === 0 || isError) {
+
+     */
       const publicUrl = import.meta.env.VITE_COINGECKO_PUBLIC_URL;
-      result = await fetch(publicUrl.concat(url));
-    }
+      let result = await fetch(publicUrl.concat(url).concat(import.meta.env.VITE_COINGECKO_API_KEY));
+    //}
 
     return result && result.json();
   };
