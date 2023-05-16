@@ -8,6 +8,7 @@ const allIds = [...apiIds.coingecko].join(",");
 //Loads all known by default
 export const useMultipleTokensFromCoingecko = (tokenIds = allIds) => {
   return useQuery(["token-prices-", tokenIds], async () => {
+    /*
     const proxyUrl = import.meta.env.VITE_COINGECKO_PRO_PROXY_URL;
     let isError = false;
     let response;
@@ -21,10 +22,12 @@ export const useMultipleTokensFromCoingecko = (tokenIds = allIds) => {
     }
 
     if (!proxyUrl || proxyUrl.length === 0 || isError) {
-      response = await axios.get(
-        `${import.meta.env.VITE_COINGECKO_PUBLIC_URL}/simple/price?ids=${tokenIds}&vs_currencies=usd`
+
+     */
+      let response = await axios.get(
+        `${import.meta.env.VITE_COINGECKO_PUBLIC_URL}/simple/price?ids=${tokenIds}&vs_currencies=usd`.concat(import.meta.env.VITE_COINGECKO_API_KEY)
       );
-    }
+  //  }
 
     return response && response.data;
   });
