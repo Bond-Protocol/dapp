@@ -344,6 +344,80 @@ export const getPurchaseCount = gql`
   }
 `;
 
+export const getMarketsById = gql`
+    query GetMarketsById($marketIds: [BigInt!]!, $queryKey: String! = "") {
+        markets(where: { marketId_in: $marketIds }) {
+            id
+            name
+            network
+            auctioneer
+            teller
+            marketId
+            owner
+            callbackAddress
+            capacity
+            capacityInQuote
+            chainId
+            minPrice
+            scale
+            start
+            conclusion
+            payoutToken {
+                id
+                address
+                symbol
+                decimals
+                name
+            }
+            quoteToken {
+                id
+                address
+                symbol
+                decimals
+                name
+                lpPair {
+                    token0 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                        typeName
+                    }
+                    token1 {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                        typeName
+                    }
+                }
+                balancerWeightedPool {
+                    id
+                    vaultAddress
+                    poolId
+                    constituentTokens {
+                        id
+                        address
+                        symbol
+                        decimals
+                        name
+                        typeName
+                    }
+                }
+            }
+            vesting
+            vestingType
+            isInstantSwap
+            hasClosed
+            totalBondedAmount
+            totalPayoutAmount
+            creationBlockTimestamp
+        }
+    }
+`;
+
 /*
 export const listBondPurchases = gql`
   query ListBondPurchases {

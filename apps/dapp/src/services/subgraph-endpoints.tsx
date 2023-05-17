@@ -55,9 +55,34 @@ export const testnetEndpoints = [
   },
 ];
 
+export const getSubgraphQuery = (
+  query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
+  chain: string,
+  enabled: boolean,
+  variables?: {}
+): UseQueryResult<any, any> => {
+  const endpoint = {
+    url: subgraphEndpoints[chain],
+    chain: chain,
+  };
+
+  return query(
+    {
+      endpoint: endpoint.url,
+      fetchParams: {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    },
+    {queryKey: endpoint.url + "--" + query.name.toString(), ...variables},
+    {enabled: enabled}
+  );
+};
+
 export const getSubgraphQueries = (
   query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
-  variables?: {}
+  variables?: {},
 ): UseQueryResult<any, any>[] => {
   const [testnet, setTestnet] = useAtom(testnetMode);
   const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;

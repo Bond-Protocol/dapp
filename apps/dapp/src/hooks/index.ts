@@ -12,3 +12,4 @@ export * from "./usePurchaseBond";
 export * from "./useTokenAllowance";
 export * from "./useTokenPricesHistory";
 export * from "./useTokens";
+export * from "./useGetMarketsForToken";
