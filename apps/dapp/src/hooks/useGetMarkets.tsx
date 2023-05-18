@@ -4,7 +4,7 @@ import {
   CalculatedMarket,
   liveMarketsBy,
   liveMarketsFor,
-  marketCounter
+  marketCounter, marketsFor
 } from "@bond-protocol/contract-library";
 import {Market, useGetMarketsByIdQuery} from "../generated/graphql";
 import {getTokenDetails} from "../utils";
@@ -138,9 +138,31 @@ export function useGetMarkets() {
     setMarketIds(res);
   }
 
+  const getLiveMarketsForPayoutAndQuote = async (
+    payoutTokenAddress: string,
+    quoteTokenAddress: string,
+    chainId: string
+  ) => {
+    setChain(chainId);
+    const provider = providers[chainId];
+
+    const results = await marketsFor(
+      payoutTokenAddress,
+      quoteTokenAddress,
+      provider,
+      chainId
+    );
+
+    const res: number[] = [];
+    results.forEach(result => res.push(Number(result)));
+
+    setMarketIds(res);
+  }
+
   return {
     getLiveMarketsForToken,
     getLiveMarketsByOwner,
+    getLiveMarketsForPayoutAndQuote,
     markets,
   }
 }
