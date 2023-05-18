@@ -47,25 +47,29 @@ export const SelectTokenDialog = (props: {
         placeholder="Search name or paste token address"
       />
       <div className="child:py-2 mt-4 max-h-[33vh] overflow-y-scroll">
-        {list.map((token: any, i: number) => (
-          <Label
-            key={i}
-            className="hover:bg-light-primary/20 cursor-pointer px-3"
-            subtextClassName="text-sans text-light-primary"
-            value={token.symbol}
-            subtext={token.name}
-            icon={token.icon}
-            onClick={(e) => {
-              props.onSubmit({
-                value: token,
-                label: token.symbol,
-                icon: token.icon,
-              });
+        {list
+          .sort((a, b) =>
+            a.symbol.toLowerCase().localeCompare(b.symbol.toLowerCase())
+          )
+          .map((token: any, i: number) => (
+            <Label
+              key={i}
+              className="hover:bg-light-primary/20 cursor-pointer px-3"
+              subtextClassName="text-sans text-light-primary"
+              value={token.symbol}
+              subtext={token.name}
+              icon={token.icon}
+              onClick={(e) => {
+                props.onSubmit({
+                  value: token,
+                  label: token.symbol,
+                  icon: token.icon,
+                });
 
-              props.onClose(e);
-            }}
-          />
-        ))}
+                props.onClose(e);
+              }}
+            />
+          ))}
       </div>
     </div>
   );

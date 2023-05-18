@@ -9,7 +9,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
-import { formatCurrency, formatDate } from "utils";
+import {calculateTrimDigits, formatCurrency, formatDate, longFormatter, trim} from "utils";
 
 export type BondPriceDatapoint = {
   date?: number;
@@ -21,6 +21,8 @@ export type BondPriceDatapoint = {
 export type BondPriceChartProps = {
   data: Array<BondPriceDatapoint>;
   payoutTokenSymbol: string;
+  quoteTokenSymbol?: string;
+  useTokenRatio?: boolean;
   className?: string;
   disableTooltip?: boolean;
 };
@@ -49,7 +51,11 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
           <YAxis
             tickLine={false}
             domain={[getBottomDomain, getTopDomain]}
-            tickFormatter={formatCurrency.dynamicFormatter}
+            tickFormatter={
+              props.useTokenRatio
+                ? (value) => trim(value, calculateTrimDigits(value))
+                : formatCurrency.dynamicFormatter
+          }
           />
           <CartesianGrid stroke="#404040" vertical={false} />
           <Line dot={false} strokeWidth={2} stroke="#40749b" dataKey="price" />
@@ -77,7 +83,11 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
             <Tooltip
               wrapperStyle={{ outline: "none", backgroundColor: "transparent" }}
               content={
-                <BondPriceChartTooltip tokenSymbol={props.payoutTokenSymbol} />
+                <BondPriceChartTooltip
+                  payoutTokenSymbol={props.payoutTokenSymbol}
+                  quoteTokenSymbol={props.quoteTokenSymbol}
+                  useTokenRatio={props.useTokenRatio}
+                />
               }
             />
           )}

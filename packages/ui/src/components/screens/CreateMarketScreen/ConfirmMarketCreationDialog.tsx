@@ -13,22 +13,22 @@ import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
 import { CreateMarketState } from "components";
-import { dynamicFormatter, formatCurrency, formatDate } from "utils";
+import {calculateTrimDigits, dynamicFormatter, formatCurrency, formatDate, trim} from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {getBlockExplorer} from "@bond-protocol/contract-library";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
 
-  const initialPrice = formatCurrency.dynamicFormatter(
-    state.priceModels.dynamic.initialPrice,
-    false
+  const initialPrice = trim(
+    state.priceModels[state.priceModel].initialPrice,
+    calculateTrimDigits(state.priceModels[state.priceModel].initialPrice)
   );
 
-  const minPrice = formatCurrency.dynamicFormatter(
-    state.priceModels.dynamic.minPrice,
-    false
+  const minPrice = trim(
+    state.priceModels[state.priceModel].minPrice,
+    calculateTrimDigits(state.priceModels[state.priceModel].minPrice)
   );
 
   return [
@@ -45,21 +45,61 @@ const getDynamicPriceFields = (state: CreateMarketState) => {
 
 const getStaticPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
+
+  const initialPrice = trim(
+    state.priceModels[state.priceModel].initialPrice,
+    calculateTrimDigits(state.priceModels[state.priceModel].initialPrice)
+  );
+
   return [
     {
       leftLabel: "Fixed Price",
-      rightLabel: `${formatCurrency.dynamicFormatter(
-        state.priceModels.static.initialPrice,
-        false
-      )} ${tokenSymbols}`,
+      rightLabel: `${initialPrice} ${tokenSymbols}`,
+    },
+  ];
+};
+
+const getOracleDynamicPriceFields = (state: CreateMarketState) => {
+  return [
+    {
+      leftLabel: "Base Discount",
+      rightLabel: `${state.priceModels["oracle-dynamic"].baseDiscount}%`,
+    },
+    {
+      leftLabel: "Target Interval Discount",
+      rightLabel: `${state.priceModels["oracle-dynamic"].targetIntervalDiscount}%`,
+    },
+    {
+      leftLabel: "Maximum Discount",
+      rightLabel: `${state.priceModels["oracle-dynamic"].maxDiscountFromCurrent}%`,
+    },
+  ];
+};
+
+const getOracleStaticPriceFields = (state: CreateMarketState) => {
+  return [
+    {
+      leftLabel: "Fixed Discount",
+      rightLabel: `${state.priceModels["oracle-static"].fixedDiscount}%`,
+    },
+    {
+      leftLabel: "Maximum Discount",
+      rightLabel: `${state.priceModels["oracle-static"].maxDiscountFromCurrent}%`,
     },
   ];
 };
 
 const getPriceFields = (state: CreateMarketState) => {
-  return state.priceModel === "dynamic"
-    ? getDynamicPriceFields(state)
-    : getStaticPriceFields(state);
+  switch (state.priceModel) {
+    case "dynamic":
+      return getDynamicPriceFields(state);
+    case "static":
+      return getStaticPriceFields(state);
+    case "oracle-dynamic":
+      return getOracleDynamicPriceFields(state);
+    case "oracle-static":
+      return getOracleStaticPriceFields(state);
+  }
 };
 
 const formatMarketState = (state: CreateMarketState) => {
@@ -81,7 +121,7 @@ const formatMarketState = (state: CreateMarketState) => {
     },
     startDate: formatDate.short(state.startDate as Date),
     endDate: formatDate.short(state.endDate as Date),
-    depositInterval: Math.trunc(state.depositInterval / 60 / 60) + " HOURS",
+    depositInterval: Math.round(state.depositInterval / 60 / 60) + " HOURS",
     debtBuffer: state.debtBuffer + "%",
     maxBondSize: formatCurrency.trimToLengthSymbol(state.maxBondSize),
   };
@@ -144,6 +184,7 @@ export const ConfirmMarketCreationDialog = (props: {
   const teller = props.getTeller(props.chain, state);
   const formattedState = formatMarketState(state);
   const [accepted, setAccepted] = useState(false);
+  const [gasEstimate, setGasEstimate]= useState("");
 
   const { blockExplorerUrl } = getBlockExplorer(
     props.chain,
@@ -169,6 +210,14 @@ export const ConfirmMarketCreationDialog = (props: {
 
   const edited = state.overridden === true;
   const disabled = edited && !accepted;
+
+  useEffect(() => {
+    async function estimateGas() {
+      const gasEstimate = await props.estimateGas(state);
+      setGasEstimate(gasEstimate);
+    }
+    estimateGas();
+  }, []);
 
   return (
     <div id="cm-confirm-modal">
@@ -229,7 +278,7 @@ export const ConfirmMarketCreationDialog = (props: {
       {props.showMultisig && (
         <div className="mt-1">
           <SummaryRow
-            editable={state.priceModel === "dynamic"}
+            editable={state.priceModel === "dynamic" || state.priceModel === "oracle-dynamic"}
             leftLabel="Deposit Interval"
             rightLabel={formattedState.depositInterval}
             symbol=" HOURS"
@@ -260,6 +309,12 @@ export const ConfirmMarketCreationDialog = (props: {
           />
         </div>
       )}
+      <div className="mt-1">
+        <SummaryRow
+          leftLabel="Gas Estimate"
+          rightLabel={gasEstimate}
+        />
+      </div>
 
       {!props.showMultisig && (
         <div className="mt-4">

@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta } from "@storybook/react";
 import { TokenInput } from "components";
 import baseIcon from "assets/logo-24.svg";
 
@@ -13,5 +13,6 @@ export const Primary = {
   args: {
     symbol: "OHM",
     logo: baseIcon,
+    value: "",
   },
 };
