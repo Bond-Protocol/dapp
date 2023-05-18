@@ -1,7 +1,7 @@
 import {getSubgraphQuery, providers} from "services";
 import {
   calcMarket,
-  CalculatedMarket,
+  CalculatedMarket, findMarketFor,
   liveMarketsBy,
   liveMarketsFor,
   marketCounter, marketsFor
@@ -159,10 +159,35 @@ export function useGetMarkets() {
     setMarketIds(res);
   }
 
+  const findLiveMarketForPayoutAndQuote = async (
+    payoutTokenAddress: string,
+    quoteTokenAddress: string,
+    amountIn: string,
+    minAmountOut: string,
+    maxExpiry: string,
+    chainId: string
+  ) => {
+    setChain(chainId);
+    const provider = providers[chainId];
+
+    const result = await findMarketFor(
+      payoutTokenAddress,
+      quoteTokenAddress,
+      amountIn,
+      minAmountOut,
+      maxExpiry,
+      provider,
+      chainId
+    );
+
+    setMarketIds([Number(result)]);
+  }
+
   return {
     getLiveMarketsForToken,
     getLiveMarketsByOwner,
     getLiveMarketsForPayoutAndQuote,
+    findLiveMarketForPayoutAndQuote,
     markets,
   }
 }

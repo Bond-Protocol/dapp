@@ -257,7 +257,7 @@ export async function marketsFor(
   }
 }
 
-// Returns an array of all active market IDs for a given payout and quote token
+// Returns a single market ID for a given payout and quote token, matching filter requirements
 export async function findMarketFor(
   payoutTokenAddress: string,
   quoteTokenAddress: string,
