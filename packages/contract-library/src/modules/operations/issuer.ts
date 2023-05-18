@@ -1,7 +1,7 @@
 import { BigNumberish } from '@ethersproject/bignumber';
 import { Overrides } from '@ethersproject/contracts';
 import { BigNumber, Signer } from 'ethers';
-import { getAggregator, getAuctioneerFromAggregator } from '../contract-helper';
+import {getAggregator, getAuctioneerFromAggregator, getChainId} from '../contract-helper';
 import { Provider } from '@ethersproject/providers';
 import { IERC20__factory, PrecalculatedMarket } from 'src/types';
 import { CHAIN_ID } from '@bond-protocol/bond-library';
@@ -20,7 +20,7 @@ export async function setIntervals(
   chainId: string,
   overrides?: Overrides,
 ): Promise<unknown> {
-  const auctioneer = await getAuctioneerFromAggregator(id, chainId, signer);
+  const auctioneer = await getAuctioneerFromAggregator(id, signer);
 
   try {
     return auctioneer.setIntervals(id, intervals, overrides);
@@ -37,7 +37,7 @@ export async function pushOwnership(
   chainId: string,
   overrides?: Overrides,
 ): Promise<unknown> {
-  const auctioneer = await getAuctioneerFromAggregator(id, chainId, signer);
+  const auctioneer = await getAuctioneerFromAggregator(id, signer);
 
   try {
     return auctioneer.pushOwnership(id, newOwnerAddress, overrides);
@@ -51,16 +51,16 @@ export function getMarketData(
   marketIds: BigNumberish[],
   prices: Map<string, number>,
   provider: Provider,
-  chainId: CHAIN_ID,
 ): Promise<PrecalculatedMarket>[] {
   const doMarket = async (
     marketId: BigNumberish,
   ): Promise<PrecalculatedMarket> => {
-    const [auctioneer, teller, marketInfo, instantSwap] = await Promise.all([
-      getAuctioneer(marketId, provider, chainId),
-      getTeller(marketId, provider, chainId),
-      getMarketInfoForPurchase(marketId, chainId, provider),
-      isInstantSwap(marketId, provider, chainId),
+    const [chainId, auctioneer, teller, marketInfo, instantSwap] = await Promise.all([
+      getChainId(provider),
+      getAuctioneer(marketId, provider),
+      getTeller(marketId, provider),
+      getMarketInfoForPurchase(marketId, provider),
+      isInstantSwap(marketId, provider),
     ]);
 
     const payoutToken = IERC20__factory.connect(

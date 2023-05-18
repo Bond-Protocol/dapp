@@ -1,7 +1,5 @@
 import { Provider } from "@wagmi/core";
 import { ethers } from "ethers";
-import {useAtom} from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 
 type FallbackProviderConfig = {
   //RPC URL

@@ -42,7 +42,6 @@ export const CloseMarketCard: FC<CloseMarketCardProps> = (props) => {
     const closeMarketTx: ContractTransaction =
       await contractLibrary.closeMarket(
         props.market.marketId,
-        props.market.chainId,
         // @ts-ignore
         signer,
         {}

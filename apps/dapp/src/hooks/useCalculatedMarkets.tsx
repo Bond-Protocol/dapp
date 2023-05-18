@@ -39,8 +39,7 @@ export function useCalculatedMarkets() {
     //TODO: Move all to a background task on startup
     const isLive = await contractLibrary.isLive(
       market.marketId,
-      requestProvider,
-      market.chainId
+      requestProvider
     );
 
     //Checks if the market start date is in the future

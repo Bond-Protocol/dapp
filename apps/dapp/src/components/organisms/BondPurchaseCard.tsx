@@ -145,7 +145,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           amount,
           market.quoteToken.decimals,
           market.marketId,
-          market.chainId,
           referralAddress,
           provider
         )

@@ -11,7 +11,6 @@ import { Provider } from '@ethersproject/providers';
 import {
   BOND_TYPE,
   getAuctioneerFactoryForName,
-  getAuctioneerFactoryForType,
   getBaseBondTeller,
   getTellerContract,
 } from '../contract-helper';
@@ -104,7 +103,6 @@ export async function estimatePurchaseGas(
 
 export async function redeem(
   tokenAddress: string,
-  chainId: string,
   bondType: BOND_TYPE,
   amount: string,
   signer: Signer,
@@ -132,7 +130,7 @@ export async function redeem(
         break;
     }
   } else {
-    teller = getTellerContract(signer, bondType, chainId);
+    teller = await getTellerContract(signer, bondType);
   }
 
   try {

@@ -62,6 +62,7 @@ export const getSubgraphQuery = (
   variables?: {}
 ): UseQueryResult<any, any> => {
   const endpoint = {
+    // @ts-ignore
     url: subgraphEndpoints[chain],
     chain: chain,
   };

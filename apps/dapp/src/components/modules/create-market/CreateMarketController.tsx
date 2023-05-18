@@ -312,10 +312,8 @@ export const CreateMarketController = () => {
 
     try {
       const tx = await contractLib.createMarket(
-        // @ts-ignore
         config.marketParams,
         config.bondType,
-        config.chain,
         signer,
         { gasLimit: gasEstimate }
       );
@@ -334,10 +332,8 @@ export const CreateMarketController = () => {
 
     try {
       let estimate = await contractLib.estimateGasCreateMarket(
-        // @ts-ignore
         config.marketParams,
         config.bondType,
-        config.chain,
         signer,
         {}
       );

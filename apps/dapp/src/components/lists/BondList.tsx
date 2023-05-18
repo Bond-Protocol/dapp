@@ -74,7 +74,6 @@ export const tableColumns: Array<Column<any>> = [
         if (!bond.bondToken) return;
         const redeemTx: ContractTransaction = await redeem(
           bond.bondToken.id,
-          bond.bondToken.chainId,
           bond.bondToken.type as BOND_TYPE,
           bond.balance.toString(),
           // @ts-ignore
