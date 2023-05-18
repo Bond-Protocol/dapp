@@ -1,12 +1,17 @@
 import {getSubgraphQuery, providers} from "services";
-import {CalculatedMarket, liveMarketsFor} from "@bond-protocol/contract-library";
+import {
+  calcMarket,
+  CalculatedMarket,
+  liveMarketsBy,
+  liveMarketsFor,
+  marketCounter
+} from "@bond-protocol/contract-library";
 import {Market, useGetMarketsByIdQuery} from "../generated/graphql";
-import * as contractLibrary from "@bond-protocol/contract-library";
 import {getTokenDetails} from "../utils";
 import {useTokens} from "context/token-context";
 import {useEffect, useState} from "react";
 
-export function useGetMarketsForToken() {
+export function useGetMarkets() {
   const { getPrice, currentPrices } = useTokens();
   const [chain, setChain] = useState<string>("");
   const [marketIds, setMarketIds] = useState<number[]>([]);
@@ -51,8 +56,7 @@ export function useGetMarketsForToken() {
       lpPair.token1.price = getPrice(lpPair.token1.id);
     }
 
-    return contractLibrary
-      .calcMarket(
+    return calcMarket(
         requestProvider,
         import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
         {
@@ -87,7 +91,7 @@ export function useGetMarketsForToken() {
       });
   };
 
-  const getLiveMarketsFor = async (
+  const getLiveMarketsForToken = async (
     tokenAddress: string,
     isPayout: boolean,
     chainId: string
@@ -108,8 +112,35 @@ export function useGetMarketsForToken() {
     setMarketIds(res);
   }
 
+  const getLiveMarketsByOwner = async (
+    ownerAddress: string,
+    chainId: string
+  ) => {
+    setChain(chainId);
+    const provider = providers[chainId];
+
+    const marketCount = await marketCounter(
+      provider,
+      chainId
+    );
+
+    const results = await liveMarketsBy(
+      ownerAddress,
+      0,
+      marketCount,
+      provider,
+      chainId
+    );
+
+    const res: number[] = [];
+    results.forEach(result => res.push(Number(result)));
+
+    setMarketIds(res);
+  }
+
   return {
-    getLiveMarketsFor,
+    getLiveMarketsForToken,
+    getLiveMarketsByOwner,
     markets,
   }
 }
