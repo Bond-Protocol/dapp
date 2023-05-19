@@ -35,8 +35,10 @@ export const testnets = [
 ];
 
 export const mainnets = [mainnet, arbitrum];
-export const supportedChains = [...testnets, ...mainnets];
-export const activeChains = environment.isTestnet ? testnets : mainnets;
+
+export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
+export const ACTIVE_CHAINS = environment.isTestnet ? testnets : mainnets;
+export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
 
 const { chains, provider } = configureChains(
   environment.isTestnet ? testnets : mainnets,
@@ -65,7 +67,6 @@ const client = createClient({
   provider,
 });
 
-//TODO: (aphex) wagmi is causing bundle size to go up dramatically fsr
 export const EvmProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   return (
     <WagmiConfig client={client}>
