@@ -142,9 +142,9 @@ export const useTokenPrices = () => {
 
         //TODO: (aphex) patched this manually due to library fixes, should be made consistent
         //@ts-ignore
-        let token0Address = token.value.token0Address;
+        let token0Address = token.value.token0Address.toLowerCase();
         //@ts-ignore
-        let token1Address = token.value.token1Address;
+        let token1Address = token.value.token1Address.toLowerCase();
 
         if (token0Address.indexOf("_") === -1)
           token0Address = chainId + "_" + token0Address;
