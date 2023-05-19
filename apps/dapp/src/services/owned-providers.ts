@@ -1,7 +1,5 @@
 import { Provider } from "@wagmi/core";
 import { ethers } from "ethers";
-import {useAtom} from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 
 type FallbackProviderConfig = {
   //RPC URL
@@ -114,7 +112,9 @@ const testnetProviders: ProviderOptions[] = [
 ];
 
 import { environment } from "src/environment";
-const activeProviders = environment.isTestnet ? testnetProviders : mainnetProviders;
+const activeProviders = environment.isTestnet
+  ? testnetProviders
+  : mainnetProviders;
 
 export const providers: { [key: string]: Provider } =
   //Go through every chain
@@ -126,7 +126,7 @@ export const providers: { [key: string]: Provider } =
         weight,
         provider: new ethers.providers.StaticJsonRpcProvider(url, {
           name: config.name,
-          chainId: Number(config.chainId)
+          chainId: Number(config.chainId),
         }),
       };
     });

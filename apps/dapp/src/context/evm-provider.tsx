@@ -26,12 +26,20 @@ import {
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
 
-const isTestnet = environment.isTestnet;
+export const testnets = [
+  goerli,
+  arbitrumGoerli,
+  optimismGoerli,
+  polygonMumbai,
+  avalancheFuji,
+];
+
+export const mainnets = [mainnet, arbitrum];
+export const supportedChains = [...testnets, ...mainnets];
+export const activeChains = environment.isTestnet ? testnets : mainnets;
 
 const { chains, provider } = configureChains(
-  isTestnet
-    ? [goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, avalancheFuji]
-    : [mainnet, arbitrum],
+  environment.isTestnet ? testnets : mainnets,
   [publicProvider()]
 );
 
