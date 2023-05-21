@@ -14,6 +14,7 @@ export const TOKENS = new Map<
   string,
   Token | LpToken | BalancerWeightedPoolToken
 >(tokens.reduce(mapReducer, []));
+
 export const PROTOCOLS = new Map<string, Protocol>(protocols);
 export const ADDRESSES = addresses;
 

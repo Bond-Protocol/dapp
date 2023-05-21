@@ -1,0 +1,656 @@
+[
+  {
+    "address": "0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b",
+    "chainId": 1,
+    "name": "Convex Finance",
+    "symbol": "CVX",
+    "logoURI": "https://www.convexfinance.com/static/icons/svg/cvx.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0x6b175474e89094c44da98b954eedeac495271d0f",
+    "chainId": 1,
+    "name": "DAI",
+    "symbol": "DAI",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/DAI.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+    "chainId": 42161,
+    "name": "DAI",
+    "symbol": "DAI",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/DAI.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "chainId": 1,
+    "name": "Wrapped Ethereum",
+    "symbol": "WETH",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+    "chainId": 42161,
+    "name": "Wrapped Ethereum",
+    "symbol": "WETH",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x853d955acef822db058eb8505911ed77f175b99e",
+    "chainId": 1,
+    "name": "FRAX",
+    "symbol": "FRAX",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/FRAX.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F",
+    "chainId": 42161,
+    "name": "FRAX",
+    "symbol": "FRAX",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/FRAX.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x5f98805a4e8be255a32880fdec7f6728c6568ba0",
+    "chainId": 1,
+    "name": "Liquity USD",
+    "symbol": "LUSD",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/LUSD.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+    "chainId": 1,
+    "name": "SHIBA INU",
+    "symbol": "SHIB",
+    "logoURI": "https://assets.coingecko.com/coins/images/11939/small/shiba.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "chainId": 1,
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDC.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+    "chainId": 42161,
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDC.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xd74f5255d557944cf7dd0e45ff521520002d5748",
+    "chainId": 42161,
+    "name": "Sperax USD",
+    "symbol": "USDs",
+    "logoURI": "https://assets.coingecko.com/coins/images/21973/large/USDs_logo_1000X1000.png?1640565887",
+    "decimals": 18
+  },
+  {
+    "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
+    "chainId": 1,
+    "name": "Tether USD",
+    "symbol": "USDT",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDT.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+    "chainId": 42161,
+    "name": "Tether USD",
+    "symbol": "USDT",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDT.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+    "chainId": 1,
+    "name": "Wrapped Bitcoin",
+    "symbol": "WBTC",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WBTC.png",
+    "decimals": 9
+  },
+  {
+    "address": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+    "chainId": 42161,
+    "name": "Wrapped Bitcoin",
+    "symbol": "WBTC",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WBTC.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+    "chainId": 42161,
+    "name": "Buffer Finance Token",
+    "symbol": "BFR",
+    "logoURI": "https://github.com/Buffer-Finance/Buffer-Media/blob/main/new_logo_50_50.png?raw=true",
+    "decimals": 18
+  },
+  {
+    "address": "0x3d9907F9a368ad0a51Be60f7Da3b97cf940982D8",
+    "chainId": 42161,
+    "name": "Camelot Token",
+    "symbol": "GRAIL",
+    "logoURI": "https://app.camelot.exchange/images/tokens/grail.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0xDC132116a76683F5355042E1b67819551AaF34E5",
+    "chainId": 42161,
+    "name": "xGRAIL Token",
+    "symbol": "xGRAIL",
+    "logoURI": "https://app.camelot.exchange/images/tokens/xgrail.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0x07e49d5de43dda6162fa28d24d5935c151875283",
+    "chainId": 42161,
+    "name": "GOVI",
+    "symbol": "GOVI",
+    "logoURI": "https://assets.coingecko.com/coins/images/13875/small/GOVI.png?1612451531",
+    "decimals": 18
+  },
+  {
+    "address": "0xFDeB59a2B4891ea17610EE38665249acC9FCC506",
+    "chainId": 42161,
+    "name": "Theta CVI LP",
+    "symbol": "T-CVI-LP",
+    "logoURI": "https://assets.coingecko.com/coins/images/13875/small/GOVI.png?1612451531",
+    "decimals": 18
+  },
+  {
+    "address": "0x579cea1889991f68acc35ff5c3dd0621ff29b0c9",
+    "chainId": 1,
+    "name": "IQ",
+    "symbol": "IQ",
+    "logoURI": "https://iq.wiki/branding/downloadassets/logooriginalbrain.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x49E050dF648E9477c7545fE1779B940f879B787A",
+    "chainId": 42161,
+    "name": "esGMD",
+    "symbol": "esGMD",
+    "logoURI": "https://assets.coingecko.com/coins/images/28088/small/IcjYItp2_400x400.jpeg?1667445886",
+    "decimals": 18
+  },
+  {
+    "address": "0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a",
+    "chainId": 42161,
+    "name": "GMX",
+    "symbol": "GMX",
+    "logoURI": "https://assets.coingecko.com/coins/images/18323/small/arbit.png?1631532468",
+    "decimals": 18
+  },
+  {
+    "address": "0x865377367054516e17014CcdED1e7d814EDC9ce4",
+    "chainId": 1,
+    "name": "DOLA",
+    "symbol": "DOLA",
+    "logoURI": "https://assets.coingecko.com/coins/images/14287/small/anchor-logo-1-200x200.png?1615275005",
+    "decimals": 18
+  },
+  {
+    "address": "0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68",
+    "chainId": 1,
+    "name": "Inverse DAO",
+    "symbol": "INV",
+    "logoURI": "https://assets.coingecko.com/coins/images/14205/small/inverse_finance.jpg?1614921871",
+    "decimals": 18
+  },
+  {
+    "address": "0x441b8a1980f2F2E43A9397099d15CC2Fe6D36250",
+    "chainId": 1,
+    "name": "Balancer INV-DOLA LP",
+    "symbol": "50INV-50DOLA",
+    "decimals": 18
+  },
+  {
+    "address": "0xE80C0cd204D654CEbe8dd64A4857cAb6Be8345a3",
+    "chainId": 1,
+    "name": "JPEG'd",
+    "symbol": "JPEG",
+    "logoURI": "https://cdn.jpegd.io/static/logos/JPEG.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xdb06a76733528761eda47d356647297bc35a98bd",
+    "chainId": 1,
+    "name": "WETH-JPEG SLP",
+    "symbol": "WETH-JPEG SLP",
+    "decimals": 18
+  },
+  {
+    "address": "0x2CaB3abfC1670D1a452dF502e216a66883cDf079",
+    "chainId": 42161,
+    "name": "Layer2DAO",
+    "symbol": "L2DAO",
+    "logoURI": "https://assets.coingecko.com/coins/images/23699/large/Khp7Y4Sn.png?1645081048",
+    "decimals": 18
+  },
+  {
+    "address": "0xF19547f9ED24aA66b03c3a552D181Ae334FBb8DB",
+    "chainId": 42161,
+    "name": "Lodestar",
+    "symbol": "LODE",
+    "logoURI": "https://assets.coingecko.com/coins/images/28218/small/lode.png?1668429341",
+    "decimals": 18
+  },
+  {
+    "address": "0xfAC77A24E52B463bA9857d6b758ba41aE20e31FF",
+    "chainId": 1,
+    "name": "LSD Coin",
+    "symbol": "LSD",
+    "logoURI": "https://assets.coingecko.com/coins/images/29519/small/logo.png?1679448801",
+    "decimals": 18
+  },
+  {
+    "address": "0x15a808ed3846D25e88AE868DE79F1bcB1Ac382B5",
+    "chainId": 42161,
+    "name": "MVD",
+    "symbol": "MVD",
+    "logoURI": "https://assets.coingecko.com/coins/images/23899/small/MVD_Coin-simple.png?1681090496",
+    "decimals": 18
+  },
+  {
+    "address": "0x682BD6921B8b9634EB4635a269EA8Ae857d6Bb4e",
+    "chainId": 42161,
+    "name": "Metavault Ethereum LP",
+    "symbol": "MVD-ETH-LP",
+    "decimals": 18
+  },
+  {
+    "address": "0xdA51015b73cE11F77A115Bb1b8a7049e02dDEcf0",
+    "chainId": 42161,
+    "name": "Neutra Token",
+    "symbol": "NEU",
+    "logoURI": "https://assets.coingecko.com/coins/images/28813/small/NEU_Token_logo.png?1674455093",
+    "decimals": 18
+  },
+  {
+    "address": "0x98585dfc8d9e7d48f0b1ae47ce33332cf4237d96",
+    "chainId": 1,
+    "name": "New Order",
+    "symbol": "NEWO",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/NEWORDER.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xc08ED9a9ABEAbcC53875787573DC32Eee5E43513",
+    "chainId": 1,
+    "name": "NEWO-USDC SLP",
+    "symbol": "NEWO-USDC SLP",
+    "decimals": 18
+  },
+  {
+    "address": "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
+    "chainId": 1,
+    "name": "Olympus",
+    "symbol": "OHM",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x0ab87046fbb341d058f17cbc4c1133f25a20a52f",
+    "chainId": 1,
+    "name": "Governance OHM",
+    "symbol": "GOHM",
+    "decimals": 18
+  },
+  {
+    "address": "0x808507121B80c02388fAd14726482e061B8da827",
+    "chainId": 1,
+    "name": "Pendle Token",
+    "symbol": "PENDLE",
+    "logoURI": "https://docs.pendle.finance/img/TokenLogo.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+    "chainId": 42161,
+    "name": "Pendle Token",
+    "symbol": "PENDLE",
+    "logoURI": "https://docs.pendle.finance/img/TokenLogo.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0x569424c5ee13884a193773fdc5d1c5f79c443a51",
+    "chainId": 1,
+    "name": "Pine Token",
+    "symbol": "PINE",
+    "logoURI": "https://assets.coingecko.com/coins/images/25660/small/Logomark-Colour.png?1676282846",
+    "decimals": 18
+  },
+  {
+    "address": "0xB40DBBb7931Cfef8Be73AEEC6c67d3809bD4600B",
+    "chainId": 42161,
+    "name": "prePO Token",
+    "symbol": "PPO",
+    "logoURI": "https://i.imgur.com/NNI5hnR.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xc55126051B22eBb829D00368f4B12Bde432de5Da",
+    "chainId": 1,
+    "name": "BTRFLY",
+    "symbol": "BTRFLY",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xc770eefad204b5180df6a14ee197d99d808ee52d",
+    "chainId": 1,
+    "name": "ShapeShift FOX Token",
+    "symbol": "FOX",
+    "logoURI": "https://ipfs.io/ipfs/bafkreibggpxpfxxnxkudvlj5bherkjpjjetzzxbmfaquigbvhqg5xkx4li?filename=fox-token.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x2C5BC2Ba3614fD27FCc7022eA71d9172E2632c16",
+    "chainId": 1,
+    "name": "ShibOriginalVision",
+    "symbol": "SOV",
+    "logoURI": "https://assets.coingecko.com/coins/images/29601/small/photo_2023-03-19_19-07-40_2.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x2C5BC2Ba3614fD27FCc7022eA71d9172E2632c16",
+    "chainId": 1,
+    "name": "ShibOriginalVision",
+    "symbol": "SOV",
+    "logoURI": "https://assets.coingecko.com/coins/images/29601/small/photo_2023-03-19_19-07-40_2.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xB4A3B0Faf0Ab53df58001804DdA5Bfc6a3D59008",
+    "chainId": 1,
+    "name": "Sperax",
+    "symbol": "SPA",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/SPA.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x5575552988A3A80504bBaeB1311674fCFd40aD4B",
+    "chainId": 42161,
+    "name": "Sperax",
+    "symbol": "SPA",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/SPA.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x65c936f008bc34fe819bce9fa5afd9dc2d49977f",
+    "chainId": 42161,
+    "name": "Y2K",
+    "symbol": "Y2K",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/Y2K.jpg",
+    "decimals": 18
+  },
+  {
+    "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+    "chainId": 42161,
+    "name": "Buffer Finance Token",
+    "symbol": "BFR",
+    "logoURI": "https://github.com/Buffer-Finance/Buffer-Media/blob/main/new_logo_50_50.png?raw=true",
+    "decimals": 18
+  },
+  {
+    "address": "0x3d9907F9a368ad0a51Be60f7Da3b97cf940982D8",
+    "chainId": 42161,
+    "name": "Camelot Token",
+    "symbol": "GRAIL",
+    "logoURI": "https://app.camelot.exchange/images/tokens/grail.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0xDC132116a76683F5355042E1b67819551AaF34E5",
+    "chainId": 42161,
+    "name": "xGRAIL Token",
+    "symbol": "xGRAIL",
+    "logoURI": "https://app.camelot.exchange/images/tokens/xgrail.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0x07e49d5de43dda6162fa28d24d5935c151875283",
+    "chainId": 42161,
+    "name": "GOVI",
+    "symbol": "GOVI",
+    "logoURI": "https://assets.coingecko.com/coins/images/13875/small/GOVI.png?1612451531",
+    "decimals": 18
+  },
+  {
+    "address": "0xFDeB59a2B4891ea17610EE38665249acC9FCC506",
+    "chainId": 42161,
+    "name": "Theta CVI LP",
+    "symbol": "T-CVI-LP",
+    "logoURI": "https://assets.coingecko.com/coins/images/13875/small/GOVI.png?1612451531",
+    "decimals": 18
+  },
+  {
+    "address": "0x579cea1889991f68acc35ff5c3dd0621ff29b0c9",
+    "chainId": 1,
+    "name": "IQ",
+    "symbol": "IQ",
+    "logoURI": "https://iq.wiki/branding/downloadassets/logooriginalbrain.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x49E050dF648E9477c7545fE1779B940f879B787A",
+    "chainId": 42161,
+    "name": "esGMD",
+    "symbol": "esGMD",
+    "logoURI": "https://assets.coingecko.com/coins/images/28088/small/IcjYItp2_400x400.jpeg?1667445886",
+    "decimals": 18
+  },
+  {
+    "address": "0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a",
+    "chainId": 42161,
+    "name": "GMX",
+    "symbol": "GMX",
+    "logoURI": "https://assets.coingecko.com/coins/images/18323/small/arbit.png?1631532468",
+    "decimals": 18
+  },
+  {
+    "address": "0x865377367054516e17014CcdED1e7d814EDC9ce4",
+    "chainId": 1,
+    "name": "DOLA",
+    "symbol": "DOLA",
+    "logoURI": "https://assets.coingecko.com/coins/images/14287/small/anchor-logo-1-200x200.png?1615275005",
+    "decimals": 18
+  },
+  {
+    "address": "0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68",
+    "chainId": 1,
+    "name": "Inverse DAO",
+    "symbol": "INV",
+    "logoURI": "https://assets.coingecko.com/coins/images/14205/small/inverse_finance.jpg?1614921871",
+    "decimals": 18
+  },
+  {
+    "address": "0x441b8a1980f2F2E43A9397099d15CC2Fe6D36250",
+    "chainId": 1,
+    "name": "Balancer INV-DOLA LP",
+    "symbol": "50INV-50DOLA",
+    "decimals": 18
+  },
+  {
+    "address": "0xE80C0cd204D654CEbe8dd64A4857cAb6Be8345a3",
+    "chainId": 1,
+    "name": "JPEG'd",
+    "symbol": "JPEG",
+    "logoURI": "https://cdn.jpegd.io/static/logos/JPEG.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xdb06a76733528761eda47d356647297bc35a98bd",
+    "chainId": 1,
+    "name": "WETH-JPEG SLP",
+    "symbol": "WETH-JPEG SLP",
+    "decimals": 18
+  },
+  {
+    "address": "0x2CaB3abfC1670D1a452dF502e216a66883cDf079",
+    "chainId": 42161,
+    "name": "Layer2DAO",
+    "symbol": "L2DAO",
+    "logoURI": "https://assets.coingecko.com/coins/images/23699/large/Khp7Y4Sn.png?1645081048",
+    "decimals": 18
+  },
+  {
+    "address": "0xF19547f9ED24aA66b03c3a552D181Ae334FBb8DB",
+    "chainId": 42161,
+    "name": "Lodestar",
+    "symbol": "LODE",
+    "logoURI": "https://assets.coingecko.com/coins/images/28218/small/lode.png?1668429341",
+    "decimals": 18
+  },
+  {
+    "address": "0xfAC77A24E52B463bA9857d6b758ba41aE20e31FF",
+    "chainId": 1,
+    "name": "LSD Coin",
+    "symbol": "LSD",
+    "logoURI": "https://assets.coingecko.com/coins/images/29519/small/logo.png?1679448801",
+    "decimals": 18
+  },
+  {
+    "address": "0x15a808ed3846D25e88AE868DE79F1bcB1Ac382B5",
+    "chainId": 42161,
+    "name": "MVD",
+    "symbol": "MVD",
+    "logoURI": "https://assets.coingecko.com/coins/images/23899/small/MVD_Coin-simple.png?1681090496",
+    "decimals": 18
+  },
+  {
+    "address": "0x682BD6921B8b9634EB4635a269EA8Ae857d6Bb4e",
+    "chainId": 42161,
+    "name": "Metavault Ethereum LP",
+    "symbol": "MVD-ETH-LP",
+    "decimals": 18
+  },
+  {
+    "address": "0xdA51015b73cE11F77A115Bb1b8a7049e02dDEcf0",
+    "chainId": 42161,
+    "name": "Neutra Token",
+    "symbol": "NEU",
+    "logoURI": "https://assets.coingecko.com/coins/images/28813/small/NEU_Token_logo.png?1674455093",
+    "decimals": 18
+  },
+  {
+    "address": "0x98585dfc8d9e7d48f0b1ae47ce33332cf4237d96",
+    "chainId": 1,
+    "name": "New Order",
+    "symbol": "NEWO",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/NEWORDER.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xc08ED9a9ABEAbcC53875787573DC32Eee5E43513",
+    "chainId": 1,
+    "name": "NEWO-USDC SLP",
+    "symbol": "NEWO-USDC SLP",
+    "decimals": 18
+  },
+  {
+    "address": "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
+    "chainId": 1,
+    "name": "Olympus",
+    "symbol": "OHM",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x0ab87046fbb341d058f17cbc4c1133f25a20a52f",
+    "chainId": 1,
+    "name": "Governance OHM",
+    "symbol": "GOHM",
+    "decimals": 18
+  },
+  {
+    "address": "0x808507121B80c02388fAd14726482e061B8da827",
+    "chainId": 1,
+    "name": "Pendle Token",
+    "symbol": "PENDLE",
+    "logoURI": "https://docs.pendle.finance/img/TokenLogo.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+    "chainId": 42161,
+    "name": "Pendle Token",
+    "symbol": "PENDLE",
+    "logoURI": "https://docs.pendle.finance/img/TokenLogo.svg",
+    "decimals": 18
+  },
+  {
+    "address": "0x569424c5ee13884a193773fdc5d1c5f79c443a51",
+    "chainId": 1,
+    "name": "Pine Token",
+    "symbol": "PINE",
+    "logoURI": "https://assets.coingecko.com/coins/images/25660/small/Logomark-Colour.png?1676282846",
+    "decimals": 18
+  },
+  {
+    "address": "0xB40DBBb7931Cfef8Be73AEEC6c67d3809bD4600B",
+    "chainId": 42161,
+    "name": "prePO Token",
+    "symbol": "PPO",
+    "logoURI": "https://i.imgur.com/NNI5hnR.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xc55126051B22eBb829D00368f4B12Bde432de5Da",
+    "chainId": 1,
+    "name": "BTRFLY",
+    "symbol": "BTRFLY",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xc770eefad204b5180df6a14ee197d99d808ee52d",
+    "chainId": 1,
+    "name": "ShapeShift FOX Token",
+    "symbol": "FOX",
+    "logoURI": "https://ipfs.io/ipfs/bafkreibggpxpfxxnxkudvlj5bherkjpjjetzzxbmfaquigbvhqg5xkx4li?filename=fox-token.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x2C5BC2Ba3614fD27FCc7022eA71d9172E2632c16",
+    "chainId": 1,
+    "name": "ShibOriginalVision",
+    "symbol": "SOV",
+    "logoURI": "https://assets.coingecko.com/coins/images/29601/small/photo_2023-03-19_19-07-40_2.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xB4A3B0Faf0Ab53df58001804DdA5Bfc6a3D59008",
+    "chainId": 1,
+    "name": "Sperax",
+    "symbol": "SPA",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/SPA.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x5575552988A3A80504bBaeB1311674fCFd40aD4B",
+    "chainId": 42161,
+    "name": "Sperax",
+    "symbol": "SPA",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/SPA.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x65c936f008bc34fe819bce9fa5afd9dc2d49977f",
+    "chainId": 42161,
+    "name": "Y2K",
+    "symbol": "Y2K",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/Y2K.jpg",
+    "decimals": 18
+  }
+]

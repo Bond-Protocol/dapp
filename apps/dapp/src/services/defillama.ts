@@ -37,13 +37,6 @@ export const fetchPrice = async (
   return unwrapPrices(response.coins);
 };
 
-/** Gets defillama query id from a token in tokenlist format */
-export const toDefillamaQueryId = (t: any) => {
-  const chain = ACTIVE_CHAINS.find((c: any) => c.id === t.chainId);
-  const name = chain?.name.split(" ")[0] ?? ""; // The api supports 'arbitrum' instead of 'arbitrum-one' :pepe_angry_sip:
-  return `${name.toLowerCase()}:${t.address}`;
-};
-
 /**The response format isnt very useful so we tweak it*/
 export const unwrapPrices = (prices: any) => {
   return Object.keys(prices).map((k) => {
@@ -51,6 +44,13 @@ export const unwrapPrices = (prices: any) => {
     const [chain, address] = k.split(":");
     return { ...content, address, chain };
   });
+};
+
+/** Gets defillama query id from a token in tokenlist format */
+export const toDefillamaQueryId = (t: any) => {
+  const chain = ACTIVE_CHAINS.find((c: any) => c.id === t.chainId);
+  const name = chain?.name.split(" ")[0] ?? ""; // The api supports 'arbitrum' instead of 'arbitrum-one' :pepe_angry_sip:
+  return `${name.toLowerCase()}:${t.address}`;
 };
 
 export const utils = {
