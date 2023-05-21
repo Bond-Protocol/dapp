@@ -50,12 +50,16 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     usdPrice: "0",
   });
   const { data: signer } = useSigner();
+  const { tokens } = useTokens();
+  console.log({ tokens });
 
-  const quoteTokenDetails = getTokenDetails(market?.quoteToken);
+  const quoteTokenDetails = tokens.find(
+    ({ address }) => address === market.quoteToken.address.toLowerCase()
+  );
+  console.log({ quoteTokenDetails });
+
   const provider = providers[market.chainId];
   const { address, isConnected } = useAccount();
-
-  const { getPrice } = useTokens();
 
   const { getGasPrice } = useGasPrice();
   const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
@@ -78,7 +82,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   );
 
   const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
-    market.chainId
+    market.chainId || 0
   );
 
   const protocol = getProtocolByAddress(market.owner, market.chainId);

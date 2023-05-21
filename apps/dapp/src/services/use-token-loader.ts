@@ -9,8 +9,6 @@ const fetchPrices = async (tokens: any[]) => {
 
   const prices = await defillama.fetchPrice(addresses);
 
-  // const unwrapped = defillama.utils.unwrapPrices(prices?.coins);
-
   //Adds the price to previously fetched tokens
   return tokens
     .map((t: any) => ({
@@ -22,23 +20,24 @@ const fetchPrices = async (tokens: any[]) => {
 
 export const useTokenLoader = () => {
   const [tokens, setTokens] = useState<any[]>([]);
+  const [tokenlists, setTokenlists] = useState<any>({});
 
-  const query = useQuery(["DEFAULT_TOKEN_LIST"], () =>
-    fetchAndParseTokenList()
+  const query = useQuery(
+    ["DEFAULT_TOKEN_LIST"],
+    () => fetchAndParseTokenList(),
+    { enabled: false }
   );
-
-  useEffect(() => {}, [tokens]);
 
   /** Loads token Prices */
   useEffect(() => {
     const loadPrices = async () => {
-      // Get chain:address string to query defillama
       const pricedTokens = await fetchPrices(tokenlist);
+
       setTokens(pricedTokens);
     };
 
     loadPrices();
-  }, [query.isFetched]);
+  }, []);
 
-  return { tokens: query.data ?? [], pricedTokens: tokens };
+  return { tokens, tokenlists };
 };

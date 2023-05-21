@@ -24,6 +24,6 @@ export const fetchAndParseTokenList = async (
         logoUrl: t?.logoURI, //we using logoUrl instead throughtout the app, cba to change rn
       }));
   } catch (e) {
-    console.error(`Something went wrong fetching ${url}`, e);
+    console.error(`Failed to fetch ${url}`, e);
   }
 };

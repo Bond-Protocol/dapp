@@ -117,7 +117,7 @@ export interface TransactionHistoryProps {
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
-  const { currentPrices } = useTokens();
+  const { tokens, getByAddress } = useTokens();
 
   const { data, ...query } = useListBondPurchasesPerMarketQuery(
     {
@@ -145,24 +145,17 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
     () =>
       data?.bondPurchases
         .map((p) => {
-          //@ts-ignore
-          p.payoutPrice = currentPrices[p.payoutToken.id]
-            ? //@ts-ignore
-              currentPrices[p.payoutToken.id][0].price
-            : 0;
+          const payoutPrice = getByAddress(p.payoutToken.address)?.price ?? 0;
 
-          //@ts-ignore
-          p.txUrl = blockExplorerTxUrl + p.id;
-          //@ts-ignore (TODO: IMPROVE)
-          p.addressUrl = blockExplorerAddressUrl + p.recipient;
-          //@ts-ignore (TODO: IMPROVE)
-          p.market = props.market;
-          return p;
+          const txUrl = blockExplorerTxUrl + p.id;
+          const addressUrl = blockExplorerAddressUrl + p.recipient;
+
+          return { ...p, payoutPrice, txUrl, addressUrl, market: props.market };
         })
         .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
         .sort((a, b) => b.timestamp - a.timestamp)
         .map((p) => toTableData(marketTxsHistory, p)),
-    [currentPrices, data]
+    [tokens, data]
   );
 
   return (

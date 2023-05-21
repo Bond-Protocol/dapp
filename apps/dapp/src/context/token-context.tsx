@@ -1,26 +1,26 @@
-import { useTokenPrices } from "hooks/useTokenPrices";
 import { createContext, useContext } from "react";
-import { TokenDetails } from "ui";
+import { Token } from "@bond-protocol/contract-library";
+import { useTokenLoader } from "services/use-token-loader";
 
-export type UseTokensReturn = ReturnType<typeof useTokenPrices>;
-
-const initialState: UseTokensReturn = {
-  tokens: [],
-  currentPrices: {},
-  getPrice: (token: any) => 1,
-  //@ts-ignore
-  getTokenDetails: (token: unknown) => ({ id: "" } as TokenDetails),
-  isLoading: true,
+export type ITokenContext = {
+  tokens: Token[];
+  list: Token[];
+  getByAddress: (address: string) => Token;
 };
 
-const TokenContext = createContext(initialState);
+const TokenContext = createContext<ITokenContext>({} as ITokenContext);
 
 export const TokenProvider = ({ children }: { children: React.ReactNode }) => {
-  const tokens = useTokenPrices();
+  //const tokens = useTokenPrices();
+  const { tokens } = useTokenLoader();
+
+  const getByAddress = (address: string) =>
+    tokens.find((t) => t.address === address.toLowerCase());
 
   return (
-    // @ts-ignore
-    <TokenContext.Provider value={tokens}>{children}</TokenContext.Provider>
+    <TokenContext.Provider value={{ tokens, list: tokens, getByAddress }}>
+      {children}
+    </TokenContext.Provider>
   );
 };
 

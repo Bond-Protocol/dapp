@@ -6,10 +6,11 @@ import "./styles/index.css";
 import "ui/style.css";
 
 //App Entry Point
-import { DevApp } from "./DevApp";
+import { App } from "./App";
+//import { DevApp } from "./DevApp";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <DevApp />
+    <App />
   </React.StrictMode>
 );

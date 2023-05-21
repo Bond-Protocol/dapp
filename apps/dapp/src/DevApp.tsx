@@ -1,10 +1,15 @@
 import { FC } from "react";
 import { DevProviders } from "context/app-providers";
 import { PageContainer } from "ui";
-import { PolicyRoutes, RouteMap } from "./RouteMap";
-import { AppStatusBanner, CoverUpScreen, Footer, Navbar } from "components";
+import { AppStatusBanner, Footer, Navbar } from "components";
 import { AppBackdrop } from "components/common/AppBackdrop";
-import { Devpage } from "./DevPage";
+import { useTokenLoader } from "services/use-token-loader";
+
+export const Devpage = () => {
+  useTokenLoader();
+
+  return <div>haii </div>;
+};
 
 export const DevApp: FC = () => {
   return (
