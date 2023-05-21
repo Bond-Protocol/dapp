@@ -16,7 +16,7 @@
     "decimals": 18
   },
   {
-    "address": "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
+    "address": "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
     "chainId": 42161,
     "name": "DAI",
     "symbol": "DAI",
@@ -24,7 +24,7 @@
     "decimals": 18
   },
   {
-    "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     "chainId": 1,
     "name": "Wrapped Ethereum",
     "symbol": "WETH",
@@ -32,7 +32,7 @@
     "decimals": 18
   },
   {
-    "address": "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+    "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
     "chainId": 42161,
     "name": "Wrapped Ethereum",
     "symbol": "WETH",
@@ -48,7 +48,7 @@
     "decimals": 18
   },
   {
-    "address": "0x17FC002b466eEc40DaE837Fc4bE5c67993ddBd6F",
+    "address": "0x17fc002b466eec40dae837fc4be5c67993ddbd6f",
     "chainId": 42161,
     "name": "FRAX",
     "symbol": "FRAX",
@@ -64,7 +64,7 @@
     "decimals": 18
   },
   {
-    "address": "0x95aD61b0a150d79219dCF64E1E6Cc01f0B64C4cE",
+    "address": "0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce",
     "chainId": 1,
     "name": "SHIBA INU",
     "symbol": "SHIB",
@@ -128,7 +128,7 @@
     "decimals": 18
   },
   {
-    "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+    "address": "0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d",
     "chainId": 42161,
     "name": "Buffer Finance Token",
     "symbol": "BFR",
@@ -136,7 +136,7 @@
     "decimals": 18
   },
   {
-    "address": "0x3d9907F9a368ad0a51Be60f7Da3b97cf940982D8",
+    "address": "0x3d9907f9a368ad0a51be60f7da3b97cf940982d8",
     "chainId": 42161,
     "name": "Camelot Token",
     "symbol": "GRAIL",
@@ -144,7 +144,7 @@
     "decimals": 18
   },
   {
-    "address": "0xDC132116a76683F5355042E1b67819551AaF34E5",
+    "address": "0xdc132116a76683f5355042e1b67819551aaf34e5",
     "chainId": 42161,
     "name": "xGRAIL Token",
     "symbol": "xGRAIL",
@@ -160,7 +160,7 @@
     "decimals": 18
   },
   {
-    "address": "0xFDeB59a2B4891ea17610EE38665249acC9FCC506",
+    "address": "0xfdeb59a2b4891ea17610ee38665249acc9fcc506",
     "chainId": 42161,
     "name": "Theta CVI LP",
     "symbol": "T-CVI-LP",
@@ -176,7 +176,7 @@
     "decimals": 18
   },
   {
-    "address": "0x49E050dF648E9477c7545fE1779B940f879B787A",
+    "address": "0x49e050df648e9477c7545fe1779b940f879b787a",
     "chainId": 42161,
     "name": "esGMD",
     "symbol": "esGMD",
@@ -184,7 +184,7 @@
     "decimals": 18
   },
   {
-    "address": "0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a",
+    "address": "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
     "chainId": 42161,
     "name": "GMX",
     "symbol": "GMX",
@@ -192,7 +192,7 @@
     "decimals": 18
   },
   {
-    "address": "0x865377367054516e17014CcdED1e7d814EDC9ce4",
+    "address": "0x865377367054516e17014ccded1e7d814edc9ce4",
     "chainId": 1,
     "name": "DOLA",
     "symbol": "DOLA",
@@ -200,7 +200,7 @@
     "decimals": 18
   },
   {
-    "address": "0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68",
+    "address": "0x41d5d79431a913c4ae7d69a668ecdfe5ff9dfb68",
     "chainId": 1,
     "name": "Inverse DAO",
     "symbol": "INV",
@@ -208,14 +208,14 @@
     "decimals": 18
   },
   {
-    "address": "0x441b8a1980f2F2E43A9397099d15CC2Fe6D36250",
+    "address": "0x441b8a1980f2f2e43a9397099d15cc2fe6d36250",
     "chainId": 1,
     "name": "Balancer INV-DOLA LP",
     "symbol": "50INV-50DOLA",
     "decimals": 18
   },
   {
-    "address": "0xE80C0cd204D654CEbe8dd64A4857cAb6Be8345a3",
+    "address": "0xe80c0cd204d654cebe8dd64a4857cab6be8345a3",
     "chainId": 1,
     "name": "JPEG'd",
     "symbol": "JPEG",
@@ -230,7 +230,7 @@
     "decimals": 18
   },
   {
-    "address": "0x2CaB3abfC1670D1a452dF502e216a66883cDf079",
+    "address": "0x2cab3abfc1670d1a452df502e216a66883cdf079",
     "chainId": 42161,
     "name": "Layer2DAO",
     "symbol": "L2DAO",
@@ -238,7 +238,7 @@
     "decimals": 18
   },
   {
-    "address": "0xF19547f9ED24aA66b03c3a552D181Ae334FBb8DB",
+    "address": "0xf19547f9ed24aa66b03c3a552d181ae334fbb8db",
     "chainId": 42161,
     "name": "Lodestar",
     "symbol": "LODE",
@@ -246,7 +246,7 @@
     "decimals": 18
   },
   {
-    "address": "0xfAC77A24E52B463bA9857d6b758ba41aE20e31FF",
+    "address": "0xfac77a24e52b463ba9857d6b758ba41ae20e31ff",
     "chainId": 1,
     "name": "LSD Coin",
     "symbol": "LSD",
@@ -254,22 +254,22 @@
     "decimals": 18
   },
   {
-    "address": "0x15a808ed3846D25e88AE868DE79F1bcB1Ac382B5",
+    "address": "0x15a808ed3846d25e88ae868de79f1bcb1ac382b5",
     "chainId": 42161,
     "name": "MVD",
     "symbol": "MVD",
     "logoURI": "https://assets.coingecko.com/coins/images/23899/small/MVD_Coin-simple.png?1681090496",
-    "decimals": 18
+    "decimals": 9
   },
   {
-    "address": "0x682BD6921B8b9634EB4635a269EA8Ae857d6Bb4e",
+    "address": "0x682bd6921b8b9634eb4635a269ea8ae857d6bb4e",
     "chainId": 42161,
     "name": "Metavault Ethereum LP",
     "symbol": "MVD-ETH-LP",
     "decimals": 18
   },
   {
-    "address": "0xdA51015b73cE11F77A115Bb1b8a7049e02dDEcf0",
+    "address": "0xda51015b73ce11f77a115bb1b8a7049e02ddecf0",
     "chainId": 42161,
     "name": "Neutra Token",
     "symbol": "NEU",
@@ -285,7 +285,7 @@
     "decimals": 18
   },
   {
-    "address": "0xc08ED9a9ABEAbcC53875787573DC32Eee5E43513",
+    "address": "0xc08ed9a9abeabcc53875787573dc32eee5e43513",
     "chainId": 1,
     "name": "NEWO-USDC SLP",
     "symbol": "NEWO-USDC SLP",
@@ -307,7 +307,7 @@
     "decimals": 18
   },
   {
-    "address": "0x808507121B80c02388fAd14726482e061B8da827",
+    "address": "0x808507121b80c02388fad14726482e061b8da827",
     "chainId": 1,
     "name": "Pendle Token",
     "symbol": "PENDLE",
@@ -315,7 +315,7 @@
     "decimals": 18
   },
   {
-    "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+    "address": "0x0c880f6761f1af8d9aa9c466984b80dab9a8c9e8",
     "chainId": 42161,
     "name": "Pendle Token",
     "symbol": "PENDLE",
@@ -331,7 +331,7 @@
     "decimals": 18
   },
   {
-    "address": "0xB40DBBb7931Cfef8Be73AEEC6c67d3809bD4600B",
+    "address": "0xb40dbbb7931cfef8be73aeec6c67d3809bd4600b",
     "chainId": 42161,
     "name": "prePO Token",
     "symbol": "PPO",
@@ -339,7 +339,7 @@
     "decimals": 18
   },
   {
-    "address": "0xc55126051B22eBb829D00368f4B12Bde432de5Da",
+    "address": "0xc55126051b22ebb829d00368f4b12bde432de5da",
     "chainId": 1,
     "name": "BTRFLY",
     "symbol": "BTRFLY",
@@ -355,7 +355,7 @@
     "decimals": 18
   },
   {
-    "address": "0x2C5BC2Ba3614fD27FCc7022eA71d9172E2632c16",
+    "address": "0x2c5bc2ba3614fd27fcc7022ea71d9172e2632c16",
     "chainId": 1,
     "name": "ShibOriginalVision",
     "symbol": "SOV",
@@ -363,7 +363,7 @@
     "decimals": 18
   },
   {
-    "address": "0x2C5BC2Ba3614fD27FCc7022eA71d9172E2632c16",
+    "address": "0x2c5bc2ba3614fd27fcc7022ea71d9172e2632c16",
     "chainId": 1,
     "name": "ShibOriginalVision",
     "symbol": "SOV",
@@ -371,7 +371,7 @@
     "decimals": 18
   },
   {
-    "address": "0xB4A3B0Faf0Ab53df58001804DdA5Bfc6a3D59008",
+    "address": "0xb4a3b0faf0ab53df58001804dda5bfc6a3d59008",
     "chainId": 1,
     "name": "Sperax",
     "symbol": "SPA",
@@ -379,7 +379,7 @@
     "decimals": 18
   },
   {
-    "address": "0x5575552988A3A80504bBaeB1311674fCFd40aD4B",
+    "address": "0x5575552988a3a80504bbaeb1311674fcfd40ad4b",
     "chainId": 42161,
     "name": "Sperax",
     "symbol": "SPA",
@@ -395,7 +395,7 @@
     "decimals": 18
   },
   {
-    "address": "0x1A5B0aaF478bf1FDA7b934c76E7692D722982a6D",
+    "address": "0x1a5b0aaf478bf1fda7b934c76e7692d722982a6d",
     "chainId": 42161,
     "name": "Buffer Finance Token",
     "symbol": "BFR",
@@ -403,7 +403,7 @@
     "decimals": 18
   },
   {
-    "address": "0x3d9907F9a368ad0a51Be60f7Da3b97cf940982D8",
+    "address": "0x3d9907f9a368ad0a51be60f7da3b97cf940982d8",
     "chainId": 42161,
     "name": "Camelot Token",
     "symbol": "GRAIL",
@@ -411,7 +411,7 @@
     "decimals": 18
   },
   {
-    "address": "0xDC132116a76683F5355042E1b67819551AaF34E5",
+    "address": "0xdc132116a76683f5355042e1b67819551aaf34e5",
     "chainId": 42161,
     "name": "xGRAIL Token",
     "symbol": "xGRAIL",
@@ -427,7 +427,7 @@
     "decimals": 18
   },
   {
-    "address": "0xFDeB59a2B4891ea17610EE38665249acC9FCC506",
+    "address": "0xfdeb59a2b4891ea17610ee38665249acc9fcc506",
     "chainId": 42161,
     "name": "Theta CVI LP",
     "symbol": "T-CVI-LP",
@@ -443,7 +443,7 @@
     "decimals": 18
   },
   {
-    "address": "0x49E050dF648E9477c7545fE1779B940f879B787A",
+    "address": "0x49e050df648e9477c7545fe1779b940f879b787a",
     "chainId": 42161,
     "name": "esGMD",
     "symbol": "esGMD",
@@ -451,7 +451,7 @@
     "decimals": 18
   },
   {
-    "address": "0xfc5A1A6EB076a2C7aD06eD22C90d7E710E35ad0a",
+    "address": "0xfc5a1a6eb076a2c7ad06ed22c90d7e710e35ad0a",
     "chainId": 42161,
     "name": "GMX",
     "symbol": "GMX",
@@ -459,7 +459,7 @@
     "decimals": 18
   },
   {
-    "address": "0x865377367054516e17014CcdED1e7d814EDC9ce4",
+    "address": "0x865377367054516e17014ccded1e7d814edc9ce4",
     "chainId": 1,
     "name": "DOLA",
     "symbol": "DOLA",
@@ -467,7 +467,7 @@
     "decimals": 18
   },
   {
-    "address": "0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68",
+    "address": "0x41d5d79431a913c4ae7d69a668ecdfe5ff9dfb68",
     "chainId": 1,
     "name": "Inverse DAO",
     "symbol": "INV",
@@ -475,14 +475,14 @@
     "decimals": 18
   },
   {
-    "address": "0x441b8a1980f2F2E43A9397099d15CC2Fe6D36250",
+    "address": "0x441b8a1980f2f2e43a9397099d15cc2fe6d36250",
     "chainId": 1,
     "name": "Balancer INV-DOLA LP",
     "symbol": "50INV-50DOLA",
     "decimals": 18
   },
   {
-    "address": "0xE80C0cd204D654CEbe8dd64A4857cAb6Be8345a3",
+    "address": "0xe80c0cd204d654cebe8dd64a4857cab6be8345a3",
     "chainId": 1,
     "name": "JPEG'd",
     "symbol": "JPEG",
@@ -497,7 +497,7 @@
     "decimals": 18
   },
   {
-    "address": "0x2CaB3abfC1670D1a452dF502e216a66883cDf079",
+    "address": "0x2cab3abfc1670d1a452df502e216a66883cdf079",
     "chainId": 42161,
     "name": "Layer2DAO",
     "symbol": "L2DAO",
@@ -505,7 +505,7 @@
     "decimals": 18
   },
   {
-    "address": "0xF19547f9ED24aA66b03c3a552D181Ae334FBb8DB",
+    "address": "0xf19547f9ed24aa66b03c3a552d181ae334fbb8db",
     "chainId": 42161,
     "name": "Lodestar",
     "symbol": "LODE",
@@ -513,7 +513,7 @@
     "decimals": 18
   },
   {
-    "address": "0xfAC77A24E52B463bA9857d6b758ba41aE20e31FF",
+    "address": "0xfac77a24e52b463ba9857d6b758ba41ae20e31ff",
     "chainId": 1,
     "name": "LSD Coin",
     "symbol": "LSD",
@@ -521,7 +521,7 @@
     "decimals": 18
   },
   {
-    "address": "0x15a808ed3846D25e88AE868DE79F1bcB1Ac382B5",
+    "address": "0x15a808ed3846d25e88ae868de79f1bcb1ac382b5",
     "chainId": 42161,
     "name": "MVD",
     "symbol": "MVD",
@@ -529,14 +529,14 @@
     "decimals": 18
   },
   {
-    "address": "0x682BD6921B8b9634EB4635a269EA8Ae857d6Bb4e",
+    "address": "0x682bd6921b8b9634eb4635a269ea8ae857d6bb4e",
     "chainId": 42161,
     "name": "Metavault Ethereum LP",
     "symbol": "MVD-ETH-LP",
     "decimals": 18
   },
   {
-    "address": "0xdA51015b73cE11F77A115Bb1b8a7049e02dDEcf0",
+    "address": "0xda51015b73ce11f77a115bb1b8a7049e02ddecf0",
     "chainId": 42161,
     "name": "Neutra Token",
     "symbol": "NEU",
@@ -552,7 +552,7 @@
     "decimals": 18
   },
   {
-    "address": "0xc08ED9a9ABEAbcC53875787573DC32Eee5E43513",
+    "address": "0xc08ed9a9abeabcc53875787573dc32eee5e43513",
     "chainId": 1,
     "name": "NEWO-USDC SLP",
     "symbol": "NEWO-USDC SLP",
@@ -574,7 +574,7 @@
     "decimals": 18
   },
   {
-    "address": "0x808507121B80c02388fAd14726482e061B8da827",
+    "address": "0x808507121b80c02388fad14726482e061b8da827",
     "chainId": 1,
     "name": "Pendle Token",
     "symbol": "PENDLE",
@@ -582,7 +582,7 @@
     "decimals": 18
   },
   {
-    "address": "0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8",
+    "address": "0x0c880f6761f1af8d9aa9c466984b80dab9a8c9e8",
     "chainId": 42161,
     "name": "Pendle Token",
     "symbol": "PENDLE",
@@ -598,7 +598,7 @@
     "decimals": 18
   },
   {
-    "address": "0xB40DBBb7931Cfef8Be73AEEC6c67d3809bD4600B",
+    "address": "0xb40dbbb7931cfef8be73aeec6c67d3809bd4600b",
     "chainId": 42161,
     "name": "prePO Token",
     "symbol": "PPO",
@@ -606,7 +606,7 @@
     "decimals": 18
   },
   {
-    "address": "0xc55126051B22eBb829D00368f4B12Bde432de5Da",
+    "address": "0xc55126051b22ebb829d00368f4b12bde432de5da",
     "chainId": 1,
     "name": "BTRFLY",
     "symbol": "BTRFLY",
@@ -622,7 +622,7 @@
     "decimals": 18
   },
   {
-    "address": "0x2C5BC2Ba3614fD27FCc7022eA71d9172E2632c16",
+    "address": "0x2c5bc2ba3614fd27fcc7022ea71d9172e2632c16",
     "chainId": 1,
     "name": "ShibOriginalVision",
     "symbol": "SOV",
@@ -630,7 +630,7 @@
     "decimals": 18
   },
   {
-    "address": "0xB4A3B0Faf0Ab53df58001804DdA5Bfc6a3D59008",
+    "address": "0xb4a3b0faf0ab53df58001804dda5bfc6a3d59008",
     "chainId": 1,
     "name": "Sperax",
     "symbol": "SPA",
@@ -638,7 +638,7 @@
     "decimals": 18
   },
   {
-    "address": "0x5575552988A3A80504bBaeB1311674fCFd40aD4B",
+    "address": "0x5575552988a3a80504bbaeb1311674fcfd40ad4b",
     "chainId": 42161,
     "name": "Sperax",
     "symbol": "SPA",

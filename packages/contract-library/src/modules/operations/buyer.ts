@@ -218,7 +218,6 @@ export async function calcMarket(
   provider: Provider,
   referrerAddress: string,
   market: PrecalculatedMarket,
-  lpType?: LpType,
 ): Promise<CalculatedMarket> {
   const calculatedMarket: CalculatedMarket = {
     id: market.id,
@@ -363,25 +362,25 @@ export async function calcMarket(
     : market.payoutToken.symbol;
 
   // @ts-ignore
-  if (market.quoteToken.lpPair != undefined && lpType != undefined) {
-    let lpMarketPrice;
-    if ('poolAddress' in market.quoteToken) {
-      lpMarketPrice = await calcBalancerPoolPrice(
-        // @ts-ignore
-        market.quoteToken,
-        provider,
-      );
-    } else {
-      lpMarketPrice = await calcLpPrice(
-        // @ts-ignore
-        market.quoteToken,
-        lpType,
-        provider,
-      );
-    }
-    calculatedMarket.discountedPrice =
-      quoteTokensPerPayoutToken * lpMarketPrice;
-  }
+  // if (market.quoteToken.lpPair != undefined && lpType != undefined) {
+  //   let lpMarketPrice;
+  //   if ('poolAddress' in market.quoteToken) {
+  //     lpMarketPrice = await calcBalancerPoolPrice(
+  //       // @ts-ignore
+  //       market.quoteToken,
+  //       provider,
+  //     );
+  //   } else {
+  //     lpMarketPrice = await calcLpPrice(
+  //       // @ts-ignore
+  //       market.quoteToken,
+  //       lpType,
+  //       provider,
+  //     );
+  //   }
+  //   calculatedMarket.discountedPrice =
+  //     quoteTokensPerPayoutToken * lpMarketPrice;
+  // }
 
   calculatedMarket.fullPrice = market.payoutToken.price;
   calculatedMarket.discount =

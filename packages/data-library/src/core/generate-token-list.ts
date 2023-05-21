@@ -21,7 +21,7 @@ export const tokenList = allTokens.reduce((acc, token) => {
         : token.addresses[chainId];
 
       return {
-        address,
+        address: address.toLowerCase(),
         chainId: Number(chainId),
         name: token.name,
         symbol: token.symbol,
