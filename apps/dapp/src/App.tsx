@@ -14,7 +14,7 @@ import { AppBackdrop } from "components/common/AppBackdrop";
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
 export const App: FC = () => {
-  if (underMaintenance) return <CoverUpScreen />;
+  if (underMaintenance) return <CoverUpScreen message={underMaintenance} />;
 
   return (
     <>
