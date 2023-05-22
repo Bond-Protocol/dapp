@@ -1,5 +1,5 @@
 import { useQueries } from "react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import * as bondLibrary from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
@@ -123,6 +123,8 @@ export function useCalculatedMarkets() {
       setMarketsByIssuer(issuerMarkets);
     }
   }, [calculateAllMarkets, tokens]);
+
+  useEffect(() => {}, [calculatedMarkets]);
 
   const isLoading = {
     market: isMarketLoading,

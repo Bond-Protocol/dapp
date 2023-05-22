@@ -48,7 +48,7 @@ export const unwrapPrices = (prices: any) => {
 
 /** Gets defillama query id from a token in tokenlist format */
 export const toDefillamaQueryId = (t: any) => {
-  const chain = ACTIVE_CHAINS.find((c: any) => c.id === t.chainId);
+  const chain = ACTIVE_CHAINS.find((c: any) => c.id === Number(t.chainId));
   const name = chain?.name.split(" ")[0] ?? ""; // The api supports 'arbitrum' instead of 'arbitrum-one' :pepe_angry_sip:
   return `${name.toLowerCase()}:${t.address}`;
 };
