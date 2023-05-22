@@ -30,12 +30,13 @@ export interface TokenBase {
 }
 
 export interface Token extends TokenBase {
-  id?: string;
-  purchaseLink?: string;
   name: string;
   symbol: string;
   decimals: number;
   price: number;
+  id?: string;
+  purchaseLink?: string;
+  logoUrl?: string;
 }
 
 export interface LpPair {

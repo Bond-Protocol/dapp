@@ -4,7 +4,6 @@ import { useTokenLoader } from "services/use-token-loader";
 
 export type ITokenContext = {
   tokens: Token[];
-  list: Token[];
   getByAddress: (address: string) => Token;
 };
 
@@ -18,7 +17,7 @@ export const TokenProvider = ({ children }: { children: React.ReactNode }) => {
     tokens.find((t) => t.address === address.toLowerCase());
 
   return (
-    <TokenContext.Provider value={{ tokens, list: tokens, getByAddress }}>
+    <TokenContext.Provider value={{ tokens, getByAddress }}>
       {children}
     </TokenContext.Provider>
   );
