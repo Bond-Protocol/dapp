@@ -1,4 +1,4 @@
-import { getSubgraphQueries } from "services";
+import { getSubgraphQueries, useTokenLoader } from "services";
 import { useTokens } from "hooks/useTokens";
 import {
   OwnerTokenTbv,
@@ -14,7 +14,6 @@ import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 export function useOwnerTokenTbvs() {
   const subgraphQueries = getSubgraphQueries(useListOwnerTokenTbvsQuery);
   const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
-  const { currentPrices, getPrice } = useTokens();
 
   const [isTestnet] = useAtom(testnetMode);
   const [protocolTbvs, setProtocolTbvs] = useState<Record<string, any>>([]);
@@ -28,35 +27,33 @@ export function useOwnerTokenTbvs() {
   }, [isLoading, isTestnet]);
 
   useEffect(() => {
-    const updated = ownerTokenTbvs
-      .map((token) => {
-        const protocol = getProtocolByAddress(token.owner, token.chainId);
-        if (!protocol) return { id: "", tbv: 0 };
-
-        const price = getPrice(token?.token);
-        let value = 0 + parseFloat(token?.tbv) * price;
-        let tbv = isNaN(value) ? 0 : value;
-        return { id: protocol?.id, tbv };
-      })
-      .reduce(
-        (elements: Record<string, { id: string; tbv: number }>, current) => {
-          const tbv = elements[current.id]?.tbv || 0;
-          return {
-            ...elements,
-            [current.id]: {
-              id: current.id,
-              tbv: isNaN(tbv) ? current.tbv : current.tbv + tbv,
-            },
-          };
-        },
-        {}
-      );
-
-    setProtocolTbvs(updated);
-  }, [ownerTokenTbvs, currentPrices]);
+    // const updated = ownerTokenTbvs
+    //   .map((token) => {
+    //     const protocol = getProtocolByAddress(token.owner, token.chainId);
+    //     if (!protocol) return { id: "", tbv: 0 };
+    //     const price = getPrice(token.address);
+    //     let value = 0 + parseFloat(token?.tbv) * price;
+    //     let tbv = isNaN(value) ? 0 : value;
+    //     return { id: protocol?.id, tbv };
+    //   })
+    //   .reduce(
+    //     (elements: Record<string, { id: string; tbv: number }>, current) => {
+    //       const tbv = elements[current.id]?.tbv || 0;
+    //       return {
+    //         ...elements,
+    //         [current.id]: {
+    //           id: current.id,
+    //           tbv: isNaN(tbv) ? current.tbv : current.tbv + tbv,
+    //         },
+    //       };
+    //     },
+    //     {}
+    //   );
+    // setProtocolTbvs(updated);
+  }, [ownerTokenTbvs]);
 
   return {
     isLoading,
-    protocolTbvs,
+    protocolTbvs: 0,
   };
 }

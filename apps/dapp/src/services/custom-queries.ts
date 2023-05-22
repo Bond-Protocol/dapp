@@ -1,6 +1,6 @@
 import { sub, getUnixTime } from "date-fns";
 
-export const generateFetcher = (url: string) => {
+export const generateCoingeckoFetch = (url: string) => {
   return async () => {
     /*
     const proxyUrl = import.meta.env.VITE_COINGECKO_PRO_PROXY_URL;
@@ -17,11 +17,24 @@ export const generateFetcher = (url: string) => {
     if (!proxyUrl || proxyUrl.length === 0 || isError) {
 
      */
-      const publicUrl = import.meta.env.VITE_COINGECKO_PUBLIC_URL;
-      let result = await fetch(publicUrl.concat(url).concat(import.meta.env.VITE_COINGECKO_API_KEY));
+    const publicUrl = import.meta.env.VITE_COINGECKO_PUBLIC_URL;
+    let result = await fetch(
+      publicUrl.concat(url).concat(import.meta.env.VITE_COINGECKO_API_KEY)
+    );
     //}
 
-    return result && result.json();
+    return result && (await result.json());
+  };
+};
+
+export const generateFetcher = (url: string) => {
+  return async () => {
+    try {
+      let result = await fetch(url);
+      return (await result?.json()) ?? {};
+    } catch (e) {
+      console.error(`Failed to fetch ${url}`, e);
+    }
   };
 };
 
@@ -34,7 +47,7 @@ export const getTokenPriceHistory = (
   const fromTimestamp = getUnixTime(from);
   const toTimestamp = getUnixTime(to);
 
-  return generateFetcher(
+  return generateCoingeckoFetch(
     `/coins/${apiId}/market_chart/range?vs_currency=usd&from=${fromTimestamp}&to=${toTimestamp}`
   );
 };

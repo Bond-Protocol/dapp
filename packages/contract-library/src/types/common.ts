@@ -25,16 +25,18 @@ export type CreateMarketParams = {
 };
 
 export interface TokenBase {
+  chainId: string;
   address: string;
-  decimals: number;
-  price: number;
 }
 
 export interface Token extends TokenBase {
-  id: string;
   name: string;
   symbol: string;
+  decimals: number;
+  price: number;
+  id?: string;
   purchaseLink?: string;
+  logoUrl?: string;
 }
 
 export interface LpPair {

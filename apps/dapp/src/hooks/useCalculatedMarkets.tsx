@@ -10,8 +10,11 @@ import { useLoadMarkets, useTokens } from "hooks";
 import { getTokenDetails } from "src/utils";
 import { dateMath } from "ui";
 
+const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
+
 export function useCalculatedMarkets() {
-  const { getPrice, currentPrices, isLoading: areTokensLoading } = useTokens();
+  //const { getPrice, currentPrices, isLoading: areTokensLoading } = useTokens();
+  const { tokens, getByAddress } = useTokens();
 
   const { markets, isLoading: isMarketLoading } = useLoadMarkets();
 
@@ -36,6 +39,7 @@ export function useCalculatedMarkets() {
       no event, so the subgraph is not updated. Thus, we check here and return early if
       the market is not live.
     */
+
     //TODO: Move all to a background task on startup
     const isLive = await contractLibrary.isLive(
       market.marketId,
@@ -51,70 +55,32 @@ export function useCalculatedMarkets() {
       return;
     }
 
-    const purchaseLink = bondLibrary.TOKENS.get(
-      market.quoteToken.id
-    )?.purchaseLinks.get(market.chainId as bondLibrary.CHAIN_ID)
-      ? bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(
-          market.chainId as bondLibrary.CHAIN_ID
-        )
-      : "https://app.sushi.com/swap";
+    const quoteToken = getByAddress(market.quoteToken.address);
+    const payoutToken = getByAddress(market.payoutToken.address);
 
-    const quoteToken = getTokenDetails(market.quoteToken);
-    const payoutToken = getTokenDetails(market.payoutToken);
+    const updatedMarket = { ...market, payoutToken, quoteToken };
 
-    const lpPair = quoteToken.lpPair;
-    if (lpPair != undefined) {
-      lpPair.token0.price = getPrice(lpPair.token0.id);
-      lpPair.token1.price = getPrice(lpPair.token1.id);
-    }
-
-    return contractLibrary
-      .calcMarket(
+    try {
+      const result = await contractLibrary.calcMarket(
         requestProvider,
-        import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
-        {
-          ...market,
-          payoutToken: {
-            id: payoutToken.id,
-            address: payoutToken.address,
-            decimals: payoutToken.decimals,
-            name: payoutToken.name,
-            symbol: payoutToken.symbol,
-            price: getPrice(payoutToken.id),
-          },
-          quoteToken: {
-            id: quoteToken.id,
-            address: quoteToken.address,
-            decimals: quoteToken.decimals,
-            name: quoteToken.name,
-            symbol: quoteToken.symbol,
-            price: getPrice(quoteToken.id),
-            lpPair: quoteToken.lpPair,
-            purchaseLink: purchaseLink,
-          },
-        },
-        bondLibrary.TOKENS.get(market.quoteToken.id)
-          ? bondLibrary.LP_TYPES.get(
-              // @ts-ignore
-              bondLibrary.TOKENS.get(market.quoteToken.id)?.lpType
-            )
-          : undefined
-      )
-      .then((result: CalculatedMarket) => ({
-        ...result,
-        start: market.start,
-        conclusion: market.conclusion,
-      }))
-      .catch((e) => {
-        console.log("catch", e);
-      });
+        FEE_ADDRESS,
+        updatedMarket
+      );
+
+      return { ...result, start: market.start, conclusion: market.conclusion };
+    } catch (e) {
+      console.log(
+        `ProtocolError: Failed to calculate market ${market.id} \n`,
+        e
+      );
+    }
   };
 
   const calculateAllMarkets = useQueries(
     markets.map((market) => ({
       queryKey: market.id,
       queryFn: () => calculateMarket(market),
-      enabled: Object.keys(currentPrices).length > 0,
+      enabled: tokens.length > 0,
     }))
   );
 
@@ -130,7 +96,7 @@ export function useCalculatedMarkets() {
   };
 
   useDeepCompareEffect(() => {
-    if (!isCalculatingAll && Object.keys(currentPrices).length > 0) {
+    if (!isCalculatingAll && Object.keys(tokens).length > 0) {
       const calculatedMarketsMap = new Map();
       const issuerMarkets = new Map();
 
@@ -155,11 +121,10 @@ export function useCalculatedMarkets() {
       setIssuers(Array.from(issuerMarkets.keys()));
       setMarketsByIssuer(issuerMarkets);
     }
-  }, [calculateAllMarkets, currentPrices]);
+  }, [calculateAllMarkets, tokens]);
 
   const isLoading = {
     market: isMarketLoading,
-    tokens: areTokensLoading,
     priceCalcs: isCalculatingAll,
   };
 
@@ -172,11 +137,9 @@ export function useCalculatedMarkets() {
     refetchAllMarkets,
     refetchOne,
     getTokenDetails,
-    getPrice,
     isSomeLoading,
     isLoading: {
       market: isMarketLoading,
-      tokens: areTokensLoading,
       priceCalcs: isCalculatingAll,
     },
   };

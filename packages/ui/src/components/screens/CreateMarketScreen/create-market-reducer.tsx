@@ -3,7 +3,6 @@ import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";
 import { differenceInCalendarDays } from "date-fns";
 
-const DEFAULT_BONDS_PER_WEEK = 7;
 const DEFAULT_DEPOSIT_INTERVAL = 86400;
 const DEFAULT_DEBT_BUFFER = 75;
 
@@ -454,7 +453,8 @@ export const reducer = (
       // Value provided in hours, we save it as seconds
       const depositInterval = value * 60 * 60;
       const debtBuffer = tweakDebtBuffer({ ...state, depositInterval });
-      let maxBondSize = (Number(state.capacity) * depositInterval) / Number(state.duration);
+      let maxBondSize =
+        (Number(state.capacity) * depositInterval) / Number(state.duration);
       maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(maxBondSize));
 
       return {
