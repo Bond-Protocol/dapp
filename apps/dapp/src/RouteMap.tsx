@@ -4,7 +4,6 @@ import {
   CreateMarket,
   CreateMarketV1,
   Dashboard,
-  IssuerPage,
   IssuerList,
   MarketInsights,
   Markets,
@@ -21,10 +20,12 @@ export const RouteMap: FC = () => {
   return (
     <Switch>
       <Route path="/" element={<IssuerList />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/markets" element={<Markets />} />
       <Route path="/issuers" element={<IssuerList />} />
       <Route path="/tokens" element={<TokenList />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/market/:chainId/:id" element={<MarketInsights />} />
+
       <Route
         path="/create"
         element={
@@ -43,9 +44,6 @@ export const RouteMap: FC = () => {
         path="/create/v1/:hash"
         element={<MarketCreated marketData={newMarket} />}
       />
-
-      <Route path="/issuers/:name" element={<IssuerPage />} />
-      <Route path="/market/:chainId/:id" element={<MarketInsights />} />
     </Switch>
   );
 };

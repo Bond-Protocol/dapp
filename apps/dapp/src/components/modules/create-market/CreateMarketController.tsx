@@ -19,7 +19,7 @@ import {
 import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
-import { useTokens } from "context/token-context";
+import { useTokenlists } from "context/tokenlist-context";
 import { usePurchaseBond } from "hooks";
 
 function getBondType(state: CreateMarketState) {
@@ -56,7 +56,7 @@ export const CreateMarketController = () => {
   const { isConnected } = useAccount();
   const network = useNetwork();
   const [state, dispatch] = useCreateMarket();
-  const { createMarketTokens: tokens } = useTokens();
+  const { tokens } = useTokenlists();
   const { getTokenAllowance, approveSpending } = usePurchaseBond();
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");

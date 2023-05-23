@@ -7,7 +7,7 @@ import type { Token as CreateMarketToken } from "ui";
 import type { Token } from "@bond-protocol/contract-library";
 import { TOKENS } from "@bond-protocol/bond-library";
 
-import { getTokenPriceHistory } from "services/custom-queries";
+import { getTokenPriceHistory } from "services";
 
 export const getPriceSourceForToken = (
   tokenId: string

@@ -34,14 +34,14 @@ export const fetchPrice = async (
 
   const endpoint = `${DEFILLAMA_ENDPOINT}/prices/current/${ids}`;
   const response = await generateFetcher(endpoint)();
-  return unwrapPrices(response.coins);
+  return formatPriceResponse(response.coins);
 };
 
 /**The response format isnt very useful so we tweak it*/
-export const unwrapPrices = (prices: any) => {
-  return Object.keys(prices).map((k) => {
-    const content = prices[k];
-    const [chain, address] = k.split(":");
+export const formatPriceResponse = (coins: any) => {
+  return Object.keys(coins).map((id) => {
+    const content = coins[id];
+    const [chain, address] = id.split(":");
     return { ...content, address, chain };
   });
 };
@@ -54,6 +54,6 @@ export const toDefillamaQueryId = (t: any) => {
 };
 
 export const utils = {
-  unwrapPrices,
+  unwrapPrices: formatPriceResponse,
   toDefillamaQueryId,
 };

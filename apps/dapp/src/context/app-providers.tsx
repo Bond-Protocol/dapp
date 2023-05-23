@@ -1,9 +1,10 @@
 import type { FC, ReactNode } from "react";
+import { HashRouter as Router } from "react-router-dom";
 import { EvmProvider } from "./evm-provider";
 import { ReactQueryProvider } from "./react-query-provider";
-import { HashRouter as Router } from "react-router-dom";
 import { MarketProvider } from "./market-context";
 import { TokenProvider } from "./token-context";
+import { TokenlistProvider } from "./tokenlist-context";
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -11,7 +12,9 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
       <EvmProvider>
         <TokenProvider>
           <MarketProvider>
-            <Router>{children}</Router>
+            <TokenlistProvider>
+              <Router>{children}</Router>
+            </TokenlistProvider>
           </MarketProvider>
         </TokenProvider>
       </EvmProvider>

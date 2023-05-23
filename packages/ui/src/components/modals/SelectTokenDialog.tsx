@@ -1,6 +1,6 @@
 import { SearchBar } from "components/molecules/SearchBar";
 import { useEffect, useState } from "react";
-import { Label, Token } from "..";
+import { IconCaroussel, IconCarousselProps, Label, Token } from "..";
 
 //Checks whether a field includes a string
 const includesText = (field: string, target: string) => {
@@ -15,15 +15,18 @@ const includesAddress = (token: any, target: string) => {
 
 const fields = ["name", "symbol"];
 
-/**
- * Shows a list of tokens to be selected with a search bar
- * */
-export const SelectTokenDialog = (props: {
+export type SelectTokenDialogProps = {
   onSubmit: Function;
   onClose: Function;
   tokens: Token[];
   chain: string;
-}) => {
+  onSwitchChain: (chainId: string) => void;
+} & IconCarousselProps;
+
+/**
+ * Shows a list of tokens to be selected with a search bar
+ * */
+export const SelectTokenDialog = (props: SelectTokenDialogProps) => {
   const [filter, setFilter] = useState("");
   const [list, setList] = useState(props.tokens);
 
@@ -46,30 +49,33 @@ export const SelectTokenDialog = (props: {
         inputClassName=""
         placeholder="Search name or paste token address"
       />
-      <div className="child:py-2 mt-4 max-h-[33vh] overflow-y-scroll">
-        {list
-          .sort((a, b) =>
-            a.symbol.toLowerCase().localeCompare(b.symbol.toLowerCase())
-          )
-          .map((token: any, i: number) => (
-            <Label
-              key={i}
-              className="hover:bg-light-primary/20 cursor-pointer px-3"
-              subtextClassName="text-sans text-light-primary"
-              value={token.symbol}
-              subtext={token.name}
-              icon={token.icon}
-              onClick={(e) => {
-                props.onSubmit({
-                  value: token,
-                  label: token.symbol,
-                  icon: token.icon,
-                });
+      <div className="my-3 flex justify-end">
+        <IconCaroussel
+          icons={props.icons}
+          selected={props.selected}
+          onChange={props.onSwitchChain}
+        />
+      </div>
+      <div className="child:py-2 max-h-[33vh] overflow-y-scroll">
+        {list.map((token: any, i: number) => (
+          <Label
+            key={i}
+            className="hover:bg-light-primary/20 cursor-pointer px-3"
+            subtextClassName="text-sans text-light-primary"
+            value={token.symbol}
+            subtext={token.name}
+            icon={token.icon}
+            onClick={(e) => {
+              props.onSubmit({
+                value: token,
+                label: token.symbol,
+                icon: token.icon,
+              });
 
-                props.onClose(e);
-              }}
-            />
-          ))}
+              props.onClose(e);
+            }}
+          />
+        ))}
       </div>
     </div>
   );

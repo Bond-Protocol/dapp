@@ -6,8 +6,6 @@ import { AppBackdrop } from "components/common/AppBackdrop";
 import { useTokenLoader } from "services/use-token-loader";
 
 export const Devpage = () => {
-  useTokenLoader();
-
   return <div>haii </div>;
 };
 

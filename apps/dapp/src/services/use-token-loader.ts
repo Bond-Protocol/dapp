@@ -8,7 +8,7 @@ import { generateGraphqlQuery } from "./custom-queries";
 import { providers } from "services/owned-providers";
 import { usdFormatter } from "../utils/format";
 
-const fetchPrices = async (tokens: Token[]) => {
+export const fetchPrices = async (tokens: Token[]) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
 
   const prices = await defillama.fetchPrice(addresses);
