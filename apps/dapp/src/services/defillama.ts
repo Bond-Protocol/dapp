@@ -26,14 +26,18 @@ export type DefillamaCurrentPricesResponse = {
  */
 export const fetchPrice = async (
   address: string | string[],
-  chain?: string
+  chainId: number
 ): Promise<Array<DefillamaCurrentPrice>> => {
+  const chain = getNameFromChainId(chainId);
+
   const ids = Array.isArray(address)
     ? address.join(",")
-    : `${chain}:${address}}`;
+    : `${chain}:${address}`;
 
   const endpoint = `${DEFILLAMA_ENDPOINT}/prices/current/${ids}`;
+
   const response = await generateFetcher(endpoint)();
+
   return formatPriceResponse(response.coins);
 };
 
@@ -48,9 +52,15 @@ export const formatPriceResponse = (coins: any) => {
 
 /** Gets defillama query id from a token in tokenlist format */
 export const toDefillamaQueryId = (t: any) => {
-  const chain = ACTIVE_CHAINS.find((c: any) => c.id === Number(t.chainId));
+  const name = getNameFromChainId(t.chainId);
+  return `${name}:${t.address}`;
+};
+
+/** Maps chainIds to names to use in defillama queries*/
+export const getNameFromChainId = (chainId: number) => {
+  const chain = ACTIVE_CHAINS.find((c: any) => c.id === chainId);
   const name = chain?.name.split(" ")[0] ?? ""; // The api supports 'arbitrum' instead of 'arbitrum-one' :pepe_angry_sip:
-  return `${name.toLowerCase()}:${t.address}`;
+  return name.toLowerCase();
 };
 
 export const utils = {

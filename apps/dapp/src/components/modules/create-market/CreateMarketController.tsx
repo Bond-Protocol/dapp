@@ -10,17 +10,13 @@ import {
   getOracleDecimals,
   getOraclePrice,
 } from "@bond-protocol/contract-library";
-import {
-  CreateMarketAction,
-  CreateMarketScreen,
-  CreateMarketState,
-  useCreateMarket,
-} from "ui";
+import { CreateMarketAction, CreateMarketState, useCreateMarket } from "ui";
 import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokenlists } from "context/tokenlist-context";
 import { usePurchaseBond } from "hooks";
+import { CreateMarketScreen } from "./CreateMarketScreen";
 
 function getBondType(state: CreateMarketState) {
   switch (state.priceModel) {

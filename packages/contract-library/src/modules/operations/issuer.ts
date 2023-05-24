@@ -112,6 +112,7 @@ export function getMarketData(
         symbol: payoutSymbol,
         decimals: payoutDecimals,
         price: prices.get(marketInfo.payoutToken) || 0,
+        chainId: Number(chainId),
       },
       quoteToken: {
         id: chainId + '_' + marketInfo.quoteToken,
@@ -121,6 +122,7 @@ export function getMarketData(
         symbol: quoteSymbol,
         decimals: quoteDecimals,
         price: prices.get(marketInfo.quoteToken) || 0,
+        chainId: Number(chainId),
       },
       isInstantSwap: instantSwap,
       totalBondedAmount: 0,

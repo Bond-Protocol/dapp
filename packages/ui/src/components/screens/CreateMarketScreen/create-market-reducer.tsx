@@ -17,6 +17,7 @@ export type Token = {
   icon: string;
   price: number;
   decimals: number;
+  logoUrl?: string;
   addresses?: { [key: string | number]: string | string[] };
   address?: string;
   apiId?: string;

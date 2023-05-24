@@ -25,7 +25,7 @@ export type CreateMarketParams = {
 };
 
 export interface TokenBase {
-  chainId: string;
+  chainId: number;
   address: string;
 }
 
@@ -41,6 +41,7 @@ export interface Token extends TokenBase {
   id?: string;
   purchaseLink?: string;
   logoUrl?: string;
+  logoURI?: string;
 }
 
 export interface LpPair {

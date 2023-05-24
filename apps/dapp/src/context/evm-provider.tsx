@@ -25,6 +25,15 @@ import {
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
+import { CHAINS } from "@bond-protocol/bond-library";
+
+const getIconsForChains = (c: any) => {
+  const logoUrl = Array.from(CHAINS.values()).find(
+    (chain) => Number(chain.chainId) === Number(c.id)
+  )?.image;
+
+  return { ...c, logoUrl };
+};
 
 export const testnets = [
   goerli,
@@ -32,15 +41,16 @@ export const testnets = [
   optimismGoerli,
   polygonMumbai,
   avalancheFuji,
-];
+].map(getIconsForChains);
 
-export const mainnets = [mainnet, arbitrum];
+export const mainnets = [mainnet, arbitrum].map(getIconsForChains);
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS = environment.isTestnet ? testnets : mainnets;
 export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
 
 const { chains, provider } = configureChains(
+  //@ts-ignore
   environment.isTestnet ? testnets : mainnets,
   [publicProvider()]
 );

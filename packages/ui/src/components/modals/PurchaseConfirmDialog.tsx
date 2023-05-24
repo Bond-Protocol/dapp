@@ -13,27 +13,27 @@ export type PurchaseConfirmDialogProps = {
 };
 
 export const PurchaseConfirmDialog = ({
-                                        issuer,
-                                        vestingTime = "?",
-                                        amount = "0",
-                                        payout = "0",
-                                        discount = 0,
-                                        contract = "",
-                                        onCancel,
-                                        onSubmit,
-                                      }: PurchaseConfirmDialogProps) => {
+  issuer,
+  vestingTime = "?",
+  amount = "0",
+  payout = "0",
+  discount = 0,
+  contract = "",
+  onCancel,
+  onSubmit,
+}: PurchaseConfirmDialogProps) => {
   return (
     <div className="mt-4 text-center text-[15px] font-light">
-      {
-        discount < 0 && (
-          <div className="text-red-500 mx-10 y-5">
-            <p>WARNING</p>
-            <p>
-              This market is currently priced at a premium, it is cheaper to buy on the open market. We recommend you buy elsewhere, or wait until the price drops on BondProtocol.
-            </p>
-          </div>
-        )
-      }
+      {discount < 0 && (
+        <div className="y-5 mx-10 text-red-500">
+          <p>WARNING</p>
+          <p>
+            This market is currently priced at a premium, it is cheaper to buy
+            on the open market. We recommend you buy elsewhere, or wait until
+            the price drops on BondProtocol.
+          </p>
+        </div>
+      )}
       <p className="">{`You are about to bond ${
         issuer ? "at " + issuer : ""
       }`}</p>

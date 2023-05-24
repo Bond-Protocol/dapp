@@ -21,18 +21,16 @@ import {
   TransactionHashDialog,
   MarketCreatedDialog,
   PriceData,
-  TokenQuantityInput,
-  SelectStartDateDialog,
   TooltipWrapper,
   calculateDuration,
-} from "components";
-import {
   calculateTrimDigits,
   formatDate,
   trimAsNumber,
   vestingOptions,
-} from "utils";
+} from "ui";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import { SelectTokenController } from "components/organisms/SelectTokenController";
+import { useChainId } from "wagmi";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -52,9 +50,6 @@ export type CreateMarketScreenProps = {
   blockExplorerUrl: string;
   blockExplorerName: string;
   created: boolean;
-  oraclePrice: number;
-  oracleMessage: string;
-  isOracleValid: boolean;
 };
 
 const capacityOptions = [
@@ -64,12 +59,13 @@ const capacityOptions = [
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const chain = props.chain;
+  const chainId = useChainId();
 
+  console.log({ chainId });
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [showMultisig, setShowMultisig] = useState(false);
   const [state, dispatch] = useCreateMarket();
-  const [hasConfirmedStart, setHasConfirmedStart] = useState(false);
 
   const capacityToken =
     state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
@@ -85,12 +81,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
 
   const canSubmit = //TODO: needs improvement
     parseFloat(state.capacity) > 0 &&
-    hasConfirmedStart &&
     state.endDate &&
     state.vesting &&
     state.quoteToken.address &&
-    state.payoutToken.address &&
-    (state.oracle ? props.isOracleValid : true);
+    state.payoutToken.address;
 
   const updateMaxBond = (
     capacity?: any,
@@ -160,11 +154,10 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       <div id="cm-top-control" className="flex items-center justify-end">
         <div
           onClick={() => {
-            setHasConfirmedStart(false);
             dispatch({ type: CreateMarketAction.RESET });
             setIndex((i) => ++i); //TODO: (afx) :pepe_gun: but its valid react so
           }}
-          className="hover:text-light-secondary font-fraktion mr-2 cursor-pointer px-8 text-sm tracking-widest"
+          className="mr-2 cursor-pointer px-8 font-fraktion text-sm tracking-widest hover:text-light-secondary"
         >
           RESET
         </div>
@@ -180,9 +173,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 value={state.payoutToken.symbol}
                 icon={state.payoutToken.icon}
                 ModalContent={(modalProps) => (
-                  <SelectTokenDialog
+                  <SelectTokenController
                     {...modalProps}
-                    onSwitchChain={() => {}}
                     tokens={props.tokens}
                     chain={chain}
                   />
@@ -215,7 +207,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 value={state.quoteToken.symbol}
                 icon={state.quoteToken.icon}
                 ModalContent={(modalProps) => (
-                  <SelectTokenDialog
+                  <SelectTokenController
                     {...modalProps}
                     tokens={props.tokens}
                     chain={chain}
@@ -231,7 +223,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             </div>
           </div>
           <div className="flex gap-x-4 py-4">
-            <TokenQuantityInput
+            <TokenInput
               id="cm-capacity-picker"
               label="Capacity"
               placeholder="Enter Amount"
@@ -257,12 +249,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <PriceModelPicker
             id="cm-price-model-picker"
-            chain={chain}
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
-            oraclePrice={props.oraclePrice}
-            oracleMessage={props.oracleMessage}
-            isOracleValid={props.isOracleValid}
             onChange={(value) => {
               dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value });
               updateMaxBond(
@@ -285,72 +273,62 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               // @ts-ignore
               id="cm-projection-chart"
               data={props.projectionData}
-              payoutTokenSymbol={state.payoutToken.symbol}
-              quoteTokenSymbol={state.quoteToken.symbol}
               initialCapacity={Number(state.capacity) || 0}
-              initialPrice={Number(
-                state.priceModels[state.priceModel].initialPrice
-              )}
               minPrice={Number(state.priceModels[state.priceModel].minPrice)}
               durationInDays={state.durationInDays}
-              depositInterval={state.depositInterval}
-              fixedDiscount={Number(
-                state.priceModels[state.priceModel].fixedDiscount
-              )}
-              baseDiscount={Number(
-                state.priceModels[state.priceModel].baseDiscount
-              )}
-              targetIntervalDiscount={Number(
-                state.priceModels[state.priceModel].targetIntervalDiscount
-              )}
-              fixedPrice={Number(
-                state.priceModels[state.priceModel].initialPrice
-              )}
-              maxDiscountFromCurrent={Number(
-                state.priceModels[state.priceModel].maxDiscountFromCurrent
-              )}
             />
           </div>
           <div className="flex gap-x-4">
-            <InputModal
-              id="cm-start-date-picker"
-              label="Market Start"
-              title="Select start date"
-              value={
-                state.startDate
-                  ? formatDate.dateAndTime(state.startDate)
-                  : hasConfirmedStart
-                  ? "Immediate"
-                  : ""
-              }
-              inputClassName="text-light-grey"
-              endAdornment={<CalendarIcon className="mr-2 fill-white" />}
-              ModalContent={(props) => (
-                <SelectStartDateDialog
-                  {...props}
-                  id="cm-start-date-dialog"
-                  onConfirmImmediate={() => setHasConfirmedStart(true)}
-                />
-              )}
-              onSubmit={(value) => {
-                setHasConfirmedStart(true);
-                dispatch({
-                  type: CreateMarketAction.UPDATE_START_DATE,
-                  value,
-                });
+            {state.priceModel === "dynamic" ? (
+              <TooltipWrapper content="Dynamic market scheduling coming soon™">
+                <InputModal
+                  disabled
+                  id="cm-start-date-picker"
+                  label="Market Start"
+                  value="Immediate"
+                  inputClassName="text-light-grey"
+                  endAdornment={<CalendarIcon className="mr-2 fill-white" />}
+                  ModalContent={(props) => <SelectDateDialog {...props} />}
+                  onSubmit={(value) => {
+                    dispatch({
+                      type: CreateMarketAction.UPDATE_START_DATE,
+                      value,
+                    });
 
-                const durationInDays = Math.ceil(
-                  Number(calculateDuration(state.endDate, value)) / 60 / 60 / 24
-                );
-                if (durationInDays) {
-                  updateMaxBond(
-                    state.capacity,
-                    durationInDays,
-                    state.priceModel
-                  );
+                    const durationInDays = Math.ceil(
+                      Number(calculateDuration(state.endDate, value)) /
+                        60 /
+                        60 /
+                        24
+                    );
+                    if (durationInDays) {
+                      updateMaxBond(
+                        state.capacity,
+                        durationInDays,
+                        state.priceModel
+                      );
+                    }
+                  }}
+                />
+              </TooltipWrapper>
+            ) : (
+              <InputModal
+                id="cm-start-date-picker"
+                label="Market Start"
+                title="Select start date"
+                value={
+                  state.startDate ? formatDate.dateAndTime(state.startDate) : ""
                 }
-              }}
-            />
+                endAdornment={<CalendarIcon className="mr-2 fill-white" />}
+                ModalContent={(props) => <SelectDateDialog {...props} />}
+                onSubmit={(value) => {
+                  dispatch({
+                    type: CreateMarketAction.UPDATE_START_DATE,
+                    value,
+                  });
+                }}
+              />
+            )}
             <InputModal
               id="cm-end-date-picker"
               label="Market End"
@@ -383,20 +361,14 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }}
             />
           </div>
-          <div className="mt-4 flex flex-row-reverse gap-x-4">
-            {!(state.durationInDays && state.capacity) ? (
+          <div className="mt-4 flex gap-x-4">
+            {!state.durationInDays ? (
               <div
-                className={`flex max-h-[104px] justify-center bg-white/5 p-4 backdrop-blur-md ${
-                  state.payoutToken.symbol &&
-                  state.quoteToken?.symbol &&
-                  state.priceModel === "oracle-dynamic"
-                    ? "w-1/2"
-                    : "w-full"
-                }`}
+                className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md`}
               >
-                <div className="text-light-grey flex items-center justify-center py-4 text-sm">
-                  <CalendarIcon className="fill-light-grey text-light-grey h-12 w-12 pr-2" />
-                  Select capacity and dates to view market duration
+                <div className="flex items-center justify-center py-4 text-sm text-light-grey">
+                  <CalendarIcon className="h-12 w-12 fill-light-grey pr-2 text-light-grey" />
+                  Select dates to view market duration
                 </div>
               </div>
             ) : (
@@ -416,14 +388,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                     });
                   }}
                 />
-
-                <InfoLabel
-                  className={`${
-                    state.priceModel === "oracle-dynamic" ? "invisible" : ""
-                  }`}
-                  label={"Market Length"}
-                  reverse
-                >
+                <InfoLabel label={"Market Length"} reverse>
                   {state.durationInDays} DAYS
                 </InfoLabel>
               </>

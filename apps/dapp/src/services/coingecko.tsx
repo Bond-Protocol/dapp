@@ -15,9 +15,8 @@ export const generateCoingeckoFetch = (url: string) => {
     if (!proxyUrl || proxyUrl.length === 0 || isError) {
      */
   const publicUrl = import.meta.env.VITE_COINGECKO_PUBLIC_URL;
-  const composedUrl = publicUrl
-    .concat(url)
-    .concat(import.meta.env.VITE_COINGECKO_API_KEY);
+  const composedUrl = publicUrl.concat(url);
+  //.concat(import.meta.env.VITE_COINGECKO_API_KEY);
 
   return generateFetcher(composedUrl);
 };
@@ -35,18 +34,31 @@ export const getTokenPriceHistory = (
   return generateCoingeckoFetch(url);
 };
 
-type SupportedChainIds = 1 | 42161;
-const platforms: Record<SupportedChainIds, string> = {
+const platforms: Record<number, string> = {
   /** Maps chain ids to coingecko platform format*/
   1: "ethereum",
   42161: "arbitrum-one",
 };
 
-export const getTokenByContract = (
-  address: string,
-  chain: SupportedChainIds
-) => {
-  const platform = platforms[chain];
-  const url = `https://api.coingecko.com/api/v3/coins/${platform}/contract/${address}`;
-  return generateCoingeckoFetch(url);
+export const getTokenByContract = async (address: string, chainId: number) => {
+  const platform = platforms[chainId];
+  const url = `/coins/${platform}/contract/${address}`;
+  const token = await generateCoingeckoFetch(url)();
+  return { ...unwrapDetails(token), chainId };
+};
+
+export const unwrapDetails = (t: any) => {
+  return {
+    logoURI: t.image.small,
+    symbol: t.symbol,
+    name: t.name,
+    address: t.detail_platforms[t.asset_platform_id].address,
+    decimals: t.detail_platforms[t.asset_platform_id].decimal_place,
+    price: t.market_data.current_price.usd,
+  };
+};
+
+export default {
+  getTokenByContract,
+  getTokenPriceHistory,
 };
