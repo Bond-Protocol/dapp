@@ -30,7 +30,8 @@ import {
 } from "ui";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { SelectTokenController } from "components/organisms/SelectTokenController";
-import { useChainId } from "wagmi";
+import { useChainId, useSwitchNetwork } from "wagmi";
+import { useFormAction } from "react-router-dom";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -61,7 +62,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const chain = props.chain;
   const chainId = useChainId();
 
-  console.log({ chainId });
+  const { switchNetwork } = useSwitchNetwork();
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [showMultisig, setShowMultisig] = useState(false);
@@ -175,8 +176,14 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 ModalContent={(modalProps) => (
                   <SelectTokenController
                     {...modalProps}
+                    onSwitchChain={(value: string) => {
+                      dispatch({
+                        type: CreateMarketAction.UPDATE_CHAIN_ID,
+                        value,
+                      });
+                    }}
                     tokens={props.tokens}
-                    chain={chain}
+                    chainId={state.chainId}
                   />
                 )}
                 onSubmit={({ value }) => {
@@ -210,7 +217,13 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   <SelectTokenController
                     {...modalProps}
                     tokens={props.tokens}
-                    chain={chain}
+                    onSwitchChain={(value: any) => {
+                      dispatch({
+                        type: CreateMarketAction.UPDATE_CHAIN_ID,
+                        value,
+                      });
+                    }}
+                    chainId={state.chainId}
                   />
                 )}
                 onSubmit={({ value }) =>

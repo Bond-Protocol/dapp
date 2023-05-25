@@ -1,5 +1,4 @@
 import { SearchBar } from "components/molecules/SearchBar";
-import { useEffect, useState } from "react";
 import { IconCaroussel, IconCarousselProps, Label } from "..";
 import type { Token } from "@bond-protocol/contract-library";
 
@@ -7,7 +6,6 @@ export type SelectTokenDialogProps = {
   onSubmit: Function;
   onClose: Function;
   tokens: Token[];
-  chain: string;
   onSwitchChain: (chainId: string) => void;
   filter: string;
   setFilter: (filter: string) => void;

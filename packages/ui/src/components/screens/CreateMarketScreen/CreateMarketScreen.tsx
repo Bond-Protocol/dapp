@@ -184,7 +184,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                     {...modalProps}
                     onSwitchChain={() => {}}
                     tokens={props.tokens}
-                    chain={chain}
+                    chainId={chain}
                   />
                 )}
                 onSubmit={({ value }) => {
@@ -218,7 +218,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                   <SelectTokenDialog
                     {...modalProps}
                     tokens={props.tokens}
-                    chain={chain}
+                    chainId={chain}
                   />
                 )}
                 onSubmit={({ value }) =>

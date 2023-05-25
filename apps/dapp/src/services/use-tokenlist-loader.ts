@@ -1,33 +1,26 @@
 import { useEffect, useState } from "react";
 import { tokenlist } from "@bond-protocol/bond-library";
 import { Token } from "@bond-protocol/contract-library";
-import { fetchAndParseTokenList } from "./token-list";
 import { fetchPrices } from "./use-token-loader";
 
 export const useTokenlistLoader = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
 
-  // const query = useQuery(
-  //   ["DEFAULT_TOKEN_LIST"],
-  //   () => fetchAndParseTokenList(),
-  //   { enabled: false }
-  // );
-
-  /** Loads token Prices */
   useEffect(() => {
     const loadPrices = async () => {
       try {
         const pricedTokens = await fetchPrices(tokenlist);
 
-        console.log({ pricedTokens });
         setTokens(pricedTokens);
       } catch (e) {
-        console.log("Failed to fetch tokenlist");
+        console.log("Failed to fetch prices for default tokenlist", e);
       }
     };
 
     loadPrices();
   }, []);
 
-  return { tokens };
+  const addToken = (token: Token) => setTokens([...tokens, token]);
+
+  return { tokens, addToken };
 };

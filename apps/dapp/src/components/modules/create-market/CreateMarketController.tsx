@@ -339,6 +339,16 @@ export const CreateMarketController = () => {
     }
   };
 
+  useEffect(() => {
+    const chainId = Number(network.chain?.id);
+    if (chainId && chainId !== state.chainId) {
+      dispatch({
+        type: CreateMarketAction.UPDATE_CHAIN_ID,
+        value: chainId,
+      });
+    }
+  }, [network.chain?.id]);
+
   return (
     <>
       <CreateMarketScreen

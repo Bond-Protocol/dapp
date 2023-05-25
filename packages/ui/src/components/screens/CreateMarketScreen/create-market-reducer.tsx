@@ -24,6 +24,7 @@ export type Token = {
 };
 
 export enum CreateMarketAction {
+  UPDATE_CHAIN_ID = "update_chain_id",
   UPDATE_QUOTE_TOKEN = "update_bond_token",
   UPDATE_PAYOUT_TOKEN = "update_payout_token",
   UPDATE_CAPACITY_TYPE = "update_capacity_type",
@@ -76,6 +77,7 @@ export type CreateMarketState = OverridableCreateMarketParams & {
   baseDiscount?: number;
   targetIntervalDiscount?: number;
   overridden: boolean;
+  chainId: number;
 };
 
 const placeholderToken = {
@@ -89,6 +91,7 @@ const placeholderToken = {
 export const placeholderState: CreateMarketState = {
   quoteToken: placeholderToken,
   payoutToken: placeholderToken,
+  chainId: 1,
   capacityType: "payout" as CapacityOption,
   capacity: "",
   allowance: "",
@@ -232,8 +235,18 @@ export const reducer = (
 ): CreateMarketState => {
   const { type, value } = action;
 
-  //console.log({ previousState: state, type, value });
   switch (type) {
+    case CreateMarketAction.UPDATE_CHAIN_ID: {
+      const chaindId = Number(value);
+      if (isNaN(chaindId)) return state;
+      if (chaindId === state.chainId) return state;
+
+      return {
+        ...state,
+        chainId: Number(value),
+      };
+    }
+
     case CreateMarketAction.UPDATE_QUOTE_TOKEN: {
       const {
         recommendedAllowance,
@@ -414,9 +427,7 @@ export const reducer = (
         ...state,
         priceModel,
         oracle,
-        oracleAddress: oracle
-          ? oracleAddress
-          : "",
+        oracleAddress: oracle ? oracleAddress : "",
       };
     }
 

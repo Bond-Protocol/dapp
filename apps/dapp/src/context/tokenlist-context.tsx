@@ -4,8 +4,8 @@ import { ITokenContext } from "./token-context";
 import { useTokenlistLoader } from "services/use-tokenlist-loader";
 
 export interface ITokenlistContext extends ITokenContext {
-  tokenlists: Record<string, Token[]>;
   getByChain: (chainId: number) => Token[];
+  addToken: (token: Token) => void;
 }
 
 const TokenlistContext = createContext<ITokenlistContext>(
@@ -17,8 +17,7 @@ export const TokenlistProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { tokens } = useTokenlistLoader();
-  const tokenlists = {};
+  const { tokens, addToken } = useTokenlistLoader();
 
   const getByAddress = () => {};
 
@@ -27,7 +26,7 @@ export const TokenlistProvider = ({
 
   return (
     <TokenlistContext.Provider
-      value={{ tokens, getByChain, tokenlists, getByAddress }}
+      value={{ addToken, tokens, getByChain, getByAddress }}
     >
       {children}
     </TokenlistContext.Provider>

@@ -12,26 +12,23 @@ import * as defillama from "services/defillama";
 import coingecko from "services/coingecko";
 import { ethers } from "ethers";
 
-export interface SelectTokenControllerProps extends SelectTokenDialogProps {}
+export interface SelectTokenControllerProps extends SelectTokenDialogProps {
+  chainId: number;
+}
 
 const icons = ACTIVE_CHAINS.map((c) => ({ id: c.id, src: c.logoUrl }));
 
 export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const [filter, setFilter] = useState("");
-  const [list, setList] = useState<Token[]>([]);
   const [importedToken, setImportedToken] = useState<Token>();
-  const [source, setSource] = useState("Defillama");
+  const [source, _setSource] = useState("Defillama");
 
-  const chainId = useChainId();
+  const connecteChainId = useChainId();
   const tokenlist = useTokenlists();
 
-  const tokens = tokenlist.getByChain(chainId);
+  const chainId = props.chainId || connecteChainId || 1;
 
-  useEffect(() => {
-    if (tokenlist.tokens) {
-      setList(tokenlist.tokens);
-    }
-  }, [tokenlist]);
+  const tokens = tokenlist.getByChain(chainId);
 
   useEffect(() => {
     async function fetchUnknownToken() {
@@ -39,6 +36,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
 
       const [token] = await defillama.fetchPrice(address, chainId);
 
+      //@ts-ignore
       setImportedToken({ ...token, chainId });
     }
 
@@ -48,19 +46,21 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   }, [filter]);
 
   useEffect(() => {
-    async function fetchMoreDetails() {
+    async function fetchTokenLogo() {
       if (importedToken?.address) {
-        const { logoURI } = await coingecko.getTokenByContract(
-          importedToken.address,
-          chainId
-        );
+        try {
+          const { logoURI } = await coingecko.getTokenByContract(
+            importedToken.address,
+            chainId
+          );
 
-        if (logoURI) setImportedToken({ ...importedToken, logoURI });
+          if (logoURI) setImportedToken({ ...importedToken, logoURI });
+        } catch (e) {}
       }
     }
 
     if (importedToken?.address) {
-      fetchMoreDetails();
+      fetchTokenLogo();
     }
   }, [importedToken]);
 
@@ -71,7 +71,6 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
         tokens={tokens}
         selected={String(chainId)}
         icons={icons}
-        onSwitchChain={() => {}}
         filter={filter}
         setFilter={setFilter}
       />
