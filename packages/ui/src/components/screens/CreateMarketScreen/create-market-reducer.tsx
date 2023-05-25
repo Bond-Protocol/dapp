@@ -244,6 +244,8 @@ export const reducer = (
       return {
         ...state,
         chainId: Number(value),
+        payoutToken: {} as Token,
+        quoteToken: {} as Token,
       };
     }
 

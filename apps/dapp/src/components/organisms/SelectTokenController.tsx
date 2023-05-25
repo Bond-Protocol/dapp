@@ -1,16 +1,15 @@
+import { useChainId } from "wagmi";
+import { useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { Token } from "@bond-protocol/contract-library";
 import {
   ImportTokenDialog,
   SelectTokenDialog,
   SelectTokenDialogProps,
 } from "ui";
-import { useChainId } from "wagmi";
+import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/evm-provider";
 import { useTokenlists } from "context/tokenlist-context";
-import { useEffect, useState } from "react";
-import { Token } from "@bond-protocol/contract-library";
-import * as defillama from "services/defillama";
-import coingecko from "services/coingecko";
-import { ethers } from "ethers";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
   chainId: number;
@@ -21,7 +20,8 @@ const icons = ACTIVE_CHAINS.map((c) => ({ id: c.id, src: c.logoUrl }));
 export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const [filter, setFilter] = useState("");
   const [importedToken, setImportedToken] = useState<Token>();
-  const [source, _setSource] = useState("Defillama");
+  const [source, setSource] = useState("Defillama");
+  const { discover, discoverLogo } = useDiscoverToken();
 
   const connecteChainId = useChainId();
   const tokenlist = useTokenlists();
@@ -33,35 +33,27 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   useEffect(() => {
     async function fetchUnknownToken() {
       const address = filter.trim();
+      if (ethers.utils.isAddress(address)) {
+        //@ts-ignore
+        const { token, source } = await discover(address, chainId);
 
-      const [token] = await defillama.fetchPrice(address, chainId);
-
-      //@ts-ignore
-      setImportedToken({ ...token, chainId });
+        setImportedToken({ ...token, chainId });
+        setSource(source);
+      }
     }
 
-    if (ethers.utils.isAddress(filter)) {
-      fetchUnknownToken();
-    }
+    fetchUnknownToken();
   }, [filter]);
 
   useEffect(() => {
     async function fetchTokenLogo() {
-      if (importedToken?.address) {
-        try {
-          const { logoURI } = await coingecko.getTokenByContract(
-            importedToken.address,
-            chainId
-          );
-
-          if (logoURI) setImportedToken({ ...importedToken, logoURI });
-        } catch (e) {}
+      if (importedToken?.address && source !== "on-chain") {
+        const updated = await discoverLogo(importedToken);
+        setImportedToken(updated);
       }
     }
 
-    if (importedToken?.address) {
-      fetchTokenLogo();
-    }
+    fetchTokenLogo();
   }, [importedToken]);
 
   return (

@@ -6,9 +6,12 @@ export const DEFILLAMA_ENDPOINT = "https://coins.llama.fi";
 export type DefillamaCurrentPrice = {
   decimals: number;
   symbol: string;
+  name: string;
   price: number;
   timestamp: number;
   confidence: number;
+  chainId: number;
+  address: string;
 };
 
 export type DefillamaCurrentPricesResponse = {
@@ -66,4 +69,8 @@ export const getNameFromChainId = (chainId: number) => {
 export const utils = {
   unwrapPrices: formatPriceResponse,
   toDefillamaQueryId,
+};
+
+export default {
+  fetchPrice,
 };
