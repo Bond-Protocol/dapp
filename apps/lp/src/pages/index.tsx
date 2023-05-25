@@ -13,6 +13,10 @@ import {
   Background,
 } from "../components";
 import { TheProblem } from "../components/TheProblem";
+//import ReactGA from "react-ga";
+
+//const TRACKING_ID = "G-EEHDXY4KZZ";
+//ReactGA.initialize(TRACKING_ID);
 
 import data from "../data";
 
