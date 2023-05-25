@@ -44,7 +44,7 @@ export const useLoadCustomPriceFunctions = () => {
                     pricesMap.set(priceSource, result);
                   });
                   return result;
-                })
+                }).catch((e: any) => console.log(e))
             );
           }
 
