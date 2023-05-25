@@ -13,6 +13,7 @@ import {
 } from "./components";
 import { useState } from "react";
 import { terms, privacyPolicy, cookiePolicy } from "./content";
+import { TokenList } from "components/lists/TokenList";
 
 export const RouteMap: FC = () => {
   const [newMarket, setNewMarket] = useState<unknown>();
@@ -22,6 +23,7 @@ export const RouteMap: FC = () => {
       <Route path="/" element={<IssuerList />} />
       <Route path="/markets" element={<Markets />} />
       <Route path="/issuers" element={<IssuerList />} />
+      <Route path="/tokens" element={<TokenList />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route
         path="/create"

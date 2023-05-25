@@ -97,6 +97,16 @@ export const listTokens = gql`
           id
         }
       }
+      usedAsPayout
+      usedAsQuote
+      totalPayoutAmount
+      payoutTokenTbvs {
+        tbv
+        quoteToken {
+          id
+          address
+        }
+      }
     }
   }
 `;

@@ -3,7 +3,9 @@ import { Token } from "@bond-protocol/contract-library";
 import { useTokenLoader } from "services/use-token-loader";
 
 export type ITokenContext = {
+  tbv: number;
   tokens: Token[];
+  payoutTokens: Token[];
   getByAddress: (address: string) => Token;
 };
 
@@ -11,13 +13,10 @@ const TokenContext = createContext<ITokenContext>({} as ITokenContext);
 
 export const TokenProvider = ({ children }: { children: React.ReactNode }) => {
   //const tokens = useTokenPrices();
-  const { tokens } = useTokenLoader();
-
-  const getByAddress = (address: string) =>
-    tokens.find((t) => t.address === address.toLowerCase());
+  const { tbv, tokens, payoutTokens, getByAddress } = useTokenLoader();
 
   return (
-    <TokenContext.Provider value={{ tokens, getByAddress }}>
+    <TokenContext.Provider value={{ tbv, tokens, payoutTokens, getByAddress }}>
       {children}
     </TokenContext.Provider>
   );

@@ -97,7 +97,7 @@ export function getMarketData(
     return {
       id: marketId.toString(),
       chainId: chainId,
-      name: "PLACEHOLDER", // TODO: Use auctioneer name
+      name: 'PLACEHOLDER', // TODO: Use auctioneer name
       auctioneer: auctioneer,
       teller: teller,
       owner: marketInfo.owner,
@@ -106,6 +106,7 @@ export function getMarketData(
       callbackAddress: marketInfo.callbackAddr,
       payoutToken: {
         id: chainId + '_' + marketInfo.payoutToken,
+        chainId: chainId,
         address: marketInfo.payoutToken,
         name: payoutName,
         symbol: payoutSymbol,
@@ -114,6 +115,7 @@ export function getMarketData(
       },
       quoteToken: {
         id: chainId + '_' + marketInfo.quoteToken,
+        chainId: chainId,
         address: marketInfo.quoteToken,
         name: quoteName,
         symbol: quoteSymbol,

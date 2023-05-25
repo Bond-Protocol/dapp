@@ -34,6 +34,10 @@ export interface Token extends TokenBase {
   symbol: string;
   decimals: number;
   price: number;
+  tbv?: number;
+  payoutTokenTbvs?: any[];
+  openMarkets?: number[];
+  usedAsPayout?: boolean;
   id?: string;
   purchaseLink?: string;
   logoUrl?: string;
