@@ -7,7 +7,7 @@ export default {
   description:
     "Dex Finance provides an ecosystem of financial products that aims to help users navigate through the intricacies DeFi via sustainable real yields.", // A short protocol description
   logoUrl:
-    "https://dexfinance-fullapp-develop-3breg.ondigitalocean.app/static/media/logo.ed7f76eb9ae23fe7a1141d23e97aba44.svg",
+    "https://www.dexfinance.com/wp-content/uploads/2022/10/Dex-Finance-Icon.svg",
   // Links to landing page, socials and docs
   links: {
     // NOTE: bonding is inscribed on the whitepaper prior to TGE.
@@ -38,7 +38,7 @@ export default {
       name: "DexFi Governance",
       symbol: "gDEX",
       logoUrl:
-        "https://www.dexfinance.com/wp-content/uploads/2022/10/Dex-Finance-Icon.svg",
+        "https://dexfinance-fullapp-develop-3breg.ondigitalocean.app/static/media/gDEX.77d2729bc4db1ec442aabeebe31e8bd1.svg",
       priceSources: [
         {
           source: "custom",
