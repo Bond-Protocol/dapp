@@ -20,7 +20,7 @@ const icons = ACTIVE_CHAINS.map((c) => ({ id: c.id, src: c.logoUrl }));
 export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const [filter, setFilter] = useState("");
   const [importedToken, setImportedToken] = useState<Token>();
-  const [source, setSource] = useState("Defillama");
+  const [source, setSource] = useState("defillama");
   const { discover, discoverLogo } = useDiscoverToken();
 
   const connecteChainId = useChainId();
@@ -34,10 +34,8 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
     async function fetchUnknownToken() {
       const address = filter.trim();
       if (ethers.utils.isAddress(address)) {
-        //@ts-ignore
         const { token, source } = await discover(address, chainId);
-
-        setImportedToken({ ...token, chainId });
+        setImportedToken(token);
         setSource(source);
       }
     }
@@ -47,7 +45,11 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
 
   useEffect(() => {
     async function fetchTokenLogo() {
-      if (importedToken?.address && source !== "on-chain") {
+      if (
+        source !== "on-chain" &&
+        importedToken?.address &&
+        !importedToken.logoURI
+      ) {
         const updated = await discoverLogo(importedToken);
         setImportedToken(updated);
       }
@@ -65,9 +67,19 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
         icons={icons}
         filter={filter}
         setFilter={setFilter}
+        onChange={() => {
+          props.onChange(importedToken);
+        }}
       />
       {importedToken && (
-        <ImportTokenDialog token={importedToken} priceSource={source} />
+        <ImportTokenDialog
+          onConfirm={(e) => {
+            props.onSubmit({ value: importedToken });
+            props.onClose(e);
+          }}
+          token={importedToken}
+          priceSource={source}
+        />
       )}
     </div>
   );

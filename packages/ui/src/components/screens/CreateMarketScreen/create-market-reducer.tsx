@@ -18,6 +18,7 @@ export type Token = {
   price: number;
   decimals: number;
   logoUrl?: string;
+  logoURI?: string;
   addresses?: { [key: string | number]: string | string[] };
   address?: string;
   apiId?: string;
@@ -244,8 +245,8 @@ export const reducer = (
       return {
         ...state,
         chainId: Number(value),
-        payoutToken: {} as Token,
-        quoteToken: {} as Token,
+        payoutToken: placeholderToken,
+        quoteToken: placeholderToken,
       };
     }
 

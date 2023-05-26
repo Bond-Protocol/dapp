@@ -31,7 +31,6 @@ import {
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { SelectTokenController } from "components/organisms/SelectTokenController";
 import { useChainId, useSwitchNetwork } from "wagmi";
-import { useFormAction } from "react-router-dom";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -172,7 +171,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 label="Payout Token"
                 title="Select token"
                 value={state.payoutToken.symbol}
-                icon={state.payoutToken.icon}
+                icon={state.payoutToken.logoURI}
                 ModalContent={(modalProps) => (
                   <SelectTokenController
                     {...modalProps}
@@ -182,6 +181,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                         value,
                       });
                     }}
+                    //@ts-ignore TODO: update types all round
                     tokens={props.tokens}
                     chainId={state.chainId}
                   />
@@ -212,7 +212,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 label="Quote Token"
                 title="Select token"
                 value={state.quoteToken.symbol}
-                icon={state.quoteToken.icon}
+                icon={state.quoteToken.logoURI}
                 ModalContent={(modalProps) => (
                   <SelectTokenController
                     {...modalProps}
@@ -241,7 +241,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               label="Capacity"
               placeholder="Enter Amount"
               value={state.capacity}
-              icon={capacityToken.icon}
+              icon={capacityToken.logoURI}
               symbol={capacityToken.symbol}
               onChange={(value) => {
                 dispatch({ type: CreateMarketAction.UPDATE_CAPACITY, value });

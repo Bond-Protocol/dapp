@@ -32,6 +32,12 @@ const fetchOnChain = async (
   }
 };
 
+// const query = useQuery(
+//   [`discover-${baseToken?.address}-${baseToken?.chainId}`],
+//   () => discover(baseToken?.address as string, baseToken?.chainId as number),
+//   { enabled: !!baseToken?.address && !!baseToken.chainId }
+// );
+
 export const useDiscoverToken = () => {
   const [isLoading, setLoading] = useState(false);
 

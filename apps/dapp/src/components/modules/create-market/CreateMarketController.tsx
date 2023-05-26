@@ -206,12 +206,15 @@ export const CreateMarketController = () => {
   const configureMarket = (state: CreateMarketState) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
-    if (!network.chain?.id) throw new Error("Unspecified chain");
+    const chainName = network.chains.find((c) => c.id === state.chainId);
 
     const chain = {
-      id: network?.chain?.id,
-      label: network.chain.name,
+      id: state.chainId ?? network?.chain?.id,
+      label: chainName,
     };
+
+    if (!network.chain?.id && !state.chainId)
+      throw new Error("Unspecified chain");
 
     const debtBuffer = state.overridden.debtBuffer
       ? state.overridden.debtBuffer
