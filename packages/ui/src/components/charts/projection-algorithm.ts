@@ -1,4 +1,4 @@
-import {trimAsNumber} from "utils";
+import { trimAsNumber } from "utils";
 
 export interface PriceData {
   date: number;
@@ -51,12 +51,28 @@ export function generateSDAChartData(
   prices: PriceData[],
   config: ProjectionConfiguration
 ): DiscountedPriceData[] {
+  console.log({ prices, config });
   if (!prices || prices.length === 0) return [];
 
   const discountedPrices: DiscountedPriceData[] = [];
-  const { tokenPrices, initialCapacity, initialPrice, depositInterval, targetDiscount, minPrice, durationInDays } = config;
+  const {
+    tokenPrices,
+    initialCapacity,
+    initialPrice,
+    depositInterval,
+    targetDiscount,
+    minPrice,
+    durationInDays,
+  } = config;
 
-  if (!minPrice || !initialCapacity || !durationInDays || !depositInterval || !initialPrice) return [];
+  if (
+    !minPrice ||
+    !initialCapacity ||
+    !durationInDays ||
+    !depositInterval ||
+    !initialPrice
+  )
+    return [];
 
   const duration = durationInDays * 24;
   if (duration > prices.length) return [];
@@ -67,27 +83,28 @@ export function generateSDAChartData(
   for (let i = 0; i < duration; i++) {
     const date = prices[i]?.date;
     const marketPrice = prices[i]?.price;
+    //const usdBondPrice = price * prices[i]?.quotePriceUsd;
     const usdMarketPrice = prices[i]?.payoutPriceUsd;
     const usdDiscountedPrice = discountedPrice * prices[i]?.quotePriceUsd;
-    const usdTargetPrice = (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount);
+    const usdTargetPrice =
+      (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount);
 
     if (!date || !marketPrice || !usdMarketPrice || !minPrice) {
       return discountedPrices;
     }
 
-    let discount = trimAsNumber(getDiscountPercentage(usdMarketPrice, usdDiscountedPrice), 2);
+    let discount = trimAsNumber(
+      getDiscountPercentage(usdMarketPrice, usdDiscountedPrice),
+      2
+    );
 
     discountedPrices.push({
       date: date,
-      price: tokenPrices
-        ? marketPrice
-        : usdMarketPrice,
-      discountedPrice: tokenPrices
-        ? discountedPrice
-        : usdDiscountedPrice,
+      price: tokenPrices ? marketPrice : usdMarketPrice,
+      discountedPrice: tokenPrices ? discountedPrice : usdDiscountedPrice,
       discount: discount,
       quotePriceUsd: prices[i]?.quotePriceUsd,
-      payoutPriceUsd: prices[i]?.payoutPriceUsd
+      payoutPriceUsd: prices[i]?.payoutPriceUsd,
     });
 
     if (usdDiscountedPrice <= usdTargetPrice) {
@@ -111,20 +128,38 @@ export function generateOSDAChartData(
     return [];
   }
   const discountedPrices: DiscountedPriceData[] = [];
-  const { tokenPrices, initialCapacity, baseDiscount, targetIntervalDiscount, maxDiscountFromCurrent, durationInDays, depositInterval } = config;
+  const {
+    tokenPrices,
+    initialCapacity,
+    baseDiscount,
+    targetIntervalDiscount,
+    maxDiscountFromCurrent,
+    durationInDays,
+    depositInterval,
+  } = config;
 
-  if (!initialCapacity || !durationInDays || !depositInterval || maxDiscountFromCurrent === undefined || targetIntervalDiscount === undefined || baseDiscount === undefined) return [];
+  if (
+    !initialCapacity ||
+    !durationInDays ||
+    !depositInterval ||
+    maxDiscountFromCurrent === undefined ||
+    targetIntervalDiscount === undefined ||
+    baseDiscount === undefined
+  )
+    return [];
 
   const initialPrice = prices[0].price;
   const minPrice = (prices[0].price / 100) * (100 - maxDiscountFromCurrent);
-  const targetDiscount = (1 - (1 - (baseDiscount / 100)) * (1 - (targetIntervalDiscount / 100))) * 100;
+  const targetDiscount =
+    (1 - (1 - baseDiscount / 100) * (1 - targetIntervalDiscount / 100)) * 100;
   const duration = durationInDays * 24;
   if (duration > prices.length) return [];
   const depositIntervalHours = depositInterval / 60 / 60;
   const hourlyDiscount = targetIntervalDiscount / depositIntervalHours;
 
   let currentDiscount = 0;
-  let actualDiscount = (1 - (1 - (baseDiscount / 100)) * (1 - (currentDiscount / 100))) * 100;
+  let actualDiscount =
+    (1 - (1 - baseDiscount / 100) * (1 - currentDiscount / 100)) * 100;
   let discountedPrice = (initialPrice / 100) * (100 - actualDiscount);
 
   for (let i = 0; i < duration; i++) {
@@ -133,25 +168,25 @@ export function generateOSDAChartData(
 
     const usdMarketPrice = prices[i]?.payoutPriceUsd;
     const usdDiscountedPrice = discountedPrice * prices[i]?.quotePriceUsd;
-    const usdTargetPrice = (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount);
+    const usdTargetPrice =
+      (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount);
 
     if (!date || !tokenMarketPrice) {
       return discountedPrices;
     }
 
-    const discount = trimAsNumber(getDiscountPercentage(usdMarketPrice, usdDiscountedPrice), 2);
+    const discount = trimAsNumber(
+      getDiscountPercentage(usdMarketPrice, usdDiscountedPrice),
+      2
+    );
 
     discountedPrices.push({
       date: date,
-      price: tokenPrices
-        ? tokenMarketPrice
-        : usdMarketPrice,
-      discountedPrice: tokenPrices
-        ? discountedPrice
-        : usdDiscountedPrice,
+      price: tokenPrices ? tokenMarketPrice : usdMarketPrice,
+      discountedPrice: tokenPrices ? discountedPrice : usdDiscountedPrice,
       discount: discount,
       quotePriceUsd: prices[i]?.quotePriceUsd,
-      payoutPriceUsd: prices[i]?.payoutPriceUsd
+      payoutPriceUsd: prices[i]?.payoutPriceUsd,
     });
 
     if (usdDiscountedPrice <= usdTargetPrice) {
@@ -159,7 +194,8 @@ export function generateOSDAChartData(
     } else {
       currentDiscount += hourlyDiscount;
     }
-    actualDiscount = (1 - (1 - (baseDiscount / 100)) * (1 - (currentDiscount / 100))) * 100;
+    actualDiscount =
+      (1 - (1 - baseDiscount / 100) * (1 - currentDiscount / 100)) * 100;
     discountedPrice = (prices[i]?.price / 100) * (100 - actualDiscount);
     if (discountedPrice < minPrice) discountedPrice = minPrice;
   }
@@ -174,26 +210,28 @@ export const generateFPAChartData = (
   if (!fixedPrice) return [];
 
   return prices.map((p) => {
-    const price = tokenPrices
-      ? p.price
-      : p.payoutPriceUsd;
+    const price = tokenPrices ? p.price : p.payoutPriceUsd;
 
     const discountedPrice = tokenPrices
       ? fixedPrice
       : fixedPrice * p.quotePriceUsd;
 
-    return ({
+    return {
       ...p,
       price: price,
       discountedPrice: discountedPrice,
       discount: getDiscountPercentage(price, discountedPrice),
-    });
+    };
   });
 };
 
 export const generateOFDAChartData = (
   prices: PriceData[],
-  { tokenPrices, fixedDiscount, maxDiscountFromCurrent }: ProjectionConfiguration
+  {
+    tokenPrices,
+    fixedDiscount,
+    maxDiscountFromCurrent,
+  }: ProjectionConfiguration
 ): DiscountedPriceData[] => {
   if (fixedDiscount === undefined || !maxDiscountFromCurrent) return [];
 
@@ -203,20 +241,19 @@ export const generateOFDAChartData = (
       : (p.payoutPriceUsd / 100) * (100 - fixedDiscount);
 
     const minPrice = tokenPrices
-      ? ((prices[0].payoutPriceUsd / prices[0].quotePriceUsd) / 100) * (100 - maxDiscountFromCurrent)
+      ? (prices[0].payoutPriceUsd / prices[0].quotePriceUsd / 100) *
+        (100 - maxDiscountFromCurrent)
       : (prices[0].payoutPriceUsd / 100) * (100 - maxDiscountFromCurrent);
 
     discountedPrice = Math.max(discountedPrice, minPrice);
 
-    const price = tokenPrices
-      ? p.price
-      : p.payoutPriceUsd;
+    const price = tokenPrices ? p.price : p.payoutPriceUsd;
 
-    return ({
+    return {
       ...p,
       price: price,
       discountedPrice: discountedPrice,
       discount: trimAsNumber(getDiscountPercentage(price, discountedPrice), 2),
-    });
+    };
   });
 };

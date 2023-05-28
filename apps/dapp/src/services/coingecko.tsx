@@ -44,10 +44,10 @@ export const getTokenByContract = async (address: string, chainId: number) => {
   const platform = platforms[chainId];
   const url = `/coins/${platform}/contract/${address}`;
   const token = await generateCoingeckoFetch(url)();
-  return { ...unwrapDetails(token), chainId };
+  return { ...formatToken(token), chainId };
 };
 
-export const unwrapDetails = (t: any) => {
+const formatToken = (t: any) => {
   return {
     logoURI: t.image.small,
     symbol: t.symbol,

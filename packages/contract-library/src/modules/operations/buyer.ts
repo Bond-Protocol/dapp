@@ -360,7 +360,7 @@ export async function calcMarket(
   const price = Number(marketPrice) * shift;
   const quoteTokensPerPayoutToken = price / Math.pow(10, 36);
   calculatedMarket.discountedPrice =
-    quoteTokensPerPayoutToken * market.quoteToken.price;
+    quoteTokensPerPayoutToken * market.quoteToken.price!;
 
   // Reduce maxAmountAccepted by 0.5% to prevent issues due to fee being slightly underestimated in the contract
   // function. See comment on https://github.com/Bond-Protocol/bonds/blob/master/src/bases/BondBaseSDA.sol line 718.
@@ -376,7 +376,7 @@ export async function calcMarket(
     // @ts-ignore
     Number(marketInfo.maxPayout) / Math.pow(10, market.payoutToken.decimals);
   calculatedMarket.maxPayout = trim(maxPayout, calculateTrimDigits(maxPayout));
-  calculatedMarket.maxPayoutUsd = maxPayout * market.payoutToken.price;
+  calculatedMarket.maxPayoutUsd = maxPayout * market.payoutToken.price!;
 
   const ownerBalance =
     Number(ownerPayoutBalance) /
@@ -435,8 +435,8 @@ export async function calcMarket(
 
   calculatedMarket.fullPrice = market.payoutToken.price;
   calculatedMarket.discount =
-    (calculatedMarket.discountedPrice - market.payoutToken.price) /
-    market.payoutToken.price;
+    (calculatedMarket.discountedPrice - market.payoutToken.price!) /
+    market.payoutToken.price!;
   calculatedMarket.discount *= 100;
   calculatedMarket.discount = trimAsNumber(-calculatedMarket.discount, 2);
 
@@ -478,7 +478,7 @@ export async function calcMarket(
   }
 
   calculatedMarket.tbvUsd =
-    calculatedMarket.totalBondedAmount * market.quoteToken.price;
+    calculatedMarket.totalBondedAmount * market.quoteToken.price!;
   calculatedMarket.formattedTbvUsd = '$'.concat(
     Math.trunc(calculatedMarket.tbvUsd).toString(),
   );

@@ -1,31 +1,33 @@
 import { useEffect, useState } from "react";
-import { useCoingeckoTokenHistory } from "./useTokenPricesHistory";
+import { useChartDefillama } from "./useChartDefillama";
 
-export const useProjectionChartData = ({ quoteToken, payoutToken, dayRange }: any) => {
-  const [prices, setPrices] = useState([]);
-  const quoteRes = useCoingeckoTokenHistory(quoteToken, dayRange);
-  const payoutRes = useCoingeckoTokenHistory(payoutToken, dayRange);
+export const useProjectionChartData = ({
+  quoteToken,
+  payoutToken,
+  dayRange,
+}: any) => {
+  const [prices, setPrices] = useState<any>([]);
+  const { chart, isValid } = useChartDefillama(
+    [quoteToken, payoutToken],
+    dayRange
+  );
 
   useEffect(() => {
-    if (!quoteToken || !payoutToken) return;
-
-    if (quoteRes.prices && payoutRes.prices) {
-      //@ts-ignore
+    if (isValid) {
+      const [payoutRes, quoteRes] = chart;
       const updated = payoutRes.prices?.map((p, i) => {
         const quotePrice = quoteRes.prices[i]?.price;
         return {
           ...p,
+          date: p.timestamp * 1000,
           price: 1 / (quotePrice / p.price),
           payoutPriceUsd: p.price,
           quotePriceUsd: quotePrice,
         };
       });
-
       setPrices(updated);
-    } else {
-      setPrices([]);
     }
-  }, [quoteToken, payoutToken, quoteRes.isLoading, payoutRes.isLoading]);
+  }, [isValid]);
 
   return { prices };
 };

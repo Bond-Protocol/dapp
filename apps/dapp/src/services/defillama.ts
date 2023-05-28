@@ -1,9 +1,10 @@
+import { sub, getUnixTime } from "date-fns";
 import { generateFetcher } from "./custom-queries";
 import { ACTIVE_CHAINS } from "context/evm-provider";
 
 export const DEFILLAMA_ENDPOINT = "https://coins.llama.fi";
 
-export type DefillamaCurrentPrice = {
+export interface DefillamaCurrentPrice {
   decimals: number;
   symbol: string;
   name: string;
@@ -12,16 +13,19 @@ export type DefillamaCurrentPrice = {
   confidence: number;
   chainId: number;
   address: string;
-};
+}
 
-export type DefillamaCurrentPricesResponse = {
-  coins: DefillamaCurrentPrice;
-};
+export interface DefillamaChart extends Omit<DefillamaCurrentPrice, "price"> {
+  prices: Array<{
+    timestamp: number;
+    price: number;
+  }>;
+}
 
 /**
  * @param address string - An 0x address
  * @param address string[] - Strings should be in a `<chainName>:<address>` or `coingecko:<apiId>`
- *  @param chain string - The chain name
+ * @param chainId number - The chain id
  *
  * example:
  *  `ethereum:0xdB25f211AB05b1c97D595516F45794528a807ad8`
@@ -30,7 +34,7 @@ export type DefillamaCurrentPricesResponse = {
 export const fetchPrice = async (
   address: string | string[],
   chainId: number
-): Promise<Array<DefillamaCurrentPrice>> => {
+): Promise<Array<DefillamaChart>> => {
   const chain = getNameFromChainId(chainId);
 
   const ids = Array.isArray(address)
@@ -41,11 +45,46 @@ export const fetchPrice = async (
 
   const response = await generateFetcher(endpoint)();
 
-  return formatPriceResponse(response.coins);
+  return formatResponse(response.coins);
+};
+
+type ChartOptionsDefillama = {
+  chainId?: number;
+  from?: number;
+  to: number;
+  days: number;
+};
+
+export const fetchChart = async (
+  address: string | string[],
+  options: ChartOptionsDefillama = {
+    to: Date.now(),
+    days: 7,
+  }
+): Promise<Array<DefillamaChart>> => {
+  const chain = options?.chainId && getNameFromChainId(options?.chainId);
+
+  const ids = Array.isArray(address)
+    ? address.join(",")
+    : `${chain}:${address}`;
+
+  const from = sub(options.to, { days: options.days });
+  const fromTimestamp = getUnixTime(from);
+
+  //const toTimestamp = getUnixTime(to);
+  console.log({ options });
+
+  const endpoint = `${DEFILLAMA_ENDPOINT}/chart/${ids}`;
+  const period = "1h";
+  const span = options.days * 24;
+  const params = `?start=${fromTimestamp}&span=${span}&period=${period}`;
+
+  const response = await generateFetcher(endpoint + params)();
+  return formatResponse(response.coins);
 };
 
 /**The response format isnt very useful so we tweak it*/
-export const formatPriceResponse = (coins: any) => {
+export const formatResponse = (coins: any) => {
   return Object.keys(coins).map((id) => {
     const content = coins[id];
     const [chain, address] = id.split(":");
@@ -67,10 +106,12 @@ export const getNameFromChainId = (chainId: number) => {
 };
 
 export const utils = {
-  unwrapPrices: formatPriceResponse,
+  unwrapPrices: formatResponse,
   toDefillamaQueryId,
 };
 
 export default {
   fetchPrice,
+  fetchChart,
+  utils,
 };
