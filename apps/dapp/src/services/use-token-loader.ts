@@ -11,10 +11,8 @@ import { BigNumberish } from "ethers";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
-  console.log({ addresses });
 
   const prices = await defillama.fetchPrice(addresses);
-  console.log({ prices });
 
   return tokens
     .map((t: any) => ({
@@ -54,7 +52,6 @@ export const useTokenLoader = () => {
   useEffect(() => {
     const promises: Promise<any>[] = [];
     const loadPrices = async () => {
-      console.log({ isAnyLoading, queries });
       if (!isAnyLoading) {
         const tokens = queries
           .flatMap((q) => q.data?.data?.tokens)
@@ -79,14 +76,12 @@ export const useTokenLoader = () => {
             };
           });
 
-        console.log({ tokens });
         const pricedTokens = await fetchPrices(tokens);
         const result = await Promise.allSettled(promises);
         result.forEach((result, index) => {
           if (!pricedTokens[index]) return;
           pricedTokens[index].openMarkets = result.value;
         });
-        console.log({ pricedTokens });
 
         setTokens(pricedTokens);
       }
