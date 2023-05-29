@@ -20,7 +20,11 @@ export const useTokenlistLoader = () => {
     loadPrices();
   }, []);
 
-  const addToken = (token: Token) => setTokens([...tokens, token]);
+  const addToken = (token: Token) => {
+    setTokens([...tokens, token]);
+    console.log("add tokens", token);
+  };
 
+  console.log("loader-hook", { tokens });
   return { tokens, addToken };
 };

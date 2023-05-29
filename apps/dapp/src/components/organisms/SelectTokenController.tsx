@@ -21,25 +21,36 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const [filter, setFilter] = useState("");
   const [importedToken, setImportedToken] = useState<Token>();
   const [source, setSource] = useState("defillama");
+  const [isLoading, setLoading] = useState(false);
   const { discover, discoverLogo } = useDiscoverToken();
 
-  const connecteChainId = useChainId();
+  const connectedChainId = useChainId();
   const tokenlist = useTokenlists();
 
-  const chainId = props.chainId || connecteChainId || 1;
+  const chainId = props.chainId || connectedChainId || 1;
 
   const tokens = tokenlist.getByChain(chainId);
+  console.log({ tokens });
 
   useEffect(() => {
     async function fetchUnknownToken() {
       const address = filter.trim();
       if (ethers.utils.isAddress(address)) {
-        const { token, source } = await discover(address, chainId);
-        setImportedToken(token);
-        setSource(source);
+        try {
+          setLoading(true);
+          const { token, source } = await discover(address, chainId);
+          setImportedToken(token);
+          setSource(source);
+        } catch (e) {
+          setLoading(false);
+          console.error(`Failed to discover ${address} on chain ${chainId}`, e);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setImportedToken(undefined);
       }
     }
-
     fetchUnknownToken();
   }, [filter]);
 
@@ -71,14 +82,17 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
           props.onChange(importedToken);
         }}
       />
-      {importedToken && (
+      {(isLoading || importedToken) && (
         <ImportTokenDialog
+          token={importedToken}
+          priceSource={source}
+          isLoading={isLoading}
           onConfirm={(e) => {
+            console.log({ importedToken });
+            tokenlist.addToken(importedToken);
             props.onSubmit({ value: importedToken });
             props.onClose(e);
           }}
-          token={importedToken}
-          priceSource={source}
         />
       )}
     </div>

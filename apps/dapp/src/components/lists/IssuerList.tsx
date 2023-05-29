@@ -69,6 +69,7 @@ export const IssuerList = () => {
     cardsPerPage > 0
       ? issuers?.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
       : issuers;
+  console.log({ cards });
 
   return (
     <>

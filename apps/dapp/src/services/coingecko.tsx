@@ -15,8 +15,9 @@ export const generateCoingeckoFetch = (url: string) => {
     if (!proxyUrl || proxyUrl.length === 0 || isError) {
      */
   const publicUrl = import.meta.env.VITE_COINGECKO_PUBLIC_URL;
-  const composedUrl = publicUrl.concat(url);
-  //.concat(import.meta.env.VITE_COINGECKO_API_KEY);
+  const composedUrl = publicUrl
+    .concat(url)
+    .concat("?" + import.meta.env.VITE_COINGECKO_API_KEY);
 
   return generateFetcher(composedUrl);
 };
@@ -49,12 +50,18 @@ export const getTokenByContract = async (address: string, chainId: number) => {
 
 const formatToken = (t: any) => {
   return {
-    logoURI: t.image.small,
+    logoURI: t.image.large,
     symbol: t.symbol,
     name: t.name,
     address: t.detail_platforms[t.asset_platform_id].address,
     decimals: t.detail_platforms[t.asset_platform_id].decimal_place,
     price: t.market_data.current_price.usd,
+    details: {
+      description: t.description.en,
+      links: {
+        homepage: t.links?.homepage?.[0],
+      },
+    },
   };
 };
 

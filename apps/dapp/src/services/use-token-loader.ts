@@ -8,6 +8,7 @@ import { generateGraphqlQuery } from "./custom-queries";
 import { providers } from "services/owned-providers";
 import { usdFormatter } from "../utils/format";
 import { BigNumberish } from "ethers";
+import { useDiscoverToken } from "hooks/useDiscoverToken";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
@@ -17,6 +18,7 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   return tokens
     .map((t: any) => ({
       ...t,
+      chainId: Number(t.chainId),
       price: prices.find((p: any) => p.address === t.address)?.price,
     }))
     .filter((t: any) => !!t.price);
@@ -31,6 +33,8 @@ export const useTokenLoader = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [payoutTokens, setPayoutTokens] = useState<Token[]>([]);
   const [tbv, setTbv] = useState<number>(0);
+  const { discoverLogo } = useDiscoverToken();
+  const [fetchedLogos, setFetchedLogos] = useState(false);
 
   const queries = useQueries(
     currentEndpoints.map((e) => {
@@ -105,6 +109,19 @@ export const useTokenLoader = () => {
 
     setTbv(totalTbv);
     setPayoutTokens(payoutTokens);
+  }, [tokens]);
+
+  useEffect(() => {
+    async function fetchLogos() {
+      if (Boolean(tokens.length) && !fetchedLogos) {
+        const updatedTokens = await Promise.all(
+          tokens.map((t) => discoverLogo(t))
+        );
+        setFetchedLogos(true);
+        setTokens(updatedTokens);
+      }
+    }
+    fetchLogos();
   }, [tokens]);
 
   return {
