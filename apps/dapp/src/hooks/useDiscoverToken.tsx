@@ -46,6 +46,7 @@ export const useDiscoverToken = () => {
 
     try {
       const [token] = await defillama.fetchPrice(address, chainId);
+      //@ts-ignore
       if (token.price) {
         return { token, source: "defillama" };
       }

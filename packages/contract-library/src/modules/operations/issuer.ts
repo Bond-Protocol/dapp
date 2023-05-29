@@ -1,7 +1,11 @@
 import { BigNumberish } from '@ethersproject/bignumber';
 import { Overrides } from '@ethersproject/contracts';
 import { BigNumber, Signer } from 'ethers';
-import {getAggregator, getAuctioneerFromAggregator, getChainId} from '../contract-helper';
+import {
+  getAggregator,
+  getAuctioneerFromAggregator,
+  getChainId,
+} from '../contract-helper';
 import { Provider } from '@ethersproject/providers';
 import { IERC20__factory, PrecalculatedMarket } from 'src/types';
 import { CHAIN_ID } from '@bond-protocol/bond-library';
@@ -55,13 +59,14 @@ export function getMarketData(
   const doMarket = async (
     marketId: BigNumberish,
   ): Promise<PrecalculatedMarket> => {
-    const [chainId, auctioneer, teller, marketInfo, instantSwap] = await Promise.all([
-      getChainId(provider),
-      getAuctioneer(marketId, provider),
-      getTeller(marketId, provider),
-      getMarketInfoForPurchase(marketId, provider),
-      isInstantSwap(marketId, provider),
-    ]);
+    const [chainId, auctioneer, teller, marketInfo, instantSwap] =
+      await Promise.all([
+        getChainId(provider),
+        getAuctioneer(marketId, provider),
+        getTeller(marketId, provider),
+        getMarketInfoForPurchase(marketId, provider),
+        isInstantSwap(marketId, provider),
+      ]);
 
     const payoutToken = IERC20__factory.connect(
       marketInfo.payoutToken,
