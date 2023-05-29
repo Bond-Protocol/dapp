@@ -94,7 +94,7 @@ export const formatResponse = (coins: any) => {
 
 /** Gets defillama query id from a token in tokenlist format */
 export const toDefillamaQueryId = (t: any) => {
-  const name = getNameFromChainId(t.chainId);
+  const name = getNameFromChainId(Number(t.chainId));
   return `${name}:${t.address}`;
 };
 
