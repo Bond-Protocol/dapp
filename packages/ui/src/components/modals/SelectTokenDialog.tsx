@@ -46,23 +46,27 @@ export const SelectTokenDialog = (props: SelectTokenDialogProps) => {
       </div>
       <div className="child:py-2 max-h-[33vh] overflow-y-scroll">
         {props.tokens
-          .filter((token: Token) =>
+          .filter((token: Token) => {
+            console.log("here");
             //@ts-ignore
-            fields.some((field) => includesText(token[field], props.filter))
-          )
+
+            return fields.some((field) =>
+              includesText(token[field], props.filter)
+            );
+          })
           .map((token: Token, i: number) => (
             <Label
               key={i}
               className="hover:bg-light-primary/20 cursor-pointer px-3"
               subtextClassName="text-sans text-light-primary"
-              value={token.symbol}
-              subtext={token.name}
-              icon={token.logoURI}
+              value={token?.symbol}
+              subtext={token?.name}
+              icon={token?.logoURI}
               onClick={(e) => {
                 props.onSubmit({
                   value: token,
-                  label: token.symbol,
-                  icon: token.logoURI,
+                  label: token?.symbol,
+                  icon: token?.logoURI,
                 });
 
                 props.onClose(e);

@@ -30,7 +30,6 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const chainId = props.chainId || connectedChainId || 1;
 
   const tokens = tokenlist.getByChain(chainId);
-  console.log({ tokens });
 
   useEffect(() => {
     async function fetchUnknownToken() {
@@ -88,7 +87,6 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
           priceSource={source}
           isLoading={isLoading}
           onConfirm={(e) => {
-            console.log({ importedToken });
             tokenlist.addToken(importedToken);
             props.onSubmit({ value: importedToken });
             props.onClose(e);
