@@ -16,3 +16,4 @@ export * from "./SelectModal";
 export * from "./SummaryList";
 export * from "./Table";
 export * from "./Tabs";
+export * from "./TokenCard";

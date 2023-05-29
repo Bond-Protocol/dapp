@@ -7,6 +7,7 @@ import { currentEndpoints } from "./subgraph-endpoints";
 import { generateGraphqlQuery } from "./custom-queries";
 import { providers } from "services/owned-providers";
 import { usdFormatter } from "../utils/format";
+import { BigNumberish } from "ethers";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
@@ -22,7 +23,7 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
     .filter((t: any) => !!t.price);
 };
 
-const listQuery = `query ListTokens { tokens { address chainId name decimals symbol usedAsPayout payoutTokenTbvs { tbv quoteToken { id address } } } }`;
+const listQuery = `query ListTokens { tokens { address chainId name decimals symbol usedAsPayout uniqueBonders { count } payoutTokenTbvs { tbv quoteToken { id address } } } }`;
 
 /**
  *
@@ -42,11 +43,6 @@ export const useTokenLoader = () => {
   );
 
   const getByAddress = (address: string) => {
-    if (address === "0x07e49d5de43dda6162fa28d24d5935c151875283") {
-      console.log(
-        tokens.find((t) => t.address.toLowerCase() === address.toLowerCase())
-      );
-    }
     return tokens.find(
       (t) => t.address.toLowerCase() === address.toLowerCase()
     );
@@ -55,18 +51,38 @@ export const useTokenLoader = () => {
   const isAnyLoading = queries.some((q) => q.isLoading);
 
   useEffect(() => {
+    const promises: Promise<any>[] = [];
     const loadPrices = async () => {
       if (!isAnyLoading) {
         const tokens = queries
-          .flatMap((q) => q.data.data.tokens)
-          .map((t) => ({
-            ...t,
-            logoUrl: tokenlist.find(
-              (tok) => tok.address === t.address.toLowerCase()
-            )?.logoURI,
-          }));
+          .flatMap((q) => q.data?.data?.tokens)
+          .map((t) => {
+            const promise = liveMarketsFor(
+              t.address,
+              true,
+              providers[t.chainId]
+            ).then((result) => {
+              const results: BigNumberish[] = [];
+              result.forEach((res) => results.push(Number(res)));
+              return results;
+            });
+
+            promises.push(promise);
+            return {
+              ...t,
+              openMarkets: [],
+              logoUrl: tokenlist.find(
+                (tok) => tok?.address === t?.address.toLowerCase()
+              )?.logoURI,
+            };
+          });
 
         const pricedTokens = await fetchPrices(tokens);
+        const result = await Promise.allSettled(promises);
+        result.forEach((result, index) => {
+          if (!pricedTokens[index]) return;
+          pricedTokens[index].openMarkets = result.value;
+        });
 
         setTokens(pricedTokens);
       }
@@ -81,24 +97,11 @@ export const useTokenLoader = () => {
     payoutTokens.forEach((token) => {
       let tbv = 0;
       token.payoutTokenTbvs?.forEach((ptt) => {
-        if (token.address === "0x07e49d5de43dda6162fa28d24d5935c151875283") {
-          console.log({
-            token,
-            ptt,
-            gba: getByAddress(ptt.quoteToken.address),
-          });
-        }
         tbv =
           tbv + (ptt.tbv * getByAddress(ptt.quoteToken.address)?.price || 0);
       });
       token.tbv = tbv;
       totalTbv = totalTbv + tbv;
-
-      liveMarketsFor(token.address, true, providers[token.chainId]).then(
-        (result) => {
-          token.openMarkets = result.map((value) => Number(value));
-        }
-      );
     });
 
     setTbv(totalTbv);

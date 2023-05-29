@@ -36,6 +36,7 @@ export interface Token extends TokenBase {
   tbv?: number;
   payoutTokenTbvs?: any[];
   openMarkets?: number[];
+  openMarketsLoaded?: boolean;
   usedAsPayout?: boolean;
   price?: number;
   id?: string;

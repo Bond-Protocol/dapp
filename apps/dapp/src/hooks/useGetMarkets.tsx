@@ -26,7 +26,8 @@ export function useGetMarkets() {
   );
 
   useEffect(() => {
-    if (!data || Object.keys(currentPrices).length === 0) return;
+    if (!data || !currentPrices || Object.keys(currentPrices).length === 0)
+      return;
     const results = data.markets;
 
     const promises: Promise<CalculatedMarket>[] = [];

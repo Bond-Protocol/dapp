@@ -7,13 +7,12 @@ import { toTableData } from "src/utils/table";
 import { meme } from "src/utils/words";
 import {
   marketList as tableColumns,
-  issuerMarketList as issuerColumns,
+  tokenMarketList as tokenColumns,
 } from "./columns";
-import { getProtocol } from "@bond-protocol/bond-library";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
-  issuer?: string;
+  token?: string;
   allowManagement?: boolean;
   filter?: string[];
   filterText?: string;
@@ -22,18 +21,18 @@ type MarketListProps = {
 
 export const MarketList: FC<MarketListProps> = ({
   allowManagement,
-  issuer,
+  token,
   ...props
 }) => {
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
 
-  const columns = issuer ? issuerColumns : tableColumns;
+  const columns = token ? tokenColumns : tableColumns;
 
   const markets = props.markets || allMarkets;
 
   const filteredMarkets = Array.from(markets.values())
-    .filter((m) => (issuer ? getProtocol(m.owner)?.id === issuer : true))
+    .filter((m) => (token ? m.payoutToken.address === token : true))
     .sort((a, b) => b.discount - a.discount);
 
   const tableMarkets = useMemo(
@@ -48,7 +47,7 @@ export const MarketList: FC<MarketListProps> = ({
             navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
           return row;
         }),
-    [allMarkets, isLoading, issuer, columns]
+    [allMarkets, isLoading, token, columns]
   );
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);

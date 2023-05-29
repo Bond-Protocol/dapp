@@ -1,4 +1,4 @@
-import { ActionCard, Pagination, InfoLabel, Loading, IssuerCard } from "ui";
+import { ActionCard, InfoLabel, Loading, Pagination, TokenCard } from "ui";
 import { useTokens } from "hooks";
 import { useAtom } from "jotai";
 import testnetMode from "../../atoms/testnetMode.atom";
@@ -21,6 +21,7 @@ export const TokenList = () => {
 
   const [testnet] = useAtom(testnetMode);
   const [tokens, setTokens] = useState<Token[]>([]);
+  const [cards, setCards] = useState<Token[]>([]);
 
   const sortTokens = function (
     compareFunction: (t1: Token, t2: Token) => number
@@ -38,6 +39,14 @@ export const TokenList = () => {
     );
   }, [payoutTokens]);
 
+  useEffect(() => {
+    setCards(
+      cardsPerPage > 0
+        ? tokens?.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
+        : tokens
+    );
+  }, [tokens]);
+
   //Pagination Controls
   const [page, setPage] = useState(0);
   const [cardsPerPage, setCardsPerPage] = useState(18);
@@ -51,11 +60,6 @@ export const TokenList = () => {
 
   const totalRows = tokens?.length || 0;
   const totalPages = Math.ceil(totalRows / Math.abs(cardsPerPage));
-
-  const cards =
-    cardsPerPage > 0
-      ? tokens?.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
-      : tokens;
 
   return (
     <>
@@ -91,8 +95,8 @@ export const TokenList = () => {
                 key={token.id}
                 className="min-w-[169px] max-w-[178px] flex-1"
               >
-                <IssuerCard
-                  issuer={token}
+                <TokenCard
+                  token={token}
                   tbv={token.tbv}
                   marketCount={token.openMarkets.length}
                   navigate={navigate}

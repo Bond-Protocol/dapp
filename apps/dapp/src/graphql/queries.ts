@@ -107,6 +107,9 @@ export const listTokens = gql`
           address
         }
       }
+      uniqueBonders {
+        count
+      }
     }
   }
 `;

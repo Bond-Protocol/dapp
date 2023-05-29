@@ -9,6 +9,7 @@ import {
   Markets,
   MarketCreated,
   PolicyPage,
+  TokenPage,
 } from "./components";
 import { useState } from "react";
 import { terms, privacyPolicy, cookiePolicy } from "./content";
@@ -22,7 +23,6 @@ export const RouteMap: FC = () => {
       <Route path="/" element={<IssuerList />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/markets" element={<Markets />} />
-      <Route path="/issuers" element={<IssuerList />} />
       <Route path="/tokens" element={<TokenList />} />
       <Route path="/market/:chainId/:id" element={<MarketInsights />} />
 
@@ -44,6 +44,8 @@ export const RouteMap: FC = () => {
         path="/create/v1/:hash"
         element={<MarketCreated marketData={newMarket} />}
       />
+
+      <Route path="/tokens/:chainId/:address" element={<TokenPage />} />
     </Switch>
   );
 };

@@ -1,5 +1,5 @@
 import { getProtocol } from "@bond-protocol/bond-library";
-import { Button, Column, DiscountLabel, formatDate } from "ui";
+import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
 import { add } from "date-fns";
 import {
   longFormatter,
@@ -7,7 +7,10 @@ import {
   usdFormatter,
 } from "src/utils/format";
 import { getTokenDetailsForMarket } from "src/utils";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  getBlockExplorer,
+} from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { CHAINS } from "@bond-protocol/bond-library";
 
@@ -125,11 +128,29 @@ const issuer: Column<CalculatedMarket> = {
   width: "w-[16%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const protocol = getProtocol(market.owner);
+    const { blockExplorerUrl } = getBlockExplorer(market.chainId, "address");
+    const address = blockExplorerUrl + market.owner;
+    const start = market.owner.substring(0, 4);
+    const end = market.owner.substring(market.owner.length - 4);
     return {
-      value: protocol?.name,
-      icon: protocol?.logoUrl,
+      value: `${start}...${end}`,
+      subtext: address,
+      searchValue: address,
     };
+  },
+  Component: (props) => {
+    return (
+      <Link
+        target="_blank"
+        rel="noopener noreferrer"
+        href={props.subtext}
+        onClick={(e: React.BaseSyntheticEvent) => {
+          e.stopPropagation();
+        }}
+      >
+        {props.value}
+      </Link>
+    );
   },
 };
 
@@ -166,3 +187,4 @@ const view: Column<CalculatedMarket> = {
 export const base = [bond, bondPrice, discount, maxPayout, vesting];
 export const marketList = [...base, tbv, issuer, view];
 export const issuerMarketList = [...base, creationDate, tbv, view];
+export const tokenMarketList = [...base, tbv, issuer, view];
