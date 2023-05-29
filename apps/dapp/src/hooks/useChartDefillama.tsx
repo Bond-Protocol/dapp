@@ -17,8 +17,8 @@ export const useChartDefillama = (tokens: Token[], dayRange = 7) => {
 
   const isValid =
     chartQuery.isSuccess &&
-    !!chart?.[0].prices?.length &&
-    !!chart?.[1].prices?.length;
+    !!chart?.[0]?.prices?.length &&
+    !!chart?.[1]?.prices?.length;
 
   return {
     chart:

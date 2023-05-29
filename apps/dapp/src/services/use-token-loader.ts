@@ -8,17 +8,17 @@ import { generateGraphqlQuery } from "./custom-queries";
 import { providers } from "services/owned-providers";
 import { usdFormatter } from "../utils/format";
 import { BigNumberish } from "ethers";
+import { useDiscoverToken } from "hooks/useDiscoverToken";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
-  console.log({ addresses });
 
   const prices = await defillama.fetchPrice(addresses);
-  console.log({ prices });
 
   return tokens
     .map((t: any) => ({
       ...t,
+      chainId: Number(t.chainId),
       price: prices.find((p: any) => p.address === t.address)?.price,
     }))
     .filter((t: any) => !!t.price);
@@ -33,6 +33,8 @@ export const useTokenLoader = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [payoutTokens, setPayoutTokens] = useState<Token[]>([]);
   const [tbv, setTbv] = useState<number>(0);
+  const { discoverLogo } = useDiscoverToken();
+  const [fetchedLogos, setFetchedLogos] = useState(false);
 
   const queries = useQueries(
     currentEndpoints.map((e) => {
@@ -54,7 +56,6 @@ export const useTokenLoader = () => {
   useEffect(() => {
     const promises: Promise<any>[] = [];
     const loadPrices = async () => {
-      console.log({ isAnyLoading, queries });
       if (!isAnyLoading) {
         const tokens = queries
           .flatMap((q) => q.data?.data?.tokens)
@@ -79,14 +80,12 @@ export const useTokenLoader = () => {
             };
           });
 
-        console.log({ tokens });
         const pricedTokens = await fetchPrices(tokens);
         const result = await Promise.allSettled(promises);
         result.forEach((result, index) => {
           if (!pricedTokens[index]) return;
           pricedTokens[index].openMarkets = result.value;
         });
-        console.log({ pricedTokens });
 
         setTokens(pricedTokens);
       }
@@ -110,6 +109,19 @@ export const useTokenLoader = () => {
 
     setTbv(totalTbv);
     setPayoutTokens(payoutTokens);
+  }, [tokens]);
+
+  useEffect(() => {
+    async function fetchLogos() {
+      if (Boolean(tokens.length) && !fetchedLogos) {
+        const updatedTokens = await Promise.all(
+          tokens.map((t) => discoverLogo(t))
+        );
+        setFetchedLogos(true);
+        setTokens(updatedTokens);
+      }
+    }
+    fetchLogos();
   }, [tokens]);
 
   return {

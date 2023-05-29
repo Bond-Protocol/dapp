@@ -67,11 +67,12 @@ export const useDiscoverToken = () => {
 
   const discoverLogo = async (token: Token) => {
     try {
-      const { logoURI } = await coingecko.getTokenByContract(
+      const { logoURI, name, details } = await coingecko.getTokenByContract(
         token.address,
         token.chainId
       );
-      return { ...token, logoURI };
+      console.log({ name, details });
+      return { ...token, name, details, logoURI, logoUrl: logoURI };
     } catch (e) {
       return token;
     }

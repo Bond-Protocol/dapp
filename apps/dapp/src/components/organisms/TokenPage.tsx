@@ -16,31 +16,21 @@ export const TokenPage: FC = () => {
   const { getByAddress } = useTokens();
   const token = getByAddress(address);
 
-  const logo = () => {
-    return token?.logoUrl
-      ? token?.logoUrl
-      : "/placeholders/token-placeholder.png";
-  };
-  console.log(token);
+  const icon = token?.logoUrl ?? "/placeholders/token-placeholder.png";
+  console.log({ token });
+
   return (
     <div className="pb-12">
-      <PageNavigation link={"homepage"} rightText="Visit Website">
-        <PageHeader
-          icon={logo()}
-          title={token?.name || placeholderToken.name}
-          underTitle={
-            <SocialRow
-              /*{...token?.links}*/
-              width={18}
-              className="mt-3 ml-2.5 justify-start gap-4 fill-white"
-            />
-          }
-        />
+      <PageNavigation
+        link={token?.details?.links?.homepage}
+        rightText="Visit Website"
+      >
+        <PageHeader icon={icon} title={token?.name || placeholderToken.name} />
       </PageNavigation>
       <div className="flex flex-col">
         <div className="mt-2">
           <p className="w-1/2 text-light-grey-400">
-            {"token description" || placeholderToken.description}
+            {token?.details?.description}
           </p>
         </div>
       </div>
@@ -50,7 +40,7 @@ export const TokenPage: FC = () => {
           label="Total Bonded Value"
           tooltip={`Estimated total value in USD of all purchases from ${token?.name} markets.`}
         >
-          ${new Intl.NumberFormat().format(Math.trunc(token.tbv))}
+          ${new Intl.NumberFormat().format(Math.trunc(token?.tbv))}
         </InfoLabel>
         <InfoLabel
           label="Total Bonds"

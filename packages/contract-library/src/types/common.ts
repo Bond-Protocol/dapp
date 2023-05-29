@@ -43,6 +43,15 @@ export interface Token extends TokenBase {
   purchaseLink?: string;
   logoUrl?: string;
   logoURI?: string;
+  details?: {
+    description?: string;
+    links: {
+      homepage?: string;
+      github?: string;
+      discord?: string;
+      medium?: string;
+    };
+  };
 }
 
 export interface LpPair {
