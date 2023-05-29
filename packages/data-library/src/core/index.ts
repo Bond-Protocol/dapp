@@ -1,4 +1,4 @@
-import tokenlist from "./tokenlist.json";
+import tokenlist from "./default-token-list.json";
 
 export * from "./getters";
 export * from "./chains";

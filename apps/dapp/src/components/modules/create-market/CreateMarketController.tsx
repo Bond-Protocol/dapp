@@ -10,17 +10,13 @@ import {
   getOracleDecimals,
   getOraclePrice,
 } from "@bond-protocol/contract-library";
-import {
-  CreateMarketAction,
-  CreateMarketScreen,
-  CreateMarketState,
-  useCreateMarket,
-} from "ui";
+import { CreateMarketAction, CreateMarketState, useCreateMarket } from "ui";
 import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
-import { useTokens } from "context/token-context";
+import { useTokenlists } from "context/tokenlist-context";
 import { usePurchaseBond } from "hooks";
+import { CreateMarketScreen } from "./CreateMarketScreen";
 
 function getBondType(state: CreateMarketState) {
   switch (state.priceModel) {
@@ -56,7 +52,7 @@ export const CreateMarketController = () => {
   const { isConnected } = useAccount();
   const network = useNetwork();
   const [state, dispatch] = useCreateMarket();
-  const { createMarketTokens: tokens } = useTokens();
+  const { tokens } = useTokenlists();
   const { getTokenAllowance, approveSpending } = usePurchaseBond();
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");
@@ -210,12 +206,15 @@ export const CreateMarketController = () => {
   const configureMarket = (state: CreateMarketState) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
-    if (!network.chain?.id) throw new Error("Unspecified chain");
+    const chainName = network.chains.find((c) => c.id === state.chainId);
 
     const chain = {
-      id: network?.chain?.id,
-      label: network.chain.name,
+      id: state.chainId ?? network?.chain?.id,
+      label: chainName,
     };
+
+    if (!network.chain?.id && !state.chainId)
+      throw new Error("Unspecified chain");
 
     const debtBuffer = state.overridden.debtBuffer
       ? state.overridden.debtBuffer
@@ -342,6 +341,16 @@ export const CreateMarketController = () => {
       return "Error estimating gas - contact us!";
     }
   };
+
+  useEffect(() => {
+    const chainId = Number(network.chain?.id);
+    if (chainId && chainId !== state.chainId) {
+      dispatch({
+        type: CreateMarketAction.UPDATE_CHAIN_ID,
+        value: chainId,
+      });
+    }
+  }, [network.chain?.id]);
 
   return (
     <>

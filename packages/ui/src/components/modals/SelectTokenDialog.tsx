@@ -1,11 +1,22 @@
 import { SearchBar } from "components/molecules/SearchBar";
-import { useEffect, useState } from "react";
-import { Label, Token } from "..";
+import { IconCaroussel, IconCarousselProps, Label } from "..";
+import type { Token } from "@bond-protocol/contract-library";
+
+export type SelectTokenDialogProps = {
+  onSubmit: Function;
+  onClose: Function;
+  tokens: Token[];
+  onSwitchChain: (chainId: string) => void;
+  filter: string;
+  setFilter: (filter: string) => void;
+} & IconCarousselProps;
 
 //Checks whether a field includes a string
 const includesText = (field: string, target: string) => {
   return field.toLowerCase().includes(target.toLowerCase());
 };
+
+const fields = ["address", "name", "symbol"];
 
 const includesAddress = (token: any, target: string) => {
   return Object.values(token?.addresses)
@@ -13,57 +24,44 @@ const includesAddress = (token: any, target: string) => {
     .some((address: any) => address.toLowerCase() === target.toLowerCase());
 };
 
-const fields = ["name", "symbol"];
-
 /**
  * Shows a list of tokens to be selected with a search bar
  * */
-export const SelectTokenDialog = (props: {
-  onSubmit: Function;
-  onClose: Function;
-  tokens: Token[];
-  chain: string;
-}) => {
-  const [filter, setFilter] = useState("");
-  const [list, setList] = useState(props.tokens);
-
-  useEffect(() => {
-    const filteredTokens = props.tokens.filter(
-      (token: Record<string, any>) =>
-        fields.some((field) => includesText(token[field], filter)) ||
-        includesAddress(token, filter)
-    );
-
-    setList(filteredTokens);
-  }, [filter]);
-
+export const SelectTokenDialog = (props: SelectTokenDialogProps) => {
   return (
     <div className="w-[448px]" tabIndex={-1}>
       <SearchBar
         autoFocus
-        value={filter}
-        onChange={setFilter}
+        value={props.filter}
+        onChange={props.setFilter}
         inputClassName=""
         placeholder="Search name or paste token address"
       />
-      <div className="child:py-2 mt-4 max-h-[33vh] overflow-y-scroll">
-        {list
-          .sort((a, b) =>
-            a.symbol.toLowerCase().localeCompare(b.symbol.toLowerCase())
+      <div className="my-3 flex justify-end">
+        <IconCaroussel
+          icons={props.icons}
+          selected={props.selected}
+          onChange={props.onSwitchChain}
+        />
+      </div>
+      <div className="child:py-2 max-h-[33vh] overflow-y-scroll">
+        {props.tokens
+          .filter((token: Token) =>
+            fields.some((field) => includesText(token[field], props.filter))
           )
-          .map((token: any, i: number) => (
+          .map((token: Token, i: number) => (
             <Label
               key={i}
               className="hover:bg-light-primary/20 cursor-pointer px-3"
               subtextClassName="text-sans text-light-primary"
               value={token.symbol}
               subtext={token.name}
-              icon={token.icon}
+              icon={token.logoURI}
               onClick={(e) => {
                 props.onSubmit({
                   value: token,
                   label: token.symbol,
-                  icon: token.icon,
+                  icon: token.logoURI,
                 });
 
                 props.onClose(e);

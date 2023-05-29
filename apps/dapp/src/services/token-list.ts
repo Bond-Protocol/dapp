@@ -5,14 +5,14 @@ const DEFAULT_TOKEN_LIST_URL =
   "https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json";
 
 /**
- * @param url the token list address, has a default
+ * @param tokenlistUrl the token list address, has a default
  * @param supportedChainIds = an array of supported chain ids, defaults to whatever active chains we have globally
  * */
 export const fetchAndParseTokenList = async (
-  url = DEFAULT_TOKEN_LIST_URL,
+  tokenlistUrl = DEFAULT_TOKEN_LIST_URL,
   supportedChainIds = ACTIVE_CHAIN_IDS
 ) => {
-  const fetchCustomList = generateFetcher(url);
+  const fetchCustomList = generateFetcher(tokenlistUrl);
 
   try {
     const response = await fetchCustomList();
@@ -24,6 +24,6 @@ export const fetchAndParseTokenList = async (
         logoUrl: t?.logoURI, //we using logoUrl instead throughtout the app, cba to change rn
       }));
   } catch (e) {
-    console.error(`Failed to fetch ${url}`, e);
+    console.error(`Failed to fetch ${tokenlistUrl}`, e);
   }
 };

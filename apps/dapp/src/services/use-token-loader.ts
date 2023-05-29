@@ -8,10 +8,11 @@ import { generateGraphqlQuery } from "./custom-queries";
 import { providers } from "services/owned-providers";
 import { usdFormatter } from "../utils/format";
 
-const fetchPrices = async (tokens: Token[]) => {
+export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
 
   const prices = await defillama.fetchPrice(addresses);
+  console.log({ prices });
 
   return tokens
     .map((t: any) => ({
@@ -55,19 +56,20 @@ export const useTokenLoader = () => {
 
   useEffect(() => {
     const loadPrices = async () => {
-      const tokens = queries
-        .flatMap((q) => q.data.data.tokens)
-        .map((t) => ({
-          ...t,
-          openMarkets: [],
-          logoUrl: tokenlist.find(
-            (tok) => tok.address === t.address.toLowerCase()
-          )?.logoURI,
-        }));
+      if (!isAnyLoading) {
+        const tokens = queries
+          .flatMap((q) => q.data.data.tokens)
+          .map((t) => ({
+            ...t,
+            logoUrl: tokenlist.find(
+              (tok) => tok.address === t.address.toLowerCase()
+            )?.logoURI,
+          }));
 
-      const pricedTokens = await fetchPrices(tokens);
+        const pricedTokens = await fetchPrices(tokens);
 
-      setTokens(pricedTokens);
+        setTokens(pricedTokens);
+      }
     };
 
     loadPrices();

@@ -1,8 +1,14 @@
 import { StoryFn, Meta } from "@storybook/react";
 import { Modal, SelectTokenDialog } from "components";
+import ethLogo from "assets/icons/ethereum.svg";
 
 import { ModalDecorator } from "../decorators";
 import { list as tokenList } from "utils";
+
+const icons = [
+  { src: ethLogo, id: "1" },
+  { src: ethLogo, id: 42161 },
+];
 
 export default {
   title: "Components/Modals/SelectToken",
@@ -19,5 +25,7 @@ export const Primary = {
       ...tokenList,
       ...tokenList,
     ],
+    icons,
+    selected: "1",
   },
 };

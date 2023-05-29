@@ -104,14 +104,6 @@
     "decimals": 9
   },
   {
-    "address": "0x865377367054516e17014ccded1e7d814edc9ce4",
-    "chainId": 1,
-    "name": "DOLA",
-    "symbol": "DOLA",
-    "logoURI": "https://assets.coingecko.com/coins/images/14287/small/anchor-logo-1-200x200.png?1615275005",
-    "decimals": 18
-  },
-  {
     "address": "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
     "chainId": 1,
     "name": "Olympus",

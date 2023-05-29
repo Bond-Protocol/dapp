@@ -1,43 +1,26 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "wagmi";
 import { tokenlist } from "@bond-protocol/bond-library";
 import { Token } from "@bond-protocol/contract-library";
-import { fetchAndParseTokenList } from "./token-list";
-import * as defillama from "./defillama";
+import { fetchPrices } from "./use-token-loader";
 
-const fetchPrices = async (tokens: Token[]) => {
-  const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
-
-  const prices = await defillama.fetchPrice(addresses);
-
-  //Adds the price to previously fetched tokens
-  return tokens
-    .map((t: any) => ({
-      ...t,
-      price: prices.find((p: any) => p.address === t.address)?.price,
-    }))
-    .filter((t: any) => !!t.price);
-};
-
-export const useTokenLoader = () => {
+export const useTokenlistLoader = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
 
-  const query = useQuery(
-    ["DEFAULT_TOKEN_LIST"],
-    () => fetchAndParseTokenList(),
-    { enabled: false }
-  );
-
-  /** Loads token Prices */
   useEffect(() => {
     const loadPrices = async () => {
-      const pricedTokens = await fetchPrices(tokenlist);
+      try {
+        const pricedTokens = await fetchPrices(tokenlist);
 
-      setTokens(pricedTokens);
+        setTokens(pricedTokens);
+      } catch (e) {
+        console.log("Failed to fetch prices for default tokenlist", e);
+      }
     };
 
     loadPrices();
   }, []);
 
-  return { tokens, tokenlists };
+  const addToken = (token: Token) => setTokens([...tokens, token]);
+
+  return { tokens, addToken };
 };
