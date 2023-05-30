@@ -1,9 +1,9 @@
 import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
 import {
-  generateSDAChartData,
   generateFPAChartData,
-  generateOSDAChartData,
   generateOFDAChartData,
+  generateOSDAChartData,
+  generateSDAChartData,
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
@@ -21,17 +21,6 @@ export type ProjectionChartProps = {
   data?: PriceData[];
   payoutTokenSymbol: string;
   quoteTokenSymbol: string;
-  initialCapacity?: number;
-  initialPrice?: number;
-  minPrice?: number;
-  targetDiscount?: number;
-  durationInDays?: number;
-  depositInterval?: number;
-  fixedDiscount?: number;
-  baseDiscount?: number;
-  targetIntervalDiscount?: number;
-  fixedPrice?: number;
-  maxDiscountFromCurrent?: number;
 };
 
 const getProjectionDataset = (
@@ -65,7 +54,6 @@ export const ProjectionChart = (
 
   const [useTokenPrices, setUseTokenPrices] = useState(false);
 
-  console.log({ props, state });
   const prices = getProjectionDataset(state, props.data, {
     tokenPrices: useTokenPrices,
     targetDiscount: parseFloat(targetDiscount),
@@ -74,16 +62,18 @@ export const ProjectionChart = (
     minPrice: Number(state.priceModels[state.priceModel]?.minPrice),
     durationInDays: state.durationInDays,
     depositInterval: state.depositInterval,
-    fixedDiscount: props.fixedDiscount,
-    baseDiscount: props.baseDiscount,
-    targetIntervalDiscount: props.targetIntervalDiscount,
-    fixedPrice: props.fixedPrice,
-    maxDiscountFromCurrent: props.maxDiscountFromCurrent,
+    fixedDiscount: Number(state.priceModels[state.priceModel]?.fixedDiscount),
+    baseDiscount: Number(state.priceModels[state.priceModel]?.baseDiscount),
+    targetIntervalDiscount: Number(
+      state.priceModels[state.priceModel]?.targetIntervalDiscount
+    ),
+    fixedPrice: Number(state.priceModels[state.priceModel]?.fixedPrice),
+    maxDiscountFromCurrent: Number(
+      state.priceModels[state.priceModel]?.maxDiscountFromCurrent
+    ),
   });
 
   const shouldRender = prices.length > 0;
-
-  console.log("ProjectionChart", { prices });
 
   return (
     <div className="flex w-full flex-col">

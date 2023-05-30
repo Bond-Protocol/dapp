@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Switch, FlatSelect } from "components";
+import { useEffect, useState } from "react";
+import { FlatSelect, Switch } from "components";
 import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
 import { ReactComponent as LineIcon } from "assets/icons/line.svg";
 import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
@@ -53,7 +53,7 @@ const priceControlConfig: Record<
   ],
   static: [
     {
-      property: "initialPrice",
+      property: "fixedPrice",
       topLabel: "Fixed Price",
       display: "exchange_rate",
       returnValue: "exchange_rate",

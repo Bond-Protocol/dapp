@@ -1,6 +1,6 @@
 import { calculateTrimDigits, trimAsNumber } from "utils/trim";
 import { formatDate } from "utils";
-import { useReducer, useContext, createContext, Dispatch } from "react";
+import { createContext, Dispatch, useContext, useReducer } from "react";
 import { differenceInCalendarDays } from "date-fns";
 
 const DEFAULT_DEPOSIT_INTERVAL = 86400;
@@ -235,8 +235,6 @@ export const reducer = (
   action: { type: CreateMarketAction; [key: string]: any }
 ): CreateMarketState => {
   const { type, value } = action;
-
-  console.log({ state });
 
   switch (type) {
     case CreateMarketAction.UPDATE_CHAIN_ID: {
