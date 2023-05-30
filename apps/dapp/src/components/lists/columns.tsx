@@ -7,6 +7,7 @@ import {
 } from "src/utils/format";
 import {
   CalculatedMarket,
+  calculateTrimDigits,
   CHAINS,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
@@ -19,7 +20,6 @@ const bond: Column<CalculatedMarket> = {
   defaultSortOrder: "asc",
   formatter: (market) => {
     const chain = CHAINS.get(market.chainId);
-
     return {
       value: market.quoteToken.symbol,
       icon: market.quoteToken.logoURI,
@@ -36,7 +36,9 @@ const bondPrice: Column<CalculatedMarket> = {
     return {
       icon: market.payoutToken.logoURI,
       value: market.formattedDiscountedPrice,
-      subtext: market.formattedFullPrice + " Market",
+      subtext: market.formattedFullPrice
+        ? market.formattedFullPrice + " Market"
+        : "Unknown",
     };
   },
 };
@@ -50,7 +52,7 @@ const discount: Column<CalculatedMarket> = {
   Component: DiscountLabel,
   formatter: (market) => {
     return {
-      value: market.discount + "%",
+      value: !isNaN(market.discount) ? market.discount + "%" : "Unknown",
       sortValue: market.discount,
     };
   },
@@ -67,7 +69,9 @@ const maxPayout: Column<CalculatedMarket> = {
         longFormatter.format(parseFloat(market.maxPayout)) +
         " " +
         market.payoutToken.symbol,
-      subtext: usdFormatter.format(market.maxPayoutUsd),
+      subtext: !isNaN(market.maxPayoutUsd)
+        ? usdFormatter.format(market.maxPayoutUsd)
+        : "Unknown",
       sortValue: market.maxPayoutUsd,
     };
   },
@@ -109,8 +113,18 @@ const tbv: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[7%]",
   formatter: (market) => {
+    const digits = calculateTrimDigits(market.totalBondedAmount);
+    const totalBondedAmount = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits,
+    })
+      .format(market.totalBondedAmount)
+      .concat(" " + market.quoteToken.symbol);
+
     return {
-      value: usdLongFormatter.format(market.tbvUsd),
+      value: !isNaN(market.tbvUsd)
+        ? usdLongFormatter.format(market.tbvUsd)
+        : totalBondedAmount,
       sortValue: market.tbvUsd,
     };
   },

@@ -6,12 +6,7 @@ import {
   getBlockExplorer,
   trim,
 } from "@bond-protocol/contract-library";
-import {
-  useGasPrice,
-  usePurchaseBond,
-  useTokenAllowance,
-  useTokens,
-} from "hooks";
+import { useGasPrice, usePurchaseBond, useTokenAllowance } from "hooks";
 import {
   ActionInfoList,
   Button,
@@ -47,11 +42,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     usdPrice: "0",
   });
   const { data: signer } = useSigner();
-  const { tokens } = useTokens();
-
-  const quoteTokenDetails = tokens.find(
-    ({ address }) => address === market.quoteToken.address.toLowerCase()
-  );
 
   const provider = providers[market.chainId];
   const { address, isConnected } = useAccount();
@@ -161,7 +151,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     );
 
   const onClickBond = !hasSufficientAllowance
-    ? approveSpending
+    ? () => setShowModal(true)
     : () => setShowModal(true);
 
   const isTerm = market.vestingType === "fixed-term";
@@ -241,7 +231,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           value={amount}
           balance={balance}
           market={market}
-          tokenIcon={quoteTokenDetails.logoUrl}
+          tokenIcon={market.quoteToken.logoUrl}
         />
         <div className="my-1 pt-2 text-xs font-light text-red-500">
           {showOwnerBalanceWarning && (

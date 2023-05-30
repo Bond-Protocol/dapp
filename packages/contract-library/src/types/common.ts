@@ -97,6 +97,7 @@ export interface CalculatedMarket {
   discount: number;
   discountedPrice: number;
   formattedDiscountedPrice: string;
+  quoteTokensPerPayoutToken: number;
   fullPrice: number;
   formattedFullPrice: string;
   maxAmountAccepted: string;

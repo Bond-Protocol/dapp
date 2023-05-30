@@ -53,7 +53,9 @@ export function useCalculatedMarkets() {
     const quoteToken = getByAddress(market.quoteToken.address);
     const payoutToken = getByAddress(market.payoutToken.address);
 
-    const updatedMarket = { ...market, payoutToken, quoteToken };
+    let updatedMarket = { ...market };
+    quoteToken && (updatedMarket.quoteToken = quoteToken);
+    payoutToken && (updatedMarket.payoutToken = payoutToken);
 
     try {
       const result = await contractLibrary.calcMarket(
@@ -68,6 +70,7 @@ export function useCalculatedMarkets() {
         `ProtocolError: Failed to calculate market ${market.id} \n`,
         e
       );
+      console.log(market);
     }
   };
 
@@ -109,12 +112,21 @@ export function useCalculatedMarkets() {
       )
     ) {
       const updated = calculatedMarkets?.map((x) => {
-        const quoteToken = tokens.find(
-          (t) => t.address === x.quoteToken.address
-        );
-        const payoutToken = tokens.find(
+        let quoteToken = tokens.find((t) => t.address === x.quoteToken.address);
+        let payoutToken = tokens.find(
           (t) => t.address === x.payoutToken.address
         );
+
+        if (!quoteToken) {
+          quoteToken = x.quoteToken;
+          quoteToken.logoUrl = quoteToken.logoURI =
+            "/placeholders/token-placeholder.png";
+        }
+        if (!payoutToken) {
+          payoutToken = x.payoutToken;
+          payoutToken.logoUrl = payoutToken.logoURI =
+            "/placeholders/token-placeholder.png";
+        }
 
         return { ...x, quoteToken, payoutToken };
       });

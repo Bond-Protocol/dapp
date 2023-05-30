@@ -89,7 +89,12 @@ export const MarketInsights = () => {
               market?.discount > 0 ? "text-light-success" : "text-red-300"
             }
           >
-            {trim(market.discount, calculateTrimDigits(market.discount))}%
+            {!isNaN(market.discount)
+              ? trim(
+                  market.discount,
+                  calculateTrimDigits(market.discount)
+                ).concat("%")
+              : "Unknown"}
           </p>
         </InfoLabel>
 

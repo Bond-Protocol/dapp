@@ -34,6 +34,16 @@ export const PurchaseConfirmDialog = ({
           </p>
         </div>
       )}
+      {isNaN(discount) && (
+        <div className="y-5 mx-10 text-red-500">
+          <p>WARNING</p>
+          <p>
+            We cannot calculate a discount for this market as we are missing
+            price data for one or both of the tokens. Please double check you
+            wish to purchase at this price before continuing.
+          </p>
+        </div>
+      )}
       <p className="">{`You are about to bond ${issuer}`}</p>
       <div className="mx-10">
         <div className="mt-5 flex justify-center gap-6 text-left">

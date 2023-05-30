@@ -274,6 +274,7 @@ export async function calcMarket(
     discount: 0,
     discountedPrice: 0,
     formattedDiscountedPrice: '',
+    quoteTokensPerPayoutToken: 0,
     fullPrice: 0,
     formattedFullPrice: '',
     maxAmountAccepted: '',
@@ -357,6 +358,8 @@ export async function calcMarket(
   const shift = Number(baseScale) / Number(marketScale);
   const price = Number(marketPrice) * shift;
   const quoteTokensPerPayoutToken = price / Math.pow(10, 36);
+
+  calculatedMarket.quoteTokensPerPayoutToken = quoteTokensPerPayoutToken;
   calculatedMarket.discountedPrice =
     quoteTokensPerPayoutToken * market.quoteToken.price!;
 
@@ -438,21 +441,33 @@ export async function calcMarket(
   calculatedMarket.discount *= 100;
   calculatedMarket.discount = trimAsNumber(-calculatedMarket.discount, 2);
 
-  digits = calculateTrimDigits(calculatedMarket.discountedPrice);
-  calculatedMarket.formattedDiscountedPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: digits,
-    minimumFractionDigits: digits,
-  }).format(calculatedMarket.discountedPrice);
+  if (calculatedMarket.payoutToken.price) {
+    digits = calculateTrimDigits(calculatedMarket.fullPrice);
+    calculatedMarket.formattedFullPrice = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits,
+    }).format(calculatedMarket.fullPrice);
+  }
 
-  digits = calculateTrimDigits(calculatedMarket.fullPrice);
-  calculatedMarket.formattedFullPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: digits,
-    minimumFractionDigits: digits,
-  }).format(calculatedMarket.fullPrice);
+  if (calculatedMarket.quoteToken.price) {
+    digits = calculateTrimDigits(calculatedMarket.discountedPrice);
+    calculatedMarket.formattedDiscountedPrice = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits,
+    }).format(calculatedMarket.discountedPrice);
+  } else {
+    digits = calculateTrimDigits(calculatedMarket.discountedPrice);
+    calculatedMarket.formattedDiscountedPrice = new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits,
+    })
+      .format(calculatedMarket.quoteTokensPerPayoutToken)
+      .concat(' ' + market.quoteToken.symbol);
+  }
 
   if (calculatedMarket.isInstantSwap) {
     calculatedMarket.formattedLongVesting = 'Immediate Payout';
