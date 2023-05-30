@@ -22,8 +22,7 @@ const bond: Column<CalculatedMarket> = {
 
     return {
       value: market.quoteToken.symbol,
-      icon: market.quoteToken.logoUrl,
-      //   lpPairIcon: lpPair?.logoUrl,
+      icon: market.quoteToken.logoURI,
       chainChip: chain?.image,
     };
   },
@@ -34,8 +33,9 @@ const bondPrice: Column<CalculatedMarket> = {
   accessor: "bondPrice",
   width: "w-[18%]",
   formatter: (market) => {
+    console.log({ market });
     return {
-      icon: market.payoutToken.logoUrl,
+      icon: market.payoutToken.logoURI,
       value: market.formattedDiscountedPrice,
       subtext: market.formattedFullPrice + " Market",
     };

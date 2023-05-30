@@ -5,6 +5,7 @@ const initialState = {
   allMarkets: new Map(),
   isMarketOwner: false,
   isSomeLoading: false,
+  updatedMarketTokens: false,
   isLoading: {
     market: false,
     tokens: false,

@@ -34,7 +34,7 @@ export const useTokenLoader = () => {
   const [payoutTokens, setPayoutTokens] = useState<Token[]>([]);
   const [tbv, setTbv] = useState<number>(0);
   const { discoverLogo } = useDiscoverToken();
-  const [fetchedLogos, setFetchedLogos] = useState(false);
+  const [fetchedExtendedDetails, setFetchExtended] = useState(false);
 
   const queries = useQueries(
     currentEndpoints.map((e) => {
@@ -113,11 +113,11 @@ export const useTokenLoader = () => {
 
   useEffect(() => {
     async function fetchExtendedDetails() {
-      if (Boolean(tokens.length) && !fetchedLogos) {
+      if (Boolean(tokens.length) && !fetchedExtendedDetails) {
         const updatedTokens = await Promise.all(
           tokens.map((t) => discoverLogo(t))
         );
-        setFetchedLogos(true);
+        setFetchExtended(true);
         setTokens(updatedTokens);
       }
     }
@@ -130,5 +130,6 @@ export const useTokenLoader = () => {
     tokens,
     payoutTokens,
     getByAddress,
+    fetchedExtendedDetails,
   };
 };

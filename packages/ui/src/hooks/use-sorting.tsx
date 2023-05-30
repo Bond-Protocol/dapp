@@ -6,9 +6,7 @@ export const useSorting = (
   const [data, setData] = useState(rawData);
 
   useEffect(() => {
-    if (!data || !rawData?.length || data?.length !== rawData?.length) {
-      setData(rawData);
-    }
+    setData(rawData);
   }, [rawData, rawData?.length]);
 
   const handleSorting = (sortField: string, sortOrder: string) => {

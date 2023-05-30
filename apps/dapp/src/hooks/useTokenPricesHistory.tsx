@@ -14,9 +14,10 @@ export const useTokenPriceHistory = (token: Token, dayRange = 90) => {
       Date.now()
     )
   );
+  console.log({ tokenPriceHistory });
 
   return {
-    prices: tokenPriceHistory?.prices.map((element: Array<number>) => ({
+    prices: tokenPriceHistory?.prices?.map((element: Array<number>) => ({
       date: element[0],
       price: element[1],
     })),

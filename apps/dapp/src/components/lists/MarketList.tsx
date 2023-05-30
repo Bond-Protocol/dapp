@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Loading, PaginatedTable } from "ui";
@@ -31,24 +31,20 @@ export const MarketList: FC<MarketListProps> = ({
 
   const markets = props.markets || allMarkets;
 
-  const filteredMarkets = Array.from(markets.values())
+  const filteredMarkets = markets
     .filter((m) => (token ? m.payoutToken.address === token : true))
     .sort((a, b) => b.discount - a.discount);
 
-  const tableMarkets = useMemo(
-    () =>
-      filteredMarkets
-        .map((m) => toTableData(columns, m))
-        .map((row) => {
-          //@ts-ignore
-          row["view"].onClick = (path: string) => navigate(path);
-          //@ts-ignore (TODO): Improve this
-          row.onClick = () =>
-            navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
-          return row;
-        }),
-    [allMarkets, isLoading, token, columns]
-  );
+  const tableMarkets = filteredMarkets
+    .map((m) => toTableData(columns, m))
+    .map((row) => {
+      //@ts-ignore
+      row["view"].onClick = (path: string) => navigate(path);
+      //@ts-ignore (TODO): Improve this
+      row.onClick = () =>
+        navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
+      return row;
+    });
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
