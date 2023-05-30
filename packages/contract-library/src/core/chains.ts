@@ -1,22 +1,64 @@
-import { CHAIN_ID } from "../constants";
-import { Chain } from "../types";
+export enum CHAIN_ID {
+  ETHEREUM_MAINNET = '1',
+  GOERLI_TESTNET = '5',
+  POA_CORE = '99',
+  POA_SOKOL = '77',
+  GNOSIS_MAINNET = '100',
+  POLYGON_MAINNET = '137',
+  POLYGON_MUMBAI_TESTNET = '80001',
+  FANTOM_MAINNET = '250',
+  BSC_MAINNET = '56',
+  AVALANCHE_MAINNET = '43114',
+  AVALANCHE_FUJI_TESTNET = '43113',
+  CELO_MAINNET = '42220',
+  CELO_ALFAJORES_TESTNET = '44787',
+  FUSE_MAINNET = '122',
+  MOONRIVER_MAINNET = '1285',
+  ARBITRUM_MAINNET = '42161',
+  ARBITRUM_GOERLI_TESTNET = '421613',
+  OPTIMISM_MAINNET = '10',
+  OPTIMISM_GOERLI_TESTNET = '420',
+  AURORA_MAINNET = '1313161554',
+  AURORA_TESTNET = '1313161555',
+  BOBA_MAINNET = '288',
+  HARMONY_MAINNET = '1666600000',
+}
+
+export interface NativeCurrency {
+  name: string;
+  symbol: string;
+  decimals?: number;
+}
+
+export interface Chain {
+  displayName: string;
+  chainName: string;
+  chainId: string;
+  isTestnet: boolean;
+  nativeCurrency: NativeCurrency;
+  rpcUrls: string[];
+  blockExplorerUrls: string[];
+  blockExplorerName: string;
+  image: string;
+  imageAltText: string;
+}
 
 const ethereumMainnet: Chain = {
-  displayName: "Ethereum",
-  chainName: "mainnet",
-  chainId: "1",
+  displayName: 'Ethereum',
+  chainName: 'mainnet',
+  chainId: '1',
   isTestnet: false,
   nativeCurrency: {
-    name: "Ethereum",
-    symbol: "ETH",
+    name: 'Ethereum',
+    symbol: 'ETH',
     decimals: 18,
   },
-  rpcUrls: [""],
-  blockExplorerUrls: ["https://etherscan.io/#/"], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
-  blockExplorerName: "Etherscan",
+  rpcUrls: [''],
+  blockExplorerUrls: ['https://etherscan.io/#/'], // DO NOT EDIT use contract-library/src/core/getBlockExplorer.ts
+  blockExplorerName: 'Etherscan',
   image:
-    "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
-  imageAltText: "Ethereum Logo",
+    'https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png',
+  imageAltText: 'Ethereum Logo',
 };
 
 const goerliTestnet: Chain = {

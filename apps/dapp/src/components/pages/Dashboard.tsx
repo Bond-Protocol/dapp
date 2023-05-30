@@ -1,19 +1,8 @@
-import { useMemo } from "react";
-import { useAccount, useNetwork } from "wagmi";
-import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
-import { TokenDetails, InfoLabel } from "ui";
-import { useMyBonds } from "hooks/useMyBonds";
-import { useTokens } from "hooks";
-import { OwnerBalance } from "src/generated/graphql";
 import { PageHeader } from "components/common";
-import { BondList, tableColumns } from "components/lists";
-import { toTableData } from "src/utils/table";
-import { usdFormatter } from "src/utils/format";
 import { RequiresWallet } from "components/utility/RequiresWallet";
-import { LoadingIndicator } from "components/utility/LoadingIndicator";
 
 export const Dashboard = () => {
-  const { myBonds, isLoading } = useMyBonds();
+  /*  const { myBonds, isLoading } = useMyBonds();
   const { chain } = useNetwork();
   const {
     getTokenDetails,
@@ -107,6 +96,15 @@ export const Dashboard = () => {
             <BondList data={account?.address && tableData} />
           </div>
         </LoadingIndicator>
+      </RequiresWallet>
+    </>
+  );
+ */
+  return (
+    <>
+      <PageHeader title={"DASHBOARD"} />
+      <RequiresWallet>
+        <div>Temporarily Rugged</div>
       </RequiresWallet>
     </>
   );

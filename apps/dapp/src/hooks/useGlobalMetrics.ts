@@ -1,7 +1,5 @@
 import { useListUniqueBondersQuery } from "src/generated/graphql";
 import { getSubgraphQueries } from "services";
-import { useOwnerTokenTbvs } from "./useOwnerTokenTbvs";
-import { usdFormatter } from "src/utils/format";
 import { useEffect, useState } from "react";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { useTestnetMode } from "hooks/useTestnet";
@@ -23,15 +21,7 @@ export const useGlobalMetrics = () => {
     );
   }, [isLoading, isTestnet]);
 
-  const { protocolTbvs } = useOwnerTokenTbvs();
-  const tbv = Object.values(protocolTbvs).reduce(
-    (total, { tbv }) => total + tbv,
-    0
-  );
-
   return {
-    tbv: usdFormatter.format(Math.trunc(tbv)),
-    protocolTbvs,
     uniqueBonders,
   };
 };

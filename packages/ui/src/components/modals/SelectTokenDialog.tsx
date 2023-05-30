@@ -47,10 +47,8 @@ export const SelectTokenDialog = (props: SelectTokenDialogProps) => {
       <div className="child:py-2 max-h-[33vh] overflow-y-scroll">
         {props.tokens
           .filter((token: Token) => {
-            console.log("here");
-            //@ts-ignore
-
             return fields.some((field) =>
+              //@ts-ignore
               includesText(token[field], props.filter)
             );
           })

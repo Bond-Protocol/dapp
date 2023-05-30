@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { tokenlist } from "@bond-protocol/bond-library";
+import { tokenlist } from "hooks";
 import { Token } from "@bond-protocol/contract-library";
 import { fetchPrices } from "./use-token-loader";
 
@@ -22,9 +22,7 @@ export const useTokenlistLoader = () => {
 
   const addToken = (token: Token) => {
     setTokens([...tokens, token]);
-    console.log("add tokens", token);
   };
 
-  console.log("loader-hook", { tokens });
   return { tokens, addToken };
 };

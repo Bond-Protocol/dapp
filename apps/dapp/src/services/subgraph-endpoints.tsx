@@ -1,8 +1,8 @@
-import { CHAIN_ID } from "@bond-protocol/bond-library";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import { UseQueryResult } from "react-query";
 import { environment } from "src/environment";
+import { CHAIN_ID } from "@bond-protocol/contract-library";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {

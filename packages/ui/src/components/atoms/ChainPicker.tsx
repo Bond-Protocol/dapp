@@ -1,6 +1,6 @@
 import { Select } from "./Select";
 import { useEffect, useState } from "react";
-import * as bondLibrary from "@bond-protocol/bond-library";
+import { Chain, SUPPORTED_CHAINS } from "@bond-protocol/contract-library";
 
 export type ChainPickerProps = {
   className?: string;
@@ -12,9 +12,9 @@ export type ChainPickerProps = {
 };
 
 export const ChainPicker = (props: ChainPickerProps) => {
-  const options = bondLibrary.SUPPORTED_CHAINS.filter(
-    (c) => props.showTestnets ? c.isTestnet : !c.isTestnet
-  ).map((supportedChain) => ({
+  const options = SUPPORTED_CHAINS.filter((c: Chain) =>
+    props.showTestnets ? c.isTestnet : !c.isTestnet
+  ).map((supportedChain: Chain) => ({
     id: supportedChain.chainId,
     label: supportedChain.displayName,
     image: supportedChain.image,

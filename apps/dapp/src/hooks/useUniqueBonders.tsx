@@ -1,7 +1,6 @@
 import { getSubgraphQueries } from "services";
 import { useEffect, useState } from "react";
 import { UniqueBonder, useListUniqueBondersQuery } from "../generated/graphql";
-import { getAddressesByProtocol } from "@bond-protocol/bond-library";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
@@ -33,22 +32,8 @@ export function useUniqueBonders() {
     setBonders(bonderMap);
   }, [isLoading]);
 
-  function getBondersForProtocol(name: string): number {
-    const addresses = getAddressesByProtocol(name);
-    let count = 0;
-
-    addresses.forEach((address) => {
-      const id = (address.chainId + "_" + address.address).toLowerCase();
-      const bondersForAddress = bonders.get(id);
-      if (bondersForAddress) count = count + bondersForAddress;
-    });
-
-    return count;
-  }
-
   return {
     bonders: bonders,
-    getBondersForProtocol: (name: string) => getBondersForProtocol(name),
     isLoading,
   };
 }

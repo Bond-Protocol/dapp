@@ -1,14 +1,9 @@
 import { BigNumberish } from '@ethersproject/bignumber';
 import { Overrides } from '@ethersproject/contracts';
-import { BigNumber, Signer } from 'ethers';
-import {
-  getAggregator,
-  getAuctioneerFromAggregator,
-  getChainId,
-} from '../contract-helper';
+import { Signer } from 'ethers';
+import { getAuctioneerFromAggregator, getChainId } from '../contract-helper';
 import { Provider } from '@ethersproject/providers';
 import { IERC20__factory, PrecalculatedMarket } from 'src/types';
-import { CHAIN_ID } from '@bond-protocol/bond-library';
 import {
   getAddresses,
   getAuctioneer,

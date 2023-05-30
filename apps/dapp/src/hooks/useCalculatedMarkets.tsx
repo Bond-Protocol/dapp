@@ -1,26 +1,19 @@
 import { useQueries } from "react-query";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import * as bondLibrary from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import type { CalculatedMarket } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
 import { useLoadMarkets, useTokens } from "hooks";
-import { getTokenDetails } from "src/utils";
 import { dateMath } from "ui";
 
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
-  //const { getPrice, currentPrices, isLoading: areTokensLoading } = useTokens();
   const { tokens, getByAddress } = useTokens();
-
   const { markets, isLoading: isMarketLoading } = useLoadMarkets();
 
   const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
-  const [issuers, setIssuers] = useState<string[]>([]);
-  const [marketsByIssuer, setMarketsByIssuer] = useState(new Map());
 
   const calculateMarket = async (market: Market) => {
     const requestProvider = providers[market.chainId];
@@ -98,28 +91,14 @@ export function useCalculatedMarkets() {
   useDeepCompareEffect(() => {
     if (!isCalculatingAll && Object.keys(tokens).length > 0) {
       const calculatedMarketsMap = new Map();
-      const issuerMarkets = new Map();
 
       calculateAllMarkets.forEach((result) => {
         if (result && result.data) {
           calculatedMarketsMap.set(result.data.id, result.data);
-
-          const protocol = bondLibrary.getProtocolByAddress(
-            result.data.owner,
-            result?.data.chainId
-          );
-
-          const id = protocol?.id;
-          const value = issuerMarkets.get(protocol?.id) || [];
-
-          value.push(result.data);
-          issuerMarkets.set(id, value);
         }
       });
 
       setCalculatedMarkets(calculatedMarketsMap);
-      setIssuers(Array.from(issuerMarkets.keys()));
-      setMarketsByIssuer(issuerMarkets);
     }
   }, [calculateAllMarkets, tokens]);
 
@@ -134,11 +113,8 @@ export function useCalculatedMarkets() {
 
   return {
     allMarkets: calculatedMarkets,
-    issuers,
-    marketsByIssuer,
     refetchAllMarkets,
     refetchOne,
-    getTokenDetails,
     isSomeLoading,
     isLoading: {
       market: isMarketLoading,

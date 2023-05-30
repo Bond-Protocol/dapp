@@ -1,3 +1,7 @@
+import tokenlist from "./tokenlist.json";
+
+export { tokenlist };
+
 export * from "./useBrowserStorage";
 export * from "./useTokenPricesHistory";
 export * from "./useListAllPurchases";
@@ -7,7 +11,6 @@ export * from "./useGasPrice";
 export * from "./useMarkets";
 export * from "./useMyBonds";
 export * from "./useLoadMarkets";
-export * from "./useProtocol";
 export * from "./usePurchaseBond";
 export * from "./useTokenAllowance";
 export * from "./useTokenPricesHistory";

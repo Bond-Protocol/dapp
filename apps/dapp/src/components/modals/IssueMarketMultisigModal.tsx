@@ -1,15 +1,15 @@
 import {
   Button,
+  CreateMarketTermsDialog,
   Input,
   Modal,
   ModalProps,
   ModalTitle,
-  CreateMarketTermsDialog,
 } from "ui";
 import { useState } from "react";
-import { CHAINS } from "@bond-protocol/bond-library";
 import copyIcon from "assets/icons/copy-icon.svg";
 import { useForm } from "react-hook-form";
+import { CHAINS } from "@bond-protocol/contract-library";
 
 export type IssueMarketMultisigModalProps = Partial<ModalProps> & {
   txnBytecode: string;

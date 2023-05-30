@@ -34,9 +34,7 @@ export const PurchaseConfirmDialog = ({
           </p>
         </div>
       )}
-      <p className="">{`You are about to bond ${
-        issuer ? "at " + issuer : ""
-      }`}</p>
+      <p className="">{`You are about to bond ${issuer}`}</p>
       <div className="mx-10">
         <div className="mt-5 flex justify-center gap-6 text-left">
           <div className="">

@@ -1,12 +1,10 @@
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket, CHAINS } from "@bond-protocol/contract-library";
 import { FC, useEffect, useState } from "react";
 import { Button } from "ui";
 import { useAccount, useSigner, useSwitchNetwork } from "wagmi";
-import { providers } from "services/owned-providers";
 import { ContractTransaction } from "ethers";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { CHAINS } from "@bond-protocol/bond-library";
 
 export type CloseMarketCardProps = {
   market: CalculatedMarket;

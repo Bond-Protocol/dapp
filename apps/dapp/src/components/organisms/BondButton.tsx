@@ -1,10 +1,9 @@
-import { Button } from "ui";
+import { Button, Tooltip } from "ui";
 import { ConnectButton } from "components/common";
 import { ReactComponent as LinkIcon } from "ui/assets/icons/external-link.svg";
-import { Tooltip } from "ui";
 import { useEffect, useState } from "react";
 import { useNetwork, useSwitchNetwork } from "wagmi";
-import { CHAINS } from "@bond-protocol/bond-library";
+import { CHAINS } from "@bond-protocol/contract-library";
 
 export type BondButtonProps = {
   showConnect: boolean;

@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useParams } from "react-router-dom";
-import { InfoLabel, SocialRow } from "ui";
+import { InfoLabel } from "ui";
 import { MarketList } from "components/lists";
 import { PageHeader, PageNavigation } from "components/common";
 import { useTokens } from "context/token-context";
@@ -17,7 +17,6 @@ export const TokenPage: FC = () => {
   const token = getByAddress(address);
 
   const icon = token?.logoUrl ?? "/placeholders/token-placeholder.png";
-  console.log({ token });
 
   return (
     <div className="pb-12">

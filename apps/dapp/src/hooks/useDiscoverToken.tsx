@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Token } from "@bond-protocol/contract-library";
+import { IERC20__factory, Token } from "@bond-protocol/contract-library";
 import defillama from "services/defillama";
-import { IERC20__factory } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import coingecko from "services/coingecko";
 
@@ -72,7 +71,6 @@ export const useDiscoverToken = () => {
         token.address,
         token.chainId
       );
-      console.log({ name, details });
       return { ...token, name, details, logoURI, logoUrl: logoURI };
     } catch (e) {
       return token;

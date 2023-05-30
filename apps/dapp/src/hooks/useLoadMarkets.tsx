@@ -1,18 +1,13 @@
-import { getSubgraphQueriesPerChainFn } from "services/subgraph-endpoints";
+import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { Market, useListMarketsQuery } from "../generated/graphql";
 import { useEffect, useState } from "react";
-import { getAddressesByChain } from "@bond-protocol/bond-library";
 import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 
 export function useLoadMarkets() {
-  const subgraphQueries = getSubgraphQueriesPerChainFn(
-    useListMarketsQuery,
-    getAddressesByChain,
-    "addresses"
-  );
+  const subgraphQueries = getSubgraphQueries(useListMarketsQuery, "addresses");
   const { isLoading } = useSubgraphLoadingCheck(subgraphQueries);
 
   const [isTestnet] = useAtom(testnetMode);

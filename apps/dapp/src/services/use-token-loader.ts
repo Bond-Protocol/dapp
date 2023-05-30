@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useQueries } from "react-query";
-import { tokenlist } from "@bond-protocol/bond-library";
+import { tokenlist } from "hooks";
 import { liveMarketsFor, Token } from "@bond-protocol/contract-library";
 import * as defillama from "./defillama";
 import { currentEndpoints } from "./subgraph-endpoints";

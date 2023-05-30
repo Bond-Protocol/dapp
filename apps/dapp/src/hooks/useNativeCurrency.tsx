@@ -1,5 +1,5 @@
-import { CHAINS, NativeCurrency } from "@bond-protocol/bond-library";
 import { useTokens } from "hooks";
+import { CHAINS, NativeCurrency } from "@bond-protocol/contract-library";
 
 export const useNativeCurrency = (chainId: string) => {
   const { tokens } = useTokens();

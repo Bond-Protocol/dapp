@@ -18,7 +18,6 @@
     "codegen": "graphql-codegen --config codegen.ts"
   },
   "dependencies": {
-    "@bond-protocol/bond-library": "*",
     "@bond-protocol/contract-library": "*",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@mui/base": "^5.0.0-alpha.88",

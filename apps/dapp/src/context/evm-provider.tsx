@@ -15,17 +15,17 @@ import {
 import type { FC, ReactNode } from "react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import {
-  mainnet,
   arbitrum,
-  goerli,
   arbitrumGoerli,
+  avalancheFuji,
+  goerli,
+  mainnet,
   optimismGoerli,
   polygonMumbai,
-  avalancheFuji,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
-import { CHAINS } from "@bond-protocol/bond-library";
+import { CHAINS } from "@bond-protocol/contract-library";
 
 const getIconsForChains = (c: any) => {
   const logoUrl = Array.from(CHAINS.values()).find(

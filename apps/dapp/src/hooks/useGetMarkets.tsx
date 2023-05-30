@@ -1,16 +1,18 @@
-import {getSubgraphQuery, providers} from "services";
+import { getSubgraphQuery, providers } from "services";
 import {
   calcMarket,
-  CalculatedMarket, findMarketFor, getChainId,
+  CalculatedMarket,
+  findMarketFor,
+  getChainId,
   liveMarketsBy,
   liveMarketsFor,
-  marketCounter, marketsFor
+  marketCounter,
+  marketsFor,
 } from "@bond-protocol/contract-library";
-import {Market, useGetMarketsByIdQuery} from "../generated/graphql";
-import {getTokenDetails} from "../utils";
-import {useTokens} from "context/token-context";
-import {useEffect, useState} from "react";
-import {Provider} from "@wagmi/core";
+import { Market, useGetMarketsByIdQuery } from "../generated/graphql";
+import { useTokens } from "context/token-context";
+import { useEffect, useState } from "react";
+import { Provider } from "@wagmi/core";
 
 export function useGetMarkets() {
   const { getPrice, currentPrices } = useTokens();
@@ -18,12 +20,9 @@ export function useGetMarkets() {
   const [marketIds, setMarketIds] = useState<number[]>([]);
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
 
-  const {data} = getSubgraphQuery(
-    useGetMarketsByIdQuery,
-    chain,
-    true,
-    { marketIds: marketIds }
-  );
+  const { data } = getSubgraphQuery(useGetMarketsByIdQuery, chain, true, {
+    marketIds: marketIds,
+  });
 
   useEffect(() => {
     if (!data || !currentPrices || Object.keys(currentPrices).length === 0)
@@ -50,40 +49,35 @@ export function useGetMarkets() {
   const calculateMarket = async (market: Market) => {
     const requestProvider = providers[market.chainId];
 
-    const quoteToken = getTokenDetails(market.quoteToken);
-    const payoutToken = getTokenDetails(market.payoutToken);
-
-    const lpPair = quoteToken.lpPair;
-    if (lpPair != undefined) {
-      lpPair.token0.price = getPrice(lpPair.token0.id);
-      lpPair.token1.price = getPrice(lpPair.token1.id);
-    }
+    const quoteToken = market.quoteToken;
+    const payoutToken = market.payoutToken;
 
     return calcMarket(
-        requestProvider,
-        import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
-        {
-          ...market,
-          payoutToken: {
-            id: payoutToken.id,
-            address: payoutToken.address,
-            decimals: payoutToken.decimals,
-            name: payoutToken.name,
-            symbol: payoutToken.symbol,
-            price: getPrice(payoutToken.id),
-          },
-          quoteToken: {
-            id: quoteToken.id,
-            address: quoteToken.address,
-            decimals: quoteToken.decimals,
-            name: quoteToken.name,
-            symbol: quoteToken.symbol,
-            price: getPrice(quoteToken.id),
-            lpPair: quoteToken.lpPair,
-            purchaseLink: "",
-          },
+      requestProvider,
+      import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
+      {
+        ...market,
+        payoutToken: {
+          id: payoutToken.id,
+          chainId: market.chainId,
+          address: payoutToken.address,
+          decimals: payoutToken.decimals,
+          name: payoutToken.name,
+          symbol: payoutToken.symbol,
+          price: getPrice(payoutToken.id),
         },
-      )
+        quoteToken: {
+          id: quoteToken.id,
+          chainId: market.chainId,
+          address: quoteToken.address,
+          decimals: quoteToken.decimals,
+          name: quoteToken.name,
+          symbol: quoteToken.symbol,
+          price: getPrice(quoteToken.id),
+          purchaseLink: "",
+        },
+      }
+    )
       .then((result: CalculatedMarket) => ({
         ...result,
         start: market.start,
@@ -102,17 +96,13 @@ export function useGetMarkets() {
     const chainId = await getChainId(provider);
     setChain(chainId);
 
-    const results = await liveMarketsFor(
-      tokenAddress,
-      isPayout,
-      provider
-    );
+    const results = await liveMarketsFor(tokenAddress, isPayout, provider);
 
     const res: number[] = [];
-    results.forEach(result => res.push(Number(result)));
+    results.forEach((result) => res.push(Number(result)));
 
     setMarketIds(res);
-  }
+  };
 
   const getLiveMarketsByOwner = async (
     ownerAddress: string,
@@ -123,18 +113,13 @@ export function useGetMarkets() {
 
     const marketCount = await marketCounter(provider);
 
-    const results = await liveMarketsBy(
-      ownerAddress,
-      0,
-      marketCount,
-      provider
-    );
+    const results = await liveMarketsBy(ownerAddress, 0, marketCount, provider);
 
     const res: number[] = [];
-    results.forEach(result => res.push(Number(result)));
+    results.forEach((result) => res.push(Number(result)));
 
     setMarketIds(res);
-  }
+  };
 
   const getLiveMarketsForPayoutAndQuote = async (
     payoutTokenAddress: string,
@@ -151,10 +136,10 @@ export function useGetMarkets() {
     );
 
     const res: number[] = [];
-    results.forEach(result => res.push(Number(result)));
+    results.forEach((result) => res.push(Number(result)));
 
     setMarketIds(res);
-  }
+  };
 
   const findLiveMarketForPayoutAndQuote = async (
     payoutTokenAddress: string,
@@ -177,7 +162,7 @@ export function useGetMarkets() {
     );
 
     setMarketIds([Number(result)]);
-  }
+  };
 
   return {
     getLiveMarketsForToken,
@@ -185,5 +170,5 @@ export function useGetMarkets() {
     getLiveMarketsForPayoutAndQuote,
     findLiveMarketForPayoutAndQuote,
     markets,
-  }
+  };
 }

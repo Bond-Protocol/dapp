@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
-import { NativeCurrency } from "@bond-protocol/bond-library";
 import { Provider } from "@ethersproject/providers";
+import { NativeCurrency } from "@bond-protocol/contract-library";
 
 export const useGasPrice = () => {
   const getGasPrice = async (

@@ -9,19 +9,9 @@ import {
   trim,
 } from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
-import {
-  dateMath,
-  dynamicFormatter,
-  formatCurrency,
-  formatDate,
-  InfoLabel,
-  Loading,
-} from "ui";
+import { dateMath, formatCurrency, formatDate, InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
-import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
-import { getTokenDetailsForMarket } from "src/utils";
-import { longFormatter } from "src/utils/format";
 
 const pricingLabels: Record<MarketPricing, string> = {
   dynamic: "Dynamic Price Market",
@@ -41,9 +31,6 @@ export const MarketInsights = () => {
   );
 
   if (!market) return <Loading content={meme()} />;
-
-  const { payout } = getTokenDetailsForMarket(market);
-  const protocol = getProtocol(market.owner);
 
   const maxPayout =
     market.currentCapacity < Number(market.maxPayout)
@@ -68,12 +55,19 @@ export const MarketInsights = () => {
     <div>
       <PageNavigation
         onClickLeft={() => navigate(-1)}
-        onClickRight={() => navigate("/issuers/" + protocol?.id)}
-        rightText="View Issuer"
+        onClickRight={() =>
+          navigate(
+            "/tokens/" +
+              market.payoutToken.chainId +
+              "/" +
+              market.payoutToken.address
+          )
+        }
+        rightText="View Token"
       >
         <PageHeader
           title={`${market.payoutToken.symbol} BOND`}
-          icon={payout?.logoUrl}
+          icon={market.payoutToken.logoUrl}
           underTitle={marketTypeLabel}
           className="place-self-start self-start justify-self-start"
         />

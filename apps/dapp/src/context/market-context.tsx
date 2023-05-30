@@ -3,8 +3,6 @@ import { createContext, useContext } from "react";
 
 const initialState = {
   allMarkets: new Map(),
-  marketsByIssuer: new Map(),
-  issuers: [],
   isMarketOwner: false,
   isSomeLoading: false,
   isLoading: {

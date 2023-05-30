@@ -1,13 +1,13 @@
 import { format } from "date-fns";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
 import {
   CalculatedMarket,
+  CHAIN_ID,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
-import { Link, Column, PaginatedTable } from "ui";
+import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useTokens } from "hooks";
 import { useMemo } from "react";

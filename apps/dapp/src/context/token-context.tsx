@@ -12,7 +12,6 @@ export type ITokenContext = {
 const TokenContext = createContext<ITokenContext>({} as ITokenContext);
 
 export const TokenProvider = ({ children }: { children: React.ReactNode }) => {
-  //const tokens = useTokenPrices();
   const { tbv, tokens, payoutTokens, getByAddress } = useTokenLoader();
 
   return (

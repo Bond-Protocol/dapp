@@ -1,18 +1,15 @@
 import type { FC } from "react";
+import { useState } from "react";
 import { Route, Routes as Switch } from "react-router-dom";
 import {
   CreateMarket,
-  CreateMarketV1,
   Dashboard,
-  IssuerList,
   MarketInsights,
   Markets,
-  MarketCreated,
   PolicyPage,
   TokenPage,
 } from "./components";
-import { useState } from "react";
-import { terms, privacyPolicy, cookiePolicy } from "./content";
+import { cookiePolicy, privacyPolicy, terms } from "./content";
 import { TokenList } from "components/lists/TokenList";
 
 export const RouteMap: FC = () => {
@@ -20,7 +17,6 @@ export const RouteMap: FC = () => {
 
   return (
     <Switch>
-      <Route path="/" element={<IssuerList />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/markets" element={<Markets />} />
       <Route path="/tokens" element={<TokenList />} />
@@ -31,18 +27,6 @@ export const RouteMap: FC = () => {
         element={
           <CreateMarket onExecute={(marketData) => setNewMarket(marketData)} />
         }
-      />
-      <Route
-        path="/create/v1"
-        element={
-          <CreateMarketV1
-            onExecute={(marketData) => setNewMarket(marketData)}
-          />
-        }
-      />
-      <Route
-        path="/create/v1/:hash"
-        element={<MarketCreated marketData={newMarket} />}
       />
 
       <Route path="/tokens/:chainId/:address" element={<TokenPage />} />

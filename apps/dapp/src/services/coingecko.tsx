@@ -1,5 +1,11 @@
-import { sub, getUnixTime } from "date-fns";
+import { getUnixTime, sub } from "date-fns";
 import { generateFetcher } from "./custom-queries";
+
+const platforms: Record<number, string> = {
+  /** Maps chain ids to coingecko platform format*/
+  1: "ethereum",
+  42161: "arbitrum-one",
+};
 
 export const generateCoingeckoFetch = (url: string) => {
   /*
@@ -23,22 +29,18 @@ export const generateCoingeckoFetch = (url: string) => {
 };
 
 export const getTokenPriceHistory = (
-  apiId: string,
+  address: string,
+  chainId: number,
   range: Duration,
   to = Date.now()
 ) => {
+  const platform = platforms[chainId];
   const from = sub(to, range);
   const fromTimestamp = getUnixTime(from);
   const toTimestamp = getUnixTime(to);
-  const url = `/coins/${apiId}/market_chart/range?vs_currency=usd&from=${fromTimestamp}&to=${toTimestamp}`;
+  const url = `/coins/${platform}/contract/${address}/market_chart/range?vs_currency=usd&from=${fromTimestamp}&to=${toTimestamp}`;
 
   return generateCoingeckoFetch(url);
-};
-
-const platforms: Record<number, string> = {
-  /** Maps chain ids to coingecko platform format*/
-  1: "ethereum",
-  42161: "arbitrum-one",
 };
 
 export const getTokenByContract = async (address: string, chainId: number) => {

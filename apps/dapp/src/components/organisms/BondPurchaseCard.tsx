@@ -2,9 +2,9 @@ import { FC, useEffect, useState } from "react";
 import {
   CalculatedMarket,
   calculateTrimDigits,
-  trim,
   formatLongNumber,
   getBlockExplorer,
+  trim,
 } from "@bond-protocol/contract-library";
 import {
   useGasPrice,
@@ -13,21 +13,18 @@ import {
   useTokens,
 } from "hooks";
 import {
-  Button,
-  InputCard,
   ActionInfoList,
-  formatDate,
-  dynamicFormatter,
+  Button,
   formatCurrency,
+  formatDate,
+  InputCard,
 } from "ui";
 import { BondButton } from "./BondButton";
 import { BondPurchaseModal } from "..";
 import { useAccount, useSigner } from "wagmi";
 import { useNativeCurrency } from "hooks/useNativeCurrency";
 import { providers } from "services/owned-providers";
-import { getProtocolByAddress } from "@bond-protocol/bond-library";
 import add from "date-fns/add";
-import { getTokenDetails } from "src/utils";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -51,12 +48,10 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   });
   const { data: signer } = useSigner();
   const { tokens } = useTokens();
-  console.log({ tokens });
 
   const quoteTokenDetails = tokens.find(
     ({ address }) => address === market.quoteToken.address.toLowerCase()
   );
-  console.log({ quoteTokenDetails });
 
   const provider = providers[market.chainId];
   const { address, isConnected } = useAccount();
@@ -84,9 +79,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
     market.chainId || 0
   );
-
-  const protocol = getProtocolByAddress(market.owner, market.chainId);
-  const issuerName = protocol?.name || "";
 
   const showOwnerBalanceWarning =
     market.callbackAddress === "0x0000000000000000000000000000000000000000" &&
@@ -328,7 +320,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         amount={`${amount} ${market.quoteToken.symbol}`}
         payout={`${Number(payout).toFixed(4)} ${market.payoutToken.symbol}`}
         discount={market.discount}
-        issuer={issuerName}
+        issuer={market.payoutToken.name}
         vestingTime={vestingLabel}
       />
     </div>

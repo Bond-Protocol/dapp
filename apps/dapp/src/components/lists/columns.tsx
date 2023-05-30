@@ -1,18 +1,16 @@
-import { getProtocol } from "@bond-protocol/bond-library";
 import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
 import { add } from "date-fns";
 import {
   longFormatter,
-  usdLongFormatter,
   usdFormatter,
+  usdLongFormatter,
 } from "src/utils/format";
-import { getTokenDetailsForMarket } from "src/utils";
 import {
   CalculatedMarket,
+  CHAINS,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
-import { CHAINS } from "@bond-protocol/bond-library";
 
 const bond: Column<CalculatedMarket> = {
   label: "Bond",
@@ -20,13 +18,12 @@ const bond: Column<CalculatedMarket> = {
   width: "w-[13%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const { quote, lpPair } = getTokenDetailsForMarket(market);
     const chain = CHAINS.get(market.chainId);
 
     return {
       value: market.quoteToken.symbol,
-      icon: quote?.logoUrl,
-      lpPairIcon: lpPair?.logoUrl,
+      icon: market.quoteToken.logoUrl,
+      //   lpPairIcon: lpPair?.logoUrl,
       chainChip: chain?.image,
     };
   },
@@ -37,10 +34,8 @@ const bondPrice: Column<CalculatedMarket> = {
   accessor: "bondPrice",
   width: "w-[18%]",
   formatter: (market) => {
-    const { payout } = getTokenDetailsForMarket(market);
-
     return {
-      icon: payout?.logoUrl,
+      icon: market.payoutToken.logoUrl,
       value: market.formattedDiscountedPrice,
       subtext: market.formattedFullPrice + " Market",
     };
@@ -186,5 +181,4 @@ const view: Column<CalculatedMarket> = {
 
 export const base = [bond, bondPrice, discount, maxPayout, vesting];
 export const marketList = [...base, tbv, issuer, view];
-export const issuerMarketList = [...base, creationDate, tbv, view];
 export const tokenMarketList = [...base, tbv, issuer, view];

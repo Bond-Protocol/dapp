@@ -1,11 +1,11 @@
-import { getToken } from "@bond-protocol/bond-library";
-import { Button, PaginatedTable, Column, formatDate } from "ui";
+import { Button, Column, formatDate, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
 import { ContractTransaction } from "ethers";
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
 import { useMemo } from "react";
+import { useTokenLoader } from "services";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -13,7 +13,9 @@ export const tableColumns: Array<Column<any>> = [
     accessor: "asset",
     unsortable: true,
     formatter: (bond) => {
-      const asset = getToken(bond?.underlying?.id);
+      const { getByAddress } = useTokenLoader();
+      console.log(bond.underlying);
+      const asset = getByAddress(bond?.underlying?.id);
       const balance = longFormatter.format(bond?.balance);
       return {
         value: `${balance} ${asset?.symbol}`,

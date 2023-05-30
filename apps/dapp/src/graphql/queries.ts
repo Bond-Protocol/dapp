@@ -1,8 +1,8 @@
 import { gql } from "graphql-request";
 
 export const listMarkets = gql`
-  query ListMarkets($addresses: [String!]!, $queryKey: String! = "") {
-    markets(first: 1000 where: { hasClosed: false, owner_in: $addresses }) {
+  query ListMarkets($queryKey: String! = "") {
+    markets(first: 1000, where: { hasClosed: false }) {
       id
       name
       network

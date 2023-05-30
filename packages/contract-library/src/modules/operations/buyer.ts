@@ -1,5 +1,4 @@
 import { BigNumberish } from '@ethersproject/bignumber';
-import { LpType } from '@bond-protocol/bond-library';
 import {
   BigNumber,
   ContractTransaction,
@@ -15,7 +14,8 @@ import {
   getTellerContract,
 } from '../contract-helper';
 import {
-  Auctioneer__factory, BondChainlinkOracle__factory,
+  Auctioneer__factory,
+  BondChainlinkOracle__factory,
   CalculatedMarket,
   ERC1155__factory,
   FixedExpirationTeller__factory,
@@ -24,8 +24,6 @@ import {
   PrecalculatedMarket,
 } from 'types';
 import {
-  calcBalancerPoolPrice,
-  calcLpPrice,
   calculateTrimDigits,
   longVestingPeriod,
   trim,
