@@ -15,7 +15,7 @@ import {
   useCreateMarket,
 } from "..";
 import { useNumericInput } from "hooks/use-numeric-input";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
@@ -52,26 +52,41 @@ export const ProjectionChart = (
     onFocus,
   } = useNumericInput("5", true);
 
+  return <div />;
   const [useTokenPrices, setUseTokenPrices] = useState(false);
+  if (Boolean(props.data.length)) {
+    return (
+      <div className="h-[99%] w-full">
+        <PlaceholderChart message="Market simulation will appear here" />
+      </div>
+    );
+  }
 
-  const prices = getProjectionDataset(state, props.data, {
-    tokenPrices: useTokenPrices,
-    targetDiscount: parseFloat(targetDiscount),
-    initialCapacity: Number(state.capacity) ?? 0,
-    initialPrice: Number(state.priceModels[state.priceModel]?.initialPrice),
-    minPrice: Number(state.priceModels[state.priceModel]?.minPrice),
-    durationInDays: state.durationInDays,
-    depositInterval: state.depositInterval,
-    fixedDiscount: Number(state.priceModels[state.priceModel]?.fixedDiscount),
-    baseDiscount: Number(state.priceModels[state.priceModel]?.baseDiscount),
-    targetIntervalDiscount: Number(
-      state.priceModels[state.priceModel]?.targetIntervalDiscount
-    ),
-    fixedPrice: Number(state.priceModels[state.priceModel]?.fixedPrice),
-    maxDiscountFromCurrent: Number(
-      state.priceModels[state.priceModel]?.maxDiscountFromCurrent
-    ),
-  });
+  const prices = useMemo(
+    () =>
+      getProjectionDataset(state, props.data, {
+        tokenPrices: useTokenPrices,
+        targetDiscount: parseFloat(targetDiscount),
+        initialCapacity: Number(state.capacity) ?? 0,
+        initialPrice: Number(state.priceModels[state.priceModel]?.initialPrice),
+        minPrice: Number(state.priceModels[state.priceModel]?.minPrice),
+        durationInDays: state.durationInDays,
+        depositInterval: state.depositInterval,
+        fixedDiscount: Number(
+          state.priceModels[state.priceModel]?.fixedDiscount
+        ),
+        baseDiscount: Number(state.priceModels[state.priceModel]?.baseDiscount),
+        targetIntervalDiscount: Number(
+          state.priceModels[state.priceModel]?.targetIntervalDiscount
+        ),
+        fixedPrice: Number(state.priceModels[state.priceModel]?.fixedPrice),
+        maxDiscountFromCurrent: Number(
+          state.priceModels[state.priceModel]?.maxDiscountFromCurrent
+        ),
+      }),
+    [props.data.length]
+  );
+  console.log({ prices });
 
   const shouldRender = prices.length > 0;
 

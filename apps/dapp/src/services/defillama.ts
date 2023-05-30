@@ -47,19 +47,13 @@ export const fetchPrice = async (
 };
 
 type ChartOptionsDefillama = {
-  chainId?: number;
-  from?: number;
-  to: number;
+  chainId: number;
   days: number;
 };
 
 export const fetchChart = async (
   address: string | string[],
-  chainId: number,
-  options: ChartOptionsDefillama = {
-    to: Date.now(),
-    days: 7,
-  }
+  options: ChartOptionsDefillama
 ): Promise<Array<DefillamaChart>> => {
   const chain = options?.chainId && getNameFromChainId(options?.chainId);
 
@@ -67,16 +61,15 @@ export const fetchChart = async (
     ? address.join(",")
     : `${chain}:${address}`;
 
-  const from = sub(options.to, { days: options.days });
-  const fromTimestamp = getUnixTime(from);
+  const from = getUnixTime(sub(Date.now(), { days: options.days }));
 
   const endpoint = `${DEFILLAMA_ENDPOINT}/chart/${ids}`;
   const period = "1h";
   const span = options.days * 24;
-  const params = `?start=${fromTimestamp}&span=${span}&period=${period}`;
+  const params = `?start=${from}&span=${span}&period=${period}`;
 
   const response = await generateFetcher(endpoint + params)();
-  return formatResponse(response.coins, chainId);
+  return formatResponse(response.coins, options.chainId);
 };
 
 /**The response format isnt very useful so we tweak it*/

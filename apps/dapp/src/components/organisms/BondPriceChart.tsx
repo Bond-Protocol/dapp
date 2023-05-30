@@ -12,12 +12,11 @@ export type BondDiscountChartProps = {
 export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
   const [range, setRange] = useState(7);
   const { dataset, isLoading, purchases } = useBondChartData(market, range);
-
-  if (isLoading || !purchases) {
-    return <div />;
+  if (isLoading) {
+    return <PlaceholderChart message={"Loading performance data"} />;
   }
 
-  if (!dataset || purchases?.length < 2 || market?.quoteToken?.lpPair) {
+  if (!dataset || purchases?.length! < 2 || market?.quoteToken?.lpPair) {
     return (
       <PlaceholderChart
         message={
@@ -46,9 +45,9 @@ export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
         <Chip selected={range === 7} onClick={(_e) => setRange(7)}>
           7D
         </Chip>
-        <Chip selected={range === 30} onClick={(_e) => setRange(30)}>
-          30D
-        </Chip>
+        {/*   <Chip selected={range === 30} onClick={(_e) => setRange(30)}> */}
+        {/*     30D */}
+        {/*   </Chip> */}
       </div>
     </div>
   );

@@ -14,7 +14,6 @@ export function useCalculatedMarkets() {
   const { tokens, getByAddress, fetchedExtendedDetails } = useTokens();
   const { markets, isLoading: isMarketLoading } = useLoadMarkets();
 
-  const [updatedMarketTokens, setUpdatedMarketTokens] = useState(false);
   const [calculatedMarkets, setCalculatedMarkets] = useState<
     CalculatedMarket[]
   >([]);
@@ -103,9 +102,11 @@ export function useCalculatedMarkets() {
 
   useEffect(() => {
     if (
-      !updatedMarketTokens &&
       Boolean(calculatedMarkets.length) &&
-      tokens.some((t) => Boolean(t.logoURI))
+      tokens.some((t) => Boolean(t.logoURI)) &&
+      !calculatedMarkets.some(
+        (m) => Boolean(m.quoteToken.logoURI) || Boolean(m.quoteToken.logoURI)
+      )
     ) {
       const updated = calculatedMarkets?.map((x) => {
         const quoteToken = tokens.find(
@@ -119,9 +120,8 @@ export function useCalculatedMarkets() {
       });
 
       setCalculatedMarkets(updated);
-      setUpdatedMarketTokens(true);
     }
-  }, [calculatedMarkets, fetchedExtendedDetails]);
+  }, [tokens, calculatedMarkets]);
 
   const isLoading = {
     market: isMarketLoading,
@@ -130,12 +130,12 @@ export function useCalculatedMarkets() {
 
   const isSomeLoading = () => Object.values(isLoading).some((x) => x);
 
+  console.log("useCalc call");
   return {
     allMarkets: calculatedMarkets,
     refetchAllMarkets,
     refetchOne,
     isSomeLoading,
-    updatedMarketTokens,
     isLoading: {
       market: isMarketLoading,
       priceCalcs: isCalculatingAll,

@@ -71,9 +71,16 @@ export const CreateMarketController = () => {
     payoutToken: state.payoutToken,
     dayRange: state.durationInDays,
   });
+  console.log("CONTROLLER");
 
   useEffect(() => {
-    if (!state.oracle || !state.payoutToken || !state.quoteToken || !state.oracleAddress || state.oracleAddress === "") {
+    if (
+      !state.oracle ||
+      !state.payoutToken ||
+      !state.quoteToken ||
+      !state.oracleAddress ||
+      state.oracleAddress === ""
+    ) {
       setOracleMessage("");
       setIsOraclePairValid(false);
       return;

@@ -21,14 +21,13 @@ const pricingLabels: Record<MarketPricing, string> = {
 };
 
 export const MarketInsights = () => {
-  const { allMarkets } = useMarkets();
+  const { allMarkets: markets } = useMarkets();
   const { id, chainId } = useParams();
   const navigate = useNavigate();
-  const markets = Array.from(allMarkets.values());
   const market: CalculatedMarket = markets.find(
     ({ marketId, chainId: marketChainId }) =>
       marketId === Number(id) && marketChainId === chainId
-  );
+  )!;
 
   if (!market) return <Loading content={meme()} />;
 

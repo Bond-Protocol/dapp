@@ -1,7 +1,7 @@
 import { trimAsNumber } from "utils";
 
 export interface PriceData {
-  date: number;
+  timestamp: number;
   price: number;
   quotePriceUsd: number;
   payoutPriceUsd: number;
@@ -81,7 +81,7 @@ export function generateSDAChartData(
 
   let discountedPrice = initialPrice;
   for (let i = 0; i < duration; i++) {
-    const date = prices[i]?.date;
+    const timestamp = prices[i]?.timestamp;
     const marketPrice = prices[i]?.price;
 
     const usdMarketPrice = prices[i]?.payoutPriceUsd;
@@ -89,7 +89,7 @@ export function generateSDAChartData(
     const usdTargetPrice =
       (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount);
 
-    if (!date || !marketPrice || !usdMarketPrice || !minPrice) {
+    if (!timestamp || !marketPrice || !usdMarketPrice || !minPrice) {
       return discountedPrices;
     }
 
@@ -99,7 +99,7 @@ export function generateSDAChartData(
     );
 
     discountedPrices.push({
-      date: date,
+      timestamp: timestamp,
       price: tokenPrices ? marketPrice : usdMarketPrice,
       discountedPrice: tokenPrices ? discountedPrice : usdDiscountedPrice,
       discount: discount,
@@ -163,7 +163,7 @@ export function generateOSDAChartData(
   let discountedPrice = (initialPrice / 100) * (100 - actualDiscount);
 
   for (let i = 0; i < duration; i++) {
-    const date = prices[i]?.date;
+    const timestamp = prices[i]?.timestamp;
     const tokenMarketPrice = prices[i]?.price;
 
     const usdMarketPrice = prices[i]?.payoutPriceUsd;
@@ -171,7 +171,7 @@ export function generateOSDAChartData(
     const usdTargetPrice =
       (prices[i].payoutPriceUsd / 100) * (100 - targetDiscount);
 
-    if (!date || !tokenMarketPrice) {
+    if (!timestamp || !tokenMarketPrice) {
       return discountedPrices;
     }
 
@@ -181,7 +181,7 @@ export function generateOSDAChartData(
     );
 
     discountedPrices.push({
-      date: date,
+      timestamp: timestamp,
       price: tokenPrices ? tokenMarketPrice : usdMarketPrice,
       discountedPrice: tokenPrices ? discountedPrice : usdDiscountedPrice,
       discount: discount,

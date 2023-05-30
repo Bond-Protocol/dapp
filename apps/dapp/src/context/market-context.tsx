@@ -2,7 +2,7 @@ import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
 import { createContext, useContext } from "react";
 
 const initialState = {
-  allMarkets: new Map(),
+  allMarkets: [],
   isMarketOwner: false,
   isSomeLoading: false,
   updatedMarketTokens: false,

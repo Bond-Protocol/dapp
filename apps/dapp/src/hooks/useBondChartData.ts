@@ -8,11 +8,11 @@ import { getClosest } from "../utils";
 import type { BondPriceDatapoint } from "ui";
 import { calcDiscountPercentage } from "../utils/calculate-percentage";
 import { interpolate } from "../utils/interpolate-price";
-import { useTokenPriceHistory } from "./useTokenPricesHistory";
 import { subgraphEndpoints } from "../services";
 import { isAfter, sub } from "date-fns";
+import { useChartDefillama } from "./useChartDefillama";
 
-type PriceDataArray = Array<{ date: number; price: number }>;
+type PriceDataArray = Array<{ timestamp: number; price: number }>;
 
 type CreateBondPurchaseDatasetArgs = {
   quoteTokenHistory: PriceDataArray;
@@ -21,11 +21,11 @@ type CreateBondPurchaseDatasetArgs = {
 
 const getClosestPrice = (timestamp: number, prices: PriceDataArray) => {
   const priceDate = getClosest(
-    prices?.map((d) => d.date),
+    prices?.map((d) => d.timestamp),
     timestamp
   );
-  const details = prices?.find((d) => d.date === priceDate)!;
-  return { price: details?.price || 0, date: priceDate };
+  const details = prices?.find((d) => d.timestamp === priceDate)!;
+  return { price: details?.price || 0, timestamp: priceDate };
 };
 
 const createBondPurchaseDataset = ({
@@ -38,15 +38,14 @@ const createBondPurchaseDataset = ({
   const updatedPurchases =
     //@ts-ignore
     (bondPurchases.reduce((entries, purchase) => {
-      const date = Math.floor(purchase.timestamp * 1000);
-
-      const { price: payoutTokenPrice, date: priceDate } = getClosestPrice(
-        date,
+      const timestamp = Math.floor(purchase.timestamp * 1000);
+      const { price: payoutTokenPrice, timestamp: priceDate } = getClosestPrice(
+        timestamp,
         payoutTokenHistory
       );
 
       const { price: quoteTokenPrice } = getClosestPrice(
-        date,
+        timestamp,
         quoteTokenHistory
       );
 
@@ -54,13 +53,13 @@ const createBondPurchaseDataset = ({
       datesToRemove.push(priceDate);
 
       const purchaseEntry = {
-        date,
+        timestamp: timestamp,
         price: payoutTokenPrice,
         discountedPrice: parseFloat(purchase.purchasePrice) * quoteTokenPrice,
       };
 
       const postPurchaseEntry = {
-        date: date + 1,
+        timestamp: timestamp + 1,
         price: payoutTokenPrice,
         discountedPrice:
           parseFloat(purchase.postPurchasePrice) * quoteTokenPrice,
@@ -69,27 +68,32 @@ const createBondPurchaseDataset = ({
       return [...entries, purchaseEntry, postPurchaseEntry];
     }, []) as any[]) || [];
 
-  //@ts-ignore
-  const earliestPurchase = updatedPurchases?.sort((a, b) => a.date - b.date)[0]
-    ?.date;
+  const earliestPurchase = updatedPurchases?.sort(
+    (a, b) => a.timestamp - b.timestamp
+  )[0]?.timestamp;
 
   return [
     ...updatedPurchases,
     ...payoutTokenHistory.filter(
-      (d) => !datesToRemove.includes(d?.date) && d?.date > earliestPurchase
+      (d) =>
+        !datesToRemove.includes(d?.timestamp) && d?.timestamp > earliestPurchase
     ),
   ];
 };
 
 export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
   //@ts-ignore
-  const { prices: quoteTokenHistory, ...quoteTokenQuery } =
-    useTokenPriceHistory(market.quoteToken);
+
+  const {
+    chart,
+    isLoading: isChartLoading,
+    isValid,
+  } = useChartDefillama([market.quoteToken, market.payoutToken]);
+
+  const quote = chart.find((t) => t.address === market.quoteToken.address);
+  const payout = chart.find((t) => t.address === market.payoutToken.address);
 
   //@ts-ignore
-  const { prices: payoutTokenHistory, ...payoutTokenQuery } =
-    useTokenPriceHistory(market.payoutToken);
-
   const { data: purchaseData, ...purchasesQuery } =
     useListBondPurchasesPerMarketQuery(
       {
@@ -105,22 +109,19 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
     );
 
   const marketCreationDate = market.creationBlockTimestamp * 1000;
+  const isLoading = isChartLoading || purchasesQuery.isLoading;
 
   //@ts-ignore
   const dataset: BondPriceDatapoint[] = createBondPurchaseDataset({
-    payoutTokenHistory,
-    quoteTokenHistory,
+    payoutTokenHistory: payout?.prices!,
+    quoteTokenHistory: quote?.prices!,
     bondPurchases: purchaseData?.bondPurchases as BondPurchase[],
   }).concat({
-    date: Date.now(),
+    timestamp: Date.now(),
     discountedPrice: market.discountedPrice,
     discount: market.discount,
     price: market.fullPrice,
   });
-
-  const isLoading = [quoteTokenQuery, payoutTokenQuery, purchasesQuery].some(
-    (q) => q.isLoading
-  );
 
   return {
     isLoading,
@@ -128,8 +129,8 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
     dataset: interpolate(dataset)
       .filter(
         (data) =>
-          Number(data.date) > marketCreationDate &&
-          isAfter(Number(data.date), sub(Date.now(), { days: dayRange }))
+          Number(data.timestamp) > marketCreationDate &&
+          isAfter(Number(data.timestamp), sub(Date.now(), { days: dayRange }))
       )
       .map((data) => ({
         ...data,
@@ -138,6 +139,6 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
           Number(data?.discountedPrice)
         ),
       })),
-    isInvalid: quoteTokenQuery?.isInvalid || payoutTokenQuery?.isInvalid,
+    isInvalid: !isValid,
   };
 };

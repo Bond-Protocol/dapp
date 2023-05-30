@@ -1,4 +1,4 @@
-import {calculateTrimDigits, formatCurrency, formatDate, trim} from "utils";
+import { calculateTrimDigits, formatCurrency, formatDate, trim } from "utils";
 
 const getDiscountColor = (price: number, discount: number) => {
   if (price === discount) return "text-white";
@@ -33,7 +33,7 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
   const price = data?.payload.price || 0;
   const discount = data?.payload.discount || 0;
   const discountedPrice = data?.payload.discountedPrice;
-  const date = data?.payload.date || Date.now();
+  const date = data?.payload.timestamp || Date.now();
   const minPrice = data?.payload?.minPrice;
   const initialPrice = data?.payload?.initialPrice;
 
@@ -44,7 +44,7 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
       : "$".concat(price);
 
     return price;
-  }
+  };
 
   return (
     <div className="bg-light-tooltip font-jakarta min-w-[150px] rounded-lg border border-transparent p-2 py-1 text-xs font-extralight">

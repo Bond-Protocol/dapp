@@ -14,12 +14,14 @@ export const useProjectionChartData = ({
 
   useEffect(() => {
     if (isValid) {
-      const [payoutRes, quoteRes] = chart;
-      const updated = payoutRes.prices?.map((p, i) => {
-        const quotePrice = quoteRes.prices[i]?.price;
+      const quote = chart.find((t) => t.address === quoteToken.address)!;
+      const payout = chart.find((t) => t.address === payoutToken.address)!;
+
+      const updated = payout.prices?.map((p, i) => {
+        const quotePrice = quote.prices[i]?.price;
         return {
           ...p,
-          date: p.timestamp * 1000,
+          timestamp: p.timestamp,
           price: 1 / (quotePrice / p.price),
           payoutPriceUsd: p.price,
           quotePriceUsd: quotePrice,

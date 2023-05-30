@@ -148,6 +148,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     </>
   );
 
+  console.log("helo");
   return (
     <div id="cm-root">
       <div id="cm-top-control" className="flex items-center justify-end">

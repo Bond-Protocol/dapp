@@ -12,8 +12,8 @@ import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
 import { calculateTrimDigits, formatCurrency, formatDate, trim } from "utils";
 
 export type BondPriceDatapoint = {
-  date?: number;
   price?: number;
+  timestamp?: number;
   discountedPrice?: number;
   discount?: string | number;
 };
@@ -40,7 +40,7 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
       <ResponsiveContainer>
         <Chart data={props.data}>
           <XAxis
-            dataKey="date"
+            dataKey="timestamp"
             tickFormatter={formatDate.dayMonthTime}
             tickLine={false}
             minTickGap={80}
