@@ -112,7 +112,7 @@ export const useTokenLoader = () => {
   }, [tokens]);
 
   useEffect(() => {
-    async function fetchLogos() {
+    async function fetchExtendedDetails() {
       if (Boolean(tokens.length) && !fetchedLogos) {
         const updatedTokens = await Promise.all(
           tokens.map((t) => discoverLogo(t))
@@ -121,7 +121,8 @@ export const useTokenLoader = () => {
         setTokens(updatedTokens);
       }
     }
-    fetchLogos();
+
+    fetchExtendedDetails();
   }, [tokens]);
 
   return {

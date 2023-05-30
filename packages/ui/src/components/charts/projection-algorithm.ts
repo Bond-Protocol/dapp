@@ -51,7 +51,7 @@ export function generateSDAChartData(
   prices: PriceData[],
   config: ProjectionConfiguration
 ): DiscountedPriceData[] {
-  console.log({ prices, config });
+  console.log("start", { prices, config });
   if (!prices || prices.length === 0) return [];
 
   const discountedPrices: DiscountedPriceData[] = [];
@@ -65,6 +65,7 @@ export function generateSDAChartData(
     durationInDays,
   } = config;
 
+  console.log({ prices, config });
   if (
     !minPrice ||
     !initialCapacity ||
@@ -73,9 +74,11 @@ export function generateSDAChartData(
     !initialPrice
   )
     return [];
+  console.log("inside calc", { prices, config });
 
   const duration = durationInDays * 24;
   if (duration > prices.length) return [];
+  console.log("mf", { prices, config });
   const depositIntervalHours = depositInterval / 60 / 60;
   const hourlyDiscount = 20 / depositIntervalHours;
 

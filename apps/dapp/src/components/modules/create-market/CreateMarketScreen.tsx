@@ -283,12 +283,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         >
           <div className="mt-2 flex h-[290px] w-full">
             <ProjectionChart
-              // @ts-ignore
-              id="cm-projection-chart"
               data={props.projectionData}
-              initialCapacity={Number(state.capacity) || 0}
-              minPrice={Number(state.priceModels[state.priceModel].minPrice)}
-              durationInDays={state.durationInDays}
+              payoutTokenSymbol={state.payoutToken.symbol}
+              quoteTokenSymbol={state.quoteToken.symbol}
             />
           </div>
           <div className="flex gap-x-4">

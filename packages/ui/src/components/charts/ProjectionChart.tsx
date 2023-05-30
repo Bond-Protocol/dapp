@@ -1,4 +1,4 @@
-import {BondPriceChart, BondPriceChartProps, PlaceholderChart} from "./";
+import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
 import {
   generateSDAChartData,
   generateFPAChartData,
@@ -7,9 +7,15 @@ import {
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
-import {CreateMarketState, Input, Switch, TooltipWrapper, useCreateMarket} from "..";
+import {
+  CreateMarketState,
+  Input,
+  Switch,
+  TooltipWrapper,
+  useCreateMarket,
+} from "..";
 import { useNumericInput } from "hooks/use-numeric-input";
-import {useState} from "react";
+import { useState } from "react";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
@@ -45,9 +51,9 @@ const getProjectionDataset = (
   }
 };
 
-export const ProjectionChart = ({
-                                  ...props
-                                }: BondPriceChartProps & ProjectionChartProps) => {
+export const ProjectionChart = (
+  props: BondPriceChartProps & ProjectionChartProps
+) => {
   const [state] = useCreateMarket();
 
   const {
@@ -59,14 +65,15 @@ export const ProjectionChart = ({
 
   const [useTokenPrices, setUseTokenPrices] = useState(false);
 
+  console.log({ props, state });
   const prices = getProjectionDataset(state, props.data, {
     tokenPrices: useTokenPrices,
-    initialCapacity: props.initialCapacity,
-    initialPrice: props.initialPrice,
-    minPrice: props.minPrice,
-    durationInDays: props.durationInDays,
     targetDiscount: parseFloat(targetDiscount),
-    depositInterval: props.depositInterval,
+    initialCapacity: Number(state.capacity) ?? 0,
+    initialPrice: Number(state.priceModels[state.priceModel]?.initialPrice),
+    minPrice: Number(state.priceModels[state.priceModel]?.minPrice),
+    durationInDays: state.durationInDays,
+    depositInterval: state.depositInterval,
     fixedDiscount: props.fixedDiscount,
     baseDiscount: props.baseDiscount,
     targetIntervalDiscount: props.targetIntervalDiscount,
@@ -75,6 +82,8 @@ export const ProjectionChart = ({
   });
 
   const shouldRender = prices.length > 0;
+
+  console.log("ProjectionChart", { prices });
 
   return (
     <div className="flex w-full flex-col">
@@ -118,9 +127,10 @@ export const ProjectionChart = ({
           </div>
         ) : (
           <div className="h-[99%] w-full">
-            <BondPriceChart {...props}
-                            data={prices}
-                            useTokenRatio={useTokenPrices}
+            <BondPriceChart
+              {...props}
+              data={prices}
+              useTokenRatio={useTokenPrices}
             />
           </div>
         )}

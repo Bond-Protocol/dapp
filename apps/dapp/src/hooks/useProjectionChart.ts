@@ -25,6 +25,7 @@ export const useProjectionChartData = ({
           quotePriceUsd: quotePrice,
         };
       });
+
       setPrices(updated);
     }
   }, [isValid]);
