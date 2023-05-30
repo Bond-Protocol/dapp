@@ -16,7 +16,6 @@ export const TokenProvider = ({ children }: { children: React.ReactNode }) => {
   const { tbv, tokens, payoutTokens, getByAddress, fetchedExtendedDetails } =
     useTokenLoader();
 
-  console.log({ tokens });
   return (
     <TokenContext.Provider
       value={{

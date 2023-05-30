@@ -33,7 +33,6 @@ const bondPrice: Column<CalculatedMarket> = {
   accessor: "bondPrice",
   width: "w-[18%]",
   formatter: (market) => {
-    console.log({ market });
     return {
       icon: market.payoutToken.logoURI,
       value: market.formattedDiscountedPrice,

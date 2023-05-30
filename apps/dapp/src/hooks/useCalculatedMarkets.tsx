@@ -130,7 +130,6 @@ export function useCalculatedMarkets() {
 
   const isSomeLoading = () => Object.values(isLoading).some((x) => x);
 
-  console.log("useCalc call");
   return {
     allMarkets: calculatedMarkets,
     refetchAllMarkets,
