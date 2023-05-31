@@ -254,9 +254,13 @@ export const CreateMarketController = () => {
 
     let startDate;
 
-    //Start date isnt currently available in mainnet
+    /*
+      Ethereum Mainnet currently uses SDA v1 contracts, so start date is not supported.
+      The v1.1 contracts have been deployed to Goerli, but we are using v1 there too for consistency.
+    */
     const startDateUnavailable =
-      state.priceModel === "dynamic" && Number(chain.id) === 1;
+      state.priceModel === "dynamic" &&
+      (Number(chain.id) === 1 || Number(chain.id) === 5);
 
     if (
       (state.startDate && state.startDate.getTime() <= Date.now()) ||

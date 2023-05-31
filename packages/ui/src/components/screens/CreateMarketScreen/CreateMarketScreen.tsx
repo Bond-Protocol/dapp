@@ -1,30 +1,29 @@
 import { useEffect, useState } from "react";
 import {
   Button,
+  calculateDuration,
+  ConfirmMarketCreationDialog,
+  CreateMarketAction,
+  CreateMarketState,
   FlatSelect,
-  InputModal,
   InfoLabel,
-  SelectTokenDialog,
-  SelectModal,
-  SelectVestingDialog,
+  InputModal,
+  MarketCreatedDialog,
+  Modal,
+  PriceData,
+  PriceModelPicker,
+  ProjectionChart,
   SelectDateDialog,
   SelectEndDateDialog,
-  TokenInput,
-  Modal,
-  CreateMarketAction,
-  PriceModelPicker,
-  ConfirmMarketCreationDialog,
-  useCreateMarket,
-  ProjectionChart,
-  CreateMarketState,
-  Token,
-  TransactionHashDialog,
-  MarketCreatedDialog,
-  PriceData,
-  calculateDuration,
-  TokenQuantityInput,
+  SelectModal,
   SelectStartDateDialog,
+  SelectTokenDialog,
+  SelectVestingDialog,
+  Token,
+  TokenQuantityInput,
   TooltipWrapper,
+  TransactionHashDialog,
+  useCreateMarket,
 } from "components";
 import {
   calculateTrimDigits,
@@ -83,9 +82,15 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     fetchAllowance();
   }, [state.payoutToken, state.priceModel, state.vestingType]);
 
-  const canSubmit = //TODO: needs improvement
+  /*
+    Ethereum Mainnet currently uses SDA v1 contracts, so start date is not supported.
+    The v1.1 contracts have been deployed to Goerli, but we are using v1 there too for consistency.
+  */
+  const canSubmit =
     parseFloat(state.capacity) > 0 &&
-    hasConfirmedStart &&
+    (hasConfirmedStart ||
+      (state.priceModel === "dynamic" &&
+        (Number(chain) === 1 || Number(chain) === 5))) &&
     state.endDate &&
     state.vesting &&
     state.quoteToken.address &&
@@ -312,7 +317,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           </div>
           <div className="flex gap-x-4">
             {state.priceModel === "dynamic" &&
-            (Number(chain) === 1 || !chain) ? (
+            (Number(chain) === 1 || Number(chain) === 5 || !chain) ? (
               <TooltipWrapper content="Dynamic market start dates are currently unavailable in Ethereum Mainnet">
                 <InputModal
                   disabled
