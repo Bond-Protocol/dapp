@@ -48,7 +48,10 @@ export const SelectVestingDialog = (props: {
         ? days
         : `${days} days`;
 
-    props.onSubmit({ value: { type, value: (type === "date" ? date : days) }, label });
+    props.onSubmit({
+      value: { type, value: type === "date" ? date : days },
+      label,
+    });
 
     props.onClose(e);
   };
@@ -87,7 +90,7 @@ export const SelectVestingDialog = (props: {
           Select
         </Button>
       </div>
-      <Link className="mt-4 -mb-1 font-mono text-sm">CUSTOM VESTING FAQ</Link>
+      <Link className="-mb-1 mt-4 font-mono text-sm">CUSTOM VESTING FAQ</Link>
     </div>
   );
 };

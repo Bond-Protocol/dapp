@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select, Modal, ModalProps, SelectProps } from "..";
+import { Modal, ModalProps, Select, SelectProps } from "..";
 import editIcon from "../../assets/icons/edit-icon.svg";
 import userIcon from "../../assets/icons/user.svg";
 
@@ -81,16 +81,16 @@ export const SelectModal = ({
           options={customOptions}
           value={value}
           onChange={(_e, value) => {
-            if (value === "user") {
-              // @ts-ignore
-              value = lastCustomValue;
-              console.log(customContent);
-            }
             if (value === "custom") {
               setOpen(true);
               return;
             }
             if (value) setValue(value);
+
+            if (value === "user") {
+              // @ts-ignore
+              value = lastCustomValue;
+            }
 
             //@ts-ignore
             if (value && value.custom) {

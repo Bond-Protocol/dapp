@@ -65,9 +65,20 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const [open, setOpen] = useState(false);
   const [showMultisig, setShowMultisig] = useState(false);
   const [state, dispatch] = useCreateMarket();
+  const [hasConfirmedStart, setHasConfirmedStart] = useState(false);
 
   const capacityToken =
     state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
+
+  const reset = () => {
+    setHasConfirmedStart(false);
+    dispatch({ type: CreateMarketAction.RESET });
+    setIndex((i) => ++i); //TODO: (afx) :pepe_gun: but its valid react so
+  };
+
+  useEffect(() => {
+    reset();
+  }, [props.chain]);
 
   useEffect(() => {
     const fetchAllowance = async () => {
@@ -78,8 +89,15 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     fetchAllowance();
   }, [state.payoutToken, state.priceModel, state.vestingType]);
 
-  const canSubmit = //TODO: needs improvement
+  /*
+    Ethereum Mainnet currently uses SDA v1 contracts, so start date is not supported.
+    The v1.1 contracts have been deployed to Goerli, but we are using v1 there too for consistency.
+  */
+  const canSubmit =
     parseFloat(state.capacity) > 0 &&
+    (hasConfirmedStart ||
+      (state.priceModel === "dynamic" &&
+        (Number(chain) === 1 || Number(chain) === 5))) &&
     state.endDate &&
     state.vesting &&
     state.quoteToken.address &&
@@ -153,10 +171,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     <div id="cm-root">
       <div id="cm-top-control" className="flex items-center justify-end">
         <div
-          onClick={() => {
-            dispatch({ type: CreateMarketAction.RESET });
-            setIndex((i) => ++i); //TODO: (afx) :pepe_gun: but its valid react so
-          }}
+          onClick={reset}
           className="mr-2 cursor-pointer px-8 font-fraktion text-sm tracking-widest hover:text-light-secondary"
         >
           RESET
@@ -289,36 +304,21 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="flex gap-x-4">
-            {state.priceModel === "dynamic" ? (
-              <TooltipWrapper content="Dynamic market scheduling coming soon™">
+            {state.priceModel === "dynamic" &&
+            (Number(chain) === 1 || Number(chain) === 5 || !chain) ? (
+              <TooltipWrapper content="Dynamic market start dates are currently unavailable in Ethereum Mainnet">
                 <InputModal
                   disabled
                   id="cm-start-date-picker"
                   label="Market Start"
                   value="Immediate"
-                  inputClassName="text-light-grey"
-                  endAdornment={<CalendarIcon className="mr-2 fill-white" />}
+                  className="opacity-75"
+                  inputClassName="text-light-grey cursor-not-allowed select-none"
+                  endAdornment={
+                    <CalendarIcon className="mr-2 cursor-not-allowed fill-white" />
+                  }
                   ModalContent={(props) => <SelectDateDialog {...props} />}
-                  onSubmit={(value) => {
-                    dispatch({
-                      type: CreateMarketAction.UPDATE_START_DATE,
-                      value,
-                    });
-
-                    const durationInDays = Math.ceil(
-                      Number(calculateDuration(state.endDate, value)) /
-                        60 /
-                        60 /
-                        24
-                    );
-                    if (durationInDays) {
-                      updateMaxBond(
-                        state.capacity,
-                        durationInDays,
-                        state.priceModel
-                      );
-                    }
-                  }}
+                  onSubmit={() => {}}
                 />
               </TooltipWrapper>
             ) : (
@@ -327,15 +327,41 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 label="Market Start"
                 title="Select start date"
                 value={
-                  state.startDate ? formatDate.dateAndTime(state.startDate) : ""
+                  state.startDate
+                    ? formatDate.dateAndTime(state.startDate)
+                    : hasConfirmedStart
+                    ? "Immediate"
+                    : ""
                 }
+                inputClassName="text-light-grey"
                 endAdornment={<CalendarIcon className="mr-2 fill-white" />}
-                ModalContent={(props) => <SelectDateDialog {...props} />}
+                ModalContent={(props) => (
+                  <SelectStartDateDialog
+                    {...props}
+                    id="cm-start-date-dialog"
+                    onConfirmImmediate={() => setHasConfirmedStart(true)}
+                  />
+                )}
                 onSubmit={(value) => {
+                  setHasConfirmedStart(true);
                   dispatch({
                     type: CreateMarketAction.UPDATE_START_DATE,
                     value,
                   });
+
+                  const durationInDays = Math.ceil(
+                    Number(calculateDuration(state.endDate, value)) /
+                      60 /
+                      60 /
+                      24
+                  );
+                  if (durationInDays) {
+                    updateMaxBond(
+                      state.capacity,
+                      durationInDays,
+                      state.priceModel
+                    );
+                  }
                 }}
               />
             )}
@@ -371,8 +397,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }}
             />
           </div>
-          <div className="mt-4 flex gap-x-4">
-            {!state.durationInDays ? (
+          <div className="mt-4 flex flex-row-reverse gap-x-4">
+            {!(state.durationInDays && state.capacity) ? (
               <div
                 className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md`}
               >

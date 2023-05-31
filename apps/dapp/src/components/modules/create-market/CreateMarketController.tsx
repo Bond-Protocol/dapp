@@ -18,9 +18,22 @@ import { useTokenlists } from "context/tokenlist-context";
 import { usePurchaseBond } from "hooks";
 import { CreateMarketScreen } from "./CreateMarketScreen";
 
-function getBondType(state: CreateMarketState) {
+function getBondType(state: CreateMarketState, chainId: string) {
+  chainId = chainId.toString();
   switch (state.priceModel) {
     case "dynamic":
+      /*
+       SDA v1.1 has not been deployed to Ethereum Mainnet
+       It has been deployed to Goerli, but using the old SDA contracts for consistency
+      */
+      if (
+        chainId === CHAIN_ID.ETHEREUM_MAINNET ||
+        chainId === CHAIN_ID.GOERLI_TESTNET
+      ) {
+        return state.vestingType === "term"
+          ? contractLib.BOND_TYPE.FIXED_TERM_SDA
+          : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
+      }
       return state.vestingType === "term"
         ? contractLib.BOND_TYPE.FIXED_TERM_SDA_V1_1
         : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA_V1_1;
@@ -40,11 +53,11 @@ function getBondType(state: CreateMarketState) {
 }
 
 const getAuctioneer = (chain: string, state: CreateMarketState) => {
-  return getAddressesForType(chain, getBondType(state)).auctioneer;
+  return getAddressesForType(chain, getBondType(state, chain)).auctioneer;
 };
 
 const getTeller = (chain: string, state: CreateMarketState) => {
-  return getAddressesForType(chain, getBondType(state)).teller;
+  return getAddressesForType(chain, getBondType(state, chain)).teller;
 };
 
 export const CreateMarketController = () => {
@@ -105,6 +118,7 @@ export const CreateMarketController = () => {
         setOracleMessage("Invalid Oracle Address!");
       }
     }
+
     checkOracle();
   }, [state.oracle, state.oracleAddress, state.payoutToken, state.quoteToken]);
 
@@ -144,6 +158,7 @@ export const CreateMarketController = () => {
       setOraclePrice(adjustedPrice);
       setOracleMessage("Using Oracle Price!");
     }
+
     checkOracle();
   }, [isOraclePairValid]);
 
@@ -234,11 +249,22 @@ export const CreateMarketController = () => {
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
-    let bondType: string = getBondType(state);
+    let bondType: string = getBondType(state, chain.id);
 
     let startDate;
 
-    if (state.startDate && state.startDate.getTime() <= Date.now()) {
+    /*
+      Ethereum Mainnet currently uses SDA v1 contracts, so start date is not supported.
+      The v1.1 contracts have been deployed to Goerli, but we are using v1 there too for consistency.
+    */
+    const startDateUnavailable =
+      state.priceModel === "dynamic" &&
+      (Number(chain.id) === 1 || Number(chain.id) === 5);
+
+    if (
+      (state.startDate && state.startDate.getTime() <= Date.now()) ||
+      startDateUnavailable
+    ) {
       startDate = 0;
     } else {
       startDate = state.startDate

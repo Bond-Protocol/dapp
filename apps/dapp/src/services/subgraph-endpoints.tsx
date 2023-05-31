@@ -15,6 +15,9 @@ export const subgraphEndpoints = {
   [CHAIN_ID.ARBITRUM_MAINNET]: `${
     import.meta.env.VITE_ARBITRUM_MAINNET_SUBGRAPH_ENDPOINT
   }`,
+  [CHAIN_ID.OPTIMISM_MAINNET]: `${
+    import.meta.env.VITE_OPTIMISM_MAINNET_SUBGRAPH_ENDPOINT
+  }`,
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: `${
     import.meta.env.VITE_ARBITRUM_TESTNET_SUBGRAPH_ENDPOINT
   }`,
@@ -37,6 +40,10 @@ export const mainnetEndpoints = [
   {
     url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
     chain: CHAIN_ID.ARBITRUM_MAINNET,
+  },
+  {
+    url: subgraphEndpoints[CHAIN_ID.OPTIMISM_MAINNET],
+    chain: CHAIN_ID.OPTIMISM_MAINNET,
   },
 ];
 

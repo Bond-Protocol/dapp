@@ -1,5 +1,6 @@
 import { Provider } from "@wagmi/core";
 import { ethers } from "ethers";
+import { environment } from "src/environment";
 
 type FallbackProviderConfig = {
   //RPC URL
@@ -37,6 +38,19 @@ const mainnetProviders: ProviderOptions[] = [
       {
         url: `https://arb-mainnet.g.alchemy.com/v2/${
           import.meta.env.VITE_ALCHEMY_ARBITRUM_MAINNET_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
+  {
+    name: "optimism",
+    chainId: "10",
+    rpcs: [
+      {
+        url: `https://opt-mainnet.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_OPTIMISM_MAINNET_KEY
         }`,
         weight: 1,
         priority: 1,
@@ -111,7 +125,6 @@ const testnetProviders: ProviderOptions[] = [
   },
 ];
 
-import { environment } from "src/environment";
 const activeProviders = environment.isTestnet
   ? testnetProviders
   : mainnetProviders;

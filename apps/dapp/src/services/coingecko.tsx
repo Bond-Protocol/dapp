@@ -5,6 +5,7 @@ const platforms: Record<number, string> = {
   /** Maps chain ids to coingecko platform format*/
   1: "ethereum",
   42161: "arbitrum-one",
+  10: "optimistic-ethereum",
 };
 
 export const generateCoingeckoFetch = (url: string) => {

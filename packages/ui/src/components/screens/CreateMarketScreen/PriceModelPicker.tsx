@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatSelect, Switch } from "components";
+import { FlatSelect, Switch, TooltipWrapper } from "components";
 import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
 import { ReactComponent as LineIcon } from "assets/icons/line.svg";
 import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
@@ -118,10 +118,21 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
     <div id={props.id} className="w-full">
       <div className="flex items-center justify-between">
         <p className="text-light-grey-400 text-sm">Price Model</p>
-        <Switch label="Oracle" onChange={(e) => {
-          setOracle(e.target.checked);
-          if (!e.target.checked) setOracleAddress("");
-        }} />
+        {Number(props.chain) !== 1 ? (
+          <Switch
+            label="Oracle"
+            onChange={(e) => {
+              setOracle(e.target.checked);
+              if (!e.target.checked) setOracleAddress("");
+            }}
+          />
+        ) : (
+          <div>
+            <TooltipWrapper content="Oracle markets are currently unavailable in Ethereum Mainnet">
+              <Switch disabled label="Oracle" onChange={(e) => {}} />
+            </TooltipWrapper>
+          </div>
+        )}
       </div>
 
       <FlatSelect

@@ -76,6 +76,7 @@ export const useDiscoverToken = () => {
 
       return { ...token, name, details, logoURI, logoUrl: logoURI };
     } catch (e) {
+      console.log(token);
       return token;
     }
   };
