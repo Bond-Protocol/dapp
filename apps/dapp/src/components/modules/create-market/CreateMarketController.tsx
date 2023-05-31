@@ -77,7 +77,13 @@ export const CreateMarketController = () => {
   });
 
   useEffect(() => {
-    if (!state.oracle || !state.payoutToken || !state.quoteToken || !state.oracleAddress || state.oracleAddress === "") {
+    if (
+      !state.oracle ||
+      !state.payoutToken ||
+      !state.quoteToken ||
+      !state.oracleAddress ||
+      state.oracleAddress === ""
+    ) {
       setOracleMessage("");
       setIsOraclePairValid(false);
       return;
@@ -232,7 +238,14 @@ export const CreateMarketController = () => {
 
     let startDate;
 
-    if (state.startDate && state.startDate.getTime() <= Date.now()) {
+    //Start date isnt currently available in mainnet
+    const startDateUnavailable =
+      state.priceModel === "dynamic" && Number(chain.id) === 1;
+
+    if (
+      (state.startDate && state.startDate.getTime() <= Date.now()) ||
+      startDateUnavailable
+    ) {
       startDate = 0;
     } else {
       startDate = state.startDate

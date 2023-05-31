@@ -22,7 +22,9 @@ import {
   MarketCreatedDialog,
   PriceData,
   calculateDuration,
-  TokenQuantityInput, SelectStartDateDialog,
+  TokenQuantityInput,
+  SelectStartDateDialog,
+  TooltipWrapper,
 } from "components";
 import {
   calculateTrimDigits,
@@ -285,7 +287,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               payoutTokenSymbol={state.payoutToken.symbol}
               quoteTokenSymbol={state.quoteToken.symbol}
               initialCapacity={Number(state.capacity) || 0}
-              initialPrice={Number(state.priceModels[state.priceModel].initialPrice)}
+              initialPrice={Number(
+                state.priceModels[state.priceModel].initialPrice
+              )}
               minPrice={Number(state.priceModels[state.priceModel].minPrice)}
               durationInDays={state.durationInDays}
               depositInterval={state.depositInterval}
@@ -307,47 +311,67 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="flex gap-x-4">
-            <InputModal
-              id="cm-start-date-picker"
-              label="Market Start"
-              title="Select start date"
-              value={
-                state.startDate
-                  ? formatDate.dateAndTime(state.startDate)
-                  : (
-                    hasConfirmedStart
-                      ? "Immediate"
-                      : ""
-                  )
-              }
-              inputClassName="text-light-grey"
-              endAdornment={<CalendarIcon className="mr-2 fill-white" />}
-              ModalContent={(props) => (
-                <SelectStartDateDialog
-                  {...props}
-                  id="cm-start-date-dialog"
-                  onConfirmImmediate={() => setHasConfirmedStart(true)}
+            {state.priceModel === "dynamic" &&
+            (Number(chain) === 1 || !chain) ? (
+              <TooltipWrapper content="Dynamic market start dates are currently unavailable in Ethereum Mainnet">
+                <InputModal
+                  disabled
+                  id="cm-start-date-picker"
+                  label="Market Start"
+                  value="Immediate"
+                  className="opacity-75"
+                  inputClassName="text-light-grey cursor-not-allowed select-none"
+                  endAdornment={
+                    <CalendarIcon className="mr-2 cursor-not-allowed fill-white" />
+                  }
+                  ModalContent={(props) => <SelectDateDialog {...props} />}
+                  onSubmit={() => {}}
                 />
-              )}
-              onSubmit={(value) => {
-                setHasConfirmedStart(true);
-                dispatch({
-                  type: CreateMarketAction.UPDATE_START_DATE,
-                  value,
-                });
-
-                const durationInDays = Math.ceil(
-                  Number(calculateDuration(state.endDate, value)) / 60 / 60 / 24
-                );
-                if (durationInDays) {
-                  updateMaxBond(
-                    state.capacity,
-                    durationInDays,
-                    state.priceModel
-                  );
+              </TooltipWrapper>
+            ) : (
+              <InputModal
+                id="cm-start-date-picker"
+                label="Market Start"
+                title="Select start date"
+                value={
+                  state.startDate
+                    ? formatDate.dateAndTime(state.startDate)
+                    : hasConfirmedStart
+                    ? "Immediate"
+                    : ""
                 }
-              }}
-            />
+                inputClassName="text-light-grey"
+                endAdornment={<CalendarIcon className="mr-2 fill-white" />}
+                ModalContent={(props) => (
+                  <SelectStartDateDialog
+                    {...props}
+                    id="cm-start-date-dialog"
+                    onConfirmImmediate={() => setHasConfirmedStart(true)}
+                  />
+                )}
+                onSubmit={(value) => {
+                  setHasConfirmedStart(true);
+                  dispatch({
+                    type: CreateMarketAction.UPDATE_START_DATE,
+                    value,
+                  });
+
+                  const durationInDays = Math.ceil(
+                    Number(calculateDuration(state.endDate, value)) /
+                      60 /
+                      60 /
+                      24
+                  );
+                  if (durationInDays) {
+                    updateMaxBond(
+                      state.capacity,
+                      durationInDays,
+                      state.priceModel
+                    );
+                  }
+                }}
+              />
+            )}
             <InputModal
               id="cm-end-date-picker"
               label="Market End"
@@ -381,7 +405,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             />
           </div>
           <div className="mt-4 flex flex-row-reverse gap-x-4">
-            {!(state.durationInDays && state.capacity)? (
+            {!(state.durationInDays && state.capacity) ? (
               <div
                 className={`flex max-h-[104px] justify-center bg-white/5 p-4 backdrop-blur-md ${
                   state.payoutToken.symbol &&
