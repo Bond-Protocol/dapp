@@ -254,7 +254,14 @@ export const CreateMarketController = () => {
 
     let startDate;
 
-    if (state.startDate && state.startDate.getTime() <= Date.now()) {
+    //Start date isnt currently available in mainnet
+    const startDateUnavailable =
+      state.priceModel === "dynamic" && Number(chain.id) === 1;
+
+    if (
+      (state.startDate && state.startDate.getTime() <= Date.now()) ||
+      startDateUnavailable
+    ) {
       startDate = 0;
     } else {
       startDate = state.startDate

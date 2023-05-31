@@ -29,8 +29,9 @@ export type SwitchProps = SwitchUnstyledProps & {
 };
 
 export const Switch = (props: SwitchProps) => {
+  const disabledStyle = props.disabled ? "opacity-50 cursor-not-allowed" : "";
   return (
-    <div className="flex items-center">
+    <div className={"flex items-center " + " " + disabledStyle}>
       <SwitchUnstyled componentsProps={slotProps} {...props} />
       {props.label && <p className="">{props.label}</p>}
     </div>
