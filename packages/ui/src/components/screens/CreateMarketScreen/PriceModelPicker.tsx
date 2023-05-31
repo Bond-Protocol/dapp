@@ -1,6 +1,5 @@
-//@ts-nocheck
 import { useState, useEffect } from "react";
-import { FlatSelect } from "components";
+import { Switch, FlatSelect } from "components";
 import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
 import { ReactComponent as LineIcon } from "assets/icons/line.svg";
 import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
@@ -15,6 +14,10 @@ export type PriceModelPickerProps = {
     oracleAddress: string;
   }) => any;
   id?: string;
+  chain: string;
+  oraclePrice?: number;
+  oracleMessage: string;
+  isOracleValid?: boolean;
 } & Partial<PriceControlProps>;
 
 const options = [
@@ -37,13 +40,15 @@ const priceControlConfig: Record<
   dynamic: [
     {
       property: "initialPrice",
-      topLabel: "Initial Discount",
-      display: "percentage",
+      topLabel: "Initial Price",
+      display: "exchange_rate",
+      returnValue: "exchange_rate",
     },
     {
       property: "minPrice",
       topLabel: "Min Price",
       display: "exchange_rate",
+      returnValue: "exchange_rate",
     },
   ],
   static: [
@@ -51,32 +56,45 @@ const priceControlConfig: Record<
       property: "initialPrice",
       topLabel: "Fixed Price",
       display: "exchange_rate",
+      returnValue: "exchange_rate",
     },
   ],
   ["oracle-dynamic"]: [
     {
-      property: "initialDiscount",
-      bottomLabel: "From Oracle Price",
-      topLabel: "Initial Discount",
+      property: "baseDiscount",
+      topLabel: "Base Discount",
       display: "percentage",
+      returnValue: "percentage",
+      initialValue: "5",
     },
     {
-      property: "minPrice",
-      topLabel: "Min Price",
-      display: "exchange_rate",
+      property: "targetIntervalDiscount",
+      topLabel: "Target Interval Discount",
+      display: "percentage",
+      returnValue: "percentage",
+      initialValue: "10",
+    },
+    {
+      property: "maxDiscountFromCurrent",
+      topLabel: "Max Discount From Start",
+      display: "percentage",
+      returnValue: "percentage",
+      initialValue: "20",
     },
   ],
   ["oracle-static"]: [
     {
-      property: "initialDiscount",
-      bottomLabel: "From Oracle Price",
+      property: "fixedDiscount",
       topLabel: "Fixed Discount",
       display: "percentage",
+      returnValue: "percentage",
     },
     {
-      property: "minPrice",
-      topLabel: "Min Price",
-      display: "exchange_rate",
+      property: "maxDiscountFromCurrent",
+      topLabel: "Max Discount From Start",
+      display: "percentage",
+      returnValue: "percentage",
+      initialValue: "20",
     },
   ],
 };
@@ -98,10 +116,13 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
 
   return (
     <div id={props.id} className="w-full">
-      {/* <div className="flex items-center justify-between"> */}
-      {/*   <p className="text-light-grey-400 text-sm">Price Model</p> */}
-      {/*   <Switch label="Oracle" onChange={(e) => setOracle(e.target.checked)} /> */}
-      {/* </div> */}
+      <div className="flex items-center justify-between">
+        <p className="text-light-grey-400 text-sm">Price Model</p>
+        <Switch label="Oracle" onChange={(e) => {
+          setOracle(e.target.checked);
+          if (!e.target.checked) setOracleAddress("");
+        }} />
+      </div>
 
       <FlatSelect
         className="mt-2"
@@ -114,6 +135,8 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
         oracle={oracle}
         type={type}
         onOracleChange={setOracleAddress}
+        oracleMessage={props.oracleMessage}
+        isOracleValid={props.isOracleValid}
       />
       <div className="flex justify-between gap-x-4 pt-4">
         {!shouldRender ? (
@@ -133,7 +156,8 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
                 key={`${priceModel}-${p.property}`}
                 payoutToken={props.payoutToken}
                 quoteToken={props.quoteToken}
-                onRateChange={(rate, reversed) => {
+                oraclePrice={props.oraclePrice}
+                onRateChange={(rate: any, reversed: boolean) => {
                   props.onRateChange &&
                     props.onRateChange({
                       priceModel,
