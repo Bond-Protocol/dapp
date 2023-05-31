@@ -1,4 +1,4 @@
-import { formatCurrency, formatDate } from "utils";
+import {calculateTrimDigits, formatCurrency, formatDate, trim} from "utils";
 
 const getDiscountColor = (price: number, discount: number) => {
   if (price === discount) return "text-white";
@@ -6,7 +6,9 @@ const getDiscountColor = (price: number, discount: number) => {
 };
 
 type ChartTooltipProps = {
-  tokenSymbol: string;
+  payoutTokenSymbol: string;
+  quoteTokenSymbol?: string;
+  useTokenRatio?: boolean;
   payload?: Array<{ payload: any }>;
 };
 
@@ -35,18 +37,27 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
   const minPrice = data?.payload?.minPrice;
   const initialPrice = data?.payload?.initialPrice;
 
+  const getValue = (price: string) => {
+    price = trim(price, calculateTrimDigits(Number(price)));
+    price = props.useTokenRatio
+      ? price.concat(" ").concat(props.quoteTokenSymbol || "")
+      : "$".concat(price);
+
+    return price;
+  }
+
   return (
     <div className="bg-light-tooltip font-jakarta min-w-[150px] rounded-lg border border-transparent p-2 py-1 text-xs font-extralight">
       <TooltipLabel
-        value={formatCurrency.dynamicFormatter(price)}
-        label={`${props.tokenSymbol} Price: `}
+        value={getValue(price)}
+        label={`${props.payoutTokenSymbol} Price: `}
         className="text-light-primary mt-2"
         valueClassName=""
       />
       {discountedPrice && (
         <>
           <TooltipLabel
-            value={formatCurrency.dynamicFormatter(discountedPrice)}
+            value={getValue(discountedPrice)}
             label="Bond Price: "
             className="text-light-secondary"
           />

@@ -16,7 +16,7 @@ import {
   getTellerContract,
 } from '../contract-helper';
 import {
-  Auctioneer__factory,
+  Auctioneer__factory, BondChainlinkOracle__factory,
   CalculatedMarket,
   ERC1155__factory,
   FixedExpirationTeller__factory,
@@ -115,6 +115,7 @@ export async function redeem(
   if (tellerAddress) {
     switch (bondType) {
       case BOND_TYPE.FIXED_EXPIRY_SDA:
+      case BOND_TYPE.FIXED_EXPIRY_SDA_V1_1:
       case BOND_TYPE.FIXED_EXPIRY_FPA:
       case BOND_TYPE.FIXED_EXPIRY_OFDA:
       case BOND_TYPE.FIXED_EXPIRY_OSDA:
@@ -122,6 +123,7 @@ export async function redeem(
         teller = FixedExpirationTeller__factory.connect(tellerAddress, signer);
         break;
       case BOND_TYPE.FIXED_TERM_SDA:
+      case BOND_TYPE.FIXED_TERM_SDA_V1_1:
       case BOND_TYPE.FIXED_TERM_FPA:
       case BOND_TYPE.FIXED_TERM_OFDA:
       case BOND_TYPE.FIXED_TERM_OSDA:
@@ -214,6 +216,54 @@ export async function changeApproval(
   }
 }
 
+export async function checkOraclePairValidity(
+  oracleAddress: string,
+  payoutTokenAddress: string,
+  quoteTokenAddress: string,
+  provider: Provider,
+): Promise<boolean> {
+  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+
+  try {
+    return oracle.supportedPairs(payoutTokenAddress, quoteTokenAddress, {});
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function getOraclePrice(
+  oracleAddress: string,
+  payoutTokenAddress: string,
+  quoteTokenAddress: string,
+  provider: Provider,
+): Promise<BigNumberish> {
+  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+
+  try {
+    return oracle["currentPrice(address,address)"](quoteTokenAddress, payoutTokenAddress);
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function getOracleDecimals(
+  oracleAddress: string,
+  payoutTokenAddress: string,
+  quoteTokenAddress: string,
+  provider: Provider,
+): Promise<BigNumberish> {
+  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+
+  try {
+    return oracle["decimals(address,address)"](quoteTokenAddress, payoutTokenAddress);
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
 export async function calcMarket(
   provider: Provider,
   referrerAddress: string,
@@ -276,6 +326,7 @@ export async function calcMarket(
     isLive,
     ownerPayoutBalance,
     ownerPayoutAllowance,
+    // @ts-ignore
   ] = await Promise.all([
     auctioneerContract.currentCapacity(calculatedMarket.marketId),
     auctioneerContract.marketPrice(calculatedMarket.marketId),
@@ -295,6 +346,7 @@ export async function calcMarket(
 
   const markets: any = auctioneerContract.markets(calculatedMarket.marketId);
 
+  // @ts-ignore
   calculatedMarket.isLive = isLive;
 
   const baseScale = BigNumber.from('10').pow(
@@ -324,6 +376,7 @@ export async function calcMarket(
   );
 
   const maxPayout =
+    // @ts-ignore
     Number(marketInfo.maxPayout) / Math.pow(10, market.payoutToken.decimals);
   calculatedMarket.maxPayout = trim(maxPayout, calculateTrimDigits(maxPayout));
   calculatedMarket.maxPayoutUsd = maxPayout * market.payoutToken.price;

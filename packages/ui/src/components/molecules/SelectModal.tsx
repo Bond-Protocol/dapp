@@ -81,16 +81,16 @@ export const SelectModal = ({
           options={customOptions}
           value={value}
           onChange={(_e, value) => {
-            if (value === "user") {
-              // @ts-ignore
-              value = lastCustomValue;
-              console.log(customContent);
-            }
             if (value === "custom") {
               setOpen(true);
               return;
             }
             if (value) setValue(value);
+
+            if (value === "user") {
+              // @ts-ignore
+              value = lastCustomValue;
+            }
 
             //@ts-ignore
             if (value && value.custom) {

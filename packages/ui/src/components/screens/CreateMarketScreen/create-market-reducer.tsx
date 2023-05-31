@@ -3,7 +3,6 @@ import { formatDate } from "utils";
 import { useReducer, useContext, createContext, Dispatch } from "react";
 import { differenceInCalendarDays } from "date-fns";
 
-const DEFAULT_BONDS_PER_WEEK = 7;
 const DEFAULT_DEPOSIT_INTERVAL = 86400;
 const DEFAULT_DEBT_BUFFER = 75;
 
@@ -71,7 +70,11 @@ export type CreateMarketState = OverridableCreateMarketParams & {
   oracle?: boolean;
   duration: string;
   durationInDays: number;
-  overridden: boolean; // Partial<OverridableCreateMarketParams>;
+  fixedDiscount?: number;
+  maxDiscountFromCurrent?: number;
+  baseDiscount?: number;
+  targetIntervalDiscount?: number;
+  overridden: boolean;
 };
 
 const placeholderToken = {
@@ -228,6 +231,7 @@ export const reducer = (
 ): CreateMarketState => {
   const { type, value } = action;
 
+  //console.log({ previousState: state, type, value });
   switch (type) {
     case CreateMarketAction.UPDATE_QUOTE_TOKEN: {
       const {
@@ -409,8 +413,7 @@ export const reducer = (
         ...state,
         priceModel,
         oracle,
-        oracleAddress,
-        startDate: new Date(), // we have to reset the start date cuz not all markets support a start date atm
+        oracleAddress: oracle ? oracleAddress : "",
       };
     }
 
@@ -448,7 +451,8 @@ export const reducer = (
       // Value provided in hours, we save it as seconds
       const depositInterval = value * 60 * 60;
       const debtBuffer = tweakDebtBuffer({ ...state, depositInterval });
-      let maxBondSize = (Number(state.capacity) * depositInterval) / Number(state.duration);
+      let maxBondSize =
+        (Number(state.capacity) * depositInterval) / Number(state.duration);
       maxBondSize = trimAsNumber(maxBondSize, calculateTrimDigits(maxBondSize));
 
       return {
