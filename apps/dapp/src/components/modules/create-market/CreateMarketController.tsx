@@ -21,10 +21,24 @@ import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokens } from "context/token-context";
 import { usePurchaseBond } from "hooks";
+import { CHAIN_ID } from "@bond-protocol/bond-library";
 
-function getBondType(state: CreateMarketState) {
+function getBondType(state: CreateMarketState, chainId: string) {
+  chainId = chainId.toString();
   switch (state.priceModel) {
     case "dynamic":
+      /*
+       SDA v1.1 has not been deployed to Ethereum Mainnet
+       It has been deployed to Goerli, but using the old SDA contracts for consistency
+      */
+      if (
+        chainId === CHAIN_ID.ETHEREUM_MAINNET ||
+        chainId === CHAIN_ID.GOERLI_TESTNET
+      ) {
+        return state.vestingType === "term"
+          ? contractLib.BOND_TYPE.FIXED_TERM_SDA
+          : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
+      }
       return state.vestingType === "term"
         ? contractLib.BOND_TYPE.FIXED_TERM_SDA_V1_1
         : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA_V1_1;
@@ -44,11 +58,11 @@ function getBondType(state: CreateMarketState) {
 }
 
 const getAuctioneer = (chain: string, state: CreateMarketState) => {
-  return getAddressesForType(chain, getBondType(state)).auctioneer;
+  return getAddressesForType(chain, getBondType(state, chain)).auctioneer;
 };
 
 const getTeller = (chain: string, state: CreateMarketState) => {
-  return getAddressesForType(chain, getBondType(state)).teller;
+  return getAddressesForType(chain, getBondType(state, chain)).teller;
 };
 
 export const CreateMarketController = () => {
@@ -77,7 +91,13 @@ export const CreateMarketController = () => {
   });
 
   useEffect(() => {
-    if (!state.oracle || !state.payoutToken || !state.quoteToken || !state.oracleAddress || state.oracleAddress === "") {
+    if (
+      !state.oracle ||
+      !state.payoutToken ||
+      !state.quoteToken ||
+      !state.oracleAddress ||
+      state.oracleAddress === ""
+    ) {
       setOracleMessage("");
       setIsOraclePairValid(false);
       return;
@@ -102,6 +122,7 @@ export const CreateMarketController = () => {
         setOracleMessage("Invalid Oracle Address!");
       }
     }
+
     checkOracle();
   }, [state.oracle, state.oracleAddress, state.payoutToken, state.quoteToken]);
 
@@ -141,6 +162,7 @@ export const CreateMarketController = () => {
       setOraclePrice(adjustedPrice);
       setOracleMessage("Using Oracle Price!");
     }
+
     checkOracle();
   }, [isOraclePairValid]);
 
@@ -228,7 +250,7 @@ export const CreateMarketController = () => {
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
-    let bondType: string = getBondType(state);
+    let bondType: string = getBondType(state, chain.id);
 
     let startDate;
 
