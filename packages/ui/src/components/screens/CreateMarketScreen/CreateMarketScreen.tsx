@@ -73,6 +73,16 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const capacityToken =
     state.capacityType === "quote" ? state.quoteToken : state.payoutToken;
 
+  const reset = () => {
+    setHasConfirmedStart(false);
+    dispatch({ type: CreateMarketAction.RESET });
+    setIndex((i) => ++i); //TODO: (afx) :pepe_gun: but its valid react so
+  };
+
+  useEffect(() => {
+    reset();
+  }, [props.chain]);
+
   useEffect(() => {
     const fetchAllowance = async () => {
       const allowance = await props.fetchAllowance(state);
@@ -164,11 +174,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     <div id="cm-root">
       <div id="cm-top-control" className="flex items-center justify-end">
         <div
-          onClick={() => {
-            setHasConfirmedStart(false);
-            dispatch({ type: CreateMarketAction.RESET });
-            setIndex((i) => ++i); //TODO: (afx) :pepe_gun: but its valid react so
-          }}
+          onClick={reset}
           className="hover:text-light-secondary font-fraktion mr-2 cursor-pointer px-8 text-sm tracking-widest"
         >
           RESET
