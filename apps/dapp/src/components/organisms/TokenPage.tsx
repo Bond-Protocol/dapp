@@ -40,13 +40,15 @@ export const TokenPage: FC = () => {
           label="Total Bonded Value"
           tooltip={`Estimated total value in USD of all purchases from ${token?.name} markets.`}
         >
-          ${new Intl.NumberFormat().format(Math.trunc(token?.tbv))}
+          {token.purchaseCount > 0 && token.tbv === 0
+            ? "Unknown"
+            : "$" + new Intl.NumberFormat().format(Math.trunc(token?.tbv))}
         </InfoLabel>
         <InfoLabel
           label="Total Bonds"
           tooltip={`The number of bonds acquired from ${token?.name}`}
         >
-          {/*total.length*/ 0}
+          {token.purchaseCount}
         </InfoLabel>
 
         <InfoLabel

@@ -93,7 +93,6 @@ export const TokenList = () => {
               >
                 <TokenCard
                   token={token}
-                  tbv={token.tbv}
                   marketCount={token.openMarkets?.length}
                   navigate={navigate}
                 />

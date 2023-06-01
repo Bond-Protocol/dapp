@@ -15,6 +15,7 @@ export const getGlobalMetrics = gql`
       decimals
       symbol
       usedAsPayout
+      purchaseCount
       uniqueBonders {
         count
       }

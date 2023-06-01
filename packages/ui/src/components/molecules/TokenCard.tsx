@@ -2,21 +2,22 @@ import { FC } from "react";
 
 export type TokenCardProps = {
   token: any;
-  tbv: number;
   marketCount: number;
   navigate?: (to: string) => void;
 };
 
 export const TokenCard: FC<TokenCardProps> = ({
   token,
-  tbv,
   marketCount = 0,
   navigate,
 }) => {
   const handleClick = (name: string) =>
     navigate && navigate("/tokens/" + token.chainId + "/" + token.address);
 
-  const formattedTbv = new Intl.NumberFormat("en-US").format(Math.floor(tbv));
+  const formattedTbv =
+    token.tbv === 0 && token.purchaseCount > 0
+      ? "Unknown"
+      : "$" + new Intl.NumberFormat("en-US").format(Math.floor(token.tbv));
 
   const noMarkets = marketCount == 0;
 
@@ -37,7 +38,7 @@ export const TokenCard: FC<TokenCardProps> = ({
       <p className="my-2 text-center font-bold tracking-wide">{token.name}</p>
 
       <p className="text-light-primary-300 font-mono text-[10px]">
-        TBV ${formattedTbv}
+        TBV {formattedTbv}
       </p>
       <p
         className={`text-xs font-bold ${

@@ -7,7 +7,6 @@ export * from "./ExpandableRow";
 export * from "./FilterBox";
 export * from "./InputCard";
 export * from "./IconCaroussel";
-export * from "./IssuerCard";
 export * from "./Modal";
 export * from "./PaginatedTable";
 export * from "./Pagination";
