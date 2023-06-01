@@ -72,11 +72,9 @@ export const useDiscoverToken = () => {
         token.chainId
       );
 
-      if (!logoURI) logoURI = "/placeholders/token-placeholder.png";
-
       return { ...token, name, details, logoURI, logoUrl: logoURI };
     } catch (e) {
-      console.log(token);
+      console.log(`Failed to discover ${token.symbol} logo`);
       return token;
     }
   };

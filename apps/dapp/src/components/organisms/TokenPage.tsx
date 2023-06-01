@@ -16,15 +16,16 @@ export const TokenPage: FC = () => {
   const { getByAddress } = useTokens();
   const token = getByAddress(address);
 
-  const icon = token?.logoUrl ?? "/placeholders/token-placeholder.png";
-
   return (
     <div className="pb-12">
       <PageNavigation
         link={token?.details?.links?.homepage}
         rightText="Visit Website"
       >
-        <PageHeader icon={icon} title={token?.name || placeholderToken.name} />
+        <PageHeader
+          icon={token.logoUrl}
+          title={token?.name || placeholderToken.name}
+        />
       </PageNavigation>
       <div className="flex flex-col">
         <div className="mt-2">

@@ -16,7 +16,6 @@ export const TokenCard: FC<TokenCardProps> = ({
   const handleClick = (name: string) =>
     navigate && navigate("/tokens/" + token.chainId + "/" + token.address);
 
-  const logo = token?.logoUrl || "/placeholders/token-placeholder.png";
   const formattedTbv = new Intl.NumberFormat("en-US").format(Math.floor(tbv));
 
   const noMarkets = marketCount == 0;
@@ -33,7 +32,7 @@ export const TokenCard: FC<TokenCardProps> = ({
       onClick={() => handleClick(token.id)}
     >
       <div className="overflow-hidden rounded-full">
-        <img className="h-[64px] w-[64px]" src={logo} />
+        <img className="h-[64px] w-[64px]" src={token.logoUrl} />
       </div>
       <p className="my-2 text-center font-bold tracking-wide">{token.name}</p>
 

@@ -3,7 +3,7 @@ import { Token } from "@bond-protocol/contract-library";
 import { useTokenLoader } from "services/use-token-loader";
 
 export type ITokenContext = {
-  tbv: number;
+  tbv: string;
   tokens: Token[];
   payoutTokens: Token[];
   getByAddress: (address: string) => Token;

@@ -5,15 +5,14 @@ import * as contractLibrary from "@bond-protocol/contract-library";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
-import { useLoadMarkets, useTokens } from "hooks";
-import { dateMath } from "ui";
+import { useTokens } from "hooks";
+import { useGlobalSubgraphData } from "hooks/useGlobalSubgraphData";
 
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
-  const { tokens, getByAddress, fetchedExtendedDetails } = useTokens();
-  const { markets, isLoading: isMarketLoading } = useLoadMarkets();
-
+  const { tokens, getByAddress } = useTokens();
+  const { markets, isLoading: isMarketLoading } = useGlobalSubgraphData();
   const [calculatedMarkets, setCalculatedMarkets] = useState<
     CalculatedMarket[]
   >([]);
@@ -27,28 +26,6 @@ export function useCalculatedMarkets() {
       "0x007fea2a31644f20b0fe18f69643890b6f878aa6",
     ];
     if (obsoleteAuctioneers.includes(market.auctioneer)) return;
-    /*
-      We cannot rely on the value of isLive from the subgraph, it only updates on events.
-      If a market is manually closed, or closes after hitting capacity, the subgraph will
-      be updated, and isLive will be false. However, if it hits its expiry date, there is
-      no event, so the subgraph is not updated. Thus, we check here and return early if
-      the market is not live.
-    */
-
-    //TODO: Move all to a background task on startup
-    const isLive = await contractLibrary.isLive(
-      market.marketId,
-      requestProvider
-    );
-
-    //Checks if the market start date is in the future
-    const willOpenInTheFuture =
-      market.start &&
-      dateMath.isBefore(new Date(), new Date(market.start * 1000));
-
-    if (!isLive && !willOpenInTheFuture) {
-      return;
-    }
 
     const quoteToken = getByAddress(market.quoteToken.address);
     const payoutToken = getByAddress(market.payoutToken.address);
@@ -119,13 +96,9 @@ export function useCalculatedMarkets() {
 
         if (!quoteToken) {
           quoteToken = x.quoteToken;
-          quoteToken.logoUrl = quoteToken.logoURI =
-            "/placeholders/token-placeholder.png";
         }
         if (!payoutToken) {
           payoutToken = x.payoutToken;
-          payoutToken.logoUrl = payoutToken.logoURI =
-            "/placeholders/token-placeholder.png";
         }
 
         return { ...x, quoteToken, payoutToken };

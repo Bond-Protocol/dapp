@@ -1,11 +1,8 @@
 import { ActionCard, InfoLabel, Loading, Pagination, TokenCard } from "ui";
 import { useTokens } from "hooks";
-import { useAtom } from "jotai";
-import testnetMode from "../../atoms/testnetMode.atom";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
-import { useGlobalMetrics } from "hooks/useGlobalMetrics";
-import { useListAllPurchases } from "hooks/useListAllPurchases";
+import { useGlobalSubgraphData } from "hooks/useGlobalSubgraphData";
 import { useEffect, useState } from "react";
 import { meme } from "src/utils/words";
 import { Token } from "@bond-protocol/contract-library";
@@ -13,15 +10,12 @@ import { numericSort } from "services";
 
 export const TokenList = () => {
   const { tbv, payoutTokens } = useTokens();
-  const { totalPurchases } = useListAllPurchases();
   const navigate = useNavigate();
-  const metrics = useGlobalMetrics();
+  const { totalPurchases, uniqueBonders } = useGlobalSubgraphData();
 
   const scrollUp = () => window.scrollTo(0, 0);
 
-  const [testnet] = useAtom(testnetMode);
   const [tokens, setTokens] = useState<Token[]>([]);
-  //const [cards, setCards] = useState<Token[]>([]);
 
   const sortTokens = function (
     compareFunction: (t1: Token, t2: Token) => number
@@ -33,9 +27,16 @@ export const TokenList = () => {
 
   useEffect(() => {
     setTokens(
-      sortTokens((t1: Token, t2: Token) =>
-        numericSort(t1.openMarkets.length, t2.openMarkets.length, false)
-      )
+      sortTokens((t1: Token, t2: Token) => {
+        if (t1.openMarkets?.length === t2.openMarkets?.length) {
+          return numericSort(t1.tbv, t2.tbv, false);
+        }
+        return numericSort(
+          t1.openMarkets?.length,
+          t2.openMarkets?.length,
+          false
+        );
+      })
     );
   }, [payoutTokens]);
 
@@ -79,7 +80,7 @@ export const TokenList = () => {
           label="Unique Bonders"
           tooltip="Total count of unique addresses that acquired bonds"
         >
-          {metrics?.uniqueBonders}
+          {uniqueBonders}
         </InfoLabel>
       </div>
       {tokens && tokens.length ? (
@@ -93,7 +94,7 @@ export const TokenList = () => {
                 <TokenCard
                   token={token}
                   tbv={token.tbv}
-                  marketCount={token.openMarkets.length}
+                  marketCount={token.openMarkets?.length}
                   navigate={navigate}
                 />
               </div>

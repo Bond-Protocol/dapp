@@ -1,5 +1,103 @@
 import { gql } from "graphql-request";
 
+export const getGlobalMetrics = gql`
+  query GetGlobalMetrics($queryKey: String! = "") {
+    purchaseCounts(first: 1) {
+      count
+    }
+    uniqueTokenBonderCounts(first: 1000) {
+      count
+    }
+    tokens {
+      address
+      chainId
+      name
+      decimals
+      symbol
+      usedAsPayout
+      uniqueBonders {
+        count
+      }
+      payoutTokenTbvs {
+        tbv
+        quoteToken {
+          id
+          address
+        }
+      }
+      markets {
+        id
+        name
+        network
+        auctioneer
+        teller
+        marketId
+        owner
+        callbackAddress
+        capacity
+        capacityInQuote
+        chainId
+        minPrice
+        scale
+        start
+        conclusion
+        payoutToken {
+          id
+          address
+          symbol
+          decimals
+          name
+        }
+        quoteToken {
+          id
+          address
+          symbol
+          decimals
+          name
+          lpPair {
+            token0 {
+              id
+              address
+              symbol
+              decimals
+              name
+              typeName
+            }
+            token1 {
+              id
+              address
+              symbol
+              decimals
+              name
+              typeName
+            }
+          }
+          balancerWeightedPool {
+            id
+            vaultAddress
+            poolId
+            constituentTokens {
+              id
+              address
+              symbol
+              decimals
+              name
+              typeName
+            }
+          }
+        }
+        vesting
+        vestingType
+        isInstantSwap
+        hasClosed
+        totalBondedAmount
+        totalPayoutAmount
+        creationBlockTimestamp
+      }
+    }
+  }
+`;
+
 export const listMarkets = gql`
   query ListMarkets($queryKey: String! = "") {
     markets(first: 1000, where: { hasClosed: false }) {
@@ -336,23 +434,6 @@ export const listBondPurchasesByAddress = gql`
         symbol
         address
       }
-    }
-  }
-`;
-
-export const listAllPurchases = gql`
-  query ListAllPurchases($queryKey: String! = "") {
-    bondPurchases(first: 1000) {
-      id
-      owner
-    }
-  }
-`;
-
-export const getPurchaseCount = gql`
-  query GetPurchaseCount($queryKey: String! = "") {
-    purchaseCounts(first: 1) {
-      count
     }
   }
 `;

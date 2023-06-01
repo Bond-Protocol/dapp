@@ -1,30 +1,21 @@
 import { useEffect, useState } from "react";
-import { useQueries } from "react-query";
-import { tokenlist } from "hooks";
-import { liveMarketsFor, Token } from "@bond-protocol/contract-library";
+import { Token } from "@bond-protocol/contract-library";
 import * as defillama from "./defillama";
-import { currentEndpoints } from "./subgraph-endpoints";
-import { generateGraphqlQuery } from "./custom-queries";
-import { providers } from "services/owned-providers";
 import { usdFormatter } from "../utils/format";
-import { BigNumberish } from "ethers";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
+import { useGlobalSubgraphData } from "hooks/useGlobalSubgraphData";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
 
   const prices = await defillama.fetchPrice(addresses);
 
-  return tokens
-    .map((t: any) => ({
-      ...t,
-      chainId: Number(t.chainId),
-      price: prices.find((p: any) => p.address === t.address)?.price,
-    }))
-    .filter((t: any) => !!t.price);
+  return tokens.map((t: any) => ({
+    ...t,
+    chainId: Number(t.chainId),
+    price: prices.find((p: any) => p.address === t.address)?.price,
+  }));
 };
-
-const listQuery = `query ListTokens { tokens { address chainId name decimals symbol usedAsPayout uniqueBonders { count } payoutTokenTbvs { tbv quoteToken { id address } } } }`;
 
 /**
  *
@@ -35,15 +26,13 @@ export const useTokenLoader = () => {
   const [tbv, setTbv] = useState<number>(0);
   const { discoverLogo } = useDiscoverToken();
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
-
-  const queries = useQueries(
-    currentEndpoints.map((e) => {
-      return {
-        queryKey: `list-all-tokens-${e.chain}`,
-        queryFn: generateGraphqlQuery(listQuery, e.url),
-      };
-    })
-  );
+  const {
+    subgraphTokens,
+    openMarketsByToken,
+    closedMarketsByToken,
+    futureMarketsByToken,
+    isLoading,
+  } = useGlobalSubgraphData();
 
   const getByAddress = (address: string) => {
     return tokens.find(
@@ -51,48 +40,27 @@ export const useTokenLoader = () => {
     );
   };
 
-  const isAnyLoading = queries.some((q) => q.isLoading);
-
   useEffect(() => {
-    const promises: Promise<any>[] = [];
     const loadPrices = async () => {
-      if (!isAnyLoading) {
-        const tokens = queries
-          .flatMap((q) => q.data?.data?.tokens)
-          .map((t) => {
-            const promise = liveMarketsFor(
-              t.address,
-              true,
-              providers[t.chainId]
-            ).then((result) => {
-              const results: BigNumberish[] = [];
-              result.forEach((res) => results.push(Number(res)));
-              return results;
-            });
-
-            promises.push(promise);
-            return {
-              ...t,
-              openMarkets: [],
-              logoUrl: tokenlist.find(
-                (tok) => tok?.address === t?.address.toLowerCase()
-              )?.logoURI,
-            };
-          });
-
-        const pricedTokens = await fetchPrices(tokens);
-        const result = await Promise.allSettled(promises);
-        result.forEach((result, index) => {
-          if (!pricedTokens[index]) return;
-          pricedTokens[index].openMarkets = result.value;
+      if (!isLoading) {
+        const tokens = subgraphTokens.map((t: any) => {
+          return {
+            ...t,
+            openMarkets: openMarketsByToken.get(t) || [],
+            closedMarkets: closedMarketsByToken.get(t) || [],
+            futureMarkets: futureMarketsByToken.get(t) || [],
+            logoUrl: "/placeholders/token-placeholder.png",
+            logoURI: "/placeholders/token-placeholder.png",
+          };
         });
 
+        const pricedTokens = await fetchPrices(tokens);
         setTokens(pricedTokens);
       }
     };
 
     loadPrices();
-  }, [isAnyLoading]);
+  }, [isLoading]);
 
   useEffect(() => {
     const payoutTokens = tokens.filter((token) => token.usedAsPayout);
