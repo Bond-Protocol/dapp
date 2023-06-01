@@ -11,11 +11,26 @@ import { useGlobalSubgraphData } from "hooks/useGlobalSubgraphData";
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
-  const { tokens, getByAddress } = useTokens();
+  const { tokens, getByAddress, fetchedExtendedDetails } = useTokens();
   const { markets, isLoading: isMarketLoading } = useGlobalSubgraphData();
   const [calculatedMarkets, setCalculatedMarkets] = useState<
     CalculatedMarket[]
   >([]);
+
+  useEffect(() => {
+    const updatedMarkets: CalculatedMarket[] = [];
+    calculatedMarkets.forEach((market: CalculatedMarket) => {
+      const quoteToken = getByAddress(market.quoteToken.address);
+      const payoutToken = getByAddress(market.payoutToken.address);
+
+      let updatedMarket = { ...market };
+      quoteToken && (updatedMarket.quoteToken = quoteToken);
+      payoutToken && (updatedMarket.payoutToken = payoutToken);
+      updatedMarkets.push(updatedMarket);
+    });
+
+    setCalculatedMarkets(updatedMarkets);
+  }, [calculatedMarkets, fetchedExtendedDetails]);
 
   const calculateMarket = async (market: Market) => {
     const requestProvider = providers[market.chainId];
