@@ -30,7 +30,7 @@ export function useCalculatedMarkets() {
     });
 
     setCalculatedMarkets(updatedMarkets);
-  }, [calculatedMarkets, fetchedExtendedDetails]);
+  }, [calculatedMarkets.length, fetchedExtendedDetails]);
 
   const calculateMarket = async (market: Market) => {
     const requestProvider = providers[market.chainId];
