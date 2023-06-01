@@ -41,12 +41,12 @@ export const TokenList = () => {
   }, [payoutTokens]);
 
   const [page, setPage] = useState(0);
-  const [cardsPerPage, setCardsPerPage] = useState(18);
+  const [cardsPerPage, setCardsPerPage] = useState(20);
 
   const handleChangePage = (newPage: number) => setPage(newPage);
 
   const toggleAll = () => {
-    setCardsPerPage(cardsPerPage === -1 ? 18 : -1);
+    setCardsPerPage(cardsPerPage === -1 ? 20 : -1);
     setPage(0);
   };
 
@@ -89,7 +89,7 @@ export const TokenList = () => {
             return (
               <div
                 key={token.id}
-                className="min-w-[169px] max-w-[178px] flex-1"
+                className="min-w-[209px] max-w-[218px] flex-1"
               >
                 <TokenCard
                   token={token}
