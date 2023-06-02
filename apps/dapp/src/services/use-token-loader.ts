@@ -28,9 +28,6 @@ export const useTokenLoader = () => {
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
   const {
     subgraphTokens,
-    openMarketsByToken,
-    closedMarketsByToken,
-    futureMarketsByToken,
     isLoading,
   } = useGlobalSubgraphData();
 
@@ -46,9 +43,6 @@ export const useTokenLoader = () => {
         const tokens = subgraphTokens.map((t: any) => {
           return {
             ...t,
-            openMarkets: openMarketsByToken.get(t) || [],
-            closedMarkets: closedMarketsByToken.get(t) || [],
-            futureMarkets: futureMarketsByToken.get(t) || [],
             logoUrl: "/placeholders/token-placeholder.png",
             logoURI: "/placeholders/token-placeholder.png",
           };

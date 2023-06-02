@@ -28,14 +28,10 @@ export const TokenList = () => {
   useEffect(() => {
     setTokens(
       sortTokens((t1: Token, t2: Token) => {
-        if (t1.openMarkets?.length === t2.openMarkets?.length) {
+        if (t1.markets?.length === t2.markets?.length) {
           return numericSort(t1.tbv, t2.tbv, false);
         }
-        return numericSort(
-          t1.openMarkets?.length,
-          t2.openMarkets?.length,
-          false
-        );
+        return numericSort(t1.markets?.length, t2.markets?.length, false);
       })
     );
   }, [payoutTokens]);
@@ -91,11 +87,7 @@ export const TokenList = () => {
                 key={token.id}
                 className="min-w-[209px] max-w-[218px] flex-1"
               >
-                <TokenCard
-                  token={token}
-                  marketCount={token.openMarkets?.length}
-                  navigate={navigate}
-                />
+                <TokenCard token={token} navigate={navigate} />
               </div>
             );
           })}

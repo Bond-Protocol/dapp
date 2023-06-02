@@ -35,7 +35,6 @@ export interface Token extends TokenBase {
   decimals: number;
   tbv?: number;
   payoutTokenTbvs?: any[];
-  openMarketsLoaded?: boolean;
   usedAsPayout?: boolean;
   price?: number;
   id?: string;
@@ -51,9 +50,7 @@ export interface Token extends TokenBase {
       medium?: string;
     };
   };
-  openMarkets?: any[];
-  closedMarkets?: any[];
-  futureMarkets?: any[];
+  markets?: any[];
 }
 
 export interface LpPair {

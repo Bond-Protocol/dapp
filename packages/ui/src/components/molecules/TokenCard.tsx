@@ -2,13 +2,11 @@ import { FC } from "react";
 
 export type TokenCardProps = {
   token: any;
-  marketCount: number;
   navigate?: (to: string) => void;
 };
 
 export const TokenCard: FC<TokenCardProps> = ({
   token,
-  marketCount = 0,
   navigate,
 }) => {
   const handleClick = (name: string) =>
@@ -19,6 +17,7 @@ export const TokenCard: FC<TokenCardProps> = ({
       ? "Unknown"
       : "$" + new Intl.NumberFormat("en-US").format(Math.floor(token.tbv));
 
+  const marketCount = token.markets.length;
   const noMarkets = marketCount == 0;
 
   const marketSize = noMarkets

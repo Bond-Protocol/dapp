@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 
 export const getGlobalMetrics = gql`
-  query GetGlobalMetrics($queryKey: String! = "") {
+  query GetGlobalMetrics($currentTime: BigInt!, $queryKey: String! = "") {
     purchaseCounts(first: 1) {
       count
     }
@@ -26,7 +26,7 @@ export const getGlobalMetrics = gql`
           address
         }
       }
-      markets {
+      markets(where: { hasClosed: false, conclusion_gt: $currentTime }) {
         id
         name
         network
