@@ -180,19 +180,12 @@ export const getDashboardData = gql`
       }
     ) {
       id
-      name
       network
-      auctioneer
-      teller
       marketId
       owner
-      callbackAddress
       capacity
       capacityInQuote
       chainId
-      minPrice
-      scale
-      start
       conclusion
       payoutToken {
         id
@@ -207,45 +200,17 @@ export const getDashboardData = gql`
         symbol
         decimals
         name
-        lpPair {
-          token0 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-          token1 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-        balancerWeightedPool {
-          id
-          vaultAddress
-          poolId
-          constituentTokens {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
       }
-      vesting
-      vestingType
-      isInstantSwap
       hasClosed
       totalBondedAmount
       totalPayoutAmount
-      creationBlockTimestamp
+      bondPurchases(first: 1000) {
+        id
+        payout
+        amount
+        timestamp
+        purchasePrice
+      }
     }
   }
 `;
@@ -382,7 +347,7 @@ export const listBondPurchasesPerMarket = gql`
   query ListBondPurchasesPerMarket($marketId: String, $queryKey: String! = "") {
     bondPurchases(
       first: 1000
-      where: { marketId: $marketId }
+      where: { market: $marketId }
       orderBy: timestamp
     ) {
       id
