@@ -6,6 +6,7 @@ import { SubgraphProvider } from "context/subgraph-context";
 import { MarketProvider } from "./market-context";
 import { TokenProvider } from "./token-context";
 import { TokenlistProvider } from "./tokenlist-context";
+import { DashboardProvider } from "context/dashboard-context";
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -14,9 +15,11 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
         <SubgraphProvider>
           <TokenProvider>
             <MarketProvider>
-              <TokenlistProvider>
-                <Router>{children}</Router>
-              </TokenlistProvider>
+              <DashboardProvider>
+                <TokenlistProvider>
+                  <Router>{children}</Router>
+                </TokenlistProvider>
+              </DashboardProvider>
             </MarketProvider>
           </TokenProvider>
         </SubgraphProvider>

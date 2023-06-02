@@ -15,7 +15,7 @@ import { CalculatedMarket, getBalance } from "@bond-protocol/contract-library";
 import { BigNumberish } from "ethers";
 import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
 
-export const useDashboardData = () => {
+export const useDashboardLoader = () => {
   const { address } = useAccount();
   const { getMarketsForOwner } = useCalculatedMarkets();
 
@@ -86,5 +86,6 @@ export const useDashboardData = () => {
     bondPurchases: bondPurchases,
     currentMarkets: currentMarkets,
     closedMarkets: closedMarkets,
+    isLoading: isLoading,
   };
 };
