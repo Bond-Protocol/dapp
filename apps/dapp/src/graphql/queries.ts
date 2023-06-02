@@ -175,7 +175,7 @@ export const getDashboardData = gql`
       where: {
         and: [
           { owner_contains_nocase: $address }
-          { or: [{ hasClosed: false }, { conclusion_lt: $currentTime }] }
+          { or: [{ hasClosed: true }, { conclusion_lt: $currentTime }] }
         ]
       }
     ) {
