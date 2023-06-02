@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 
-export const getGlobalMetrics = gql`
-  query GetGlobalMetrics($currentTime: BigInt!, $queryKey: String! = "") {
+export const getGlobalData = gql`
+  query GetGlobalData($currentTime: BigInt!, $queryKey: String! = "") {
     purchaseCounts(first: 1) {
       count
     }

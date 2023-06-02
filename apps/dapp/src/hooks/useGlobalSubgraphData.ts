@@ -3,7 +3,7 @@ import {
   PurchaseCount,
   Token,
   UniqueTokenBonderCount,
-  useGetGlobalMetricsQuery,
+  useGetGlobalDataQuery,
 } from "src/generated/graphql";
 import { getSubgraphQueries } from "services";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryRes
 import { useTestnetMode } from "hooks/useTestnet";
 
 export const useGlobalSubgraphData = () => {
-  const globalMetrics = getSubgraphQueries(useGetGlobalMetricsQuery, {
+  const globalMetrics = getSubgraphQueries(useGetGlobalDataQuery, {
     currentTime: Math.trunc(Date.now() / 1000),
   });
   const { isLoading } = useSubgraphLoadingCheck(globalMetrics);
