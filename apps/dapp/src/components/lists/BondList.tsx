@@ -4,28 +4,24 @@ import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
 import { ContractTransaction } from "ethers";
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
-import { useMemo } from "react";
-import { useTokenLoader } from "services";
+import { toTableData } from "src/utils/table";
 
 export const tableColumns: Array<Column<any>> = [
   {
     label: "Bond",
-    accessor: "asset",
+    accessor: "bond",
     unsortable: true,
     formatter: (bond) => {
-      const { getByAddress } = useTokenLoader();
-      console.log(bond.underlying);
-      const asset = getByAddress(bond?.underlying?.id);
       const balance = longFormatter.format(bond?.balance);
       return {
-        value: `${balance} ${asset?.symbol}`,
-        icon: asset?.logoUrl,
+        value: `${balance} ${bond?.underlying?.symbol ?? "???"}`,
+        icon: bond?.underlying?.logoURI,
       };
     },
   },
   {
     label: "Market Value",
-    accessor: "price",
+    accessor: "value",
     formatter: (bond) => {
       return {
         value: usdFormatter.format(bond?.usdPriceString),
@@ -109,8 +105,8 @@ export const tableColumns: Array<Column<any>> = [
   },
 ];
 
-export const BondList = (props: any) => {
-  const tableData = useMemo(() => props.data, [props.data[0]?.price]);
+export const BondList = ({ data = [], ...props }: any) => {
+  const tableData = data.map((b) => toTableData(tableColumns, b));
 
   return (
     <div>

@@ -49,6 +49,7 @@ export const mainnets = [mainnet, arbitrum, optimism].map(getIconsForChains);
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS = environment.isTestnet ? testnets : mainnets;
 export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
+export const MAINNETS = mainnets;
 
 const { chains, provider } = configureChains(
   //@ts-ignore

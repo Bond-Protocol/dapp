@@ -6,7 +6,7 @@ export type ITokenContext = {
   tbv: string;
   tokens: Token[];
   payoutTokens: Token[];
-  getByAddress: (address: string) => Token;
+  getByAddress: (address: string) => Token | undefined;
   fetchedExtendedDetails?: boolean;
 };
 

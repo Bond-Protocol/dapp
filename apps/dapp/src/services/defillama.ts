@@ -1,6 +1,6 @@
 import { sub, getUnixTime } from "date-fns";
 import { generateFetcher } from "./custom-queries";
-import { ACTIVE_CHAINS } from "context/evm-provider";
+import { ACTIVE_CHAINS, MAINNETS } from "context/evm-provider";
 
 export const DEFILLAMA_ENDPOINT = "https://coins.llama.fi";
 
@@ -89,7 +89,7 @@ export const toDefillamaQueryId = (t: any) => {
 
 /** Maps chainIds to names to use in defillama queries*/
 export const getNameFromChainId = (chainId: number) => {
-  const chain = ACTIVE_CHAINS.find((c: any) => c.id === chainId);
+  const chain = MAINNETS.find((c: any) => c.id === chainId);
   const name = chain?.name.split(" ")[0] ?? ""; // The api supports 'arbitrum' instead of 'arbitrum-one' :pepe_angry_sip:
   return name.toLowerCase();
 };

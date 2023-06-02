@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { Token } from "@bond-protocol/contract-library";
+import { tokenlist } from "hooks";
 import * as defillama from "./defillama";
 import { usdFormatter } from "../utils/format";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { useGlobalSubgraphData } from "hooks/useGlobalSubgraphData";
+import { environment } from "src/environment";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
@@ -13,8 +15,22 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   return tokens.map((t: any) => ({
     ...t,
     chainId: Number(t.chainId),
-    price: prices.find((p: any) => p.address === t.address)?.price,
+    price: prices.find((p: any) => p.address === t.address)?.price ?? 0,
   }));
+};
+
+export const fetchAndMatchPricesForTestnet = async (
+  tokens: Array<Omit<Token, "price">>
+) => {
+  const pricedTokens = await fetchPrices(tokenlist);
+
+  return tokens.map((t) => {
+    const price = pricedTokens.find(
+      (pt) => t.symbol.toLowerCase() === pt?.symbol?.toLowerCase()
+    )?.price;
+
+    return { ...t, price };
+  });
 };
 
 /**
@@ -33,7 +49,7 @@ export const useTokenLoader = () => {
 
   const getByAddress = (address: string) => {
     return tokens.find(
-      (t) => t.address.toLowerCase() === address.toLowerCase()
+      (t) => t.address.toLowerCase() === address?.toLowerCase()
     );
   };
 
@@ -48,7 +64,9 @@ export const useTokenLoader = () => {
           };
         });
 
-        const pricedTokens = await fetchPrices(tokens);
+        const pricedTokens = environment.isTesting
+          ? await fetchAndMatchPricesForTestnet(tokens)
+          : await fetchPrices(tokens);
         setTokens(pricedTokens);
       }
     };
@@ -58,19 +76,20 @@ export const useTokenLoader = () => {
 
   useEffect(() => {
     const payoutTokens = tokens.filter((token) => token.usedAsPayout);
-    let totalTbv = 0;
-    payoutTokens.forEach((token) => {
-      let tbv = 0;
-      token.payoutTokenTbvs?.forEach((ptt) => {
-        tbv =
-          tbv + (ptt.tbv * getByAddress(ptt.quoteToken.address)?.price || 0);
-      });
-      token.tbv = tbv;
-      totalTbv = totalTbv + tbv;
-    });
+    if (tokens.some((t) => Boolean(t.price))) {
+      const totalTbv = payoutTokens.reduce((totalTbv, token) => {
+        const tbv =
+          token.payoutTokenTbvs?.reduce(
+            (tbv, t) => tbv + t.tbv * t.quoteToken.price,
+            0
+          ) ?? 0;
 
-    setTbv(totalTbv);
-    setPayoutTokens(payoutTokens);
+        return totalTbv + tbv;
+      }, 0);
+
+      setTbv(totalTbv);
+      setPayoutTokens(payoutTokens);
+    }
   }, [tokens]);
 
   useEffect(() => {

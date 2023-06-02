@@ -1,5 +1,7 @@
 import { PageHeader } from "components/common";
+import { UserBonds } from "components/organisms/UserBonds";
 import { RequiresWallet } from "components/utility/RequiresWallet";
+import { BondList } from "..";
 
 export const Dashboard = () => {
   /*  const { myBonds, isLoading } = useMyBonds();
@@ -15,7 +17,9 @@ export const Dashboard = () => {
   const data = useMemo(() => {
     return myBonds
       .filter((b) => b.owner?.toLowerCase() === account?.address?.toLowerCase())
-      .map((bond: Partial<OwnerBalance>) => {
+      .map(
+
+(bond: Partial<OwnerBalance>) => {
         if (!bond.bondToken || !bond.bondToken.underlying) return;
         const date = new Date(bond.bondToken.expiry * 1000);
         const now = new Date(Date.now());
@@ -104,7 +108,7 @@ export const Dashboard = () => {
     <>
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
-        <div>Temporarily Rugged</div>
+        <UserBonds />
       </RequiresWallet>
     </>
   );

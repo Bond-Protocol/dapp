@@ -8,14 +8,18 @@ import {
   useGetOwnerBalancesByOwnerQuery,
   useListErc20BondTokensQuery,
 } from "../generated/graphql";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import * as contractLibrary from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useTokens } from "./useTokens";
+import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 
 export function useMyBonds() {
   const { address } = useAccount();
+  const { tokens, getByAddress } = useTokens();
+  const chainId = useChainId();
 
   const ownerBalanceSubgraphQueries = getSubgraphQueries(
     useGetOwnerBalancesByOwnerQuery,
@@ -114,9 +118,44 @@ export function useMyBonds() {
   }, [address, isTestnet]);
 
   useEffect(() => {
-    const updatedBonds = [...ownerBalances, ...erc20OwnerBalances];
+    const updatedBonds = [...ownerBalances, ...erc20OwnerBalances].map(
+      (bond: Partial<OwnerBalance>) => {
+        if (!bond.bondToken || !bond.bondToken.underlying) return;
+        const date = new Date(bond.bondToken.expiry * 1000);
+        const now = new Date(Date.now());
+        const canClaim = now >= date;
+
+        //const purchase = purchases?.data?.bondPurchases.find();
+        const underlying = getByAddress(bond.bondToken?.underlying.address);
+
+        let balance: number | string =
+          bond.balance / Math.pow(10, bond.bondToken.underlying.decimals);
+        balance = trim(balance, calculateTrimDigits(balance));
+
+        const usdPriceNumber: number = underlying?.price
+          ? underlying.price * Number(balance)
+          : 0;
+        const usdPriceString: string = usdPriceNumber
+          ? trim(usdPriceNumber, calculateTrimDigits(usdPriceNumber))
+          : "???";
+
+        const isCorrectNetwork = Number(bond.bondToken.chainId) === chainId;
+
+        return {
+          bond,
+          balance,
+          usdPriceString,
+          usdPriceNumber,
+          underlying,
+          isCorrectNetwork,
+          canClaim,
+        };
+      }
+    );
+
+    console.log({ updatedBonds });
     setMyBonds(updatedBonds);
-  }, [ownerBalances, erc20OwnerBalances]);
+  }, [ownerBalances, erc20OwnerBalances, tokens]);
 
   return {
     myBonds: myBonds,
