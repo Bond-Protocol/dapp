@@ -11,9 +11,11 @@ import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import { useTestnetMode } from "hooks/useTestnet";
 
-export const useGlobalSubgraphData = () => {
+const currentTime = Math.trunc(Date.now() / 1000);
+
+export const useSubgraphLoader = () => {
   const globalMetrics = getSubgraphQueries(useGetGlobalDataQuery, {
-    currentTime: Math.trunc(Date.now() / 1000),
+    currentTime: currentTime,
   });
   const { isLoading } = useSubgraphLoadingCheck(globalMetrics);
 

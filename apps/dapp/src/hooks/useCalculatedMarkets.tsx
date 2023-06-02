@@ -6,13 +6,13 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
 import { useTokens } from "hooks";
-import { useGlobalSubgraphData } from "hooks/useGlobalSubgraphData";
+import { useSubgraph } from "hooks/useSubgraph";
 
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
   const { tokens, getByAddress, fetchedExtendedDetails } = useTokens();
-  const { markets, isLoading: isMarketLoading } = useGlobalSubgraphData();
+  const { markets, isLoading: isMarketLoading } = useSubgraph();
   const [calculatedMarkets, setCalculatedMarkets] = useState<
     CalculatedMarket[]
   >([]);

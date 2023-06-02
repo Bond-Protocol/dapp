@@ -4,8 +4,8 @@ import { tokenlist } from "hooks";
 import * as defillama from "./defillama";
 import { usdFormatter } from "../utils/format";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
-import { useGlobalSubgraphData } from "hooks/useGlobalSubgraphData";
 import { environment } from "src/environment";
+import { useSubgraph } from "hooks/useSubgraph";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
@@ -42,10 +42,7 @@ export const useTokenLoader = () => {
   const [tbv, setTbv] = useState<number>(0);
   const { discoverLogo } = useDiscoverToken();
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
-  const {
-    subgraphTokens,
-    isLoading,
-  } = useGlobalSubgraphData();
+  const { subgraphTokens, isLoading } = useSubgraph();
 
   const getByAddress = (address: string) => {
     return tokens.find(
@@ -76,20 +73,19 @@ export const useTokenLoader = () => {
 
   useEffect(() => {
     const payoutTokens = tokens.filter((token) => token.usedAsPayout);
-    if (tokens.some((t) => Boolean(t.price))) {
-      const totalTbv = payoutTokens.reduce((totalTbv, token) => {
-        const tbv =
-          token.payoutTokenTbvs?.reduce(
-            (tbv, t) => tbv + t.tbv * t.quoteToken.price,
-            0
-          ) ?? 0;
+    let totalTbv = 0;
+    payoutTokens.forEach((token) => {
+      let tbv = 0;
+      token.payoutTokenTbvs?.forEach((ptt) => {
+        tbv =
+          tbv + (ptt.tbv * getByAddress(ptt.quoteToken.address)?.price || 0);
+      });
+      token.tbv = tbv;
+      totalTbv = totalTbv + tbv;
+    });
 
-        return totalTbv + tbv;
-      }, 0);
-
-      setTbv(totalTbv);
-      setPayoutTokens(payoutTokens);
-    }
+    setTbv(totalTbv);
+    setPayoutTokens(payoutTokens);
   }, [tokens]);
 
   useEffect(() => {

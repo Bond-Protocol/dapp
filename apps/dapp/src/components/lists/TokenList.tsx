@@ -2,16 +2,16 @@ import { ActionCard, InfoLabel, Loading, Pagination, TokenCard } from "ui";
 import { useTokens } from "hooks";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
-import { useGlobalSubgraphData } from "hooks/useGlobalSubgraphData";
 import { useEffect, useState } from "react";
 import { meme } from "src/utils/words";
 import { Token } from "@bond-protocol/contract-library";
 import { numericSort } from "services";
+import { useSubgraph } from "hooks/useSubgraph";
 
 export const TokenList = () => {
   const { tbv, payoutTokens } = useTokens();
   const navigate = useNavigate();
-  const { totalPurchases, uniqueBonders } = useGlobalSubgraphData();
+  const { totalPurchases, uniqueBonders } = useSubgraph();
 
   const scrollUp = () => window.scrollTo(0, 0);
 
