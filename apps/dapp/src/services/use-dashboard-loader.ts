@@ -15,13 +15,15 @@ import { CalculatedMarket, getBalance } from "@bond-protocol/contract-library";
 import { BigNumberish } from "ethers";
 import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
 
+const currentTime = Math.trunc(Date.now() / 1000);
+
 export const useDashboardLoader = () => {
   const { address } = useAccount();
   const { getMarketsForOwner } = useCalculatedMarkets();
 
   const dashboardData = getSubgraphQueries(useGetDashboardDataQuery, {
     address: address,
-    currentTime: Math.trunc(Date.now() / 1000),
+    currentTime: currentTime,
   });
   const { isLoading } = useSubgraphLoadingCheck(dashboardData);
 

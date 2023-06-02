@@ -135,7 +135,7 @@ export function useCalculatedMarkets() {
     getMarketsForOwner: (address: string) =>
       calculatedMarkets.filter(
         (market: CalculatedMarket) =>
-          market.owner.toLowerCase() === address.toLowerCase()
+          address && market.owner.toLowerCase() === address.toLowerCase()
       ),
     refetchAllMarkets,
     refetchOne,
