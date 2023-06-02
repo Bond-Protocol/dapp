@@ -173,9 +173,10 @@ export const getDashboardData = gql`
     }
     markets(
       where: {
-        owner_contains_nocase: $address
-        hasClosed: true
-        conclusion_lt: $currentTime
+        and: [
+          { owner_contains_nocase: $address }
+          { or: [{ hasClosed: false }, { conclusion_lt: $currentTime }] }
+        ]
       }
     ) {
       id
