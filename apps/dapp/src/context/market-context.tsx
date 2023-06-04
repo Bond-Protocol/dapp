@@ -1,8 +1,10 @@
 import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
 import { createContext, useContext } from "react";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 const initialState = {
   allMarkets: [],
+  getMarketsForOwner: (address: string) => ({} as CalculatedMarket),
   isMarketOwner: false,
   isSomeLoading: false,
   updatedMarketTokens: false,

@@ -92,7 +92,6 @@ export const tableColumns: Array<Column<any>> = [
       return (
         <Button
           thin
-          size="sm"
           variant={props?.data?.canClaim ? "primary" : "ghost"}
           disabled={!props?.data?.canClaim}
           className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
@@ -109,8 +108,9 @@ export const BondList = ({ data = [], ...props }: any) => {
   const tableData = data.map((b: any) => toTableData(tableColumns, b));
 
   return (
-    <div>
+    <div className="mt-10">
       <PaginatedTable
+        title={<div />}
         defaultSort="vesting"
         columns={tableColumns}
         data={tableData}

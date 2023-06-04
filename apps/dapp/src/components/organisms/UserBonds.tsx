@@ -21,12 +21,13 @@ export const UserBonds = () => {
     <div>
       <div className="flex gap-x-4">
         <InfoLabel
+          reverse
           label="My TBV"
           tooltip="Total value acquired through bonds in USD"
         >
           {formatCurrency.usdFormatter.format(tbv)}
         </InfoLabel>
-        <InfoLabel label="Available to Claim">
+        <InfoLabel reverse label="Available to Claim">
           {formatCurrency.usdFormatter.format(claimable)}
         </InfoLabel>
       </div>

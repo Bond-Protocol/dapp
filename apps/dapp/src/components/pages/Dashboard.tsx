@@ -116,7 +116,7 @@ export const Dashboard = () => {
     <>
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
-        <Tabs tabs={tabs}>
+        <Tabs tabs={tabs} className="pb-20">
           <UserBonds />
           <UserMarkets />
         </Tabs>

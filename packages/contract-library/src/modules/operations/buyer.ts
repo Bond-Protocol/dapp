@@ -237,7 +237,10 @@ export async function getOraclePrice(
   const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
 
   try {
-    return oracle["currentPrice(address,address)"](quoteTokenAddress, payoutTokenAddress);
+    return oracle['currentPrice(address,address)'](
+      quoteTokenAddress,
+      payoutTokenAddress,
+    );
   } catch (e) {
     console.log(e);
     throw e;
@@ -253,7 +256,10 @@ export async function getOracleDecimals(
   const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
 
   try {
-    return oracle["decimals(address,address)"](quoteTokenAddress, payoutTokenAddress);
+    return oracle['decimals(address,address)'](
+      quoteTokenAddress,
+      payoutTokenAddress,
+    );
   } catch (e) {
     console.log(e);
     throw e;
@@ -492,14 +498,13 @@ export async function calcMarket(
 
   calculatedMarket.tbvUsd =
     calculatedMarket.totalBondedAmount * market.quoteToken.price!;
-  calculatedMarket.formattedTbvUsd = '$'.concat(
-    Math.trunc(calculatedMarket.tbvUsd).toString(),
-  );
-
-  calculatedMarket.creationDate = format(
-    new Date(calculatedMarket.creationBlockTimestamp * 1000),
-    'yyyy-MM-dd',
-  );
+  (calculatedMarket.formattedTbvUsd = Math.trunc(
+    calculatedMarket.tbvUsd,
+  ).toString()),
+    (calculatedMarket.creationDate = format(
+      new Date(calculatedMarket.creationBlockTimestamp * 1000),
+      'yyyy-MM-dd',
+    ));
 
   return calculatedMarket;
 }

@@ -13,7 +13,7 @@ import {
 } from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 
-const bond: Column<CalculatedMarket> = {
+export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",
   accessor: "bond",
   width: "w-[13%]",
@@ -43,7 +43,7 @@ const bondPrice: Column<CalculatedMarket> = {
   },
 };
 
-const discount: Column<CalculatedMarket> = {
+export const discountColumn: Column<CalculatedMarket> = {
   label: "Discount",
   accessor: "discount",
   alignEnd: true,
@@ -167,7 +167,7 @@ const issuer: Column<CalculatedMarket> = {
   },
 };
 
-const view: Column<CalculatedMarket> = {
+export const viewColumn: Column<CalculatedMarket> = {
   label: "",
   accessor: "view",
   alignEnd: true,
@@ -197,6 +197,7 @@ const view: Column<CalculatedMarket> = {
   ),
 };
 
-export const base = [bond, bondPrice, discount, maxPayout, vesting];
-export const marketList = [...base, tbv, issuer, view];
-export const tokenMarketList = [...base, tbv, issuer, view];
+export const base = [bondColumn, bondPrice, discountColumn, maxPayout, vesting];
+export const marketList = [...base, tbv, issuer, viewColumn];
+export const tokenMarketList = [...base, tbv, issuer, viewColumn];
+export const userMarketList = [bondColumn];
