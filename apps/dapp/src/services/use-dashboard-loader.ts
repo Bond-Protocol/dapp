@@ -13,11 +13,12 @@ import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryRes
 import { CalculatedMarket, getBalance } from "@bond-protocol/contract-library";
 import { BigNumberish } from "ethers";
 import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
+import { useAccount } from "wagmi";
 
 const currentTime = Math.trunc(Date.now() / 1000);
 
 export const useDashboardLoader = () => {
-  const address = "0xea8a734db4c7EA50C32B5db8a0Cb811707e8ACE3"; //useAccount();
+  const { address } = useAccount();
   const { allMarkets } = useCalculatedMarkets();
 
   const dashboardData = getSubgraphQueries(useGetDashboardDataQuery, {
