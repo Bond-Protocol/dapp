@@ -1,3 +1,4 @@
+export * from "./CloseMarketDialog";
 export * from "./CreateMarketConfirmDialog";
 export * from "./CreateMarketTermsDialog";
 export * from "./GeneralTermsDialog";
@@ -8,3 +9,4 @@ export * from "./PurchaseSuccessDialog";
 export * from "./SelectTokenDialog";
 export * from "./TransactionErrorDialog";
 export * from "./TransactionHashDialog";
+export * from "./UpdateAllowanceDialog";

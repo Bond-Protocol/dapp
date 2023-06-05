@@ -16,7 +16,7 @@ export const tableColumns: Array<Column<CalculatedMarket>> = [
     },
   },
   {
-    label: "Remaining Capacity",
+    label: "Capacity",
     accessor: "capacity",
     formatter: (market) => {
       const total = formatCurrency.longFormatter.format(
@@ -28,7 +28,7 @@ export const tableColumns: Array<Column<CalculatedMarket>> = [
 
       return {
         value: `${remaining} ${market.capacityToken}`,
-        subtext: `from ${total} ${market.capacityToken}`,
+        subtext: `Total: ${total} ${market.capacityToken}`,
       };
     },
   },
@@ -41,7 +41,9 @@ export const tableColumns: Array<Column<CalculatedMarket>> = [
           formatCurrency.longFormatter.format(market.totalBondedAmount) +
           " " +
           market.quoteToken.symbol,
-        subtext: formatCurrency.usdFormatter.format(market.formattedTbvUsd),
+        subtext: formatCurrency.usdFormatter.format(
+          Number(market.formattedTbvUsd)
+        ),
       };
     },
   },
@@ -60,11 +62,10 @@ export const tableColumns: Array<Column<CalculatedMarket>> = [
 export const UserMarketList = ({ data = [], ...props }: any) => {
   const tableData = data.map((b: any) => toTableData(tableColumns, b));
 
-  console.log({ data });
   return (
     <div className="mt-10">
       <PaginatedTable
-        title={<div />}
+        title="Markets"
         defaultSort="vesting"
         columns={tableColumns}
         data={tableData}

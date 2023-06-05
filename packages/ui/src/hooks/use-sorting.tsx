@@ -14,8 +14,8 @@ export const useSorting = (
       const sorted =
         data &&
         [...data].sort((a, b) => {
-          let current = a[sortField]?.sortValue || a[sortField].value;
-          let next = b[sortField]?.sortValue || b[sortField].value;
+          let current = a[sortField]?.sortValue || a[sortField]?.value;
+          let next = b[sortField]?.sortValue || b[sortField]?.value;
           if (!current) return 1;
           if (!next) return -1;
           if (!current && !next) return 0;
@@ -35,11 +35,11 @@ export const useSorting = (
           }
           return 0;
 
-          return (
-            current.toString().localeCompare(next.toString(), "en", {
-              numeric: true,
-            }) * (sortOrder === "asc" ? 1 : -1)
-          );
+          // return (
+          //   current.toString().localeCompare(next.toString(), "en", {
+          //     numeric: true,
+          //   }) * (sortOrder === "asc" ? 1 : -1)
+          // );
         });
       setData(sorted);
     }
