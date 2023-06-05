@@ -15,6 +15,10 @@ export const longFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
+export const longerFormatter = new Intl.NumberFormat("en-US", {
+  maximumFractionDigits: 8,
+});
+
 export const getRateMod = (value: string | number) => {
   let rateMod;
 

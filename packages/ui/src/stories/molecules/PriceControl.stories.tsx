@@ -8,13 +8,20 @@ export default {
   argTypes: {},
 } as Meta<typeof PriceControl>;
 
+const token = {
+  symbol: "ETH",
+  price: "1900",
+};
+
 export const Primary = {
   args: {
-    topLabel: "Fixed Price",
+    topLabel: "Fixed ppppppppppppppppppppppppppppppppPrice",
     bottomLabel: "Initial Discount",
     tooltip: "ya",
-    exchangeRate: 0.256,
     onRateChange: () => {},
+
+    payoutToken: token,
+    quoteToken: { symbol: "NGMI", price: 1123100123 },
   },
 };
 
