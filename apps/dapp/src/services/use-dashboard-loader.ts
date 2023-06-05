@@ -6,7 +6,6 @@ import {
   OwnerBalance,
   useGetDashboardDataQuery,
 } from "../generated/graphql";
-import { useAccount } from "wagmi";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { useTestnetMode } from "hooks/useTestnet";
 import { useEffect, useState } from "react";
@@ -18,8 +17,8 @@ import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
 const currentTime = Math.trunc(Date.now() / 1000);
 
 export const useDashboardLoader = () => {
-  const { address } = useAccount();
-  const { getMarketsForOwner } = useCalculatedMarkets();
+  const address = "0xea8a734db4c7EA50C32B5db8a0Cb811707e8ACE3"; //useAccount();
+  const { allMarkets } = useCalculatedMarkets();
 
   const dashboardData = getSubgraphQueries(useGetDashboardDataQuery, {
     address: address,
@@ -31,9 +30,7 @@ export const useDashboardLoader = () => {
   const [ownerBalances, setOwnerBalances] = useState<OwnerBalance[]>([]);
   const [bondPurchases, setBondPurchases] = useState<BondPurchase[]>([]);
   const [closedMarkets, setClosedMarkets] = useState<Market[]>([]);
-  const [currentMarkets, setCurrentMarkets] = useState<CalculatedMarket[]>(
-    getMarketsForOwner(address)
-  );
+  const [currentMarkets, setCurrentMarkets] = useState<CalculatedMarket[]>([]);
 
   useEffect(() => {
     if (isLoading || !address) return;
@@ -82,6 +79,15 @@ export const useDashboardLoader = () => {
 
     fetchErc20OwnerBalances();
   }, [isLoading, isTestnet]);
+
+  useEffect(() => {
+    setCurrentMarkets(
+      allMarkets.filter(
+        (market: CalculatedMarket) =>
+          address && market.owner.toLowerCase() === address.toLowerCase()
+      )
+    );
+  }, [allMarkets.length]);
 
   return {
     ownerBalances: ownerBalances,
