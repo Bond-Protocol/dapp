@@ -21,7 +21,12 @@ export const TokenList = () => {
     compareFunction: (t1: Token, t2: Token) => number
   ) {
     const arr: Token[] = [];
-    payoutTokens.forEach((value) => arr.push(value));
+    payoutTokens
+      .filter(
+        (value: Token) =>
+          value.logoUrl !== "/placeholders/token-placeholder.png"
+      )
+      .forEach((value: Token) => arr.push(value));
     return arr.sort(compareFunction);
   };
 
