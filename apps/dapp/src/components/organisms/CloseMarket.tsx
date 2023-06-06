@@ -9,19 +9,21 @@ export const CloseMarket = (props) => {
   const [txHash, setTxHash] = useState<string>();
   const { data: signer } = useSigner();
 
+  console.log({ market: props.market });
   const handleClose = async () => {
     if (!signer) return;
 
     try {
       setSubmitted(true);
-      const tx = await closeMarket(props.market.id, signer!);
+      const tx = await closeMarket(props.market.marketId, signer!, {});
       setTxHash(tx.hash);
       const finalized = await tx.wait(1);
       if (finalized) {
         setClosing(false);
       }
     } catch (e) {
-      console.error("Something went wrong closing a market");
+      console.error("Something went wrong closing a market", e);
+      setSubmitted(false);
     }
   };
 
@@ -31,7 +33,11 @@ export const CloseMarket = (props) => {
         Close
       </Button>
 
-      <Modal open={closing} onClickClose={() => setClosing(false)}>
+      <Modal
+        title={submitted ? "Transaction Pending" : "Close Market"}
+        open={closing}
+        onClickClose={() => setClosing(false)}
+      >
         {submitted ? (
           <TransactionHashDialog hash={txHash!} />
         ) : (

@@ -67,6 +67,7 @@ export const useTokenLoader = () => {
             return {
               ...t,
               chainId: Number(t.chainId),
+              decimals: Number(t.decimals),
               logoUrl: "/placeholders/token-placeholder.png",
               logoURI: "/placeholders/token-placeholder.png",
             };

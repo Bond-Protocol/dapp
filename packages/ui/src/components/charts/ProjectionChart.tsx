@@ -52,8 +52,8 @@ export const ProjectionChart = (
     onFocus,
   } = useNumericInput("5", true);
 
-  return <div />;
   const [useTokenPrices, setUseTokenPrices] = useState(false);
+
   if (Boolean(props.data.length)) {
     return (
       <div className="h-[99%] w-full">
