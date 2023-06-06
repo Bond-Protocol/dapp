@@ -1,5 +1,5 @@
 import { SearchBar } from "components/molecules/SearchBar";
-import { IconCaroussel, IconCarousselProps, Label } from "..";
+import { IconCarousel, IconCarouselProps, Label } from "..";
 import type { Token } from "@bond-protocol/contract-library";
 
 export type SelectTokenDialogProps = {
@@ -9,7 +9,7 @@ export type SelectTokenDialogProps = {
   onSwitchChain: (chainId: string) => void;
   filter: string;
   setFilter: (filter: string) => void;
-} & IconCarousselProps;
+} & IconCarouselProps;
 
 //Checks whether a field includes a string
 const includesText = (field: string, target: string) => {
@@ -38,7 +38,7 @@ export const SelectTokenDialog = (props: SelectTokenDialogProps) => {
         placeholder="Search name or paste token address"
       />
       <div className="my-3 flex justify-end">
-        <IconCaroussel
+        <IconCarousel
           icons={props.icons}
           selected={props.selected}
           onChange={props.onSwitchChain}

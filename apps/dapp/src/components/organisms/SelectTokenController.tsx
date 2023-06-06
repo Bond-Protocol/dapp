@@ -9,7 +9,6 @@ import {
 } from "ui";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/evm-provider";
-import { useTokenlists } from "context/tokenlist-context";
 import { useTokens } from "context/token-context";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
@@ -31,7 +30,6 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const chainId = props.chainId || connectedChainId || 1;
 
   const tokens = tokenUtils.getByChain(chainId);
-  console.log({ tokens, tokenUtils });
 
   useEffect(() => {
     async function fetchUnknownToken() {

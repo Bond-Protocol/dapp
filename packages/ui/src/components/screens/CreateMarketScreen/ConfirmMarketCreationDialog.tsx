@@ -1,18 +1,18 @@
 import {
   Button,
+  Checkbox,
+  CreateMarketAction,
+  CreateMarketState,
+  Link,
   SummaryLabel,
   SummaryList,
-  Tooltip,
   SummaryRow,
-  Link,
+  Tooltip,
   useCreateMarket,
-  CreateMarketAction,
-  Checkbox,
 } from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
-import { CreateMarketState } from "components";
 import {
   calculateTrimDigits,
   dynamicFormatter,
@@ -52,15 +52,15 @@ const getDynamicPriceFields = (state: CreateMarketState) => {
 const getStaticPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
 
-  const initialPrice = trim(
-    state.priceModels[state.priceModel].initialPrice,
-    calculateTrimDigits(state.priceModels[state.priceModel].initialPrice)
+  const fixedPrice = trim(
+    state.priceModels[state.priceModel].fixedPrice,
+    calculateTrimDigits(state.priceModels[state.priceModel].fixedPrice)
   );
 
   return [
     {
       leftLabel: "Fixed Price",
-      rightLabel: `${initialPrice} ${tokenSymbols}`,
+      rightLabel: `${fixedPrice} ${tokenSymbols}`,
     },
   ];
 };

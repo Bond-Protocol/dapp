@@ -224,7 +224,6 @@ export const CreateMarketController = () => {
   };
 
   const configureMarket = (state: CreateMarketState) => {
-    console.log("start");
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
     const chainName = network.chains.find((c) => c.id === state.chainId);

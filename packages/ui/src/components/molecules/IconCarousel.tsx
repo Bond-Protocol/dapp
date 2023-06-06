@@ -1,13 +1,12 @@
 import { Icon, IconProps } from "components/atoms";
 
-export type IconCarousselProps = {
+export type IconCarouselProps = {
   icons: IconProps & { id: string }[];
   selected: string;
   onChange: (id: any) => void;
 };
 
-export const IconCaroussel = (props: IconCarousselProps) => {
-  console.log({ icons: props.icons });
+export const IconCarousel = (props: IconCarouselProps) => {
   return (
     <div className="flex gap-x-2">
       {props.icons.map((iconProps) => {
@@ -16,7 +15,6 @@ export const IconCaroussel = (props: IconCarousselProps) => {
             key={iconProps.id}
             onClick={(e) => {
               e.preventDefault();
-              console.log("icon-carousel", iconProps.id);
               props.onChange(iconProps.id);
             }}
             className={`cursor-pointer hover:opacity-100 ${

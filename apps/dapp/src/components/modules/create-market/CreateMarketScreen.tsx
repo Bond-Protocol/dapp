@@ -49,6 +49,9 @@ export type CreateMarketScreenProps = {
   blockExplorerUrl: string;
   blockExplorerName: string;
   created: boolean;
+  oraclePrice: number;
+  oracleMessage: string;
+  isOracleValid: boolean;
 };
 
 const capacityOptions = [
@@ -99,7 +102,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     state.endDate &&
     state.vesting &&
     state.quoteToken.address &&
-    state.payoutToken.address;
+    state.payoutToken.address &&
+    (state.oracle ? props.isOracleValid : true);
 
   const updateMaxBond = (
     capacity?: any,
@@ -278,6 +282,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
             id="cm-price-model-picker"
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
+            oraclePrice={props.oraclePrice}
+            oracleMessage={props.oracleMessage}
+            isOracleValid={props.isOracleValid}
             onChange={(value) => {
               dispatch({ type: CreateMarketAction.UPDATE_PRICE_MODEL, value });
               updateMaxBond(
@@ -399,11 +406,17 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           <div className="mt-4 flex flex-row-reverse gap-x-4">
             {!(state.durationInDays && state.capacity) ? (
               <div
-                className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md`}
+                className={`flex max-h-[104px] justify-center bg-white/5 p-4 backdrop-blur-md ${
+                  state.payoutToken.symbol &&
+                  state.quoteToken?.symbol &&
+                  state.priceModel === "oracle-dynamic"
+                    ? "w-1/2"
+                    : "w-full"
+                }`}
               >
                 <div className="flex items-center justify-center py-4 text-sm text-light-grey">
                   <CalendarIcon className="h-12 w-12 fill-light-grey pr-2 text-light-grey" />
-                  Select dates to view market duration
+                  Select capacity and dates to view market duration
                 </div>
               </div>
             ) : (
@@ -423,7 +436,14 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                     });
                   }}
                 />
-                <InfoLabel label={"Market Length"} reverse>
+
+                <InfoLabel
+                  className={`${
+                    state.priceModel === "oracle-dynamic" ? "invisible" : ""
+                  }`}
+                  label={"Market Length"}
+                  reverse
+                >
                   {state.durationInDays} DAYS
                 </InfoLabel>
               </>

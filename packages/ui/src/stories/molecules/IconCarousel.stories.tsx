@@ -1,13 +1,13 @@
-import { Meta, StoryFn } from "@storybook/react";
-import { IconCaroussel } from "components/molecules";
+import { Meta } from "@storybook/react";
+import { IconCarousel } from "components/molecules";
 import ethLogo from "assets/icons/ethereum.svg";
 
 export default {
-  title: "Design System/Molecules/IconCaroussel",
-  component: IconCaroussel,
+  title: "Design System/Molecules/IconCarousel",
+  component: IconCarousel,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-} as Meta<typeof IconCaroussel>;
+} as Meta<typeof IconCarousel>;
 
 const icons = [
   { src: ethLogo, id: "1" },

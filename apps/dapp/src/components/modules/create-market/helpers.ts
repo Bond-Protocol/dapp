@@ -3,7 +3,11 @@ import { CreateMarketState } from "ui";
 export const doPriceMath = (state: CreateMarketState) => {
   let rates = state.priceModels[state.priceModel];
 
-  const price = Number(rates?.initialPrice).toExponential();
+  const price =
+    state.priceModel === "dynamic"
+      ? Number(rates?.initialPrice).toExponential()
+      : Number(rates?.fixedPrice).toExponential();
+
   const minPrice = Number(rates?.minPrice).toExponential();
 
   const priceSymbolIndex = price.indexOf("e") + 1;
@@ -32,8 +36,8 @@ export const doPriceMath = (state: CreateMarketState) => {
   const exp =
     36 +
     scaleAdjustment +
-    state.quoteToken.decimals -
-    state.payoutToken.decimals +
+    Number(state.quoteToken.decimals) -
+    Number(state.payoutToken.decimals) +
     priceDecimalDiff;
 
   // Calculate the decimal difference in the initial price and minimum price to offset the exponent
