@@ -72,14 +72,12 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
     <div>
       <SelectTokenDialog
         {...props}
-        // @ts-ignore
         tokens={tokens}
         selected={String(chainId)}
         icons={icons}
         filter={filter}
         setFilter={setFilter}
         onChange={() => {
-          // @ts-ignore
           props.onChange(importedToken);
         }}
       />
@@ -88,13 +86,9 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
           token={importedToken}
           priceSource={source}
           isLoading={isLoading}
-          // @ts-ignore
           onConfirm={(e) => {
-            // @ts-ignore
             tokenUtils.addToken(importedToken);
-            // @ts-ignore
             props.onSubmit({ value: importedToken });
-            // @ts-ignore
             props.onClose(e);
           }}
         />
