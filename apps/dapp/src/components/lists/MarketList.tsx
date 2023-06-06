@@ -32,15 +32,24 @@ export const MarketList: FC<MarketListProps> = ({
   const markets = props.markets || allMarkets;
 
   const filteredMarkets = markets
-    .filter((m) => (token ? m.payoutToken.address === token : true))
-    .sort((a, b) => b.discount - a.discount);
+    .filter((m: CalculatedMarket) =>
+      token ? m.payoutToken.address === token : true
+    )
+    .sort((a: CalculatedMarket, b: CalculatedMarket) => {
+      let aDiscount = a.discount;
+      let bDiscount = b.discount;
+
+      if (isNaN(aDiscount) || aDiscount === Infinity || aDiscount === -Infinity)
+        aDiscount = 0;
+      if (isNaN(bDiscount) || bDiscount === Infinity || bDiscount === -Infinity)
+        bDiscount = 0;
+      return bDiscount - aDiscount;
+    });
 
   const tableMarkets = filteredMarkets
-    .map((m) => toTableData(columns, m))
-    .map((row) => {
-      //@ts-ignore
+    .map((m: CalculatedMarket) => toTableData(columns, m))
+    .map((row: any) => {
       row["view"].onClick = (path: string) => navigate(path);
-      //@ts-ignore (TODO): Improve this
       row.onClick = () =>
         navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
       return row;
