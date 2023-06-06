@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { InfoLabel, SocialRow } from "ui";
+import { Button, InfoLabel, SocialRow } from "ui";
 import { MarketList } from "components/lists";
 import { PageHeader, PageNavigation } from "components/common";
 import { useTokens } from "context/token-context";
@@ -9,6 +9,9 @@ export const TokenPage: FC = () => {
   const { address } = useParams();
   const { fetchedExtendedDetails, getByAddress } = useTokens();
   const [token, setToken] = useState(getByAddress(address || ""));
+  const [showMore, setShowMore] = useState(
+    !(token?.details?.description?.length > 360)
+  );
 
   useEffect(() => {
     if (!fetchedExtendedDetails) return;
@@ -35,9 +38,36 @@ export const TokenPage: FC = () => {
       </PageNavigation>
       <div className="flex flex-col">
         <div className="mt-2">
-          <p className="w-1/2 text-light-grey-400">
-            {token?.details?.description}
-          </p>
+          {!showMore && token?.details?.description?.length > 360 && (
+            <>
+              <p className="line-clamp-5 w-1/2 text-light-grey-400">
+                {token?.details?.description}
+              </p>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowMore(!showMore)}
+              >
+                Show More
+              </Button>
+            </>
+          )}
+          {showMore && (
+            <>
+              <p className="w-1/2 text-light-grey-400">
+                {token?.details?.description}
+              </p>
+              {token?.details?.description?.length > 360 && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setShowMore(!showMore)}
+                >
+                  Hide
+                </Button>
+              )}
+            </>
+          )}
         </div>
       </div>
 
