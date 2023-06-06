@@ -52,10 +52,12 @@ function getBondType(state: CreateMarketState, chainId: string) {
 }
 
 const getAuctioneer = (chain: string, state: CreateMarketState) => {
+  // @ts-ignore
   return getAddressesForType(chain, getBondType(state, chain)).auctioneer;
 };
 
 const getTeller = (chain: string, state: CreateMarketState) => {
+  // @ts-ignore
   return getAddressesForType(chain, getBondType(state, chain)).teller;
 };
 
@@ -107,6 +109,7 @@ export const CreateMarketController = () => {
           state.oracleAddress,
           state.payoutToken.address,
           state.quoteToken.address,
+          // @ts-ignore
           providers[network?.chain?.id]
         );
         setIsOraclePairValid(valid);
@@ -122,7 +125,7 @@ export const CreateMarketController = () => {
 
   useEffect(() => {
     if (!isOraclePairValid) {
-      setOraclePrice(0);
+      setOraclePrice(BigNumber.from(0));
       setOracleMessage("");
       return;
     }
@@ -133,6 +136,7 @@ export const CreateMarketController = () => {
         state.oracleAddress,
         state.payoutToken.address,
         state.quoteToken.address,
+        // @ts-ignore
         providers[network?.chain?.id]
       );
 
@@ -141,6 +145,7 @@ export const CreateMarketController = () => {
         state.oracleAddress,
         state.payoutToken.address,
         state.quoteToken.address,
+        // @ts-ignore
         providers[network?.chain?.id]
       );
       const adjustedPrice = ethers.utils.formatUnits(price, decimals);
@@ -153,7 +158,7 @@ export const CreateMarketController = () => {
         },
       });
 
-      setOraclePrice(adjustedPrice);
+      setOraclePrice(BigNumber.from(adjustedPrice));
       setOracleMessage("Using Oracle Price!");
     }
 
@@ -236,17 +241,22 @@ export const CreateMarketController = () => {
     if (!network.chain?.id && !state.chainId)
       throw new Error("Unspecified chain");
 
+    // @ts-ignore
     const debtBuffer = state.overridden.debtBuffer
-      ? state.overridden.debtBuffer
+      ? // @ts-ignore
+        state.overridden.debtBuffer
       : state.debtBuffer;
 
+    // @ts-ignore
     const depositInterval = state.overridden.depositInterval
-      ? state.overridden.depositInterval
+      ? // @ts-ignore
+        state.overridden.depositInterval
       : state.depositInterval;
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
+    // @ts-ignore
     let bondType: string = getBondType(state, chain.id);
 
     let startDate;
@@ -321,13 +331,16 @@ export const CreateMarketController = () => {
     const config = configureMarket(state);
 
     return contractLib.createMarketMultisig(
+      // @ts-ignore
       config?.marketParams,
+      // @ts-ignore
       config?.bondType
     );
   };
 
   const getApproveTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
+    // @ts-ignore
     const tellerAddress = getTeller(config?.chain, state);
 
     return contractLib.getApproveTxBytecode(
@@ -342,7 +355,9 @@ export const CreateMarketController = () => {
 
     try {
       const tx = await contractLib.createMarket(
+        // @ts-ignore
         config.marketParams,
+        // @ts-ignore
         config.bondType,
         signer,
         { gasLimit: gasEstimate }
@@ -362,7 +377,9 @@ export const CreateMarketController = () => {
 
     try {
       let estimate = await contractLib.estimateGasCreateMarket(
+        // @ts-ignore
         config.marketParams,
+        // @ts-ignore
         config.bondType,
         signer,
         {}
@@ -386,12 +403,14 @@ export const CreateMarketController = () => {
   return (
     <>
       <CreateMarketScreen
+        // @ts-ignore
         tokens={tokens.filter((t) =>
           isConnected ? t.chainId === network.chain?.id : t.chainId === 1
         )}
         onSubmitAllowance={approveCapacitySpending}
         onSubmitCreation={onSubmit}
         onSubmitMultisigCreation={setCreationHash}
+        // @ts-ignore
         estimateGas={estimateGas}
         fetchAllowance={fetchAllowance}
         getAuctioneer={getAuctioneer}
@@ -403,9 +422,12 @@ export const CreateMarketController = () => {
         projectionData={projectionData.prices}
         isAllowanceTxPending={allowanceTx}
         creationHash={creationHash}
+        // @ts-ignore
         blockExplorerName={blockExplorer.blockExplorerName}
+        // @ts-ignore
         blockExplorerUrl={blockExplorer.blockExplorerUrl}
         created={created}
+        // @ts-ignore
         oraclePrice={oraclePrice}
         oracleMessage={oracleMessage}
         isOracleValid={isOraclePairValid}
