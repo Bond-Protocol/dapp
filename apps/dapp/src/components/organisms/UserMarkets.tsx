@@ -1,11 +1,11 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAccount } from "wagmi";
+import { Button, InfoLabel } from "ui";
+import type { AllowanceToken } from "ui";
+import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
 import { UserMarketList } from "components/lists/UserMarketList";
 import { useMarkets } from "context/market-context";
-import { useState } from "react";
-import { Button, InfoLabel, Modal, UpdateAllowanceDialog } from "ui";
-import type { AllowanceToken } from "ui";
-import { useNavigate } from "react-router-dom";
-import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
-import { useAccount } from "wagmi";
 
 export const UserMarkets = () => {
   const navigate = useNavigate();

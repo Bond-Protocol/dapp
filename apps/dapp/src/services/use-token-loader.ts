@@ -39,6 +39,7 @@ export const fetchAndMatchPricesForTestnet = async (
  */
 export const useTokenLoader = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
+  const [userTokens, setUserTokens] = useState<Token[]>([]);
   const [payoutTokens, setPayoutTokens] = useState<Token[]>([]);
   const [tbv, setTbv] = useState<number>(0);
   const { discoverLogo } = useDiscoverToken();
@@ -51,21 +52,32 @@ export const useTokenLoader = () => {
     );
   };
 
+  const getByChain = (chainId: number) =>
+    tokens.filter((t) => t.chainId === chainId);
+
+  const addToken = (token: Token) => {
+    setUserTokens((prev) => [...prev, token]);
+  };
+
   useEffect(() => {
     const loadPrices = async () => {
       if (!isLoading) {
-        const tokens = subgraphTokens.map((t: any) => {
-          return {
-            ...t,
-            logoUrl: "/placeholders/token-placeholder.png",
-            logoURI: "/placeholders/token-placeholder.png",
-          };
-        });
+        const tokens = subgraphTokens
+          .map((t: any) => {
+            return {
+              ...t,
+              chainId: Number(t.chainId),
+              logoUrl: "/placeholders/token-placeholder.png",
+              logoURI: "/placeholders/token-placeholder.png",
+            };
+          })
+          .concat(userTokens);
 
-        const pricedTokens = environment.isTesting
+        const pricedTokens = environment.isTestnet
           ? await fetchAndMatchPricesForTestnet(tokens)
           : await fetchPrices(tokens);
         setTokens(pricedTokens);
+        setFetchExtended(false);
       }
     };
 
@@ -109,6 +121,8 @@ export const useTokenLoader = () => {
     tokens,
     payoutTokens,
     getByAddress,
+    getByChain,
+    addToken,
     fetchedExtendedDetails,
   };
 };

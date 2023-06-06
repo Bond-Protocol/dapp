@@ -6,28 +6,19 @@ export type ITokenContext = {
   tbv: string;
   tokens: Token[];
   payoutTokens: Token[];
+  addToken: (token: Token) => void;
   getByAddress: (address: string) => Token | undefined;
+  getByChain: (chainId: number) => Token[] | undefined;
   fetchedExtendedDetails?: boolean;
 };
 
 const TokenContext = createContext<ITokenContext>({} as ITokenContext);
 
 export const TokenProvider = ({ children }: { children: React.ReactNode }) => {
-  const { tbv, tokens, payoutTokens, getByAddress, fetchedExtendedDetails } =
-    useTokenLoader();
+  const tokens = useTokenLoader();
 
   return (
-    <TokenContext.Provider
-      value={{
-        tbv,
-        tokens,
-        payoutTokens,
-        getByAddress,
-        fetchedExtendedDetails,
-      }}
-    >
-      {children}
-    </TokenContext.Provider>
+    <TokenContext.Provider value={tokens}>{children}</TokenContext.Provider>
   );
 };
 

@@ -10,6 +10,7 @@ import {
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/evm-provider";
 import { useTokenlists } from "context/tokenlist-context";
+import { useTokens } from "context/token-context";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
   chainId: number;
@@ -25,11 +26,12 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const { discover, discoverLogo } = useDiscoverToken();
 
   const connectedChainId = useChainId();
-  const tokenlist = useTokenlists();
+  const tokenUtils = useTokens();
 
   const chainId = props.chainId || connectedChainId || 1;
 
-  const tokens = tokenlist.getByChain(chainId);
+  const tokens = tokenUtils.getByChain(chainId);
+  console.log({ tokens, tokenUtils });
 
   useEffect(() => {
     async function fetchUnknownToken() {
@@ -87,8 +89,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
           priceSource={source}
           isLoading={isLoading}
           onConfirm={(e) => {
-            // @ts-ignore
-            tokenlist.addToken(importedToken);
+            tokenUtils.addToken(importedToken);
             props.onSubmit({ value: importedToken });
             props.onClose(e);
           }}

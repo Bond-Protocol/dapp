@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
@@ -27,8 +26,8 @@ function getBondType(state: CreateMarketState, chainId: string) {
        It has been deployed to Goerli, but using the old SDA contracts for consistency
       */
       if (
-        chainId === CHAIN_ID.ETHEREUM_MAINNET ||
-        chainId === CHAIN_ID.GOERLI_TESTNET
+        chainId === contractLib.CHAIN_ID.ETHEREUM_MAINNET ||
+        chainId === contractLib.CHAIN_ID.GOERLI_TESTNET
       ) {
         return state.vestingType === "term"
           ? contractLib.BOND_TYPE.FIXED_TERM_SDA
@@ -84,7 +83,6 @@ export const CreateMarketController = () => {
     payoutToken: state.payoutToken,
     dayRange: state.durationInDays,
   });
-  console.log("CONTROLLER");
 
   useEffect(() => {
     if (
@@ -226,6 +224,7 @@ export const CreateMarketController = () => {
   };
 
   const configureMarket = (state: CreateMarketState) => {
+    console.log("start");
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
     const chainName = network.chains.find((c) => c.id === state.chainId);

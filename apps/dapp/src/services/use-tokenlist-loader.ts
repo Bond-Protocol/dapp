@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { tokenlist } from "hooks";
+import { tokenlist, useTokens } from "hooks";
 import { Token } from "@bond-protocol/contract-library";
 import { fetchPrices } from "./use-token-loader";
 
 export const useTokenlistLoader = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
+  //const tokens = useTokens();
 
   useEffect(() => {
     const loadPrices = async () => {
