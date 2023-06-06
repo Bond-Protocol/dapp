@@ -16,6 +16,15 @@
     "decimals": 18
   },
   {
+    "address": "0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844",
+    "chainId": 5,
+    "name": "DAI",
+    "symbol": "DAI",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/DAI.png",
+    "decimals": 18
+  },
+
+  {
     "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     "chainId": 1,
     "name": "Wrapped Ethereum",
@@ -26,6 +35,14 @@
   {
     "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
     "chainId": 42161,
+    "name": "Wrapped Ethereum",
+    "symbol": "WETH",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
+    "decimals": 18
+  },
+  {
+    "address": "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
+    "chainId": 5,
     "name": "Wrapped Ethereum",
     "symbol": "WETH",
     "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
@@ -102,21 +119,5 @@
     "symbol": "WBTC",
     "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WBTC.png",
     "decimals": 9
-  },
-  {
-    "address": "0x865377367054516e17014ccded1e7d814edc9ce4",
-    "chainId": 1,
-    "name": "DOLA",
-    "symbol": "DOLA",
-    "logoURI": "https://assets.coingecko.com/coins/images/14287/small/anchor-logo-1-200x200.png?1615275005",
-    "decimals": 18
-  },
-  {
-    "address": "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
-    "chainId": 1,
-    "name": "Olympus",
-    "symbol": "OHM",
-    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
-    "decimals": 18
   }
 ]

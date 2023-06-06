@@ -40,8 +40,8 @@ export const testnets = [
   goerli,
   arbitrumGoerli,
   optimismGoerli,
-  polygonMumbai,
-  avalancheFuji,
+  //polygonMumbai,
+  //avalancheFuji,
 ].map(getIconsForChains);
 
 export const mainnets = [mainnet, arbitrum, optimism].map(getIconsForChains);

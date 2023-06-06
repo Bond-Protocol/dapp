@@ -32,14 +32,14 @@ export const fetchAndMatchPricesForTestnet = async () => {
   });
 };
 
-export const useTokenLoader = () => {
+/**
+ *
+ */
+export const useTokenlistLoader = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [userTokens, setUserTokens] = useState<Token[]>([]);
-  const [payoutTokens, setPayoutTokens] = useState<Token[]>([]);
-  const [tbv, setTbv] = useState<number>(0);
   const { discoverLogo } = useDiscoverToken();
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
-  const { subgraphTokens, isLoading } = useSubgraph();
 
   const getByAddress = (address: string) => {
     return tokens.find(
@@ -56,48 +56,18 @@ export const useTokenLoader = () => {
 
   useEffect(() => {
     const loadPrices = async () => {
-      if (!isLoading) {
-        const tokens = subgraphTokens
-          .map((t: any) => {
-            return {
-              ...t,
-              chainId: Number(t.chainId),
-              decimals: Number(t.decimals),
-              logoUrl: "/placeholders/token-placeholder.png",
-              logoURI: "/placeholders/token-placeholder.png",
-            };
-          })
-          .concat(userTokens);
+      const tokens = tokenlist;
 
-        const pricedTokens = environment.isTestnet
-          ? await fetchAndMatchPricesForTestnet()
-          : await fetchPrices(tokens);
+      const pricedTokens = environment.isTestnet
+        ? await fetchAndMatchPricesForTestnet()
+        : await fetchPrices(tokens);
 
-        setTokens(pricedTokens);
-        setFetchExtended(false);
-      }
+      setTokens(pricedTokens);
+      setFetchExtended(false);
     };
 
     loadPrices();
-  }, [isLoading]);
-
-  useEffect(() => {
-    const payoutTokens = tokens.filter((token) => token.usedAsPayout);
-    const totalTbv = payoutTokens.reduce((totalTbv, token) => {
-      return (
-        totalTbv +
-          token.payoutTokenTbvs?.reduce((tbv, ptt) => {
-            return (
-              //@ts-ignore
-              tbv + (ptt.tbv * getByAddress(ptt.quoteToken.address)?.price ?? 0)
-            );
-          }, 0) ?? 0
-      );
-    }, 0);
-
-    setTbv(totalTbv);
-    setPayoutTokens(payoutTokens);
-  }, [tokens]);
+  }, []);
 
   useEffect(() => {
     async function fetchExtendedDetails() {
@@ -114,9 +84,7 @@ export const useTokenLoader = () => {
   }, [tokens]);
 
   return {
-    tbv: usdFormatter.format(Math.trunc(tbv)),
-    tokens,
-    payoutTokens,
+    tokens: [...tokens, ...userTokens],
     getByAddress,
     getByChain,
     addToken,

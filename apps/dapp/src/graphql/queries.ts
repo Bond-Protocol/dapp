@@ -204,13 +204,6 @@ export const getDashboardData = gql`
       hasClosed
       totalBondedAmount
       totalPayoutAmount
-      bondPurchases(first: 1000) {
-        id
-        payout
-        amount
-        timestamp
-        purchasePrice
-      }
     }
   }
 `;

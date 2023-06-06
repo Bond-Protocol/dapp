@@ -16,6 +16,7 @@ import { useProjectionChartData } from "hooks/useProjectionChart";
 import { useTokenlists } from "context/tokenlist-context";
 import { usePurchaseBond } from "hooks";
 import { CreateMarketScreen } from "./CreateMarketScreen";
+import { useTokenlistLoader } from "services/use-tokenlist-loader-v2";
 
 function getBondType(state: CreateMarketState, chainId: string) {
   chainId = chainId.toString();
@@ -64,7 +65,7 @@ export const CreateMarketController = () => {
   const { isConnected } = useAccount();
   const network = useNetwork();
   const [state, dispatch] = useCreateMarket();
-  const { tokens } = useTokenlists();
+  const { tokens } = useTokenlistLoader();
   const { getTokenAllowance, approveSpending } = usePurchaseBond();
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");

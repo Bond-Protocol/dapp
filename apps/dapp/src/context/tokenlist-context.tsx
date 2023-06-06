@@ -1,12 +1,8 @@
 import { createContext, useContext } from "react";
-import { Token } from "@bond-protocol/contract-library";
 import { ITokenContext } from "./token-context";
-import { useTokenlistLoader } from "services/use-tokenlist-loader";
+import { useTokenlistLoader } from "services/use-tokenlist-loader-v2";
 
-export interface ITokenlistContext extends ITokenContext {
-  getByChain: (chainId: number) => Token[];
-  addToken: (token: Token) => void;
-}
+export type ITokenlistContext = Partial<ITokenContext>;
 
 const TokenlistContext = createContext<ITokenlistContext>(
   {} as ITokenlistContext
@@ -17,18 +13,10 @@ export const TokenlistProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { tokens, addToken } = useTokenlistLoader();
-
-  const getByAddress = () => {};
-
-  const getByChain = (chainId: number) =>
-    tokens.filter((t) => t.chainId === chainId);
+  const tokens = useTokenlistLoader();
 
   return (
-    <TokenlistContext.Provider
-      // @ts-ignore
-      value={{ addToken, tokens, getByChain, getByAddress }}
-    >
+    <TokenlistContext.Provider value={tokens}>
       {children}
     </TokenlistContext.Provider>
   );

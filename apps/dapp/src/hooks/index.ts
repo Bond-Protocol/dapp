@@ -1,6 +1,7 @@
 import tokenlist from "./tokenlist.json";
+import testnetTokenlist from "./testnet-tokenlist.json";
 
-export { tokenlist };
+export { tokenlist, testnetTokenlist };
 
 export * from "./useBrowserStorage";
 export * from "./useTokenPricesHistory";

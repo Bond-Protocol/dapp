@@ -24,6 +24,7 @@ export const useSubgraphLoader = () => {
   const [uniqueBonders, setUniqueBonders] = useState(0);
   const [subgraphTokens, setSubgraphTokens] = useState<Token[]>([]);
   const [markets, setMarkets] = useState<Market[]>([]);
+  const [isCurrentLoading, setIsCurrentLoading] = useState(true);
 
   useEffect(() => {
     if (isLoading) return;
@@ -55,6 +56,7 @@ export const useSubgraphLoader = () => {
 
     setSubgraphTokens(tokens);
     setMarkets(markets);
+    setIsCurrentLoading(false);
   }, [isLoading, isTestnet]);
 
   return {
@@ -62,11 +64,10 @@ export const useSubgraphLoader = () => {
     uniqueBonders: uniqueBonders,
     subgraphTokens: subgraphTokens,
     markets: markets,
-    isLoading: !(
-      totalPurchases > 0 &&
-      uniqueBonders > 0 &&
-      subgraphTokens.length > 0 &&
-      markets.length > 0
-    ),
+    isLoading: isCurrentLoading,
+    // totalPurchases > 0 &&
+    // uniqueBonders > 0 &&
+    // subgraphTokens.length > 0 &&
+    // markets.length > 0
   };
 };

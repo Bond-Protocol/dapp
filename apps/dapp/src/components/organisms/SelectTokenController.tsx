@@ -9,7 +9,7 @@ import {
 } from "ui";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/evm-provider";
-import { useTokens } from "context/token-context";
+import { useTokenlists } from "context/tokenlist-context";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
   chainId: number;
@@ -25,7 +25,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const { discover, discoverLogo } = useDiscoverToken();
 
   const connectedChainId = useChainId();
-  const tokenUtils = useTokens();
+  const tokenUtils = useTokenlists();
 
   const chainId = props.chainId || connectedChainId || 1;
 
