@@ -54,6 +54,7 @@ export default function Home() {
               <Values className="mx-auto my-10 w-full px-4 lg:my-24 lg:px-16" />
               <TheProblem className="bp-container" />
               <WinWin className="bp-container" />
+              {/*
               <div className="bp-container">
                 <Grid
                   title="Partners"
@@ -70,6 +71,7 @@ export default function Home() {
                   </LinkButton>
                 </div>
               </div>
+              */}
               <div className="bp-container">
                 <Grid
                   big

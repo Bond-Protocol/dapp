@@ -50,6 +50,7 @@ export const useSubgraphLoader = () => {
     setUniqueBonders(uniqueBonders);
 
     let markets: Market[] = [];
+    // @ts-ignore
     tokens.forEach((token: Token) => (markets = markets.concat(token.markets)));
 
     setSubgraphTokens(tokens);

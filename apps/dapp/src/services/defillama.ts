@@ -33,7 +33,7 @@ export interface DefillamaChart extends Omit<DefillamaCurrentPrice, "price"> {
  */
 export const fetchPrice = async (
   address: string | string[],
-  chainId: number
+  chainId?: number
 ): Promise<Array<DefillamaChart>> => {
   const ids = Array.isArray(address)
     ? address.join(",")
@@ -73,7 +73,7 @@ export const fetchChart = async (
 };
 
 /**The response format isnt very useful so we tweak it*/
-export const formatResponse = (coins: any, chainId: number) => {
+export const formatResponse = (coins: any, chainId?: number) => {
   return Object.keys(coins).map((id) => {
     const content = coins[id];
     const [_chain, address] = id.split(":");

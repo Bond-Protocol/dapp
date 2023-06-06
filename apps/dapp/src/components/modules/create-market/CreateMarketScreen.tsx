@@ -18,6 +18,7 @@ import {
   SelectDateDialog,
   SelectEndDateDialog,
   SelectModal,
+  SelectStartDateDialog,
   SelectVestingDialog,
   Token,
   TokenInput,
@@ -29,7 +30,6 @@ import {
 } from "ui";
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { SelectTokenController } from "components/organisms/SelectTokenController";
-import { useChainId, useSwitchNetwork } from "wagmi";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -58,9 +58,7 @@ const capacityOptions = [
 
 export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   const chain = props.chain;
-  const chainId = useChainId();
 
-  const { switchNetwork } = useSwitchNetwork();
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
   const [showMultisig, setShowMultisig] = useState(false);
@@ -230,6 +228,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 ModalContent={(modalProps) => (
                   <SelectTokenController
                     {...modalProps}
+                    // @ts-ignore
                     tokens={props.tokens}
                     onSwitchChain={(value: any) => {
                       dispatch({
@@ -274,6 +273,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               }
             />
           </div>
+          {/* @ts-ignore */}
           <PriceModelPicker
             id="cm-price-model-picker"
             payoutToken={state.payoutToken}

@@ -46,13 +46,16 @@ export function useCalculatedMarkets() {
     const payoutToken = getByAddress(market.payoutToken.address);
 
     let updatedMarket = { ...market };
+    // @ts-ignore
     quoteToken && (updatedMarket.quoteToken = quoteToken);
+    // @ts-ignore
     payoutToken && (updatedMarket.payoutToken = payoutToken);
 
     try {
       const result = await contractLibrary.calcMarket(
         requestProvider,
         FEE_ADDRESS,
+        // @ts-ignore
         updatedMarket
       );
 
@@ -67,7 +70,7 @@ export function useCalculatedMarkets() {
   };
 
   const calculateAllMarkets = useQueries(
-    markets.map((market) => ({
+    markets.map((market: Market) => ({
       queryKey: market.id,
       queryFn: () => calculateMarket(market),
       enabled: tokens.length > 0,
@@ -91,6 +94,7 @@ export function useCalculatedMarkets() {
         .filter((result) => result && result?.data)
         .map((r) => r.data);
 
+      // @ts-ignore
       setCalculatedMarkets(markets);
     }
   }, [calculateAllMarkets, tokens]);

@@ -9,8 +9,9 @@ export const TokenPage: FC = () => {
   const { address } = useParams();
   const { fetchedExtendedDetails, getByAddress } = useTokens();
   const [token, setToken] = useState(getByAddress(address || ""));
+
   const [showMore, setShowMore] = useState(
-    !(token?.details?.description?.length > 360)
+    !(token?.details?.description && token?.details?.description?.length > 360)
   );
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export const TokenPage: FC = () => {
       </PageNavigation>
       <div className="flex flex-col">
         <div className="mt-2">
-          {!showMore && token?.details?.description?.length > 360 && (
+          {!showMore && token?.details?.description && token?.details?.description?.length > 360 && (
             <>
               <p className="line-clamp-5 w-1/2 text-light-grey-400">
                 {token?.details?.description}
@@ -57,7 +58,7 @@ export const TokenPage: FC = () => {
               <p className="w-1/2 text-light-grey-400">
                 {token?.details?.description}
               </p>
-              {token?.details?.description?.length > 360 && (
+              {token?.details?.description && token?.details?.description?.length > 360 && (
                 <Button
                   size="sm"
                   variant="ghost"

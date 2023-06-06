@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 import { Provider } from "@wagmi/core";
 
 export function useGetMarkets() {
-  const { getPrice, currentPrices } = useTokens();
+  const { tokens, fetchedExtendedDetails, getByAddress } = useTokens();
   const [chain, setChain] = useState<string>("");
   const [marketIds, setMarketIds] = useState<number[]>([]);
   const [markets, setMarkets] = useState<CalculatedMarket[]>([]);
@@ -25,8 +25,7 @@ export function useGetMarkets() {
   });
 
   useEffect(() => {
-    if (!data || !currentPrices || Object.keys(currentPrices).length === 0)
-      return;
+    if (!data || !tokens || !fetchedExtendedDetails) return;
     const results = data.markets;
 
     const promises: Promise<CalculatedMarket>[] = [];
@@ -44,7 +43,7 @@ export function useGetMarkets() {
     });
 
     setMarkets(calculatedMarkets);
-  }, [data, currentPrices]);
+  }, [data, fetchedExtendedDetails]);
 
   const calculateMarket = async (market: Market) => {
     const requestProvider = providers[market.chainId];
@@ -64,7 +63,7 @@ export function useGetMarkets() {
           decimals: payoutToken.decimals,
           name: payoutToken.name,
           symbol: payoutToken.symbol,
-          price: getPrice(payoutToken.id),
+          price: getByAddress(payoutToken.address)?.price,
         },
         quoteToken: {
           id: quoteToken.id,
@@ -73,7 +72,7 @@ export function useGetMarkets() {
           decimals: quoteToken.decimals,
           name: quoteToken.name,
           symbol: quoteToken.symbol,
-          price: getPrice(quoteToken.id),
+          price: getByAddress(quoteToken.address)?.price,
           purchaseLink: "",
         },
       }

@@ -40,7 +40,7 @@ const fetchOnChain = async (
 export const useDiscoverToken = () => {
   const [isLoading, setLoading] = useState(false);
 
-  const discover = async (address: string, chainId: number) => {
+  const discover = async (address: string, chainId: number): Promise<{ token: Token, source: string }> => {
     setLoading(true);
 
     try {
@@ -63,6 +63,7 @@ export const useDiscoverToken = () => {
     } finally {
       setLoading(false);
     }
+    return { source: "", token: {} as Token };
   };
 
   const discoverLogo = async (token: Token) => {

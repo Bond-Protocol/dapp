@@ -15,6 +15,7 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   return tokens.map((t: any) => ({
     ...t,
     chainId: Number(t.chainId),
+    // @ts-ignore
     price: prices.find((p: any) => p.address === t.address)?.price ?? 0,
   }));
 };
@@ -78,6 +79,7 @@ export const useTokenLoader = () => {
       let tbv = 0;
       token.payoutTokenTbvs?.forEach((ptt) => {
         tbv =
+          // @ts-ignore
           tbv + (ptt.tbv * getByAddress(ptt.quoteToken.address)?.price || 0);
       });
       token.tbv = tbv;

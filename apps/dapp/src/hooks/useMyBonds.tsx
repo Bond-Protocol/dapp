@@ -153,7 +153,7 @@ export function useMyBonds() {
       }
     );
 
-    console.log({ updatedBonds });
+    // @ts-ignore
     setMyBonds(updatedBonds);
   }, [ownerBalances, erc20OwnerBalances, tokens]);
 

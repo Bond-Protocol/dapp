@@ -67,7 +67,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   );
 
   const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
-    market.chainId || 0
+    market.chainId || "0"
   );
 
   const showOwnerBalanceWarning =

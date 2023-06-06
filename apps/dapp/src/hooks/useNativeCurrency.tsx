@@ -11,10 +11,10 @@ export const useNativeCurrency = (chainId: string) => {
     symbol: "ETH",
   };
 
-  const nativeCurrencyPrice =
+  const nativeCurrencyPrice: number =
     tokens.find(
       ({ name }) => name.toLowerCase() === nativeCurrency.name.toLowerCase()
-    ) || 0;
+    )?.price || 0;
 
   return { nativeCurrency, nativeCurrencyPrice };
 };

@@ -26,6 +26,7 @@ export const TokenlistProvider = ({
 
   return (
     <TokenlistContext.Provider
+      // @ts-ignore
       value={{ addToken, tokens, getByChain, getByAddress }}
     >
       {children}

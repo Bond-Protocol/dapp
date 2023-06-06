@@ -106,7 +106,7 @@ export const tableColumns: Array<Column<any>> = [
 ];
 
 export const BondList = ({ data = [], ...props }: any) => {
-  const tableData = data.map((b) => toTableData(tableColumns, b));
+  const tableData = data.map((b: any) => toTableData(tableColumns, b));
 
   return (
     <div>

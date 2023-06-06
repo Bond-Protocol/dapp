@@ -87,6 +87,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
           priceSource={source}
           isLoading={isLoading}
           onConfirm={(e) => {
+            // @ts-ignore
             tokenlist.addToken(importedToken);
             props.onSubmit({ value: importedToken });
             props.onClose(e);

@@ -32,6 +32,7 @@ export const MarketList: FC<MarketListProps> = ({
   const markets = props.markets || allMarkets;
 
   const filteredMarkets = markets
+    // @ts-ignore
     .filter((m: CalculatedMarket) =>
       token ? m.payoutToken.address === token : true
     )

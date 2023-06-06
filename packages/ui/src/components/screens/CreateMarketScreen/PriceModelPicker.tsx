@@ -16,7 +16,7 @@ export type PriceModelPickerProps = {
   id?: string;
   chain: string;
   oraclePrice?: number;
-  oracleMessage: string;
+  oracleMessage?: string;
   isOracleValid?: boolean;
 } & Partial<PriceControlProps>;
 
@@ -146,7 +146,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
         oracle={oracle}
         type={type}
         onOracleChange={setOracleAddress}
-        oracleMessage={props.oracleMessage}
+        oracleMessage={props.oracleMessage || ""}
         isOracleValid={props.isOracleValid}
       />
       <div className="flex justify-between gap-x-4 pt-4">

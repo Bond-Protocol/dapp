@@ -34,8 +34,10 @@ export const TokenList = () => {
     setTokens(
       sortTokens((t1: Token, t2: Token) => {
         if (t1.markets?.length === t2.markets?.length) {
+          // @ts-ignore
           return numericSort(t1.tbv, t2.tbv, false);
         }
+        // @ts-ignore
         return numericSort(t1.markets?.length, t2.markets?.length, false);
       })
     );
