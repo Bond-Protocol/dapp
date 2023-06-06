@@ -63,6 +63,20 @@ const formatToken = (t: any) => {
       description: t.description.en,
       links: {
         homepage: t.links?.homepage?.[0],
+        twitter:
+          t.links?.twitter_screen_name &&
+          "https://twitter.com/".concat(t.links?.twitter_screen_name),
+        telegram:
+          t.links?.telegram_channel_identifier &&
+          "https://t.me/".concat(t.links?.telegram_channel_identifier),
+        discord: t.links?.chat_url.filter(
+          (url: string) => url.indexOf("https://discord.gg") !== -1
+        )[0],
+        medium: t.links?.announcement_url
+          .concat(t.links?.chat_url)
+          .concat(t.links?.official_forum_url)
+          .filter((url: string) => url.indexOf("medium.com") !== -1)[0],
+        github: t.links?.repos_url.github && t.links?.repos_url.github[0],
       },
     },
   };

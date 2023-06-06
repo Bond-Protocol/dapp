@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useParams } from "react-router-dom";
-import { InfoLabel } from "ui";
+import { InfoLabel, SocialRow } from "ui";
 import { MarketList } from "components/lists";
 import { PageHeader, PageNavigation } from "components/common";
 import { useTokens } from "context/token-context";
@@ -25,6 +25,13 @@ export const TokenPage: FC = () => {
         <PageHeader
           icon={token.logoUrl}
           title={token?.name || placeholderToken.name}
+          underTitle={
+            <SocialRow
+              {...token?.details?.links}
+              width={18}
+              className="mt-3 ml-2.5 justify-start gap-4 fill-white"
+            />
+          }
         />
       </PageNavigation>
       <div className="flex flex-col">
