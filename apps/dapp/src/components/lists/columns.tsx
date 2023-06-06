@@ -52,7 +52,12 @@ const discount: Column<CalculatedMarket> = {
   Component: DiscountLabel,
   formatter: (market) => {
     return {
-      value: !isNaN(market.discount) ? market.discount + "%" : "Unknown",
+      value:
+        !isNaN(market.discount) &&
+        market.discount !== Infinity &&
+        market.discount !== -Infinity
+          ? market.discount + "%"
+          : "Unknown",
       sortValue: market.discount,
     };
   },
