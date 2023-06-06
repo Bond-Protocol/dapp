@@ -4,18 +4,27 @@ import { useState } from "react";
 import { Button, InfoLabel, Modal, UpdateAllowanceDialog } from "ui";
 import type { AllowanceToken } from "ui";
 import { useNavigate } from "react-router-dom";
+import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
+import { useAccount } from "wagmi";
 
 export const UserMarkets = () => {
-  const address = "0xea8a734db4c7EA50C32B5db8a0Cb811707e8ACE3";
-  const [updating, setUpdating] = useState(false);
-  const { getMarketsForOwner } = useMarkets();
   const navigate = useNavigate();
-  const markets = getMarketsForOwner(address);
-  const payouts: AllowanceToken[] = markets
+  //const address = "0xea8a734db4c7EA50C32B5db8a0Cb811707e8ACE3";
+  const { address } = useAccount();
+
+  const [updating, setUpdating] = useState(false);
+
+  const { getMarketsForOwner } = useMarkets();
+
+  const markets = getMarketsForOwner(address!);
+
+  const tokens: AllowanceToken[] = markets
     ?.map((market) => {
       //@ts-ignore
-      market.payoutToken.allowance = market.ownerAllowance;
-      return market.payoutToken as AllowanceToken;
+      const token: AllowanceToken = market.payoutToken;
+      token.allowance = market.ownerAllowance;
+      token.auctioneer = market.auctioneer;
+      return token;
     })
     .filter((t, i, arr) => arr.lastIndexOf(t) === i);
 
@@ -35,13 +44,11 @@ export const UserMarkets = () => {
         </div>
         <UserMarketList data={markets} />
       </div>
-      <Modal
-        title="Token Allowances"
+      <UpdateAllowanceModal
+        handleClose={() => setUpdating(false)}
         open={updating}
-        onClickClose={() => setUpdating(false)}
-      >
-        <UpdateAllowanceDialog tokens={payouts} />
-      </Modal>
+        tokens={tokens}
+      />
     </>
   );
 };

@@ -1,7 +1,10 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket, CHAINS } from "@bond-protocol/contract-library";
 import { toTableData } from "src/utils/table";
-import { Column, formatCurrency, formatDate, PaginatedTable } from "ui";
+import { Button, Column, formatCurrency, formatDate, PaginatedTable } from "ui";
 import { bondColumn, discountColumn, viewColumn } from "./columns";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
+import { CloseMarket } from "hooks/useCloseMarket";
+import { useNavigate } from "react-router-dom";
 
 export const tableColumns: Array<Column<CalculatedMarket>> = [
   bondColumn,
@@ -50,15 +53,46 @@ export const tableColumns: Array<Column<CalculatedMarket>> = [
   discountColumn,
   {
     label: "Expiry Date",
-    accessor: "",
+    accessor: "conclusion",
     formatter: (market) => {
       return {
         value: formatDate.short(new Date(Number(market.conclusion) * 1000)),
       };
     },
   },
-  viewColumn,
+  {
+    label: "",
+    accessor: "",
+    //@ts-ignore
+    formatter: (market) => {
+      return {
+        value: market,
+      };
+    },
+    Component: (props) => {
+      const navigate = useNavigate();
+      const { chainId, marketId } = props.value;
+      const goToMarket = () => navigate(`/market/${chainId}/${marketId}`);
+
+      return (
+        <div className="flex gap-x-2">
+          <CloseMarket market={props.value} />
+          <Button thin size="sm" variant="ghost" onClick={() => goToMarket()}>
+            <div className="flex place-items-center">
+              View
+              <ArrowIcon
+                height={16}
+                width={16}
+                className="my-auto rotate-180"
+              />
+            </div>
+          </Button>
+        </div>
+      );
+    },
+  },
 ];
+
 export const UserMarketList = ({ data = [], ...props }: any) => {
   const tableData = data.map((b: any) => toTableData(tableColumns, b));
 

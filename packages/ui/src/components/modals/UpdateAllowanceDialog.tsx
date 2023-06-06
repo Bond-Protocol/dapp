@@ -3,10 +3,10 @@ import { Token } from "@bond-protocol/contract-library";
 import { Button, Input, Label } from "components";
 import { formatCurrency } from "src/utils";
 
-export type AllowanceToken = Token & { allowance: string };
+export type AllowanceToken = Token & { allowance: string; auctioneer: string };
 export type UpdateAlowanceDialogProps = {
   tokens: AllowanceToken[];
-  handleUpdateAllowance: (allowance: string, chainId: number) => void;
+  handleUpdateAllowance: (allowance: string, token: AllowanceToken) => void;
   onClose: (e: React.BaseSyntheticEvent) => void;
 };
 
@@ -16,8 +16,10 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
   const [newAllowance, setNewAllowance] = useState<string>("");
 
   const handleUpdate = (e: React.BaseSyntheticEvent, allowance: string) => {
-    props.handleUpdateAllowance(allowance, token?.chainId!);
-    props.onClose(e);
+    if (token) {
+      props.handleUpdateAllowance(allowance, token);
+      props.onClose(e);
+    }
   };
 
   return (

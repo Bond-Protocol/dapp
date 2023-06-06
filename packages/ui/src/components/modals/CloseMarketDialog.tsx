@@ -11,7 +11,7 @@ export const CloseMarketDialog = ({
   handleClose,
 }: CloseMarketDialogProps) => {
   return (
-    <div className="text-center">
+    <div className="max-w-sm text-center">
       <p>
         You're about to close your {market.payoutToken.symbol}/
         {market.quoteToken.symbol} market{" "}
