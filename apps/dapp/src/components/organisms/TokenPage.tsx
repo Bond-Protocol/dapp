@@ -1,20 +1,19 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { InfoLabel, SocialRow } from "ui";
 import { MarketList } from "components/lists";
 import { PageHeader, PageNavigation } from "components/common";
 import { useTokens } from "context/token-context";
 
-const placeholderToken = {
-  name: "PlaceholderToken",
-  description: "We placehold for other tokens (P, H)",
-  links: { homepage: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
-};
-
 export const TokenPage: FC = () => {
   const { address } = useParams();
-  const { getByAddress } = useTokens();
-  const token = getByAddress(address);
+  const { fetchedExtendedDetails, getByAddress } = useTokens();
+  const [token, setToken] = useState(getByAddress(address || ""));
+
+  useEffect(() => {
+    if (!fetchedExtendedDetails) return;
+    setToken(getByAddress(address || ""));
+  }, [fetchedExtendedDetails]);
 
   return (
     <div className="pb-12">
@@ -23,8 +22,8 @@ export const TokenPage: FC = () => {
         rightText="Visit Website"
       >
         <PageHeader
-          icon={token.logoUrl}
-          title={token?.name || placeholderToken.name}
+          icon={token?.logoUrl}
+          title={token?.name || "Loading..."}
           underTitle={
             <SocialRow
               {...token?.details?.links}
@@ -47,15 +46,15 @@ export const TokenPage: FC = () => {
           label="Total Bonded Value"
           tooltip={`Estimated total value in USD of all purchases from ${token?.name} markets.`}
         >
-          {token.purchaseCount > 0 && token.tbv === 0
+          {token?.purchaseCount && token.purchaseCount > 0 && token?.tbv === 0
             ? "Unknown"
-            : "$" + new Intl.NumberFormat().format(Math.trunc(token?.tbv))}
+            : "$" + new Intl.NumberFormat().format(Math.trunc(token?.tbv || 0))}
         </InfoLabel>
         <InfoLabel
           label="Total Bonds"
           tooltip={`The number of bonds acquired from ${token?.name}`}
         >
-          {token.purchaseCount}
+          {token?.purchaseCount}
         </InfoLabel>
 
         <InfoLabel
