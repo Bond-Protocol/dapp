@@ -53,15 +53,6 @@ export const ProjectionChart = (
   } = useNumericInput("5", true);
 
   const [useTokenPrices, setUseTokenPrices] = useState(false);
-
-  if (Boolean(props.data.length)) {
-    return (
-      <div className="h-[99%] w-full">
-        <PlaceholderChart message="Market simulation will appear here" />
-      </div>
-    );
-  }
-
   const prices = useMemo(
     () =>
       getProjectionDataset(state, props.data, {
@@ -86,6 +77,15 @@ export const ProjectionChart = (
       }),
     [props.data.length]
   );
+
+  if (Boolean(props.data.length)) {
+    return (
+      <div className="h-[99%] w-full">
+        <PlaceholderChart message="Market simulation will appear here" />
+      </div>
+    );
+  }
+
   console.log({ prices });
 
   const shouldRender = prices.length > 0;
