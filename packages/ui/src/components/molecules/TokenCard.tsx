@@ -1,14 +1,12 @@
 import { FC } from "react";
+import { TooltipWrapper } from "src/components";
 
 export type TokenCardProps = {
   token: any;
   navigate?: (to: string) => void;
 };
 
-export const TokenCard: FC<TokenCardProps> = ({
-  token,
-  navigate,
-}) => {
+export const TokenCard: FC<TokenCardProps> = ({ token, navigate }) => {
   const handleClick = (name: string) =>
     navigate && navigate("/tokens/" + token.chainId + "/" + token.address);
 
@@ -34,7 +32,15 @@ export const TokenCard: FC<TokenCardProps> = ({
       <div className="overflow-hidden rounded-full">
         <img className="h-[64px] w-[64px]" src={token.logoUrl} />
       </div>
-      <p className="my-2 text-center font-bold tracking-wide">{token.name}</p>
+      {token.name.length <= 18 ? (
+        <p className="my-2 text-center font-bold tracking-wide">{token.name}</p>
+      ) : (
+        <TooltipWrapper content={token.name}>
+          <p className="my-2 text-center font-bold tracking-wide">
+            {token.name.substring(0, 16).concat("\u2026")}
+          </p>
+        </TooltipWrapper>
+      )}
 
       <p className="text-light-primary-300 font-mono text-[10px]">
         TBV {formattedTbv}
