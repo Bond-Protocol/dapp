@@ -53,7 +53,7 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
       ) : (
         props.tokens.map((t) => (
           <div key={t.symbol} className="flex justify-between py-2 ">
-            <Label value={t.symbol} icon={t.logoURI} />
+            <Label value="" icon={t.logoURI} />
             <p className="my-auto w-full px-2 pr-12 text-right">
               {`${formatCurrency.longFormatter.format(Number(t.allowance))} ${
                 t.symbol

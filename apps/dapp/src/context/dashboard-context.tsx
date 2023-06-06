@@ -1,5 +1,7 @@
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { createContext, useContext } from "react";
 import { useDashboardLoader } from "services/use-dashboard-loader";
+import { BondPurchase, Market, OwnerBalance } from "src/generated";
 
 const initialState = {
   ownerBalances: [],
@@ -9,7 +11,17 @@ const initialState = {
   isLoading: false,
 };
 
-export const DashboardContext = createContext(initialState);
+interface IDashboardContext {
+  ownerBalances: OwnerBalance[];
+  bondPurchases: BondPurchase[];
+  currentMarkets: CalculatedMarket[];
+  closedMarkets: Market[];
+  isLoading: boolean;
+}
+
+export const DashboardContext = createContext(
+  initialState as IDashboardContext
+);
 
 export const useDashboard = () => {
   return useContext(DashboardContext);
@@ -23,7 +35,6 @@ export const DashboardProvider = ({
   const dashboardData = useDashboardLoader();
 
   return (
-    // @ts-ignore
     <DashboardContext.Provider value={dashboardData}>
       {children}
     </DashboardContext.Provider>

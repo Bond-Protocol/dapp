@@ -4,12 +4,9 @@ import { UserMarkets } from "components/organisms/UserMarkets";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { Tabs } from "ui";
 
-export const Dashboard = () => {
-  const tabs = [
-    { label: "My bonds", id: 0 },
-    { label: "My Markets", id: 1 },
-  ];
+const tabs = [{ label: "My bonds" }, { label: "My Markets" }];
 
+export const Dashboard = () => {
   return (
     <>
       <PageHeader title={"DASHBOARD"} />
