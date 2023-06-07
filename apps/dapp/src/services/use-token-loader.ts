@@ -111,7 +111,7 @@ export const useTokenLoader = () => {
     }
 
     fetchExtendedDetails();
-  }, [tokens]);
+  }, [tokens, fetchedExtendedDetails]);
 
   return {
     tbv: usdFormatter.format(Math.trunc(tbv)),
