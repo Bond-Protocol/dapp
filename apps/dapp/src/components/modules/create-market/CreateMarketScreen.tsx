@@ -46,8 +46,8 @@ export type CreateMarketScreenProps = {
   tokens: Token[];
   isAllowanceTxPending?: boolean;
   creationHash?: string;
-  blockExplorerUrl: string;
-  blockExplorerName: string;
+  blockExplorerUrl?: string;
+  blockExplorerName?: string;
   created: boolean;
   oraclePrice: number;
   oracleMessage: string;
