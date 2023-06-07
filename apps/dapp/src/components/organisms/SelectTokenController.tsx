@@ -72,7 +72,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
     <div>
       <SelectTokenDialog
         {...props}
-        tokens={tokens ?? []}
+        tokens={tokens}
         selected={String(chainId)}
         icons={icons}
         filter={filter}
@@ -87,8 +87,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
           priceSource={source}
           isLoading={isLoading}
           onConfirm={(e) => {
-            if (importedToken) tokenUtils.addToken(importedToken);
-
+            tokenUtils.addToken(importedToken);
             props.onSubmit({ value: importedToken });
             props.onClose(e);
           }}

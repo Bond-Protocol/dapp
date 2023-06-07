@@ -3,16 +3,13 @@ import { useState } from "react";
 import { Button, CloseMarketDialog, Modal, TransactionHashDialog } from "ui";
 import { useSigner } from "wagmi";
 
-export type CloseMarketProps = {
-  market: CalculatedMarket;
-};
-
-export const CloseMarket = (props: CloseMarketProps) => {
+export const CloseMarket = (props) => {
   const [closing, setClosing] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [txHash, setTxHash] = useState<string>();
   const { data: signer } = useSigner();
 
+  console.log({ market: props.market });
   const handleClose = async () => {
     if (!signer) return;
 
