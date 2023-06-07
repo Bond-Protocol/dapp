@@ -3,7 +3,11 @@ import { Token } from "@bond-protocol/contract-library";
 import { Button, Input, Label } from "components";
 import { formatCurrency } from "src/utils";
 
-export type AllowanceToken = Token & { allowance: string; auctioneer: string };
+export type AllowanceToken = Token & {
+  capacity: number;
+  allowance: string;
+  auctioneer: string;
+};
 export type UpdateAlowanceDialogProps = {
   tokens: AllowanceToken[];
   handleUpdateAllowance: (allowance: string, token: AllowanceToken) => void;
