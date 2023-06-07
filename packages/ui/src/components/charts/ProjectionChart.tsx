@@ -86,8 +86,6 @@ export const ProjectionChart = (
     );
   }
 
-  console.log({ prices });
-
   const shouldRender = prices.length > 0;
 
   return (

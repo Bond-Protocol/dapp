@@ -89,6 +89,7 @@ export interface PrecalculatedMarket {
   totalPayoutAmount: number;
   creationBlockTimestamp: number;
   callbackAddress: string;
+  bondsIssued: number;
 }
 
 export interface CalculatedMarket {
@@ -127,6 +128,7 @@ export interface CalculatedMarket {
   creationBlockTimestamp: number;
   creationDate: string;
   callbackAddress: string;
+  bondsIssued: number;
   start?: number;
   conclusion?: number;
 }

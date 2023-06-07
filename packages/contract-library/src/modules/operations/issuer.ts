@@ -126,6 +126,7 @@ export function getMarketData(
       totalBondedAmount: 0,
       totalPayoutAmount: 0,
       creationBlockTimestamp: 0,
+      bondsIssued: 0,
     };
   };
 

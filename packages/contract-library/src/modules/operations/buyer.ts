@@ -307,6 +307,7 @@ export async function calcMarket(
     creationBlockTimestamp: market.creationBlockTimestamp,
     creationDate: '',
     callbackAddress: market.callbackAddress,
+    bondsIssued: market.bondsIssued,
   };
   const auctioneerContract = getAuctioneerFactoryForName(
     market.name,
@@ -367,7 +368,9 @@ export async function calcMarket(
 
   calculatedMarket.quoteTokensPerPayoutToken = quoteTokensPerPayoutToken;
   calculatedMarket.discountedPrice =
-    quoteTokensPerPayoutToken * market.quoteToken.price!;
+    market.quoteToken.price && market.quoteToken.price > 0
+      ? quoteTokensPerPayoutToken * market.quoteToken.price
+      : NaN;
 
   // Reduce maxAmountAccepted by 0.5% to prevent issues due to fee being slightly underestimated in the contract
   // function. See comment on https://github.com/Bond-Protocol/bonds/blob/master/src/bases/BondBaseSDA.sol line 718.
@@ -383,7 +386,10 @@ export async function calcMarket(
     // @ts-ignore
     Number(marketInfo.maxPayout) / Math.pow(10, market.payoutToken.decimals);
   calculatedMarket.maxPayout = trim(maxPayout, calculateTrimDigits(maxPayout));
-  calculatedMarket.maxPayoutUsd = maxPayout * market.payoutToken.price!;
+  calculatedMarket.maxPayoutUsd =
+    market.payoutToken.price && market.payoutToken.price > 0
+      ? maxPayout * market.payoutToken.price
+      : NaN;
 
   const ownerBalance =
     Number(ownerPayoutBalance) /
@@ -419,28 +425,7 @@ export async function calcMarket(
     ? market.quoteToken.symbol
     : market.payoutToken.symbol;
 
-  // @ts-ignore
-  // if (market.quoteToken.lpPair != undefined && lpType != undefined) {
-  //   let lpMarketPrice;
-  //   if ('poolAddress' in market.quoteToken) {
-  //     lpMarketPrice = await calcBalancerPoolPrice(
-  //       // @ts-ignore
-  //       market.quoteToken,
-  //       provider,
-  //     );
-  //   } else {
-  //     lpMarketPrice = await calcLpPrice(
-  //       // @ts-ignore
-  //       market.quoteToken,
-  //       lpType,
-  //       provider,
-  //     );
-  //   }
-  //   calculatedMarket.discountedPrice =
-  //     quoteTokensPerPayoutToken * lpMarketPrice;
-  // }
-
-  calculatedMarket.fullPrice = market.payoutToken.price;
+  calculatedMarket.fullPrice = market.payoutToken.price!;
   calculatedMarket.discount =
     (calculatedMarket.discountedPrice - market.payoutToken.price!) /
     market.payoutToken.price!;
@@ -497,7 +482,10 @@ export async function calcMarket(
   }
 
   calculatedMarket.tbvUsd =
-    calculatedMarket.totalBondedAmount * market.quoteToken.price!;
+    market.quoteToken.price && market.quoteToken.price > 0
+      ? calculatedMarket.totalBondedAmount * market.quoteToken.price
+      : NaN;
+
   (calculatedMarket.formattedTbvUsd = Math.trunc(
     calculatedMarket.tbvUsd,
   ).toString()),

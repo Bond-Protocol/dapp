@@ -9,7 +9,6 @@ export * from "./useCalculatedMarkets";
 export * from "./useFetchMarkets";
 export * from "./useGasPrice";
 export * from "./useMarkets";
-export * from "./useMyBonds";
 export * from "./usePurchaseBond";
 export * from "./useTokenAllowance";
 export * from "./useTokenPricesHistory";

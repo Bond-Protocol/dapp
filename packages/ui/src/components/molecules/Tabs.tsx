@@ -19,7 +19,6 @@ type TabProps = {
 export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
   const [selected, setSelected] = useState(value || 0);
 
-  console.log({ selected });
   return (
     <TabsUnstyled
       value={selected}

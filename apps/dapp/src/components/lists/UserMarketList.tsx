@@ -1,7 +1,7 @@
-import { CalculatedMarket, CHAINS } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { toTableData } from "src/utils/table";
 import { Button, Column, formatCurrency, formatDate, PaginatedTable } from "ui";
-import { bondColumn, discountColumn, viewColumn } from "./columns";
+import { bondColumn, discountColumn } from "./columns";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { CloseMarket } from "components";
 import { useNavigate } from "react-router-dom";
@@ -74,7 +74,6 @@ export const tableColumns: Array<Column<CalculatedMarket>> = [
       const { chainId, marketId } = props.value;
       const goToMarket = () => navigate(`/market/${chainId}/${marketId}`);
 
-      console.log("helloo");
       return (
         <div className="flex gap-x-2">
           <CloseMarket market={props.value} />

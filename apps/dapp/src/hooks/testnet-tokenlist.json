@@ -1,6 +1,6 @@
 [
   {
-    "address": "0x11fE4B6AE13d2a6055C8D9cF65c55bac32B5d844",
+    "address": "0x41e38e70a36150D08A8c97aEC194321b5eB545A5",
     "chainId": 5,
     "name": "DAI",
     "symbol": "DAI",
@@ -12,6 +12,14 @@
     "chainId": 5,
     "name": "Wrapped Ethereum",
     "symbol": "WETH",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
+    "decimals": 18
+  },
+  {
+    "address": "0x20be9a427F3BB6bC15873420644d1f5F4db31CC0",
+    "chainId": 5,
+    "name": "Chainlink",
+    "symbol": "LINK",
     "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
     "decimals": 18
   }

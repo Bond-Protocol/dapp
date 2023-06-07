@@ -11,20 +11,25 @@ export const tableColumns: Array<Column<any>> = [
     label: "Bond",
     accessor: "bond",
     unsortable: true,
-    formatter: (bond) => {
-      const balance = longFormatter.format(bond?.balance);
+    formatter: (ownerBalance) => {
+      const balance = longFormatter.format(ownerBalance?.balance);
       return {
-        value: `${balance} ${bond?.underlying?.symbol ?? "???"}`,
-        icon: bond?.underlying?.logoURI,
+        value: `${balance} ${
+          ownerBalance?.bond?.bondToken?.underlying?.symbol ?? "???"
+        }`,
+        icon: ownerBalance?.bond?.bondToken?.underlying?.logoURI,
       };
     },
   },
   {
     label: "Market Value",
     accessor: "value",
-    formatter: (bond) => {
+    formatter: (ownerBalance) => {
       return {
-        value: usdFormatter.format(bond?.usdPriceString),
+        value:
+          ownerBalance?.usdPriceString !== ""
+            ? usdFormatter.format(ownerBalance?.usdPriceString)
+            : "Unknown",
       };
     },
   },
@@ -32,15 +37,15 @@ export const tableColumns: Array<Column<any>> = [
     label: "Vesting",
     accessor: "vesting",
     defaultSortOrder: "asc",
-    formatter: (bond) => {
-      const expiry = bond?.bond?.bondToken?.expiry;
+    formatter: (ownerBalance) => {
+      const expiry = ownerBalance?.bond?.bondToken?.expiry;
       const date = new Date(expiry * 1000);
       const formatted = formatDate.short(date);
       const timeLeft = formatDate.distanceToNow(date);
 
       return {
-        value: bond.canClaim ? "Vested" : formatted,
-        subtext: bond.canClaim ? `On ${formatted}` : `In ${timeLeft}`,
+        value: ownerBalance.canClaim ? "Vested" : formatted,
+        subtext: ownerBalance.canClaim ? `On ${formatted}` : `In ${timeLeft}`,
         sortValue: expiry,
       };
     },
@@ -50,10 +55,10 @@ export const tableColumns: Array<Column<any>> = [
     accessor: "claim",
     alignEnd: true,
     unsortable: true,
-    formatter: (bond) => {
+    formatter: (ownerBalance) => {
       return {
-        onClick: () => bond.handleClaim(),
-        data: bond,
+        onClick: () => ownerBalance.handleClaim(),
+        data: ownerBalance,
       };
     },
     Component: (props: any) => {
@@ -61,11 +66,10 @@ export const tableColumns: Array<Column<any>> = [
       const { switchNetwork } = useSwitchNetwork();
       const { data: signer } = useSigner();
 
-      const isCorrectNetwork =
-        Number(props?.data?.bond.bondToken.chainId) === chain?.id;
+      const isCorrectNetwork = Number(props?.data?.bond.chainId) === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(Number(props?.data?.bond.bondToken.chainId));
+        switchNetwork?.(Number(props?.data?.bondToken.chainId));
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {

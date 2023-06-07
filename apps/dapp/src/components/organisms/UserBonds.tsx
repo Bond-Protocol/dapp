@@ -1,18 +1,18 @@
-import { useMyBonds } from "hooks/useMyBonds";
+import { useDashboard } from "context/dashboard-context";
 import { formatCurrency, InfoLabel } from "ui";
 import { BondList } from "..";
 
 export const UserBonds = () => {
-  const { myBonds } = useMyBonds();
+  const { ownerBalances } = useDashboard();
 
   const tbv =
-    myBonds?.reduce((total, bond) => {
+    ownerBalances?.reduce((total, bond) => {
       //@ts-ignore
       return total + bond.usdPriceNumber;
     }, 0) ?? 0;
 
   const claimable =
-    myBonds.reduce((total, bond) => {
+    ownerBalances.reduce((total, bond) => {
       //@ts-ignore
       return bond?.canClaim ? total + (bond?.usdPriceNumber ?? 0) : total;
     }, 0) ?? 0;
@@ -31,7 +31,7 @@ export const UserBonds = () => {
           {formatCurrency.usdFormatter.format(claimable)}
         </InfoLabel>
       </div>
-      <BondList data={myBonds} />
+      <BondList data={ownerBalances} />
     </div>
   );
 };

@@ -119,5 +119,13 @@
     "symbol": "WBTC",
     "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WBTC.png",
     "decimals": 9
+  },
+  {
+    "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
+    "chainId": 1,
+    "name": "Chainlink",
+    "symbol": "LINK",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
+    "decimals": 18
   }
 ]

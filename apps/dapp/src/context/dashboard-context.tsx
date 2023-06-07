@@ -8,14 +8,20 @@ const initialState = {
   bondPurchases: [],
   currentMarkets: [],
   closedMarkets: [],
+  bondsIssued: 0,
+  uniqueBonders: 0,
+  tbv: 0,
   isLoading: false,
 };
 
 interface IDashboardContext {
-  ownerBalances: OwnerBalance[];
+  ownerBalances: Partial<OwnerBalance>[];
   bondPurchases: BondPurchase[];
   currentMarkets: CalculatedMarket[];
   closedMarkets: Market[];
+  bondsIssued: number;
+  uniqueBonders: number;
+  tbv: number;
   isLoading: boolean;
 }
 

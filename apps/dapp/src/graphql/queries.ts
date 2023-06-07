@@ -94,6 +94,7 @@ export const getGlobalData = gql`
         totalBondedAmount
         totalPayoutAmount
         creationBlockTimestamp
+        bondsIssued
       }
     }
   }
@@ -204,134 +205,17 @@ export const getDashboardData = gql`
       hasClosed
       totalBondedAmount
       totalPayoutAmount
-    }
-  }
-`;
-
-export const getOwnerBalancesByOwner = gql`
-  query GetOwnerBalancesByOwner($owner: String!, $queryKey: String! = "") {
-    ownerBalances(where: { owner_contains_nocase: $owner, balance_gt: 0 }) {
-      id
-      tokenId
-      owner
-      balance
-      network
-      chainId
-      bondToken {
+      bondsIssued
+      bondPurchases(first: 1000) {
         id
-        symbol
-        decimals
-        expiry
-        network
-        chainId
-        type
-        teller
-        underlying {
-          id
-          symbol
-          decimals
-          address
-          chainId
-        }
+        payout
+        amount
+        timestamp
+        purchasePrice
       }
     }
-  }
-`;
-
-export const listOwnedMarkets = gql`
-  query ListOwnedMarkets($owner: String!, $queryKey: String! = "") {
-    markets(where: { owner_contains_nocase: $owner }) {
-      id
-      name
-      network
-      chainId
-      auctioneer
-      teller
-      marketId
-      owner
-      callbackAddress
-      capacity
-      capacityInQuote
-      chainId
-      minPrice
-      scale
-      payoutToken {
-        id
-        address
-        symbol
-        decimals
-        name
-      }
-      quoteToken {
-        id
-        address
-        symbol
-        decimals
-        name
-        lpPair {
-          token0 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-          token1 {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-        balancerWeightedPool {
-          id
-          vaultAddress
-          poolId
-          constituentTokens {
-            id
-            address
-            symbol
-            decimals
-            name
-            typeName
-          }
-        }
-      }
-      vesting
-      vestingType
-      isInstantSwap
-      hasClosed
-      totalBondedAmount
-      totalPayoutAmount
-      creationBlockTimestamp
-    }
-  }
-`;
-
-export const listErc20BondTokens = gql`
-  query ListErc20BondTokens($queryKey: String! = "") {
-    bondTokens(
-      where: {
-        type: "fixed-expiration"
-        teller_not_in: ["0x007fe7c498a2cf30971ad8f2cbc36bd14ac51156"]
-      }
-    ) {
-      id
-      symbol
-      decimals
-      underlying {
-        id
-        symbol
-        decimals
-      }
-      expiry
-      teller
-      network
-      chainId
-      type
+    uniqueBonderCounts(where: { id_contains_nocase: $address }) {
+      count
     }
   }
 `;
@@ -350,37 +234,6 @@ export const listBondPurchasesPerMarket = gql`
       timestamp
       purchasePrice
       postPurchasePrice
-      quoteToken {
-        id
-        name
-        symbol
-        address
-      }
-      payoutToken {
-        id
-        name
-        symbol
-        address
-      }
-    }
-  }
-`;
-
-export const listBondPurchasesByAddress = gql`
-  query ListBondPurchasesByAddress(
-    $recipient: String = ""
-    $queryKey: String! = ""
-  ) {
-    bondPurchases(where: { recipient: $recipient }) {
-      id
-      recipient
-      payout
-      amount
-      timestamp
-      purchasePrice
-      postPurchasePrice
-      network
-      chainId
       quoteToken {
         id
         name
