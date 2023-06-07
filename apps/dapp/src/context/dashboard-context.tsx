@@ -1,7 +1,7 @@
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { createContext, useContext } from "react";
 import { useDashboardLoader } from "services/use-dashboard-loader";
-import { BondPurchase, Market, OwnerBalance } from "src/generated";
+import { BondPurchase, Market, OwnerBalance } from "src/generated/graphql";
 
 const initialState = {
   ownerBalances: [],
