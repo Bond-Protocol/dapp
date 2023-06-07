@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import { ITokenContext } from "./token-context";
 import { useTokenlistLoader } from "services/use-tokenlist-loader-v2";
 
-export type ITokenlistContext = Partial<ITokenContext>;
+export type ITokenlistContext = Omit<ITokenContext, "tbv" | "payoutTokens">;
 
 const TokenlistContext = createContext<ITokenlistContext>(
   {} as ITokenlistContext

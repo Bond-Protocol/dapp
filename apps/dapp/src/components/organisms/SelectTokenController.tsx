@@ -72,6 +72,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
     <div>
       <SelectTokenDialog
         {...props}
+        //@ts-ignore
         tokens={tokens}
         selected={String(chainId)}
         icons={icons}
@@ -87,6 +88,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
           priceSource={source}
           isLoading={isLoading}
           onConfirm={(e) => {
+            //@ts-ignore
             tokenUtils.addToken(importedToken);
             props.onSubmit({ value: importedToken });
             props.onClose(e);

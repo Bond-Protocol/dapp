@@ -125,6 +125,7 @@ export const useDashboardLoader = () => {
         }
       );
 
+      //@ts-ignore
       setOwnerBalances(updatedBonds);
     };
 
