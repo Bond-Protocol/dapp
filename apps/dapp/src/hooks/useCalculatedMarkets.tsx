@@ -18,19 +18,31 @@ export function useCalculatedMarkets() {
   >([]);
 
   useEffect(() => {
-    const updatedMarkets: CalculatedMarket[] = [];
-    calculatedMarkets.forEach((market: CalculatedMarket) => {
-      const quoteToken = getByAddress(market.quoteToken.address);
-      const payoutToken = getByAddress(market.payoutToken.address);
+    const marketsExist = Boolean(calculatedMarkets.length);
+    const tokensHaveLogos = tokens.some((t) => Boolean(t.logoURI));
+    const marketTokensDontHaveLogos = calculatedMarkets.every(
+      (m) =>
+        m.quoteToken.logoURI?.includes("placeholder") ||
+        m.quoteToken.logoURI?.includes("placeholder")
+    );
 
-      let updatedMarket = { ...market };
-      quoteToken && (updatedMarket.quoteToken = quoteToken);
-      payoutToken && (updatedMarket.payoutToken = payoutToken);
-      updatedMarkets.push(updatedMarket);
-    });
+    if (marketsExist && tokensHaveLogos && marketTokensDontHaveLogos) {
+      const updatedMarkets = calculatedMarkets.map(
+        (market: CalculatedMarket) => {
+          const quoteToken = getByAddress(market.quoteToken.address);
+          const payoutToken = getByAddress(market.payoutToken.address);
+          return {
+            ...market,
+            quoteToken,
+            payoutToken,
+          };
+        }
+      );
 
-    setCalculatedMarkets(updatedMarkets);
-  }, [calculatedMarkets.length, fetchedExtendedDetails]);
+      //@ts-ignore for now oke
+      setCalculatedMarkets(updatedMarkets);
+    }
+  }, [calculatedMarkets, tokens]);
 
   const calculateMarket = async (market: Market) => {
     const requestProvider = providers[market.chainId];
@@ -99,33 +111,34 @@ export function useCalculatedMarkets() {
     }
   }, [calculateAllMarkets, tokens]);
 
-  useEffect(() => {
-    if (
-      Boolean(calculatedMarkets.length) &&
-      tokens.some((t) => Boolean(t.logoURI)) &&
-      !calculatedMarkets.some(
-        (m) => Boolean(m.quoteToken.logoURI) || Boolean(m.quoteToken.logoURI)
-      )
-    ) {
-      const updated = calculatedMarkets?.map((x) => {
-        let quoteToken = tokens.find((t) => t.address === x.quoteToken.address);
-        let payoutToken = tokens.find(
-          (t) => t.address === x.payoutToken.address
-        );
+  // useEffect(() => {
+  //   if (
+  //     Boolean(calculatedMarkets.length) &&
+  //     tokens.some((t) => Boolean(t.logoURI)) &&
+  //     !calculatedMarkets.some(
+  //       (m) => Boolean(m.quoteToken.logoURI) || Boolean(m.quoteToken.logoURI)
+  //     )
+  //   ) {
+  //     const updated = calculatedMarkets?.map((x) => {
+  //       let quoteToken = tokens.find((t) => t.address === x.quoteToken.address);
+  //       let payoutToken = tokens.find(
+  //         (t) => t.address === x.payoutToken.address
+  //       );
+  //       console.log({ quoteToken, payoutToken });
 
-        if (!quoteToken) {
-          quoteToken = x.quoteToken;
-        }
-        if (!payoutToken) {
-          payoutToken = x.payoutToken;
-        }
+  //       if (!quoteToken) {
+  //         quoteToken = x.quoteToken;
+  //       }
+  //       if (!payoutToken) {
+  //         payoutToken = x.payoutToken;
+  //       }
 
-        return { ...x, quoteToken, payoutToken };
-      });
+  //       return { ...x, quoteToken, payoutToken };
+  //     });
 
-      setCalculatedMarkets(updated);
-    }
-  }, [tokens, calculatedMarkets]);
+  //     setCalculatedMarkets(updated);
+  //   }
+  // }, [tokens, calculatedMarkets, fetchedExtendedDetails]);
 
   const isLoading = {
     market: isMarketLoading,
