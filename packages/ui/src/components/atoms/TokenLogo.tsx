@@ -56,12 +56,6 @@ export const Logo = (props: LogoProps) => {
 
   return (
     <div className={`relative ${style} ${props.className}`}>
-      {props.chainChip && (
-        <img
-          className={`absolute z-10 h-[12px] w-[12px] rounded-full`}
-          src={props.chainChip}
-        />
-      )}
       <div className={`flex items-center justify-center ${style}`}>
         <img
           className={`absolute rounded-full`}
@@ -70,6 +64,12 @@ export const Logo = (props: LogoProps) => {
           height={size}
         />
       </div>
+      {props.chainChip && (
+        <img
+          className={`absolute -top-1.5 h-[12px] w-[12px] rounded-full`}
+          src={props.chainChip}
+        />
+      )}
     </div>
   );
 };

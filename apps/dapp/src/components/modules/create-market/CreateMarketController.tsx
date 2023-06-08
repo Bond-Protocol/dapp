@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
@@ -10,18 +9,14 @@ import {
   getOracleDecimals,
   getOraclePrice,
 } from "@bond-protocol/contract-library";
-import {
-  CreateMarketAction,
-  CreateMarketScreen,
-  CreateMarketState,
-  useCreateMarket,
-} from "ui";
+import { CreateMarketAction, CreateMarketState, useCreateMarket } from "ui";
 import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
-import { useTokens } from "context/token-context";
+import { useTokenlists } from "context/tokenlist-context";
 import { usePurchaseBond } from "hooks";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
+import { CreateMarketScreen } from "./CreateMarketScreen";
+import { useTokenlistLoader } from "services/use-tokenlist-loader-v2";
 
 function getBondType(state: CreateMarketState, chainId: string) {
   chainId = chainId.toString();
@@ -32,8 +27,8 @@ function getBondType(state: CreateMarketState, chainId: string) {
        It has been deployed to Goerli, but using the old SDA contracts for consistency
       */
       if (
-        chainId === CHAIN_ID.ETHEREUM_MAINNET ||
-        chainId === CHAIN_ID.GOERLI_TESTNET
+        chainId === contractLib.CHAIN_ID.ETHEREUM_MAINNET ||
+        chainId === contractLib.CHAIN_ID.GOERLI_TESTNET
       ) {
         return state.vestingType === "term"
           ? contractLib.BOND_TYPE.FIXED_TERM_SDA
@@ -70,7 +65,7 @@ export const CreateMarketController = () => {
   const { isConnected } = useAccount();
   const network = useNetwork();
   const [state, dispatch] = useCreateMarket();
-  const { createMarketTokens: tokens } = useTokens();
+  const { tokens } = useTokenlistLoader();
   const { getTokenAllowance, approveSpending } = usePurchaseBond();
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");
@@ -107,6 +102,8 @@ export const CreateMarketController = () => {
     setIsOraclePairValid(false);
 
     async function checkOracle() {
+      if (!network?.chain?.id) return;
+
       try {
         const valid = await checkOraclePairValidity(
           // @ts-ignore
@@ -128,6 +125,7 @@ export const CreateMarketController = () => {
 
   useEffect(() => {
     if (!isOraclePairValid) {
+      //@ts-ignore
       setOraclePrice(0);
       setOracleMessage("");
       return;
@@ -139,6 +137,7 @@ export const CreateMarketController = () => {
         state.oracleAddress,
         state.payoutToken.address,
         state.quoteToken.address,
+        // @ts-ignore
         providers[network?.chain?.id]
       );
 
@@ -147,6 +146,7 @@ export const CreateMarketController = () => {
         state.oracleAddress,
         state.payoutToken.address,
         state.quoteToken.address,
+        // @ts-ignore
         providers[network?.chain?.id]
       );
       const adjustedPrice = ethers.utils.formatUnits(price, decimals);
@@ -159,6 +159,7 @@ export const CreateMarketController = () => {
         },
       });
 
+      // @ts-ignore
       setOraclePrice(adjustedPrice);
       setOracleMessage("Using Oracle Price!");
     }
@@ -232,25 +233,32 @@ export const CreateMarketController = () => {
   const configureMarket = (state: CreateMarketState) => {
     if (!state.quoteToken.symbol || !state.payoutToken.symbol) return;
 
-    if (!network.chain?.id) throw new Error("Unspecified chain");
+    const chainName = network.chains.find((c) => c.id === state.chainId);
 
     const chain = {
-      id: network?.chain?.id,
-      label: network.chain.name,
+      id: state.chainId ?? network?.chain?.id,
+      label: chainName,
     };
 
+    if (!network.chain?.id && !state.chainId)
+      throw new Error("Unspecified chain");
+
+    // @ts-ignore
     const debtBuffer = state.overridden.debtBuffer
-      ? state.overridden.debtBuffer
+      ? // @ts-ignore
+        state.overridden.debtBuffer
       : state.debtBuffer;
 
+    // @ts-ignore
     const depositInterval = state.overridden.depositInterval
-      ? state.overridden.depositInterval
+      ? // @ts-ignore
+        state.overridden.depositInterval
       : state.depositInterval;
 
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
-    let bondType: string = getBondType(state, chain.id);
+    let bondType: string = getBondType(state, String(chain.id));
 
     let startDate;
 
@@ -324,6 +332,7 @@ export const CreateMarketController = () => {
     const config = configureMarket(state);
 
     return contractLib.createMarketMultisig(
+      //@ts-ignore
       config?.marketParams,
       config?.bondType
     );
@@ -331,7 +340,7 @@ export const CreateMarketController = () => {
 
   const getApproveTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
-    const tellerAddress = getTeller(config?.chain, state);
+    const tellerAddress = getTeller(String(config?.chain), state);
 
     return contractLib.getApproveTxBytecode(
       tellerAddress,
@@ -345,10 +354,9 @@ export const CreateMarketController = () => {
 
     try {
       const tx = await contractLib.createMarket(
-        // @ts-ignore
-        config.marketParams,
-        config.bondType,
-        config.chain,
+        //@ts-ignore
+        config?.marketParams,
+        config?.bondType,
         signer,
         { gasLimit: gasEstimate }
       );
@@ -367,10 +375,10 @@ export const CreateMarketController = () => {
 
     try {
       let estimate = await contractLib.estimateGasCreateMarket(
-        // @ts-ignore
+        //@ts-ignore
         config.marketParams,
+        //@ts-ignore
         config.bondType,
-        config.chain,
         signer,
         {}
       );
@@ -380,15 +388,27 @@ export const CreateMarketController = () => {
     }
   };
 
+  useEffect(() => {
+    const chainId = Number(network.chain?.id);
+    if (chainId && chainId !== state.chainId) {
+      dispatch({
+        type: CreateMarketAction.UPDATE_CHAIN_ID,
+        value: chainId,
+      });
+    }
+  }, [network.chain?.id]);
+
   return (
     <>
       <CreateMarketScreen
+        //@ts-ignore
         tokens={tokens.filter((t) =>
           isConnected ? t.chainId === network.chain?.id : t.chainId === 1
         )}
         onSubmitAllowance={approveCapacitySpending}
         onSubmitCreation={onSubmit}
         onSubmitMultisigCreation={setCreationHash}
+        //@ts-ignore
         estimateGas={estimateGas}
         fetchAllowance={fetchAllowance}
         getAuctioneer={getAuctioneer}
@@ -400,9 +420,12 @@ export const CreateMarketController = () => {
         projectionData={projectionData.prices}
         isAllowanceTxPending={allowanceTx}
         creationHash={creationHash}
+        //@ts-ignore
         blockExplorerName={blockExplorer.blockExplorerName}
+        //@ts-ignore
         blockExplorerUrl={blockExplorer.blockExplorerUrl}
         created={created}
+        //@ts-ignore
         oraclePrice={oraclePrice}
         oracleMessage={oracleMessage}
         isOracleValid={isOraclePairValid}

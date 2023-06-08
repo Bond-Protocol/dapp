@@ -12,11 +12,10 @@ import auctioneerAbi from 'src/abis/protocol/auctioneer.json';
 
 export async function closeMarket(
   id: BigNumberish,
-  chainId: string,
   signer: Signer,
   overrides?: Overrides,
 ): Promise<ContractTransaction> {
-  const auctioneer = await getAuctioneerFromAggregator(id, chainId, signer);
+  const auctioneer = await getAuctioneerFromAggregator(id, signer);
 
   try {
     return auctioneer.closeMarket(id, overrides);
@@ -29,11 +28,10 @@ export async function closeMarket(
 export async function estimateGasCreateMarket(
   config: CreateMarketParams,
   bondType: BOND_TYPE,
-  chainId: string,
   signer: Signer,
   overrides?: Overrides,
 ): Promise<BigNumber> {
-  const auctioneer = getAuctioneerForCreate(signer, bondType, chainId);
+  const auctioneer = await getAuctioneerForCreate(signer, bondType);
   try {
     const bytes = getBytes(config, bondType);
     // @ts-ignore
@@ -47,11 +45,10 @@ export async function estimateGasCreateMarket(
 export async function createMarket(
   config: CreateMarketParams,
   bondType: BOND_TYPE,
-  chainId: string,
   signer: Signer,
   overrides?: Overrides,
 ): Promise<ContractTransaction> {
-  const auctioneer = getAuctioneerForCreate(signer, bondType, chainId);
+  const auctioneer = await getAuctioneerForCreate(signer, bondType);
   try {
     const bytes = getBytes(config, bondType);
     // @ts-ignore
@@ -203,7 +200,6 @@ function getBytes(config: CreateMarketParams, bondType: BOND_TYPE) {
 
 export async function getMarketInfoForPurchase(
   id: BigNumberish,
-  chainId: string,
   provider: Provider,
 ): Promise<{
   owner: string;
@@ -213,7 +209,7 @@ export async function getMarketInfoForPurchase(
   vesting: number;
   maxPayout: BigNumber;
 }> {
-  const auctioneer = await getAuctioneerFromAggregator(id, chainId, provider);
+  const auctioneer = await getAuctioneerFromAggregator(id, provider);
 
   try {
     return auctioneer.getMarketInfoForPurchase(id);

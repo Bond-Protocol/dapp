@@ -72,7 +72,6 @@ export const IssueMarketPage = (props: IssueMarketPageProps) => {
     const tx = await contractLibrary.createMarket(
       props.data.marketParams,
       props.data.bondType,
-      props.data.chain,
       // @ts-ignore
       signer,
       { gasLimit: 1000000 }

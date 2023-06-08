@@ -5,10 +5,11 @@ import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
 
 export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
-  title?: string;
-  className?: string;
+  title?: string | JSX.Element;
   filterText?: string;
   hideSearchbar?: boolean;
+  className?: string;
+  headingClassName?: string;
 };
 
 export const PaginatedTable = (props: PaginatedTableProps) => {
@@ -54,7 +55,9 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
 
   return (
     <div className={props.className}>
-      <div className="flex items-center justify-between">
+      <div
+        className={`flex items-center justify-between ${props.headingClassName}`}
+      >
         {props.title && (
           <p className="font-fraktion ml-4 text-2xl uppercase">{props.title}</p>
         )}
@@ -62,7 +65,7 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
           <SearchBar
             value={text}
             onChange={setText}
-            className="mb-2 max-w-xs"
+            className="mb-2 max-w-xs justify-self-end"
           />
         )}
       </div>

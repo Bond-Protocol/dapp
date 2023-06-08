@@ -1,31 +1,26 @@
-import {BondPriceChart, BondPriceChartProps, PlaceholderChart} from "./";
+import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
 import {
-  generateSDAChartData,
   generateFPAChartData,
-  generateOSDAChartData,
   generateOFDAChartData,
+  generateOSDAChartData,
+  generateSDAChartData,
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
-import {CreateMarketState, Input, Switch, TooltipWrapper, useCreateMarket} from "..";
+import {
+  CreateMarketState,
+  Input,
+  Switch,
+  TooltipWrapper,
+  useCreateMarket,
+} from "..";
 import { useNumericInput } from "hooks/use-numeric-input";
-import {useState} from "react";
+import { useMemo, useState } from "react";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
   payoutTokenSymbol: string;
   quoteTokenSymbol: string;
-  initialCapacity?: number;
-  initialPrice?: number;
-  minPrice?: number;
-  targetDiscount?: number;
-  durationInDays?: number;
-  depositInterval?: number;
-  fixedDiscount?: number;
-  baseDiscount?: number;
-  targetIntervalDiscount?: number;
-  fixedPrice?: number;
-  maxDiscountFromCurrent?: number;
 };
 
 const getProjectionDataset = (
@@ -45,9 +40,9 @@ const getProjectionDataset = (
   }
 };
 
-export const ProjectionChart = ({
-                                  ...props
-                                }: BondPriceChartProps & ProjectionChartProps) => {
+export const ProjectionChart = (
+  props: BondPriceChartProps & ProjectionChartProps
+) => {
   const [state] = useCreateMarket();
 
   const {
@@ -58,21 +53,38 @@ export const ProjectionChart = ({
   } = useNumericInput("5", true);
 
   const [useTokenPrices, setUseTokenPrices] = useState(false);
+  const prices = useMemo(
+    () =>
+      getProjectionDataset(state, props.data, {
+        tokenPrices: useTokenPrices,
+        targetDiscount: parseFloat(targetDiscount),
+        initialCapacity: Number(state.capacity) ?? 0,
+        initialPrice: Number(state.priceModels[state.priceModel]?.initialPrice),
+        minPrice: Number(state.priceModels[state.priceModel]?.minPrice),
+        durationInDays: state.durationInDays,
+        depositInterval: state.depositInterval,
+        fixedDiscount: Number(
+          state.priceModels[state.priceModel]?.fixedDiscount
+        ),
+        baseDiscount: Number(state.priceModels[state.priceModel]?.baseDiscount),
+        targetIntervalDiscount: Number(
+          state.priceModels[state.priceModel]?.targetIntervalDiscount
+        ),
+        fixedPrice: Number(state.priceModels[state.priceModel]?.fixedPrice),
+        maxDiscountFromCurrent: Number(
+          state.priceModels[state.priceModel]?.maxDiscountFromCurrent
+        ),
+      }),
+    [props.data.length]
+  );
 
-  const prices = getProjectionDataset(state, props.data, {
-    tokenPrices: useTokenPrices,
-    initialCapacity: props.initialCapacity,
-    initialPrice: props.initialPrice,
-    minPrice: props.minPrice,
-    durationInDays: props.durationInDays,
-    targetDiscount: parseFloat(targetDiscount),
-    depositInterval: props.depositInterval,
-    fixedDiscount: props.fixedDiscount,
-    baseDiscount: props.baseDiscount,
-    targetIntervalDiscount: props.targetIntervalDiscount,
-    fixedPrice: props.fixedPrice,
-    maxDiscountFromCurrent: props.maxDiscountFromCurrent,
-  });
+  if (Boolean(props.data.length)) {
+    return (
+      <div className="h-[99%] w-full">
+        <PlaceholderChart message="Market simulation will appear here" />
+      </div>
+    );
+  }
 
   const shouldRender = prices.length > 0;
 
@@ -118,9 +130,10 @@ export const ProjectionChart = ({
           </div>
         ) : (
           <div className="h-[99%] w-full">
-            <BondPriceChart {...props}
-                            data={prices}
-                            useTokenRatio={useTokenPrices}
+            <BondPriceChart
+              {...props}
+              data={prices}
+              useTokenRatio={useTokenPrices}
             />
           </div>
         )}

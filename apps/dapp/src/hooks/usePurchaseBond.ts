@@ -53,7 +53,6 @@ export const usePurchaseBond = () => {
       amount: string,
       decimals: number,
       marketId: number,
-      chainId: string,
       referralAddress: string,
       provider: Provider
     ): Promise<BigNumberish> => {
@@ -63,8 +62,7 @@ export const usePurchaseBond = () => {
           amount,
           decimals,
           referralAddress,
-          provider,
-          chainId
+          provider
         );
       } catch (e) {
         console.log(e);

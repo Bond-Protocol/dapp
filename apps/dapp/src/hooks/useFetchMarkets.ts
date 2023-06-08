@@ -8,13 +8,11 @@ import {
   PrecalculatedMarket,
   marketCounter,
 } from "@bond-protocol/contract-library";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
 
 export function useFetchMarkets(
   tokenPrices: Map<string, number>,
   ownerAddress: string,
   referrerAddress: string,
-  chainId: string,
   provider: Provider
 ) {
   const [marketData, setMarketData] = useState<PrecalculatedMarket[]>([]);
@@ -28,21 +26,18 @@ export function useFetchMarkets(
     if (!isLoading) {
       isLoading = true;
 
-      const count = await marketCounter(provider, chainId);
+      const count = await marketCounter(provider);
       const marketIds = await liveMarketsBy(
         ownerAddress,
         0,
         count,
-        provider,
-        chainId
+        provider
       );
 
       const promises = getMarketData(
         marketIds,
         tokenPrices,
-        provider,
-        // @ts-ignore
-        chainId as CHAIN_ID
+        provider
       );
 
       let results: PrecalculatedMarket[];

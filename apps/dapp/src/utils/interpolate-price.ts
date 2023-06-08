@@ -10,7 +10,7 @@ export const generateRange = (min: number, max: number, distance: number) => {
 export const interpolate = (dataset: BondPriceDatapoint[]) => {
   //Sort from latest since we always know the current discount
   const purchases = Array.from(dataset).sort(
-    (a, b) => Number(b.date) - Number(a.date)
+    (a, b) => Number(b.timestamp) - Number(a.timestamp)
   );
 
   let currentPrice = 0;

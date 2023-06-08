@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Select, Modal, ModalProps, SelectProps } from "..";
+import { Modal, ModalProps, Select, SelectProps } from "..";
 import editIcon from "../../assets/icons/edit-icon.svg";
 import userIcon from "../../assets/icons/user.svg";
 

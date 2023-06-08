@@ -15,7 +15,9 @@ import {
   BondFixedExpOFDA,
   BondFixedExpOFDA__factory,
   BondFixedExpOSDA,
-  BondFixedExpOSDA__factory, BondFixedExpSDAv1_1, BondFixedExpSDAv1_1__factory,
+  BondFixedExpOSDA__factory,
+  BondFixedExpSDAv1_1,
+  BondFixedExpSDAv1_1__factory,
   BondFixedTermCDA,
   BondFixedTermCDA__factory,
   BondFixedTermFPA,
@@ -23,7 +25,9 @@ import {
   BondFixedTermOFDA,
   BondFixedTermOFDA__factory,
   BondFixedTermOSDA,
-  BondFixedTermOSDA__factory, BondFixedTermSDAv1_1, BondFixedTermSDAv1_1__factory,
+  BondFixedTermOSDA__factory,
+  BondFixedTermSDAv1_1,
+  BondFixedTermSDAv1_1__factory,
   BondTeller,
   BondTeller__factory,
   FixedExpirationTeller,
@@ -47,20 +51,29 @@ export enum BOND_TYPE {
   FIXED_TERM_OSDA = 'fixed-term-osda',
 }
 
-export function getAggregator(
-  providerOrSigner: Signer | Provider,
-  chainId: string,
-): Aggregator {
+export const getChainId = async (providerOrSigner: Provider | Signer): Promise<string> => {
+  if (!providerOrSigner) return "";
+  let chainId;
+  if (providerOrSigner instanceof Provider) {
+    const network = await providerOrSigner.getNetwork();
+    chainId = network.chainId;
+  } else {
+    chainId = await providerOrSigner.getChainId();
+  }
+
+  return chainId.toString();
+}
+
+export async function getAggregator(providerOrSigner: Provider | Signer): Promise<Aggregator> {
+  const chainId = await getChainId(providerOrSigner);
   return Aggregator__factory.connect(
     getAddresses(chainId).aggregator,
     providerOrSigner,
   );
 }
 
-export function getAuthority(
-  providerOrSigner: Signer | Provider,
-  chainId: string,
-): Authority {
+export async function getAuthority(providerOrSigner: Provider | Signer): Promise<Authority> {
+  const chainId = await getChainId(providerOrSigner);
   return Authority__factory.connect(
     getAddresses(chainId).authority,
     providerOrSigner,
@@ -68,17 +81,17 @@ export function getAuthority(
 }
 
 export function getBaseBondTeller(
-  providerOrSigner: Signer | Provider,
+  providerOrSigner: Provider | Signer,
   address: string,
 ): BondTeller {
   return BondTeller__factory.connect(address, providerOrSigner);
 }
 
-export function getTellerContract(
-  providerOrSigner: Signer | Provider,
-  bondType: BOND_TYPE,
-  chainId: string,
-): FixedExpirationTeller | FixedTermTeller {
+export async function getTellerContract(
+  providerOrSigner: Provider | Signer,
+  bondType: BOND_TYPE
+): Promise<FixedExpirationTeller | FixedTermTeller> {
+  const chainId = await getChainId(providerOrSigner);
   switch (bondType) {
     case BOND_TYPE.FIXED_EXPIRY_SDA:
     case BOND_TYPE.FIXED_EXPIRY_SDA_V1_1:
@@ -103,21 +116,23 @@ export function getTellerContract(
   }
 }
 
-export function getAuctioneerForCreate(
-  providerOrSigner: Signer | Provider,
-  bondType: BOND_TYPE,
-  chainId: string,
-):
-  | BondFixedExpCDA
-  | BondFixedExpSDAv1_1
-  | BondFixedExpFPA
-  | BondFixedExpOFDA
-  | BondFixedExpOSDA
-  | BondFixedTermCDA
-  | BondFixedTermSDAv1_1
-  | BondFixedTermFPA
-  | BondFixedTermOFDA
-  | BondFixedTermOSDA {
+export async function getAuctioneerForCreate(
+  providerOrSigner: Provider | Signer,
+  bondType: BOND_TYPE
+): Promise<
+    | BondFixedExpCDA
+    | BondFixedExpSDAv1_1
+    | BondFixedExpFPA
+    | BondFixedExpOFDA
+    | BondFixedExpOSDA
+    | BondFixedTermCDA
+    | BondFixedTermSDAv1_1
+    | BondFixedTermFPA
+    | BondFixedTermOFDA
+    | BondFixedTermOSDA
+  > {
+  const chainId = await getChainId(providerOrSigner);
+
   const factory = getAuctioneerFactoryForType(bondType);
   return factory.connect(
     getAddressesForType(chainId, bondType).auctioneer,
@@ -127,10 +142,9 @@ export function getAuctioneerForCreate(
 
 export async function getAuctioneerFromAggregator(
   marketId: BigNumberish,
-  chainId: string,
   providerOrSigner: Signer | Provider,
 ): Promise<Auctioneer> {
-  const aggregator = getAggregator(providerOrSigner, chainId);
+  const aggregator = await getAggregator(providerOrSigner);
   const auctioneerAddress = await aggregator.getAuctioneer(marketId, {});
   return Auctioneer__factory.connect(auctioneerAddress, providerOrSigner);
 }
@@ -202,9 +216,9 @@ export function getAuctioneerFactoryForName(
     default:
       throw Error(
         'Auctioneer Factory Not Found for ' +
-          auctioneerName +
-          ' ' +
-          auctioneerAddress,
+        auctioneerName +
+        ' ' +
+        auctioneerAddress,
       );
   }
 

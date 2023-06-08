@@ -1,15 +1,4 @@
-import {
-  BalancerVault__factory,
-  BalancerWeightedPool__factory,
-  IERC20__factory,
-} from 'src/types';
-import { Provider } from '@ethersproject/providers';
-import {
-  LpToken,
-  LpType,
-  BalancerWeightedPoolToken,
-  BalancerWeightedPoolConstituent,
-} from '@bond-protocol/bond-library';
+import { CHAINS } from 'core/chains';
 
 export const trim = (num: number | string, precision: number): string => {
   if (num == undefined) {
@@ -76,6 +65,17 @@ export function longVestingPeriod(seconds: number): string {
   return result;
 }
 
+export const getBlockExplorer = (chainId: string, subpath = "") => {
+  return {
+    blockExplorerUrl: CHAINS.get(chainId)?.blockExplorerUrls[0].replace(
+      "#",
+      subpath
+    ),
+    blockExplorerName: CHAINS.get(chainId)?.blockExplorerName,
+  };
+};
+
+/*
 export const calcLpPrice = async (
   lpToken: LpToken,
   lpType: LpType,
@@ -248,3 +248,4 @@ export const calcBalancerPoolPrice = async (
   const poolSupply = Number(poolTotalSupply) / Math.pow(10, poolDecimals);
   return poolTotalValue / poolSupply;
 };
+*/

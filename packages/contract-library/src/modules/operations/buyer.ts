@@ -1,5 +1,4 @@
 import { BigNumberish } from '@ethersproject/bignumber';
-import { LpType } from '@bond-protocol/bond-library';
 import {
   BigNumber,
   ContractTransaction,
@@ -11,12 +10,12 @@ import { Provider } from '@ethersproject/providers';
 import {
   BOND_TYPE,
   getAuctioneerFactoryForName,
-  getAuctioneerFactoryForType,
   getBaseBondTeller,
   getTellerContract,
 } from '../contract-helper';
 import {
-  Auctioneer__factory, BondChainlinkOracle__factory,
+  Auctioneer__factory,
+  BondChainlinkOracle__factory,
   CalculatedMarket,
   ERC1155__factory,
   FixedExpirationTeller__factory,
@@ -25,8 +24,6 @@ import {
   PrecalculatedMarket,
 } from 'types';
 import {
-  calcBalancerPoolPrice,
-  calcLpPrice,
   calculateTrimDigits,
   longVestingPeriod,
   trim,
@@ -104,7 +101,6 @@ export async function estimatePurchaseGas(
 
 export async function redeem(
   tokenAddress: string,
-  chainId: string,
   bondType: BOND_TYPE,
   amount: string,
   signer: Signer,
@@ -132,7 +128,7 @@ export async function redeem(
         break;
     }
   } else {
-    teller = getTellerContract(signer, bondType, chainId);
+    teller = await getTellerContract(signer, bondType);
   }
 
   try {
@@ -241,7 +237,10 @@ export async function getOraclePrice(
   const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
 
   try {
-    return oracle["currentPrice(address,address)"](quoteTokenAddress, payoutTokenAddress);
+    return oracle['currentPrice(address,address)'](
+      quoteTokenAddress,
+      payoutTokenAddress,
+    );
   } catch (e) {
     console.log(e);
     throw e;
@@ -257,7 +256,10 @@ export async function getOracleDecimals(
   const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
 
   try {
-    return oracle["decimals(address,address)"](quoteTokenAddress, payoutTokenAddress);
+    return oracle['decimals(address,address)'](
+      quoteTokenAddress,
+      payoutTokenAddress,
+    );
   } catch (e) {
     console.log(e);
     throw e;
@@ -268,7 +270,6 @@ export async function calcMarket(
   provider: Provider,
   referrerAddress: string,
   market: PrecalculatedMarket,
-  lpType?: LpType,
 ): Promise<CalculatedMarket> {
   const calculatedMarket: CalculatedMarket = {
     id: market.id,
@@ -279,6 +280,7 @@ export async function calcMarket(
     discount: 0,
     discountedPrice: 0,
     formattedDiscountedPrice: '',
+    quoteTokensPerPayoutToken: 0,
     fullPrice: 0,
     formattedFullPrice: '',
     maxAmountAccepted: '',
@@ -305,6 +307,7 @@ export async function calcMarket(
     creationBlockTimestamp: market.creationBlockTimestamp,
     creationDate: '',
     callbackAddress: market.callbackAddress,
+    bondsIssued: market.bondsIssued,
   };
   const auctioneerContract = getAuctioneerFactoryForName(
     market.name,
@@ -362,8 +365,12 @@ export async function calcMarket(
   const shift = Number(baseScale) / Number(marketScale);
   const price = Number(marketPrice) * shift;
   const quoteTokensPerPayoutToken = price / Math.pow(10, 36);
+
+  calculatedMarket.quoteTokensPerPayoutToken = quoteTokensPerPayoutToken;
   calculatedMarket.discountedPrice =
-    quoteTokensPerPayoutToken * market.quoteToken.price;
+    market.quoteToken.price && market.quoteToken.price > 0
+      ? quoteTokensPerPayoutToken * market.quoteToken.price
+      : NaN;
 
   // Reduce maxAmountAccepted by 0.5% to prevent issues due to fee being slightly underestimated in the contract
   // function. See comment on https://github.com/Bond-Protocol/bonds/blob/master/src/bases/BondBaseSDA.sol line 718.
@@ -379,7 +386,10 @@ export async function calcMarket(
     // @ts-ignore
     Number(marketInfo.maxPayout) / Math.pow(10, market.payoutToken.decimals);
   calculatedMarket.maxPayout = trim(maxPayout, calculateTrimDigits(maxPayout));
-  calculatedMarket.maxPayoutUsd = maxPayout * market.payoutToken.price;
+  calculatedMarket.maxPayoutUsd =
+    market.payoutToken.price && market.payoutToken.price > 0
+      ? maxPayout * market.payoutToken.price
+      : NaN;
 
   const ownerBalance =
     Number(ownerPayoutBalance) /
@@ -415,49 +425,40 @@ export async function calcMarket(
     ? market.quoteToken.symbol
     : market.payoutToken.symbol;
 
-  // @ts-ignore
-  if (market.quoteToken.lpPair != undefined && lpType != undefined) {
-    let lpMarketPrice;
-    if ('poolAddress' in market.quoteToken) {
-      lpMarketPrice = await calcBalancerPoolPrice(
-        // @ts-ignore
-        market.quoteToken,
-        provider,
-      );
-    } else {
-      lpMarketPrice = await calcLpPrice(
-        // @ts-ignore
-        market.quoteToken,
-        lpType,
-        provider,
-      );
-    }
-    calculatedMarket.discountedPrice =
-      quoteTokensPerPayoutToken * lpMarketPrice;
-  }
-
-  calculatedMarket.fullPrice = market.payoutToken.price;
+  calculatedMarket.fullPrice = market.payoutToken.price!;
   calculatedMarket.discount =
-    (calculatedMarket.discountedPrice - market.payoutToken.price) /
-    market.payoutToken.price;
+    (calculatedMarket.discountedPrice - market.payoutToken.price!) /
+    market.payoutToken.price!;
   calculatedMarket.discount *= 100;
   calculatedMarket.discount = trimAsNumber(-calculatedMarket.discount, 2);
 
-  digits = calculateTrimDigits(calculatedMarket.discountedPrice);
-  calculatedMarket.formattedDiscountedPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: digits,
-    minimumFractionDigits: digits,
-  }).format(calculatedMarket.discountedPrice);
+  if (calculatedMarket.payoutToken.price) {
+    digits = calculateTrimDigits(calculatedMarket.fullPrice);
+    calculatedMarket.formattedFullPrice = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits,
+    }).format(calculatedMarket.fullPrice);
+  }
 
-  digits = calculateTrimDigits(calculatedMarket.fullPrice);
-  calculatedMarket.formattedFullPrice = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: digits,
-    minimumFractionDigits: digits,
-  }).format(calculatedMarket.fullPrice);
+  if (calculatedMarket.quoteToken.price) {
+    digits = calculateTrimDigits(calculatedMarket.discountedPrice);
+    calculatedMarket.formattedDiscountedPrice = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits,
+    }).format(calculatedMarket.discountedPrice);
+  } else {
+    digits = calculateTrimDigits(calculatedMarket.discountedPrice);
+    calculatedMarket.formattedDiscountedPrice = new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits,
+    })
+      .format(calculatedMarket.quoteTokensPerPayoutToken)
+      .concat(' ' + market.quoteToken.symbol);
+  }
 
   if (calculatedMarket.isInstantSwap) {
     calculatedMarket.formattedLongVesting = 'Immediate Payout';
@@ -481,15 +482,17 @@ export async function calcMarket(
   }
 
   calculatedMarket.tbvUsd =
-    calculatedMarket.totalBondedAmount * market.quoteToken.price;
-  calculatedMarket.formattedTbvUsd = '$'.concat(
-    Math.trunc(calculatedMarket.tbvUsd).toString(),
-  );
+    market.quoteToken.price && market.quoteToken.price > 0
+      ? calculatedMarket.totalBondedAmount * market.quoteToken.price
+      : NaN;
 
-  calculatedMarket.creationDate = format(
-    new Date(calculatedMarket.creationBlockTimestamp * 1000),
-    'yyyy-MM-dd',
-  );
+  (calculatedMarket.formattedTbvUsd = Math.trunc(
+    calculatedMarket.tbvUsd,
+  ).toString()),
+    (calculatedMarket.creationDate = format(
+      new Date(calculatedMarket.creationBlockTimestamp * 1000),
+      'yyyy-MM-dd',
+    ));
 
   return calculatedMarket;
 }

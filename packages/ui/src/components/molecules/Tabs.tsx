@@ -6,6 +6,7 @@ import TabUnstyled from "@mui/base/TabUnstyled";
 import TabPanelUnstyled from "@mui/base/TabPanelUnstyled";
 
 type TabProps = {
+  className?: string;
   children?: React.ReactNode;
   value?: number;
   largeTab?: boolean;
@@ -21,12 +22,12 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
   return (
     <TabsUnstyled
       value={selected}
-      className=" mt-4 overflow-hidden rounded-t-lg border-transparent"
+      className={`overflow-hidden rounded-t-lg border-transparent ${props.className}`}
     >
       <TabsListUnstyled
         componentsProps={{
           root: {
-            className: "bg-white/10 pt-8 mt-2 flex justify-center",
+            className: "my-8 mt-2 flex justify-around",
           },
         }}
       >
@@ -40,13 +41,12 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
             componentsProps={{
               root: {
                 className: `
-                 border-transparent font-faketion tracking-widest uppercase rounded-t-lg px-6 py-4 select-none
+                 border-b-2 w-full font-mono tracking-widest uppercase rounded-t-lg px-6 py-4 select-none 
                  ${
                    selected === i
-                     ? "bg-light-primary-900 font-extrabold"
-                     : "bg-transparent hover:bg-light-primary-900/50"
-                 } 
-                 ${props.largeTab ? "px-36" : ""}`,
+                     ? "border-white"
+                     : "border-transparent hover:border-white"
+                 }`,
               },
             }}
           >

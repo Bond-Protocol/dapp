@@ -1,29 +1,28 @@
-import { getProtocol } from "@bond-protocol/bond-library";
-import { Button, Column, DiscountLabel, formatDate } from "ui";
+import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
 import { add } from "date-fns";
 import {
   longFormatter,
-  usdLongFormatter,
   usdFormatter,
+  usdLongFormatter,
 } from "src/utils/format";
-import { getTokenDetailsForMarket } from "src/utils";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  calculateTrimDigits,
+  CHAINS,
+  getBlockExplorer,
+} from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
-import { CHAINS } from "@bond-protocol/bond-library";
 
-const bond: Column<CalculatedMarket> = {
+export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",
   accessor: "bond",
   width: "w-[13%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const { quote, lpPair } = getTokenDetailsForMarket(market);
     const chain = CHAINS.get(market.chainId);
-
     return {
       value: market.quoteToken.symbol,
-      icon: quote?.logoUrl,
-      lpPairIcon: lpPair?.logoUrl,
+      icon: market.quoteToken.logoURI,
       chainChip: chain?.image,
     };
   },
@@ -34,17 +33,17 @@ const bondPrice: Column<CalculatedMarket> = {
   accessor: "bondPrice",
   width: "w-[18%]",
   formatter: (market) => {
-    const { payout } = getTokenDetailsForMarket(market);
-
     return {
-      icon: payout?.logoUrl,
+      icon: market.payoutToken.logoURI,
       value: market.formattedDiscountedPrice,
-      subtext: market.formattedFullPrice + " Market",
+      subtext: market.formattedFullPrice
+        ? market.formattedFullPrice + " Market"
+        : "Unknown",
     };
   },
 };
 
-const discount: Column<CalculatedMarket> = {
+export const discountColumn: Column<CalculatedMarket> = {
   label: "Discount",
   accessor: "discount",
   alignEnd: true,
@@ -53,7 +52,12 @@ const discount: Column<CalculatedMarket> = {
   Component: DiscountLabel,
   formatter: (market) => {
     return {
-      value: market.discount + "%",
+      value:
+        !isNaN(market.discount) &&
+        market.discount !== Infinity &&
+        market.discount !== -Infinity
+          ? market.discount + "%"
+          : "Unknown",
       sortValue: market.discount,
     };
   },
@@ -70,7 +74,9 @@ const maxPayout: Column<CalculatedMarket> = {
         longFormatter.format(parseFloat(market.maxPayout)) +
         " " +
         market.payoutToken.symbol,
-      subtext: usdFormatter.format(market.maxPayoutUsd),
+      subtext: !isNaN(market.maxPayoutUsd)
+        ? usdFormatter.format(market.maxPayoutUsd)
+        : "Unknown",
       sortValue: market.maxPayoutUsd,
     };
   },
@@ -112,8 +118,18 @@ const tbv: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[7%]",
   formatter: (market) => {
+    const digits = calculateTrimDigits(market.totalBondedAmount);
+    const totalBondedAmount = new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: digits,
+      minimumFractionDigits: digits,
+    })
+      .format(market.totalBondedAmount)
+      .concat(" " + market.quoteToken.symbol);
+
     return {
-      value: usdLongFormatter.format(market.tbvUsd),
+      value: !isNaN(market.tbvUsd)
+        ? usdLongFormatter.format(market.tbvUsd)
+        : totalBondedAmount,
       sortValue: market.tbvUsd,
     };
   },
@@ -125,15 +141,33 @@ const issuer: Column<CalculatedMarket> = {
   width: "w-[16%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const protocol = getProtocol(market.owner);
+    const { blockExplorerUrl } = getBlockExplorer(market.chainId, "address");
+    const address = blockExplorerUrl + market.owner;
+    const start = market.owner.substring(0, 4);
+    const end = market.owner.substring(market.owner.length - 4);
     return {
-      value: protocol?.name,
-      icon: protocol?.logoUrl,
+      value: `${start}...${end}`,
+      subtext: address,
+      searchValue: address,
     };
+  },
+  Component: (props) => {
+    return (
+      <Link
+        target="_blank"
+        rel="noopener noreferrer"
+        href={props.subtext}
+        onClick={(e: React.BaseSyntheticEvent) => {
+          e.stopPropagation();
+        }}
+      >
+        {props.value}
+      </Link>
+    );
   },
 };
 
-const view: Column<CalculatedMarket> = {
+export const viewColumn: Column<CalculatedMarket> = {
   label: "",
   accessor: "view",
   alignEnd: true,
@@ -163,6 +197,7 @@ const view: Column<CalculatedMarket> = {
   ),
 };
 
-export const base = [bond, bondPrice, discount, maxPayout, vesting];
-export const marketList = [...base, tbv, issuer, view];
-export const issuerMarketList = [...base, creationDate, tbv, view];
+export const base = [bondColumn, bondPrice, discountColumn, maxPayout, vesting];
+export const marketList = [...base, tbv, issuer, viewColumn];
+export const tokenMarketList = [...base, tbv, issuer, viewColumn];
+export const userMarketList = [bondColumn];

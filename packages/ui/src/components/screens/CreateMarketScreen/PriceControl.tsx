@@ -158,9 +158,11 @@ export const PriceControl = (props: PriceControlProps) => {
     });
   };
 
+  const smallText = value.length >= 12;
+
   return (
     <div
-      className={`max-h-[104px] text-light-grey-400 bg-white/5 py-3 px-4 backdrop-blur-md ${props.className}`}
+      className={`text-light-grey-400 max-h-[104px] bg-white/5 px-4 py-3 backdrop-blur-md ${props.className}`}
     >
       <TooltipWrapper content={props.tooltip}>
         <div className="font-fraktion flex justify-center font-bold uppercase">
@@ -182,7 +184,11 @@ export const PriceControl = (props: PriceControlProps) => {
           </Button>
         </div>
         <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
-          <div className="font-fraktion text-[25px] text-white">
+          <div
+            className={`font-fraktion text-white ${
+              smallText ? "text-xs" : "text-[20px]"
+            }`}
+          >
             <input
               {...numericInput}
               value={value}
@@ -202,7 +208,7 @@ export const PriceControl = (props: PriceControlProps) => {
       <div
         className={`text-light-grey-400 flex select-none justify-center text-[14px] ${
           props.display === "percentage" ? "" : "cursor-pointer"
-        }`}
+        } ${smallText ? "text-xs" : "text-sm"}`}
         onClick={(e) => {
           e.preventDefault();
         }}

@@ -11,12 +11,12 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
 
   const tabs = [
     { label: "Markets", path: "/markets" },
-    { label: "Issuers", path: "/issuers" },
+    { label: "Tokens", path: "/tokens" },
     { label: "Dashboard", path: "/dashboard" },
   ];
 
   const isSelected = (path: string) => {
-    if (path === "/issuers" && location.pathname === "/") return true;
+    if (path === "/tokens" && location.pathname === "/") return true;
     return path.substring(1) === location.pathname.split("/")[1];
   };
 
