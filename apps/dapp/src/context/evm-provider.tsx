@@ -17,12 +17,12 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import {
   arbitrum,
   arbitrumGoerli,
-  avalancheFuji,
+  //avalancheFuji,
   goerli,
   mainnet,
   optimism,
   optimismGoerli,
-  polygonMumbai,
+  //polygonMumbai,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
@@ -52,8 +52,7 @@ export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
 export const MAINNETS = mainnets;
 
 const { chains, provider } = configureChains(
-  //@ts-ignore
-  environment.isTestnet ? testnets : mainnets,
+  environment.isTesting ? testnets : mainnets,
   [publicProvider()]
 );
 

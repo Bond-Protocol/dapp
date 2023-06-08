@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import {
   Button,
   calculateDuration,
-  calculateTrimDigits,
   ConfirmMarketCreationDialog,
   CreateMarketAction,
   CreateMarketState,
   FlatSelect,
-  formatDate,
   InfoLabel,
   InputModal,
   MarketCreatedDialog,
@@ -19,11 +17,15 @@ import {
   SelectEndDateDialog,
   SelectModal,
   SelectStartDateDialog,
+  TokenInput,
   SelectVestingDialog,
   Token,
-  TokenInput,
   TooltipWrapper,
   TransactionHashDialog,
+} from "ui";
+import {
+  calculateTrimDigits,
+  formatDate,
   trimAsNumber,
   useCreateMarket,
   vestingOptions,
@@ -307,6 +309,29 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               data={props.projectionData}
               payoutTokenSymbol={state.payoutToken.symbol}
               quoteTokenSymbol={state.quoteToken.symbol}
+              //@ts-ignore
+              initialCapacity={Number(state.capacity) || 0}
+              initialPrice={Number(
+                state.priceModels[state.priceModel].initialPrice
+              )}
+              minPrice={Number(state.priceModels[state.priceModel].minPrice)}
+              durationInDays={state.durationInDays}
+              depositInterval={state.depositInterval}
+              fixedDiscount={Number(
+                state.priceModels[state.priceModel].fixedDiscount
+              )}
+              baseDiscount={Number(
+                state.priceModels[state.priceModel].baseDiscount
+              )}
+              targetIntervalDiscount={Number(
+                state.priceModels[state.priceModel].targetIntervalDiscount
+              )}
+              fixedPrice={Number(
+                state.priceModels[state.priceModel].initialPrice
+              )}
+              maxDiscountFromCurrent={Number(
+                state.priceModels[state.priceModel].maxDiscountFromCurrent
+              )}
             />
           </div>
           <div className="flex gap-x-4">
