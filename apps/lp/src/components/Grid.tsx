@@ -4,6 +4,7 @@ export type CardProps = {
   logoUrl: string;
   url?: string;
   name?: string;
+  homepage?: string;
   className?: string;
 };
 
@@ -16,13 +17,15 @@ export type GridProps = {
   big?: boolean;
 };
 
-export const Card = ({ logoUrl, url, name, className }: CardProps) => {
+export const Card = ({
+  logoUrl,
+  url,
+  homepage,
+  name,
+  className,
+}: CardProps) => {
   return (
-    <a
-      href={`https://app.bondprotocol.finance/#/issuers/${name}`}
-      target="_blank"
-      rel="noreferrer"
-    >
+    <a href={homepage} target="_blank" rel="noreferrer">
       <div
         className={`group flex h-[76px] w-[160px] max-w-[160px] cursor-pointer flex-col items-center justify-center bg-white/5 backdrop-blur-lg hover:bg-white/10 lg:w-[200px] lg:max-w-[200px] lg:flex-row ${className}`}
       >
@@ -38,7 +41,7 @@ export const Card = ({ logoUrl, url, name, className }: CardProps) => {
         <div className="select-none text-center font-bold md:w-2/3 lg:-ml-3 lg:text-left">
           <p className="group-hover:hidden"> {name} </p>
           <p className="text-light-secondary hidden group-hover:block">
-            Go to Market
+            Visit website
           </p>
         </div>
       </div>
