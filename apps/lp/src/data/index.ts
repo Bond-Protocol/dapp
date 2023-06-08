@@ -1,3 +1,5 @@
+import protocols from "./protocols.json";
+
 const auditors = [
   {
     name: "Sherlock",
@@ -39,6 +41,7 @@ const links = {
 };
 
 export default {
+  protocols,
   links,
   auditors,
   bounties,
