@@ -89,7 +89,9 @@ export const MarketInsights = () => {
               market?.discount > 0 ? "text-light-success" : "text-red-300"
             }
           >
-            {!isNaN(market.discount)
+            {!isNaN(market.discount) &&
+            market.discount !== Infinity &&
+            market.discount !== -Infinity
               ? trim(
                   market.discount,
                   calculateTrimDigits(market.discount)

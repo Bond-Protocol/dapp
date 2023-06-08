@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Token } from "@bond-protocol/contract-library";
-import { tokenlist, testnetTokenlist } from "hooks";
+import { testnetTokenlist, tokenlist } from "hooks";
 import * as defillama from "./defillama";
 import { usdFormatter } from "../utils/format";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
@@ -83,17 +83,17 @@ export const useTokenLoader = () => {
 
   useEffect(() => {
     const payoutTokens = tokens.filter((token) => token.usedAsPayout);
-    const totalTbv = payoutTokens.reduce((totalTbv, token) => {
-      return (
-        totalTbv +
-          token.payoutTokenTbvs?.reduce((tbv, ptt) => {
-            return (
-              //@ts-ignore
-              tbv + (ptt.tbv * getByAddress(ptt.quoteToken.address)?.price ?? 0)
-            );
-          }, 0) ?? 0
-      );
-    }, 0);
+    let totalTbv = 0;
+    payoutTokens.forEach((token) => {
+      let tbv = 0;
+      token.payoutTokenTbvs?.forEach((ptt) => {
+        tbv =
+          // @ts-ignore
+          tbv + (ptt.tbv * getByAddress(ptt.quoteToken.address)?.price || 0);
+      });
+      token.tbv = tbv;
+      totalTbv = totalTbv + tbv;
+    });
 
     setTbv(totalTbv);
     setPayoutTokens(payoutTokens);

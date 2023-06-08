@@ -33,7 +33,11 @@ const userTxsHistory: Column<any>[] = [
       const value =
         parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice);
 
-      return { value: usdFormatter.format(value), sortValue: value };
+      return {
+        value:
+          purchase.payoutPrice > 0 ? usdFormatter.format(value) : "Unknown",
+        sortValue: value,
+      };
     },
   },
   {
