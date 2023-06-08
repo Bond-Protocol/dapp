@@ -215,6 +215,7 @@
     "decimals": 18,
     "display": false
   },
+
   {
     "address": "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B",
     "chainId": 1,
@@ -233,6 +234,17 @@
     "decimals": 18,
     "display": true
   },
+
+  {
+    "address": "0xc0c293ce456ff0ed870add98a0828dd4d2903dbf",
+    "chainId": 1,
+    "name": "Aura Finance",
+    "symbol": "AURA",
+    "logoURI": "https://assets.coingecko.com/coins/images/25942/large/logo.png?1654784187",
+    "decimals": 18,
+    "display": true
+  },
+
   {
     "address": "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
     "chainId": 1,
