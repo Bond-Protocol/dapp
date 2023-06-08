@@ -13,30 +13,38 @@ export type PurchaseConfirmDialogProps = {
 };
 
 export const PurchaseConfirmDialog = ({
-                                        issuer,
-                                        vestingTime = "?",
-                                        amount = "0",
-                                        payout = "0",
-                                        discount = 0,
-                                        contract = "",
-                                        onCancel,
-                                        onSubmit,
-                                      }: PurchaseConfirmDialogProps) => {
+  issuer,
+  vestingTime = "?",
+  amount = "0",
+  payout = "0",
+  discount = 0,
+  contract = "",
+  onCancel,
+  onSubmit,
+}: PurchaseConfirmDialogProps) => {
   return (
     <div className="mt-4 text-center text-[15px] font-light">
-      {
-        discount < 0 && (
-          <div className="text-red-500 mx-10 y-5">
-            <p>WARNING</p>
-            <p>
-              This market is currently priced at a premium, it is cheaper to buy on the open market. We recommend you buy elsewhere, or wait until the price drops on BondProtocol.
-            </p>
-          </div>
-        )
-      }
-      <p className="">{`You are about to bond ${
-        issuer ? "at " + issuer : ""
-      }`}</p>
+      {discount < 0 && (
+        <div className="y-5 mx-10 text-red-500">
+          <p>WARNING</p>
+          <p>
+            This market is currently priced at a premium, it is cheaper to buy
+            on the open market. We recommend you buy elsewhere, or wait until
+            the price drops on BondProtocol.
+          </p>
+        </div>
+      )}
+      {isNaN(discount) && (
+        <div className="y-5 mx-10 text-red-500">
+          <p>WARNING</p>
+          <p>
+            We cannot calculate a discount for this market as we are missing
+            price data for one or both of the tokens. Please double check you
+            wish to purchase at this price before continuing.
+          </p>
+        </div>
+      )}
+      <p className="">{`You are about to bond ${issuer}`}</p>
       <div className="mx-10">
         <div className="mt-5 flex justify-center gap-6 text-left">
           <div className="">

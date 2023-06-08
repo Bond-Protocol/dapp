@@ -6,10 +6,9 @@ import { BigNumberish, ethers } from 'ethers';
 // @param marketId     The ID of the market
 export async function getAuctioneer(
   marketId: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<string> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.getAuctioneer(marketId);
@@ -23,10 +22,9 @@ export async function getAuctioneer(
 // @param marketId     The ID of the market
 export async function getTeller(
   marketId: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<string> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.getTeller(marketId);
@@ -40,10 +38,9 @@ export async function getTeller(
 // @param marketId     The ID of the market
 export async function currentCapacity(
   marketId: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.currentCapacity(marketId);
@@ -59,10 +56,9 @@ export async function currentCapacity(
 // Returns price for market (see the specific auctioneer for units)
 export async function marketPrice(
   marketId: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.marketPrice(marketId);
@@ -77,10 +73,9 @@ export async function marketPrice(
 // Returns scaling factor for market in configured decimals
 export async function marketScale(
   marketId: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.marketScale(marketId);
@@ -91,10 +86,9 @@ export async function marketScale(
 }
 
 export async function marketCounter(
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.marketCounter();
@@ -115,10 +109,9 @@ export async function payoutFor(
   amount: string,
   tokenDecimals: number,
   referrer: string,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
   const amt = ethers.utils.parseUnits(amount, tokenDecimals);
 
   try {
@@ -137,10 +130,9 @@ export async function payoutFor(
 export async function maxAmountAccepted(
   marketId: BigNumberish,
   referrer: string,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.maxAmountAccepted(marketId, referrer);
@@ -154,10 +146,9 @@ export async function maxAmountAccepted(
 // @param marketId     The ID of the market
 export async function isInstantSwap(
   marketId: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<boolean> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.isInstantSwap(marketId);
@@ -171,10 +162,9 @@ export async function isInstantSwap(
 // @param marketId     The ID of the market
 export async function isLive(
   marketId: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<boolean> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.isLive(marketId);
@@ -189,10 +179,9 @@ export async function isLive(
 export async function liveMarketsBetween(
   firstIndex: BigNumberish,
   lastIndex: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish[]> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.liveMarketsBetween(firstIndex, lastIndex);
@@ -208,10 +197,9 @@ export async function liveMarketsBetween(
 export async function liveMarketsFor(
   tokenAddress: string,
   isPayout: boolean,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish[]> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.liveMarketsFor(tokenAddress, isPayout);
@@ -227,10 +215,9 @@ export async function liveMarketsBy(
   ownerAddress: string,
   firstIndex: BigNumberish,
   lastIndex: BigNumberish,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish[]> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.liveMarketsBy(ownerAddress, firstIndex, lastIndex);
@@ -244,10 +231,9 @@ export async function liveMarketsBy(
 export async function marketsFor(
   payoutTokenAddress: string,
   quoteTokenAddress: string,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish[]> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.marketsFor(payoutTokenAddress, quoteTokenAddress);
@@ -257,17 +243,16 @@ export async function marketsFor(
   }
 }
 
-// Returns an array of all active market IDs for a given payout and quote token
+// Returns a single market ID for a given payout and quote token, matching filter requirements
 export async function findMarketFor(
   payoutTokenAddress: string,
   quoteTokenAddress: string,
   amountIn: string,
   minAmountOut: string,
   maxExpiry: string,
-  provider: Provider,
-  chainId: string,
+  provider: Provider
 ): Promise<BigNumberish> {
-  const aggregator = getAggregator(provider, chainId);
+  const aggregator = await getAggregator(provider);
 
   try {
     return aggregator.findMarketFor(

@@ -1,7 +1,8 @@
-import {CHAIN_ID} from "@bond-protocol/bond-library";
-import {useAtom} from "jotai";
+import { useAtom } from "jotai";
 import testnetMode from "../atoms/testnetMode.atom";
-import {UseQueryResult} from "react-query";
+import { UseQueryResult } from "react-query";
+import { environment } from "src/environment";
+import { CHAIN_ID } from "@bond-protocol/contract-library";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
@@ -59,6 +60,7 @@ export const testnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
     chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
   },
+  /*
   {
     url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
     chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
@@ -67,11 +69,42 @@ export const testnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],
     chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,
   },
+   */
 ];
+
+export const currentEndpoints = environment.isTesting
+  ? testnetEndpoints
+  : mainnetEndpoints;
+
+export const getSubgraphQuery = (
+  query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
+  chain: string,
+  enabled: boolean,
+  variables?: {}
+): UseQueryResult<any, any> => {
+  const endpoint = {
+    // @ts-ignore
+    url: subgraphEndpoints[chain],
+    chain: chain,
+  };
+
+  return query(
+    {
+      endpoint: endpoint.url,
+      fetchParams: {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    },
+    {queryKey: endpoint.url + "--" + query.name.toString(), ...variables},
+    {enabled: enabled}
+  );
+};
 
 export const getSubgraphQueries = (
   query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
-  variables?: {}
+  variables?: {},
 ): UseQueryResult<any, any>[] => {
   const [testnet, setTestnet] = useAtom(testnetMode);
   const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;
@@ -88,8 +121,8 @@ export const getSubgraphQueries = (
             },
           },
         },
-        {queryKey: endpoint.url + "--" + query.name.toString(), ...variables},
-        {enabled: testnet ? !!testnet : !testnet}
+        { queryKey: endpoint.url + "--" + query.name.toString(), ...variables },
+        { enabled: testnet ? !!testnet : !testnet }
       )
     );
   });
@@ -123,7 +156,7 @@ export const getSubgraphQueriesPerChainFn = (
           },
         },
         variables,
-        {enabled: testnet ? !!testnet : !testnet},
+        { enabled: testnet ? !!testnet : !testnet }
       )
     );
   });

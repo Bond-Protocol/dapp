@@ -9,11 +9,11 @@ import {
   CartesianGrid,
 } from "recharts";
 import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
-import {calculateTrimDigits, formatCurrency, formatDate, longFormatter, trim} from "utils";
+import { calculateTrimDigits, formatCurrency, formatDate, trim } from "utils";
 
 export type BondPriceDatapoint = {
-  date?: number;
   price?: number;
+  timestamp?: number;
   discountedPrice?: number;
   discount?: string | number;
 };
@@ -40,7 +40,7 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
       <ResponsiveContainer>
         <Chart data={props.data}>
           <XAxis
-            dataKey="date"
+            dataKey="timestamp"
             tickFormatter={formatDate.dayMonthTime}
             tickLine={false}
             minTickGap={80}
@@ -55,7 +55,7 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
               props.useTokenRatio
                 ? (value) => trim(value, calculateTrimDigits(value))
                 : formatCurrency.dynamicFormatter
-          }
+            }
           />
           <CartesianGrid stroke="#404040" vertical={false} />
           <Line dot={false} strokeWidth={2} stroke="#40749b" dataKey="price" />

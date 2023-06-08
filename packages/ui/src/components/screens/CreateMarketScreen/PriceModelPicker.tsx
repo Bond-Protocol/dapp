@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Switch, FlatSelect, TooltipWrapper } from "components";
+import { useEffect, useState } from "react";
+import { FlatSelect, Switch, TooltipWrapper } from "components";
 import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
 import { ReactComponent as LineIcon } from "assets/icons/line.svg";
 import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
@@ -16,7 +16,7 @@ export type PriceModelPickerProps = {
   id?: string;
   chain: string;
   oraclePrice?: number;
-  oracleMessage: string;
+  oracleMessage?: string;
   isOracleValid?: boolean;
 } & Partial<PriceControlProps>;
 
@@ -53,7 +53,7 @@ const priceControlConfig: Record<
   ],
   static: [
     {
-      property: "initialPrice",
+      property: "fixedPrice",
       topLabel: "Fixed Price",
       display: "exchange_rate",
       returnValue: "exchange_rate",
@@ -146,7 +146,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
         oracle={oracle}
         type={type}
         onOracleChange={setOracleAddress}
-        oracleMessage={props.oracleMessage}
+        oracleMessage={props.oracleMessage || ""}
         isOracleValid={props.isOracleValid}
       />
       <div className="flex justify-between gap-x-4 pt-4">

@@ -1,13 +1,13 @@
 import { format } from "date-fns";
-import { CHAIN_ID } from "@bond-protocol/bond-library";
 import {
   CalculatedMarket,
+  CHAIN_ID,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
 import { toTableData } from "src/utils/table";
-import { Link, Column, PaginatedTable } from "ui";
+import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useTokens } from "hooks";
 import { useMemo } from "react";
@@ -33,7 +33,11 @@ const userTxsHistory: Column<any>[] = [
       const value =
         parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice);
 
-      return { value: usdFormatter.format(value), sortValue: value };
+      return {
+        value:
+          purchase.payoutPrice > 0 ? usdFormatter.format(value) : "Unknown",
+        sortValue: value,
+      };
     },
   },
   {
@@ -117,7 +121,7 @@ export interface TransactionHistoryProps {
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
-  const { currentPrices } = useTokens();
+  const { tokens, getByAddress } = useTokens();
 
   const { data, ...query } = useListBondPurchasesPerMarketQuery(
     {
@@ -145,24 +149,17 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
     () =>
       data?.bondPurchases
         .map((p) => {
-          //@ts-ignore
-          p.payoutPrice = currentPrices[p.payoutToken.id]
-            ? //@ts-ignore
-              currentPrices[p.payoutToken.id][0].price
-            : 0;
+          const payoutPrice = getByAddress(p.payoutToken.address)?.price ?? 0;
 
-          //@ts-ignore
-          p.txUrl = blockExplorerTxUrl + p.id;
-          //@ts-ignore (TODO: IMPROVE)
-          p.addressUrl = blockExplorerAddressUrl + p.recipient;
-          //@ts-ignore (TODO: IMPROVE)
-          p.market = props.market;
-          return p;
+          const txUrl = blockExplorerTxUrl + p.id;
+          const addressUrl = blockExplorerAddressUrl + p.recipient;
+
+          return { ...p, payoutPrice, txUrl, addressUrl, market: props.market };
         })
         .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
         .sort((a, b) => b.timestamp - a.timestamp)
         .map((p) => toTableData(marketTxsHistory, p)),
-    [currentPrices, data]
+    [tokens, data]
   );
 
   return (

@@ -25,16 +25,36 @@ export type CreateMarketParams = {
 };
 
 export interface TokenBase {
+  chainId: number;
   address: string;
-  decimals: number;
-  price: number;
 }
 
 export interface Token extends TokenBase {
-  id: string;
   name: string;
   symbol: string;
+  decimals: number;
+  tbv?: number;
+  purchaseCount?: number;
+  uniqueBonders?: {
+    count: number;
+  };
+  payoutTokenTbvs?: any[];
+  usedAsPayout?: boolean;
+  price?: number;
+  id?: string;
   purchaseLink?: string;
+  logoUrl?: string;
+  logoURI?: string;
+  details?: {
+    description?: string;
+    links: {
+      homepage?: string;
+      github?: string;
+      discord?: string;
+      medium?: string;
+    };
+  };
+  markets?: any[];
 }
 
 export interface LpPair {
@@ -69,6 +89,7 @@ export interface PrecalculatedMarket {
   totalPayoutAmount: number;
   creationBlockTimestamp: number;
   callbackAddress: string;
+  bondsIssued: number;
 }
 
 export interface CalculatedMarket {
@@ -80,6 +101,7 @@ export interface CalculatedMarket {
   discount: number;
   discountedPrice: number;
   formattedDiscountedPrice: string;
+  quoteTokensPerPayoutToken: number;
   fullPrice: number;
   formattedFullPrice: string;
   maxAmountAccepted: string;
@@ -106,6 +128,7 @@ export interface CalculatedMarket {
   creationBlockTimestamp: number;
   creationDate: string;
   callbackAddress: string;
+  bondsIssued: number;
   start?: number;
   conclusion?: number;
 }

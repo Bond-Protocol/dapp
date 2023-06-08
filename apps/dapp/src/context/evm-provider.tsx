@@ -17,22 +17,42 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import {
   arbitrum,
   arbitrumGoerli,
-  avalancheFuji,
+  //avalancheFuji,
   goerli,
   mainnet,
   optimism,
   optimismGoerli,
-  polygonMumbai,
+  //polygonMumbai,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
+import { CHAINS } from "@bond-protocol/contract-library";
 
-const isTestnet = environment.isTestnet;
+const getIconsForChains = (c: any) => {
+  const logoUrl = Array.from(CHAINS.values()).find(
+    (chain) => Number(chain.chainId) === Number(c.id)
+  )?.image;
+
+  return { ...c, logoUrl };
+};
+
+export const testnets = [
+  goerli,
+  arbitrumGoerli,
+  optimismGoerli,
+  //polygonMumbai,
+  //avalancheFuji,
+].map(getIconsForChains);
+
+export const mainnets = [mainnet, arbitrum, optimism].map(getIconsForChains);
+
+export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
+export const ACTIVE_CHAINS = environment.isTestnet ? testnets : mainnets;
+export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
+export const MAINNETS = mainnets;
 
 const { chains, provider } = configureChains(
-  isTestnet
-    ? [goerli, arbitrumGoerli, optimismGoerli, polygonMumbai, avalancheFuji]
-    : [mainnet, arbitrum, optimism],
+  environment.isTesting ? testnets : mainnets,
   [publicProvider()]
 );
 
@@ -58,7 +78,6 @@ const client = createClient({
   provider,
 });
 
-//TODO: (aphex) wagmi is causing bundle size to go up dramatically fsr
 export const EvmProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   return (
     <WagmiConfig client={client}>

@@ -125,7 +125,9 @@ const testnetProviders: ProviderOptions[] = [
   },
 ];
 
-const activeProviders = environment.isTestnet ? testnetProviders : mainnetProviders;
+const activeProviders = environment.isTesting
+  ? testnetProviders
+  : mainnetProviders;
 
 export const providers: { [key: string]: Provider } =
   //Go through every chain
@@ -137,7 +139,7 @@ export const providers: { [key: string]: Provider } =
         weight,
         provider: new ethers.providers.StaticJsonRpcProvider(url, {
           name: config.name,
-          chainId: Number(config.chainId)
+          chainId: Number(config.chainId),
         }),
       };
     });

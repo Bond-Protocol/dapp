@@ -1,8 +1,8 @@
-import { getTokenDetails } from "../../utils/getTokenDetails";
+import { Token } from "@bond-protocol/contract-library";
 
 export type TokenLabelProps = {
   label: string;
-  token?: any;
+  token?: Token;
   secondary?: string | React.ReactNode;
   wrapped?: boolean;
   className?: string;
@@ -11,34 +11,9 @@ export type TokenLabelProps = {
 };
 
 const TokenLabelBase = (props: TokenLabelProps) => {
-  const quoteLogo = (token: any) => {
-    if ("lpPair" in token && token.lpPair != undefined) {
-      const token0 = getTokenDetails(token.lpPair.token0).logoUrl;
-      const token1 = getTokenDetails(token.lpPair.token1).logoUrl;
-
-      return (
-        <div className="flex flex-row">
-          <img className="h-[24px] w-[24px]" src={token0} />
-          <img
-            className="ml-[-8px] flex h-[24px] w-[24px] self-end"
-            src={token1}
-          />
-        </div>
-      );
-    } else {
-      const quote = getTokenDetails(token).logoUrl;
-
-      return (
-        <div className="flex flex-row">
-          <img className="h-[24px] w-[24px]" src={quote} />
-        </div>
-      );
-    }
-  };
-
   return (
     <div className={`child:my-auto flex ${props.className}`}>
-      {props.token && quoteLogo(props.token)}
+      {props.token && props.token.logoUrl}
       {props.children}
       <div className="mx-1 flex-col">
         <p className={props.secondary ? "text-[14px] leading-none" : ""}>

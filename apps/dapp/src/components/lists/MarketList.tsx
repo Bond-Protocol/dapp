@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Loading, PaginatedTable } from "ui";
@@ -7,13 +7,12 @@ import { toTableData } from "src/utils/table";
 import { meme } from "src/utils/words";
 import {
   marketList as tableColumns,
-  issuerMarketList as issuerColumns,
+  tokenMarketList as tokenColumns,
 } from "./columns";
-import { getProtocol } from "@bond-protocol/bond-library";
 
 type MarketListProps = {
   markets?: Map<string, CalculatedMarket>;
-  issuer?: string;
+  token?: string;
   allowManagement?: boolean;
   filter?: string[];
   filterText?: string;
@@ -22,34 +21,40 @@ type MarketListProps = {
 
 export const MarketList: FC<MarketListProps> = ({
   allowManagement,
-  issuer,
+  token,
   ...props
 }) => {
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
 
-  const columns = issuer ? issuerColumns : tableColumns;
+  const columns = token ? tokenColumns : tableColumns;
 
   const markets = props.markets || allMarkets;
 
-  const filteredMarkets = Array.from(markets.values())
-    .filter((m) => (issuer ? getProtocol(m.owner)?.id === issuer : true))
-    .sort((a, b) => b.discount - a.discount);
+  const filteredMarkets = markets
+    // @ts-ignore
+    .filter((m: CalculatedMarket) =>
+      token ? m.payoutToken.address === token : true
+    )
+    .sort((a: CalculatedMarket, b: CalculatedMarket) => {
+      let aDiscount = a.discount;
+      let bDiscount = b.discount;
 
-  const tableMarkets = useMemo(
-    () =>
-      filteredMarkets
-        .map((m) => toTableData(columns, m))
-        .map((row) => {
-          //@ts-ignore
-          row["view"].onClick = (path: string) => navigate(path);
-          //@ts-ignore (TODO): Improve this
-          row.onClick = () =>
-            navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
-          return row;
-        }),
-    [allMarkets, isLoading, issuer, columns]
-  );
+      if (isNaN(aDiscount) || aDiscount === Infinity || aDiscount === -Infinity)
+        aDiscount = 0;
+      if (isNaN(bDiscount) || bDiscount === Infinity || bDiscount === -Infinity)
+        bDiscount = 0;
+      return bDiscount - aDiscount;
+    });
+
+  const tableMarkets = filteredMarkets
+    .map((m: CalculatedMarket) => toTableData(columns, m))
+    .map((row: any) => {
+      row["view"].onClick = (path: string) => navigate(path);
+      row.onClick = () =>
+        navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
+      return row;
+    });
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 

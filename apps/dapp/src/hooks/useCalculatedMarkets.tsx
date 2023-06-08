@@ -1,23 +1,48 @@
 import { useQueries } from "react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import * as bondLibrary from "@bond-protocol/bond-library";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import type { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
-import { useLoadMarkets, useTokens } from "hooks";
-import { getTokenDetails } from "src/utils";
-import { dateMath } from "ui";
+import { useTokens } from "hooks";
+import { useSubgraph } from "hooks/useSubgraph";
+
+const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
-  const { getPrice, currentPrices, isLoading: areTokensLoading } = useTokens();
+  const { tokens, getByAddress, fetchedExtendedDetails } = useTokens();
+  const { markets, isLoading: isMarketLoading } = useSubgraph();
+  const [calculatedMarkets, setCalculatedMarkets] = useState<
+    CalculatedMarket[]
+  >([]);
 
-  const { markets, isLoading: isMarketLoading } = useLoadMarkets();
+  useEffect(() => {
+    const marketsExist = Boolean(calculatedMarkets.length);
+    const tokensHaveLogos = tokens.some((t) => Boolean(t.logoURI));
+    const marketTokensDontHaveLogos = calculatedMarkets.every(
+      (m) =>
+        m.quoteToken.logoURI?.includes("placeholder") ||
+        m.quoteToken.logoURI?.includes("placeholder")
+    );
 
-  const [calculatedMarkets, setCalculatedMarkets] = useState(new Map());
-  const [issuers, setIssuers] = useState<string[]>([]);
-  const [marketsByIssuer, setMarketsByIssuer] = useState(new Map());
+    if (marketsExist && tokensHaveLogos && marketTokensDontHaveLogos) {
+      const updatedMarkets = calculatedMarkets.map(
+        (market: CalculatedMarket) => {
+          const quoteToken = getByAddress(market.quoteToken.address);
+          const payoutToken = getByAddress(market.payoutToken.address);
+          return {
+            ...market,
+            quoteToken,
+            payoutToken,
+          };
+        }
+      );
+
+      //@ts-ignore for now oke
+      setCalculatedMarkets(updatedMarkets);
+    }
+  }, [calculatedMarkets, tokens]);
 
   const calculateMarket = async (market: Market) => {
     const requestProvider = providers[market.chainId];
@@ -29,93 +54,38 @@ export function useCalculatedMarkets() {
     ];
     if (obsoleteAuctioneers.includes(market.auctioneer)) return;
 
-    /*
-      We cannot rely on the value of isLive from the subgraph, it only updates on events.
-      If a market is manually closed, or closes after hitting capacity, the subgraph will
-      be updated, and isLive will be false. However, if it hits its expiry date, there is
-      no event, so the subgraph is not updated. Thus, we check here and return early if
-      the market is not live.
-    */
-    //TODO: Move all to a background task on startup
-    const isLive = await contractLibrary.isLive(
-      market.marketId,
-      requestProvider,
-      market.chainId
-    );
+    const quoteToken = getByAddress(market.quoteToken.address);
+    const payoutToken = getByAddress(market.payoutToken.address);
 
-    //Checks if the market start date is in the future
-    const willOpenInTheFuture =
-      market.start &&
-      dateMath.isBefore(new Date(), new Date(market.start * 1000));
+    let updatedMarket = { ...market };
+    // @ts-ignore
+    quoteToken && (updatedMarket.quoteToken = quoteToken);
+    // @ts-ignore
+    payoutToken && (updatedMarket.payoutToken = payoutToken);
 
-    if (!isLive && !willOpenInTheFuture) {
-      return;
-    }
-
-    const purchaseLink = bondLibrary.TOKENS.get(
-      market.quoteToken.id
-    )?.purchaseLinks.get(market.chainId as bondLibrary.CHAIN_ID)
-      ? bondLibrary.TOKENS.get(market.quoteToken.id)?.purchaseLinks.get(
-          market.chainId as bondLibrary.CHAIN_ID
-        )
-      : "https://app.sushi.com/swap";
-
-    const quoteToken = getTokenDetails(market.quoteToken);
-    const payoutToken = getTokenDetails(market.payoutToken);
-
-    const lpPair = quoteToken.lpPair;
-    if (lpPair != undefined) {
-      lpPair.token0.price = getPrice(lpPair.token0.id);
-      lpPair.token1.price = getPrice(lpPair.token1.id);
-    }
-
-    return contractLibrary
-      .calcMarket(
+    try {
+      const result = await contractLibrary.calcMarket(
         requestProvider,
-        import.meta.env.VITE_MARKET_REFERRAL_ADDRESS,
-        {
-          ...market,
-          payoutToken: {
-            id: payoutToken.id,
-            address: payoutToken.address,
-            decimals: payoutToken.decimals,
-            name: payoutToken.name,
-            symbol: payoutToken.symbol,
-            price: getPrice(payoutToken.id),
-          },
-          quoteToken: {
-            id: quoteToken.id,
-            address: quoteToken.address,
-            decimals: quoteToken.decimals,
-            name: quoteToken.name,
-            symbol: quoteToken.symbol,
-            price: getPrice(quoteToken.id),
-            lpPair: quoteToken.lpPair,
-            purchaseLink: purchaseLink,
-          },
-        },
-        bondLibrary.TOKENS.get(market.quoteToken.id)
-          ? bondLibrary.LP_TYPES.get(
-              // @ts-ignore
-              bondLibrary.TOKENS.get(market.quoteToken.id)?.lpType
-            )
-          : undefined
-      )
-      .then((result: CalculatedMarket) => ({
-        ...result,
-        start: market.start,
-        conclusion: market.conclusion,
-      }))
-      .catch((e) => {
-        console.log("catch", e);
-      });
+        FEE_ADDRESS,
+        // @ts-ignore
+        updatedMarket
+      );
+
+      return { ...result, start: market.start, conclusion: market.conclusion };
+    } catch (e) {
+      console.log(
+        `ProtocolError: Failed to calculate market ${market.id} \n`,
+        e
+      );
+      console.log(market);
+    }
   };
 
   const calculateAllMarkets = useQueries(
-    markets.map((market) => ({
+    markets.map((market: Market) => ({
       queryKey: market.id,
       queryFn: () => calculateMarket(market),
-      enabled: Object.keys(currentPrices).length > 0,
+      enabled: tokens.length > 0,
     }))
   );
 
@@ -131,36 +101,47 @@ export function useCalculatedMarkets() {
   };
 
   useDeepCompareEffect(() => {
-    if (!isCalculatingAll && Object.keys(currentPrices).length > 0) {
-      const calculatedMarketsMap = new Map();
-      const issuerMarkets = new Map();
+    if (!isCalculatingAll && Object.keys(tokens).length > 0) {
+      const markets = calculateAllMarkets
+        .filter((result) => result && result?.data)
+        .map((r) => r.data);
 
-      calculateAllMarkets.forEach((result) => {
-        if (result && result.data) {
-          calculatedMarketsMap.set(result.data.id, result.data);
-
-          const protocol = bondLibrary.getProtocolByAddress(
-            result.data.owner,
-            result?.data.chainId
-          );
-
-          const id = protocol?.id;
-          const value = issuerMarkets.get(protocol?.id) || [];
-
-          value.push(result.data);
-          issuerMarkets.set(id, value);
-        }
-      });
-
-      setCalculatedMarkets(calculatedMarketsMap);
-      setIssuers(Array.from(issuerMarkets.keys()));
-      setMarketsByIssuer(issuerMarkets);
+      // @ts-ignore
+      setCalculatedMarkets(markets);
     }
-  }, [calculateAllMarkets, currentPrices]);
+  }, [calculateAllMarkets, tokens]);
+
+  // useEffect(() => {
+  //   if (
+  //     Boolean(calculatedMarkets.length) &&
+  //     tokens.some((t) => Boolean(t.logoURI)) &&
+  //     !calculatedMarkets.some(
+  //       (m) => Boolean(m.quoteToken.logoURI) || Boolean(m.quoteToken.logoURI)
+  //     )
+  //   ) {
+  //     const updated = calculatedMarkets?.map((x) => {
+  //       let quoteToken = tokens.find((t) => t.address === x.quoteToken.address);
+  //       let payoutToken = tokens.find(
+  //         (t) => t.address === x.payoutToken.address
+  //       );
+  //       console.log({ quoteToken, payoutToken });
+
+  //       if (!quoteToken) {
+  //         quoteToken = x.quoteToken;
+  //       }
+  //       if (!payoutToken) {
+  //         payoutToken = x.payoutToken;
+  //       }
+
+  //       return { ...x, quoteToken, payoutToken };
+  //     });
+
+  //     setCalculatedMarkets(updated);
+  //   }
+  // }, [tokens, calculatedMarkets, fetchedExtendedDetails]);
 
   const isLoading = {
     market: isMarketLoading,
-    tokens: areTokensLoading,
     priceCalcs: isCalculatingAll,
   };
 
@@ -168,16 +149,16 @@ export function useCalculatedMarkets() {
 
   return {
     allMarkets: calculatedMarkets,
-    issuers,
-    marketsByIssuer,
+    getMarketsForOwner: (address: string) =>
+      calculatedMarkets.filter(
+        (market: CalculatedMarket) =>
+          market.owner.toLowerCase() === address?.toLowerCase()
+      ),
     refetchAllMarkets,
     refetchOne,
-    getTokenDetails,
-    getPrice,
     isSomeLoading,
     isLoading: {
       market: isMarketLoading,
-      tokens: areTokensLoading,
       priceCalcs: isCalculatingAll,
     },
   };

@@ -1,22 +1,28 @@
 import {
   Button,
+  Checkbox,
+  CreateMarketAction,
+  CreateMarketState,
+  Link,
   SummaryLabel,
   SummaryList,
-  Tooltip,
   SummaryRow,
-  Link,
+  Tooltip,
   useCreateMarket,
-  CreateMarketAction,
-  Checkbox,
 } from "components";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { ReactComponent as Timer } from "assets/icons/timer.svg";
 import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
-import { CreateMarketState } from "components";
-import {calculateTrimDigits, dynamicFormatter, formatCurrency, formatDate, trim} from "utils";
+import {
+  calculateTrimDigits,
+  dynamicFormatter,
+  formatCurrency,
+  formatDate,
+  trim,
+} from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
-import {useEffect, useState} from "react";
-import {getBlockExplorer} from "@bond-protocol/contract-library";
+import { useEffect, useState } from "react";
+import { getBlockExplorer } from "@bond-protocol/contract-library";
 
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
@@ -46,15 +52,15 @@ const getDynamicPriceFields = (state: CreateMarketState) => {
 const getStaticPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
 
-  const initialPrice = trim(
-    state.priceModels[state.priceModel].initialPrice,
-    calculateTrimDigits(state.priceModels[state.priceModel].initialPrice)
+  const fixedPrice = trim(
+    state.priceModels[state.priceModel].fixedPrice,
+    calculateTrimDigits(state.priceModels[state.priceModel].fixedPrice)
   );
 
   return [
     {
       leftLabel: "Fixed Price",
-      rightLabel: `${initialPrice} ${tokenSymbols}`,
+      rightLabel: `${fixedPrice} ${tokenSymbols}`,
     },
   ];
 };
@@ -111,8 +117,8 @@ const formatMarketState = (state: CreateMarketState) => {
     capacity: {
       icon:
         state.capacityType === "payout"
-          ? state.payoutToken.icon
-          : state.quoteToken.icon,
+          ? state.payoutToken.logoURI
+          : state.quoteToken.logoURI,
       symbol:
         state.capacityType === "payout"
           ? state.payoutToken.symbol
@@ -184,12 +190,9 @@ export const ConfirmMarketCreationDialog = (props: {
   const teller = props.getTeller(props.chain, state);
   const formattedState = formatMarketState(state);
   const [accepted, setAccepted] = useState(false);
-  const [gasEstimate, setGasEstimate]= useState("");
+  const [gasEstimate, setGasEstimate] = useState("");
 
-  const { blockExplorerUrl } = getBlockExplorer(
-    props.chain,
-    "address"
-  );
+  const { blockExplorerUrl } = getBlockExplorer(props.chain, "address");
 
   const createMarketBytecode = props.getTxBytecode(state);
   const allowanceBytecode = props.getApproveTxBytecode(state);
@@ -226,7 +229,7 @@ export const ConfirmMarketCreationDialog = (props: {
           <h4 className="font-fraktion">SETUP</h4>
           <div className="grid grid-cols-[1fr_32px_1fr]">
             <SummaryLabel
-              icon={state.payoutToken.icon}
+              icon={state.payoutToken.logoURI}
               value={state.payoutToken.symbol}
               subtext="PAYOUT TOKEN"
             />
@@ -234,7 +237,7 @@ export const ConfirmMarketCreationDialog = (props: {
               <Arrow className="rotate-90" />
             </div>
             <SummaryLabel
-              icon={state.quoteToken.icon}
+              icon={state.quoteToken.logoURI}
               value={state.quoteToken.symbol}
               subtext="QUOTE TOKEN"
             />
@@ -278,16 +281,19 @@ export const ConfirmMarketCreationDialog = (props: {
       {props.showMultisig && (
         <div className="mt-1">
           <SummaryRow
-            editable={state.priceModel === "dynamic" || state.priceModel === "oracle-dynamic"}
+            editable={
+              state.priceModel === "dynamic" ||
+              state.priceModel === "oracle-dynamic"
+            }
             leftLabel="Deposit Interval"
             rightLabel={formattedState.depositInterval}
             symbol=" HOURS"
-            onChange={(value) =>{
+            onChange={(value) => {
               if (!value) return;
               dispatch({
                 type: CreateMarketAction.OVERRIDE_DEPOSIT_INTERVAL,
                 value,
-              })
+              });
             }}
           />
         </div>
@@ -304,16 +310,16 @@ export const ConfirmMarketCreationDialog = (props: {
             symbol="%"
             onChange={(value) => {
               if (!value) return;
-              dispatch({type: CreateMarketAction.OVERRIDE_DEBT_BUFFER, value})
+              dispatch({
+                type: CreateMarketAction.OVERRIDE_DEBT_BUFFER,
+                value,
+              });
             }}
           />
         </div>
       )}
       <div className="mt-1">
-        <SummaryRow
-          leftLabel="Gas Estimate"
-          rightLabel={gasEstimate}
-        />
+        <SummaryRow leftLabel="Gas Estimate" rightLabel={gasEstimate} />
       </div>
 
       {!props.showMultisig && (

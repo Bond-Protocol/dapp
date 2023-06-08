@@ -9,19 +9,9 @@ import {
   trim,
 } from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
-import {
-  dateMath,
-  dynamicFormatter,
-  formatCurrency,
-  formatDate,
-  InfoLabel,
-  Loading,
-} from "ui";
+import { dateMath, formatCurrency, formatDate, InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
-import { getProtocol } from "@bond-protocol/bond-library";
 import { meme } from "src/utils/words";
-import { getTokenDetailsForMarket } from "src/utils";
-import { longFormatter } from "src/utils/format";
 
 const pricingLabels: Record<MarketPricing, string> = {
   dynamic: "Dynamic Price Market",
@@ -31,19 +21,15 @@ const pricingLabels: Record<MarketPricing, string> = {
 };
 
 export const MarketInsights = () => {
-  const { allMarkets } = useMarkets();
+  const { allMarkets: markets } = useMarkets();
   const { id, chainId } = useParams();
   const navigate = useNavigate();
-  const markets = Array.from(allMarkets.values());
   const market: CalculatedMarket = markets.find(
     ({ marketId, chainId: marketChainId }) =>
       marketId === Number(id) && marketChainId === chainId
-  );
+  )!;
 
   if (!market) return <Loading content={meme()} />;
-
-  const { payout } = getTokenDetailsForMarket(market);
-  const protocol = getProtocol(market.owner);
 
   const maxPayout =
     market.currentCapacity < Number(market.maxPayout)
@@ -68,12 +54,19 @@ export const MarketInsights = () => {
     <div>
       <PageNavigation
         onClickLeft={() => navigate(-1)}
-        onClickRight={() => navigate("/issuers/" + protocol?.id)}
-        rightText="View Issuer"
+        onClickRight={() =>
+          navigate(
+            "/tokens/" +
+              market.payoutToken.chainId +
+              "/" +
+              market.payoutToken.address
+          )
+        }
+        rightText="View Token"
       >
         <PageHeader
           title={`${market.payoutToken.symbol} BOND`}
-          icon={payout?.logoUrl}
+          icon={market.payoutToken.logoUrl}
           underTitle={marketTypeLabel}
           className="place-self-start self-start justify-self-start"
         />
@@ -96,7 +89,14 @@ export const MarketInsights = () => {
               market?.discount > 0 ? "text-light-success" : "text-red-300"
             }
           >
-            {trim(market.discount, calculateTrimDigits(market.discount))}%
+            {!isNaN(market.discount) &&
+            market.discount !== Infinity &&
+            market.discount !== -Infinity
+              ? trim(
+                  market.discount,
+                  calculateTrimDigits(market.discount)
+                ).concat("%")
+              : "Unknown"}
           </p>
         </InfoLabel>
 

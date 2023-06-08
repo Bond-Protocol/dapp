@@ -1,0 +1,77 @@
+[
+  {
+    "name": "OlympusDAO",
+    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
+    "homepage": "https://olympusdao.finance/"
+  },
+  {
+    "name": "GMX",
+    "logoUrl": "https://assets.coingecko.com/coins/images/18323/large/arbit.png?1631532468",
+    "homepage": "https://gmx.io/#/"
+  },
+  {
+    "name": "Redacted",
+    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png",
+    "homepage": "https://redacted.finance/"
+  },
+  {
+    "name": "Y2K",
+    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/Y2K.jpg",
+    "homepage": "https://www.y2k.finance/"
+  },
+  {
+    "name": "ShapeShiftDAO",
+    "logoUrl": "https://ipfs.io/ipfs/bafkreibggpxpfxxnxkudvlj5bherkjpjjetzzxbmfaquigbvhqg5xkx4li?filename=fox-token.png",
+    "homepage": "https://shapeshift.com/"
+  },
+  {
+    "name": "JPEG'd DAO",
+    "logoUrl": "https://cdn.jpegd.io/static/logos/JPEGD_LOGO.svg",
+    "homepage": "https://jpegd.io/"
+  },
+  {
+    "name": "Camelot DEX",
+    "logoUrl": "https://app.camelot.exchange/images/logo-sm.svg",
+    "homepage": "https://app.camelot.exchange"
+  },
+  {
+    "name": "InverseFinance",
+    "logoUrl": "https://assets.coingecko.com/coins/images/14205/large/inverse_finance.jpg?1614921871",
+    "homepage": "https://www.inverse.finance"
+  },
+  {
+    "name": "IQ",
+    "logoUrl": "https://iq.wiki/branding/downloadassets/logooriginalbrain.png",
+    "homepage": "https://iq.wiki/"
+  },
+  {
+    "name": "Buffer Finance",
+    "logoUrl": "https://github.com/Buffer-Finance/Buffer-Media/blob/main/new_logo_50_50.png?raw=true",
+    "homepage": "https://buffer.finance"
+  },
+  {
+    "name": "Pendle",
+    "logoUrl": "https://docs.pendle.finance/img/logo.svg",
+    "homepage": "https://pendle.finance/"
+  },
+  {
+    "name": "GMD",
+    "logoUrl": "https://assets.coingecko.com/coins/images/28088/large/gmd.png?1676044809",
+    "homepage": "https://gmdprotocol.com"
+  },
+  {
+    "name": "NewOrder",
+    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/NEWORDER.png",
+    "homepage": "https://neworder.network/"
+  },
+  {
+    "name": "Neutra Finance",
+    "logoUrl": "https://assets.coingecko.com/coins/images/28813/small/NEU_Token_logo.png?1674455093",
+    "homepage": "https://neutra.finance"
+  },
+  {
+    "name": "Lodestar",
+    "logoUrl": "https://assets.coingecko.com/coins/images/28218/large/lode.png?1668429341",
+    "homepage": "https://lodestarfinance.io"
+  }
+]

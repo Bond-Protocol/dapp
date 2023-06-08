@@ -1,8 +1,4 @@
-import { PROTOCOLS } from "@bond-protocol/bond-library";
-
-const protocols = Array.from(PROTOCOLS.values()).filter(
-  (p) => !p.links.twitter?.includes("bond_protocol") //remove our test protocols
-);
+import protocols from "./protocols.json";
 
 const auditors = [
   {
@@ -45,8 +41,8 @@ const links = {
 };
 
 export default {
-  links,
   protocols,
+  links,
   auditors,
   bounties,
 };

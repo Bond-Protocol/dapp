@@ -1,32 +1,35 @@
-import { getToken } from "@bond-protocol/bond-library";
-import { Button, PaginatedTable, Column, formatDate } from "ui";
+import { Button, Column, formatDate, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
 import { ContractTransaction } from "ethers";
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
-import { useMemo } from "react";
+import { toTableData } from "src/utils/table";
 
 export const tableColumns: Array<Column<any>> = [
   {
     label: "Bond",
-    accessor: "asset",
+    accessor: "bond",
     unsortable: true,
-    formatter: (bond) => {
-      const asset = getToken(bond?.underlying?.id);
-      const balance = longFormatter.format(bond?.balance);
+    formatter: (ownerBalance) => {
+      const balance = longFormatter.format(ownerBalance?.balance);
       return {
-        value: `${balance} ${asset?.symbol}`,
-        icon: asset?.logoUrl,
+        value: `${balance} ${
+          ownerBalance?.bond?.bondToken?.underlying?.symbol ?? "???"
+        }`,
+        icon: ownerBalance?.bond?.bondToken?.underlying?.logoURI,
       };
     },
   },
   {
     label: "Market Value",
-    accessor: "price",
-    formatter: (bond) => {
+    accessor: "value",
+    formatter: (ownerBalance) => {
       return {
-        value: usdFormatter.format(bond?.usdPriceString),
+        value:
+          ownerBalance?.usdPriceString !== ""
+            ? usdFormatter.format(ownerBalance?.usdPriceString)
+            : "Unknown",
       };
     },
   },
@@ -34,15 +37,15 @@ export const tableColumns: Array<Column<any>> = [
     label: "Vesting",
     accessor: "vesting",
     defaultSortOrder: "asc",
-    formatter: (bond) => {
-      const expiry = bond?.bond?.bondToken?.expiry;
+    formatter: (ownerBalance) => {
+      const expiry = ownerBalance?.bond?.bondToken?.expiry;
       const date = new Date(expiry * 1000);
       const formatted = formatDate.short(date);
       const timeLeft = formatDate.distanceToNow(date);
 
       return {
-        value: bond.canClaim ? "Vested" : formatted,
-        subtext: bond.canClaim ? `On ${formatted}` : `In ${timeLeft}`,
+        value: ownerBalance.canClaim ? "Vested" : formatted,
+        subtext: ownerBalance.canClaim ? `On ${formatted}` : `In ${timeLeft}`,
         sortValue: expiry,
       };
     },
@@ -52,10 +55,10 @@ export const tableColumns: Array<Column<any>> = [
     accessor: "claim",
     alignEnd: true,
     unsortable: true,
-    formatter: (bond) => {
+    formatter: (ownerBalance) => {
       return {
-        onClick: () => bond.handleClaim(),
-        data: bond,
+        onClick: () => ownerBalance.handleClaim(),
+        data: ownerBalance,
       };
     },
     Component: (props: any) => {
@@ -63,18 +66,16 @@ export const tableColumns: Array<Column<any>> = [
       const { switchNetwork } = useSwitchNetwork();
       const { data: signer } = useSigner();
 
-      const isCorrectNetwork =
-        Number(props?.data?.bond.bondToken.chainId) === chain?.id;
+      const isCorrectNetwork = Number(props?.data?.bond.chainId) === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(Number(props?.data?.bond.bondToken.chainId));
+        switchNetwork?.(Number(props?.data?.bondToken.chainId));
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {
         if (!bond.bondToken) return;
         const redeemTx: ContractTransaction = await redeem(
           bond.bondToken.id,
-          bond.bondToken.chainId,
           bond.bondToken.type as BOND_TYPE,
           bond.balance.toString(),
           // @ts-ignore
@@ -95,7 +96,6 @@ export const tableColumns: Array<Column<any>> = [
       return (
         <Button
           thin
-          size="sm"
           variant={props?.data?.canClaim ? "primary" : "ghost"}
           disabled={!props?.data?.canClaim}
           className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
@@ -108,12 +108,13 @@ export const tableColumns: Array<Column<any>> = [
   },
 ];
 
-export const BondList = (props: any) => {
-  const tableData = useMemo(() => props.data, [props.data[0]?.price]);
+export const BondList = ({ data = [], ...props }: any) => {
+  const tableData = data.map((b: any) => toTableData(tableColumns, b));
 
   return (
-    <div>
+    <div className="mt-10">
       <PaginatedTable
+        title={<div />}
         defaultSort="vesting"
         columns={tableColumns}
         data={tableData}
