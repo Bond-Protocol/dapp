@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { Token } from "@bond-protocol/contract-library";
-import { tokenlist, testnetTokenlist } from "hooks";
+import { testnetTokenlist, tokenlist } from "hooks";
 import * as defillama from "./defillama";
-import { usdFormatter } from "../utils/format";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { environment } from "src/environment";
-import { useSubgraph } from "hooks/useSubgraph";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
@@ -56,7 +54,7 @@ export const useTokenlistLoader = () => {
 
   useEffect(() => {
     const loadPrices = async () => {
-      const tokens = tokenlist;
+      const tokens = tokenlist.filter((t) => t.display === true);
 
       const pricedTokens = environment.isTestnet
         ? await fetchAndMatchPricesForTestnet()
