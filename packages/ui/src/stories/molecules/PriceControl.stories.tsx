@@ -15,7 +15,7 @@ const token = {
 
 export const Primary = {
   args: {
-    topLabel: "Fixed ppppppppppppppppppppppppppppppppPrice",
+    topLabel: "Fixed Price",
     bottomLabel: "Initial Discount",
     tooltip: "ya",
     onRateChange: () => {},
@@ -32,4 +32,22 @@ export const Percentage = {
     bottomLabel: "Initial Discount",
     topLabel: "From Oracle Price",
   },
+};
+
+export const LargeText = {
+  args: {
+    ...Primary.args,
+    payoutToken: {
+      symbol: "WETH",
+      price: "921304102341293491234912934912342",
+    },
+    quoteToken: { symbol: "ibbtc/sbtcCRV-f", price: 3 },
+  },
+  decorators: [
+    (Story) => (
+      <div className="max-w-sm">
+        <Story />
+      </div>
+    ),
+  ],
 };
