@@ -18,7 +18,7 @@ import {
 } from "@bond-protocol/contract-library";
 import { BigNumberish } from "ethers";
 import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
-import { useAccount, useChainId } from "wagmi";
+import { useAccount } from "wagmi";
 import { useTokens } from "context";
 
 const currentTime = Math.trunc(Date.now() / 1000);
@@ -26,10 +26,9 @@ const currentTime = Math.trunc(Date.now() / 1000);
 export const useDashboardLoader = () => {
   const { address } = useAccount();
   const { allMarkets } = useCalculatedMarkets();
-  const chainId = useChainId();
 
   const dashboardData = getSubgraphQueries(useGetDashboardDataQuery, {
-    address: address,
+    address: address || "NO_ADDRESS",
     currentTime: currentTime,
   });
   const { isLoading } = useSubgraphLoadingCheck(dashboardData);
