@@ -12,11 +12,8 @@ import {
   Head,
   Background,
 } from "../components";
+import { GAContainer } from "../components/GAContainer";
 import { TheProblem } from "../components/TheProblem";
-//import ReactGA from "react-ga";
-
-//const TRACKING_ID = "G-EEHDXY4KZZ";
-//ReactGA.initialize(TRACKING_ID);
 
 import data from "../data";
 
@@ -44,6 +41,7 @@ export default function Home() {
       <Head {...headConfig} />
       <main className="h-full 2xl:max-w-2xl">
         <div className="mx-auto h-full w-full">
+          <GAContainer />
           <Background height={pageHeight}>
             <Navbar />
             <div
