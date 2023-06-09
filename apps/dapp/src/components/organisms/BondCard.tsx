@@ -19,7 +19,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         </div>
       )}
       <div
-        className={`flex w-full flex-col justify-center ${
+        className={`flex flex-col justify-center ${
           props.isFutureMarket ? "w-full" : "w-1/2"
         }`}
       >
