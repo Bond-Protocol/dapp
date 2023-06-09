@@ -78,7 +78,7 @@ export const ProjectionChart = (
     [props.data.length]
   );
 
-  if (Boolean(props.data.length)) {
+  if (!Boolean(props.data.length)) {
     return (
       <div className="h-[99%] w-full">
         <PlaceholderChart message="Market simulation will appear here" />

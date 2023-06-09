@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import {
   Button,
   calculateDuration,
+  calculateTrimDigits,
   ConfirmMarketCreationDialog,
   CreateMarketAction,
   CreateMarketState,
   FlatSelect,
+  formatDate,
   InfoLabel,
   InputModal,
   MarketCreatedDialog,
@@ -17,15 +19,11 @@ import {
   SelectEndDateDialog,
   SelectModal,
   SelectStartDateDialog,
-  TokenInput,
   SelectVestingDialog,
   Token,
+  TokenInput,
   TooltipWrapper,
   TransactionHashDialog,
-} from "ui";
-import {
-  calculateTrimDigits,
-  formatDate,
   trimAsNumber,
   useCreateMarket,
   vestingOptions,
@@ -282,6 +280,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           {/* @ts-ignore */}
           <PriceModelPicker
             id="cm-price-model-picker"
+            chain={chain}
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
             oraclePrice={props.oraclePrice}
