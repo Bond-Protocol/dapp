@@ -151,7 +151,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     );
 
   const onClickBond = !hasSufficientAllowance
-    ? () => setShowModal(true)
+    ? () => approveSpending()
     : () => setShowModal(true);
 
   const isTerm = market.vestingType === "fixed-term";

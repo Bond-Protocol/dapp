@@ -128,7 +128,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
           />
         ) : (
           <div>
-            <TooltipWrapper content="Oracle markets are currently unavailable in Ethereum Mainnet">
+            <TooltipWrapper content="Oracle markets are currently unavailable on Ethereum Mainnet">
               <Switch disabled label="Oracle" onChange={(e) => {}} />
             </TooltipWrapper>
           </div>
