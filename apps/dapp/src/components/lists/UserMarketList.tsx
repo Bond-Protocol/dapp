@@ -52,7 +52,7 @@ export const tableColumns: Array<Column<CalculatedMarket>> = [
   },
   discountColumn,
   {
-    label: "Expiry Date",
+    label: "End Date",
     accessor: "conclusion",
     formatter: (market) => {
       return {
