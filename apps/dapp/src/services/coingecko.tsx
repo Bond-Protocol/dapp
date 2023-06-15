@@ -62,6 +62,7 @@ const formatToken = (t: any) => {
     details: {
       description: t.description.en,
       links: {
+        coingecko: "https://coingecko.com/en/coins/".concat(t.id),
         homepage: t.links?.homepage?.[0],
         twitter:
           t.links?.twitter_screen_name &&
