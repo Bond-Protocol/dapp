@@ -21,7 +21,7 @@ const TooltipLabel = (props: {
   return (
     <div className={`flex w-full justify-between ${props.className}`}>
       <p className="w-1/2">{props.label}</p>
-      <p className={`text-left text-white ${props.valueClassName}`}>
+      <p className={`text-left font-mono ${props.valueClassName}`}>
         {props.value}
       </p>
     </div>
@@ -38,21 +38,21 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
   const initialPrice = data?.payload?.initialPrice;
 
   const getValue = (price: string) => {
-    price = trim(price, calculateTrimDigits(Number(price)));
+    price = trim(price, calculateTrimDigits(Number(price))) + "$";
     price = props.useTokenRatio
-      ? price.concat(" ").concat(props.quoteTokenSymbol || "")
-      : "$".concat(price);
+      ? price.replace("$", props.quoteTokenSymbol || "")
+      : price;
 
     return price;
   };
 
   return (
-    <div className="bg-light-tooltip font-jakarta min-w-[150px] rounded-lg border border-transparent p-2 py-1 text-xs font-extralight">
+    <div className="bg-light-tooltip font-jakarta min-w-[160px] rounded-lg border border-transparent p-2 py-1 text-xs font-extralight">
       <TooltipLabel
         value={getValue(price)}
         label={`${props.payoutTokenSymbol} Price: `}
         className="text-light-primary mt-2"
-        valueClassName=""
+        valueClassName="text-white"
       />
       {discountedPrice && (
         <>
@@ -60,6 +60,7 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
             value={getValue(discountedPrice)}
             label="Bond Price: "
             className="text-light-secondary"
+            valueClassName="text-white"
           />
           <TooltipLabel
             value={`${discount.toFixed(2)}%`}

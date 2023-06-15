@@ -1,7 +1,7 @@
 import { StoryFn, Meta } from "@storybook/react";
 import { ProjectionChart } from "components";
 
-import data from "./btc-price";
+import data from "./mock-data";
 
 export default {
   title: "Components/Charts/ProjectionChart",

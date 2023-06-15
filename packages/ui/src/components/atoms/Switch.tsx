@@ -16,7 +16,9 @@ const slotProps = {
     };
   },
   track: ({ checked }: { checked: boolean }) => {
-    const checkedStyle = checked ? "bg-light-primary border-light-primary" : "";
+    const checkedStyle = checked
+      ? "bg-light-secondary border-light-primary"
+      : "";
 
     return {
       className: `bg-transparent rounded-full border border-white block absolute w-full h-full transtion-all duration-300 ${checkedStyle}`,
@@ -31,9 +33,12 @@ export type SwitchProps = SwitchUnstyledProps & {
 export const Switch = (props: SwitchProps) => {
   const disabledStyle = props.disabled ? "opacity-50 cursor-not-allowed" : "";
   return (
-    <div className={"flex items-center " + " " + disabledStyle}>
+    <div className={"flex items-center" + " " + disabledStyle}>
       <SwitchUnstyled componentsProps={slotProps} {...props} />
-      {props.label && <p className="">{props.label}</p>}
+
+      {props.label && (
+        <p className="text-light-grey-400 text-sm font-light">{props.label}</p>
+      )}
     </div>
   );
 };

@@ -93,32 +93,30 @@ export const ProjectionChart = (
       {shouldRender && (
         <div className="pb-1">
           <TooltipWrapper content="The market simulation provides a rough estimate of how bond prices and sales are likely to occur, applying the current price settings to historical token prices. It is not intended to be extremely accurate, just to give an idea of how different settings could affect bond sales. The 'DISCOUNT' box above, allows you to compare market performance with different assumptions of the discount at which users will be interested in purchasing bonds.">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-between">
+              <div className="my-auto mr-2 w-[180px]">
+                <Switch
+                  label="Token Ratio"
+                  onChange={(e) => setUseTokenPrices(e.target.checked)}
+                />
+              </div>
               {state.priceModel === "dynamic" && (
-                <>
-                  <p className="text-light-secondary mr-2 font-mono text-sm uppercase">
+                <div className="flex">
+                  <p className="text-light-grey-400 my-auto mr-1 text-sm">
                     Discount
                   </p>
                   <Input
                     id="cm-target-discount-input"
                     className="h-[60%] w-[11%] self-end"
                     inputClassName="text-center mr-1.5 mb-0.5"
-                    rootClassName="text-center justify-end h-[28px]"
+                    rootClassName="text-center w-[50px] justify-end h-[28px]"
                     value={targetDiscount}
                     onChange={setTargetDiscount}
                     onBlur={onBlur}
                     onFocus={onFocus}
                   />
-                </>
+                </div>
               )}
-              <div className="mr-2">
-                <Switch
-                  label="Token Ratio"
-                  onChange={(e) => {
-                    setUseTokenPrices(e.target.checked);
-                  }}
-                />
-              </div>
             </div>
           </TooltipWrapper>
         </div>
