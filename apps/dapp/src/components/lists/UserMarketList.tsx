@@ -52,7 +52,7 @@ export const tableColumns: Array<Column<CalculatedMarket>> = [
   },
   discountColumn,
   {
-    label: "Expiry Date",
+    label: "End Date",
     accessor: "conclusion",
     formatter: (market) => {
       return {
@@ -99,7 +99,6 @@ export const UserMarketList = ({ data = [], ...props }: any) => {
   return (
     <div className="mt-10">
       <PaginatedTable
-        title="Markets"
         defaultSort="vesting"
         columns={tableColumns}
         data={tableData}

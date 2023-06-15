@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { TooltipWrapper } from "src/components";
+import { CHAINS } from "@bond-protocol/contract-library";
 
 export type TokenCardProps = {
   token: any;
@@ -24,34 +25,44 @@ export const TokenCard: FC<TokenCardProps> = ({ token, navigate }) => {
     ? `${marketCount} Market`
     : `${marketCount} Markets`;
 
-  return (
-    <div
-      className="flex flex-col items-center justify-between rounded-lg border border-transparent bg-white/[.05] p-5 transition-all duration-300 hover:cursor-pointer hover:bg-white/10"
-      onClick={() => handleClick(token.id)}
-    >
-      <div className="overflow-hidden rounded-full">
-        <img className="h-[64px] w-[64px]" src={token.logoUrl} />
-      </div>
-      {token.name.length <= 18 ? (
-        <p className="my-2 text-center font-bold tracking-wide">{token.name}</p>
-      ) : (
-        <TooltipWrapper content={token.name}>
-          <p className="my-2 text-center font-bold tracking-wide">
-            {token.name.substring(0, 16).concat("\u2026")}
-          </p>
-        </TooltipWrapper>
-      )}
+  const chainChip = CHAINS.get(token.chainId.toString())?.image;
 
-      <p className="text-light-primary-300 font-mono text-[10px]">
-        TBV {formattedTbv}
-      </p>
-      <p
-        className={`text-xs font-bold ${
-          noMarkets ? "text-light-grey-400/50" : "text-light-primary-50"
-        }`}
+  return (
+    <div>
+      <div
+        className="relative flex flex-col items-center justify-between rounded-lg border border-transparent bg-white/[.05] p-5 transition-all duration-300 hover:cursor-pointer hover:bg-white/10"
+        onClick={() => handleClick(token.id)}
       >
-        {marketSize}
-      </p>
+        <div className="absolute top-[8px] right-[8px]">
+          <img className="h-[16px] w-[16px]" src={chainChip} />
+        </div>
+
+        <div className="overflow-hidden rounded-full">
+          <img className="h-[64px] w-[64px]" src={token.logoUrl} />
+        </div>
+        {token.name.length <= 18 ? (
+          <p className="my-2 text-center font-bold tracking-wide">
+            {token.name}
+          </p>
+        ) : (
+          <TooltipWrapper content={token.name}>
+            <p className="my-2 text-center font-bold tracking-wide">
+              {token.name.substring(0, 16).concat("\u2026")}
+            </p>
+          </TooltipWrapper>
+        )}
+
+        <p className="text-light-primary-300 font-mono text-[10px]">
+          TBV {formattedTbv}
+        </p>
+        <p
+          className={`text-xs font-bold ${
+            noMarkets ? "text-light-grey-400/50" : "text-light-primary-50"
+          }`}
+        >
+          {marketSize}
+        </p>
+      </div>
     </div>
   );
 };

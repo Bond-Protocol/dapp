@@ -49,9 +49,7 @@ export interface Token extends TokenBase {
     description?: string;
     links: {
       homepage?: string;
-      github?: string;
       discord?: string;
-      medium?: string;
     };
   };
   markets?: any[];

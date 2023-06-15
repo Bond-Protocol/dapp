@@ -29,7 +29,7 @@ export const PageNavigation = (props: PageNavigationProps) => {
 
       {props.rightText && !props.link && (
         <div
-          className="flex font-mono text-sm uppercase text-light-secondary hover:cursor-pointer hover:underline"
+          className="flex font-mono text-base font-bold uppercase text-light-secondary hover:cursor-pointer"
           onClick={props.onClickRight}
         >
           <p className="my-auto mr-1 whitespace-nowrap">{props.rightText}</p>
@@ -41,7 +41,7 @@ export const PageNavigation = (props: PageNavigationProps) => {
           href={props.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="my-auto whitespace-nowrap font-mono text-sm font-light text-light-secondary hover:cursor-pointer hover:underline"
+          className="my-auto whitespace-nowrap font-mono text-base font-bold uppercase text-light-secondary hover:cursor-pointer"
           iconClassName="mt-0.5 ml-1 my-auto"
         >
           {props.rightText}
