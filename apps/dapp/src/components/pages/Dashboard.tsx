@@ -2,16 +2,21 @@ import { PageHeader } from "components/common";
 import { UserBonds } from "components/organisms/UserBonds";
 import { UserMarkets } from "components/organisms/UserMarkets";
 import { RequiresWallet } from "components/utility/RequiresWallet";
+import { useDashboard } from "context/dashboard-context";
 import { Tabs } from "ui";
 
-const tabs = [{ label: "My bonds" }, { label: "My Markets" }];
-
 export const Dashboard = () => {
+  const dashboard = useDashboard();
+  const tabs = [{ label: "My bonds" }, { label: "My Markets" }];
+
+  const hasMarkets =
+    !!dashboard.currentMarkets.length || !dashboard.closedMarkets.length;
+
   return (
     <>
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
-        <Tabs tabs={tabs} className="pb-20">
+        <Tabs tabs={hasMarkets ? tabs : [tabs[0]]} className="pb-20">
           <UserBonds />
           <UserMarkets />
         </Tabs>
