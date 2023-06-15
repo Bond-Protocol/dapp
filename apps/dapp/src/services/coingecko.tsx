@@ -73,10 +73,6 @@ const formatToken = (t: any) => {
         discord: t.links?.chat_url.filter(
           (url: string) => url.indexOf("https://discord.gg") !== -1
         )[0],
-        medium: t.links?.announcement_url
-          .concat(t.links?.chat_url)
-          .concat(t.links?.official_forum_url)
-          .filter((url: string) => url.indexOf("medium.com") !== -1)[0],
         everipedia: "https://iq.wiki/api/address-to-wiki?address=".concat(
           t.detail_platforms[t.asset_platform_id].contract_address
         ),

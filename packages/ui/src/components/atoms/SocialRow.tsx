@@ -1,6 +1,5 @@
 import { ReactComponent as CoingeckoIcon } from "../../assets/icons/socials/coingecko.svg";
 import { ReactComponent as GitbookIcon } from "../../assets/icons/socials/gitbook.svg";
-import { ReactComponent as GithubIcon } from "../../assets/icons/socials/github.svg";
 import { ReactComponent as MediumIcon } from "../../assets/icons/socials/medium.svg";
 import { ReactComponent as TwitterIcon } from "../../assets/icons/socials/twitter.svg";
 import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discord.svg";
@@ -12,7 +11,6 @@ import { useEffect, useState } from "react";
 export type SocialRowProps = {
   coingecko?: string;
   gitbook?: string;
-  github?: string;
   medium?: string;
   everipedia?: string;
   twitter?: string;
@@ -57,12 +55,6 @@ export const SocialRow = (props: SocialRowProps) => {
       {props.gitbook && (
         <LinkIcon href={props.gitbook}>
           <GitbookIcon width={props.width} />
-        </LinkIcon>
-      )}
-
-      {props.github && (
-        <LinkIcon href={props.github}>
-          <GithubIcon width={props.width} />
         </LinkIcon>
       )}
 
