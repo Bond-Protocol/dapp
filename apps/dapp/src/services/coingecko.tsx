@@ -56,7 +56,7 @@ const formatToken = (t: any) => {
     logoURI: t.image.large,
     symbol: t.symbol,
     name: t.name,
-    address: t.detail_platforms[t.asset_platform_id].address,
+    address: t.detail_platforms[t.asset_platform_id].contract_address,
     decimals: t.detail_platforms[t.asset_platform_id].decimal_place,
     price: t.market_data.current_price.usd,
     details: {
@@ -76,7 +76,9 @@ const formatToken = (t: any) => {
           .concat(t.links?.chat_url)
           .concat(t.links?.official_forum_url)
           .filter((url: string) => url.indexOf("medium.com") !== -1)[0],
-        github: t.links?.repos_url.github && t.links?.repos_url.github[0],
+        everipedia: "https://iq.wiki/api/address-to-wiki?address=".concat(
+          t.detail_platforms[t.asset_platform_id].contract_address
+        ),
       },
     },
   };

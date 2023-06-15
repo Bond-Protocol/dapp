@@ -6,6 +6,7 @@ import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discor
 import { ReactComponent as TelegramIcon } from "../../assets/icons/socials/telegram.svg";
 import { ReactComponent as IqIcon } from "../../assets/icons/socials/iq.svg";
 import { LinkIcon } from "../../components/atoms/LinkIcon";
+import { useEffect, useState } from "react";
 
 export type SocialRowProps = {
   gitbook?: string;
@@ -23,6 +24,19 @@ export type SocialRowProps = {
  * Displays and links supported social networks
  */
 export const SocialRow = (props: SocialRowProps) => {
+  const [everipedia, setEveripedia] = useState("");
+
+  useEffect(() => {
+    if (!props.everipedia) return;
+    const resolveEveripedia = async () => {
+      fetch(props.everipedia).then((result) => {
+        console.log(result);
+        setEveripedia(result);
+      });
+    };
+    resolveEveripedia();
+  }, [props.everipedia]);
+
   return (
     <div
       className={`child:my-auto child:select-none my-auto flex ${
@@ -65,7 +79,7 @@ export const SocialRow = (props: SocialRowProps) => {
         </LinkIcon>
       )}
       {props.everipedia && (
-        <LinkIcon href={props.everipedia}>
+        <LinkIcon href={everipedia}>
           <IqIcon width={props.width} />
         </LinkIcon>
       )}
