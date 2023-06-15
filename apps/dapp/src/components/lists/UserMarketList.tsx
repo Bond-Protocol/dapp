@@ -99,7 +99,6 @@ export const UserMarketList = ({ data = [], ...props }: any) => {
   return (
     <div className="mt-10">
       <PaginatedTable
-        title="Markets"
         defaultSort="vesting"
         columns={tableColumns}
         data={tableData}
