@@ -11,6 +11,8 @@ const initialState = {
   bondsIssued: 0,
   uniqueBonders: 0,
   tbv: 0,
+  userTbv: 0,
+  claimableAmount: 0,
   isLoading: false,
 };
 
@@ -22,6 +24,8 @@ interface IDashboardContext {
   bondsIssued: number;
   uniqueBonders: number;
   tbv: number;
+  userTbv: number;
+  claimableAmount: number;
   isLoading: boolean;
 }
 

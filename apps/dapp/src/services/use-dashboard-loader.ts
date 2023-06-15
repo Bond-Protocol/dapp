@@ -18,21 +18,22 @@ import {
 } from "@bond-protocol/contract-library";
 import { BigNumberish } from "ethers";
 import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
-import { useAccount } from "wagmi";
 import { useTokens } from "context";
 
 const currentTime = Math.trunc(Date.now() / 1000);
 
 export const useDashboardLoader = () => {
-  const { address } = useAccount();
+  //const { address } = useAccount();
+  const address = "0x7472c48649d797e06022f28f4a8f58cb1c001b27";
   const { allMarkets } = useCalculatedMarkets();
 
   const dashboardData = getSubgraphQueries(useGetDashboardDataQuery, {
     address: address || "NO_ADDRESS",
     currentTime: currentTime,
   });
+
   const { isLoading } = useSubgraphLoadingCheck(dashboardData);
-  const { getByAddress } = useTokens();
+  const { tokens, getByAddress } = useTokens();
 
   const [isTestnet] = useTestnetMode();
   const [ownerBalances, setOwnerBalances] = useState<Partial<OwnerBalance>[]>(
@@ -44,6 +45,8 @@ export const useDashboardLoader = () => {
   const [bondsIssued, setBondsIssued] = useState(0);
   const [uniqueBonders, setUniqueBonders] = useState(0);
   const [tbv, setTbv] = useState(0);
+  const [userTbv, setUserTbv] = useState(0);
+  const [claimableAmount, setClaimableAmount] = useState(0);
 
   useEffect(() => {
     if (isLoading || !address) return;
@@ -59,6 +62,7 @@ export const useDashboardLoader = () => {
       dashboardData,
       "bondPurchases"
     );
+
     const closedMarkets = concatSubgraphQueryResultArrays(
       dashboardData,
       "markets"
@@ -96,7 +100,6 @@ export const useDashboardLoader = () => {
           const now = new Date(Date.now());
           const canClaim = now >= date;
 
-          //const purchase = purchases?.data?.bondPurchases.find();
           const underlying = getByAddress(bond.bondToken?.underlying.address);
 
           let balance: number | string =
@@ -162,14 +165,33 @@ export const useDashboardLoader = () => {
     setBondsIssued(bonds);
   }, [allMarkets.length]);
 
+  //Calculates TBV for purchases
+  useEffect(() => {
+    const hasPurchases = !!bondPurchases.length;
+    const hasPrices = tokens.some((t) => !!t.price);
+
+    if (hasPrices && hasPurchases) {
+      const tbv = bondPurchases.reduce((tbv, purchase) => {
+        const price = getByAddress(purchase.payoutToken.address)?.price ?? 0;
+        return tbv + price * purchase.payout;
+      }, 0);
+      setUserTbv(tbv);
+    }
+  }, [tokens, bondPurchases.length]);
+
+  //Calculates claimable value for purchases
+
   return {
-    ownerBalances: ownerBalances,
-    bondPurchases: bondPurchases,
-    currentMarkets: currentMarkets,
-    closedMarkets: closedMarkets,
-    bondsIssued: bondsIssued,
-    uniqueBonders: uniqueBonders,
-    tbv: tbv,
+    ownerBalances,
+
+    bondPurchases,
+    currentMarkets,
+    closedMarkets,
+    bondsIssued,
+    uniqueBonders,
+    tbv,
+    userTbv,
+    claimableAmount,
     isLoading: isLoading,
   };
 };
