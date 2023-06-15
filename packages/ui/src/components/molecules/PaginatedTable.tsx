@@ -60,7 +60,7 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
       >
         <div>
           {props.title && (
-            <p className="font-fraktion ml-4 text-2xl uppercase">
+            <p className="font-fraktion ml-4 text-2xl font-bold uppercase">
               {props.title}
             </p>
           )}
