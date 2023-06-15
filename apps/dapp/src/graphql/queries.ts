@@ -126,6 +126,8 @@ export const getDashboardData = gql`
           id
           symbol
           decimals
+          totalPayoutAmount
+          address
         }
       }
     }
@@ -149,7 +151,7 @@ export const getDashboardData = gql`
       chainId
       type
     }
-    bondPurchases(where: { recipient: $address }) {
+    bondPurchases(where: { recipient_contains_nocase: $address }) {
       id
       recipient
       payout
