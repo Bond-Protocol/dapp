@@ -11,7 +11,7 @@ export const TokenPage: FC = () => {
   const [token, setToken] = useState(getByAddress(address || ""));
 
   const [showMore, setShowMore] = useState(
-    !(token?.details?.description && token?.details?.description?.length > 360)
+    !(token?.details?.description && token?.details?.description?.length > 225)
   );
 
   useEffect(() => {
@@ -39,34 +39,37 @@ export const TokenPage: FC = () => {
       </PageNavigation>
       <div className="flex flex-col">
         <div className="mt-2">
-          {!showMore && token?.details?.description && token?.details?.description?.length > 360 && (
-            <>
-              <p className="line-clamp-5 w-1/2 text-light-grey-400">
-                {token?.details?.description}
-              </p>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setShowMore(!showMore)}
-              >
-                Show More
-              </Button>
-            </>
-          )}
-          {showMore && (
-            <>
-              <p className="w-1/2 text-light-grey-400">
-                {token?.details?.description}
-              </p>
-              {token?.details?.description && token?.details?.description?.length > 360 && (
+          {!showMore &&
+            token?.details?.description &&
+            token?.details?.description?.length > 225 && (
+              <>
+                <p className="line-clamp-3 w-1/2 text-light-grey-400">
+                  {token?.details?.description}
+                </p>
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={() => setShowMore(!showMore)}
                 >
-                  Hide
+                  Show More
                 </Button>
-              )}
+              </>
+            )}
+          {showMore && (
+            <>
+              <p className="w-1/2 text-light-grey-400">
+                {token?.details?.description}
+              </p>
+              {token?.details?.description &&
+                token?.details?.description?.length > 225 && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => setShowMore(!showMore)}
+                  >
+                    Hide
+                  </Button>
+                )}
             </>
           )}
         </div>
