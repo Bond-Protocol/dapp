@@ -23,7 +23,7 @@ export const TokenPage: FC = () => {
     <div className="pb-12">
       <PageNavigation
         link={token?.details?.links?.homepage}
-        rightText="Visit Website"
+        rightText="VISIT WEBSITE"
       >
         <PageHeader
           icon={token?.logoUrl}
