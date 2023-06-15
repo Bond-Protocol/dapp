@@ -58,16 +58,23 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
       <div
         className={`flex items-center justify-between ${props.headingClassName}`}
       >
-        {props.title && (
-          <p className="font-fraktion ml-4 text-2xl uppercase">{props.title}</p>
-        )}
-        {!props.hideSearchbar && (
-          <SearchBar
-            value={text}
-            onChange={setText}
-            className="mb-2 max-w-xs justify-self-end"
-          />
-        )}
+        <div>
+          {props.title && (
+            <p className="font-fraktion ml-4 text-2xl uppercase">
+              {props.title}
+            </p>
+          )}
+        </div>
+
+        <div>
+          {!props.hideSearchbar && (
+            <SearchBar
+              value={text}
+              onChange={setText}
+              className="mb-2 max-w-xs justify-self-end"
+            />
+          )}
+        </div>
       </div>
       <Table
         {...props}
