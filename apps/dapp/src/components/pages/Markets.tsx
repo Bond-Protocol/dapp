@@ -15,11 +15,7 @@ export const Markets = () => {
           title={"LIVE MARKETS"}
           subtitle={"Instantly acquire governance tokens at a discount"}
         />
-        <SearchBar
-          className="py-1"
-          value={filterText}
-          onChange={setFilterText}
-        />
+        <SearchBar value={filterText} onChange={setFilterText} />
       </div>
       <MarketList hideSearchbar filterText={filterText} />
       <ActionCard
