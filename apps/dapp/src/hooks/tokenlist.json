@@ -63,15 +63,6 @@
     "display": true
   },
   {
-    "address": "0x7468a5d8E02245B00E8C0217fCE021C70Bc51305",
-    "chainId": 42161,
-    "name": "FRAX",
-    "symbol": "FRAX",
-    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/FRAX.png",
-    "decimals": 18,
-    "display": true
-  },
-  {
     "address": "0x2E3D870790dC77A83DD1d18184Acc7439A53f475",
     "chainId": 10,
     "name": "FRAX",
@@ -225,15 +216,6 @@
     "decimals": 18,
     "display": true
   },
-  {
-    "address": "0xaAFcFD42c9954C6689ef1901e03db742520829c5",
-    "chainId": 42161,
-    "name": "Convex Finance",
-    "symbol": "CVX",
-    "logoURI": "https://www.convexfinance.com/static/icons/svg/cvx.svg",
-    "decimals": 18,
-    "display": true
-  },
 
   {
     "address": "0xc0c293ce456ff0ed870add98a0828dd4d2903dbf",
@@ -257,15 +239,6 @@
   {
     "address": "0xf0cb2dc0db5e6c66B9a70Ac27B06b878da017028",
     "chainId": 42161,
-    "name": "Olympus",
-    "symbol": "OHM",
-    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
-    "decimals": 9,
-    "display": true
-  },
-  {
-    "address": "0x060cb087a9730E13aa191f31A6d86bFF8DfcdCC0",
-    "chainId": 10,
     "name": "Olympus",
     "symbol": "OHM",
     "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",

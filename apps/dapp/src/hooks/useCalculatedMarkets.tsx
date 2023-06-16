@@ -96,8 +96,18 @@ export function useCalculatedMarkets() {
     if (marketsExist && tokensHaveLogos && marketTokensDontHaveLogos) {
       const updatedMarkets = calculatedMarkets.map(
         (market: CalculatedMarket) => {
-          const quoteToken = getByAddress(market.quoteToken.address);
-          const payoutToken = getByAddress(market.payoutToken.address);
+          const quoteToken =
+            getByAddress(market.quoteToken.address) || market.quoteToken;
+          const payoutToken =
+            getByAddress(market.payoutToken.address) || market.payoutToken;
+
+          if (!getByAddress(market.quoteToken.address)) {
+            console.log(market.quoteToken);
+          }
+          if (!getByAddress(market.payoutToken.address)) {
+            console.log(market.payoutToken);
+          }
+
           return {
             ...market,
             quoteToken,
