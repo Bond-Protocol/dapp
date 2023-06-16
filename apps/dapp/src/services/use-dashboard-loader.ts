@@ -162,7 +162,12 @@ export const useDashboardLoader = () => {
       return count + Number(m.bondsIssued);
     }, 0);
 
-    setBondsIssued(bonds);
+    const pastBonds = closedMarkets.reduce(
+      (total, m) => total + m.bondPurchases?.length!,
+      0
+    );
+
+    setBondsIssued(bonds + pastBonds);
   }, [allMarkets.length]);
 
   //Calculates TBV for purchases
