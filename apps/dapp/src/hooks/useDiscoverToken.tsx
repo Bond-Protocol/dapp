@@ -91,15 +91,15 @@ export const useDiscoverToken = () => {
       import.meta.env.VITE_API_URL + "tokens?tokens=" + queryString
     );
 
-    return tks.data.map((t) => {
-      const og = tokens
+    return tks.data.map((t: any) => {
+      const original = tokens
         .filter(
           (token) =>
             Number(token.chainId) === Number(t.data.chainId) &&
             token.address.toLowerCase() === t.data.address.toLowerCase()
         )
         .at(0);
-      return { ...og, ...t.data };
+      return { ...original, ...t.data };
     });
   };
 
