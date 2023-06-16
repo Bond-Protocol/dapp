@@ -10,7 +10,7 @@ export const Markets = () => {
   const [filterText, setFilterText] = useState("");
   return (
     <>
-      <div className="mb-2 flex items-center justify-between">
+      <div className="mb-2 flex items-end justify-between py-2">
         <PageHeader
           title={"LIVE MARKETS"}
           subtitle={"Instantly acquire governance tokens at a discount"}

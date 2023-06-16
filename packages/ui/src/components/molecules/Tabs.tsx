@@ -41,7 +41,7 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
             componentsProps={{
               root: {
                 className: `
-                 border-b-2 w-full font-mono tracking-widest uppercase rounded-t-lg px-6 py-4 select-none 
+                 border-b-2 w-full font-mono font-bold tracking-widest uppercase rounded-t-lg px-6 py-4 select-none 
                  ${
                    selected === i
                      ? "border-white"

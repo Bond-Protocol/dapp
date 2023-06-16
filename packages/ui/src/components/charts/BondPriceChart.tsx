@@ -9,7 +9,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
-import { calculateTrimDigits, formatCurrency, formatDate, trim } from "utils";
+import { calculateTrimDigits, formatDate, trim } from "utils";
 
 export type BondPriceDatapoint = {
   price?: number;
@@ -26,9 +26,6 @@ export type BondPriceChartProps = {
   className?: string;
   disableTooltip?: boolean;
 };
-
-export const getBottomDomain = (min: number) => min - min / 90;
-export const getTopDomain = (max: number) => max + max / 90;
 
 export const BondPriceChart = (props: BondPriceChartProps) => {
   if (!props.data.length) {
@@ -50,11 +47,9 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
           />
           <YAxis
             tickLine={false}
-            domain={[getBottomDomain, getTopDomain]}
-            tickFormatter={
-              props.useTokenRatio
-                ? (value) => trim(value, calculateTrimDigits(value))
-                : formatCurrency.dynamicFormatter
+            domain={["auto", "auto"]}
+            tickFormatter={(value) =>
+              `${trim(value, calculateTrimDigits(value))}$`
             }
           />
           <CartesianGrid stroke="#404040" vertical={false} />

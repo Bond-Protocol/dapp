@@ -173,7 +173,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       <div id="cm-top-control" className="flex items-center justify-end">
         <div
           onClick={reset}
-          className="mr-2 cursor-pointer px-8 font-fraktion text-sm tracking-widest hover:text-light-secondary"
+          className="mr-2 cursor-pointer font-fraktion text-base font-bold tracking-widest hover:text-light-secondary"
         >
           RESET
         </div>

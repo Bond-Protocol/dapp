@@ -19,7 +19,7 @@ export const Primary = {
   render: Template,
 
   args: {
-    payoutTokenSymbol: "GMX",
+    payoutTokenSymbol: "wstETH",
     data,
   },
 };

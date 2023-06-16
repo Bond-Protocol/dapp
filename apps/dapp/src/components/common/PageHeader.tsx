@@ -26,7 +26,7 @@ export const PageHeader = (props: PageHeaderProps) => {
         </div>
       </div>
       {props.subtitle && (
-        <div className="select-none py-2 font-sans text-[15px] font-extralight">
+        <div className="select-none font-sans text-[15px] font-extralight">
           {props.subtitle}
         </div>
       )}

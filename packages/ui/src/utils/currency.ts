@@ -5,6 +5,13 @@ export const usdFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
+export const usdFullFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "usd",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 export const usdLongFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "usd",
@@ -116,5 +123,6 @@ export const formatCurrency = {
   longFormatter,
   usdFormatter,
   usdLongFormatter,
+  usdFullFormatter,
   trimToLengthSymbol,
 };

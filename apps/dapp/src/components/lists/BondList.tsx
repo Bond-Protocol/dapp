@@ -96,12 +96,12 @@ export const tableColumns: Array<Column<any>> = [
       return (
         <Button
           thin
-          variant={props?.data?.canClaim ? "primary" : "ghost"}
+          variant="primary"
           disabled={!props?.data?.canClaim}
           className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
           onClick={() => handleClaim()}
         >
-          {props?.data?.canClaim ? "Claim" : "Vesting"}
+          Claim
         </Button>
       );
     },

@@ -31,6 +31,13 @@ export const longFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 2,
 });
 
+export const usdFullFormatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "usd",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
 export const dynamicFormatter = (num: string) => {
   if (!num?.split) return num;
   let maximumFractionDigits = 0;

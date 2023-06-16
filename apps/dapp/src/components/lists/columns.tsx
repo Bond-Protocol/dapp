@@ -51,6 +51,13 @@ export const discountColumn: Column<CalculatedMarket> = {
   defaultSortOrder: "desc",
   Component: DiscountLabel,
   formatter: (market) => {
+    const value =
+      !isNaN(market.discount) &&
+      market.discount !== Infinity &&
+      market.discount !== -Infinity
+        ? market.discount + "%"
+        : "Unknown";
+
     return {
       value:
         !isNaN(market.discount) &&
@@ -58,7 +65,7 @@ export const discountColumn: Column<CalculatedMarket> = {
         market.discount !== -Infinity
           ? market.discount + "%"
           : "Unknown",
-      sortValue: market.discount,
+      sortValue: value.includes("Unknown") ? 100 : market.discount + 100,
     };
   },
 };
