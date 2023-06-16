@@ -22,7 +22,7 @@
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@mui/base": "^5.0.0-alpha.88",
     "@rainbow-me/rainbowkit": "0.8.1",
-    "axios": "^0.27.2",
+    "axios": "^1.4.0",
     "buffer": "^6.0.3",
     "date-fns": "^2.29.2",
     "dotenv": "^16.0.3",

@@ -6,7 +6,6 @@ import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discor
 import { ReactComponent as TelegramIcon } from "../../assets/icons/socials/telegram.svg";
 import { ReactComponent as IqIcon } from "../../assets/icons/socials/iq.svg";
 import { LinkIcon } from "../../components/atoms/LinkIcon";
-import { useEffect, useState } from "react";
 
 export type SocialRowProps = {
   coingecko?: string;
@@ -24,23 +23,6 @@ export type SocialRowProps = {
  * Displays and links supported social networks
  */
 export const SocialRow = (props: SocialRowProps) => {
-  const [everipedia, setEveripedia] = useState<string>();
-
-  useEffect(() => {
-    if (!props.everipedia) return;
-    const resolveEveripedia = async () => {
-      // @ts-ignore
-      const res = await fetch(props.everipedia);
-      const reader = res?.body?.getReader();
-      const data = await reader?.read();
-      if (!data?.value) return;
-      const value = Buffer.from(data.value).toString("utf-8");
-      if (value === "[]") return;
-      setEveripedia(value.substring(2, value.length - 2));
-    };
-    resolveEveripedia();
-  }, [props.everipedia]);
-
   return (
     <div
       className={`child:my-auto child:select-none my-auto flex ${
@@ -81,8 +63,8 @@ export const SocialRow = (props: SocialRowProps) => {
           <TelegramIcon width={props.width} />
         </LinkIcon>
       )}
-      {everipedia && (
-        <LinkIcon href={everipedia}>
+      {props.everipedia && (
+        <LinkIcon href={props.everipedia}>
           <IqIcon width={props.width} />
         </LinkIcon>
       )}

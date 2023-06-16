@@ -36,7 +36,7 @@ export const fetchAndMatchPricesForTestnet = async () => {
 export const useTokenlistLoader = () => {
   const [tokens, setTokens] = useState<Token[]>([]);
   const [userTokens, setUserTokens] = useState<Token[]>([]);
-  const { discoverLogo } = useDiscoverToken();
+  const { discoverFromApi } = useDiscoverToken();
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
 
   const getByAddress = (address: string) => {
@@ -70,9 +70,7 @@ export const useTokenlistLoader = () => {
   useEffect(() => {
     async function fetchExtendedDetails() {
       if (Boolean(tokens.length) && !fetchedExtendedDetails) {
-        const updatedTokens = await Promise.all(
-          tokens.map((t) => discoverLogo(t))
-        );
+        const updatedTokens = await discoverFromApi(tokens);
         setFetchExtended(true);
         setTokens(updatedTokens);
       }

@@ -3,6 +3,7 @@ import { IERC20__factory, Token } from "@bond-protocol/contract-library";
 import defillama from "services/defillama";
 import { providers } from "services/owned-providers";
 import coingecko from "services/coingecko";
+import axios from "axios";
 
 const fetchOnChain = async (
   address: string,
@@ -40,7 +41,10 @@ const fetchOnChain = async (
 export const useDiscoverToken = () => {
   const [isLoading, setLoading] = useState(false);
 
-  const discover = async (address: string, chainId: number): Promise<{ token: Token, source: string }> => {
+  const discover = async (
+    address: string,
+    chainId: number
+  ): Promise<{ token: Token; source: string }> => {
     setLoading(true);
 
     try {
@@ -80,9 +84,29 @@ export const useDiscoverToken = () => {
     }
   };
 
+  const discoverFromApi = async (tokens: Token[]) => {
+    const toQuery = tokens.map((t) => `${t.chainId}:${t.address}`);
+    const queryString = toQuery.join(",");
+    const tks = await axios.get(
+      import.meta.env.VITE_API_URL + "tokens?tokens=" + queryString
+    );
+
+    return tks.data.map((t) => {
+      const og = tokens
+        .filter(
+          (token) =>
+            Number(token.chainId) === Number(t.data.chainId) &&
+            token.address.toLowerCase() === t.data.address.toLowerCase()
+        )
+        .at(0);
+      return { ...og, ...t.data };
+    });
+  };
+
   return {
     discover,
     discoverLogo,
+    discoverFromApi,
     isLoading,
   };
 };

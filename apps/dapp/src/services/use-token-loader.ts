@@ -37,7 +37,7 @@ export const useTokenLoader = () => {
   const [userTokens, setUserTokens] = useState<Token[]>([]);
   const [payoutTokens, setPayoutTokens] = useState<Token[]>([]);
   const [tbv, setTbv] = useState<number>(0);
-  const { discoverLogo } = useDiscoverToken();
+  const { discoverFromApi } = useDiscoverToken();
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
   const { subgraphTokens, isLoading } = useSubgraph();
 
@@ -102,9 +102,7 @@ export const useTokenLoader = () => {
   useEffect(() => {
     async function fetchExtendedDetails() {
       if (Boolean(tokens.length) && !fetchedExtendedDetails) {
-        const updatedTokens = await Promise.all(
-          tokens.map((t) => discoverLogo(t))
-        );
+        const updatedTokens = await discoverFromApi(tokens);
         setFetchExtended(true);
         setTokens(updatedTokens);
       }
