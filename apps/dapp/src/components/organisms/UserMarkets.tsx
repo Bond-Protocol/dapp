@@ -40,7 +40,7 @@ export const UserMarkets = () => {
           </Button>
           <Button onClick={() => navigate("/create")}>Deploy Market</Button>
         </div>
-        <UserMarketList data={dashboard.currentMarkets} />
+        <UserMarketList />
       </div>
       <UpdateAllowanceModal
         handleClose={() => setUpdating(false)}

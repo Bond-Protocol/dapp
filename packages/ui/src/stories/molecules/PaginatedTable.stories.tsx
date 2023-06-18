@@ -12,12 +12,14 @@ const cols = [
     label: "Bond",
     width: "w-[18%]",
     accessor: "bond",
+    tooltip: "Fml",
     unsortable: true,
   },
   { label: "Bond Price", accessor: "price" },
   {
     label: "Discount",
     accessor: "discount",
+    tooltip: "Fml",
     width: "w-[6%]",
     alignEnd: true,
     Component: DiscountLabel,
@@ -25,11 +27,13 @@ const cols = [
   {
     label: "Max Payout",
     accessor: "maxPayout",
+    tooltip: "Fml",
     alignEnd: true,
   },
   { label: "Vesting", accessor: "vesting" },
   {
     label: "Creation Date",
+    tooltip: "Fml",
     accessor: "creationDate",
     defaultSortOrder: "asc",
   },
@@ -37,6 +41,7 @@ const cols = [
   { label: "Issuer", accessor: "issuer" },
   {
     label: "",
+    tooltip: "Fml",
     accessor: "view",
     width: "w-[7%]",
     alignEnd: true,

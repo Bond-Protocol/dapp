@@ -105,6 +105,7 @@ export const TableHead = (props: TableHeadProps) => {
           <TableHeading
             isSorting={sortField === field.accessor}
             ascending={order === "asc"}
+            tooltip={field.tooltip}
             key={field.accessor}
             alignEnd={field.alignEnd}
             onClick={

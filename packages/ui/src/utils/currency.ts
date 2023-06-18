@@ -1,3 +1,5 @@
+import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
+
 export const usdFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "usd",
@@ -106,6 +108,8 @@ export const dynamicFormatter = (value: string | number, currency = true) => {
   }).format(Number(num));
 };
 
+export const trimToken = (value) => trim(value, calculateTrimDigits(value));
+
 export const trimToLengthSymbol = (num: number) => {
   if (num < 1) return num;
   const symbols = ["", "k", "M", "B", "T", "Q", "GMI"]; // array of symbols to use for each magnitude of number
@@ -125,4 +129,5 @@ export const formatCurrency = {
   usdLongFormatter,
   usdFullFormatter,
   trimToLengthSymbol,
+  trimToken,
 };

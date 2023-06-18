@@ -17,15 +17,18 @@ import {
   trim,
 } from "@bond-protocol/contract-library";
 import { BigNumberish } from "ethers";
-import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
 import { useTokens } from "context";
 import { useAccount } from "wagmi";
+import { dateMath } from "ui";
 
 const currentTime = Math.trunc(Date.now() / 1000);
 
+const hasClosed = (market: Market) =>
+  dateMath.isBefore(new Date(market.conclusion * 1000), new Date()) ||
+  market.hasClosed;
+
 export const useDashboardLoader = () => {
   const { address } = useAccount();
-  const { allMarkets } = useCalculatedMarkets();
 
   const dashboardData = getSubgraphQueries(useGetDashboardDataQuery, {
     address: address || "NO_ADDRESS",
@@ -40,8 +43,7 @@ export const useDashboardLoader = () => {
     []
   );
   const [bondPurchases, setBondPurchases] = useState<BondPurchase[]>([]);
-  const [closedMarkets, setClosedMarkets] = useState<Market[]>([]);
-  const [currentMarkets, setCurrentMarkets] = useState<CalculatedMarket[]>([]);
+  const [allMarkets, setAllMarkets] = useState<Market[]>([]);
   const [bondsIssued, setBondsIssued] = useState(0);
   const [uniqueBonders, setUniqueBonders] = useState(0);
   const [tbv, setTbv] = useState(0);
@@ -49,6 +51,7 @@ export const useDashboardLoader = () => {
 
   useEffect(() => {
     if (isLoading || !address) return;
+
     const ownerBalances = concatSubgraphQueryResultArrays(
       dashboardData,
       "ownerBalances"
@@ -62,10 +65,7 @@ export const useDashboardLoader = () => {
       "bondPurchases"
     );
 
-    const closedMarkets = concatSubgraphQueryResultArrays(
-      dashboardData,
-      "markets"
-    );
+    const markets = concatSubgraphQueryResultArrays(dashboardData, "markets");
     const uniqueBonderCounts = concatSubgraphQueryResultArrays(
       dashboardData,
       "uniqueBonderCounts"
@@ -132,45 +132,31 @@ export const useDashboardLoader = () => {
     };
 
     setBondPurchases(bondPurchases);
-    setClosedMarkets(closedMarkets);
+    setAllMarkets(markets);
+
     uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
 
     fetchErc20OwnerBalances();
   }, [tokens, isLoading, isTestnet]);
 
+  //Calculate user markets TBV and total bonds
   useEffect(() => {
-    const markets = allMarkets.filter(
-      (market: CalculatedMarket) =>
-        address && market.owner.toLowerCase() === address.toLowerCase()
-    );
-    setCurrentMarkets(markets);
-
-    const closedTbv = closedMarkets.reduce((tbv, m) => {
+    const tbv = allMarkets.reduce((tbv, m) => {
       const price = getByAddress(m.quoteToken.address)?.price ?? 0;
       return tbv + Number(m.totalBondedAmount) * price;
     }, 0);
 
-    const tbv =
-      closedTbv +
-      markets.reduce((tbv, m) => {
-        return tbv + m.tbvUsd;
-      }, 0);
-
     setTbv(tbv);
 
-    const bonds = markets.reduce((count, m) => {
-      return count + Number(m.bondsIssued);
-    }, 0);
-
-    const pastBonds = closedMarkets.reduce(
+    const pastBonds = allMarkets.reduce(
       (total, m) => total + m.bondPurchases?.length!,
       0
     );
 
-    setBondsIssued(bonds + pastBonds);
-  }, [allMarkets.length]);
+    setBondsIssued(pastBonds);
+  }, [allMarkets]);
 
-  //Calculates TBV for purchases
+  //Calculates TBV for user purchases
   useEffect(() => {
     const hasPurchases = !!bondPurchases.length;
     const hasPrices = tokens.some((t) => !!t.price);
@@ -184,14 +170,64 @@ export const useDashboardLoader = () => {
     }
   }, [tokens, bondPurchases.length]);
 
-  //Calculates claimable value for purchases
+  //Calculates market stats and adds token details to each market
+  useEffect(() => {
+    const hasMarkets = !!allMarkets.length;
+    const hasPrices = tokens.some((t) => !!t.price);
+
+    if (hasPrices && hasMarkets) {
+      const updated = allMarkets.map((market) => {
+        const quoteToken = getByAddress(market.quoteToken.address);
+        const payoutToken = getByAddress(market.payoutToken.address);
+        const total = market.bondPurchases?.reduce(
+          (all, p, i, arr) => {
+            const quotePrice = quoteToken?.price ?? 0;
+            const payoutPrice = payoutToken?.price ?? 0;
+
+            const totalQuoteUsd = quotePrice * Number(p.amount);
+            const totalPayoutUsd = payoutPrice * Number(p.payout);
+
+            let avgPrice = all.avgPrice + Number(p.purchasePrice);
+
+            if (i === arr.length - 1) {
+              avgPrice = avgPrice / i;
+            }
+
+            return {
+              quoteUsd: all.quoteUsd + totalQuoteUsd,
+              payoutUsd: all.payoutUsd + totalPayoutUsd,
+              quote: all.quote + Number(p.amount),
+              payout: all.payout + Number(p.payout),
+              avgPrice,
+            };
+          },
+          { quoteUsd: 0, payoutUsd: 0, quote: 0, payout: 0, avgPrice: 0 }
+        );
+        return {
+          ...market,
+          total,
+          quoteToken: quoteToken ?? market.quoteToken,
+          payoutToken: payoutToken ?? market.payoutToken,
+        };
+      });
+      //@ts-ignore
+      setAllMarkets(updated);
+    }
+  }, [tokens, allMarkets.length]);
 
   return {
     ownerBalances,
-
     bondPurchases,
-    currentMarkets,
-    closedMarkets,
+    currentMarkets: allMarkets.filter(
+      (m) =>
+        !m.hasClosed &&
+        !dateMath.isBefore(new Date(m.conclusion * 1000), new Date())
+    ),
+    closedMarkets: allMarkets.filter(
+      (m) =>
+        m.hasClosed ||
+        dateMath.isBefore(new Date(m.conclusion * 1000), new Date())
+    ),
     bondsIssued,
     uniqueBonders,
     tbv,

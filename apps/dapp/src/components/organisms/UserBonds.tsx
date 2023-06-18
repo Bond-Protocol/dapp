@@ -18,9 +18,8 @@ export const UserBonds = () => {
           reverse
           label="My TBV"
           tooltip="Total value acquired through bonds in USD"
-        >
-          {formatCurrency.usdFormatter.format(userTbv)}
-        </InfoLabel>
+          value={formatCurrency.usdFormatter.format(userTbv)}
+        />
         <InfoLabel reverse label="Available to Claim">
           {formatCurrency.usdFormatter.format(claimable)}
         </InfoLabel>

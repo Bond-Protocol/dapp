@@ -174,14 +174,7 @@ export const getDashboardData = gql`
         address
       }
     }
-    markets(
-      where: {
-        and: [
-          { owner_contains_nocase: $address }
-          { or: [{ hasClosed: true }, { conclusion_lt: $currentTime }] }
-        ]
-      }
-    ) {
+    markets(where: { and: [{ owner_contains_nocase: $address }] }) {
       id
       network
       marketId
@@ -214,6 +207,7 @@ export const getDashboardData = gql`
         amount
         timestamp
         purchasePrice
+        recipient
       }
     }
     uniqueBonderCounts(where: { id_contains_nocase: $address }) {
