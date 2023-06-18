@@ -1,8 +1,29 @@
 import { useMemo, useState } from "react";
 import { Table, TableProps } from "./Table";
 import { useSorting } from "hooks/use-sorting";
+import { Button, Loading } from "components";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
+import React from "react";
+
+export interface FallbackProps {
+  title?: string;
+  subtext?: string;
+  buttonText?: string;
+  onClick?: () => void;
+}
+
+const Fallback = (props: FallbackProps) => {
+  return (
+    <div className="mt-20 flex w-full flex-col place-items-center">
+      <div className="text-5xl">{props.title}</div>
+      <div className="my-4">{props.subtext}</div>
+      {props.buttonText && (
+        <Button onClick={props.onClick}>{props.buttonText}</Button>
+      )}
+    </div>
+  );
+};
 
 export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   title?: string | JSX.Element;
@@ -10,6 +31,7 @@ export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   hideSearchbar?: boolean;
   className?: string;
   headingClassName?: string;
+  fallback?: FallbackProps | React.ReactNode;
 };
 
 export const PaginatedTable = (props: PaginatedTableProps) => {
@@ -52,6 +74,29 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalRows) : 0;
+
+  const isLoading = props.loading;
+  const isEmpty = !props.loading && !filteredData?.length;
+
+  if (isEmpty) {
+    return (
+      <div className={props.className}>
+        {React.isValidElement(props.fallback) ? (
+          props.fallback
+        ) : (
+          <Fallback {...(props.fallback as FallbackProps)} />
+        )}
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className={props.className}>
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div className={props.className}>

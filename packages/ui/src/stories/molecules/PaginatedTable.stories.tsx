@@ -88,3 +88,26 @@ export const Sorting = {
     defaultSort: "creationDate",
   },
 };
+
+export const Loading = {
+  args: {
+    data: [],
+    columns: cols,
+    defaultSort: "creationDate",
+    loading: true,
+  },
+};
+
+export const Empty = {
+  args: {
+    data: [],
+    columns: cols,
+    defaultSort: "creationDate",
+    loading: false,
+    fallback: {
+      title: "The fallbackooor",
+      subtext: "oooh im falling baaaaaaack",
+      buttonText: "Fallback harder",
+    },
+  },
+};

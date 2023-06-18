@@ -163,13 +163,16 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
   );
 
   return (
-    <div className={props.className}>
+    <div className={"mb-10 " + props.className}>
       <PaginatedTable
         title="Transaction History"
         defaultSort="timestamp"
         loading={query.isLoading}
         columns={marketTxsHistory}
         data={tableData}
+        fallback={{
+          title: "NO TRANSACTIONS YET",
+        }}
       />
     </div>
   );

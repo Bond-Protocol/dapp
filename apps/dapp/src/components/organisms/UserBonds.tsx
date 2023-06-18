@@ -3,7 +3,7 @@ import { formatCurrency, InfoLabel } from "ui";
 import { BondList } from "..";
 
 export const UserBonds = () => {
-  const { ownerBalances, userTbv } = useDashboard();
+  const { isLoading, ownerBalances, userTbv } = useDashboard();
 
   const claimable =
     ownerBalances.reduce((total, bond) => {
@@ -24,7 +24,7 @@ export const UserBonds = () => {
           {formatCurrency.usdFormatter.format(claimable)}
         </InfoLabel>
       </div>
-      <BondList data={ownerBalances} />
+      <BondList isLoading={isLoading} data={ownerBalances} />
     </div>
   );
 };

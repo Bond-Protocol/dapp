@@ -7,6 +7,7 @@ import { meme } from "src/utils/words";
 import { Token } from "@bond-protocol/contract-library";
 import { numericSort } from "services";
 import { useSubgraph } from "hooks/useSubgraph";
+import { environment } from "src/environment";
 
 export const TokenList = () => {
   const { tbv, payoutTokens } = useTokens();
@@ -24,6 +25,7 @@ export const TokenList = () => {
     payoutTokens
       .filter(
         (value: Token) =>
+          !environment.isProduction ||
           value.logoUrl !== "/placeholders/token-placeholder.png"
       )
       .forEach((value: Token) => arr.push(value));

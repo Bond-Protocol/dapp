@@ -58,17 +58,18 @@ export const MarketList: FC<MarketListProps> = ({
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
-  if (isSomeLoading) {
-    return <Loading content={meme()} />;
-  }
-
   return (
     <PaginatedTable
+      loading={isSomeLoading}
       hideSearchbar={props.hideSearchbar}
       filterText={props.filterText}
       defaultSort="discount"
       columns={columns}
       data={tableMarkets}
+      fallback={{
+        title: "NO MARKETS CURRENTLY AVAILABLE",
+        buttonText: "Deploy a new market",
+      }}
     />
   );
 };

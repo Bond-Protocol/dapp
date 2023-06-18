@@ -11,7 +11,6 @@ import { useTestnetMode } from "hooks/useTestnet";
 import { useEffect, useState } from "react";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import {
-  CalculatedMarket,
   calculateTrimDigits,
   getBalance,
   trim,
