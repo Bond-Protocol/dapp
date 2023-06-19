@@ -49,7 +49,7 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
             tickLine={false}
             domain={["auto", "auto"]}
             tickFormatter={(value) =>
-              `${trim(value, calculateTrimDigits(value))}$`
+              `$${trim(value, calculateTrimDigits(value))}`
             }
           />
           <CartesianGrid stroke="#404040" vertical={false} />
