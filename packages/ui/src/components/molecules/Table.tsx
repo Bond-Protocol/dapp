@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { TableHeading, TableCell, Label, LabelProps, Loading } from "..";
+import { TableHeading, TableCell, Label, LabelProps } from "..";
 
 export type SortOrder = "asc" | "desc";
 
@@ -21,10 +21,10 @@ export interface Column<T> {
 
 export interface TableProps {
   columns: Array<Column<any>>;
-  data?: Array<Record<string, Cell>>;
+  data?: Array<any>;
   loading?: boolean;
   defaultSort?: string;
-  fallback?: React.ReactNode;
+  //fallback?: React.ReactNode;
   emptyFallback?: string;
   emptyRows?: number;
   handleSorting: (field: string, sortOrder: string) => void;

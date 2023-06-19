@@ -111,3 +111,20 @@ export const Empty = {
     },
   },
 };
+
+export const Filters = {
+  args: {
+    data: sortableData,
+    columns: cols,
+    defaultSort: "creationDate",
+    loading: false,
+    filters: [
+      {
+        id: "cool",
+        label: "Switch things",
+        type: "switch",
+        handler: () => console.log("handling"),
+      },
+    ],
+  },
+};

@@ -108,7 +108,8 @@ export const dynamicFormatter = (value: string | number, currency = true) => {
   }).format(Number(num));
 };
 
-export const trimToken = (value) => trim(value, calculateTrimDigits(value));
+export const trimToken = (value: any) =>
+  trim(value, calculateTrimDigits(value));
 
 export const trimToLengthSymbol = (num: number) => {
   if (num < 1) return num;

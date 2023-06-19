@@ -1,10 +1,27 @@
 import { useState } from "react";
 import { ClickAwayListener, PopperUnstyled } from "@mui/base";
 import { ReactComponent as FilterIcon } from "../../assets/icons/sliders.svg";
-import { ChainPicker } from "..";
+import { Select, Switch } from "..";
+
+type FilterTypes = "switch" | "select";
+
+export type Filter = {
+  id: string;
+  type: "switch" | "select";
+  label?: string;
+  handler: (arg: any) => Boolean;
+  startActive?: boolean;
+};
 
 export type FilterBoxProps = {
-  fields?: string[];
+  filters: Filter[];
+  activeFilters: Filter[];
+  handleFilterClick: (id: string, args?: any) => void;
+};
+
+const components: Record<FilterTypes, (props: any) => JSX.Element> = {
+  switch: Switch,
+  select: Select,
 };
 
 export const FilterBox = (props: FilterBoxProps) => {
@@ -16,23 +33,35 @@ export const FilterBox = (props: FilterBoxProps) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const onClose = () => {
-    setAnchorEl(null);
-  };
+  const onClose = () => setAnchorEl(null);
 
   return (
     <>
       <div
         id={id}
         onClick={handleClick}
-        className="w-min cursor-pointer rounded-lg border"
+        className="h-10 w-min cursor-pointer rounded-lg border"
       >
         <FilterIcon className="fill-white" />
       </div>
       <PopperUnstyled open={open} anchorEl={anchorEl}>
         <ClickAwayListener onClickAway={onClose}>
           <div className="bg-light-black min-w-[320px] rounded-lg p-4 transition-all">
-            <ChainPicker showTestnets />
+            <div className="mb-3 text-lg">Filters</div>
+            <div className="mb-3">
+              {props.filters.map((f) => {
+                const FilterComponent = components[f.type];
+                return (
+                  <FilterComponent
+                    label={f.label}
+                    defaultChecked={props.activeFilters.some(
+                      (active) => active.id === f.id
+                    )}
+                    onClick={(args: any) => props.handleFilterClick(f.id, args)}
+                  />
+                );
+              })}
+            </div>
           </div>
         </ClickAwayListener>
       </PopperUnstyled>
