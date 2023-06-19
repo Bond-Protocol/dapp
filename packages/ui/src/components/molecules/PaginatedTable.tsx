@@ -163,18 +163,19 @@ export const PaginatedTable = ({
         </div>
 
         <div className="mb-2 flex h-min gap-x-1">
-          {!!filters.length && (
-            <FilterBox
-              handleFilterClick={onClickFilter}
-              activeFilters={activeFilters}
-              filters={filters}
-            />
-          )}
           {!props.hideSearchbar && (
             <SearchBar
               value={text}
               onChange={setText}
               className="max-w-xs justify-self-end"
+            />
+          )}
+
+          {!!filters.length && (
+            <FilterBox
+              handleFilterClick={onClickFilter}
+              activeFilters={activeFilters}
+              filters={filters}
             />
           )}
         </div>

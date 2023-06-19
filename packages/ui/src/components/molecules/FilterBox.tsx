@@ -48,7 +48,7 @@ export const FilterBox = (props: FilterBoxProps) => {
         <ClickAwayListener onClickAway={onClose}>
           <div className="bg-light-black min-w-[320px] rounded-lg p-4 transition-all">
             <div className="mb-3 text-lg">Filters</div>
-            <div className="mb-3">
+            <div className="mb-3 flex flex-col gap-y-2">
               {props.filters.map((f) => {
                 const FilterComponent = components[f.type];
                 return (

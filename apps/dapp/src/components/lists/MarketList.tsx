@@ -20,11 +20,16 @@ type MarketListProps = {
 const filters: Filter[] = [
   {
     id: "discount",
-    label: "Hide Premium bonds",
+    label: "Hide Negative Discounts",
     type: "switch",
-    handler: (market: CalculatedMarket) => {
-      return Number(market.discount) > 0;
-    },
+    handler: (market: CalculatedMarket) =>
+      Number(market.discount) >= 0 || isNaN(market.discount),
+  },
+  {
+    id: "unknown",
+    label: "Hide Unknown Discounts",
+    type: "switch",
+    handler: (market: CalculatedMarket) => !isNaN(market.discount),
   },
 ];
 
