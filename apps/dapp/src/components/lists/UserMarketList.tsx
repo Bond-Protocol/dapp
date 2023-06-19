@@ -213,15 +213,27 @@ const closedColumns = [
 
       if (expired) {
         return (
-          <Button thin size="sm" disabled variant="ghost">
+          <Button
+            thin
+            size="sm"
+            className="w-full opacity-50"
+            disabled
+            variant="ghost"
+          >
             Market Closed
           </Button>
         );
       }
       return (
-        <div className="flex gap-x-2">
+        <div className="flex w-full gap-x-2">
           <CloseMarket market={props.value} />
-          <Button thin size="sm" variant="ghost" onClick={() => goToMarket()}>
+          <Button
+            thin
+            size="sm"
+            className="w-full"
+            variant="ghost"
+            onClick={() => goToMarket()}
+          >
             <div className="flex place-items-center">
               View
               <ArrowIcon
