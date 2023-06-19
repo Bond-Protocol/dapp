@@ -40,7 +40,7 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
   const getValue = (price: string) => {
     price = props.useTokenRatio
       ? trim(price, calculateTrimDigits(Number(price)))
-      : formatCurrency.usdFullFormatter.format(Number(price));
+      : formatCurrency.dynamicFormatter(Number(price));
 
     price = props.useTokenRatio ? price + props.quoteTokenSymbol || "" : price;
 
