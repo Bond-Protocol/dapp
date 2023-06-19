@@ -1,23 +1,32 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { Loading, PaginatedTable } from "ui";
+import { FallbackProps, Filter, PaginatedTable } from "ui";
 import { useMarkets } from "hooks";
-import { toTableData } from "src/utils/table";
-import { meme } from "src/utils/words";
 import {
   marketList as tableColumns,
   tokenMarketList as tokenColumns,
 } from "./columns";
 
 type MarketListProps = {
-  markets?: Map<string, CalculatedMarket>;
+  markets?: CalculatedMarket[];
   token?: string;
   allowManagement?: boolean;
   filter?: string[];
   filterText?: string;
   hideSearchbar?: boolean;
 };
+
+const filters: Filter[] = [
+  {
+    id: "discount",
+    label: "Hide Premium bonds",
+    type: "switch",
+    handler: (market: CalculatedMarket) => {
+      return Number(market.discount) > 0;
+    },
+  },
+];
 
 export const MarketList: FC<MarketListProps> = ({
   allowManagement,
@@ -26,35 +35,13 @@ export const MarketList: FC<MarketListProps> = ({
 }) => {
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
+  const markets = props.markets || allMarkets;
 
   const columns = token ? tokenColumns : tableColumns;
 
-  const markets = props.markets || allMarkets;
-
-  const filteredMarkets = markets
-    // @ts-ignore
-    .filter((m: CalculatedMarket) =>
-      token ? m.payoutToken.address === token : true
-    )
-    .sort((a: CalculatedMarket, b: CalculatedMarket) => {
-      let aDiscount = a.discount;
-      let bDiscount = b.discount;
-
-      if (isNaN(aDiscount) || aDiscount === Infinity || aDiscount === -Infinity)
-        aDiscount = 0;
-      if (isNaN(bDiscount) || bDiscount === Infinity || bDiscount === -Infinity)
-        bDiscount = 0;
-      return bDiscount - aDiscount;
-    });
-
-  const tableMarkets = filteredMarkets
-    .map((m: CalculatedMarket) => toTableData(columns, m))
-    .map((row: any) => {
-      row["view"].onClick = (path: string) => navigate(path);
-      row.onClick = () =>
-        navigate(`/market/${row?.view?.subtext}/${row?.view.value}`);
-      return row;
-    });
+  const filteredMarkets = markets.filter((m: CalculatedMarket) =>
+    token ? m.payoutToken.address === token : true
+  );
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
@@ -65,10 +52,15 @@ export const MarketList: FC<MarketListProps> = ({
       filterText={props.filterText}
       defaultSort="discount"
       columns={columns}
-      data={tableMarkets}
+      filters={filters}
+      data={filteredMarkets}
+      onClickRow={(market: CalculatedMarket) =>
+        navigate(`/market/${market.chainId}/${market.marketId}`)
+      }
       fallback={{
         title: "NO MARKETS CURRENTLY AVAILABLE",
         buttonText: "Deploy a new market",
+        onClick: () => navigate("/create"),
       }}
     />
   );

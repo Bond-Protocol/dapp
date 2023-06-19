@@ -16,6 +16,8 @@ export const UserMarkets = () => {
     ?.map((market) => {
       //@ts-ignore
       const token: AllowanceToken = market.payoutToken;
+
+      //@ts-ignore
       token.allowance = market.ownerAllowance;
       token.auctioneer = market.auctioneer;
       return token;
@@ -26,11 +28,13 @@ export const UserMarkets = () => {
     <>
       <div>
         <div className="flex gap-x-4">
-          <InfoLabel label="Total Bonded Value">
+          <InfoLabel reverse label="Total Bonded Value">
             {formatCurrency.usdLongFormatter.format(dashboard.tbv)}
           </InfoLabel>
-          <InfoLabel label="Bonds Issued">{dashboard.bondsIssued}</InfoLabel>
-          <InfoLabel label="Unique Bonders">
+          <InfoLabel reverse label="Bonds Issued">
+            {dashboard.bondsIssued}
+          </InfoLabel>
+          <InfoLabel reverse label="Unique Bonders">
             {dashboard.uniqueBonders}
           </InfoLabel>
         </div>

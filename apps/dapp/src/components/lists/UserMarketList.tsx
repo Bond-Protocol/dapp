@@ -1,9 +1,9 @@
 import { CalculatedMarket, CHAINS } from "@bond-protocol/contract-library";
-import { toTableData } from "src/utils/table";
 import {
   Button,
   Column,
   dateMath,
+  Filter,
   formatCurrency,
   formatDate,
   PaginatedTable,
@@ -15,12 +15,13 @@ import { useNavigate } from "react-router-dom";
 import { useDashboard } from "context/dashboard-context";
 import { ethers } from "ethers";
 
-const endColumn = {
+const endColumn: Column<CalculatedMarket> = {
   label: "End Date",
   accessor: "conclusion",
   formatter: (market) => {
     return {
       value: formatDate.short(new Date(Number(market.conclusion) * 1000)),
+      sortValue: market.conclusion,
     };
   },
 };
@@ -126,9 +127,9 @@ const closedColumns = [
     label: "Paid",
     accessor: "payout",
     formatter: (market: any) => {
-      const payout = formatCurrency.longFormatter.format(market.total.payout);
+      const payout = formatCurrency.longFormatter.format(market.total?.payout);
       const usdPayout = formatCurrency.usdFormatter.format(
-        market.total.payoutUsd
+        market.total?.payoutUsd
       );
       return {
         value: payout + " " + market.payoutToken.symbol,
@@ -154,6 +155,7 @@ const closedColumns = [
   {
     label: "Capacity",
     accessor: "capacity",
+
     formatter: (market: any) => {
       const capacityToken = market.capacityInQuote
         ? market.quoteToken
@@ -164,22 +166,23 @@ const closedColumns = [
         capacityToken.decimals
       );
 
-      const key = market.capacityInQuote ? "quote" : "payout";
-      const percentage = (market.total[key] / Number(capacity)) * 100;
+      //const key = market.capacityInQuote ? "quote" : "payout";
+      //const percentage = (market.total[key] / Number(capacity)) * 100;
 
       return {
         value: `${formatCurrency.dynamicFormatter(
           capacity.toString(),
           false
         )} ${capacityToken.symbol}`,
-        subtext: percentage.toFixed(2) + "%",
+        //subtext: percentage.toFixed(2) + "%",
       };
     },
   },
   {
     label: "Bonds",
     accessor: "bonds",
-    tooltip: "Total bonds purchases/ Total unique addresses",
+    width: "w-[8%]",
+    tooltip: "Total bonds acquired / by unique addresses",
     formatter: (market: any) => {
       const total = market.bondPurchases.length;
       const unique = new Set(
@@ -203,8 +206,8 @@ const closedColumns = [
     },
     Component: (props: any) => {
       const navigate = useNavigate();
-      const { chainId, marketId, hasClosed, conclusion } = props.value;
       const goToMarket = () => navigate(`/market/${chainId}/${marketId}`);
+      const { chainId, marketId, hasClosed, conclusion } = props.value;
       const expired =
         dateMath.isBefore(new Date(conclusion * 1000), new Date()) || hasClosed;
 
@@ -234,34 +237,40 @@ const closedColumns = [
   },
 ];
 
-export const UserMarketList = ({ open = [], closed = [], ...props }: any) => {
+export const UserMarketList = () => {
+  const navigate = useNavigate();
   const dashboard = useDashboard();
-  const openMarkets = dashboard.currentMarkets.map((b: any) =>
-    toTableData(closedColumns, b)
-  );
 
-  const closedMarkets = dashboard.closedMarkets.map((b: any) =>
-    toTableData(closedColumns, b)
-  );
+  const filters: Array<Filter> = [
+    {
+      id: "status",
+      type: "switch",
+      label: "Hide Closed Markets",
+      startActive: dashboard.currentMarkets.length > 0,
+      handler: (market) => {
+        return (
+          !dateMath.isBefore(new Date(market.conclusion * 1000), new Date()) &&
+          !market.hasClosed
+        );
+      },
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-y-20">
-      {openMarkets.length > 0 && (
+      {!!dashboard.allMarkets.length && (
         <PaginatedTable
-          title="Open Markets"
+          title="Markets"
           defaultSort="conclusion"
           columns={closedColumns}
-          data={openMarkets}
-          Fallback={props.Fallback}
-        />
-      )}
-      {closedMarkets.length > 0 && (
-        <PaginatedTable
-          title="Closed Markets"
-          defaultSort="conclusion"
-          columns={closedColumns}
-          data={closedMarkets}
-          Fallback={props.Fallback}
+          data={dashboard.allMarkets}
+          filters={filters}
+          //@ts-ignore
+          fallback={{
+            title: "No markets to show",
+            buttonText: "Deploy a new Market",
+            onClick: () => navigate("/create"),
+          }}
         />
       )}
     </div>

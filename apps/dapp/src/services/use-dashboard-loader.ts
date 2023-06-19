@@ -217,6 +217,7 @@ export const useDashboardLoader = () => {
   return {
     ownerBalances,
     bondPurchases,
+    allMarkets,
     currentMarkets: allMarkets.filter(
       (m) =>
         !m.hasClosed &&

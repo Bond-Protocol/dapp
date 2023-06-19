@@ -4,7 +4,6 @@ import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
 import { ContractTransaction } from "ethers";
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
-import { toTableData } from "src/utils/table";
 import { useNavigate } from "react-router-dom";
 
 export const tableColumns: Array<Column<any>> = [
@@ -110,7 +109,6 @@ export const tableColumns: Array<Column<any>> = [
 ];
 
 export const BondList = ({ data = [], ...props }: any) => {
-  const tableData = data.map((b: any) => toTableData(tableColumns, b));
   const navigate = useNavigate();
 
   return (
@@ -119,9 +117,8 @@ export const BondList = ({ data = [], ...props }: any) => {
         title={<div />}
         defaultSort="vesting"
         columns={tableColumns}
-        data={tableData}
+        data={data}
         loading={props.isLoading}
-        //@ts-ignore
         fallback={{
           title: "YOU HAVE NO PENDING BONDS",
           onClick: () => navigate("/markets"),

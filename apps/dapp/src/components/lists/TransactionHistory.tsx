@@ -6,7 +6,6 @@ import {
 } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
 import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
-import { toTableData } from "src/utils/table";
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useTokens } from "hooks";
@@ -157,8 +156,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
           return { ...p, payoutPrice, txUrl, addressUrl, market: props.market };
         })
         .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
-        .sort((a, b) => b.timestamp - a.timestamp)
-        .map((p) => toTableData(marketTxsHistory, p)),
+        .sort((a, b) => b.timestamp - a.timestamp),
     [tokens, data]
   );
 
@@ -170,6 +168,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         loading={query.isLoading}
         columns={marketTxsHistory}
         data={tableData}
+        //@ts-ignore
         fallback={{
           title: "NO TRANSACTIONS YET",
         }}
