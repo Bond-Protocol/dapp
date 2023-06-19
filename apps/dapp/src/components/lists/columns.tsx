@@ -12,6 +12,7 @@ import {
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
+import { useNavigate } from "react-router-dom";
 
 export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",
@@ -181,27 +182,31 @@ export const viewColumn: Column<CalculatedMarket> = {
   width: "w-[10%]",
   unsortable: true,
   formatter: (market) => ({ value: market.marketId, subtext: market.chainId }),
-  Component: (props: any) => (
-    <Button
-      thin
-      icon
-      size="sm"
-      variant="ghost"
-      className="mr-4"
-      onClick={(e: React.BaseSyntheticEvent) => {
-        e.stopPropagation();
-        e.preventDefault();
-        const chainId = CHAINS.get(props.subtext)?.chainId;
-        const marketId = props.value; //TODO: (afx) improve
-        props.onClick(`/market/${chainId}/${marketId}`);
-      }}
-    >
-      <div className="flex place-items-center">
-        View
-        <ArrowIcon height={16} width={16} className="my-auto rotate-180" />
-      </div>
-    </Button>
-  ),
+  Component: (props: any) => {
+    const navigate = useNavigate();
+
+    return (
+      <Button
+        thin
+        icon
+        size="sm"
+        variant="ghost"
+        className="mr-4"
+        onClick={(e: React.BaseSyntheticEvent) => {
+          e.stopPropagation();
+          e.preventDefault();
+          const chainId = props.subtext;
+          const marketId = props.value; //TODO: (afx) improve
+          navigate(`/market/${chainId}/${marketId}`);
+        }}
+      >
+        <div className="flex place-items-center">
+          View
+          <ArrowIcon height={16} width={16} className="my-auto rotate-180" />
+        </div>
+      </Button>
+    );
+  },
 };
 
 export const base = [bondColumn, bondPrice, discountColumn, maxPayout, vesting];

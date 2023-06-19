@@ -4,31 +4,30 @@ export const useSorting = (
   rawData?: Array<Record<string, any>>
 ): [Array<Record<string, any>>, (field: string, order: string) => void] => {
   const [data, setData] = useState(rawData);
+  const [lastField, setLastField] = useState<string>();
+  const [lastOrder, setLastOrder] = useState<string>();
 
   useEffect(() => {
-    setData(rawData);
+    if (lastField && lastOrder && rawData) {
+      const sorted = handleSorting(lastField, lastOrder, rawData);
+      setData(sorted);
+    } else {
+      setData(rawData);
+    }
   }, [rawData, rawData?.length]);
 
-  const handleSorting = (sortField: string, sortOrder: string) => {
+  const sort = (sortField: string, sortOrder: string) => {
     if (sortField) {
-      const sorted =
-        data &&
-        [...data].sort((a, b) => {
-          let current = a[sortField]?.sortValue || a[sortField]?.value;
-          let next = b[sortField]?.sortValue || b[sortField]?.value;
-
-          return (
-            current.toString().localeCompare(next.toString(), "en", {
-              numeric: true,
-            }) * (sortOrder === "asc" ? 1 : -1)
-          );
-        });
-      setData(sorted);
+      if (data) {
+        const sorted = handleSorting(sortField, sortOrder, data!);
+        setData(sorted);
+        setLastField(sortField);
+        setLastOrder(sortOrder);
+      }
     }
   };
 
-  //@ts-ignore
-  return [data, handleSorting];
+  return [data!, sort];
 };
 
 export const handleSorting = (

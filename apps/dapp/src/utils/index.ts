@@ -4,6 +4,5 @@ export * from "./formatSymbolForWallet";
 export * from "./generate-fetcher";
 export * from "./getLocale";
 export * from "./getTimestamp";
-export * from "./mock-data";
 export * from "./trim";
 export * from "./getClosest";

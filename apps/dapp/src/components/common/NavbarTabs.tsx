@@ -10,14 +10,17 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
   const location = useLocation();
 
   const tabs = [
-    { label: "Markets", path: "/markets" },
-    { label: "Tokens", path: "/tokens" },
-    { label: "Dashboard", path: "/dashboard" },
+    { label: "Markets", path: "/markets", group: "market" },
+    { label: "Tokens", path: "/tokens", group: "token" },
+    { label: "Dashboard", path: "/dashboard", group: "dashboard" },
   ];
 
-  const isSelected = (path: string) => {
+  const isSelected = (path: string, group: string) => {
     if (path === "/tokens" && location.pathname === "/") return true;
-    return path.substring(1) === location.pathname.split("/")[1];
+    return (
+      path.substring(1) === location.pathname.split("/")[1] ||
+      location.pathname.includes(group)
+    );
   };
 
   return (
@@ -26,7 +29,7 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
         <div
           key={i}
           className={`font-fraktion font-bold uppercase hover:cursor-pointer ${
-            isSelected(tab.path) ? "text-light-secondary" : ""
+            isSelected(tab.path, tab.group) ? "text-light-secondary" : ""
           }`}
           onClick={() => navigate(tab.path)}
         >

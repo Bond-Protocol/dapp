@@ -3,7 +3,7 @@ import { formatCurrency, InfoLabel } from "ui";
 import { BondList } from "..";
 
 export const UserBonds = () => {
-  const { ownerBalances, userTbv } = useDashboard();
+  const { isLoading, ownerBalances, userTbv } = useDashboard();
 
   const claimable =
     ownerBalances.reduce((total, bond) => {
@@ -18,14 +18,13 @@ export const UserBonds = () => {
           reverse
           label="My TBV"
           tooltip="Total value acquired through bonds in USD"
-        >
-          {formatCurrency.usdFormatter.format(userTbv)}
-        </InfoLabel>
+          value={formatCurrency.usdFormatter.format(userTbv)}
+        />
         <InfoLabel reverse label="Available to Claim">
           {formatCurrency.usdFormatter.format(claimable)}
         </InfoLabel>
       </div>
-      <BondList data={ownerBalances} />
+      <BondList isLoading={isLoading} data={ownerBalances} />
     </div>
   );
 };
