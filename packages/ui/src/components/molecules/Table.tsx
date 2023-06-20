@@ -21,10 +21,11 @@ export interface Column<T> {
 
 export interface TableProps {
   columns: Array<Column<any>>;
-  data?: Array<Record<string, Cell>>;
+  data?: Array<any>;
   loading?: boolean;
   defaultSort?: string;
-  Fallback?: (props?: any) => JSX.Element;
+  //fallback?: React.ReactNode;
+  emptyFallback?: string;
   emptyRows?: number;
   handleSorting: (field: string, sortOrder: string) => void;
 }
@@ -38,28 +39,29 @@ export const Table = ({ data = [], ...props }: TableProps) => {
   const handleSorting = props.handleSorting || (() => {});
 
   return (
-    <table className="w-full table-fixed">
-      <colgroup>
-        {props.columns.map((c, i) => (
-          <col key={i} className={c.width && c.width} />
-        ))}
-      </colgroup>
-      <TableHead
-        columns={props.columns}
-        handleSorting={handleSorting}
-        defaultSortField={props.defaultSort}
-        defaultSortOrder={defaultSortOrder}
-        hasData={!!data}
-      />
-      {props.loading && props.Fallback && <props.Fallback />}
-      {!props.loading && (
-        <TableBody
-          emptyRows={props.emptyRows}
+    <>
+      <table className="w-full table-fixed">
+        <colgroup>
+          {props.columns.map((c, i) => (
+            <col key={i} className={c.width && c.width} />
+          ))}
+        </colgroup>
+        <TableHead
           columns={props.columns}
-          rows={data}
+          handleSorting={handleSorting}
+          defaultSortField={props.defaultSort}
+          defaultSortOrder={defaultSortOrder}
+          hasData={!!data}
         />
-      )}
-    </table>
+        {!props.loading && (
+          <TableBody
+            emptyRows={props.emptyRows}
+            columns={props.columns}
+            rows={data}
+          />
+        )}
+      </table>
+    </>
   );
 };
 
@@ -105,6 +107,8 @@ export const TableHead = (props: TableHeadProps) => {
           <TableHeading
             isSorting={sortField === field.accessor}
             ascending={order === "asc"}
+            //@ts-ignore
+            tooltip={field.tooltip}
             key={field.accessor}
             alignEnd={field.alignEnd}
             onClick={

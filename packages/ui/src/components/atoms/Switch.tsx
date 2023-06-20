@@ -17,11 +17,11 @@ const slotProps = {
   },
   track: ({ checked }: { checked: boolean }) => {
     const checkedStyle = checked
-      ? "bg-light-secondary border-light-primary"
-      : "";
+      ? "bg-light-secondary border-transparent"
+      : "border-white";
 
     return {
-      className: `bg-transparent rounded-full border border-white block absolute w-full h-full transtion-all duration-300 ${checkedStyle}`,
+      className: `rounded-full border block absolute w-full h-full transtion-all duration-300 ${checkedStyle}`,
     };
   },
 };

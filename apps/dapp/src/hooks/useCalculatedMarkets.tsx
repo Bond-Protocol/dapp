@@ -77,9 +77,21 @@ export function useCalculatedMarkets() {
     if (!isCalculatingAll && Object.keys(tokens).length > 0) {
       const markets = calculateAllMarkets
         .filter((result) => result && result?.data)
-        .map((r) => r.data);
+        .map((r) => r.data)
+        //@ts-ignore
+        .map((market: CalculatedMarket) => {
+          const quoteToken =
+            getByAddress(market.quoteToken.address) || market.quoteToken;
+          const payoutToken =
+            getByAddress(market.payoutToken.address) || market.payoutToken;
 
-      // @ts-ignore
+          return {
+            ...market,
+            quoteToken,
+            payoutToken,
+          };
+        });
+
       setCalculatedMarkets(markets);
     }
   }, [calculateAllMarkets, tokens]);
@@ -101,13 +113,6 @@ export function useCalculatedMarkets() {
           const payoutToken =
             getByAddress(market.payoutToken.address) || market.payoutToken;
 
-          if (!getByAddress(market.quoteToken.address)) {
-            console.log(market.quoteToken);
-          }
-          if (!getByAddress(market.payoutToken.address)) {
-            console.log(market.payoutToken);
-          }
-
           return {
             ...market,
             quoteToken,
@@ -116,10 +121,9 @@ export function useCalculatedMarkets() {
         }
       );
 
-      //@ts-ignore for now oke
       setCalculatedMarkets(updatedMarkets);
     }
-  }, [calculatedMarkets.length, tokens]);
+  }, [calculatedMarkets.length, tokens, fetchedExtendedDetails]);
 
   const isLoading = {
     market: isMarketLoading,

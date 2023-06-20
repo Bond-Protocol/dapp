@@ -10,7 +10,7 @@ export const Dashboard = () => {
   const tabs = [{ label: "My bonds" }, { label: "My Markets" }];
 
   const hasMarkets =
-    !!dashboard.currentMarkets.length || !dashboard.closedMarkets.length;
+    !!dashboard.currentMarkets.length || !!dashboard.closedMarkets.length;
 
   return (
     <>

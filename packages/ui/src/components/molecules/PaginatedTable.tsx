@@ -1,8 +1,42 @@
-import { useMemo, useState } from "react";
-import { Table, TableProps } from "./Table";
+import React, { useMemo, useState } from "react";
+import { Cell, Column, Table, TableProps } from "./Table";
 import { useSorting } from "hooks/use-sorting";
+import { Button, Filter, FilterBox, Loading } from "components";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
+
+export const toValue = (value: any) => ({ value });
+export const toTableData = (
+  columns: Column<any>[],
+  data: any
+): Record<string, Cell> => {
+  return columns.reduce((acc, { accessor, formatter }) => {
+    const value = String(data[accessor]);
+    return {
+      ...acc,
+      [accessor]: formatter ? formatter(data) : toValue(value),
+    };
+  }, {});
+};
+
+export interface FallbackProps {
+  title?: string;
+  subtext?: string;
+  buttonText?: string;
+  onClick?: () => void;
+}
+
+const Fallback = (props: FallbackProps) => {
+  return (
+    <div className="mt-20 flex w-full flex-col place-items-center">
+      <div className="text-5xl">{props.title}</div>
+      <div className="my-4">{props.subtext}</div>
+      {props.buttonText && (
+        <Button onClick={props.onClick}>{props.buttonText}</Button>
+      )}
+    </div>
+  );
+};
 
 export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   title?: string | JSX.Element;
@@ -10,13 +44,52 @@ export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   hideSearchbar?: boolean;
   className?: string;
   headingClassName?: string;
+  fallback?: FallbackProps;
+  filters?: Filter[];
+  onClickRow?: (args: any) => void;
 };
 
-export const PaginatedTable = (props: PaginatedTableProps) => {
-  const [data, handleSorting] = useSorting(props.data);
+export const PaginatedTable = ({
+  filters = [],
+  ...props
+}: PaginatedTableProps) => {
+  const [activeFilters, setActiveFilters] = useState<Filter[]>(
+    filters.filter((f) => f.startActive)
+  );
+
+  const tableData = useMemo(
+    () =>
+      props.data
+        ?.filter((d) => activeFilters?.every((f) => f.handler(d)))
+        ?.map((d) => {
+          const row = toTableData(props.columns, d);
+          if (props.onClickRow) {
+            //@ts-ignore
+            row.onClick = () => props.onClickRow(d);
+          }
+          return row;
+        }),
+
+    [props.data, props.columns, activeFilters.length]
+  );
+
+  const [data, handleSorting] = useSorting(tableData);
+
   const [text, setText] = useState("");
   const [page, setPage] = useState(0);
+
   const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const onClickFilter = (id: string) => {
+    const filter = filters.find((f) => f.id === id)!;
+    const activeFilter = activeFilters.find((f) => f.id === id);
+
+    if (activeFilter) {
+      setActiveFilters(activeFilters.filter((f) => f.id !== id));
+    } else {
+      setActiveFilters([...activeFilters, filter]);
+    }
+  };
 
   const handleChangePage = (newPage: number) => {
     setPage(newPage);
@@ -27,17 +100,14 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
     setPage(0);
   };
 
-  const filteredData = useMemo(() => {
-    const textToFilter = props.filterText ?? text;
+  const textToFilter = props.filterText ?? text;
+  const filteredData = data?.filter((r) =>
+    Object.values(r).some((v) => {
+      const value = v?.searchValue || v?.value;
 
-    return data?.filter((r) =>
-      Object.values(r).some((v) => {
-        const value = v?.searchValue || v?.value;
-
-        return String(value).toLowerCase().includes(textToFilter.toLowerCase());
-      })
-    );
-  }, [text, props.filterText, data]);
+      return String(value).toLowerCase().includes(textToFilter.toLowerCase());
+    })
+  );
 
   const totalRows = filteredData?.length || 0;
   const totalPages = Math.ceil(totalRows / Math.abs(rowsPerPage));
@@ -53,6 +123,30 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalRows) : 0;
 
+  const isLoading = props.loading;
+  const isEmpty =
+    !props.loading && !filteredData?.length && activeFilters.length === 0;
+
+  if (isEmpty) {
+    return (
+      <div className={props.className}>
+        {React.isValidElement(props.fallback) ? (
+          props.fallback
+        ) : (
+          <Fallback {...(props.fallback as FallbackProps)} />
+        )}
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className={props.className}>
+        <Loading />
+      </div>
+    );
+  }
+
   return (
     <div className={props.className}>
       <div
@@ -66,12 +160,20 @@ export const PaginatedTable = (props: PaginatedTableProps) => {
           )}
         </div>
 
-        <div>
+        <div className="mb-2 flex h-min gap-x-1">
           {!props.hideSearchbar && (
             <SearchBar
               value={text}
               onChange={setText}
-              className="mb-2 max-w-xs justify-self-end"
+              className="max-w-xs justify-self-end"
+            />
+          )}
+
+          {!!filters.length && (
+            <FilterBox
+              handleFilterClick={onClickFilter}
+              activeFilters={activeFilters}
+              filters={filters}
             />
           )}
         </div>

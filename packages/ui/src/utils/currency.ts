@@ -1,3 +1,5 @@
+import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
+
 export const usdFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "usd",
@@ -74,37 +76,41 @@ export const dynamicFormatter = (value: string | number, currency = true) => {
   let num = String(value);
 
   if (!num?.split) return num;
-  let maximumFractionDigits = 0;
+  let totalDigits = 0;
   let [single, decimal] = num.split(".").map((n) => parseFloat(n));
 
   if (decimal > 1000) {
-    maximumFractionDigits = 6;
+    totalDigits = 7;
   }
 
   if (decimal > 100) {
-    maximumFractionDigits = 5;
+    totalDigits = 6;
   }
 
   if (single > 0) {
-    maximumFractionDigits = 2;
+    totalDigits = 2;
   }
 
   if (single > 1000) {
-    maximumFractionDigits = 0;
+    totalDigits = 0;
   }
 
   if (currency) {
     return new Intl.NumberFormat("en-us", {
       style: "currency",
       currency: "usd",
-      maximumFractionDigits,
+      minimumFractionDigits: totalDigits,
+      maximumFractionDigits: totalDigits,
     }).format(Number(num));
   }
 
   return new Intl.NumberFormat("en-us", {
-    maximumFractionDigits,
+    maximumFractionDigits: totalDigits,
   }).format(Number(num));
 };
+
+export const trimToken = (value: any) =>
+  trim(value, calculateTrimDigits(value));
 
 export const trimToLengthSymbol = (num: number) => {
   if (num < 1) return num;
@@ -125,4 +131,5 @@ export const formatCurrency = {
   usdLongFormatter,
   usdFullFormatter,
   trimToLengthSymbol,
+  trimToken,
 };

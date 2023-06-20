@@ -4,7 +4,7 @@ import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
 import { ContractTransaction } from "ethers";
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
-import { toTableData } from "src/utils/table";
+import { useNavigate } from "react-router-dom";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -66,10 +66,11 @@ export const tableColumns: Array<Column<any>> = [
       const { switchNetwork } = useSwitchNetwork();
       const { data: signer } = useSigner();
 
-      const isCorrectNetwork = Number(props?.data?.bond.chainId) === chain?.id;
+      const isCorrectNetwork =
+        Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(Number(props?.data?.bondToken.chainId));
+        switchNetwork?.(Number(props?.data?.bond?.bondToken?.chainId));
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {
@@ -109,7 +110,7 @@ export const tableColumns: Array<Column<any>> = [
 ];
 
 export const BondList = ({ data = [], ...props }: any) => {
-  const tableData = data.map((b: any) => toTableData(tableColumns, b));
+  const navigate = useNavigate();
 
   return (
     <div className="mt-10">
@@ -117,8 +118,13 @@ export const BondList = ({ data = [], ...props }: any) => {
         title={<div />}
         defaultSort="vesting"
         columns={tableColumns}
-        data={tableData}
-        Fallback={props.Fallback}
+        data={data}
+        loading={props.isLoading}
+        fallback={{
+          title: "YOU HAVE NO PENDING BONDS",
+          onClick: () => navigate("/markets"),
+          buttonText: "Explore Bond Markets",
+        }}
       />
     </div>
   );

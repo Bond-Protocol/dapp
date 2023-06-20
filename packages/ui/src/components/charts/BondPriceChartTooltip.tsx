@@ -38,10 +38,11 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
   const initialPrice = data?.payload?.initialPrice;
 
   const getValue = (price: string) => {
-    price = trim(price, calculateTrimDigits(Number(price))) + "$";
     price = props.useTokenRatio
-      ? price.replace("$", props.quoteTokenSymbol || "")
-      : price;
+      ? trim(price, calculateTrimDigits(Number(price)))
+      : formatCurrency.dynamicFormatter(Number(price));
+
+    price = props.useTokenRatio ? price + props.quoteTokenSymbol || "" : price;
 
     return price;
   };

@@ -31,7 +31,12 @@ export const CloseMarket = (props: CloseMarketProps) => {
 
   return (
     <>
-      <Button thin size="sm" onClick={() => setClosing(true)}>
+      <Button
+        className="w-full"
+        thin
+        size="sm"
+        onClick={() => setClosing(true)}
+      >
         Close
       </Button>
 
