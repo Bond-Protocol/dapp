@@ -14,7 +14,7 @@ export const toTableData = (
     const value = String(data[accessor]);
     return {
       ...acc,
-      [accessor]: formatter ? formatter(data) : toValue(value),
+      [accessor]: formatter ? { data, ...formatter(data) } : toValue(value),
     };
   }, {});
 };
