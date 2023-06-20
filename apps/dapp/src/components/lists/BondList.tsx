@@ -66,10 +66,11 @@ export const tableColumns: Array<Column<any>> = [
       const { switchNetwork } = useSwitchNetwork();
       const { data: signer } = useSigner();
 
-      const isCorrectNetwork = Number(props?.data?.bond.chainId) === chain?.id;
+      const isCorrectNetwork =
+        Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(Number(props?.data?.bondToken.chainId));
+        switchNetwork?.(Number(props?.data?.bond?.bondToken?.chainId));
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {

@@ -1,10 +1,9 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Cell, Column, Table, TableProps } from "./Table";
 import { useSorting } from "hooks/use-sorting";
-import { Button, FilterBox, Loading, Filter } from "components";
+import { Button, Filter, FilterBox, Loading } from "components";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
-import React from "react";
 
 export const toValue = (value: any) => ({ value });
 export const toTableData = (
@@ -100,7 +99,6 @@ export const PaginatedTable = ({
     setRowsPerPage(rowsPerPage === -1 ? 10 : -1);
     setPage(0);
   };
-  console.log({ data });
 
   const textToFilter = props.filterText ?? text;
   const filteredData = data?.filter((r) =>
