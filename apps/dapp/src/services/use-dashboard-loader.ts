@@ -214,6 +214,22 @@ export const useDashboardLoader = () => {
     }
   }, [tokens, allMarkets.length]);
 
+  //Calculates TBV for purchases
+  useEffect(() => {
+    const hasPurchases = !!bondPurchases.length;
+    const hasPrices = tokens.some((t) => !!t.price);
+
+    if (hasPrices && hasPurchases) {
+      const tbv = bondPurchases.reduce((tbv, purchase) => {
+        const price = getByAddress(purchase.payoutToken.address)?.price ?? 0;
+        return tbv + price * purchase.payout;
+      }, 0);
+      setUserTbv(tbv);
+    }
+  }, [tokens, bondPurchases.length]);
+
+  //Calculates claimable value for purchases
+
   return {
     ownerBalances,
     bondPurchases,
