@@ -19,6 +19,7 @@ export const UserMarkets = () => {
       //@ts-ignore TODO: IMPROVE
       const token: AllowanceToken = market.payoutToken;
       const calculatedMarket = markets.allMarkets.find(
+        //@ts-ignore
         (m) => m?.id === market.id
       );
 
