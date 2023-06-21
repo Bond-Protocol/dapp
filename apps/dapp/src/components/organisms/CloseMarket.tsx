@@ -1,4 +1,5 @@
 import { CalculatedMarket, closeMarket } from "@bond-protocol/contract-library";
+import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useState } from "react";
 import { Button, CloseMarketDialog, Modal, TransactionHashDialog } from "ui";
 import { useSigner } from "wagmi";
@@ -41,17 +42,16 @@ export const CloseMarket = (props: CloseMarketProps) => {
         Close
       </Button>
 
-      <Modal
-        title={submitted ? "Transaction Pending" : "Close Market"}
+      <TransactionWizard
         open={closing}
-        onClickClose={() => setClosing(false)}
-      >
-        {submitted ? (
-          <TransactionHashDialog hash={txHash!} />
-        ) : (
+        chainId={5} // FIIIIIIIIIIIIIIIIIIIIIIX
+        onSubmit={handleClose}
+        closeModal={() => setClosing(false)}
+        initialTitle="Close Market"
+        InitialDialog={(args) => (
           <CloseMarketDialog market={props.market} handleClose={handleClose} />
         )}
-      </Modal>
+      />
     </>
   );
 };
