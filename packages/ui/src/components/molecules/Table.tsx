@@ -6,6 +6,7 @@ export type SortOrder = "asc" | "desc";
 export interface Cell extends LabelProps {
   sortValue?: string | number;
   searchValue?: string | number;
+  data?: any;
 }
 
 export interface Column<T> {
