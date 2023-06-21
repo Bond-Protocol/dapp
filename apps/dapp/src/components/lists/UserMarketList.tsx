@@ -16,13 +16,14 @@ import { CloseMarket } from "components";
 import { useNavigate } from "react-router-dom";
 import { useDashboard } from "context/dashboard-context";
 import { ethers } from "ethers";
-import { Market } from "src/generated";
+import { Market } from "src/generated/graphql";
 
 const hasMarketExpiredOrClosed = ({ conclusion, hasClosed }: Market) => {
   return (
     dateMath.isBefore(new Date(conclusion * 1000), new Date()) || hasClosed
   );
 };
+
 const endColumn: Column<CalculatedMarket> = {
   label: "End Date",
   accessor: "conclusion",
