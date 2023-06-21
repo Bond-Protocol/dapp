@@ -24,6 +24,7 @@ export const CloseMarket = (props: CloseMarketProps) => {
         setClosing(false);
       }
     } catch (e) {
+      console.log({ error: e });
       console.error("Something went wrong closing a market", e);
       setSubmitted(false);
     }
