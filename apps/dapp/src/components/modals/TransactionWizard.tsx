@@ -12,24 +12,26 @@ import { getBlockExplorer } from "@bond-protocol/contract-library";
 
 export type TransactionWizardProps = {
   open: boolean;
-  onSubmit: () => Promise<ContractTransaction>;
-  closeModal: () => void;
   chainId: string;
+  onClose: () => void;
+  onSubmit: () => Promise<ContractTransaction>;
   InitialDialog: (props: any) => JSX.Element;
-  initialTitle: string;
+  SuccessDialog: (props: any) => JSX.Element;
+  initialTitle?: string;
+  successTitle?: string;
+  titles?: Partial<Record<TxStatus, string>>;
 } & Partial<TransactionHashDialogProps>;
-
-const defaultTitles = [
-  "Confirm Transaction",
-  "Transaction Pending",
-  "Successful Transaction!",
-  "Failed Transaction",
-];
 
 type TxStatus = "pending" | "signing" | "waiting" | "success" | "failed";
 
+type TxStepHandler = {
+  title?: string;
+  element: React.ReactNode;
+};
+
 export const TransactionWizard = ({
   InitialDialog,
+  SuccessDialog,
   ...props
 }: TransactionWizardProps) => {
   const [status, setStatus] = useState<TxStatus>("pending");
@@ -42,16 +44,15 @@ export const TransactionWizard = ({
     "tx"
   );
 
-  const titles = props.initialTitle
-    ? [props.initialTitle, ...defaultTitles]
-    : defaultTitles;
-
   const handleSubmit = async () => {
+    console.log("handle submit start");
     const provider = providers[props.chainId];
-    setStatus("signing");
+
+    let tx;
 
     try {
-      const tx = await props.onSubmit();
+      setStatus("signing");
+      tx = await props.onSubmit();
 
       setStatus("waiting");
       setHash(tx.hash);
@@ -66,9 +67,11 @@ export const TransactionWizard = ({
         setStatus("failed");
       } else {
         setStatus("success");
-        setResult(result as any);
       }
+
+      setResult(result);
     } catch (e) {
+      console.error("WizardError:", e, status);
       setStatus("failed");
       setTxError(e as Error);
     }
@@ -79,44 +82,72 @@ export const TransactionWizard = ({
     setStatus("pending");
   };
 
-  const xdialogs: Record<TxStatus, React.ReactNode> = [
-    {
-      pending: (
+  const restart = () => {
+    setStatus("pending");
+    setTxError(null!);
+    setResult(null!);
+    setHash(null!);
+  };
+
+  const handlers: Record<TxStatus, TxStepHandler> = {
+    pending: {
+      title: props.titles?.pending ?? "Confirm Transaction",
+      element: (
         <InitialDialog
           key={0}
           onSubmit={handleSubmit}
-          onCancel={props.closeModal}
+          onCancel={props.onClose}
         />
       ),
     },
-    {
-      signing: <div>waiting</div>,
+    signing: {
+      title: "Waiting your confirmation",
+      element: (
+        <div key={1} className="text-center text-sm">
+          Sign the transaction to proceed
+        </div>
+      ),
     },
-    {
-      waiting: (
+    waiting: {
+      title: "Transaction Pending",
+      element: (
         <TransactionHashDialog
-          key={1}
+          key={2}
           hash={hash}
           blockExplorerName={blockExplorerName}
           blockExplorerUrl={blockExplorerUrl}
         />
       ),
     },
-    {
-      success: <div>Success</div>,
+    success: {
+      title: "Transaction Successful!",
+      element: (
+        <SuccessDialog
+          key={3}
+          hash={hash}
+          blockExplorerName={blockExplorerName}
+          blockExplorerUrl={blockExplorerUrl}
+        />
+      ),
     },
-    {
-      failed: <TransactionErrorDialog key={3} hash={hash} error={txError} />,
+    failed: {
+      title: "Something went wrong",
+      element: (
+        <TransactionErrorDialog
+          key={4}
+          hash={hash}
+          error={txError}
+          onSubmit={restart}
+        />
+      ),
     },
-  ];
+  };
+
+  const current = handlers[status];
 
   return (
-    <Modal
-      title={defaultTitles[status]}
-      open={props.open}
-      onClickClose={closeModal}
-    >
-      {dialogs[status]}
+    <Modal title={current.title} open={props.open} onClickClose={closeModal}>
+      {current.element}
     </Modal>
   );
 };

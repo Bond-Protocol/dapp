@@ -16,19 +16,9 @@ export const CloseMarket = (props: CloseMarketProps) => {
   const handleClose = async () => {
     if (!signer) return;
 
-    try {
-      setSubmitted(true);
-      const tx = await closeMarket(props.market.marketId, signer!, {});
-      setTxHash(tx.hash);
-      const finalized = await tx.wait(1);
-      if (finalized) {
-        setClosing(false);
-      }
-    } catch (e) {
-      console.log({ error: e });
-      console.error("Something went wrong closing a market", e);
-      setSubmitted(false);
-    }
+    setSubmitted(true);
+    console.log("i go", signer);
+    return closeMarket(props.market.marketId, signer!, {});
   };
 
   return (
@@ -49,7 +39,7 @@ export const CloseMarket = (props: CloseMarketProps) => {
         closeModal={() => setClosing(false)}
         initialTitle="Close Market"
         InitialDialog={(args) => (
-          <CloseMarketDialog market={props.market} handleClose={handleClose} />
+          <CloseMarketDialog market={props.market} {...args} />
         )}
       />
     </>
