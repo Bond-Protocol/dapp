@@ -13,14 +13,17 @@ import {
   formatCurrency,
   formatDate,
   InputCard,
+  PurchaseConfirmDialog,
+  PurchaseSuccessDialog,
 } from "ui";
 import { BondButton } from "./BondButton";
-import { BondPurchaseModal } from "..";
 import { useAccount, useSigner } from "wagmi";
 import { useNativeCurrency } from "hooks/useNativeCurrency";
 import { providers } from "services/owned-providers";
 import add from "date-fns/add";
 import defillama from "services/defillama";
+import { TransactionWizard } from "components/modals/TransactionWizard";
+import { useNavigate } from "react-router-dom";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -31,10 +34,8 @@ const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
 
-const getPurchaseURL = (chainId: string | number, payoutAddress: string) =>
-  `https://swap.cow.fi/#/${chainId}/swap/WETH/${payoutAddress}`;
-
 export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
   const [payout, setPayout] = useState<string>("0");
@@ -227,6 +228,16 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     );
   };
 
+  const goToMarkets = () => {
+    setShowModal(false);
+    navigate("/markets");
+  };
+
+  const goToBondDetails = () => {
+    setShowModal(false);
+    navigate("/dashboard");
+  };
+
   return (
     <div className="h-full">
       <div className="flex h-full flex-col justify-between">
@@ -305,16 +316,29 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           </Button>
         </BondButton>
       </div>
-      <BondPurchaseModal
-        onSubmit={submitTx}
-        chainId={market.chainId}
+      <TransactionWizard
         open={showModal}
-        closeModal={() => setShowModal(false)}
-        amount={`${amount} ${market.quoteToken.symbol}`}
-        payout={`${Number(payout).toFixed(4)} ${market.payoutToken.symbol}`}
-        discount={market.discount}
-        issuer={market.payoutToken.name}
-        vestingTime={vestingLabel}
+        chainId={market.chainId}
+        onSubmit={submitTx}
+        onClose={() => setShowModal(false)}
+        InitialDialog={(args) => (
+          <PurchaseConfirmDialog
+            {...args}
+            amount={`${amount} ${market.quoteToken.symbol}`}
+            payout={`${Number(payout).toFixed(4)} ${market.payoutToken.symbol}`}
+            discount={market.discount}
+            issuer={market.payoutToken.name}
+            vestingTime={vestingLabel}
+            contract={market.auctioneer}
+          />
+        )}
+        SuccessDialog={(args) => (
+          <PurchaseSuccessDialog
+            {...args}
+            goToMarkets={goToMarkets}
+            goToBondDetails={goToBondDetails}
+          />
+        )}
       />
     </div>
   );

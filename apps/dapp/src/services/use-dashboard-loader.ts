@@ -158,7 +158,7 @@ export const useDashboardLoader = () => {
   //Calculates TBV for user purchases
   useEffect(() => {
     const hasPurchases = !!bondPurchases.length;
-    const hasPrices = tokens.some((t) => !!t.price);
+    const hasPrices = tokens?.some((t) => !!t.price);
 
     if (hasPrices && hasPurchases) {
       const tbv = bondPurchases.reduce((tbv, purchase) => {
@@ -172,7 +172,7 @@ export const useDashboardLoader = () => {
   //Calculates market stats and adds token details to each market
   useEffect(() => {
     const hasMarkets = !!allMarkets.length;
-    const hasPrices = tokens.some((t) => !!t.price);
+    const hasPrices = tokens?.some((t) => !!t.price);
 
     if (hasPrices && hasMarkets) {
       const updated = allMarkets.map((market) => {
@@ -217,7 +217,7 @@ export const useDashboardLoader = () => {
   //Calculates TBV for purchases
   useEffect(() => {
     const hasPurchases = !!bondPurchases.length;
-    const hasPrices = tokens.some((t) => !!t.price);
+    const hasPrices = tokens?.some((t) => !!t.price);
 
     if (hasPrices && hasPurchases) {
       const tbv = bondPurchases.reduce((tbv, purchase) => {

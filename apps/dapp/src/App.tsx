@@ -10,6 +10,7 @@ import {
   Navbar,
 } from "components";
 import { AppBackdrop } from "components/common/AppBackdrop";
+import { environment } from "./environment";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
