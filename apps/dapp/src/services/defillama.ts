@@ -94,6 +94,15 @@ export const getNameFromChainId = (chainId: number) => {
   return name.toLowerCase();
 };
 
+export const getSwapURL = (
+  chainId: number | string,
+  payoutToken: string,
+  baseToken = "0x0000000000000000000000000000000000000000" // ETH
+) => {
+  const chain = getNameFromChainId(Number(chainId));
+  return `https://swap.defillama.com/?chain=${chain}&from=${baseToken}&to=${payoutToken}`;
+};
+
 export const utils = {
   unwrapPrices: formatResponse,
   toDefillamaQueryId,
@@ -102,5 +111,6 @@ export const utils = {
 export default {
   fetchPrice,
   fetchChart,
+  getSwapURL,
   utils,
 };
