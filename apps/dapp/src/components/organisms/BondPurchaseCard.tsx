@@ -20,6 +20,7 @@ import { useAccount, useSigner } from "wagmi";
 import { useNativeCurrency } from "hooks/useNativeCurrency";
 import { providers } from "services/owned-providers";
 import add from "date-fns/add";
+import defillama from "services/defillama";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -29,6 +30,9 @@ export type BondPurchaseCard = {
 const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
+
+const getPurchaseURL = (chainId: string | number, payoutAddress: string) =>
+  `https://swap.cow.fi/#/${chainId}/swap/WETH/${payoutAddress}`;
 
 export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const [showModal, setShowModal] = useState(false);
@@ -285,11 +289,10 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           showPurchaseLink={!hasSufficientBalance}
           chainId={market.chainId}
           quoteTokenSymbol={market.quoteToken.symbol}
-          purchaseLink={
-            market.quoteToken.purchaseLink
-              ? market.quoteToken.purchaseLink
-              : "https://app.sushi.com/swap"
-          }
+          purchaseLink={defillama.getSwapURL(
+            market.chainId,
+            market.quoteToken.address
+          )}
         >
           <Button
             disabled={!hasSufficientBalance}

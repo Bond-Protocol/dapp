@@ -9,8 +9,7 @@ export const Dashboard = () => {
   const dashboard = useDashboard();
   const tabs = [{ label: "My bonds" }, { label: "My Markets" }];
 
-  const hasMarkets =
-    !!dashboard.currentMarkets.length || !!dashboard.closedMarkets.length;
+  const hasMarkets = !!dashboard.allMarkets.length;
 
   return (
     <>

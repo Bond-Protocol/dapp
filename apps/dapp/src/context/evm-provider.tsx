@@ -52,7 +52,7 @@ export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
 export const MAINNETS = mainnets;
 
 const { chains, provider } = configureChains(
-  environment.isTesting ? testnets : mainnets,
+  environment.isTestnet ? testnets : mainnets,
   [publicProvider()]
 );
 

@@ -23,3 +23,18 @@ export const Chip = ({ selected, children, ...props }: ChipProps) => {
     </ButtonUnstyled>
   );
 };
+
+export type StatusChipProps = {
+  content?: string | React.ReactNode;
+  className?: string;
+};
+
+export const StatusChip = (props: StatusChipProps) => {
+  return (
+    <div
+      className={`rounded-full border border-transparent px-1.5 py-0.5 text-center font-mono text-[10px] font-light leading-none ${props.className}`}
+    >
+      {props.content}
+    </div>
+  );
+};

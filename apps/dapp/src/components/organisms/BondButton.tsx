@@ -14,6 +14,24 @@ export type BondButtonProps = {
   children: React.ReactNode;
 };
 
+const tooltipContent = (
+  <div className="p-4 text-left">
+    <p className="font-bold">
+      Note: This may not be the most efficient source of this token.
+    </p>
+    <p className="mt-2">
+      This will link to LlamaSwap, an external meta-aggregator that queries
+      exchange rates across 1inch, cowswap, matcha and others to find the best
+      price.
+    </p>
+
+    <p className="mt-4">
+      For LP tokens, you might want to create the LP position yourself in the
+      corresponding DEX.
+    </p>
+  </div>
+);
+
 export const BondButton = (props: BondButtonProps) => {
   const [networkDisplayName, setNetworkDisplayName] = useState(
     CHAINS.get(props.chainId)?.displayName || props.chainId
@@ -65,8 +83,13 @@ export const BondButton = (props: BondButtonProps) => {
             variant="ghost"
             className="mt-4 flex w-full justify-center"
           >
+            <Tooltip
+              className="max-w-sm"
+              iconClassname="mr-2 fill-white text-white"
+              content={tooltipContent}
+            />
             GET{" "}
-            {props.quoteTokenSymbol.length > 6
+            {props.quoteTokenSymbol.length > 14
               ? props.quoteTokenSymbol.split(" ")[1]
               : props.quoteTokenSymbol}
             <LinkIcon className={`color-inherit my-auto ml-1`} />
