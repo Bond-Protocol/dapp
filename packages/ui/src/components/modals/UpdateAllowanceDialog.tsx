@@ -11,7 +11,7 @@ export type AllowanceToken = Token & {
 export type UpdateAlowanceDialogProps = {
   tokens: AllowanceToken[];
   handleUpdateAllowance: (allowance: string, token: AllowanceToken) => void;
-  onSubmit: (allowance: string, token: AllowanceToken) => void;
+  onSubmit: (chainId: number, allowance: string, token: AllowanceToken) => void;
   onClose: (e: React.BaseSyntheticEvent) => void;
 };
 
@@ -20,9 +20,9 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
   const [token, setToken] = useState<AllowanceToken>();
   const [newAllowance, setNewAllowance] = useState<string>("");
 
-  const handleUpdate = (allowance: string) => {
+  const handleUpdate = () => {
     if (token) {
-      return props.onSubmit(allowance, token);
+      return props.onSubmit(token.chainId, newAllowance, token);
     }
   };
 
@@ -40,7 +40,7 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
               onChange={(e) => setNewAllowance(e.target.value)}
               defaultValue={token?.allowance}
             />
-            <Button onClick={() => handleUpdate(newAllowance)}>Update</Button>
+            <Button onClick={() => handleUpdate()}>Update</Button>
           </div>
           <Button
             className="mt-8"

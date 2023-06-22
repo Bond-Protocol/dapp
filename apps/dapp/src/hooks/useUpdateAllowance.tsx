@@ -10,12 +10,11 @@ export const useUpdateAllowance = () => {
 
   const { data: signer } = useSigner();
 
-  const update = (
-    selectedToken = token,
+  const updateAllowance = (
     newAllowance = allowance,
+    selectedToken = token,
     address?: string
   ) => {
-    console.log();
     if (!signer) {
       throw new Error("No signer connected");
     }
@@ -34,7 +33,7 @@ export const useUpdateAllowance = () => {
   };
 
   return {
-    update,
+    updateAllowance,
     updating,
     token,
     allowance,

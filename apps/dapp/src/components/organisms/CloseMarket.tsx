@@ -32,7 +32,7 @@ export const CloseMarket = (props: CloseMarketProps) => {
         open={closing}
         onSubmit={handleClose}
         onClose={() => setClosing(false)}
-        initialTitle="Close Market"
+        titles={{ standby: "Close Bond Market" }}
         InitialDialog={(args) => (
           <CloseMarketDialog market={props.market} {...args} />
         )}

@@ -1,23 +1,48 @@
 import { Button, Link } from "components/atoms";
+import { useState } from "react";
 import { TransactionHashDialogProps } from "./TransactionHashDialog";
 
 export type TransactionErrorDialogProps = TransactionHashDialogProps & {
   error?: Error;
   onSubmit?: () => void;
 };
+const placeholderMessage =
+  "We dont seem to know exactly... yet! Contact us if the problem persists!";
 
 export const TransactionErrorDialog = (props: TransactionErrorDialogProps) => {
+  const [showFullMessage, setShowMore] = useState(false);
+
+  const message = props.error?.message;
+  const isLongMessage = message && Number(message?.length) > 180;
+
+  const adjusted =
+    isLongMessage && !showFullMessage
+      ? `${message?.substring(0, 180)}...`
+      : message;
+
   return (
     <div className="text-center">
-      <p className="text-bold mb-2 mt-4 overflow-x-hidden uppercase">
-        Transaction Failed!
+      <p className="mb-2 mt-4 overflow-x-hidden font-bold ">
+        Transaction Failed
       </p>
       {props.error && (
-        <p className="my-4 text-xs text-red-500">
+        <div className="my-4 overflow-x-hidden break-words text-xs text-red-500">
           <span className="font-bold">Reason:</span> <br />
-          {props.error?.message ??
-            "We don't seem to know exactly... yet! Contact us if the problem persists!"}
-        </p>
+          {adjusted ?? placeholderMessage}
+          {isLongMessage && !showFullMessage && (
+            <div className="mt-2 w-full">
+              <Button
+                className="mx-auto block"
+                size="sm"
+                variant="ghost"
+                thin
+                onClick={() => setShowMore(true)}
+              >
+                Expand
+              </Button>
+            </div>
+          )}
+        </div>
       )}
       {props.hash && (
         <div className="flex justify-center py-2">
@@ -31,7 +56,11 @@ export const TransactionErrorDialog = (props: TransactionErrorDialogProps) => {
           </Link>
         </div>
       )}
-      {props.onSubmit && <Button onClick={props.onSubmit}>Try Again</Button>}
+      {props.onSubmit && (
+        <Button className="mt-6" onClick={props.onSubmit}>
+          Try Again
+        </Button>
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { AllowanceToken, UpdateAllowanceDialog } from "ui";
 import { useUpdateAllowance } from "hooks/useUpdateAllowance";
 import { TransactionWizard } from "./TransactionWizard";
-import { useChainId } from "wagmi";
+import { useState } from "react";
 
 export type UpdateAllowanceModalProps = {
   tokens: AllowanceToken[];
@@ -11,16 +11,23 @@ export type UpdateAllowanceModalProps = {
 
 export const UpdateAllowanceModal = (props: UpdateAllowanceModalProps) => {
   const allowanceControl = useUpdateAllowance();
+  const [chainId, setChainId] = useState<number>(0);
 
-  console.log({ tokens: props.tokens });
+  const handleSubmit = (chainId: string | number, ...args: any[]) => {
+    setChainId(Number(chainId));
+    return allowanceControl.updateAllowance(...args);
+  };
+
   return (
     <TransactionWizard
       open={props.open}
       onClose={props.onClose}
-      onSubmit={allowanceControl.update}
+      onSubmit={handleSubmit}
+      chainId={chainId}
       InitialDialog={(args) => (
         <UpdateAllowanceDialog {...args} tokens={props.tokens} />
       )}
+      SuccessDialog={() => <div className="text-center">Allowance updated</div>}
     />
   );
 };

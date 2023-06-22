@@ -5,6 +5,8 @@ import { OwnerBalance } from "../../generated/graphql";
 import { ContractTransaction } from "ethers";
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { TransactionWizard } from "components/modals/TransactionWizard";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -62,9 +64,11 @@ export const tableColumns: Array<Column<any>> = [
       };
     },
     Component: (props: any) => {
+      const [open, setOpen] = useState(false);
       const { chain } = useNetwork();
       const { switchNetwork } = useSwitchNetwork();
       const { data: signer } = useSigner();
+      const [tx, setTx] = useState<any>();
 
       const isCorrectNetwork =
         Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
@@ -74,36 +78,46 @@ export const tableColumns: Array<Column<any>> = [
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {
-        if (!bond.bondToken) return;
-        const redeemTx: ContractTransaction = await redeem(
+        if (!bond.bondToken || !signer) return;
+        return redeem(
           bond.bondToken.id,
           bond.bondToken.type as BOND_TYPE,
           bond.balance.toString(),
-          // @ts-ignore
           signer,
           bond.bondToken.teller,
           {}
         );
-
-        await signer?.provider
-          ?.waitForTransaction(redeemTx.hash)
-          .catch((error) => console.log(error));
       }
 
+      const claim = () => {
+        setOpen(true);
+        const tx = redeemBond(props?.data?.bond);
+        setTx(tx);
+      };
+
       const handleClaim = isCorrectNetwork
-        ? () => redeemBond(props?.data?.bond)
+        ? () => claim()
         : () => switchChain();
 
       return (
-        <Button
-          thin
-          variant="primary"
-          disabled={!props?.data?.canClaim}
-          className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
-          onClick={() => handleClaim()}
-        >
-          Claim
-        </Button>
+        <>
+          <Button
+            thin
+            variant="primary"
+            disabled={!props?.data?.canClaim}
+            className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
+            onClick={() => handleClaim()}
+          >
+            Claim
+          </Button>
+          <TransactionWizard
+            open={open}
+            onSubmit={() => redeemBond(props?.data?.bond)}
+            onClose={() => setOpen(false)}
+            SuccessDialog={() => <div>Bond claimed!</div>}
+            signingTx={tx}
+          />
+        </>
       );
     },
   },
