@@ -18,6 +18,9 @@ export const SearchBar = (props: SearchBarProps) => {
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
         inputClassName={props.inputClassName ?? "text-[20px] font-bold"}
+        rootClassName={
+          !!props.value?.length ? "border-light-secondary" : "border-white"
+        }
         startAdornment={
           <div className="ml-2 inline-flex">
             <SearchIcon className="fill-white" />

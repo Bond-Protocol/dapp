@@ -75,7 +75,7 @@ export const PaginatedTable = ({
 
   const [data, handleSorting] = useSorting(tableData);
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState(props.filterText ?? "");
   const [page, setPage] = useState(0);
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -100,7 +100,7 @@ export const PaginatedTable = ({
     setPage(0);
   };
 
-  const textToFilter = props.filterText ?? text;
+  const textToFilter = text;
   const filteredData = data?.filter((r) =>
     Object.values(r).some((v) => {
       const value = v?.searchValue || v?.value;
@@ -145,7 +145,7 @@ export const PaginatedTable = ({
             <SearchBar
               value={text}
               onChange={setText}
-              className="max-w-xs justify-self-end"
+              className={"max-w-xs justify-self-end"}
             />
           )}
 

@@ -14,6 +14,7 @@ import { useTokens } from "hooks";
 import { useMemo } from "react";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import { TweakedBondPurchase } from "services/use-dashboard-loader";
+import { mergeTokens } from "src/utils/mergeTokens";
 
 const blockExplorer: Column<TweakedBondPurchase> = {
   accessor: "blockExplorerUrl",
@@ -154,12 +155,19 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
           const { blockExplorerUrl: blockExplorerAddressUrl } =
             getBlockExplorer(chainId, "address");
 
-          const payoutPrice = getByAddress(p.payoutToken?.address)?.price ?? 0;
+          const updated = mergeTokens(p, getByAddress);
+          const payoutPrice = updated.payoutToken?.price ?? 0;
 
           const txUrl = blockExplorerTxUrl + p.id;
           const addressUrl = blockExplorerAddressUrl + p.recipient;
 
-          return { ...p, payoutPrice, txUrl, addressUrl, market: props.market };
+          return {
+            ...updated,
+            payoutPrice,
+            txUrl,
+            addressUrl,
+            market: props.market,
+          };
         })
         .filter(
           (p) =>

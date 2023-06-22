@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Button, InfoLabel, SocialRow } from "ui";
 import { MarketList } from "components/lists";
 import { PageHeader, PageNavigation } from "components/common";
@@ -7,6 +7,7 @@ import { useTokens } from "context/token-context";
 
 export const TokenPage: FC = () => {
   const { address } = useParams();
+  const [params, setParams] = useSearchParams();
   const { fetchedExtendedDetails, getByAddress } = useTokens();
   const [token, setToken] = useState(getByAddress(address || ""));
 
@@ -19,6 +20,7 @@ export const TokenPage: FC = () => {
     setToken(getByAddress(address || ""));
   }, [fetchedExtendedDetails]);
 
+  const issuer = params.get("issuer");
   return (
     <div className="pb-12">
       <PageNavigation
@@ -101,7 +103,7 @@ export const TokenPage: FC = () => {
       <MarketList
         title="Available Markets"
         token={token?.address}
-        filter={["token"]}
+        filterText={issuer!}
       />
     </div>
   );
