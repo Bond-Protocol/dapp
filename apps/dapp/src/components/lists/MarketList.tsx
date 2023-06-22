@@ -15,6 +15,7 @@ type MarketListProps = {
   filter?: string[];
   filterText?: string;
   hideSearchbar?: boolean;
+  title?: string;
 };
 
 const filters: Filter[] = [
@@ -52,6 +53,7 @@ export const MarketList: FC<MarketListProps> = ({
 
   return (
     <PaginatedTable
+      title={props.title}
       loading={isSomeLoading}
       hideSearchbar={props.hideSearchbar}
       filterText={props.filterText}

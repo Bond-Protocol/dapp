@@ -2,7 +2,6 @@ import { Button, Column, formatDate, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
-import { ContractTransaction } from "ethers";
 import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -16,10 +15,8 @@ export const tableColumns: Array<Column<any>> = [
     formatter: (ownerBalance) => {
       const balance = longFormatter.format(ownerBalance?.balance);
       return {
-        value: `${balance} ${
-          ownerBalance?.bond?.bondToken?.underlying?.symbol ?? "???"
-        }`,
-        icon: ownerBalance?.bond?.bondToken?.underlying?.logoURI,
+        value: `${balance} ${ownerBalance?.underlying?.symbol ?? "???"}`,
+        icon: ownerBalance?.underlying?.logoURI,
       };
     },
   },
@@ -129,7 +126,7 @@ export const BondList = ({ data = [], ...props }: any) => {
   return (
     <div className="mt-10">
       <PaginatedTable
-        title={<div />}
+        title={props.title ?? <div />}
         defaultSort="vesting"
         columns={tableColumns}
         data={data}

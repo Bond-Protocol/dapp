@@ -12,7 +12,7 @@ export interface ActionCardProps {
 
 export const ActionCard = (props: ActionCardProps) => {
   return (
-    <div className={`mx-auto text-center ${props.className}`}>
+    <div className={`mx-auto my-10 text-center ${props.className}`}>
       <div className="tracking-wide">{props.title}</div>
       <div className="mt-2 flex justify-center gap-6">
         <Link

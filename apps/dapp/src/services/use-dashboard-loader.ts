@@ -14,11 +14,19 @@ import {
   calculateTrimDigits,
   getBalance,
   trim,
+  Token,
 } from "@bond-protocol/contract-library";
 import { BigNumberish } from "ethers";
 import { useTokens } from "context";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
+
+export type TweakedBondPurchase = BondPurchase & {
+  txUrl: string;
+  payoutToken: Token;
+  quoteToken: Token;
+  payoutPrice: number;
+};
 
 const currentTime = Math.trunc(Date.now() / 1000);
 
@@ -41,7 +49,7 @@ export const useDashboardLoader = () => {
   const [ownerBalances, setOwnerBalances] = useState<Partial<OwnerBalance>[]>(
     []
   );
-  const [bondPurchases, setBondPurchases] = useState<BondPurchase[]>([]);
+  const [bondPurchases, setBondPurchases] = useState<TweakedBondPurchase[]>([]);
   const [allMarkets, setAllMarkets] = useState<Market[]>([]);
   const [bondsIssued, setBondsIssued] = useState(0);
   const [uniqueBonders, setUniqueBonders] = useState(0);
@@ -130,7 +138,20 @@ export const useDashboardLoader = () => {
       setOwnerBalances(updatedBonds);
     };
 
-    setBondPurchases(bondPurchases);
+    setBondPurchases(
+      tokens
+        ? bondPurchases.map((p: any) => {
+            const tokens = {
+              payoutToken: getByAddress(p.payoutToken?.address),
+              quoteToken: getByAddress(p.quoteToken?.address),
+            };
+            return {
+              ...p,
+              ...tokens,
+            };
+          })
+        : bondPurchases
+    );
     setAllMarkets(markets);
 
     uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
@@ -162,7 +183,7 @@ export const useDashboardLoader = () => {
 
     if (hasPrices && hasPurchases) {
       const tbv = bondPurchases.reduce((tbv, purchase) => {
-        const price = getByAddress(purchase.payoutToken.address)?.price ?? 0;
+        const price = getByAddress(purchase.payoutToken?.address)?.price ?? 0;
         return tbv + price * purchase.payout;
       }, 0);
       setUserTbv(tbv);
@@ -221,7 +242,7 @@ export const useDashboardLoader = () => {
 
     if (hasPrices && hasPurchases) {
       const tbv = bondPurchases.reduce((tbv, purchase) => {
-        const price = getByAddress(purchase.payoutToken.address)?.price ?? 0;
+        const price = getByAddress(purchase.payoutToken?.address)?.price ?? 0;
         return tbv + price * purchase.payout;
       }, 0);
       setUserTbv(tbv);
