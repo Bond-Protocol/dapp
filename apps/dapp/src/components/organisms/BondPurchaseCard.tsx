@@ -31,7 +31,7 @@ const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
 
-const getPurchaseURL = (chainId, payoutAddress: string) =>
+const getPurchaseURL = (chainId: string | number, payoutAddress: string) =>
   `https://swap.cow.fi/#/${chainId}/swap/WETH/${payoutAddress}`;
 
 export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
