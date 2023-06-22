@@ -1,4 +1,4 @@
-class BondProtocolError extends Error {
+export class BondProtocolError extends Error {
   constructor(message: string, prefix = "") {
     super(`${prefix}: ${message}`);
     this.name = this.constructor.name;

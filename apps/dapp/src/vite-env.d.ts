@@ -30,3 +30,11 @@ declare const __COMMIT_HASH__: string;
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare class BondProtocolError extends Error {
+  constructor(message: string, prefix = "") {
+    super(`${prefix}: ${message}`);
+    this.name = this.constructor.name;
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}

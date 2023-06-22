@@ -6,23 +6,16 @@ export type TransactionErrorDialogProps = TransactionHashDialogProps & {
   onSubmit?: () => void;
 };
 
-const parseError = (error: any) => {
-  const body = JSON.parse(error.body);
-  return body?.error;
-};
-
 export const TransactionErrorDialog = (props: TransactionErrorDialogProps) => {
-  const error = props.error;
-
   return (
     <div className="text-center">
       <p className="text-bold mb-2 mt-4 overflow-x-hidden uppercase">
-        Transaction <span className="text-bold text-red-500">Failed</span>
+        Transaction Failed!
       </p>
-      {error && (
+      {props.error && (
         <p className="my-4 text-xs text-red-500">
           <span className="font-bold">Reason:</span> <br />
-          {error.message ??
+          {props.error?.message ??
             "We don't seem to know exactly... yet! Contact us if the problem persists!"}
         </p>
       )}

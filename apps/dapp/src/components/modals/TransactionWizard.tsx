@@ -9,99 +9,110 @@ import {
 import { ContractTransaction } from "ethers";
 import { providers } from "services/owned-providers";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
+import { Address, useSigner, useTransaction } from "wagmi";
 
-export type TransactionWizardProps = {
-  open: boolean;
-  chainId: string;
-  onClose: () => void;
-  onSubmit: () => Promise<ContractTransaction>;
-  InitialDialog: (props: any) => JSX.Element;
-  SuccessDialog: (props: any) => JSX.Element;
-  initialTitle?: string;
-  successTitle?: string;
-  titles?: Partial<Record<TxStatus, string>>;
-} & Partial<TransactionHashDialogProps>;
+enum TX_STATUS {
+  STANDBY = "standby",
+  SIGNING = "signing",
+  WAITING = "waiting",
+  SUCCESS = "success",
+  FAILED = "failed",
+}
 
-type TxStatus = "pending" | "signing" | "waiting" | "success" | "failed";
+type TxStatus = `${TX_STATUS}`;
+type TxStatusDialogs = `${TX_STATUS}Dialog`;
 
 type TxStepHandler = {
   title?: string;
   element: React.ReactNode;
 };
 
+export type TransactionWizardProps = {
+  open: boolean;
+  onClose: () => void;
+  onSubmit: (...args: any[]) => Promise<ContractTransaction>;
+  InitialDialog: (props: any) => JSX.Element;
+  SuccessDialog: (props: any) => JSX.Element;
+  chainId?: string;
+  afterSubmit?: () => void;
+  titles?: Partial<Record<TxStatus, string>>;
+} & Partial<TransactionHashDialogProps> &
+  Partial<Record<TxStatusDialogs, () => JSX.Element>>;
+
 export const TransactionWizard = ({
   InitialDialog,
   SuccessDialog,
   ...props
 }: TransactionWizardProps) => {
-  const [status, setStatus] = useState<TxStatus>("pending");
-  const [hash, setHash] = useState("");
+  const [status, setStatus] = useState<TxStatus>(TX_STATUS.STANDBY);
+  const [hash, setHash] = useState<Address>();
   const [txError, setTxError] = useState<Error>();
-  const [result, setResult] = useState();
+  const [result, setResult] = useState<any>();
+
+  const tx = useTransaction({
+    hash,
+    enabled: !!hash,
+  });
 
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
     props.chainId,
     "tx"
   );
 
-  const handleSubmit = async () => {
-    console.log("handle submit start");
+  const handleSubmit = async (...args: any[]) => {
     const provider = providers[props.chainId];
 
-    let tx;
+    setStatus(TX_STATUS.SIGNING);
 
     try {
-      setStatus("signing");
-      tx = await props.onSubmit();
+      const tx = await props.onSubmit(...args);
 
-      setStatus("waiting");
-      setHash(tx.hash);
-
-      console.log("TRANSACTION:", { tx });
+      setHash(tx.hash as Address);
+      setStatus(TX_STATUS.WAITING);
 
       const result = await provider.waitForTransaction(tx.hash);
 
       console.log("RESULT:", { result });
 
-      if (result.status === 0) {
-        setStatus("failed");
-      } else {
-        setStatus("success");
-      }
-
       setResult(result);
+      setStatus(TX_STATUS.SUCCESS);
+
+      //Call a clean up or follow up method
+      props.afterSubmit && props?.afterSubmit();
     } catch (e) {
-      console.error("WizardError:", e, status);
-      setStatus("failed");
+      console.error("WizardError:", e);
+      setStatus(TX_STATUS.FAILED);
       setTxError(e as Error);
     }
   };
 
   const closeModal = () => {
-    props.closeModal();
-    setStatus("pending");
+    props.onClose();
+    setStatus(TX_STATUS.STANDBY);
   };
 
   const restart = () => {
-    setStatus("pending");
+    setStatus(TX_STATUS.STANDBY);
     setTxError(null!);
     setResult(null!);
     setHash(null!);
   };
 
   const handlers: Record<TxStatus, TxStepHandler> = {
-    pending: {
-      title: props.titles?.pending ?? "Confirm Transaction",
+    standby: {
+      title: props.titles?.standby ?? "Confirm Transaction",
       element: (
-        <InitialDialog
-          key={0}
-          onSubmit={handleSubmit}
-          onCancel={props.onClose}
-        />
+        <>
+          <InitialDialog
+            key={0}
+            onSubmit={handleSubmit}
+            onCancel={props.onClose}
+          />
+        </>
       ),
     },
     signing: {
-      title: "Waiting your confirmation",
+      title: props.titles?.signing ?? "Waiting your signature",
       element: (
         <div key={1} className="text-center text-sm">
           Sign the transaction to proceed
@@ -109,7 +120,7 @@ export const TransactionWizard = ({
       ),
     },
     waiting: {
-      title: "Transaction Pending",
+      title: props.titles?.waiting ?? "Transaction Pending",
       element: (
         <TransactionHashDialog
           key={2}
@@ -120,7 +131,7 @@ export const TransactionWizard = ({
       ),
     },
     success: {
-      title: "Transaction Successful!",
+      title: props.titles?.success ?? "Transaction Successful!",
       element: (
         <SuccessDialog
           key={3}
@@ -131,7 +142,7 @@ export const TransactionWizard = ({
       ),
     },
     failed: {
-      title: "Something went wrong",
+      title: props.titles?.failed ?? "Something went wrong",
       element: (
         <TransactionErrorDialog
           key={4}

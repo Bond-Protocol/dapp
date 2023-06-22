@@ -1,35 +1,26 @@
-import {
-  AllowanceToken,
-  Modal,
-  TransactionHashDialog,
-  UpdateAllowanceDialog,
-} from "ui";
+import { AllowanceToken, UpdateAllowanceDialog } from "ui";
 import { useUpdateAllowance } from "hooks/useUpdateAllowance";
+import { TransactionWizard } from "./TransactionWizard";
+import { useChainId } from "wagmi";
 
 export type UpdateAllowanceModalProps = {
   tokens: AllowanceToken[];
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
 };
 
 export const UpdateAllowanceModal = (props: UpdateAllowanceModalProps) => {
-  const allowances = useUpdateAllowance();
+  const allowanceControl = useUpdateAllowance();
 
+  console.log({ tokens: props.tokens });
   return (
-    <Modal
-      title="Token Allowances"
+    <TransactionWizard
       open={props.open}
-      onClickClose={props.handleClose}
-    >
-      {allowances.updating ? (
-        <TransactionHashDialog hash={allowances.txHash} />
-      ) : (
-        <UpdateAllowanceDialog
-          onClose={props.handleClose}
-          handleUpdateAllowance={allowances.update}
-          tokens={props.tokens}
-        />
+      onClose={props.onClose}
+      onSubmit={allowanceControl.update}
+      InitialDialog={(args) => (
+        <UpdateAllowanceDialog {...args} tokens={props.tokens} />
       )}
-    </Modal>
+    />
   );
 };

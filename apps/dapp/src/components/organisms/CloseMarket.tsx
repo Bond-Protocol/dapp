@@ -9,15 +9,11 @@ export type CloseMarketProps = {
 };
 export const CloseMarket = (props: CloseMarketProps) => {
   const [closing, setClosing] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [txHash, setTxHash] = useState<string>();
   const { data: signer } = useSigner();
 
   const handleClose = async () => {
     if (!signer) return;
 
-    setSubmitted(true);
-    console.log("i go", signer);
     return closeMarket(props.market.marketId, signer!, {});
   };
 
@@ -34,9 +30,8 @@ export const CloseMarket = (props: CloseMarketProps) => {
 
       <TransactionWizard
         open={closing}
-        chainId={5} // FIIIIIIIIIIIIIIIIIIIIIIX
         onSubmit={handleClose}
-        closeModal={() => setClosing(false)}
+        onClose={() => setClosing(false)}
         initialTitle="Close Market"
         InitialDialog={(args) => (
           <CloseMarketDialog market={props.market} {...args} />

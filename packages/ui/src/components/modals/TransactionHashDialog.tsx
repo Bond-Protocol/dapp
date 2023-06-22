@@ -1,7 +1,7 @@
 import { Link } from "components/atoms";
 
 export type TransactionHashDialogProps = {
-  hash: string;
+  hash: string | `0x${string}`;
   blockExplorerName?: string;
   blockExplorerUrl?: string;
 };

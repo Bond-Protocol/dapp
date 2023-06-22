@@ -12,7 +12,7 @@ export const UserMarkets = () => {
   const dashboard = useDashboard();
   const markets = useMarkets();
 
-  const [updating, setUpdating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const tokens: AllowanceToken[] = dashboard.currentMarkets
     ?.map((market) => {
@@ -45,17 +45,20 @@ export const UserMarkets = () => {
             {dashboard.uniqueBonders}
           </InfoLabel>
         </div>
+
         <div className="my-10 flex justify-center gap-x-4">
-          <Button variant="ghost" onClick={() => setUpdating(true)}>
+          <Button variant="ghost" onClick={() => setIsUpdating(true)}>
             Update Allowances
           </Button>
           <Button onClick={() => navigate("/create")}>Deploy Market</Button>
         </div>
+
         <UserMarketList />
       </div>
+
       <UpdateAllowanceModal
-        handleClose={() => setUpdating(false)}
-        open={updating}
+        onClose={() => setIsUpdating(false)}
+        open={isUpdating}
         tokens={tokens}
       />
     </>
