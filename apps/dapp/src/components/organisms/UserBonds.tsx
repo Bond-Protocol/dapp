@@ -1,9 +1,9 @@
 import { useDashboard } from "context/dashboard-context";
 import { formatCurrency, InfoLabel } from "ui";
-import { BondList } from "..";
+import { BondList, TransactionHistory } from "..";
 
 export const UserBonds = () => {
-  const { isLoading, ownerBalances, userTbv } = useDashboard();
+  const { isLoading, ownerBalances, bondPurchases, userTbv } = useDashboard();
 
   const claimable =
     ownerBalances.reduce((total, bond) => {
@@ -24,7 +24,12 @@ export const UserBonds = () => {
           {formatCurrency.usdFormatter.format(claimable)}
         </InfoLabel>
       </div>
-      <BondList isLoading={isLoading} data={ownerBalances} />
+      <BondList title="Balance" isLoading={isLoading} data={ownerBalances} />
+      <TransactionHistory
+        title="Bond History"
+        className="mb-30"
+        data={bondPurchases}
+      />
     </div>
   );
 };

@@ -97,14 +97,14 @@ export const getSubgraphQuery = (
         },
       },
     },
-    {queryKey: endpoint.url + "--" + query.name.toString(), ...variables},
-    {enabled: enabled}
+    { queryKey: endpoint.url + "--" + query.name.toString(), ...variables },
+    { enabled: enabled }
   );
 };
 
 export const getSubgraphQueries = (
   query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
-  variables?: {},
+  variables?: {}
 ): UseQueryResult<any, any>[] => {
   const [testnet, setTestnet] = useAtom(testnetMode);
   const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;

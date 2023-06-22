@@ -29,7 +29,7 @@ export interface FallbackProps {
 const Fallback = (props: FallbackProps) => {
   return (
     <div className="mt-20 flex w-full flex-col place-items-center">
-      <div className="text-5xl">{props.title}</div>
+      <div className="text-3xl">{props.title}</div>
       <div className="my-4">{props.subtext}</div>
       {props.buttonText && (
         <Button onClick={props.onClick}>{props.buttonText}</Button>
@@ -128,7 +128,7 @@ export const PaginatedTable = ({
     !props.loading && !filteredData?.length && activeFilters.length === 0;
 
   return (
-    <div className={props.className}>
+    <div className={"pb-20 " + props.className}>
       <div
         className={`flex items-center justify-between ${props.headingClassName}`}
       >
