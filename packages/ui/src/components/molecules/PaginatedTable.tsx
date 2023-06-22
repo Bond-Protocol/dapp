@@ -127,26 +127,6 @@ export const PaginatedTable = ({
   const isEmpty =
     !props.loading && !filteredData?.length && activeFilters.length === 0;
 
-  if (isEmpty) {
-    return (
-      <div className={props.className}>
-        {React.isValidElement(props.fallback) ? (
-          props.fallback
-        ) : (
-          <Fallback {...(props.fallback as FallbackProps)} />
-        )}
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className={props.className}>
-        <Loading />
-      </div>
-    );
-  }
-
   return (
     <div className={props.className}>
       <div
@@ -184,6 +164,23 @@ export const PaginatedTable = ({
         emptyRows={emptyRows}
         data={rows}
       />
+
+      {isLoading && (
+        <div className={props.className}>
+          <Loading />
+        </div>
+      )}
+
+      {isEmpty && (
+        <div className={"pb-8" + props.className}>
+          {React.isValidElement(props.fallback) ? (
+            props.fallback
+          ) : (
+            <Fallback {...(props.fallback as FallbackProps)} />
+          )}
+        </div>
+      )}
+
       {totalRows > rowsPerPage && (
         <Pagination
           className="mt-4"
