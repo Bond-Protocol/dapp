@@ -6,6 +6,7 @@ import { usdFormatter } from "../utils/format";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { environment } from "src/environment";
 import { useSubgraph } from "hooks/useSubgraph";
+import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
@@ -63,8 +64,7 @@ export const useTokenLoader = () => {
               ...t,
               chainId: Number(t.chainId),
               decimals: Number(t.decimals),
-              logoUrl: "/placeholders/token-placeholder.png",
-              logoURI: "/placeholders/token-placeholder.png",
+              logoURI: PLACEHOLDER_TOKEN_LOGO_URL,
             };
           })
           .concat(userTokens);

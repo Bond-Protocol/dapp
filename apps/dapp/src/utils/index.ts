@@ -6,3 +6,4 @@ export * from "./getLocale";
 export * from "./getTimestamp";
 export * from "./trim";
 export * from "./getClosest";
+export * from "./placeholders";
