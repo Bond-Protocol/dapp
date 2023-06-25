@@ -215,5 +215,5 @@ export const tokenMarketList = [...base, tbv, issuer, viewColumn];
 export const userMarketList = [bondColumn];
 
 export const mobileMarketLIst = [bondColumn, bondPrice, discountColumn].map(
-  (c) => ({ ...c, width: undefined })
+  (c) => ({ ...c, width: undefined, alignEnd: false })
 );

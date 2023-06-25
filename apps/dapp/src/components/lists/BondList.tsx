@@ -6,6 +6,7 @@ import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";
+import { useMediaQueries } from "hooks/useMediaQueries";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -120,15 +121,18 @@ export const tableColumns: Array<Column<any>> = [
   },
 ];
 
+const mobileColumns = tableColumns.filter((c) => c.accessor !== "value");
+
 export const BondList = ({ data = [], ...props }: any) => {
   const navigate = useNavigate();
+  const { isTabletOrMobile } = useMediaQueries();
 
   return (
     <div className="mt-10">
       <PaginatedTable
         title={props.title ?? <div />}
         defaultSort="vesting"
-        columns={tableColumns}
+        columns={isTabletOrMobile ? mobileColumns : tableColumns}
         data={data}
         loading={props.isLoading}
         fallback={{

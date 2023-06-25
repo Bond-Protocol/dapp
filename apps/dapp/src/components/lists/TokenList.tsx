@@ -1,5 +1,5 @@
 import { ActionCard, InfoLabel, Loading, Pagination, TokenCard } from "ui";
-import { useTokens } from "hooks";
+import { useMediaQueries, useTokens } from "hooks";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { environment } from "src/environment";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 
 export const TokenList = () => {
+  const { isTabletOrMobile } = useMediaQueries();
   const { tbv, payoutTokens } = useTokens();
   const navigate = useNavigate();
   const { totalPurchases, uniqueBonders } = useSubgraph();
@@ -64,13 +65,14 @@ export const TokenList = () => {
       : tokens;
 
   return (
-    <>
+    <div className="pb-20">
       <PageHeader title="BOND TOKENS" />
-      <div className="flex gap-x-4 py-10">
+      <div className="grid grid-rows-2 grid-cols-2 md:flex gap-4 py-10">
         <InfoLabel
           reverse
           label="Total Bonded Value"
           tooltip="Total value, in USD, of assets acquired by tokens through bonds"
+          className="col-span-2"
         >
           {tbv}
         </InfoLabel>
@@ -117,17 +119,19 @@ export const TokenList = () => {
           <Loading content={meme()} />
         </div>
       )}
-      <ActionCard
-        className="my-6"
-        title="Do you wanna issue a bond?"
-        leftLabel="Why Bond"
-        rightLabel="Issue a bond"
-        url="https://docs.bondprotocol.finance/basics/bonding"
-        onClickRight={() => {
-          navigate("/create");
-          scrollUp();
-        }}
-      />
-    </>
+      {!isTabletOrMobile && (
+        <ActionCard
+          className="my-6"
+          title="Do you wanna issue a bond?"
+          leftLabel="Why Bond"
+          rightLabel="Issue a bond"
+          url="https://docs.bondprotocol.finance/basics/bonding"
+          onClickRight={() => {
+            navigate("/create");
+            scrollUp();
+          }}
+        />
+      )}
+    </div>
   );
 };

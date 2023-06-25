@@ -1,3 +1,4 @@
+import { useMediaQueries } from "hooks/useMediaQueries";
 import { TokenLogo, TokenLogoProps } from "ui";
 
 export interface PageHeaderProps extends TokenLogoProps {
@@ -8,6 +9,7 @@ export interface PageHeaderProps extends TokenLogoProps {
 }
 
 export const PageHeader = (props: PageHeaderProps) => {
+  const { isTabletOrMobile } = useMediaQueries();
   return (
     <div className="w-full">
       <div className={`flex select-none font-bold ${props.className}`}>
@@ -16,7 +18,9 @@ export const PageHeader = (props: PageHeaderProps) => {
         )}
         <div className="my-auto">
           {props.title && (
-            <div className={`my-auto font-fraktion text-5xl leading-10`}>
+            <div
+              className={`my-auto font-fraktion text-4xl md:text-5xl leading-10`}
+            >
               {props.title}
             </div>
           )}

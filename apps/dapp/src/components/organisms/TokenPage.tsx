@@ -5,6 +5,32 @@ import { MarketList } from "components/lists";
 import { PageHeader, PageNavigation } from "components/common";
 import { useTokens } from "context/token-context";
 
+const TokenDescription = (props: {
+  description: string;
+  showFull: boolean;
+  onClick: () => void;
+}) => {
+  return (
+    <div className="w-full items-center">
+      <p
+        className={`md:w-1/2 span text-light-grey-400 ${
+          props.showFull ? "line-clamp-none" : "line-clamp-1 md:line-clamp-3"
+        }`}
+      >
+        {props.description}
+      </p>
+      {props.description.length > 255 && (
+        <p
+          className="mx-auto span font-bold text-light-grey-400 cursor-pointer hover:text-light-secondary md:w-1/2"
+          onClick={props.onClick}
+        >
+          {props.showFull ? "Show Less" : "Show More"}
+        </p>
+      )}
+    </div>
+  );
+};
+
 export const TokenPage: FC = () => {
   const { address } = useParams();
   const [params] = useSearchParams();
@@ -40,71 +66,49 @@ export const TokenPage: FC = () => {
         />
       </PageNavigation>
       <div className="flex flex-col">
-        <div className="mt-2">
-          {!showMore &&
-            token?.details?.description &&
-            token?.details?.description?.length > 225 && (
-              <>
-                <p className="line-clamp-3 w-1/2 text-light-grey-400">
-                  {token?.details?.description}
-                </p>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setShowMore(!showMore)}
-                >
-                  Show More
-                </Button>
-              </>
-            )}
-          {showMore && (
-            <>
-              <p className="w-1/2 text-light-grey-400">
-                {token?.details?.description}
-              </p>
-              {token?.details?.description &&
-                token?.details?.description?.length > 225 && (
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setShowMore(!showMore)}
-                  >
-                    Hide
-                  </Button>
-                )}
-            </>
+        <div className="mt-2 px-4">
+          {token?.details?.description && (
+            <TokenDescription
+              onClick={() => setShowMore((prev) => !prev)}
+              showFull={showMore}
+              description={token?.details?.description}
+            />
           )}
         </div>
       </div>
 
-      <div className="mb-16 mt-10 flex justify-between gap-4 child:w-full">
-        <InfoLabel
-          label="Total Bonded Value"
-          tooltip={`Estimated total value in USD of all purchases from ${token?.name} markets.`}
-        >
-          {token?.purchaseCount && token.purchaseCount > 0 && token?.tbv === 0
-            ? "Unknown"
-            : "$" + new Intl.NumberFormat().format(Math.trunc(token?.tbv || 0))}
-        </InfoLabel>
-        <InfoLabel
-          label="Total Bonds"
-          tooltip={`The number of bonds acquired from ${token?.name}`}
-        >
-          {token?.purchaseCount}
-        </InfoLabel>
+      <div className="mt-10 flex flex-col-reverse md:flex-col">
+        <div className="mb-16 md:mt-10 grid grid-cols-2 md:flex justify-between gap-4 child:w-full ">
+          <InfoLabel
+            className="col-span-2"
+            label="Total Bonded Value"
+            tooltip={`Estimated total value in USD of all purchases from ${token?.name} markets.`}
+          >
+            {token?.purchaseCount && token.purchaseCount > 0 && token?.tbv === 0
+              ? "Unknown"
+              : "$" +
+                new Intl.NumberFormat().format(Math.trunc(token?.tbv || 0))}
+          </InfoLabel>
+          <InfoLabel
+            label="Total Bonds"
+            tooltip={`The number of bonds acquired from ${token?.name}`}
+          >
+            {token?.purchaseCount}
+          </InfoLabel>
 
-        <InfoLabel
-          label="Unique Bonders"
-          tooltip={`The number of unique addresses which have purchased ${token?.name} bonds.`}
-        >
-          {token?.uniqueBonders?.count}
-        </InfoLabel>
+          <InfoLabel
+            label="Unique Bonders"
+            tooltip={`The number of unique addresses which have purchased ${token?.name} bonds.`}
+          >
+            {token?.uniqueBonders?.count}
+          </InfoLabel>
+        </div>
+        <MarketList
+          title="Available Markets"
+          token={token?.address}
+          filterText={issuer!}
+        />
       </div>
-      <MarketList
-        title="Available Markets"
-        token={token?.address}
-        filterText={issuer!}
-      />
     </div>
   );
 };

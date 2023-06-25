@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { useDashboard } from "context/dashboard-context";
 import { ethers } from "ethers";
 import { Market } from "src/generated/graphql";
+import { useMediaQueries } from "hooks/useMediaQueries";
 
 const hasMarketExpiredOrClosed = ({ conclusion, hasClosed }: Market) => {
   return (
@@ -192,6 +193,7 @@ const tableColumns = [
 ];
 
 export const UserMarketList = () => {
+  const { isTabletOrMobile } = useMediaQueries();
   const navigate = useNavigate();
   const dashboard = useDashboard();
 
@@ -210,6 +212,12 @@ export const UserMarketList = () => {
     },
   ];
 
+  const fallback = {
+    title: "No markets to show",
+    buttonText: "Deploy a new Market",
+    onClick: () => navigate("/create"),
+  };
+
   return (
     <div className="flex flex-col gap-y-20">
       {!!dashboard.allMarkets.length && (
@@ -220,11 +228,7 @@ export const UserMarketList = () => {
           data={dashboard.allMarkets}
           filters={filters}
           //@ts-ignore
-          fallback={{
-            title: "No markets to show",
-            buttonText: "Deploy a new Market",
-            onClick: () => navigate("/create"),
-          }}
+          fallback={isTabletOrMobile ? { title: fallback.title } : fallback}
         />
       )}
     </div>

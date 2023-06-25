@@ -40,7 +40,7 @@ export const MarketList: FC<MarketListProps> = ({
   token,
   ...props
 }) => {
-  const { isMobile } = useMediaQueries();
+  const { isTabletOrMobile } = useMediaQueries();
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
   const markets = props.markets || allMarkets;
@@ -53,6 +53,12 @@ export const MarketList: FC<MarketListProps> = ({
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
+  const fallback = {
+    title: "NO MARKETS CURRENTLY AVAILABLE",
+    buttonText: "Deploy a new market",
+    onClick: () => navigate("/create"),
+  };
+
   return (
     <PaginatedTable
       title={props.title}
@@ -60,17 +66,13 @@ export const MarketList: FC<MarketListProps> = ({
       hideSearchbar={props.hideSearchbar}
       filterText={props.filterText}
       defaultSort="discount"
-      columns={isMobile ? mobileColumns : columns}
+      columns={isTabletOrMobile ? mobileColumns : columns}
       filters={filters}
       data={filteredMarkets}
       onClickRow={(market: CalculatedMarket) =>
         navigate(`/market/${market.chainId}/${market.marketId}`)
       }
-      fallback={{
-        title: "NO MARKETS CURRENTLY AVAILABLE",
-        buttonText: "Deploy a new market",
-        onClick: () => navigate("/create"),
-      }}
+      fallback={isTabletOrMobile ? { title: fallback.title } : fallback}
     />
   );
 };

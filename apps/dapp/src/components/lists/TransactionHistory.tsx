@@ -10,7 +10,7 @@ import {
 } from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
-import { useTokens } from "hooks";
+import { useMediaQueries, useTokens } from "hooks";
 import { useMemo } from "react";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import { TweakedBondPurchase } from "services/use-dashboard-loader";
@@ -38,7 +38,8 @@ const blockExplorer: Column<TweakedBondPurchase> = {
     );
   },
 };
-const userTxsHistory: Column<TweakedBondPurchase>[] = [
+
+const baseTxsHistory: Column<TweakedBondPurchase>[] = [
   {
     accessor: "timestamp",
     label: "Time",
@@ -49,20 +50,6 @@ const userTxsHistory: Column<TweakedBondPurchase>[] = [
       const date = format(timestamp, "yyyy.MM.dd");
       const time = format(timestamp, "kk:mm zzz");
       return { sortValue: purchase.timestamp, value: date, subtext: time };
-    },
-  },
-
-  {
-    accessor: "amount",
-    label: "Bond Amount",
-    formatter: (purchase) => {
-      return {
-        value: `${longFormatter.format(purchase.amount)} ${
-          purchase.quoteToken?.symbol ?? "???"
-        }`,
-        sortValue: purchase.amount,
-        icon: purchase.quoteToken?.logoURI ?? PLACEHOLDER_TOKEN_LOGO_URL,
-      };
     },
   },
 
@@ -79,6 +66,24 @@ const userTxsHistory: Column<TweakedBondPurchase>[] = [
       };
     },
   },
+];
+
+const userTxsHistory: Column<TweakedBondPurchase>[] = [
+  ...baseTxsHistory,
+  {
+    accessor: "amount",
+    label: "Bond Amount",
+    formatter: (purchase) => {
+      return {
+        value: `${longFormatter.format(purchase.amount)} ${
+          purchase.quoteToken?.symbol ?? "???"
+        }`,
+        sortValue: purchase.amount,
+        icon: purchase.quoteToken?.logoURI ?? PLACEHOLDER_TOKEN_LOGO_URL,
+      };
+    },
+  },
+
   {
     accessor: "totalValue",
     label: "Total Value",
@@ -128,6 +133,7 @@ export interface TransactionHistoryProps {
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
+  const { isMobile, isTabletOrMobile } = useMediaQueries();
   const { tokens, getByAddress } = useTokens();
   const isMarketHistory = !!props.market;
   //@ts-ignore
@@ -178,6 +184,8 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
 
     [tokens, data, props.data]
   );
+  const desktopColumns = isMarketHistory ? marketTxsHistory : userTxsHistory;
+  const cols = isTabletOrMobile ? baseTxsHistory : desktopColumns;
 
   return (
     <div className={props.className}>
@@ -185,7 +193,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         title={props.title ?? "Transaction History"}
         defaultSort="timestamp"
         loading={query.isLoading}
-        columns={isMarketHistory ? marketTxsHistory : userTxsHistory}
+        columns={cols}
         data={tableData}
         fallback={{ title: "NO TRANSACTIONS YET" }}
       />

@@ -34,7 +34,7 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
 
   return (
     <div className={`h-full w-full ${props.className}`}>
-      <ResponsiveContainer>
+      <ResponsiveContainer minWidth={300} minHeight={260}>
         <Chart data={props.data}>
           <XAxis
             dataKey="timestamp"

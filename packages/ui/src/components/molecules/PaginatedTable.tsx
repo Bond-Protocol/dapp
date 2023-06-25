@@ -28,7 +28,7 @@ export interface FallbackProps {
 
 const Fallback = (props: FallbackProps) => {
   return (
-    <div className="mt-20 flex w-full flex-col place-items-center">
+    <div className="mt-20 flex w-full flex-col place-items-center text-center">
       <div className="text-3xl">{props.title}</div>
       <div className="my-4">{props.subtext}</div>
       {props.buttonText && (
