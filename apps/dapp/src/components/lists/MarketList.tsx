@@ -2,10 +2,11 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Filter, PaginatedTable } from "ui";
-import { useMarkets } from "hooks";
+import { useMarkets, useMediaQueries } from "hooks";
 import {
   marketList as tableColumns,
   tokenMarketList as tokenColumns,
+  mobileMarketLIst as mobileColumns,
 } from "./columns";
 
 type MarketListProps = {
@@ -39,6 +40,7 @@ export const MarketList: FC<MarketListProps> = ({
   token,
   ...props
 }) => {
+  const { isMobile } = useMediaQueries();
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
   const markets = props.markets || allMarkets;
@@ -58,7 +60,7 @@ export const MarketList: FC<MarketListProps> = ({
       hideSearchbar={props.hideSearchbar}
       filterText={props.filterText}
       defaultSort="discount"
-      columns={columns}
+      columns={isMobile ? mobileColumns : columns}
       filters={filters}
       data={filteredMarkets}
       onClickRow={(market: CalculatedMarket) =>

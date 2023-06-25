@@ -7,7 +7,7 @@ import { useTokens } from "context/token-context";
 
 export const TokenPage: FC = () => {
   const { address } = useParams();
-  const [params, setParams] = useSearchParams();
+  const [params] = useSearchParams();
   const { fetchedExtendedDetails, getByAddress } = useTokens();
   const [token, setToken] = useState(getByAddress(address || ""));
 

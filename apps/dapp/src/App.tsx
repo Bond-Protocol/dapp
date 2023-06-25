@@ -18,26 +18,23 @@ export const App: FC = () => {
   if (underMaintenance) return <CoverUpScreen message={underMaintenance} />;
 
   return (
-    <>
-      <MobileCover />
-      <div className="xs:hidden fml:block">
-        <Providers>
-          <AppStatusBanner />
-          <div className="flex h-full min-h-[100vh] flex-col justify-between">
-            <div className="h-full overflow-x-hidden font-jakarta antialiased">
-              <Navbar />
-              <AppBackdrop />
-              <PolicyRoutes />
-              <div className="mx-auto max-w-[1136px]">
-                <PageContainer>
-                  <RouteMap />
-                </PageContainer>
-              </div>
+    <div className="">
+      <Providers>
+        <AppStatusBanner />
+        <div className="flex h-full min-h-[100vh] flex-col justify-between">
+          <div className="h-full overflow-x-hidden font-jakarta antialiased">
+            <Navbar />
+            <AppBackdrop />
+            <PolicyRoutes />
+            <div className="mx-auto max-w-[1136px]">
+              <PageContainer>
+                <RouteMap />
+              </PageContainer>
             </div>
-            <Footer />
           </div>
-        </Providers>
-      </div>
-    </>
+          <Footer />
+        </div>
+      </Providers>
+    </div>
   );
 };

@@ -213,3 +213,7 @@ export const base = [bondColumn, bondPrice, discountColumn, maxPayout, vesting];
 export const marketList = [...base, tbv, issuer, viewColumn];
 export const tokenMarketList = [...base, tbv, issuer, viewColumn];
 export const userMarketList = [bondColumn];
+
+export const mobileMarketLIst = [bondColumn, bondPrice, discountColumn].map(
+  (c) => ({ ...c, width: undefined })
+);

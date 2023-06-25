@@ -11,7 +11,7 @@ export const Navbar = () => {
       <div className="flex w-1/3" onClick={() => navigate("/")}>
         <ProtocolLogo className="py-6" />
       </div>
-      <NavbarTabs className="w-1/3" />
+      <NavbarTabs className="hidden w-1/3 md:flex" />
       <div className="flex w-1/3 select-none justify-end">
         <ConnectButton />
       </div>

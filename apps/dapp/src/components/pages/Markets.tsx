@@ -8,7 +8,7 @@ export const Markets = () => {
   const scrollUp = () => window.scrollTo(0, 0);
   return (
     <>
-      <div className="-mb-[54px] flex items-end justify-between py-2">
+      <div className="flex items-end justify-between py-2 md:-mb-[54px]">
         <PageHeader
           title={"LIVE MARKETS"}
           subtitle={"Instantly acquire governance tokens at a discount"}
