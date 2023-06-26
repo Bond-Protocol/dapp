@@ -12,7 +12,7 @@ export const Navbar = () => {
         <ProtocolLogo className="py-6" />
       </div>
       <NavbarTabs className="hidden w-1/3 md:flex" />
-      <div className="flex w-1/3 select-none justify-end">
+      <div className="flex w-1/2 select-none justify-end md:w-1/3">
         <ConnectButton />
       </div>
     </div>

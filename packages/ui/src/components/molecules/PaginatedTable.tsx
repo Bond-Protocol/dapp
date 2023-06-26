@@ -38,6 +38,13 @@ const Fallback = (props: FallbackProps) => {
   );
 };
 
+const filterTable = (element: Cell, filter: string) =>
+  Object.values(element).some((v) => {
+    const value = v?.searchValue || v?.value;
+
+    return String(value).toLowerCase().includes(filter.toLowerCase());
+  });
+
 export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   title?: string | JSX.Element;
   filterText?: string;
@@ -53,8 +60,14 @@ export const PaginatedTable = ({
   filters = [],
   ...props
 }: PaginatedTableProps) => {
+  const [textToFilter, setTextToFilter] = useState(props.filterText ?? "");
+
+  const mappedFilters = filters.map((f) =>
+    f.type === "text" ? { ...f, handler: (v: string) => setTextToFilter(v) } : f
+  );
+
   const [activeFilters, setActiveFilters] = useState<Filter[]>(
-    filters.filter((f) => f.startActive)
+    mappedFilters.filter((f) => f.startActive)
   );
 
   const tableData = useMemo(
@@ -75,7 +88,6 @@ export const PaginatedTable = ({
 
   const [data, handleSorting] = useSorting(tableData);
 
-  const [text, setText] = useState(props.filterText ?? "");
   const [page, setPage] = useState(0);
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -100,13 +112,8 @@ export const PaginatedTable = ({
     setPage(0);
   };
 
-  const textToFilter = text;
-  const filteredData = data?.filter((r) =>
-    Object.values(r).some((v) => {
-      const value = v?.searchValue || v?.value;
-
-      return String(value).toLowerCase().includes(textToFilter.toLowerCase());
-    })
+  const filteredData = data?.filter((element) =>
+    filterTable(element, textToFilter)
   );
 
   const totalRows = filteredData?.length || 0;
@@ -143,8 +150,8 @@ export const PaginatedTable = ({
         <div className="mb-2 flex h-min gap-x-1">
           {!props.hideSearchbar && (
             <SearchBar
-              value={text}
-              onChange={setText}
+              value={textToFilter}
+              onChange={setTextToFilter}
               className={"max-w-xs justify-self-end"}
             />
           )}

@@ -2,12 +2,14 @@ import { ConnectButton as ConnectButtonUnstyled } from "@rainbow-me/rainbowkit";
 import { Button, Icon } from "ui";
 import arbitrum from "assets/icons/arbitrum.svg";
 import repeatIcon from "assets/icons/loop.svg";
+import { useMediaQueries } from "hooks/useMediaQueries";
 
 export interface ConnectButtonProps {
   full?: boolean;
 }
 
 export const ConnectButton = (props: ConnectButtonProps) => {
+  const { isTabletOrMobile } = useMediaQueries();
   return (
     <ConnectButtonUnstyled.Custom>
       {({
@@ -42,7 +44,7 @@ export const ConnectButton = (props: ConnectButtonProps) => {
                     onClick={openConnectModal}
                     className="w-full px-4 align-top font-fraktion"
                   >
-                    Connect Wallet
+                    {isTabletOrMobile ? "Connect" : "Connect Wallet"}
                   </Button>
                 );
               }

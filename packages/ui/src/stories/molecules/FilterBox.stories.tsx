@@ -8,5 +8,15 @@ export default {
 } as Meta<typeof FilterBox>;
 
 export const Primary = {
-  args: {},
+  args: {
+    filters: [
+      {
+        id: "afx",
+        type: "text",
+        label: "Search",
+        handler: (args) => console.log({ args }),
+      },
+    ],
+    activeFilters: [],
+  },
 };

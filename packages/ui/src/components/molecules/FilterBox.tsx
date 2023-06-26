@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { ClickAwayListener, PopperUnstyled } from "@mui/base";
+import { Input, Select, Switch } from "..";
 import { ReactComponent as FilterIcon } from "../../assets/icons/sliders.svg";
-import { Select, Switch } from "..";
 
-type FilterTypes = "switch" | "select";
+type FilterTypes = "switch" | "select" | "text";
 
 export type Filter = {
   id: string;
-  type: "switch" | "select";
+  type: FilterTypes;
   label?: string;
   handler: (arg: any) => Boolean;
   startActive?: boolean;
@@ -22,6 +22,7 @@ export type FilterBoxProps = {
 const components: Record<FilterTypes, (props: any) => JSX.Element> = {
   switch: Switch,
   select: Select,
+  text: Input,
 };
 
 export const FilterBox = (props: FilterBoxProps) => {
@@ -57,6 +58,18 @@ export const FilterBox = (props: FilterBoxProps) => {
             <div className="mb-3 flex flex-col gap-y-2">
               {props.filters.map((f) => {
                 const FilterComponent = components[f.type];
+
+                if (f.type === "text") {
+                  return (
+                    <FilterComponent
+                      label={f.label}
+                      onChange={(e: React.BaseSyntheticEvent) =>
+                        f.handler(e.target.value)
+                      }
+                    />
+                  );
+                }
+
                 return (
                   <FilterComponent
                     label={f.label}

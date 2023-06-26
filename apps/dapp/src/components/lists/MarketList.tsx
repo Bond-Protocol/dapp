@@ -63,7 +63,7 @@ export const MarketList: FC<MarketListProps> = ({
     <PaginatedTable
       title={props.title}
       loading={isSomeLoading}
-      hideSearchbar={props.hideSearchbar}
+      hideSearchbar={props.hideSearchbar || isTabletOrMobile}
       filterText={props.filterText}
       defaultSort="discount"
       columns={isTabletOrMobile ? mobileColumns : columns}
