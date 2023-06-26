@@ -30,11 +30,13 @@ export const MarketInsights = () => {
   )!;
 
   if (!market) return <Loading content={meme()} />;
+  const capacityInQuote = market.capacityToken === market.quoteToken.symbol;
 
-  const maxPayout =
-    market.currentCapacity < Number(market.maxPayout)
+  const maxPayout = !capacityInQuote
+    ? market.currentCapacity < Number(market.maxPayout)
       ? market.currentCapacity
-      : market.maxPayout;
+      : market.maxPayout
+    : market.maxPayout;
 
   const vestingDate = formatDate.short(new Date(market.vesting * 1000));
 
@@ -76,7 +78,9 @@ export const MarketInsights = () => {
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {formatCurrency.trimToLengthSymbol(Number(maxPayout))}
+          {Number(maxPayout) > 1
+            ? formatCurrency.trimToLengthSymbol(Number(maxPayout))
+            : trim(Number(maxPayout), calculateTrimDigits(Number(maxPayout)))}
           <span className="ml-1 text-xl">{market.payoutToken.symbol}</span>
         </InfoLabel>
 
@@ -118,7 +122,12 @@ export const MarketInsights = () => {
           label={`${isFutureMarket ? "Total" : "Remaining"} Capacity`}
           tooltip="The remaining amount of tokens to be bonded in this market"
         >
-          {formatCurrency.trimToLengthSymbol(market.currentCapacity)}
+          {Number(market.currentCapacity) > 1
+            ? formatCurrency.trimToLengthSymbol(Number(market.currentCapacity))
+            : trim(
+                Number(market.currentCapacity),
+                calculateTrimDigits(Number(market.currentCapacity))
+              )}
           <span className="ml-1 text-xl">{market.capacityToken}</span>
         </InfoLabel>
       </div>
