@@ -3,12 +3,12 @@ import { Button } from "components";
 
 export type CloseMarketDialogProps = {
   market: CalculatedMarket;
-  handleClose: (id: string) => void;
+  onSubmit: (id: string) => void;
 };
 
 export const CloseMarketDialog = ({
   market,
-  handleClose,
+  onSubmit,
 }: CloseMarketDialogProps) => {
   return (
     <div className="max-w-sm text-center">
@@ -21,7 +21,7 @@ export const CloseMarketDialog = ({
         <span className="font-bold">can't be re-opened. </span> You'll have to
         deploy a new market with the same configuration.
       </p>
-      <Button onClick={() => handleClose(market.id)}>Close Market</Button>
+      <Button onClick={() => onSubmit(market.id)}>Close Market</Button>
     </div>
   );
 };

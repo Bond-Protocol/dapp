@@ -51,6 +51,7 @@ export function useCalculatedMarkets() {
         e
       );
       console.log(market);
+      return market;
     }
   };
 

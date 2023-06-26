@@ -125,7 +125,7 @@ const testnetProviders: ProviderOptions[] = [
   },
 ];
 
-const activeProviders = environment.isTesting
+const activeProviders = environment.isTestnet
   ? testnetProviders
   : mainnetProviders;
 

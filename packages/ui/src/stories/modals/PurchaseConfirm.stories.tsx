@@ -15,6 +15,17 @@ export const Primary = {
     amount: "333,333 DAI",
     payout: "333 GOHM",
     vestingTime: "12 months",
-    contract: "0x12312312312312312312312311414",
+    auctioneerAddress: "0x12312312312312312312312311414",
+    tellerAddress: "0x12312312312312312312312311414",
+    blockExplorerURL: "https://etherscan.io/address/",
+    blockExplorerName: "Etherscan",
+    networkFee: "0.012 ETH",
+  },
+};
+
+export const Warning = {
+  args: {
+    ...Primary.args,
+    discount: -1,
   },
 };

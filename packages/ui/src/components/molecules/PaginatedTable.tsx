@@ -29,7 +29,7 @@ export interface FallbackProps {
 const Fallback = (props: FallbackProps) => {
   return (
     <div className="mt-20 flex w-full flex-col place-items-center">
-      <div className="text-5xl">{props.title}</div>
+      <div className="text-3xl">{props.title}</div>
       <div className="my-4">{props.subtext}</div>
       {props.buttonText && (
         <Button onClick={props.onClick}>{props.buttonText}</Button>
@@ -75,7 +75,7 @@ export const PaginatedTable = ({
 
   const [data, handleSorting] = useSorting(tableData);
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState(props.filterText ?? "");
   const [page, setPage] = useState(0);
 
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -100,7 +100,7 @@ export const PaginatedTable = ({
     setPage(0);
   };
 
-  const textToFilter = props.filterText ?? text;
+  const textToFilter = text;
   const filteredData = data?.filter((r) =>
     Object.values(r).some((v) => {
       const value = v?.searchValue || v?.value;
@@ -127,28 +127,8 @@ export const PaginatedTable = ({
   const isEmpty =
     !props.loading && !filteredData?.length && activeFilters.length === 0;
 
-  if (isEmpty) {
-    return (
-      <div className={props.className}>
-        {React.isValidElement(props.fallback) ? (
-          props.fallback
-        ) : (
-          <Fallback {...(props.fallback as FallbackProps)} />
-        )}
-      </div>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <div className={props.className}>
-        <Loading />
-      </div>
-    );
-  }
-
   return (
-    <div className={props.className}>
+    <div className={"pb-20 " + props.className}>
       <div
         className={`flex items-center justify-between ${props.headingClassName}`}
       >
@@ -165,7 +145,7 @@ export const PaginatedTable = ({
             <SearchBar
               value={text}
               onChange={setText}
-              className="max-w-xs justify-self-end"
+              className={"max-w-xs justify-self-end"}
             />
           )}
 
@@ -184,6 +164,23 @@ export const PaginatedTable = ({
         emptyRows={emptyRows}
         data={rows}
       />
+
+      {isLoading && (
+        <div className={props.className}>
+          <Loading />
+        </div>
+      )}
+
+      {isEmpty && (
+        <div className={"pb-8" + props.className}>
+          {React.isValidElement(props.fallback) ? (
+            props.fallback
+          ) : (
+            <Fallback {...(props.fallback as FallbackProps)} />
+          )}
+        </div>
+      )}
+
       {totalRows > rowsPerPage && (
         <Pagination
           className="mt-4"

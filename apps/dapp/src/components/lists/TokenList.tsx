@@ -8,6 +8,7 @@ import { Token } from "@bond-protocol/contract-library";
 import { numericSort } from "services";
 import { useSubgraph } from "hooks/useSubgraph";
 import { environment } from "src/environment";
+import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 
 export const TokenList = () => {
   const { tbv, payoutTokens } = useTokens();
@@ -26,7 +27,7 @@ export const TokenList = () => {
       .filter(
         (value: Token) =>
           !environment.isProduction ||
-          value.logoUrl !== "/placeholders/token-placeholder.png"
+          value.logoURI !== PLACEHOLDER_TOKEN_LOGO_URL
       )
       .forEach((value: Token) => arr.push(value));
     return arr.sort(compareFunction);

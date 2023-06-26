@@ -1,17 +1,44 @@
 import { format } from "date-fns";
 import {
   CalculatedMarket,
-  CHAIN_ID,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import { subgraphEndpoints } from "services/subgraph-endpoints";
-import { useListBondPurchasesPerMarketQuery } from "src/generated/graphql";
+import {
+  BondPurchase,
+  useListBondPurchasesPerMarketQuery,
+} from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
 import { useTokens } from "hooks";
 import { useMemo } from "react";
+import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
+import { TweakedBondPurchase } from "services/use-dashboard-loader";
+import { mergeTokens } from "src/utils/mergeTokens";
 
-const userTxsHistory: Column<any>[] = [
+const blockExplorer: Column<TweakedBondPurchase> = {
+  accessor: "blockExplorerUrl",
+  label: "Tx Hash",
+  unsortable: true,
+  formatter: (purchase) => {
+    const txHash = purchase.id;
+    const start = txHash.substring(0, 4);
+    const end = txHash.substring(txHash.length - 4);
+    return {
+      value: `${start}...${end}`,
+      subtext: purchase.txUrl,
+      searchValue: txHash,
+    };
+  },
+  Component: (props) => {
+    return (
+      <Link target="_blank" rel="noopener noreferrer" href={props.subtext}>
+        {props.value}
+      </Link>
+    );
+  },
+};
+const userTxsHistory: Column<TweakedBondPurchase>[] = [
   {
     accessor: "timestamp",
     label: "Time",
@@ -24,13 +51,39 @@ const userTxsHistory: Column<any>[] = [
       return { sortValue: purchase.timestamp, value: date, subtext: time };
     },
   },
+
+  {
+    accessor: "amount",
+    label: "Bond Amount",
+    formatter: (purchase) => {
+      return {
+        value: `${longFormatter.format(purchase.amount)} ${
+          purchase.quoteToken?.symbol ?? "???"
+        }`,
+        sortValue: purchase.amount,
+        icon: purchase.quoteToken?.logoURI ?? PLACEHOLDER_TOKEN_LOGO_URL,
+      };
+    },
+  },
+
+  {
+    accessor: "payout",
+    label: "Payout Amount",
+    formatter: (purchase) => {
+      return {
+        value: `${longFormatter.format(purchase.payout)} ${
+          purchase.payoutToken?.symbol ?? "???"
+        }`,
+        icon: purchase.payoutToken?.logoURI ?? PLACEHOLDER_TOKEN_LOGO_URL,
+        sortValue: purchase.payout,
+      };
+    },
+  },
   {
     accessor: "totalValue",
     label: "Total Value",
-    alignEnd: true,
     formatter: (purchase) => {
-      const value =
-        parseFloat(purchase.payout) * parseFloat(purchase.payoutPrice);
+      const value = Number(purchase.payout) * Number(purchase.payoutPrice);
 
       return {
         value:
@@ -39,32 +92,7 @@ const userTxsHistory: Column<any>[] = [
       };
     },
   },
-  {
-    accessor: "amount",
-    label: "Bond Amount",
-    alignEnd: true,
-    formatter: (purchase) => {
-      return {
-        value: `${longFormatter.format(purchase.amount)} ${
-          purchase.quoteToken.symbol
-        }`,
-        sortValue: purchase.amount,
-      };
-    },
-  },
-  {
-    accessor: "payout",
-    label: "Payout Amount",
-    alignEnd: true,
-    formatter: (purchase) => {
-      return {
-        value: `${longFormatter.format(purchase.payout)} ${
-          purchase.payoutToken.symbol
-        }`,
-        sortValue: purchase.payout,
-      };
-    },
-  },
+  blockExplorer,
 ];
 
 const marketTxsHistory: Column<any>[] = [
@@ -90,88 +118,76 @@ const marketTxsHistory: Column<any>[] = [
       );
     },
   },
-  {
-    accessor: "blockExplorerUrl",
-    label: "Tx Hash",
-    unsortable: true,
-    formatter: (purchase) => {
-      const txHash = purchase.id;
-      const start = txHash.substring(0, 4);
-      const end = txHash.substring(txHash.length - 4);
-      return {
-        value: `${start}...${end}`,
-        subtext: purchase.txUrl,
-        searchValue: txHash,
-      };
-    },
-    Component: (props) => {
-      return (
-        <Link target="_blank" rel="noopener noreferrer" href={props.subtext}>
-          {props.value}
-        </Link>
-      );
-    },
-  },
 ];
 
 export interface TransactionHistoryProps {
-  market: CalculatedMarket;
+  title?: string;
+  market?: CalculatedMarket;
+  data?: Array<BondPurchase & { chainId: number | string }>;
   className?: string;
 }
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
   const { tokens, getByAddress } = useTokens();
+  const isMarketHistory = !!props.market;
+  //@ts-ignore
+  const endpoint = subgraphEndpoints[props.market?.chainId];
 
   const { data, ...query } = useListBondPurchasesPerMarketQuery(
-    {
-      // @ts-ignore
-      endpoint: subgraphEndpoints[props.market.chainId as CHAIN_ID],
-      fetchParams: {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    },
-    { marketId: props.market.id }
+    { endpoint },
+    { marketId: props.market?.id },
+    { enabled: isMarketHistory }
   );
 
-  const { blockExplorerUrl: blockExplorerTxUrl } = getBlockExplorer(
-    props.market.chainId,
-    "tx"
-  );
-  const { blockExplorerUrl: blockExplorerAddressUrl } = getBlockExplorer(
-    props.market.chainId,
-    "address"
-  );
+  const details = (isMarketHistory ? data?.bondPurchases : props.data) ?? [];
 
   const tableData = useMemo(
     () =>
-      data?.bondPurchases
+      details
         .map((p) => {
-          const payoutPrice = getByAddress(p.payoutToken.address)?.price ?? 0;
+          //@ts-ignore
+          const chainId = isMarketHistory ? props?.market?.chainId : p.chainId;
+
+          const { blockExplorerUrl: blockExplorerTxUrl } = getBlockExplorer(
+            chainId,
+            "tx"
+          );
+          const { blockExplorerUrl: blockExplorerAddressUrl } =
+            getBlockExplorer(chainId, "address");
+
+          const updated = mergeTokens(p, getByAddress);
+          const payoutPrice = updated.payoutToken?.price ?? 0;
 
           const txUrl = blockExplorerTxUrl + p.id;
           const addressUrl = blockExplorerAddressUrl + p.recipient;
 
-          return { ...p, payoutPrice, txUrl, addressUrl, market: props.market };
+          return {
+            ...updated,
+            payoutPrice,
+            txUrl,
+            addressUrl,
+            market: props.market,
+          };
         })
-        .filter((p) => p.timestamp > props.market.creationBlockTimestamp) // Avoids fetching markets with the same id from old contracts
+        .filter(
+          (p) =>
+            !isMarketHistory ||
+            p.timestamp > props.market?.creationBlockTimestamp!
+        ) // Avoids fetching markets with the same id from old contracts
         .sort((a, b) => b.timestamp - a.timestamp),
-    [tokens, data]
+
+    [tokens, data, props.data]
   );
 
   return (
-    <div className={"mb-10 " + props.className}>
+    <div className={props.className}>
       <PaginatedTable
-        title="Transaction History"
+        title={props.title ?? "Transaction History"}
         defaultSort="timestamp"
         loading={query.isLoading}
-        columns={marketTxsHistory}
+        columns={isMarketHistory ? marketTxsHistory : userTxsHistory}
         data={tableData}
-        //@ts-ignore
-        fallback={{
-          title: "NO TRANSACTIONS YET",
-        }}
+        fallback={{ title: "NO TRANSACTIONS YET" }}
       />
     </div>
   );

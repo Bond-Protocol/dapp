@@ -6,6 +6,7 @@ export interface ButtonGroupProps {
   rightLabel?: string;
   onClickLeft?: () => void;
   onClickRight?: () => void;
+  disabled?: boolean;
 }
 
 export const ButtonGroup = (props: ButtonGroupProps) => {
@@ -19,7 +20,12 @@ export const ButtonGroup = (props: ButtonGroupProps) => {
         >
           {props.leftLabel}
         </Button>
-        <Button thin className="w-1/2" onClick={props.onClickRight}>
+        <Button
+          thin
+          disabled={props.disabled}
+          className="w-1/2"
+          onClick={props.onClickRight}
+        >
           {props.rightLabel}
         </Button>
       </div>

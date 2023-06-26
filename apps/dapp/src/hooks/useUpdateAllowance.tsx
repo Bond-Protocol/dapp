@@ -1,39 +1,44 @@
 import { useSigner } from "wagmi";
 import { useState } from "react";
 import { changeApproval } from "@bond-protocol/contract-library";
-import type { AllowanceToken } from "ui";
+import { AllowanceToken } from "ui";
 
 export const useUpdateAllowance = () => {
   const [updating, setUpdating] = useState(false);
-  const [txHash, setTxHash] = useState("");
+  const [token, setToken] = useState<AllowanceToken>();
+  const [allowance, setAllowance] = useState<string>("");
+
   const { data: signer } = useSigner();
 
-  const update = async (amount: string, token: AllowanceToken) => {
+  const updateAllowance = (
+    newAllowance = allowance,
+    selectedToken = token,
+    address?: string
+  ) => {
     if (!signer) {
-      return;
+      throw new Error("No signer connected");
     }
 
-    try {
-      setUpdating(true);
-      const tx = await changeApproval(
-        token.address,
-        token.decimals,
-        token.auctioneer,
-        amount,
-        signer
-      );
-      setTxHash(tx.hash);
-      await tx.wait(1);
-      setUpdating(false);
-    } catch (e) {
-      console.log("Failed to change allowance", e);
+    if (!selectedToken || !newAllowance) {
+      throw new Error("Invalid input: " + JSON.stringify({ allowance, token }));
     }
+
+    return changeApproval(
+      selectedToken.address,
+      selectedToken.decimals,
+      address ?? selectedToken.auctioneer,
+      newAllowance,
+      signer
+    );
   };
 
   return {
-    update,
+    updateAllowance,
     updating,
-    txHash,
+    token,
+    allowance,
     setUpdating,
+    setToken,
+    setAllowance,
   };
 };

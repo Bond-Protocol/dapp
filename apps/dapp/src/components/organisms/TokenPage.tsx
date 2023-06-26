@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Button, InfoLabel, SocialRow } from "ui";
 import { MarketList } from "components/lists";
 import { PageHeader, PageNavigation } from "components/common";
@@ -7,6 +7,7 @@ import { useTokens } from "context/token-context";
 
 export const TokenPage: FC = () => {
   const { address } = useParams();
+  const [params, setParams] = useSearchParams();
   const { fetchedExtendedDetails, getByAddress } = useTokens();
   const [token, setToken] = useState(getByAddress(address || ""));
 
@@ -19,6 +20,7 @@ export const TokenPage: FC = () => {
     setToken(getByAddress(address || ""));
   }, [fetchedExtendedDetails]);
 
+  const issuer = params.get("issuer");
   return (
     <div className="pb-12">
       <PageNavigation
@@ -32,7 +34,7 @@ export const TokenPage: FC = () => {
             <SocialRow
               {...token?.details?.links}
               width={18}
-              className="mt-3 ml-2.5 justify-start gap-4 fill-white"
+              className="ml-2.5 mt-3 justify-start gap-4 fill-white"
             />
           }
         />
@@ -75,7 +77,7 @@ export const TokenPage: FC = () => {
         </div>
       </div>
 
-      <div className="mt-10 mb-16 flex justify-between gap-4 child:w-full">
+      <div className="mb-16 mt-10 flex justify-between gap-4 child:w-full">
         <InfoLabel
           label="Total Bonded Value"
           tooltip={`Estimated total value in USD of all purchases from ${token?.name} markets.`}
@@ -98,7 +100,11 @@ export const TokenPage: FC = () => {
           {token?.uniqueBonders?.count}
         </InfoLabel>
       </div>
-      <MarketList token={token?.address} filter={["token"]} />
+      <MarketList
+        title="Available Markets"
+        token={token?.address}
+        filterText={issuer!}
+      />
     </div>
   );
 };

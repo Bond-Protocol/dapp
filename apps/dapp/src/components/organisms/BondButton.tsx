@@ -89,7 +89,7 @@ export const BondButton = (props: BondButtonProps) => {
               content={tooltipContent}
             />
             GET{" "}
-            {props.quoteTokenSymbol.length > 14
+            {props.quoteTokenSymbol.length > 12
               ? props.quoteTokenSymbol.split(" ")[1]
               : props.quoteTokenSymbol}
             <LinkIcon className={`color-inherit my-auto ml-1`} />
