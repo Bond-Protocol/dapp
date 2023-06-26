@@ -34,6 +34,62 @@ const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
 const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
 
+const ShowWarning = ({
+  market,
+  showOwnerBalanceWarning,
+  showOwnerAllowanceWarning,
+}: {
+  market: CalculatedMarket;
+  showOwnerBalanceWarning: boolean;
+  showOwnerAllowanceWarning: boolean;
+}) => {
+  return (
+    <div className="my-1 pt-2 text-xs font-light text-red-500">
+      {showOwnerBalanceWarning && (
+        <div>
+          <p className="py-1">
+            WARNING: This market allows a max payout of {market.maxPayout}{" "}
+            {market.payoutToken.symbol}, however the market owner currently has
+            a balance of {market.ownerBalance} {market.payoutToken.symbol}.
+          </p>
+          <p className="py-1">
+            If you are the market owner, you can fix this issue by transferring
+            more {market.payoutToken.symbol} to the owner address {market.owner}
+            .
+          </p>
+        </div>
+      )}
+      {showOwnerAllowanceWarning && (
+        <div>
+          <p className="py-1">
+            WARNING: This market allows a max payout of {market.maxPayout}{" "}
+            {market.payoutToken.symbol}, however the market owner&apos;s
+            allowance is limited to {market.ownerAllowance}{" "}
+            {market.payoutToken.symbol}.
+          </p>
+          <p className="py-1">
+            If you are the market owner, you can fix this issue by increasing
+            the allowance for {market.teller} to spend{" "}
+            {market.payoutToken.symbol} from the owner address {market.owner}.
+          </p>
+        </div>
+      )}
+      {(showOwnerBalanceWarning || showOwnerAllowanceWarning) && (
+        <div>
+          <p className="py-1">
+            As a result, attempts to purchase a bond paying out an amount in
+            excess of{" "}
+            {Math.min(
+              Number(market.ownerBalance),
+              Number(market.ownerAllowance)
+            )}
+            &nbsp;{market.payoutToken.symbol} will fail.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
 export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -248,52 +304,11 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           market={market}
           tokenIcon={market.quoteToken.logoUrl}
         />
-        <div className="my-1 pt-2 text-xs font-light text-red-500">
-          {showOwnerBalanceWarning && (
-            <div>
-              <p className="py-1">
-                WARNING: This market allows a max payout of {market.maxPayout}{" "}
-                {market.payoutToken.symbol}, however the market owner currently
-                has a balance of {market.ownerBalance}{" "}
-                {market.payoutToken.symbol}.
-              </p>
-              <p className="py-1">
-                If you are the market owner, you can fix this issue by
-                transferring more {market.payoutToken.symbol} to the owner
-                address {market.owner}.
-              </p>
-            </div>
-          )}
-          {showOwnerAllowanceWarning && (
-            <div>
-              <p className="py-1">
-                WARNING: This market allows a max payout of {market.maxPayout}{" "}
-                {market.payoutToken.symbol}, however the market owner&apos;s
-                allowance is limited to {market.ownerAllowance}{" "}
-                {market.payoutToken.symbol}.
-              </p>
-              <p className="py-1">
-                If you are the market owner, you can fix this issue by
-                increasing the allowance for {market.teller} to spend{" "}
-                {market.payoutToken.symbol} from the owner address{" "}
-                {market.owner}.
-              </p>
-            </div>
-          )}
-          {(showOwnerBalanceWarning || showOwnerAllowanceWarning) && (
-            <div>
-              <p className="py-1">
-                As a result, attempts to purchase a bond paying out an amount in
-                excess of{" "}
-                {Math.min(
-                  Number(market.ownerBalance),
-                  Number(market.ownerAllowance)
-                )}
-                &nbsp;{market.payoutToken.symbol} will fail.
-              </p>
-            </div>
-          )}
-        </div>
+        <ShowWarning
+          market={market}
+          showOwnerAllowanceWarning={!!showOwnerAllowanceWarning}
+          showOwnerBalanceWarning={showOwnerBalanceWarning}
+        />
         <ActionInfoList fields={summaryFields} />
         <BondButton
           showConnect={!isConnected}
@@ -324,12 +339,20 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         InitialDialog={(args) => (
           <PurchaseConfirmDialog
             {...args}
-            amount={`${amount} ${market.quoteToken.symbol}`}
+            amount={`${formatCurrency.trimToken(amount)} ${
+              market.quoteToken.symbol
+            }`}
             payout={`${Number(payout).toFixed(4)} ${market.payoutToken.symbol}`}
             discount={market.discount}
             issuer={market.payoutToken.name}
             vestingTime={vestingLabel}
-            contract={market.auctioneer}
+            auctioneerAddress={market.auctioneer}
+            tellerAddress={market.teller}
+            payoutLogo={market.payoutToken.logoURI}
+            quoteLogo={market.quoteToken.logoURI}
+            networkFee={`${networkFee} ${nativeCurrency.symbol}`}
+            blockExplorerName={blockExplorerName}
+            blockExplorerURL={blockExplorerUrl}
           />
         )}
         SuccessDialog={(args) => (
