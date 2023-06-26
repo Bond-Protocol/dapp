@@ -187,10 +187,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         loading={query.isLoading}
         columns={isMarketHistory ? marketTxsHistory : userTxsHistory}
         data={tableData}
-        //@ts-ignore
-        fallback={{
-          title: "NO TRANSACTIONS YET",
-        }}
+        fallback={{ title: "NO TRANSACTIONS YET" }}
       />
     </div>
   );

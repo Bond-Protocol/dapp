@@ -2,7 +2,13 @@ import { ActionInfoProps, ActionInfoLabel } from "components";
 
 export const SummaryRow = (props: ActionInfoProps) => {
   return (
-    <div className="child:my-auto child:mx-2 text-light-grey flex h-10 justify-between bg-white/5">
+    <div
+      className={
+        "child:my-auto child:mx-2 text-light-grey flex h-10 justify-between bg-white/5" +
+        " " +
+        props.className
+      }
+    >
       <ActionInfoLabel
         value={props.leftLabel}
         tooltip={props.tooltip}

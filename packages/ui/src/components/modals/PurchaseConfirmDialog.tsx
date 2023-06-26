@@ -1,5 +1,8 @@
 import { ButtonGroup } from "components/molecules/ButtonGroup";
-import { Link } from "components/atoms";
+import { Checkbox, Link, SummaryLabel } from "components/atoms";
+import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
+import { SummaryList, SummaryRow } from "../molecules";
+import { useState } from "react";
 
 export type PurchaseConfirmDialogProps = {
   issuer?: string;
@@ -8,9 +11,21 @@ export type PurchaseConfirmDialogProps = {
   discount?: number;
   vestingTime?: string;
   contract?: string;
+  tellerAddress: string;
+  auctioneerAddress: string;
+  blockExplorerName: string;
+  blockExplorerURL: string;
+  payoutLogo?: string;
+  quoteLogo?: string;
+  networkFee?: string;
   onSubmit: () => void;
   onCancel: () => void;
 };
+
+const warning =
+  " This market is currently priced at a premium, it is cheaper to buy on the open market. We recommend you buy elsewhere, or wait until the price drops on BondProtocol.";
+const unknownWarning =
+  " We cannot calculate a discount for this market as we are missing price data for one or both of the tokens. Please double check you wish to purchase at this price before continuing. ";
 
 export const PurchaseConfirmDialog = ({
   issuer,
@@ -21,62 +36,87 @@ export const PurchaseConfirmDialog = ({
   contract = "",
   onCancel,
   onSubmit,
+  blockExplorerURL,
+  blockExplorerName,
+  ...props
 }: PurchaseConfirmDialogProps) => {
+  const [accepted, setAccepted] = useState(false);
+
+  const fields = [
+    {
+      leftLabel: "Network fee",
+      tooltip: "An estimation of how much gas the transaction will consume",
+      rightLabel: props.networkFee,
+    },
+    {
+      leftLabel: "Auction contract",
+      rightLabel: "View on " + blockExplorerName,
+      link: `${blockExplorerURL}/${props.auctioneerAddress}`,
+    },
+    {
+      leftLabel: "Teller contract",
+      rightLabel: "View on " + blockExplorerName,
+      link: `${blockExplorerURL}/${props.tellerAddress}`,
+    },
+  ];
+
+  const hasWarning = discount < 0 || isNaN(discount);
+
+  const cantSubmit = hasWarning && !accepted;
+
   return (
     <div className="mt-4 text-center text-[15px] font-light">
-      {discount < 0 && (
-        <div className="y-5 mx-10 text-red-500">
-          <p>WARNING</p>
-          <p>
-            This market is currently priced at a premium, it is cheaper to buy
-            on the open market. We recommend you buy elsewhere, or wait until
-            the price drops on BondProtocol.
-          </p>
-        </div>
-      )}
-      {isNaN(discount) && (
-        <div className="y-5 mx-10 text-red-500">
-          <p>WARNING</p>
-          <p>
-            We cannot calculate a discount for this market as we are missing
-            price data for one or both of the tokens. Please double check you
-            wish to purchase at this price before continuing.
-          </p>
-        </div>
-      )}
-      <p className="">{`You are about to bond ${issuer}`}</p>
-      <div className="mx-10">
-        <div className="mt-5 flex justify-center gap-6 text-left">
-          <div className="">
-            <p>{"You are paying"}</p>
-            <p>{"You are receiving"}</p>
+      <div>
+        <div className="grid grid-cols-[1fr_32px_1fr]">
+          <SummaryLabel
+            icon={props.quoteLogo}
+            value={amount}
+            subtext="You Bond"
+            className="uppercase"
+          />
+          <div className="flex items-center justify-center">
+            <Arrow className="rotate-90" />
           </div>
-          <div className="">
-            <p>{amount}</p>
-            <p>{payout}</p>
-          </div>
+          <SummaryLabel
+            icon={props.payoutLogo}
+            value={payout}
+            subtext="You Get"
+            className="uppercase"
+          />
         </div>
-        <div>The vesting period lasts {vestingTime} </div>
-        <p className="text-light-secondary-30 mt-2 text-xs">
-          {"This transaction can not be undone"}
-        </p>
+        <SummaryRow
+          className="mt-2"
+          leftLabel="Vested on"
+          rightLabel={vestingTime}
+        />
+        <h4 className="font-fraktion text-left mt-2">DETAILS</h4>
+        <SummaryList fields={fields} />
       </div>
+      {hasWarning && (
+        <div className="m-4 font-mono text-left text-sm ">
+          <div className="text-red-500">
+            {discount < 0 && <p> {warning} </p>}
+            {isNaN(discount) && <p>{unknownWarning}</p>}
+          </div>
+          <Checkbox
+            onChange={(value) => setAccepted(value)}
+            className="mt-1"
+            label="I understand"
+          />
+        </div>
+      )}
+
+      <p className="text-light-secondary-30 text-left mt-2">
+        This transaction cannot be undone.
+      </p>
       <ButtonGroup
-        className="mt-10"
+        className="mt-6"
         leftLabel="Cancel"
         rightLabel="Confirm Bond"
         onClickLeft={onCancel}
         onClickRight={onSubmit}
+        disabled={cantSubmit}
       />
-
-      <div className="mx-auto mt-1 flex w-full justify-center">
-        <Link
-          className="text-light-secondary mx-auto mt-4 font-mono uppercase"
-          href={contract}
-        >
-          View Bond Contract
-        </Link>
-      </div>
     </div>
   );
 };

@@ -36,7 +36,7 @@ export const Checkbox = ({
       <div
         id={id}
         onClick={!disabled ? toggle : () => {}}
-        className={`border-light-neutral flex h-6 w-6 items-center border ${
+        className={`border-light-neutral flex h-5 w-5 items-center border ${
           disabled ? "opacity-80" : "hover:cursor-pointer"
         } ${className}`}
       >
@@ -49,7 +49,7 @@ export const Checkbox = ({
         </div>
       </div>
       {label && (
-        <p className={"pl-2 text-sm" + " " + labelClassname}>{label}</p>
+        <p className={"pl-2 text-sm mt-1" + " " + labelClassname}>{label}</p>
       )}
     </div>
   );
