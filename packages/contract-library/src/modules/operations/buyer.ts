@@ -347,7 +347,9 @@ export async function calcMarket(
     ),
   ]);
 
-  const markets: any = auctioneerContract.markets(calculatedMarket.marketId);
+  const markets: any = await auctioneerContract.markets(
+    calculatedMarket.marketId,
+  );
 
   // @ts-ignore
   calculatedMarket.isLive = isLive;
