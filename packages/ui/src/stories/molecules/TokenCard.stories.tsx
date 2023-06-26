@@ -12,7 +12,11 @@ export const Primary = {
   args: {
     token: {
       tbv: 1000000,
-      logoUrl:
+      name: "BTRFLY",
+      chainId: 1,
+      address: "",
+      markets: [1, 1, 1, 1],
+      logoURI:
         "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png",
     },
     leftLabel: "LESGOOOO",

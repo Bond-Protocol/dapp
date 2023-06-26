@@ -64,10 +64,12 @@ export const TokenList = () => {
       ? tokens?.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
       : tokens;
 
+  const title = isTabletOrMobile ? "TOKENS" : "BOND TOKENS";
+
   return (
     <div className="pb-20">
-      <PageHeader title="BOND TOKENS" />
-      <div className="grid grid-rows-2 grid-cols-2 md:flex gap-4 py-10">
+      <PageHeader title={title} />
+      <div className="grid grid-cols-2 grid-rows-2 gap-4 pb-10 pt-4 md:flex">
         <InfoLabel
           reverse
           label="Total Bonded Value"
@@ -97,9 +99,15 @@ export const TokenList = () => {
             return (
               <div
                 key={token.id}
-                className="min-w-[209px] max-w-[218px] flex-1"
+                className="mx-4 min-w-[209px] flex-1 md:mx-0 md:max-w-[218px]"
               >
-                <TokenCard token={token} navigate={navigate} />
+                <TokenCard
+                  token={token}
+                  navigate={(args) => {
+                    scrollUp();
+                    navigate(args);
+                  }}
+                />
               </div>
             );
           })}
