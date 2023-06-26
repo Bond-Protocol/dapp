@@ -86,7 +86,7 @@ export const PurchaseConfirmDialog = ({
         </div>
         <SummaryRow
           className="mt-2"
-          leftLabel="Vested on"
+          leftLabel="Vested in"
           rightLabel={vestingTime}
         />
         <h4 className="font-fraktion text-left mt-2">DETAILS</h4>

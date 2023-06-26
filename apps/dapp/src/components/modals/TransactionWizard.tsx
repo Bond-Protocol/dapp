@@ -149,7 +149,9 @@ export const TransactionWizard = ({
   const handlers: Record<TxStatus, TxStepHandler> = {
     standby: {
       title: props.titles?.standby ?? "Confirm Transaction",
-      element: <Start key={0} onSubmit={handleSubmit} />,
+      element: (
+        <Start key={0} onSubmit={handleSubmit} onCancel={props.onClose} />
+      ),
     },
     signing: {
       title: props.titles?.signing ?? "Waiting your signature",
@@ -179,6 +181,7 @@ export const TransactionWizard = ({
           hash={hash!}
           error={txError}
           onSubmit={props.signingTx ? retry : restart}
+          {...blockExplorer}
         />
       ),
     },
