@@ -17,12 +17,10 @@ import { configureChains, createClient, WagmiConfig } from "wagmi";
 import {
   arbitrum,
   arbitrumGoerli,
-  //avalancheFuji,
   goerli,
   mainnet,
   optimism,
   optimismGoerli,
-  //polygonMumbai,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
@@ -50,6 +48,7 @@ export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS = environment.isTestnet ? testnets : mainnets;
 export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
 export const MAINNETS = mainnets;
+const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 
 const { chains, provider } = configureChains(
   environment.isTestnet ? testnets : mainnets,
@@ -60,13 +59,22 @@ const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
     wallets: [
-      metaMaskWallet({ chains }),
-      rainbowWallet({ chains }),
+      metaMaskWallet({
+        chains,
+        projectId: projectId,
+      }),
+      rainbowWallet({
+        chains,
+        projectId: projectId,
+      }),
       coinbaseWallet({
         appName: "BondProtocol",
         chains: chains,
       }),
-      walletConnectWallet({ chains }),
+      walletConnectWallet({
+        chains,
+        projectId: projectId,
+      }),
       injectedWallet({ chains, shimDisconnect: true }),
     ],
   },
