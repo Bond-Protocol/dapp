@@ -53,7 +53,7 @@ export const PageNavigation = (props: PageNavigationProps) => {
         )}
       </div>
 
-      {isTabletOrMobile && props.children}
+      {isTabletOrMobile && <div className="mx-4 my-2">{props.children}</div>}
     </div>
   );
 };
