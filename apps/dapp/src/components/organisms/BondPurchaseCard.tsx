@@ -223,9 +223,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const summaryFields = [
     {
       leftLabel: "You will get",
-      rightLabel: `${formatCurrency.dynamicFormatter(payout, false)} ${
-        market.payoutToken.symbol
-      }`,
+      rightLabel: `${payout} ${market.payoutToken.symbol}`,
     },
     {
       leftLabel: "Vested on",

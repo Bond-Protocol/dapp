@@ -59,7 +59,7 @@ const mainnetAddresses: ContractAddresses = {
   fixedTermTeller: '0x007F7735baF391e207E3aA380bb53c4Bd9a5Fed6',
   fixedTermSDAAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222',
   fixedTermSDAv1_1Auctioneer: '',
-  fixedTermFPAAuctioneer: '0xF7F9A96cDBFEFd70BDa14a8f30EC503b16bCe9b1',
+  fixedTermFPAAuctioneer: '0xF7F9Ae2415F8Cb89BEebf9662A19f2393e7065e0',
   fixedTermOFDAAuctioneer: '',
   fixedTermOSDAAuctioneer: '',
 };
