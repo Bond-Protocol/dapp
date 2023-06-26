@@ -1,6 +1,7 @@
 import { Input, InputProps } from "..";
 import { ReactComponent as SearchIcon } from "../../assets/icons/magnifying-glass.svg";
 import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
+import { useState } from "react";
 
 export type SearchBarProps = Omit<InputProps, "onChange"> & {
   onChange: (text: string) => void | any;
@@ -10,17 +11,23 @@ export type SearchBarProps = Omit<InputProps, "onChange"> & {
 };
 
 export const SearchBar = (props: SearchBarProps) => {
+  const [focused, setFocused] = useState(false);
+  const onFocus = () => setFocused(true);
+  const onBlur = () => setFocused(false);
+
   return (
     <div className={props.className}>
       <Input
+        onFocus={onFocus}
+        onBlur={onBlur}
         autoFocus={props.autoFocus}
         placeholder={props.placeholder ?? "Search"}
         value={props.value}
         onChange={(e) => props.onChange(e.target.value)}
         inputClassName={props.inputClassName ?? "text-[20px] font-bold"}
-        rootClassName={
+        rootClassName={`${
           !!props.value?.length ? "border-light-secondary" : "border-white"
-        }
+        } transition-all ${focused ? "" : "w-min md:w-full"}`}
         startAdornment={
           <div className="ml-2 inline-flex">
             <SearchIcon className="fill-white" />
