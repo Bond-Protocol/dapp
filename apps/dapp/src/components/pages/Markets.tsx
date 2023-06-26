@@ -13,7 +13,7 @@ export const Markets = () => {
       <div className="flex items-end justify-between py-2 md:-mb-[54px]">
         <PageHeader
           title={"LIVE MARKETS"}
-          subtitle={"Instantly acquire governance tokens at a discount"}
+          subtitle={"Instantly acquire tokens at a discount"}
         />
       </div>
       <MarketList />
