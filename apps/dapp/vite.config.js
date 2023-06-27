@@ -16,9 +16,9 @@ import nodePolyfills from "rollup-plugin-polyfill-node";
  ***/
 
 const commitHash = require("child_process")
-  .execSync("git rev-parse --short HEAD")
-  .toString()
-  .slice(0, 7);
+    .execSync("git rev-parse --short HEAD")
+    .toString()
+    .slice(0, 7);
 
 export default defineConfig({
   plugins: [react(), svgr()],
@@ -32,6 +32,10 @@ export default defineConfig({
     outDir: "../dist",
     rollupOptions: {
       plugins: [nodePolyfills()],
+      external: [
+        "@safe-globalThis/safe-apps-provider",
+        "@safe-globalThis/safe-apps-sdk",
+      ],
     },
     commonjsOptions: {
       transformMixedEsModules: true,
