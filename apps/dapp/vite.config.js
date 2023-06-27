@@ -16,9 +16,9 @@ import nodePolyfills from "rollup-plugin-polyfill-node";
  ***/
 
 const commitHash = require("child_process")
-    .execSync("git rev-parse --short HEAD")
-    .toString()
-    .slice(0, 7);
+  .execSync("git rev-parse --short HEAD")
+  .toString()
+  .slice(0, 7);
 
 export default defineConfig({
   plugins: [react(), svgr()],
@@ -26,16 +26,26 @@ export default defineConfig({
   envDir: "..",
   define: {
     __COMMIT_HASH__: JSON.stringify(commitHash),
-    global: "globalThis",
+    global: (() => {
+      let globalVariable = "globalThis";
+      try {
+        // Try to import @safe-global/safe-apps-provider
+        require.resolve("@safe-global/safe-apps-provider");
+        // Try to import @safe-global/safe-apps-sdk
+        require.resolve("@safe-global/safe-apps-sdk");
+        // If both modules are found, return the custom global variable
+        globalVariable = "global";
+      } catch (e) {
+        // If either module is not found, fallback to globalThis
+        globalVariable = "globalThis";
+      }
+      return globalVariable;
+    })(),
   },
   build: {
     outDir: "../dist",
     rollupOptions: {
       plugins: [nodePolyfills()],
-      external: [
-        "@safe-globalThis/safe-apps-provider",
-        "@safe-globalThis/safe-apps-sdk",
-      ],
     },
     commonjsOptions: {
       transformMixedEsModules: true,
@@ -45,7 +55,21 @@ export default defineConfig({
     esbuildOptions: {
       // Node.js global to browser globalThis
       define: {
-        global: "globalThis",
+        global: (() => {
+          let globalVariable = "globalThis";
+          try {
+            // Try to import @safe-global/safe-apps-provider
+            require.resolve("@safe-global/safe-apps-provider");
+            // Try to import @safe-global/safe-apps-sdk
+            require.resolve("@safe-global/safe-apps-sdk");
+            // If both modules are found, return the custom global variable
+            globalVariable = "global";
+          } catch (e) {
+            // If either module is not found, fallback to globalThis
+            globalVariable = "globalThis";
+          }
+          return globalVariable;
+        })(),
       },
       // Enable esbuild polyfill plugins
       plugins: [
