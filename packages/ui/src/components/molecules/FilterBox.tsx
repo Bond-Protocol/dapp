@@ -14,6 +14,7 @@ export type Filter = {
 };
 
 export type FilterBoxProps = {
+  className?: string;
   filters: Filter[];
   activeFilters: Filter[];
   handleFilterClick: (id: string, args?: any) => void;
@@ -48,7 +49,7 @@ export const FilterBox = (props: FilterBoxProps) => {
         onClick={handleClick}
         className={`h-10 w-min cursor-pointer rounded-lg border ${
           hasActiveFilters ? "border-light-secondary" : "border-white"
-        }`}
+        } ${props.className}`}
       >
         <FilterIcon
           className={hasActiveFilters ? "fill-light-secondary" : "fill-white"}

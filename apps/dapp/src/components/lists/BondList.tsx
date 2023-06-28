@@ -131,6 +131,7 @@ export const BondList = ({ data = [], ...props }: any) => {
     <div className="mt-10">
       <PaginatedTable
         title={props.title ?? <div />}
+        hideSearchbar={isTabletOrMobile}
         defaultSort="vesting"
         columns={isTabletOrMobile ? mobileColumns : tableColumns}
         data={data}

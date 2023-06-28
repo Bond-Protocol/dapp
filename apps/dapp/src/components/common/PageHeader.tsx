@@ -18,9 +18,7 @@ export const PageHeader = (props: PageHeaderProps) => {
         )}
         <div className="my-auto">
           {props.title && (
-            <div
-              className={`my-auto font-fraktion text-4xl leading-10 md:text-5xl`}
-            >
+            <div className={`my-auto font-fraktion text-5xl leading-10`}>
               {props.title}
             </div>
           )}

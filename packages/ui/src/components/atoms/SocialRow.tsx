@@ -8,6 +8,7 @@ import { ReactComponent as IqIcon } from "../../assets/icons/socials/iq.svg";
 import { LinkIcon } from "../../components/atoms/LinkIcon";
 
 export type SocialRowProps = {
+  homepage?: string;
   coingecko?: string;
   gitbook?: string;
   medium?: string;
