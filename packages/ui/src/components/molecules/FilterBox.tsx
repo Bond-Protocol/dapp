@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { ClickAwayListener, PopperUnstyled } from "@mui/base";
-import { Input, Select, Switch } from "..";
+import { Input, SearchBar, Select, Switch } from "..";
 import { ReactComponent as FilterIcon } from "../../assets/icons/sliders.svg";
 
-type FilterTypes = "switch" | "select" | "text";
+type FilterTypes = "switch" | "search";
 
 export type Filter = {
   id: string;
   type: FilterTypes;
   label?: string;
-  handler: (arg: any) => Boolean;
+  handler: (arg: any) => Boolean | void;
   startActive?: boolean;
 };
 
@@ -21,12 +21,12 @@ export type FilterBoxProps = {
 
 const components: Record<FilterTypes, (props: any) => JSX.Element> = {
   switch: Switch,
-  select: Select,
-  text: Input,
+  search: Input,
 };
 
 export const FilterBox = (props: FilterBoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [text, setText] = useState("");
   const open = Boolean(anchorEl);
   const id = open ? "settings-popper" : undefined;
 
@@ -34,7 +34,10 @@ export const FilterBox = (props: FilterBoxProps) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const onClose = () => setAnchorEl(null);
+  const onClose = (e: MouseEvent | TouchEvent) => {
+    e.preventDefault();
+    setAnchorEl(null);
+  };
 
   const hasActiveFilters = Boolean(props.activeFilters.length);
 
@@ -59,13 +62,16 @@ export const FilterBox = (props: FilterBoxProps) => {
               {props.filters.map((f) => {
                 const FilterComponent = components[f.type];
 
-                if (f.type === "text") {
+                if (f.type === "search") {
                   return (
-                    <FilterComponent
+                    <SearchBar
+                      className="mb-2"
                       label={f.label}
-                      onChange={(e: React.BaseSyntheticEvent) =>
-                        f.handler(e.target.value)
-                      }
+                      value={text}
+                      onChange={(value: string) => {
+                        setText(value);
+                        f.handler(value);
+                      }}
                     />
                   );
                 }

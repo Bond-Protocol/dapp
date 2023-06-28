@@ -190,6 +190,8 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
   return (
     <div className={props.className}>
       <PaginatedTable
+        hideSearchbar={isTabletOrMobile}
+        disableSearch={isTabletOrMobile}
         title={props.title ?? "Transaction History"}
         defaultSort="timestamp"
         loading={query.isLoading}

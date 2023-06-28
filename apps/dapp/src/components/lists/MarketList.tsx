@@ -19,7 +19,7 @@ type MarketListProps = {
   title?: string;
 };
 
-const filters: Filter[] = [
+const defaultFilters: Filter[] = [
   {
     id: "discount",
     label: "Hide Negative Discounts",
@@ -58,6 +58,8 @@ export const MarketList: FC<MarketListProps> = ({
     buttonText: "Deploy a new market",
     onClick: () => navigate("/create"),
   };
+
+  const filters = defaultFilters;
 
   return (
     <PaginatedTable

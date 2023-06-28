@@ -27,7 +27,7 @@ export const SearchBar = (props: SearchBarProps) => {
         inputClassName={props.inputClassName ?? "text-[20px] font-bold"}
         rootClassName={`${
           !!props.value?.length ? "border-light-secondary" : "border-white"
-        } transition-all ${focused ? "" : "w-min md:w-full"}`}
+        } transition-all ${focused ? "" : "w-[80px] md:w-full"}`}
         startAdornment={
           <div className="ml-2 inline-flex">
             <SearchIcon className="fill-white" />

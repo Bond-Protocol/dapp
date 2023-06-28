@@ -65,6 +65,7 @@ export const TokenList = () => {
       : tokens;
 
   const title = isTabletOrMobile ? "TOKENS" : "BOND TOKENS";
+  const bonderTitle = isTabletOrMobile ? "BONDERS" : "UNIQUE BONDERS";
 
   return (
     <div className="pb-20">
@@ -87,7 +88,7 @@ export const TokenList = () => {
         </InfoLabel>
         <InfoLabel
           reverse
-          label="Unique Bonders"
+          label={bonderTitle}
           tooltip="Total count of unique addresses that acquired bonds"
         >
           {uniqueBonders}

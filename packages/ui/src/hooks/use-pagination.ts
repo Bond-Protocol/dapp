@@ -6,14 +6,14 @@ export type UsePaginationProps = {
 
 /** Utility hook to handle array pagination */
 export const usePagination = <T>(data: T[]) => {
-  const [page, setPage] = useState(0);
+  const [selectedPage, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const handleChangePage = (newPage: number) => {
     setPage(newPage);
   };
 
-  const toggleAll = () => {
+  const onSeeAll = () => {
     setRowsPerPage(rowsPerPage === -1 ? 10 : -1);
     setPage(0);
   };
@@ -23,21 +23,28 @@ export const usePagination = <T>(data: T[]) => {
 
   //Used to make pages consistent by having the same number of rows
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalRows) : 0;
+    selectedPage > 0
+      ? Math.max(0, (1 + selectedPage) * rowsPerPage - totalRows)
+      : 0;
 
   const rows =
     rowsPerPage > 0
-      ? data?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+      ? data?.slice(
+          selectedPage * rowsPerPage,
+          selectedPage * rowsPerPage + rowsPerPage
+        )
       : data;
 
   return {
     rows,
-    page,
+    selectedPage,
     emptyRows,
     rowsPerPage,
     totalPages,
     totalRows,
     handleChangePage,
-    toggleAll,
+    onSeeAll,
+    showPagination: totalRows > rowsPerPage,
+    isShowingAll: rowsPerPage === -1,
   };
 };

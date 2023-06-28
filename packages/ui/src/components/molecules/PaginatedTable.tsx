@@ -39,7 +39,7 @@ const Fallback = (props: FallbackProps) => {
   );
 };
 
-const filterTable = (element: Cell, filter: string) =>
+const filterTableByText = (element: Cell, filter: string) =>
   Object.values(element).some((v) => {
     const value = v?.searchValue || v?.value;
 
@@ -50,6 +50,7 @@ export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   title?: string | JSX.Element;
   filterText?: string;
   hideSearchbar?: boolean;
+  disableSearch?: boolean;
   className?: string;
   headingClassName?: string;
   fallback?: FallbackProps;
@@ -57,17 +58,35 @@ export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   onClickRow?: (args: any) => void;
 };
 
+const SEARCH_FILTER = {
+  type: "search",
+  id: "search",
+  label: "Search",
+  startActive: false,
+} as Filter;
+
 export const PaginatedTable = ({
   filters = [],
   ...props
 }: PaginatedTableProps) => {
   const [textToFilter, setTextToFilter] = useState(props.filterText ?? "");
 
-  const mappedFilters = filters.map((f) =>
-    f.type === "search"
-      ? { ...f, handler: (v: string) => setTextToFilter(v) }
-      : f
-  );
+  const searchFilter = {
+    ...SEARCH_FILTER,
+    handler: (value: string) => {
+      setTextToFilter(value);
+      setActiveFilters(
+        !!value
+          ? (prev) => [...prev, SEARCH_FILTER]
+          : activeFilters.filter((f) => f.id !== SEARCH_FILTER.id)
+      );
+    },
+  };
+
+  const mappedFilters: Filter[] =
+    props.hideSearchbar && !props.disableSearch
+      ? [searchFilter, ...filters]
+      : filters;
 
   const [activeFilters, setActiveFilters] = useState<Filter[]>(
     mappedFilters.filter((f) => f.startActive)
@@ -77,7 +96,11 @@ export const PaginatedTable = ({
     () =>
       props.data
         ?.filter((d) =>
-          activeFilters?.every((f) => f.type === "search" || f.handler(d))
+          activeFilters?.every((f) =>
+            f.type === "search"
+              ? filterTableByText(d, textToFilter)
+              : f.handler(d)
+          )
         )
         ?.map((d) => {
           const row = toTableData(props.columns, d);
@@ -90,10 +113,8 @@ export const PaginatedTable = ({
     [props.data, props.columns, activeFilters.length]
   );
 
-  const [data, handleSorting] = useSorting(tableData);
-
   const onClickFilter = (id: string) => {
-    const filter = filters.find((f) => f.id === id)!;
+    const filter = mappedFilters.find((f) => f.id === id)!;
     const activeFilter = activeFilters.find((f) => f.id === id);
 
     if (activeFilter) {
@@ -103,24 +124,21 @@ export const PaginatedTable = ({
     }
   };
 
-  const filteredData = data?.filter((element) =>
-    filterTable(element, textToFilter)
-  );
+  const [sortedData, handleSorting] = useSorting(tableData);
 
   const {
-    page,
-    rows,
+    rows: paginatedData,
     emptyRows,
-    rowsPerPage,
-    totalPages,
-    totalRows,
-    handleChangePage,
-    toggleAll,
-  } = usePagination(filteredData);
+    showPagination,
+    ...pagination
+  } = usePagination(sortedData);
 
   const isLoading = props.loading;
   const isEmpty =
-    !props.loading && !filteredData?.length && activeFilters.length === 0;
+    !props.loading && !sortedData?.length && activeFilters.length === 0;
+
+  const hideSearchbar =
+    props.hideSearchbar || filters.some((f) => f.type === "search");
 
   return (
     <div className={"pb-20 " + props.className}>
@@ -136,7 +154,7 @@ export const PaginatedTable = ({
         </div>
 
         <div className="mb-2 flex h-min gap-x-1">
-          {!props.hideSearchbar && (
+          {!hideSearchbar && (
             <SearchBar
               value={textToFilter}
               onChange={setTextToFilter}
@@ -144,11 +162,11 @@ export const PaginatedTable = ({
             />
           )}
 
-          {!!filters.length && (
+          {!!mappedFilters.length && (
             <FilterBox
               handleFilterClick={onClickFilter}
               activeFilters={activeFilters}
-              filters={filters}
+              filters={mappedFilters}
             />
           )}
         </div>
@@ -157,7 +175,7 @@ export const PaginatedTable = ({
         {...props}
         handleSorting={handleSorting}
         emptyRows={emptyRows}
-        data={rows}
+        data={paginatedData}
       />
 
       {isLoading && (
@@ -176,16 +194,7 @@ export const PaginatedTable = ({
         </div>
       )}
 
-      {totalRows > rowsPerPage && (
-        <Pagination
-          className="mt-4"
-          handleChangePage={handleChangePage}
-          selectedPage={page}
-          totalPages={totalPages}
-          onSeeAll={toggleAll}
-          isShowingAll={rowsPerPage === -1}
-        />
-      )}
+      {showPagination && <Pagination className="mt-4" {...pagination} />}
     </div>
   );
 };
