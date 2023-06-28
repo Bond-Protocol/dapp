@@ -4,12 +4,13 @@ import { useSorting } from "hooks/use-sorting";
 import { Button, Filter, FilterBox, Loading } from "components";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
+import { usePagination } from "src/hooks/use-pagination";
 
 export const toValue = (value: any) => ({ value });
 export const toTableData = (
   columns: Column<any>[],
   data: any
-): Record<string, Cell> => {
+): Record<string, Cell | Function> => {
   return columns.reduce((acc, { accessor, formatter }) => {
     const value = String(data[accessor]);
     return {
@@ -63,7 +64,9 @@ export const PaginatedTable = ({
   const [textToFilter, setTextToFilter] = useState(props.filterText ?? "");
 
   const mappedFilters = filters.map((f) =>
-    f.type === "text" ? { ...f, handler: (v: string) => setTextToFilter(v) } : f
+    f.type === "search"
+      ? { ...f, handler: (v: string) => setTextToFilter(v) }
+      : f
   );
 
   const [activeFilters, setActiveFilters] = useState<Filter[]>(
@@ -73,12 +76,13 @@ export const PaginatedTable = ({
   const tableData = useMemo(
     () =>
       props.data
-        ?.filter((d) => activeFilters?.every((f) => f.handler(d)))
+        ?.filter((d) =>
+          activeFilters?.every((f) => f.type === "search" || f.handler(d))
+        )
         ?.map((d) => {
           const row = toTableData(props.columns, d);
           if (props.onClickRow) {
-            //@ts-ignore
-            row.onClick = () => props.onClickRow(d);
+            row.onClick = () => props.onClickRow?.(d);
           }
           return row;
         }),
@@ -87,10 +91,6 @@ export const PaginatedTable = ({
   );
 
   const [data, handleSorting] = useSorting(tableData);
-
-  const [page, setPage] = useState(0);
-
-  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const onClickFilter = (id: string) => {
     const filter = filters.find((f) => f.id === id)!;
@@ -103,32 +103,20 @@ export const PaginatedTable = ({
     }
   };
 
-  const handleChangePage = (newPage: number) => {
-    setPage(newPage);
-  };
-
-  const toggleAll = () => {
-    setRowsPerPage(rowsPerPage === -1 ? 10 : -1);
-    setPage(0);
-  };
-
   const filteredData = data?.filter((element) =>
     filterTable(element, textToFilter)
   );
 
-  const totalRows = filteredData?.length || 0;
-  const totalPages = Math.ceil(totalRows / Math.abs(rowsPerPage));
-
-  const rows =
-    rowsPerPage > 0
-      ? filteredData?.slice(
-          page * rowsPerPage,
-          page * rowsPerPage + rowsPerPage
-        )
-      : filteredData;
-
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - totalRows) : 0;
+  const {
+    page,
+    rows,
+    emptyRows,
+    rowsPerPage,
+    totalPages,
+    totalRows,
+    handleChangePage,
+    toggleAll,
+  } = usePagination(filteredData);
 
   const isLoading = props.loading;
   const isEmpty =
