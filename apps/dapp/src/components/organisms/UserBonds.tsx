@@ -3,13 +3,8 @@ import { formatCurrency, InfoLabel } from "ui";
 import { BondList, TransactionHistory } from "..";
 
 export const UserBonds = () => {
-  const { isLoading, ownerBalances, bondPurchases, userTbv } = useDashboard();
-
-  const claimable =
-    ownerBalances.reduce((total, bond) => {
-      //@ts-ignore
-      return bond?.canClaim ? total + (bond?.usdPriceNumber ?? 0) : total;
-    }, 0) ?? 0;
+  const { isLoading, ownerBalances, bondPurchases, userTbv, userClaimable } =
+    useDashboard();
 
   return (
     <div>
@@ -21,7 +16,7 @@ export const UserBonds = () => {
           value={formatCurrency.usdFormatter.format(userTbv)}
         />
         <InfoLabel reverse label="Available to Claim">
-          {formatCurrency.usdFormatter.format(claimable)}
+          {formatCurrency.usdFormatter.format(userClaimable)}
         </InfoLabel>
       </div>
       <BondList title="Balance" isLoading={isLoading} data={ownerBalances} />

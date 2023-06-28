@@ -12,6 +12,7 @@ const initialState = {
   uniqueBonders: 0,
   tbv: 0,
   userTbv: 0,
+  userClaimable: 0,
   isLoading: false,
 };
 
@@ -25,6 +26,7 @@ interface IDashboardContext {
   uniqueBonders: number;
   tbv: number;
   userTbv: number;
+  userClaimable: number;
   isLoading: boolean;
 }
 

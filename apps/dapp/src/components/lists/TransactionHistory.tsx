@@ -158,7 +158,6 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
 
   useEffect(() => {
     loadBondPurchases().then((response) => {
-      console.log(response);
       setBondPurchases(response);
     });
   }, []);
