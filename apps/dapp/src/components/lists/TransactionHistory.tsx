@@ -199,20 +199,18 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         columns={marketTxsHistory}
         data={tableData}
         fallback={{ title: "NO TRANSACTIONS YET" }}
-        csvHeaders={[
-          "TIME",
-          "BOND AMOUNT (" + props.market?.quoteToken.symbol + ")",
-          "BOND AMOUNT (USD)",
-          "PAYOUT AMOUNT (" + props.market?.payoutToken.symbol + ")",
-          "PAYOUT AMOUNT (USD)",
-          "DISCOUNT",
-          "ADDRESS",
-          "TX HASH",
-        ]}
-        //@ts-ignore
-        fallback={{
-          title: "NO TRANSACTIONS YET",
-        }}
+        csvHeaders={
+          props.market && [
+            "TIME",
+            `BOND AMOUNT (${props.market?.quoteToken.symbol})`,
+            "BOND AMOUNT (USD)",
+            `PAYOUT AMOUNT (${props.market?.payoutToken.symbol})`,
+            "PAYOUT AMOUNT (USD)",
+            "DISCOUNT",
+            "ADDRESS",
+            "TX HASH",
+          ]
+        }
       />
     </div>
   );

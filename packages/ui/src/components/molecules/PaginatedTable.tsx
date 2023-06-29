@@ -5,6 +5,7 @@ import { useSorting } from "hooks/use-sorting";
 import { Button, Filter, FilterBox, Loading } from "components";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
+import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg";
 
 export const toValue = (value: any) => ({ value });
 export const toTableData = (
@@ -154,8 +155,12 @@ export const PaginatedTable = ({ filters = [], ...props }: PaginatedTableProps) 
           )}
         </div>
 
-        <div className="mb-2 flex h-min gap-x-1">
-          {props.csvHeaders && <CSVLink data={csvData()}>Download me</CSVLink>}
+        <div className="mb-2 flex flex h-min items-center gap-x-1 pr-2">
+          {props.csvHeaders && (
+            <CSVLink data={csvData()}>
+              <DownloadIcon height={32} width={32} />
+            </CSVLink>
+          )}
 
           {!!filters.length && (
             <FilterBox
