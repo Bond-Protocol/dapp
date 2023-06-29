@@ -71,9 +71,10 @@ export const MarketList: FC<MarketListProps> = ({
       columns={isTabletOrMobile ? mobileColumns : columns}
       filters={filters}
       data={filteredMarkets}
-      onClickRow={(market: CalculatedMarket) =>
-        navigate(`/market/${market.chainId}/${market.marketId}`)
-      }
+      onClickRow={(market: CalculatedMarket) => {
+        window.scrollTo(0, 0);
+        navigate(`/market/${market.chainId}/${market.marketId}`);
+      }}
       fallback={isTabletOrMobile ? { title: fallback.title } : fallback}
     />
   );

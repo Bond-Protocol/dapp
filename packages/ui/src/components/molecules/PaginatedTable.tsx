@@ -39,7 +39,7 @@ const Fallback = (props: FallbackProps) => {
   );
 };
 
-const filterTableByText = (element: Cell, filter: string) =>
+const filterRowByText = (element: Cell, filter: string) =>
   Object.values(element).some((v) => {
     const value = v?.searchValue || v?.value;
 
@@ -98,7 +98,7 @@ export const PaginatedTable = ({
         ?.filter((d) =>
           activeFilters?.every((f) =>
             f.type === "search"
-              ? filterTableByText(d, textToFilter)
+              ? filterRowByText(d, textToFilter)
               : f.handler(d)
           )
         )
@@ -117,11 +117,11 @@ export const PaginatedTable = ({
     const filter = mappedFilters.find((f) => f.id === id)!;
     const activeFilter = activeFilters.find((f) => f.id === id);
 
-    if (activeFilter) {
-      setActiveFilters(activeFilters.filter((f) => f.id !== id));
-    } else {
-      setActiveFilters([...activeFilters, filter]);
-    }
+    setActiveFilters(
+      activeFilter
+        ? activeFilters.filter((f) => f.id !== id)
+        : [...activeFilters, filter]
+    );
   };
 
   const [sortedData, handleSorting] = useSorting(tableData);
@@ -164,6 +164,7 @@ export const PaginatedTable = ({
 
           {!!mappedFilters.length && (
             <FilterBox
+              className="mr-4 md:mr-0"
               handleFilterClick={onClickFilter}
               activeFilters={activeFilters}
               filters={mappedFilters}

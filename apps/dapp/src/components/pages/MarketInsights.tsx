@@ -118,7 +118,9 @@ export const MarketInsights = () => {
           {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
         </InfoLabel>
         <InfoLabel
-          label={`${isFutureMarket ? "Total" : "Remaining"} Capacity`}
+          label={`${
+            isTabletOrMobile ? "" : isFutureMarket ? "Total" : "Remaining"
+          } Capacity`}
           tooltip="The remaining amount of tokens to be bonded in this market"
         >
           {Number(market.currentCapacity) > 1

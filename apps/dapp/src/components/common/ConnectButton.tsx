@@ -77,10 +77,11 @@ export const ConnectButton = (props: ConnectButtonProps) => {
                     </div>
                   </div>
                   <Button
+                    thin
                     variant="ghost"
                     onClick={openAccountModal}
                     type="button"
-                    className="my-auto w-full px-4 font-mono hover:cursor-pointer"
+                    className="my-auto w-full font-mono hover:cursor-pointer md:px-4"
                   >
                     {account.displayName}
                   </Button>

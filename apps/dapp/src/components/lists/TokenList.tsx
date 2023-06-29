@@ -48,7 +48,7 @@ export const TokenList = () => {
   }, [payoutTokens]);
 
   const [page, setPage] = useState(0);
-  const [cardsPerPage, setCardsPerPage] = useState(20);
+  const [cardsPerPage, setCardsPerPage] = useState(15);
 
   const handleChangePage = (newPage: number) => setPage(newPage);
 
@@ -68,7 +68,7 @@ export const TokenList = () => {
   const bonderTitle = isTabletOrMobile ? "BONDERS" : "UNIQUE BONDERS";
 
   return (
-    <div className="pb-20">
+    <div className="pb-4">
       <PageHeader title={title} />
       <div className="grid grid-cols-2 grid-rows-2 gap-4 pb-10 pt-4 md:flex">
         <InfoLabel
