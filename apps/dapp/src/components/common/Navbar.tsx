@@ -8,7 +8,7 @@ import { ClickAwayListener, PopperUnstyled } from "@mui/base";
 
 export const Navbar = () => {
   const navigate = useNavigate();
-  const [showNavbar, setShowNavbar] = useState(true);
+  const [showNavbar, setShowNavbar] = useState(false);
 
   return (
     <div>
