@@ -12,6 +12,7 @@ import { PageHeader, PageNavigation } from "components/common";
 import { dateMath, formatCurrency, formatDate, InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { meme } from "src/utils/words";
+import { useMediaQueries } from "hooks/useMediaQueries";
 
 const pricingLabels: Record<MarketPricing, string> = {
   dynamic: "Dynamic Price Market",
@@ -23,6 +24,7 @@ const pricingLabels: Record<MarketPricing, string> = {
 export const MarketInsights = () => {
   const { allMarkets: markets } = useMarkets();
   const { id, chainId } = useParams();
+  const { isMobile, isTabletOrMobile } = useMediaQueries();
   const navigate = useNavigate();
   const market: CalculatedMarket = markets.find(
     ({ marketId, chainId: marketChainId }) =>
@@ -53,15 +55,12 @@ export const MarketInsights = () => {
   const marketTypeLabel = pricingLabels[type];
 
   return (
-    <div>
+    <div className="pb-20">
       <PageNavigation
         onClickLeft={() => navigate(-1)}
         onClickRight={() =>
           navigate(
-            "/tokens/" +
-              market.payoutToken.chainId +
-              "/" +
-              market.payoutToken.address
+            `/tokens/${market.payoutToken.chainId}/${market.payoutToken.address}`
           )
         }
         rightText="View Token"
@@ -73,7 +72,7 @@ export const MarketInsights = () => {
           className="place-self-start self-start justify-self-start"
         />
       </PageNavigation>
-      <div className="mt-8 mb-16 flex justify-between gap-4 child:w-full">
+      <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:mt-0 md:flex">
         <InfoLabel
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
@@ -119,7 +118,9 @@ export const MarketInsights = () => {
           {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
         </InfoLabel>
         <InfoLabel
-          label={`${isFutureMarket ? "Total" : "Remaining"} Capacity`}
+          label={`${
+            isTabletOrMobile ? "" : isFutureMarket ? "Total" : "Remaining"
+          } Capacity`}
           tooltip="The remaining amount of tokens to be bonded in this market"
         >
           {Number(market.currentCapacity) > 1

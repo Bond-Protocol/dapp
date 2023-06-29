@@ -4,7 +4,7 @@ export const mergeToken = (
   token: Partial<Token>,
   finder: (address: string) => Token | undefined
 ) => {
-  const extendedToken = finder(token.address ?? "");
+  const extendedToken = finder(token?.address ?? "");
 
   return {
     ...token,
