@@ -30,7 +30,7 @@ export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="-ml-3 flex h-full min-h-[200px] w-full flex-col md:ml-0">
       <BaseBondPriceChart
         data={dataset}
         payoutTokenSymbol={market.payoutToken.symbol}

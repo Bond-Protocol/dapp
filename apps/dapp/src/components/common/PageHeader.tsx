@@ -1,3 +1,4 @@
+import { useMediaQueries } from "hooks/useMediaQueries";
 import { TokenLogo, TokenLogoProps } from "ui";
 
 export interface PageHeaderProps extends TokenLogoProps {
@@ -8,11 +9,12 @@ export interface PageHeaderProps extends TokenLogoProps {
 }
 
 export const PageHeader = (props: PageHeaderProps) => {
+  const { isTabletOrMobile } = useMediaQueries();
   return (
-    <div className="w-full">
+    <div className="w-full px-4 md:px-0">
       <div className={`flex select-none font-bold ${props.className}`}>
         {props.icon && (
-          <TokenLogo {...props} size="lg" className="my-auto mr-2 ml-3" />
+          <TokenLogo {...props} size="lg" className="my-auto ml-3 mr-2" />
         )}
         <div className="my-auto">
           {props.title && (

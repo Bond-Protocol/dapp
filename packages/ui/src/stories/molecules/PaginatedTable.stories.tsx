@@ -1,70 +1,9 @@
 //@ts-nocheck
 import { Meta, StoryFn } from "@storybook/react";
-import { data } from "../mock-data/table";
+import data from "../mock-data/table";
+import { base as columns } from "../mock-data/columns";
 import { DiscountLabel, PaginatedTable, Button } from "components";
 import { MouseEventHandler } from "react";
-
-const tableData = Array(87).fill(data[0]);
-const sortableData = [...data];
-
-const cols = [
-  {
-    label: "Bond",
-    width: "w-[18%]",
-    accessor: "bond",
-    tooltip: "Fml",
-    unsortable: true,
-  },
-  { label: "Bond Price", accessor: "price" },
-  {
-    label: "Discount",
-    accessor: "discount",
-    tooltip: "Fml",
-    width: "w-[6%]",
-    alignEnd: true,
-    Component: DiscountLabel,
-  },
-  {
-    label: "Max Payout",
-    accessor: "maxPayout",
-    tooltip: "Fml",
-    alignEnd: true,
-  },
-  { label: "Vesting", accessor: "vesting" },
-  {
-    label: "Creation Date",
-    tooltip: "Fml",
-    accessor: "creationDate",
-    defaultSortOrder: "asc",
-  },
-  { label: "TBV", accessor: "tbv", width: "w-[8%]", alignEnd: true },
-  { label: "Issuer", accessor: "issuer" },
-  {
-    label: "",
-    tooltip: "Fml",
-    accessor: "view",
-    width: "w-[7%]",
-    alignEnd: true,
-    unsortable: true,
-    Component: ({
-      value,
-      ...props
-    }: {
-      value: string;
-      onClick: MouseEventHandler<any>;
-    }) => (
-      <Button
-        thin
-        size="sm"
-        variant="ghost"
-        className="mr-4"
-        onClick={props.onClick}
-      >
-        View
-      </Button>
-    ),
-  },
-];
 
 export default {
   title: "Design System/Molecules/PaginatedTable",
@@ -75,35 +14,25 @@ export default {
 
 export const Primary = {
   args: {
-    data: tableData,
-    columns: cols,
+    data,
+    columns,
     defaultSort: "creationDate",
-  },
-};
-
-export const Sorting = {
-  args: {
-    data: sortableData,
-    columns: cols,
-    defaultSort: "creationDate",
+    loading: false,
   },
 };
 
 export const Loading = {
   args: {
+    ...Primary.args,
     data: [],
-    columns: cols,
-    defaultSort: "creationDate",
     loading: true,
   },
 };
 
 export const Empty = {
   args: {
+    ...Primary.args,
     data: [],
-    columns: cols,
-    defaultSort: "creationDate",
-    loading: false,
     fallback: {
       title: "The fallbackooor",
       subtext: "oooh im falling baaaaaaack",
@@ -114,16 +43,18 @@ export const Empty = {
 
 export const Filters = {
   args: {
-    data: sortableData,
-    columns: cols,
-    defaultSort: "creationDate",
-    loading: false,
+    ...Primary.args,
     filters: [
       {
         id: "cool",
         label: "Switch things",
         type: "switch",
         handler: () => console.log("handling"),
+      },
+      {
+        id: "search",
+        type: "search",
+        label: "Search",
       },
     ],
   },
