@@ -3,9 +3,11 @@ import { UserBonds } from "components/organisms/UserBonds";
 import { UserMarkets } from "components/organisms/UserMarkets";
 import { RequiresWallet } from "components/utility/RequiresWallet";
 import { useDashboard } from "context/dashboard-context";
+import { useMediaQueries } from "hooks/useMediaQueries";
 import { Tabs } from "ui";
 
 export const Dashboard = () => {
+  const { isTabletOrMobile } = useMediaQueries();
   const dashboard = useDashboard();
   const tabs = [{ label: "My bonds" }, { label: "My Markets" }];
 
@@ -15,10 +17,14 @@ export const Dashboard = () => {
     <>
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
-        <Tabs tabs={hasMarkets ? tabs : [tabs[0]]} className="pb-20">
+        {isTabletOrMobile ? (
           <UserBonds />
-          <UserMarkets />
-        </Tabs>
+        ) : (
+          <Tabs tabs={hasMarkets ? tabs : [tabs[0]]} className="pb-20">
+            <UserBonds />
+            <UserMarkets />
+          </Tabs>
+        )}
       </RequiresWallet>
     </>
   );

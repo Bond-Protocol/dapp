@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export const useSorting = (
   rawData?: Array<Record<string, any>>
 ): [Array<Record<string, any>>, (field: string, order: string) => void] => {
-  const [data, setData] = useState(rawData);
+  const [data, setData] = useState(rawData ?? []);
   const [lastField, setLastField] = useState<string>();
   const [lastOrder, setLastOrder] = useState<string>();
 
@@ -12,14 +12,14 @@ export const useSorting = (
       const sorted = handleSorting(lastField, lastOrder, rawData);
       setData(sorted);
     } else {
-      setData(rawData);
+      setData(rawData ?? []);
     }
   }, [rawData, rawData?.length]);
 
   const sort = (sortField: string, sortOrder: string) => {
     if (sortField) {
       if (data) {
-        const sorted = handleSorting(sortField, sortOrder, data!);
+        const sorted = handleSorting(sortField, sortOrder, data);
         setData(sorted);
         setLastField(sortField);
         setLastOrder(sortOrder);
@@ -27,7 +27,7 @@ export const useSorting = (
     }
   };
 
-  return [data!, sort];
+  return [data, sort];
 };
 
 export const handleSorting = (
@@ -36,11 +36,11 @@ export const handleSorting = (
   data: Array<Record<string, any>>
 ) => {
   return data.sort((a, b) => {
-    const current = a[sortField]?.sortValue || a[sortField].value;
-    const next = b[sortField]?.sortValue || b[sortField].value;
+    const current = a[sortField]?.sortValue || a[sortField]?.value;
+    const next = b[sortField]?.sortValue || b[sortField]?.value;
 
     return (
-      current.toString().localeCompare(next.toString(), "en", {
+      current?.toString().localeCompare(next?.toString(), "en", {
         numeric: true,
       }) * (sortOrder === "asc" ? 1 : -1)
     );

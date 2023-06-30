@@ -1,19 +1,20 @@
 import { useState } from "react";
 import { ClickAwayListener, PopperUnstyled } from "@mui/base";
+import { Input, SearchBar, Select, Switch } from "..";
 import { ReactComponent as FilterIcon } from "../../assets/icons/sliders.svg";
-import { Select, Switch } from "..";
 
-type FilterTypes = "switch" | "select";
+type FilterTypes = "switch" | "search";
 
 export type Filter = {
   id: string;
-  type: "switch" | "select";
+  type: FilterTypes;
   label?: string;
-  handler: (arg: any) => Boolean;
+  handler: (arg: any) => Boolean | void;
   startActive?: boolean;
 };
 
 export type FilterBoxProps = {
+  className?: string;
   filters: Filter[];
   activeFilters: Filter[];
   handleFilterClick: (id: string, args?: any) => void;
@@ -21,11 +22,12 @@ export type FilterBoxProps = {
 
 const components: Record<FilterTypes, (props: any) => JSX.Element> = {
   switch: Switch,
-  select: Select,
+  search: Input,
 };
 
 export const FilterBox = (props: FilterBoxProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [text, setText] = useState("");
   const open = Boolean(anchorEl);
   const id = open ? "settings-popper" : undefined;
 
@@ -33,7 +35,10 @@ export const FilterBox = (props: FilterBoxProps) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const onClose = () => setAnchorEl(null);
+  const onClose = (e: MouseEvent | TouchEvent) => {
+    e.preventDefault();
+    setAnchorEl(null);
+  };
 
   const hasActiveFilters = Boolean(props.activeFilters.length);
 
@@ -44,7 +49,7 @@ export const FilterBox = (props: FilterBoxProps) => {
         onClick={handleClick}
         className={`h-10 w-min cursor-pointer rounded-lg border ${
           hasActiveFilters ? "border-light-secondary" : "border-white"
-        }`}
+        } ${props.className}`}
       >
         <FilterIcon
           className={hasActiveFilters ? "fill-light-secondary" : "fill-white"}
@@ -57,6 +62,21 @@ export const FilterBox = (props: FilterBoxProps) => {
             <div className="mb-3 flex flex-col gap-y-2">
               {props.filters.map((f) => {
                 const FilterComponent = components[f.type];
+
+                if (f.type === "search") {
+                  return (
+                    <SearchBar
+                      className="mb-2"
+                      label={f.label}
+                      value={text}
+                      onChange={(value: string) => {
+                        setText(value);
+                        f.handler(value);
+                      }}
+                    />
+                  );
+                }
+
                 return (
                   <FilterComponent
                     label={f.label}

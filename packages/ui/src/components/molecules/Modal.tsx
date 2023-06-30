@@ -69,7 +69,7 @@ export const Modal = ({ title, ...props }: ModalProps) => {
         <ModalBackground>
           {/*@ts-ignore*/}
           <ClickAwayListener onClickAway={(e) => props.onClickClose(e)}>
-            <div className={`min-w-[350px] max-w-[650px]`}>
+            <div className={`min-w-[320px] md:max-w-[650px]`}>
               <ModalHeader
                 topLeftContent={title}
                 onClickClose={props.onClickClose}
