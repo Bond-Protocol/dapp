@@ -1,7 +1,10 @@
-import { BondPriceChart as BaseBondPriceChart, Chip } from "ui";
+import {
+  BondPriceChart as BaseBondPriceChart,
+  Chip,
+  PlaceholderChart,
+} from "ui";
 import { useBondChartData } from "hooks/useBondChartData";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { PlaceholderChart } from "ui";
 import { useState } from "react";
 
 export type BondDiscountChartProps = {
@@ -30,7 +33,7 @@ export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className="-ml-3 flex h-full min-h-[200px] w-full flex-col md:ml-0">
       <BaseBondPriceChart
         data={dataset}
         payoutTokenSymbol={market.payoutToken.symbol}

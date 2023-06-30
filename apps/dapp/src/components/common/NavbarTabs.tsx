@@ -1,12 +1,12 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export interface NavbarTabsProps {
   selected?: number;
   className?: string;
+  onClickTab: (path: string) => void;
 }
 
 export const NavbarTabs = (props: NavbarTabsProps) => {
-  const navigate = useNavigate();
   const location = useLocation();
 
   const tabs = [
@@ -24,14 +24,19 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
   };
 
   return (
-    <div className={`flex select-none justify-center gap-6 ${props.className}`}>
+    <div
+      className={`mx-2 flex select-none flex-col-reverse items-end justify-center gap-8 md:mx-0 md:flex-row md:gap-6 ${props.className}`}
+    >
       {tabs.map((tab, i) => (
         <div
           key={i}
-          className={`font-fraktion font-bold uppercase hover:cursor-pointer ${
+          className={`font-fraktion text-3xl font-bold uppercase hover:cursor-pointer md:text-base ${
             isSelected(tab.path, tab.group) ? "text-light-secondary" : ""
           }`}
-          onClick={() => navigate(tab.path)}
+          onClick={(e) => {
+            e.preventDefault();
+            props.onClickTab(tab.path);
+          }}
         >
           {tab.label}
         </div>

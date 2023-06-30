@@ -2,9 +2,10 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Filter, PaginatedTable } from "ui";
-import { useMarkets } from "hooks";
+import { useMarkets, useMediaQueries } from "hooks";
 import {
   marketList as tableColumns,
+  mobileMarketLIst as mobileColumns,
   tokenMarketList as tokenColumns,
 } from "./columns";
 
@@ -18,7 +19,7 @@ type MarketListProps = {
   title?: string;
 };
 
-const filters: Filter[] = [
+const defaultFilters: Filter[] = [
   {
     id: "discount",
     label: "Hide Negative Discounts",
@@ -39,6 +40,7 @@ export const MarketList: FC<MarketListProps> = ({
   token,
   ...props
 }) => {
+  const { isTabletOrMobile } = useMediaQueries();
   const navigate = useNavigate();
   const { allMarkets, isLoading } = useMarkets();
   const markets = props.markets || allMarkets;
@@ -51,24 +53,29 @@ export const MarketList: FC<MarketListProps> = ({
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
+  const fallback = {
+    title: "NO MARKETS CURRENTLY AVAILABLE",
+    buttonText: "Deploy a new market",
+    onClick: () => navigate("/create"),
+  };
+
+  const filters = defaultFilters;
+
   return (
     <PaginatedTable
       title={props.title}
       loading={isSomeLoading}
-      hideSearchbar={props.hideSearchbar}
+      hideSearchbar={props.hideSearchbar || isTabletOrMobile}
       filterText={props.filterText}
       defaultSort="discount"
-      columns={columns}
+      columns={isTabletOrMobile ? mobileColumns : columns}
       filters={filters}
       data={filteredMarkets}
-      onClickRow={(market: CalculatedMarket) =>
-        navigate(`/market/${market.chainId}/${market.marketId}`)
-      }
-      fallback={{
-        title: "NO MARKETS CURRENTLY AVAILABLE",
-        buttonText: "Deploy a new market",
-        onClick: () => navigate("/create"),
+      onClickRow={(market: CalculatedMarket) => {
+        window.scrollTo(0, 0);
+        navigate(`/market/${market.chainId}/${market.marketId}`);
       }}
+      fallback={isTabletOrMobile ? { title: fallback.title } : fallback}
     />
   );
 };

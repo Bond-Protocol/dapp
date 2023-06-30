@@ -8,6 +8,7 @@ import { BondPurchase } from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFullFormatter } from "src/utils/format";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMediaQueries } from "hooks";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import axios from "axios";
 
@@ -33,7 +34,8 @@ const blockExplorer: Column<any> = {
     );
   },
 };
-const userTxsHistory: Column<any>[] = [
+
+const baseTxsHistory: Column<any>[] = [
   {
     accessor: "timestamp",
     label: "Time",
@@ -84,6 +86,24 @@ const userTxsHistory: Column<any>[] = [
       };
     },
   },
+];
+
+const userTxsHistory: Column<any>[] = [
+  ...baseTxsHistory,
+  {
+    accessor: "amount",
+    label: "Bond Amount",
+    formatter: (purchase) => {
+      return {
+        value: `${longFormatter.format(purchase.amount)} ${
+          purchase.quoteToken?.symbol ?? "???"
+        }`,
+        sortValue: purchase.amount,
+        icon: purchase.quoteToken?.logoURI ?? PLACEHOLDER_TOKEN_LOGO_URL,
+      };
+    },
+  },
+
   {
     accessor: "discount",
     label: "Discount",
@@ -144,6 +164,7 @@ export interface TransactionHistoryProps {
 const API_ENDPOINT = import.meta.env.VITE_API_URL;
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
+  const { isMobile, isTabletOrMobile } = useMediaQueries();
   const isMarketHistory = !!props.market;
 
   const [bondPurchases, setBondPurchases] = useState();
@@ -190,13 +211,17 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         .sort((a, b) => b.timestamp - a.timestamp),
     [bondPurchases, props.data]
   );
+  const desktopColumns = isMarketHistory ? marketTxsHistory : userTxsHistory;
+  const cols = isTabletOrMobile ? baseTxsHistory : desktopColumns;
 
   return (
     <div className={props.className}>
       <PaginatedTable
+        hideSearchbar={isTabletOrMobile}
+        disableSearch={isTabletOrMobile}
         title={props.title ?? "Transaction History"}
         defaultSort="timestamp"
-        columns={marketTxsHistory}
+        columns={cols}
         data={tableData}
         fallback={{ title: "NO TRANSACTIONS YET" }}
         csvHeaders={

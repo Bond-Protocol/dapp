@@ -1,5 +1,5 @@
 import { ActionCard, InfoLabel, Loading, Pagination, TokenCard } from "ui";
-import { useTokens } from "hooks";
+import { useMediaQueries, useTokens } from "hooks";
 import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
 import { useEffect, useState } from "react";
@@ -11,6 +11,7 @@ import { environment } from "src/environment";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 
 export const TokenList = () => {
+  const { isTabletOrMobile } = useMediaQueries();
   const { tbv, payoutTokens } = useTokens();
   const navigate = useNavigate();
   const { totalPurchases, uniqueBonders } = useSubgraph();
@@ -47,7 +48,7 @@ export const TokenList = () => {
   }, [payoutTokens]);
 
   const [page, setPage] = useState(0);
-  const [cardsPerPage, setCardsPerPage] = useState(20);
+  const [cardsPerPage, setCardsPerPage] = useState(15);
 
   const handleChangePage = (newPage: number) => setPage(newPage);
 
@@ -63,14 +64,18 @@ export const TokenList = () => {
       ? tokens?.slice(page * cardsPerPage, page * cardsPerPage + cardsPerPage)
       : tokens;
 
+  const title = isTabletOrMobile ? "TOKENS" : "BOND TOKENS";
+  const bonderTitle = isTabletOrMobile ? "BONDERS" : "UNIQUE BONDERS";
+
   return (
-    <>
-      <PageHeader title="BOND TOKENS" />
-      <div className="flex gap-x-4 py-10">
+    <div className="pb-4">
+      <PageHeader title={title} />
+      <div className="grid grid-cols-2 grid-rows-2 gap-4 pb-10 pt-4 md:flex">
         <InfoLabel
           reverse
           label="Total Bonded Value"
           tooltip="Total value, in USD, of assets acquired by tokens through bonds"
+          className="col-span-2"
         >
           {tbv}
         </InfoLabel>
@@ -83,7 +88,7 @@ export const TokenList = () => {
         </InfoLabel>
         <InfoLabel
           reverse
-          label="Unique Bonders"
+          label={bonderTitle}
           tooltip="Total count of unique addresses that acquired bonds"
         >
           {uniqueBonders}
@@ -95,9 +100,15 @@ export const TokenList = () => {
             return (
               <div
                 key={token.id}
-                className="min-w-[209px] max-w-[218px] flex-1"
+                className="mx-4 min-w-[209px] flex-1 md:mx-0 md:max-w-[218px]"
               >
-                <TokenCard token={token} navigate={navigate} />
+                <TokenCard
+                  token={token}
+                  navigate={(args) => {
+                    scrollUp();
+                    navigate(args);
+                  }}
+                />
               </div>
             );
           })}
@@ -117,17 +128,19 @@ export const TokenList = () => {
           <Loading content={meme()} />
         </div>
       )}
-      <ActionCard
-        className="my-6"
-        title="Do you wanna issue a bond?"
-        leftLabel="Why Bond"
-        rightLabel="Issue a bond"
-        url="https://docs.bondprotocol.finance/basics/bonding"
-        onClickRight={() => {
-          navigate("/create");
-          scrollUp();
-        }}
-      />
-    </>
+      {!isTabletOrMobile && (
+        <ActionCard
+          className="my-6"
+          title="Do you wanna issue a bond?"
+          leftLabel="Why Bond"
+          rightLabel="Issue a bond"
+          url="https://docs.bondprotocol.finance/basics/bonding"
+          onClickRight={() => {
+            navigate("/create");
+            scrollUp();
+          }}
+        />
+      )}
+    </div>
   );
 };

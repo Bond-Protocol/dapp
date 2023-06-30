@@ -12,18 +12,20 @@ export type BondCardProps = {
 
 export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
   return (
-    <div className={`flex gap-4 ${props.className}`}>
+    <div
+      className={`flex flex-col gap-4 px-2 md:flex-row md:px-0 ${props.className}`}
+    >
       {!props.isFutureMarket && (
-        <div className="flex w-1/2">
+        <div className="flex w-full md:w-1/2">
           <BondPriceChart market={market} />
         </div>
       )}
       <div
         className={`flex flex-col justify-center ${
-          props.isFutureMarket ? "w-full" : "w-1/2"
+          props.isFutureMarket ? "w-full" : "md:w-1/2"
         }`}
       >
-        <div className="mb-2 flex gap-x-1">
+        <div className="mb-2 flex flex-col gap-x-1 md:flex-row">
           {props.isFutureMarket && market.start && (
             <SummaryLabel
               small

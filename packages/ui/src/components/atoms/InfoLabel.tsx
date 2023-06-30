@@ -11,8 +11,8 @@ export type InfoLabelProps = {
 } & Partial<TokenInputProps>;
 
 export const InfoLabel = (props: InfoLabelProps) => {
-  const textSize = props.small ? "" : "text-[48px]";
-  const height = props.small ? "h-[72px]" : "h-[104px]";
+  const textSize = props.small ? "" : "text-3xl md:text-[48px]";
+  const height = props.small ? "md:h-[72px]" : "md:h-[104px]";
 
   const className = `font-fraktion select-none font-bold leading-none ${textSize}`;
 
@@ -25,7 +25,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
   return (
     <TooltipWrapper className={props.className} content={props.tooltip}>
       <div
-        className={`flex h-[104px] max-h-[104px] w-full flex-col justify-center bg-white/[.05] text-center backdrop-blur-lg ${
+        className={`flex h-[84px] max-h-[104px] w-full flex-col justify-center bg-white/[.05] p-4 text-center backdrop-blur-lg md:p-0 ${
           props.reverse && "flex-col-reverse"
         } ${props.tooltip ? "" : props.className} ${height}`}
       >

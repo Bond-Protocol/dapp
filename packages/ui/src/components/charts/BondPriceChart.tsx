@@ -1,12 +1,12 @@
 //@ts-nocheck
 import {
-  LineChart as Chart,
+  CartesianGrid,
   Line,
+  LineChart as Chart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
 } from "recharts";
 import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
 import { calculateTrimDigits, formatDate, trim } from "utils";
@@ -34,7 +34,7 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
 
   return (
     <div className={`h-full w-full ${props.className}`}>
-      <ResponsiveContainer>
+      <ResponsiveContainer minWidth={300} minHeight={260}>
         <Chart data={props.data}>
           <XAxis
             dataKey="timestamp"
