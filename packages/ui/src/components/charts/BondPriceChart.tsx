@@ -1,12 +1,12 @@
 //@ts-nocheck
 import {
-  LineChart as Chart,
+  CartesianGrid,
   Line,
+  LineChart as Chart,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
 } from "recharts";
 import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
 import { calculateTrimDigits, formatDate, trim } from "utils";

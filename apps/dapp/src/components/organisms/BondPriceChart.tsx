@@ -1,7 +1,10 @@
-import { BondPriceChart as BaseBondPriceChart, Chip } from "ui";
+import {
+  BondPriceChart as BaseBondPriceChart,
+  Chip,
+  PlaceholderChart,
+} from "ui";
 import { useBondChartData } from "hooks/useBondChartData";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { PlaceholderChart } from "ui";
 import { useState } from "react";
 
 export type BondDiscountChartProps = {

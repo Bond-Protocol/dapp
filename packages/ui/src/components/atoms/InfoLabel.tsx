@@ -25,7 +25,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
   return (
     <TooltipWrapper className={props.className} content={props.tooltip}>
       <div
-        className={`flex p-4 md:p-0 h-[84px] max-h-[104px] w-full flex-col justify-center bg-white/[.05] text-center backdrop-blur-lg ${
+        className={`flex h-[84px] max-h-[104px] w-full flex-col justify-center bg-white/[.05] p-4 text-center backdrop-blur-lg md:p-0 ${
           props.reverse && "flex-col-reverse"
         } ${props.tooltip ? "" : props.className} ${height}`}
       >

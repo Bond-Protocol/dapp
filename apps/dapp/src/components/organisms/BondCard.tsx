@@ -13,7 +13,7 @@ export type BondCardProps = {
 export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
   return (
     <div
-      className={`flex flex-col px-2 md:px-0 md:flex-row gap-4 ${props.className}`}
+      className={`flex flex-col gap-4 px-2 md:flex-row md:px-0 ${props.className}`}
     >
       {!props.isFutureMarket && (
         <div className="flex w-full md:w-1/2">
@@ -25,7 +25,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
           props.isFutureMarket ? "w-full" : "md:w-1/2"
         }`}
       >
-        <div className="mb-2 flex flex-col md:flex-row gap-x-1">
+        <div className="mb-2 flex flex-col gap-x-1 md:flex-row">
           {props.isFutureMarket && market.start && (
             <SummaryLabel
               small

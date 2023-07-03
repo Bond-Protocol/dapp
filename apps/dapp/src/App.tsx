@@ -2,15 +2,8 @@ import { FC } from "react";
 import { Providers } from "context/app-providers";
 import { PageContainer } from "ui";
 import { PolicyRoutes, RouteMap } from "./RouteMap";
-import {
-  AppStatusBanner,
-  CoverUpScreen,
-  Footer,
-  MobileCover,
-  Navbar,
-} from "components";
+import { AppStatusBanner, CoverUpScreen, Footer, Navbar } from "components";
 import { AppBackdrop } from "components/common/AppBackdrop";
-import { environment } from "./environment";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 

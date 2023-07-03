@@ -1,9 +1,8 @@
 //@ts-nocheck
-import { Meta, StoryFn } from "@storybook/react";
+import {Meta} from "@storybook/react";
 import data from "../mock-data/table";
-import { base as columns } from "../mock-data/columns";
-import { DiscountLabel, PaginatedTable, Button } from "components";
-import { MouseEventHandler } from "react";
+import {base as columns} from "../mock-data/columns";
+import {PaginatedTable} from "components";
 
 export default {
   title: "Design System/Molecules/PaginatedTable",
