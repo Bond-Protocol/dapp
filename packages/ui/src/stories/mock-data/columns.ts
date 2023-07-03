@@ -1,10 +1,10 @@
 import {
-  longFormatter,
-  usdFormatter,
-  usdLongFormatter,
   Column,
   DiscountLabel,
   formatDate,
+  longFormatter,
+  usdFormatter,
+  usdLongFormatter,
 } from "src";
 import {
   CalculatedMarket,

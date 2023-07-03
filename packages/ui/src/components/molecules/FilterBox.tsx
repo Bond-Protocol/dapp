@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ClickAwayListener, PopperUnstyled } from "@mui/base";
-import { Input, SearchBar, Select, Switch } from "..";
+import { Input, SearchBar, Switch } from "..";
 import { ReactComponent as FilterIcon } from "../../assets/icons/sliders.svg";
 
 type FilterTypes = "switch" | "search";

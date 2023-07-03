@@ -4,14 +4,9 @@ import { formatCurrency, InfoLabel } from "ui";
 import { BondList, TransactionHistory } from "..";
 
 export const UserBonds = () => {
-  const { isLoading, ownerBalances, bondPurchases, userTbv } = useDashboard();
+  const { isLoading, ownerBalances, bondPurchases, userTbv, userClaimable } =
+    useDashboard();
   const { isTabletOrMobile } = useMediaQueries();
-
-  const claimable =
-    ownerBalances.reduce((total, bond) => {
-      //@ts-ignore
-      return bond?.canClaim ? total + (bond?.usdPriceNumber ?? 0) : total;
-    }, 0) ?? 0;
 
   const tbvElement = (
     <InfoLabel
@@ -24,10 +19,10 @@ export const UserBonds = () => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col gap-4 md:flex-row">
         {!isTabletOrMobile && tbvElement}
         <InfoLabel className="mt-4 md:mt-0" reverse label="Available to Claim">
-          {formatCurrency.usdFormatter.format(claimable)}
+          {formatCurrency.usdFormatter.format(userClaimable)}
         </InfoLabel>
       </div>
       <BondList title="Balance" isLoading={isLoading} data={ownerBalances} />

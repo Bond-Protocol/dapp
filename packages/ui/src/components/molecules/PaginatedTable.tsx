@@ -1,3 +1,4 @@
+import { CSVLink } from "react-csv";
 import React, { useMemo, useState } from "react";
 import { Cell, Column, Table, TableProps } from "./Table";
 import { useSorting } from "hooks/use-sorting";
@@ -5,6 +6,7 @@ import { Button, Filter, FilterBox, Loading } from "components";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
 import { usePagination } from "src/hooks/use-pagination";
+import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg";
 
 export const toValue = (value: any) => ({ value });
 export const toTableData = (
@@ -53,6 +55,8 @@ export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   disableSearch?: boolean;
   className?: string;
   headingClassName?: string;
+  csvHeaders?: string[];
+  csvFilename?: string;
   fallback?: FallbackProps;
   filters?: Filter[];
   onClickRow?: (args: any) => void;
@@ -87,7 +91,6 @@ export const PaginatedTable = ({
     props.hideSearchbar && !props.disableSearch
       ? [searchFilter, ...filters]
       : filters;
-
   const [activeFilters, setActiveFilters] = useState<Filter[]>(
     mappedFilters.filter((f) => f.startActive)
   );
@@ -133,6 +136,23 @@ export const PaginatedTable = ({
     ...pagination
   } = usePagination(sortedData);
 
+  const csvData = (): string[][] => {
+    if (!props.csvHeaders) return [];
+    const rows = [props.csvHeaders];
+    sortedData?.forEach((row) => {
+      const vals: any[] = [];
+      Object.keys(row)?.forEach((key) => {
+        row[key]?.csvValues &&
+          row[key]?.csvValues.forEach((val: any) => {
+            vals.push(val);
+          });
+      });
+      rows.push(vals);
+    });
+    // @ts-ignore
+    return rows;
+  };
+
   const isLoading = props.loading;
   const isEmpty =
     !props.loading && !sortedData?.length && activeFilters.length === 0;
@@ -153,7 +173,21 @@ export const PaginatedTable = ({
           )}
         </div>
 
-        <div className="mb-2 flex h-min gap-x-1">
+        <div className="mb-2 flex h-min items-center gap-x-1 pr-2">
+          {props.csvHeaders && (
+            <CSVLink data={csvData()} filename={props.csvFilename}>
+              <DownloadIcon height={32} width={32} />
+            </CSVLink>
+          )}
+
+          {!!filters.length && (
+            <FilterBox
+              handleFilterClick={onClickFilter}
+              activeFilters={activeFilters}
+              filters={filters}
+            />
+          )}
+
           {!hideSearchbar && (
             <SearchBar
               value={textToFilter}

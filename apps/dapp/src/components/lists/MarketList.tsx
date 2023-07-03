@@ -5,8 +5,8 @@ import { Filter, PaginatedTable } from "ui";
 import { useMarkets, useMediaQueries } from "hooks";
 import {
   marketList as tableColumns,
-  tokenMarketList as tokenColumns,
   mobileMarketLIst as mobileColumns,
+  tokenMarketList as tokenColumns,
 } from "./columns";
 
 type MarketListProps = {
