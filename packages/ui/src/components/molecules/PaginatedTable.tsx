@@ -56,6 +56,7 @@ export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   className?: string;
   headingClassName?: string;
   csvHeaders?: string[];
+  csvFilename?: string;
   fallback?: FallbackProps;
   filters?: Filter[];
   onClickRow?: (args: any) => void;
@@ -174,7 +175,7 @@ export const PaginatedTable = ({
 
         <div className="mb-2 flex h-min items-center gap-x-1 pr-2">
           {props.csvHeaders && (
-            <CSVLink data={csvData()}>
+            <CSVLink data={csvData()} filename={props.csvFilename}>
               <DownloadIcon height={32} width={32} />
             </CSVLink>
           )}

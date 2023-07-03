@@ -205,6 +205,9 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
   );
   const desktopColumns = isMarketHistory ? marketTxsHistory : userTxsHistory;
   const cols = isTabletOrMobile ? baseTxsHistory : desktopColumns;
+  const csvFilename =
+    props.market &&
+    `${props.market?.quoteToken.symbol}-${props.market?.payoutToken.symbol}-${props.market?.id}`;
 
   return (
     <div className={props.className}>
@@ -216,6 +219,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         columns={cols}
         data={tableData}
         fallback={{ title: "NO TRANSACTIONS YET" }}
+        csvFilename={csvFilename}
         csvHeaders={
           props.market && [
             "TIME",
