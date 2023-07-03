@@ -2,7 +2,7 @@ import { CSVLink } from "react-csv";
 import React, { useMemo, useState } from "react";
 import { Cell, Column, Table, TableProps } from "./Table";
 import { useSorting } from "hooks/use-sorting";
-import { Button, Filter, FilterBox, Loading } from "components";
+import { Button, Filter, FilterBox, Loading, Tooltip } from "components";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
 import { usePagination } from "src/hooks/use-pagination";
@@ -175,9 +175,11 @@ export const PaginatedTable = ({
 
         <div className="mb-2 flex h-min items-center gap-x-1 pr-2">
           {props.csvHeaders && (
-            <CSVLink data={csvData()} filename={props.csvFilename}>
-              <DownloadIcon height={32} width={32} />
-            </CSVLink>
+            <Tooltip content="Download Transaction History as CSV">
+              <CSVLink data={csvData()} filename={props.csvFilename}>
+                <DownloadIcon height={32} width={32} />
+              </CSVLink>
+            </Tooltip>
           )}
 
           {!!filters.length && (
