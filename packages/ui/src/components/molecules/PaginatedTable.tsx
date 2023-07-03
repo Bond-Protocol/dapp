@@ -136,13 +136,13 @@ export const PaginatedTable = ({
   } = usePagination(sortedData);
 
   const csvData = (): string[][] => {
-    if (!props.csvHeaders) return;
+    if (!props.csvHeaders) return [];
     const rows = [props.csvHeaders];
     sortedData?.forEach((row) => {
       const vals: any[] = [];
       Object.keys(row)?.forEach((key) => {
         row[key]?.csvValues &&
-          row[key]?.csvValues.forEach((val) => {
+          row[key]?.csvValues.forEach((val: any) => {
             vals.push(val);
           });
       });

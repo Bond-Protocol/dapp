@@ -1,7 +1,9 @@
 import { format } from "date-fns";
 import {
   CalculatedMarket,
+  calculateTrimDigits,
   getBlockExplorer,
+  trim,
   trimAsNumber,
 } from "@bond-protocol/contract-library";
 import { BondPurchase } from "src/generated/graphql";
@@ -56,10 +58,12 @@ const baseTxsHistory: Column<any>[] = [
     accessor: "amount",
     label: "Bond Amount",
     formatter: (purchase) => {
+      const value =
+        purchase.amount > 1
+          ? longFormatter.format(purchase.amount)
+          : trim(purchase.amount, calculateTrimDigits(purchase.amount));
       return {
-        value: `${longFormatter.format(purchase.amount)} ${
-          purchase.quoteToken?.symbol ?? "???"
-        }`,
+        value: `${value} ${purchase.quoteToken?.symbol ?? "???"}`,
         subtext: purchase.quoteToken?.price
           ? usdFullFormatter.format(purchase.amountUsd)
           : "Unknown",
@@ -73,10 +77,12 @@ const baseTxsHistory: Column<any>[] = [
     accessor: "payout",
     label: "Payout Amount",
     formatter: (purchase) => {
+      const value =
+        purchase.payout > 1
+          ? longFormatter.format(purchase.payout)
+          : trim(purchase.payout, calculateTrimDigits(purchase.payout));
       return {
-        value: `${longFormatter.format(purchase.payout)} ${
-          purchase.payoutToken?.symbol ?? "???"
-        }`,
+        value: `${value} ${purchase.payoutToken?.symbol ?? "???"}`,
         subtext: purchase.payoutUsd
           ? usdFullFormatter.format(purchase.payoutUsd)
           : "Unknown",
@@ -90,20 +96,6 @@ const baseTxsHistory: Column<any>[] = [
 
 const userTxsHistory: Column<any>[] = [
   ...baseTxsHistory,
-  {
-    accessor: "amount",
-    label: "Bond Amount",
-    formatter: (purchase) => {
-      return {
-        value: `${longFormatter.format(purchase.amount)} ${
-          purchase.quoteToken?.symbol ?? "???"
-        }`,
-        sortValue: purchase.amount,
-        icon: purchase.quoteToken?.logoURI ?? PLACEHOLDER_TOKEN_LOGO_URL,
-      };
-    },
-  },
-
   {
     accessor: "discount",
     label: "Discount",

@@ -93,13 +93,14 @@ export const useDiscoverToken = () => {
 
     return tks.data.map((t: any) => {
       const original = tokens
-        .filter(
-          (token) =>
-            Number(token.chainId) === Number(t.data.chainId) &&
-            token.address.toLowerCase() === t.data.address.toLowerCase()
-        )
+        .filter((token) => {
+          return (
+            Number(token.chainId) === Number(t.chainId) &&
+            token.address.toLowerCase() === t.address.toLowerCase()
+          );
+        })
         .at(0);
-      return { ...original, ...t.data };
+      return { ...original, ...t };
     });
   };
 
