@@ -53,10 +53,13 @@ export const MarketInsights = () => {
 
   const type = getMarketTypeByAuctioneer(market.auctioneer);
   const marketTypeLabel = pricingLabels[type];
+  const showTxHistory = false;
+  const showNavigation = false;
 
   return (
-    <div className="pb-20">
+    <div className="pb-4">
       <PageNavigation
+        skip={!showNavigation}
         onClickLeft={() => navigate(-1)}
         onClickRight={() =>
           navigate(
@@ -134,7 +137,7 @@ export const MarketInsights = () => {
       </div>
 
       <BondCard market={market} isFutureMarket={isFutureMarket} />
-      {!isFutureMarket && (
+      {!isFutureMarket && showTxHistory && (
         <TransactionHistory className="mt-20" market={market} />
       )}
     </div>

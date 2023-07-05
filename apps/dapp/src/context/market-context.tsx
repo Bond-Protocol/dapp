@@ -5,6 +5,8 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 const initialState = {
   allMarkets: [],
   getMarketsForOwner: (address: string) => ({} as CalculatedMarket[]),
+  getByChainAndId: (chain: string | number, id: string | number) =>
+    ({} as CalculatedMarket),
   isMarketOwner: false,
   isSomeLoading: false,
   updatedMarketTokens: false,

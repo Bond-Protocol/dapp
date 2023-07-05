@@ -10,6 +10,8 @@ export interface PageNavigationProps {
   link?: string;
   onClickLeft?: () => void;
   onClickRight?: () => void;
+  /** hack to support embed routes*/
+  skip?: boolean;
 }
 
 export const PageNavigation = (props: PageNavigationProps) => {
@@ -17,6 +19,11 @@ export const PageNavigation = (props: PageNavigationProps) => {
   const goBack = () => navigate(-1);
 
   const { isTabletOrMobile } = useMediaQueries();
+
+  if (props.skip) {
+    return <>{props.children}</>;
+  }
+
   return (
     <div>
       <div
