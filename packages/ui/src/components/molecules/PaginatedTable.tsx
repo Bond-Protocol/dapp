@@ -182,14 +182,6 @@ export const PaginatedTable = ({
             </Tooltip>
           )}
 
-          {!!filters.length && (
-            <FilterBox
-              handleFilterClick={onClickFilter}
-              activeFilters={activeFilters}
-              filters={filters}
-            />
-          )}
-
           {!hideSearchbar && (
             <SearchBar
               value={textToFilter}

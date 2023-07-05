@@ -72,7 +72,7 @@ export const MarketInsights = () => {
           className="place-self-start self-start justify-self-start"
         />
       </PageNavigation>
-      <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:mt-0 md:flex">
+      <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
         <InfoLabel
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
