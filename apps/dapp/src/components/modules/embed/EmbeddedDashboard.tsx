@@ -1,5 +1,4 @@
 import { BondList } from "components/lists";
-import { UserBonds } from "components/organisms/UserBonds";
 import { useDashboard } from "context/dashboard-context";
 
 export const EmbeddedDashboard = () => {

@@ -1,65 +1,39 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
-import {
-  CalculatedMarket,
-  calculateTrimDigits,
-  getMarketTypeByAuctioneer,
-  MarketPricing,
-  trim,
-} from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
-import { dateMath, formatCurrency, formatDate, InfoLabel, Loading } from "ui";
+import { InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
-
-const pricingLabels: Record<MarketPricing, string> = {
-  dynamic: "Dynamic Price Market",
-  static: "Static Price Market",
-  "oracle-static": "Static Oracle Market",
-  "oracle-dynamic": "Dynamic Price Market",
-};
+import { useMarketDetails } from "hooks/useMarketDetails";
 
 export const MarketInsights = () => {
-  const { allMarkets: markets } = useMarkets();
   const { id, chainId } = useParams();
-  const { isMobile, isTabletOrMobile } = useMediaQueries();
   const navigate = useNavigate();
+  const { isTabletOrMobile } = useMediaQueries();
+
+  const { allMarkets: markets } = useMarkets();
   const market: CalculatedMarket = markets.find(
     ({ marketId, chainId: marketChainId }) =>
       marketId === Number(id) && marketChainId === chainId
   )!;
 
+  const {
+    maxPayoutLabel,
+    discountLabel,
+    vestingLabel,
+    isFutureMarket,
+    marketTypeLabel,
+    capacity,
+  } = useMarketDetails(market);
+
   if (!market) return <Loading content={meme()} />;
-  const capacityInQuote = market.capacityToken === market.quoteToken.symbol;
-
-  const maxPayout = !capacityInQuote
-    ? market.currentCapacity < Number(market.maxPayout)
-      ? market.currentCapacity
-      : market.maxPayout
-    : market.maxPayout;
-
-  const vestingDate = formatDate.short(new Date(market.vesting * 1000));
-
-  const vestingLabel =
-    market.vestingType === "fixed-term"
-      ? market.formattedLongVesting
-      : vestingDate;
-
-  const startDate = market.start && new Date(market.start * 1000);
-  const isFutureMarket =
-    !!startDate && dateMath.isBefore(new Date(), startDate);
-
-  const type = getMarketTypeByAuctioneer(market.auctioneer);
-  const marketTypeLabel = pricingLabels[type];
-  const showTxHistory = false;
-  const showNavigation = false;
 
   return (
     <div className="pb-4">
       <PageNavigation
-        skip={!showNavigation}
         onClickLeft={() => navigate(-1)}
         onClickRight={() =>
           navigate(
@@ -80,9 +54,7 @@ export const MarketInsights = () => {
           label="Max Payout"
           tooltip="The maximum payout currently available from this market."
         >
-          {Number(maxPayout) > 1
-            ? formatCurrency.trimToLengthSymbol(Number(maxPayout))
-            : trim(Number(maxPayout), calculateTrimDigits(Number(maxPayout)))}
+          {maxPayoutLabel}
           <span className="ml-1 text-xl">{market.payoutToken.symbol}</span>
         </InfoLabel>
 
@@ -95,14 +67,7 @@ export const MarketInsights = () => {
               market?.discount > 0 ? "text-light-success" : "text-red-300"
             }
           >
-            {!isNaN(market.discount) &&
-            market.discount !== Infinity &&
-            market.discount !== -Infinity
-              ? trim(
-                  market.discount,
-                  calculateTrimDigits(market.discount)
-                ).concat("%")
-              : "Unknown"}
+            {discountLabel}
           </p>
         </InfoLabel>
 
@@ -118,7 +83,7 @@ export const MarketInsights = () => {
               : "Purchases from a fixed expiry market will vest on the specified date. All bonds vest at midnight UTC. If this date is already in the past, they will vest immediately upon purchase."
           }
         >
-          {vestingLabel.includes("Immediate") ? "Immediate" : vestingLabel}
+          {vestingLabel}
         </InfoLabel>
         <InfoLabel
           label={`${
@@ -126,18 +91,13 @@ export const MarketInsights = () => {
           } Capacity`}
           tooltip="The remaining amount of tokens to be bonded in this market"
         >
-          {Number(market.currentCapacity) > 1
-            ? formatCurrency.trimToLengthSymbol(Number(market.currentCapacity))
-            : trim(
-                Number(market.currentCapacity),
-                calculateTrimDigits(Number(market.currentCapacity))
-              )}
+          {capacity}
           <span className="ml-1 text-xl">{market.capacityToken}</span>
         </InfoLabel>
       </div>
 
       <BondCard market={market} isFutureMarket={isFutureMarket} />
-      {!isFutureMarket && showTxHistory && (
+      {!isFutureMarket && (
         <TransactionHistory className="mt-20" market={market} />
       )}
     </div>

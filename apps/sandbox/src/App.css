@@ -3,3 +3,7 @@
   margin: 0 auto;
   text-align: center;
 }
+
+.main-container {
+  padding-bottom: 10vh;
+}
