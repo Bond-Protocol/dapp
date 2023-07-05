@@ -90,6 +90,7 @@ const ShowWarning = ({
     </div>
   );
 };
+
 export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -320,7 +321,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         >
           <Button
             disabled={!hasSufficientBalance}
-            className="mt-4 w-full"
+            className="h- mt-4 w-full"
             onClick={onClickBond}
           >
             {!hasSufficientAllowance && hasSufficientBalance

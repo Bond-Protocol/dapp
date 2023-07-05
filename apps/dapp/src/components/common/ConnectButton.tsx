@@ -3,9 +3,12 @@ import { Button, Icon } from "ui";
 import arbitrum from "assets/icons/arbitrum.svg";
 import repeatIcon from "assets/icons/loop.svg";
 import { useMediaQueries } from "hooks/useMediaQueries";
+import { ChainButton } from "./ChainButton";
 
 export interface ConnectButtonProps {
   full?: boolean;
+  hideAccount?: boolean;
+  hideChain?: boolean;
 }
 
 export const ConnectButton = (props: ConnectButtonProps) => {
@@ -61,30 +64,20 @@ export const ConnectButton = (props: ConnectButtonProps) => {
               }
               return (
                 <div className="flex gap-4">
-                  <div onClick={openChainModal} className="my-auto">
-                    <div className="max-h-[40px]">
-                      <Icon
-                        width={32}
-                        height={32}
-                        className="hover:cursor-pointer"
-                        alt={chain.name ?? "Chain icon"}
-                        src={
-                          chain.id === 421613 //TODO: remove goerli arb icon hack
-                            ? arbitrum
-                            : chain.iconUrl ?? repeatIcon
-                        }
-                      />
-                    </div>
-                  </div>
-                  <Button
-                    thin
-                    variant="ghost"
-                    onClick={openAccountModal}
-                    type="button"
-                    className="my-auto w-full font-mono hover:cursor-pointer md:px-4"
-                  >
-                    {account.displayName}
-                  </Button>
+                  {!props.hideChain && (
+                    <ChainButton chain={chain} onClick={openChainModal} />
+                  )}
+                  {!props.hideAccount && (
+                    <Button
+                      thin
+                      variant="ghost"
+                      onClick={openAccountModal}
+                      type="button"
+                      className="my-auto w-full font-mono text-xs hover:cursor-pointer md:px-4 md:text-base"
+                    >
+                      {account.displayName}
+                    </Button>
+                  )}
                 </div>
               );
             })()}

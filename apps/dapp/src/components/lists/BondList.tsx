@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useMediaQueries } from "hooks/useMediaQueries";
+import { useEmbedContext } from "..";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -126,19 +127,24 @@ const mobileColumns = tableColumns.filter((c) => c.accessor !== "value");
 export const BondList = ({ data = [], ...props }: any) => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
+  const { ownerAddress, isEmbed } = useEmbedContext();
+
+  const searchString = isEmbed ? `?owner=${ownerAddress}` : "";
 
   return (
-    <div className="mt-10">
+    <div className={props.className}>
       <PaginatedTable
         title={props.title ?? <div />}
-        hideSearchbar={isTabletOrMobile}
+        hideSearchbar={isTabletOrMobile || props.disableSearch}
+        disableSearch={props.disableSearch}
         defaultSort="vesting"
         columns={isTabletOrMobile ? mobileColumns : tableColumns}
         data={data}
         loading={props.isLoading}
         fallback={{
           title: "YOU HAVE NO PENDING BONDS",
-          onClick: () => navigate("/markets"),
+          onClick: () =>
+            navigate((isEmbed ? "/embed" : "") + "/markets" + searchString),
           buttonText: "Explore Bond Markets",
         }}
       />

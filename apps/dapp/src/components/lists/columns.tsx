@@ -210,6 +210,14 @@ export const viewColumn: Column<CalculatedMarket> = {
 };
 
 export const base = [bondColumn, bondPrice, discountColumn, maxPayout, vesting];
+export const embedColumns = [
+  bondColumn,
+  bondPrice,
+  discountColumn,
+  maxPayout,
+  vesting,
+].map((e) => ({ ...e, width: undefined, alignEnd: false }));
+
 export const marketList = [...base, tbv, issuer, viewColumn];
 export const tokenMarketList = [...base, tbv, issuer, viewColumn];
 export const userMarketList = [bondColumn];
