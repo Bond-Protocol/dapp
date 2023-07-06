@@ -1,29 +1,35 @@
+import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { BondPriceLabel } from "components/common/BondPriceLabel";
 import { BondPurchaseCard } from "components/organisms";
 import { useMarkets } from "context/market-context";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { useParams } from "react-router-dom";
-import { SummaryLabel } from "ui";
+import { SummaryLabel, getDiscountColor } from "ui";
 
-export const EmbeddedPurchaseCard = () => {
+export const EmbeddedPurchaseCard = (props: { market?: CalculatedMarket }) => {
   const { id, chainId } = useParams();
   const { getByChainAndId } = useMarkets();
-  const market = getByChainAndId(chainId!, id!);
+  const market = props.market ?? getByChainAndId(chainId!, id!);
   const details = useMarketDetails(market);
 
   return (
     <div className="w-full">
-      <div className="flex gap-x-1 pb-2">
-        <SummaryLabel
-          className="w-full"
-          small
-          subtext="DISCOUNT"
-          value={details.discountLabel ?? ""}
+      <div className="flex h-full gap-x-1 pb-2">
+        <BondPriceLabel
+          bondPrice={market.formattedDiscountedPrice}
+          price={market.payoutToken.price ?? 0}
+          {...market.payoutToken}
         />
         <SummaryLabel
-          className="w-full"
-          small
-          subtext={market.payoutToken.symbol + " BOND PRICE"}
-          value={market.formattedDiscountedPrice}
+          tooltip="The current discount available from this market. Green = discount, buy. Red = premium, do not buy."
+          className="h-full w-full "
+          valueClassName={`${getDiscountColor(
+            market.payoutToken.price ?? 0,
+            market.discountedPrice
+          )} font-bold`}
+          center
+          subtext="DISCOUNT"
+          value={details.discountLabel ?? ""}
         />
       </div>
       <BondPurchaseCard market={market} />

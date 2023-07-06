@@ -24,6 +24,7 @@ import add from "date-fns/add";
 import defillama from "services/defillama";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useNavigate } from "react-router-dom";
+import { useIsEmbed } from "hooks/useIsEmbed";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -92,6 +93,7 @@ const ShowWarning = ({
 };
 
 export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
+  const isEmbed = useIsEmbed();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState<string>("0");
@@ -285,12 +287,14 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   const goToMarkets = () => {
     setShowModal(false);
-    navigate("/markets");
+    console.log({ isEmbed }, "here");
+    navigate((isEmbed ? "/embed" : "") + "/markets");
   };
 
   const goToBondDetails = () => {
     setShowModal(false);
-    navigate("/dashboard");
+    console.log({ isEmbed }, "here");
+    navigate((isEmbed ? "/embed" : "") + "/dashboard");
   };
 
   return (

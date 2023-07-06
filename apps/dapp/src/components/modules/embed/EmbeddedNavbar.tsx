@@ -1,6 +1,6 @@
 import { ConnectButton, NavbarTabs } from "components/common";
 import { useMemo } from "react";
-import { ProtocolLogo } from "ui";
+import { ProtocolLogo, TooltipWrapper } from "ui";
 import { useAccount } from "wagmi";
 import { useEmbedContext } from "./embed-context";
 
@@ -11,7 +11,7 @@ export const EmbeddedNavbar = () => {
   const tabs = useMemo(
     () => [
       {
-        label: "Markets",
+        label: "Bond",
         path: `/embed/markets?owner=${ownerAddress}`,
         group: "market",
       },
@@ -23,7 +23,11 @@ export const EmbeddedNavbar = () => {
   return (
     <div className="flex items-center justify-between bg-light-base p-1">
       <div className="flex items-center gap-x-2">
-        <ProtocolLogo small />
+        <TooltipWrapper content="Click to visit Bond Protocol">
+          <a target="_blank" href="https://bondprotocol.finance">
+            <ProtocolLogo small />
+          </a>
+        </TooltipWrapper>
         {isConnected && <ConnectButton hideAccount />}
       </div>
       <NavbarTabs tabs={tabs} />
