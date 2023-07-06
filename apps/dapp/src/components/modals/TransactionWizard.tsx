@@ -80,13 +80,14 @@ export const TransactionWizard = ({
 
   const handleTx = async (tx: ContractTransaction, chainId: string) => {
     const provider = providers[chainId];
+    console.log({ chainId });
 
     try {
       if (tx) {
         setHash(tx.hash as Address);
         setStatus(TX_STATUS.WAITING);
 
-        const result = await provider.waitForTransaction(tx.hash);
+        const result = await tx.wait(1);
         setResult(result);
         setStatus(TX_STATUS.SUCCESS);
       }

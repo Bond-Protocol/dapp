@@ -69,11 +69,11 @@ export const tableColumns: Array<Column<any>> = [
       const { data: signer } = useSigner();
       const [tx, setTx] = useState<any>();
 
-      const isCorrectNetwork =
-        Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
+      const bondChainId = Number(props?.data?.bond?.bondToken?.chainId);
+      const isCorrectNetwork = bondChainId === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(Number(props?.data?.bond?.bondToken?.chainId));
+        switchNetwork?.(bondChainId);
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {
@@ -111,6 +111,7 @@ export const tableColumns: Array<Column<any>> = [
           </Button>
           <TransactionWizard
             open={open}
+            chainId={bondChainId.toString()}
             onSubmit={() => redeemBond(props?.data?.bond)}
             onClose={() => setOpen(false)}
             SuccessDialog={() => <div>Bond claimed!</div>}

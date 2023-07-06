@@ -1,6 +1,11 @@
 import "./App.css";
-import { Iframe } from "./Iframe";
+import { EmbedMarket } from "./Iframe";
 
+const tnetwork = "0x71e47a4429d35827e0312aa13162197c23287546";
+const gmx = "0xea8a734db4c7ea50c32b5db8a0cb811707e8ace3";
+const afx = "0x62A665d3f9fc9a968dC35a789122981d9109349a";
+
+const gdex = "0xeca93e266b914700a26cf3fe364fad4134f8ba94";
 function App() {
   return (
     <div className="main-container">
@@ -16,13 +21,8 @@ function App() {
         }}
       >
         <div>
-          <h2>Width: 420</h2>
-          <Iframe width={420} />
-        </div>
-
-        <div>
-          <h2>Width: 800</h2>
-          <Iframe width={800} />
+          <h2>Sigle Market - Width: 400</h2>
+          <EmbedMarket width={820} />
         </div>
       </div>
     </div>

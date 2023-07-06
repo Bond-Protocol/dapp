@@ -1,6 +1,8 @@
 import { Link, TokenLogo, TooltipIcon, TooltipWrapper } from "components/atoms";
 
 export const SummaryLabel = (props: {
+  valueClassName: string;
+  center?: boolean;
   icon?: string;
   value: string;
   subtext?: string;
@@ -10,19 +12,25 @@ export const SummaryLabel = (props: {
   small?: boolean;
 }) => {
   return (
-    <TooltipWrapper content={props.tooltip} className={props.className}>
+    <TooltipWrapper content={props.tooltip}>
       <div
-        className={`font-fraktion bg-white/5 p-4 pt-3 ${
-          props.small ? "text-center" : ""
-        } ${props.tooltip ? "" : props.className}`}
+        className={`font-fraktion bg-white/5 p-4 ${
+          props.small || props.center ? "text-center" : ""
+        } ${props.className}`}
       >
         <div
-          className={`flex items-center ${props.small ? "justify-center" : ""}`}
+          className={`flex items-center ${
+            props.small || props.center ? "justify-center" : ""
+          }`}
         >
           {props.icon && (
             <TokenLogo className="-ml-1 mr-2 w-[24px]" icon={props.icon} />
           )}
-          <p className={props.small ? "font-bold" : "text-2xl"}>
+          <p
+            className={`${props.small ? "font-bold" : "text-2xl"} ${
+              props.valueClassName
+            }`}
+          >
             {props.value}
           </p>
         </div>
