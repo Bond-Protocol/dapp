@@ -34,13 +34,13 @@ export const MarketInsights = () => {
   return (
     <div className="pb-4">
       <PageNavigation
+        rightText="View Token"
         onClickLeft={() => navigate(-1)}
         onClickRight={() =>
           navigate(
             `/tokens/${market.payoutToken.chainId}/${market.payoutToken.address}`
           )
         }
-        rightText="View Token"
       >
         <PageHeader
           title={`${market.payoutToken.symbol} BOND`}

@@ -1,6 +1,4 @@
 export const AppBackdrop = () => {
-  //return <div className="w-full bg-transparent" />;
-
   return (
     <div id="bg" className="bg-base w-full">
       <div id="grad-1" className="bg-base bg-grad-top" />

@@ -21,10 +21,10 @@ export const App: FC = () => {
   const isIframe = window.self !== window.top;
 
   return (
-    <div className="">
-      <Providers>
-        {!isIframe && <AppStatusBanner />}
-        {!isIframe && (
+    <Providers>
+      {!isIframe && (
+        <>
+          <AppStatusBanner />
           <div className="flex h-full min-h-[100vh] flex-col justify-between">
             <div className="h-full overflow-x-clip font-jakarta antialiased">
               <AppBackdrop />
@@ -39,21 +39,21 @@ export const App: FC = () => {
             </div>
             <Footer />
           </div>
-        )}
-        {isIframe && (
-          <EmbedProvider>
-            <div className="flex h-full min-h-[100vh] flex-col justify-between">
-              <AppBackdrop />
-              <div className="flex h-full flex-col overflow-x-clip font-jakarta antialiased">
-                <EmbeddedNavbar />
-                <EmbedContainer>
-                  <EmbedRoutes />
-                </EmbedContainer>
-              </div>
+        </>
+      )}
+      {isIframe && (
+        <EmbedProvider>
+          <div className="flex h-full min-h-[100vh] flex-col justify-between">
+            <AppBackdrop />
+            <div className="flex h-full flex-col overflow-x-clip font-jakarta antialiased">
+              <EmbeddedNavbar />
+              <EmbedContainer>
+                <EmbedRoutes />
+              </EmbedContainer>
             </div>
-          </EmbedProvider>
-        )}
-      </Providers>
-    </div>
+          </div>
+        </EmbedProvider>
+      )}
+    </Providers>
   );
 };
