@@ -7,13 +7,15 @@ import {
 } from "ui";
 
 import { ContractTransaction } from "ethers";
-import { providers } from "services/owned-providers";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
 import { Address } from "wagmi";
 
 enum TX_STATUS {
+  /** Waiting, transaction hasn't been sent to signer*/
   STANDBY = "standby",
+  /** Transaction has been sent to signer and is pending signature */
   SIGNING = "signing",
+  /** Transaction has been sent to mempool and is waiting confirmation*/
   WAITING = "waiting",
   SUCCESS = "success",
   FAILED = "failed",
@@ -27,14 +29,21 @@ type TxStepHandler = {
 };
 
 export type TransactionWizardProps = {
+  /** Whether the wizard is open*/
   open: boolean;
+  /** Handler to close the wizard from within it */
   onClose: () => void;
+  /** Should call the transaction and return it */
   onSubmit: (...args: any[]) => Promise<ContractTransaction | undefined>;
+  /** The initial dialog of the wizard, usually the transaction summary/starter */
   InitialDialog?: (props: any) => JSX.Element;
+  /** The dialog show if the transaction succeeds */
   SuccessDialog?: (props: any) => JSX.Element;
+  /** The chainId for the chain where the tx is happening*/
   chainId?: number | string;
-  afterSubmit?: () => void;
+  /** A transaction started externally and waiting to be signed */
   signingTx?: Promise<ContractTransaction>;
+  /** Optional titles for every stage */
   titles?: Partial<Record<TxStatus, string>>;
 } & Partial<TransactionHashDialogProps>;
 
@@ -66,10 +75,10 @@ export const TransactionWizard = ({
     setStatus(TX_STATUS.SIGNING);
 
     try {
-      const tx = await props.onSubmit(chainId, ...args);
+      const tx = await props.onSubmit(chain, ...args);
 
       if (tx) {
-        handleTx(tx, chain);
+        handleTx(tx);
       }
     } catch (e) {
       console.error("WizardError:", e);
@@ -78,15 +87,13 @@ export const TransactionWizard = ({
     }
   };
 
-  const handleTx = async (tx: ContractTransaction, chainId: string) => {
-    const provider = providers[chainId];
-
+  const handleTx = async (tx: ContractTransaction) => {
     try {
       if (tx) {
         setHash(tx.hash as Address);
         setStatus(TX_STATUS.WAITING);
 
-        const result = await provider.waitForTransaction(tx.hash);
+        const result = await tx.wait(1);
         setResult(result);
         setStatus(TX_STATUS.SUCCESS);
       }
@@ -104,7 +111,7 @@ export const TransactionWizard = ({
         setStatus(TX_STATUS.SIGNING);
         try {
           const tx = await props.signingTx;
-          handleTx(tx, String(props.chainId));
+          handleTx(tx);
         } catch (e) {
           setTxError(e as Error);
           setStatus(TX_STATUS.FAILED);
@@ -138,19 +145,19 @@ export const TransactionWizard = ({
     setStatus(TX_STATUS.SIGNING);
   };
 
+  const StartDialog = InitialDialog ?? (() => <div />);
+
   const SuccessDialog =
     props.SuccessDialog ??
     ((args) => (
       <TransactionHashDialog {...args} hash={hash!} {...blockExplorer} />
     ));
 
-  const Start = InitialDialog ?? (() => <div />);
-
   const handlers: Record<TxStatus, TxStepHandler> = {
     standby: {
       title: props.titles?.standby ?? "Confirm Transaction",
       element: (
-        <Start key={0} onSubmit={handleSubmit} onCancel={props.onClose} />
+        <StartDialog key={0} onSubmit={handleSubmit} onCancel={props.onClose} />
       ),
     },
     signing: {

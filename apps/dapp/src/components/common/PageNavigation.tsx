@@ -17,6 +17,7 @@ export const PageNavigation = (props: PageNavigationProps) => {
   const goBack = () => navigate(-1);
 
   const { isTabletOrMobile } = useMediaQueries();
+
   return (
     <div>
       <div
