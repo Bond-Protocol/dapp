@@ -22,7 +22,7 @@ export const EmbeddedNavbar = () => {
 
   return (
     <div className="flex items-center justify-between bg-light-base p-1">
-      <div className="flex items-center gap-x-2">
+      <div className="flex items-center">
         <TooltipWrapper content="Click to visit Bond Protocol">
           <a target="_blank" href="https://bondprotocol.finance">
             <ProtocolLogo small />

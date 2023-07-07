@@ -4,18 +4,19 @@ import repeatIcon from "assets/icons/loop.svg";
 
 type ChainButtonProps = {
   onClick: () => void;
+  iconWidth?: number;
   chain: {
     id?: number;
     name?: string;
     iconUrl?: string;
   };
 };
-export const ChainButton = (props: ChainButtonProps) => {
+export const ChainButton = ({ iconWidth = 32, ...props }: ChainButtonProps) => {
   return (
     <div onClick={props.onClick}>
       <Icon
-        width={22}
-        height={22}
+        width={iconWidth}
+        height={iconWidth}
         className="hover:cursor-pointer"
         alt={props.chain.name ?? "Chain icon"}
         src={

@@ -40,9 +40,9 @@ export const SummaryLabel = (props: {
           </Link>
         ) : (
           <div
-            className={
-              "flex items-center" + " " + props.small ? "justify-center" : ""
-            }
+            className={`flex items-center ${
+              props.small || props.center ? "justify-center" : ""
+            }`}
           >
             <p className="text-light-grey text-base font-bold leading-none">
               {props.subtext}

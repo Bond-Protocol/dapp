@@ -1,7 +1,5 @@
 import { ConnectButton as ConnectButtonUnstyled } from "@rainbow-me/rainbowkit";
 import { Button, Icon } from "ui";
-import arbitrum from "assets/icons/arbitrum.svg";
-import repeatIcon from "assets/icons/loop.svg";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { ChainButton } from "./ChainButton";
 
@@ -9,6 +7,7 @@ export interface ConnectButtonProps {
   full?: boolean;
   hideAccount?: boolean;
   hideChain?: boolean;
+  iconWidth?: number;
 }
 
 export const ConnectButton = (props: ConnectButtonProps) => {
@@ -65,7 +64,11 @@ export const ConnectButton = (props: ConnectButtonProps) => {
               return (
                 <div className="flex items-center gap-4">
                   {!props.hideChain && (
-                    <ChainButton chain={chain} onClick={openChainModal} />
+                    <ChainButton
+                      iconWidth={props.iconWidth}
+                      chain={chain}
+                      onClick={openChainModal}
+                    />
                   )}
                   {!props.hideAccount && (
                     <Button
