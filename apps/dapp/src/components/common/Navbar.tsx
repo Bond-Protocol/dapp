@@ -3,38 +3,35 @@ import { ProtocolLogo } from "ui";
 import { NavbarTabs, NavbarTabsProps } from "./NavbarTabs";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueries } from "hooks/useMediaQueries";
+import { useAccount } from "wagmi";
 
-export const Navbar = ({
-  hide,
-  children,
-}: {
-  children: any;
-  hide?: boolean;
-}) => {
-  const { isTabletOrMobile } = useMediaQueries();
-
+export const Navbar = ({ hide }: { hide?: boolean }) => {
   const navigate = useNavigate();
+  const { isTabletOrMobile } = useMediaQueries();
+  const { isConnected } = useAccount();
 
   return (
-    <>
-      <div className="mx-auto flex h-full w-full max-w-[1440px] items-center justify-between p-2 md:h-[96px] md:px-5 md:py-0">
-        <div className="flex w-1/3">
-          <ProtocolLogo navigate={navigate} className="py-3 md:py-6" />
-        </div>
-
-        <NavbarTabs onClickTab={navigate} className="hidden w-1/3 md:flex" />
-        <div className="flex w-2/3 select-none justify-end md:w-1/3">
-          <ConnectButton />
-        </div>
+    <div className="mx-auto flex h-full w-full max-w-[1440px] items-center justify-between p-2 px-3 pt-1 md:h-[96px] md:px-5 md:py-0">
+      <div className="flex w-1/3 items-center gap-x-2">
+        <ProtocolLogo
+          small={isTabletOrMobile}
+          navigate={navigate}
+          className="py-3 md:py-6"
+        />
+        {isConnected && isTabletOrMobile && (
+          <ConnectButton iconWidth={28} hideAccount />
+        )}
       </div>
 
-      {children}
-      {isTabletOrMobile && <MobileNavbar />}
-    </>
+      <NavbarTabs onClickTab={navigate} className="hidden w-1/3 md:flex" />
+      <div className="flex w-2/3 select-none justify-end md:w-1/3">
+        <ConnectButton hideChain={isTabletOrMobile} />
+      </div>
+    </div>
   );
 };
 
-export const MobileNavbar = (
+export const MobileNavtabs = (
   props: Pick<NavbarTabsProps, "labels" | "tabs">
 ) => {
   return (
