@@ -193,7 +193,7 @@ export const PaginatedTable = ({
 
           {!hideFilters && (
             <FilterBox
-              className="mr-4 md:mr-0"
+              className="mr-1"
               handleFilterClick={onClickFilter}
               activeFilters={activeFilters}
               filters={mappedFilters}

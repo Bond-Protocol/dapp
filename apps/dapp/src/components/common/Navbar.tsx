@@ -6,9 +6,14 @@ import { useMediaQueries } from "hooks/useMediaQueries";
 import { useAccount } from "wagmi";
 
 export const Navbar = ({ hide }: { hide?: boolean }) => {
-  const navigate = useNavigate();
+  const routerNavigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
   const { isConnected } = useAccount();
+
+  const navigate = (path: string) => {
+    window.scrollTo(0, 0);
+    routerNavigate(path);
+  };
 
   return (
     <div className="mx-auto flex h-full w-full max-w-[1440px] items-center justify-between p-2 px-3 pt-1 md:h-[96px] md:px-5 md:py-0">

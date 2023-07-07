@@ -16,7 +16,12 @@ const defaultTabs = [
 
 export const NavbarTabs = (props: NavbarTabsProps) => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const routerNavigate = useNavigate();
+
+  const navigate = (path: string) => {
+    window.scrollTo(0, 0);
+    routerNavigate(path);
+  };
 
   const tabs = props.tabs ?? defaultTabs;
 
