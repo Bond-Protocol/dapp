@@ -32,7 +32,7 @@ export const App: FC = () => {
             <div className="h-full overflow-x-clip font-jakarta antialiased">
               <AppBackdrop />
               <div className="flex h-full min-h-[100vh] flex-col justify-between">
-                <div>
+                <div className="min-h-[100vh]">
                   <Navbar />
                   <PolicyRoutes />
                   <div className="mx-auto max-w-[1136px]">

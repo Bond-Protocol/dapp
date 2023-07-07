@@ -50,6 +50,9 @@ export const ConnectButton = (props: ConnectButtonProps) => {
                   </Button>
                 );
               }
+              if (chain.unsupported && props.hideAccount) {
+                return <div />;
+              }
               if (chain.unsupported) {
                 return (
                   <Button

@@ -14,7 +14,7 @@ export const Dashboard = () => {
   const hasMarkets = !!dashboard.allMarkets.length;
 
   return (
-    <>
+    <div className="h-full">
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
         {isTabletOrMobile ? (
@@ -26,6 +26,6 @@ export const Dashboard = () => {
           </Tabs>
         )}
       </RequiresWallet>
-    </>
+    </div>
   );
 };

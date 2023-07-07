@@ -17,7 +17,7 @@ export const RequiresWallet = ({ className, children }: RequireWalletProps) => {
   return isConnected ? (
     <>{children}</>
   ) : (
-    <div className="mt-10 flex flex-col">
+    <div className="mt-10 flex h-full flex-col">
       <h1 className="mt-24 text-center font-fraktion text-5xl leading-normal">
         CONNECT WALLET
         <br />
