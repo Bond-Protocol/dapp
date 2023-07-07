@@ -14,7 +14,7 @@ export const Dashboard = () => {
   const hasMarkets = !!dashboard.allMarkets.length;
 
   return (
-    <div className="h-full">
+    <div className="h-full min-h-[90vh]">
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
         {isTabletOrMobile ? (

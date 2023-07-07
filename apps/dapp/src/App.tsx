@@ -28,11 +28,11 @@ export const App: FC = () => {
       {!isIframe && (
         <>
           <AppStatusBanner />
-          <div className="flex h-full min-h-[100vh] flex-col justify-between">
+          <div className="flex h-full flex-col justify-between">
             <div className="h-full overflow-x-clip font-jakarta antialiased">
               <AppBackdrop />
               <div className="flex h-full min-h-[100vh] flex-col justify-between">
-                <div className="min-h-[100vh]">
+                <div>
                   <Navbar />
                   <PolicyRoutes />
                   <div className="mx-auto max-w-[1136px]">
