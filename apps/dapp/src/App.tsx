@@ -8,10 +8,12 @@ import {
   CoverUpScreen,
   Footer,
   Navbar,
+  MobileNavtabs,
 } from "components";
 import { AppBackdrop } from "components/common/AppBackdrop";
 import { EmbedProvider } from "components/modules/embed/embed-context";
 import { EmbeddedNavbar } from "components/modules/embed/EmbeddedNavbar";
+import { useMediaQueries } from "./hooks";
 
 const underMaintenance = import.meta.env.VITE_MAINTENANCE;
 
@@ -19,6 +21,7 @@ export const App: FC = () => {
   if (underMaintenance) return <CoverUpScreen message={underMaintenance} />;
 
   const isIframe = window.self !== window.top;
+  const { isTabletOrMobile } = useMediaQueries();
 
   return (
     <Providers>
@@ -28,16 +31,22 @@ export const App: FC = () => {
           <div className="flex h-full min-h-[100vh] flex-col justify-between">
             <div className="h-full overflow-x-clip font-jakarta antialiased">
               <AppBackdrop />
-              <Navbar>
-                <PolicyRoutes />
-                <div className="mx-auto max-w-[1136px]">
-                  <PageContainer>
-                    <RouteMap />
-                  </PageContainer>
+              <div className="flex h-full min-h-[100vh] flex-col justify-between">
+                <div className="min-h-[100vh]">
+                  <Navbar />
+                  <PolicyRoutes />
+                  <div className="mx-auto max-w-[1136px]">
+                    <PageContainer>
+                      <RouteMap />
+                    </PageContainer>
+                  </div>
                 </div>
-              </Navbar>
+                {isTabletOrMobile && <MobileNavtabs />}
+                <div>
+                  <Footer />
+                </div>
+              </div>
             </div>
-            <Footer />
           </div>
         </>
       )}
