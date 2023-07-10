@@ -19,14 +19,3 @@ export const Oracle = {
     onOracleChange: () => {},
   },
 };
-
-export const All: StoryObj<typeof PriceModelDetails> = {
-  render: (args) => (
-    <div className="child:pb-20">
-      <Base {...args} type="dynamic" />
-      <Base {...args} type="static" />
-      <Base {...args} oracle type="dynamic" />
-      <Base {...args} oracle type="static" />
-    </div>
-  ),
-};
