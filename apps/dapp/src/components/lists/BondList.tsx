@@ -69,7 +69,6 @@ export const tableColumns: Array<Column<any>> = [
       const [tx, setTx] = useState<any>();
 
       const chainId = props?.data?.bond?.bondToken.chainId;
-      console.log({ chainId });
 
       const isCorrectNetwork =
         Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
