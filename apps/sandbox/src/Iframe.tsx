@@ -1,26 +1,33 @@
-const basePath = "http://localhost:5173/#/embed";
-const tnetwork = "0x71e47a4429d35827e0312aa13162197c23287546";
-const afx = "0x62A665d3f9fc9a968dC35a789122981d9109349a";
-const gdex = "0xeca93e266b914700a26cf3fe364fad4134f8ba94";
+//const basePath = "http://localhost:5173/#/embed";
 
-const gmx = "0xea8a734db4c7ea50c32b5db8a0cb811707e8ace3";
-type EmbedProps = {
-  owner?: string;
-  width?: number;
-};
+export const EmbedMarket = () => {
+  const yourBondIssuerAddress = "";
 
-export const EmbedMarket = ({ width = 550, owner }: EmbedProps) => {
-  const marketsPath = `${basePath}/markets?owner=${owner ?? gmx}`;
+  const path = `https://app.bondprotocol.finance/#/embed/markets?owner=${yourBondIssuerAddress}`;
+
   return (
-    <iframe
-      allowTransparency={true}
-      src={marketsPath}
-      width={width}
-      height={650}
+    <div
       style={{
-        border: "none",
-        background: "none",
+        position: "relative",
+        minHeight: "460px",
+        paddingTop: "25px",
+        height: 0,
+        width: 850,
       }}
-    />
+    >
+      <iframe
+        allowTransparency={true}
+        src={path}
+        style={{
+          border: "none",
+          background: "none",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+        }}
+      />
+    </div>
   );
 };

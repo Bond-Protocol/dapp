@@ -1,3 +1,4 @@
+import { useMediaQueries } from "hooks/useMediaQueries";
 import { formatCurrency, TokenLogo } from "ui";
 
 type BondPriceLabelProps = {
@@ -8,16 +9,18 @@ type BondPriceLabelProps = {
 };
 
 export const BondPriceLabel = (props: BondPriceLabelProps) => {
+  const { isTabletOrMobile } = useMediaQueries();
+
   return (
     <div className="flex w-full items-center bg-white/5">
-      <div className="flex items-center">
+      <div className="flex flex-col  items-center md:flex-row">
         <TokenLogo
           icon={props.logoURI}
-          size="lg"
+          size={isTabletOrMobile ? "sm" : "lg"}
           className="my-auto ml-3 mr-2"
         />
         <div
-          className={`my-auto font-fraktion text-5xl font-semibold leading-10`}
+          className={`my-auto font-fraktion text-xl font-semibold leading-10 md:text-5xl`}
         >
           {props.symbol}
         </div>
@@ -30,7 +33,7 @@ export const BondPriceLabel = (props: BondPriceLabelProps) => {
         <div className="font-mono">
           <p>{props.bondPrice}</p>
           <p className="text-xs text-light-primary-100">
-            {formatCurrency.usdFormatter.format(props.price)}
+            ${formatCurrency.trimToken(props.price)}
           </p>
         </div>
       </div>
