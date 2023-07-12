@@ -68,6 +68,8 @@ export const tableColumns: Array<Column<any>> = [
       const { data: signer } = useSigner();
       const [tx, setTx] = useState<any>();
 
+      const chainId = props?.data?.bond?.bondToken.chainId;
+
       const isCorrectNetwork =
         Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
 
@@ -109,6 +111,7 @@ export const tableColumns: Array<Column<any>> = [
             Claim
           </Button>
           <TransactionWizard
+            chainId={chainId}
             open={open}
             onSubmit={() => redeemBond(props?.data?.bond)}
             onClose={() => setOpen(false)}
