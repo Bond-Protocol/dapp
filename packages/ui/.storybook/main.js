@@ -17,6 +17,9 @@ export default {
     name: "@storybook/react-vite",
     options: {},
   },
+  features: {
+    buildStoriesJson: true,
+  },
   refs: {
     app: {
       title: "Core App",

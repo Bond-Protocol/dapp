@@ -15,15 +15,19 @@ export type PriceControlProps = {
   exchangeRate: number;
   onRateChange: (exchangeRate: any) => any;
   tooltip?: React.ReactNode;
-  display: "percentage" | "exchange_rate";
-  returnValue: "percentage" | "exchange_rate";
+  display?: "percentage" | "exchange_rate";
+  returnValue?: "percentage" | "exchange_rate";
   initialValue?: string;
   className?: string;
 };
 
-export const PriceControl = (props: PriceControlProps) => {
+export const PriceControl = ({
+  display = "exchange_rate",
+  returnValue = "exchange_rate",
+  ...props
+}: PriceControlProps) => {
   const { value, setValue, getAValidPercentage, ...numericInput } =
-    useNumericInput(props.initialValue, props.display === "percentage");
+    useNumericInput(props.initialValue, display === "percentage");
 
   const [rate, setRate] = useState<number>();
   const [payoutPerQuote, setPayoutPerQuote] = useState<number>();
@@ -43,7 +47,7 @@ export const PriceControl = (props: PriceControlProps) => {
       props.payoutToken?.symbol;
     setExchangeLabel(exchangeLabel);
 
-    if (props.returnValue === "exchange_rate") {
+    if (returnValue === "exchange_rate") {
       props.onRateChange && props.onRateChange(rate);
     } else {
       props.onRateChange && props.onRateChange(value.replace("%", ""));
@@ -57,7 +61,7 @@ export const PriceControl = (props: PriceControlProps) => {
       ? Number(props.oraclePrice)
       : props.payoutToken?.price / props.quoteToken?.price;
 
-    if (props.display !== "percentage") {
+    if (display !== "percentage") {
       const rateMod = getRateMod(rate);
       const scale = getPriceScale(rate);
       setRate(rate);
@@ -77,11 +81,7 @@ export const PriceControl = (props: PriceControlProps) => {
     if (e.toString().charAt(e.toString().length - 1) === ".") return;
 
     const updated = numericInput.onChange(e);
-    if (
-      props.quoteToken &&
-      props.payoutToken &&
-      props.display === "percentage"
-    ) {
+    if (props.quoteToken && props.payoutToken && display === "percentage") {
       const initialRate = props.oraclePrice
         ? props.oraclePrice
         : props.payoutToken?.price / props.quoteToken?.price;
@@ -90,7 +90,7 @@ export const PriceControl = (props: PriceControlProps) => {
       setRate(underlyingRate);
       setPayoutPerQuote(1 / underlyingRate);
 
-      if (props.returnValue === "exchange_rate") {
+      if (returnValue === "exchange_rate") {
         props.onRateChange && props.onRateChange(underlyingRate);
       } else {
         props.onRateChange && props.onRateChange(value.replace("%", ""));
@@ -109,7 +109,7 @@ export const PriceControl = (props: PriceControlProps) => {
       let prev = incoming === "" ? "0" : incoming;
       let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
 
-      if (props.display === "percentage") {
+      if (display === "percentage") {
         const initialRate = props.oraclePrice
           ? props.oraclePrice
           : props.payoutToken?.price / props.quoteToken?.price;
@@ -139,7 +139,7 @@ export const PriceControl = (props: PriceControlProps) => {
         newRate = "0.00";
       }
 
-      if (props.display === "percentage") {
+      if (display === "percentage") {
         const initialRate = props.oraclePrice
           ? props.oraclePrice
           : props.payoutToken?.price / props.quoteToken?.price;
@@ -207,7 +207,7 @@ export const PriceControl = (props: PriceControlProps) => {
       </div>
       <div
         className={`text-light-grey-400 flex select-none justify-center text-[14px] ${
-          props.display === "percentage" ? "" : "cursor-pointer"
+          display === "percentage" ? "" : "cursor-pointer"
         } ${smallText ? "text-xs" : "text-sm"}`}
         onClick={(e) => {
           e.preventDefault();

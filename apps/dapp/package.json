@@ -15,7 +15,7 @@
     "lint-staged": "lint-staged",
     "format": "prettier --write './**/*.{ts,tsx,json}'",
     "codegen": "graphql-codegen --config codegen.ts",
-    "storybook": "storybook dev -p 6007 --no-open --quiet",
+    "storybook": "storybook dev -p 6007 --no-open ",
     "build-storybook": "storybook build"
   },
   "dependencies": {
@@ -61,6 +61,7 @@
     "@storybook/addon-interactions": "^7.0.26",
     "@storybook/addon-links": "^7.0.26",
     "@storybook/blocks": "^7.0.26",
+    "@storybook/preset-typescript": "^3.0.0",
     "@storybook/react": "^7.0.26",
     "@storybook/react-vite": "^7.0.26",
     "@storybook/testing-library": "^0.0.14-next.2",

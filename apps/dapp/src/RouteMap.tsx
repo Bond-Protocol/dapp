@@ -7,6 +7,7 @@ import {
   Markets,
   PolicyPage,
   TokenPage,
+  CreateAuction,
 } from "./components";
 import { cookiePolicy, privacyPolicy, terms } from "./content";
 import { TokenList } from "components/lists/TokenList";
@@ -26,6 +27,7 @@ export const RouteMap: FC = () => {
         <Route path="/tokens" element={<TokenList />} />
         <Route path="/market/:chainId/:id" element={<MarketInsights />} />
         <Route path="/create" element={<CreateMarket />} />
+        <Route path="/create-auction" element={<CreateAuction />} />
         <Route path="/tokens/:chainId/:address" element={<TokenPage />} />
       </Switch>
     </>
