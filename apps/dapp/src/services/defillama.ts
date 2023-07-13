@@ -69,7 +69,7 @@ export const fetchChart = async (
   const params = `?start=${from}&span=${span}&period=${period}`;
 
   const response = await generateFetcher(endpoint + params)();
-  return formatResponse(response.coins, options.chainId);
+  return formatResponse(response.coins ?? {}, options.chainId);
 };
 
 /**The response format isnt very useful so we tweak it*/

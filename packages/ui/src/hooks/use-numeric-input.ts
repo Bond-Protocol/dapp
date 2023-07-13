@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 
-export const useNumericInput = (initialValue = "0", isPercentual?: boolean) => {
-  const [value, setValue] = useState<string>(initialValue);
+export const useNumericInput = (
+  initialValue = "0",
+  isPercentual?: boolean,
+  symbol?: string
+) => {
+  const [value, setValue] = useState<string>(
+    initialValue + "" + (symbol ?? "")
+  );
 
   useEffect(() => {
     let updated = value ?? initialValue;
@@ -9,6 +15,10 @@ export const useNumericInput = (initialValue = "0", isPercentual?: boolean) => {
 
     setValue(updated);
   }, [isPercentual]);
+
+  useEffect(() => {
+    setValue((prev) => prev + " " + symbol);
+  }, [symbol]);
 
   const onChange = (event: React.BaseSyntheticEvent) => {
     const nextValue = event.target.value;
@@ -30,14 +40,15 @@ export const useNumericInput = (initialValue = "0", isPercentual?: boolean) => {
   };
 
   const onFocus = () => {
-    if (isPercentual) {
-      setValue((prev) => parseFloat(prev).toString());
-    }
+    setValue((prev) => parseFloat(prev).toString());
   };
 
   const onBlur = () => {
     if (isPercentual) {
       setValue((prev) => getAValidPercentage(prev) + "%");
+    }
+    if (symbol && !value.includes(symbol)) {
+      setValue((prev) => prev + " " + symbol);
     }
   };
 

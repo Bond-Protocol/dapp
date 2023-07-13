@@ -23,7 +23,7 @@ export interface CreateAuctionState {
   startDate: Date;
   endDate: Date;
   minBid: number;
-  lastCancel: number;
+  lastCancel: Date;
   chainId: number;
 }
 
@@ -51,6 +51,30 @@ export const createAuctionReducer = (
       return { ...state, capacity: Number(value) };
     }
 
+    case CreateAuctionAction.UPDATE_FUNDING_THRESHOLD: {
+      return { ...state, fundingThreshold: Number(value) };
+    }
+
+    case CreateAuctionAction.UPDATE_MIN_PRICE: {
+      return { ...state, minPrice: Number(value) };
+    }
+
+    case CreateAuctionAction.UPDATE_START_DATE: {
+      return { ...state, startDate: value };
+    }
+
+    case CreateAuctionAction.UPDATE_END_DATE: {
+      return { ...state, endDate: value };
+    }
+
+    case CreateAuctionAction.UPDATE_MIN_BID: {
+      return { ...state, minBid: value };
+    }
+
+    case CreateAuctionAction.UPDATE_LAST_CANCEL: {
+      return { ...state, lastCancel: value };
+    }
+
     default: {
       return state;
     }
@@ -66,7 +90,7 @@ export const placeholderState = {
   endDate: new Date(),
   startDate: new Date(),
   minBid: 0,
-  lastCancel: 0,
+  lastCancel: new Date(),
 } as CreateAuctionState;
 
 export const CreateAuctionContext = createContext<

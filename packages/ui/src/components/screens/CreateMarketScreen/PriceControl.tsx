@@ -7,8 +7,7 @@ import { useNumericInput } from "hooks/use-numeric-input";
 import { Token } from "./create-market-reducer";
 
 export type PriceControlProps = {
-  bottomLabel: string;
-  topLabel?: string;
+  topLabel: string;
   quoteToken?: Token;
   payoutToken?: Token;
   oraclePrice?: number;
@@ -18,7 +17,13 @@ export type PriceControlProps = {
   display?: "percentage" | "exchange_rate";
   returnValue?: "percentage" | "exchange_rate";
   initialValue?: string;
+  hideLabel?: boolean;
   className?: string;
+  textClassName?: string;
+  controlClassName?: string;
+  labelClassName?: string;
+  inputClassName?: string;
+  symbol?: string;
 };
 
 export const PriceControl = ({
@@ -27,7 +32,7 @@ export const PriceControl = ({
   ...props
 }: PriceControlProps) => {
   const { value, setValue, getAValidPercentage, ...numericInput } =
-    useNumericInput(props.initialValue, display === "percentage");
+    useNumericInput(props.initialValue, display === "percentage", props.symbol);
 
   const [rate, setRate] = useState<number>();
   const [payoutPerQuote, setPayoutPerQuote] = useState<number>();
@@ -98,7 +103,7 @@ export const PriceControl = ({
     } else {
       setRate(Number(updated));
       setPayoutPerQuote(1 / Number(updated));
-      props.onRateChange && props.onRateChange(updated);
+      props.onRateChange && props.onRateChange(Number(updated));
     }
   };
 
@@ -109,6 +114,7 @@ export const PriceControl = ({
       let prev = incoming === "" ? "0" : incoming;
       let newRate = (parseFloat(prev) + rateMod).toFixed(scale);
 
+      console.log({ newRate, prev, incoming });
       if (display === "percentage") {
         const initialRate = props.oraclePrice
           ? props.oraclePrice
@@ -165,7 +171,13 @@ export const PriceControl = ({
       className={`text-light-grey-400 max-h-[104px] bg-white/5 px-4 py-3 backdrop-blur-md ${props.className}`}
     >
       <TooltipWrapper content={props.tooltip}>
-        <div className="font-fraktion flex justify-center font-bold uppercase">
+        <div
+          className={
+            "font-fraktion flex justify-center font-bold uppercase" +
+            " " +
+            props.labelClassName
+          }
+        >
           {props.topLabel}
           {props.tooltip && (
             <TooltipIcon className="fill-light-grey-400 ml-1" />
@@ -174,7 +186,7 @@ export const PriceControl = ({
       </TooltipWrapper>
 
       <div
-        className={`flex max-h-[104px] w-full justify-center ${props.className}`}
+        className={`flex max-h-[104px] w-full justify-center ${props.controlClassName}`}
       >
         <div className="flex items-center justify-center">
           <Button icon variant="ghost" onClick={lowerRate}>
@@ -186,14 +198,18 @@ export const PriceControl = ({
         <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
           <div
             className={`font-fraktion text-white ${
-              smallText ? "text-xs" : "text-[20px]"
-            }`}
+              smallText ? "text-base" : "text-[20px]"
+            } ${props.textClassName}`}
           >
             <input
               {...numericInput}
               value={value}
               onChange={onChange}
-              className="w-[170px] bg-transparent text-center"
+              className={
+                "w-[170px] bg-transparent text-center" +
+                " " +
+                props.inputClassName
+              }
             />
           </div>
         </div>
@@ -205,16 +221,18 @@ export const PriceControl = ({
           </Button>
         </div>
       </div>
-      <div
-        className={`text-light-grey-400 flex select-none justify-center text-[14px] ${
-          display === "percentage" ? "" : "cursor-pointer"
-        } ${smallText ? "text-xs" : "text-sm"}`}
-        onClick={(e) => {
-          e.preventDefault();
-        }}
-      >
-        {exchangeLabel}
-      </div>
+      {!props.hideLabel && (
+        <div
+          className={`text-light-grey-400 flex select-none justify-center text-[14px] ${
+            display === "percentage" ? "" : "cursor-pointer"
+          } ${smallText ? "text-xs" : "text-sm"}`}
+          onClick={(e) => {
+            e.preventDefault();
+          }}
+        >
+          {exchangeLabel}
+        </div>
+      )}
     </div>
   );
 };

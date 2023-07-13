@@ -171,6 +171,54 @@ const Buttons = (props: {
   );
 };
 
+export const MarketCreationSumamryHead = ({ state }: any) => {
+  const startDate = formatDate.short(state.startDate);
+  const endDate = formatDate.short(state.endDate);
+
+  return (
+    <div>
+      <div>
+        <h4 className="font-fraktion">SETUP</h4>
+        <div className="grid grid-cols-[1fr_32px_1fr]">
+          <SummaryLabel
+            icon={state.payoutToken.logoURI}
+            value={state.payoutToken.symbol}
+            subtext="PAYOUT TOKEN"
+          />
+          <div className="flex items-center justify-center">
+            <Arrow className="rotate-90" />
+          </div>
+          <SummaryLabel
+            icon={state.quoteToken.logoURI}
+            value={state.quoteToken.symbol}
+            subtext="QUOTE TOKEN"
+          />
+        </div>
+      </div>
+
+      <div className="mt-1 grid grid-cols-2 gap-x-8">
+        <SummaryLabel
+          icon={state.payoutToken.icon}
+          value={state.payoutToken.value}
+          subtext="CAPACITY"
+        />
+      </div>
+      <h4 className="font-fraktion mt-4">SCHEDULE</h4>
+      <div className="grid grid-cols-[1fr_32px_1fr]">
+        <SummaryLabel
+          small
+          value={startDate !== "invalid" ? startDate : "Immediate"}
+          subtext="AUCTION START DATE"
+        />
+        <div className="flex items-center justify-center">
+          <Arrow className="rotate-90" />
+        </div>
+        <SummaryLabel small value={endDate} subtext="MARKET END DATE" />
+      </div>
+    </div>
+  );
+};
+
 export const ConfirmMarketCreationDialog = (props: {
   showMultisig: boolean;
   chain: string;
