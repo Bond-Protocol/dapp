@@ -1,3 +1,4 @@
+import { CreateAuctionProvider } from "components/modules/auction/create-auction-reducer";
 import { CreateAuctionScreen } from "components/modules/auction/CreateAuctionScreen";
 import { PageHeader, PageNavigation } from "..";
 
@@ -11,7 +12,9 @@ export const CreateAuction = () => {
         />
       </PageNavigation>
       <div className="mt-4">
-        <CreateAuctionScreen />
+        <CreateAuctionProvider>
+          <CreateAuctionScreen />
+        </CreateAuctionProvider>
       </div>
     </div>
   );

@@ -67,6 +67,11 @@ export const TokenInput = (props: TokenInputProps) => {
     ? `${value} ${props.symbol ?? ""}`
     : value;
 
+  const displayValue = showTokenSymbol
+    ? `${value} ${props.symbol ?? ""}`
+    : value;
+
+  console.log({ value });
   return (
     <Input
       {...props}

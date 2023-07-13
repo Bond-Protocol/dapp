@@ -188,18 +188,16 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 title="Select token"
                 value={state.payoutToken.symbol}
                 icon={state.payoutToken.logoURI}
-                ModalContent={(modalProps) => (
+                ModalContent={(modalProps: any) => (
                   <SelectTokenController
                     {...modalProps}
+                    chainId={state.chainId}
                     onSwitchChain={(value: string) => {
                       dispatch({
                         type: CreateMarketAction.UPDATE_CHAIN_ID,
                         value,
                       });
                     }}
-                    //@ts-ignore TODO: update types all round
-                    tokens={props.tokens}
-                    chainId={state.chainId}
                   />
                 )}
                 onSubmit={({ value }) => {

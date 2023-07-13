@@ -1,5 +1,5 @@
 import { SelectTokenController } from "components/organisms/SelectTokenController";
-import { InfoLabel, Input, InputModal, PriceControl } from "ui";
+import { InfoLabel, Input, InputModal, PriceControl, TokenInput } from "ui";
 import {
   CreateAuctionAction,
   useCreateAuction,
@@ -12,76 +12,83 @@ export const CreateAuctionScreen = (props: CreateAuctionScreenProps) => {
 
   return (
     <div className="flex">
-      <div id="ca-left-container " className="flex w-1/2 gap-x-3">
-        <div
-          id="ca-inner-left-container"
-          className="flex flex-col w-1/2 gap-y-2 justify-between"
-        >
-          <div>
-            <InputModal
-              id="cm-payout-token-picker"
-              label="Auction Token"
-              title="Select token"
-              value={state.payoutToken?.symbol}
-              icon={state.payoutToken?.logoURI}
-              onSubmit={({ value }) => {
-                console.log("YO");
-                dispatch({
-                  type: CreateAuctionAction.UPDATE_PAYOUT_TOKEN,
-                  value,
-                });
-              }}
-              ModalContent={(modalProps) => (
-                <SelectTokenController
-                  {...modalProps}
-                  onSwitchChain={(value: string) => {
-                    console.log("switch");
-                  }}
-                />
-              )}
-            />
-
-            <Input label="text" />
-            <Input label="text" />
-          </div>
-
-          <Input label="text" />
-          <PriceControl
-            display="exchange_rate"
-            exchangeRate={0.1}
-            onRateChange={() => {}}
-            bottomLabel="Min Price"
+      <div id="ca-left-container " className="flex w-1/2 flex-col gap-y-2">
+        <div className="flex w-full justify-between gap-x-2">
+          <InputModal
+            id="cm-payout-token-picker"
+            label="Auction Token"
+            title="Select token"
+            value={state.payoutToken?.symbol}
+            icon={state.payoutToken?.logoURI}
+            onSubmit={({ value }) => {
+              dispatch({
+                type: CreateAuctionAction.UPDATE_PAYOUT_TOKEN,
+                value,
+              });
+            }}
+            ModalContent={(modalProps: any) => (
+              <SelectTokenController
+                {...modalProps}
+                onSwitchChain={(value: string) => {
+                  dispatch({
+                    type: CreateAuctionAction.UPDATE_CHAIN_ID,
+                    value,
+                  });
+                }}
+                chainId={state.chainId}
+              />
+            )}
           />
-          <Input label="text" />
-          <Input label="text" />
-        </div>
-        <div
-          id="ca-inner-right-container "
-          className="flex flex-col w-1/2 gap-y-2 justify-between"
-        >
+
           <InputModal
             id="cm-payout-token-picker"
             label="Get Token"
             title="Select token"
-            value={"cool"}
-            icon={"no"}
-            ModalContent={(modalProps) => (
+            value={state.quoteToken?.symbol}
+            icon={state.quoteToken?.logoURI}
+            onSubmit={({ value }) => {
+              dispatch({
+                type: CreateAuctionAction.UPDATE_QUOTE_TOKEN,
+                value,
+              });
+            }}
+            ModalContent={(modalProps: any) => (
               <SelectTokenController
                 {...modalProps}
                 onSwitchChain={(value: string) => {
-                  console.log("switch");
+                  dispatch({
+                    type: CreateAuctionAction.UPDATE_CHAIN_ID,
+                    value,
+                  });
                 }}
-                //@ts-ignore TODO: update types all round
-                tokens={props.tokens}
-                chainId={1}
+                chainId={state.chainId}
               />
             )}
-            onSubmit={() => console.log("ok")}
           />
-          <Input label="text" />
-          <InfoLabel value="Cool" label="Minimum Tokens to Get" />
-          <Input label="text" />
-          <Input label="text" />
+        </div>
+
+        <div className="flex w-full justify-between gap-x-2">
+          <TokenInput
+            label="Capacity"
+            placeholder="Enter Amount"
+            value={state.capacity}
+            icon={state.payoutToken.logoURI}
+            symbol={state.payoutToken.symbol}
+            onChange={(value) => {
+              dispatch({ type: CreateAuctionAction.UPDATE_CAPACITY, value });
+            }}
+          />
+          <TokenInput
+            id="cm-capacity-picker"
+            label="Funding Threshold"
+            placeholder="Enter Amount"
+            value={state.capacity}
+            icon={state.payoutToken.logoURI}
+            symbol={state.payoutToken.symbol}
+            onChange={(value) => {
+              dispatch({ type: CreateAuctionAction.UPDATE_CAPACITY, value });
+            }}
+          />
         </div>
       </div>
       <div id="ca-right-container" className="w-1/2">

@@ -11,7 +11,8 @@ import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/evm-provider";
 import { useTokenlists } from "context/tokenlist-context";
 
-export interface SelectTokenControllerProps extends SelectTokenDialogProps {
+export interface SelectTokenControllerProps
+  extends Omit<SelectTokenDialogProps, "tokens"> {
   chainId: number;
 }
 

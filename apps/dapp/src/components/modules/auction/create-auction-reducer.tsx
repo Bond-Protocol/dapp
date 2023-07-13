@@ -11,6 +11,7 @@ export enum CreateAuctionAction {
   UPDATE_END_DATE = "update_end_date",
   UPDATE_MIN_BID = "update_min_bid",
   UPDATE_LAST_CANCEL = "update_last_cancel",
+  UPDATE_CHAIN_ID = "update_chain_id",
 }
 
 export interface CreateAuctionState {
@@ -21,8 +22,9 @@ export interface CreateAuctionState {
   minPrice: number;
   startDate: Date;
   endDate: Date;
-  minBind: number;
+  minBid: number;
   lastCancel: number;
+  chainId: number;
 }
 
 export const createAuctionReducer = (
@@ -40,13 +42,32 @@ export const createAuctionReducer = (
     case CreateAuctionAction.UPDATE_PAYOUT_TOKEN: {
       return { ...state, payoutToken: value };
     }
+
+    case CreateAuctionAction.UPDATE_CHAIN_ID: {
+      return { ...state, chainId: Number(value) };
+    }
+
+    case CreateAuctionAction.UPDATE_CAPACITY: {
+      return { ...state, capacity: Number(value) };
+    }
+
     default: {
       return state;
     }
   }
 };
 
-export const placeholderState = {} as CreateAuctionState;
+export const placeholderState = {
+  quoteToken: {},
+  payoutToken: {},
+  capacity: 0,
+  fundingThreshold: 0,
+  minPrice: 0,
+  endDate: new Date(),
+  startDate: new Date(),
+  minBid: 0,
+  lastCancel: 0,
+} as CreateAuctionState;
 
 export const CreateAuctionContext = createContext<
   [
