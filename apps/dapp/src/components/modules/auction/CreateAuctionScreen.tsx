@@ -1,14 +1,16 @@
 import { DatePickerModal } from "components/modals/DatePickerModal";
+import { TransactionWizard } from "components/modals/TransactionWizard";
 import { SelectTokenController } from "components/organisms/SelectTokenController";
 import { useState } from "react";
 import {
   Button,
   InfoLabel,
-  Input,
   InputModal,
+  PlaceholderChart,
   PriceControl,
   TokenInput,
 } from "ui";
+import { ConfirmAuctionCreationDialog } from "./ConfirmAuctionCreationDialog";
 import {
   CreateAuctionAction,
   useCreateAuction,
@@ -56,14 +58,15 @@ export const CreateAuctionScreen = (props: CreateAuctionScreenProps) => {
   );
 
   return (
-    <div className="">
-      <div className="flex">
+    <div className="mt-10">
+      <div className="flex gap-x-4">
         <div id="ca-left-container " className="flex w-1/2 flex-col gap-y-4">
           <div className="flex w-full justify-between gap-x-2">
             <InputModal
               id="cm-payout-token-picker"
               label="Auction Token"
               title="Select token"
+              placeholder="Select Token"
               value={state.payoutToken?.symbol}
               icon={state.payoutToken?.logoURI}
               onSubmit={({ value }) => {
@@ -90,6 +93,7 @@ export const CreateAuctionScreen = (props: CreateAuctionScreenProps) => {
               id="cm-payout-token-picker"
               label="Get Token"
               title="Select token"
+              placeholder="Select Token"
               value={state.quoteToken?.symbol}
               icon={state.quoteToken?.logoURI}
               onSubmit={({ value }) => {
@@ -207,10 +211,39 @@ export const CreateAuctionScreen = (props: CreateAuctionScreenProps) => {
           </div>
         </div>
         <div id="ca-right-container" className="w-1/2">
-          chort
+          <PlaceholderChart />
         </div>
       </div>
       <div className="my-8 flex justify-center gap-x-10">{buttons}</div>
+      <TransactionWizard
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          setShowMultisig(false);
+        }}
+        onSubmit={(args) => {
+          return new Promise(() => {});
+        }}
+        titles={{
+          standby: showMultisig
+            ? "Multisig Configuration"
+            : "Confirm Auction Creation",
+        }}
+        InitialDialog={() => (
+          <ConfirmAuctionCreationDialog
+            showMultisig={showMultisig}
+            chain={state.chainId?.toString()}
+            submitApproveSpendingTransaction={() => {}}
+            submitCreateMarketTransaction={() => {}}
+            submitMultisigCreation={() => {}}
+            getAuctioneer={() => ""}
+            getTeller={() => ""}
+            getTxBytecode={() => ""}
+            getApproveTxBytecode={() => ""}
+            estimateGas={() => "1"}
+          />
+        )}
+      />
     </div>
   );
 };
