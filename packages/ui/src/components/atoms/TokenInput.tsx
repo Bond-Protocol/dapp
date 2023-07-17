@@ -63,6 +63,9 @@ export const TokenInput = (props: TokenInputProps) => {
       setValue(updated);
     }
   };
+  const displayValue = showTokenSymbol
+    ? `${value} ${props.symbol ?? ""}`
+    : value;
 
   return (
     <Input
@@ -70,7 +73,7 @@ export const TokenInput = (props: TokenInputProps) => {
       onBlur={onBlur}
       onFocus={onFocus}
       onChange={onChange}
-      value={showTokenSymbol ? `${value} ${props.symbol}` : value}
+      value={Number(value) === 0 ? null : displayValue}
       label={props.label}
       startAdornment={
         props.icon && <Icon className="pl-2" width={24} src={props.icon} />

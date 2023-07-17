@@ -1,15 +1,5 @@
 import { useState } from "react";
-import { ButtonGroup, Checkbox, Link } from "components";
-
-const verificationLink = (
-  <Link
-    href="/verify-market"
-    target="_blank"
-    className="text-light-secondary my-4 mx-auto text-sm uppercase"
-  >
-    Read the Verification Requirements
-  </Link>
-);
+import { ButtonGroup, Checkbox } from "components";
 
 export const CreateMarketTermsDialog = (props: {
   onAccept: () => void;
@@ -30,7 +20,6 @@ export const CreateMarketTermsDialog = (props: {
         </p>
         <p>Alternatively, you can provide your own UI, or none at all.</p>
       </div>
-      {verificationLink}
       <div className="mx-8 flex">
         <Checkbox className="w-10" onChange={setChecked} />
         <p className="my-auto ml-2 text-xs">

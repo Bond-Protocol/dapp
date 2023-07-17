@@ -1,0 +1,68 @@
+import {
+  CalculatedMarket,
+  getMarketTypeByAuctioneer,
+  MarketPricing,
+} from "@bond-protocol/contract-library";
+import { dateMath, formatCurrency, formatDate } from "ui";
+
+const pricingLabels: Record<MarketPricing, string> = {
+  dynamic: "Dynamic Price Market",
+  static: "Static Price Market",
+  "oracle-static": "Static Oracle Market",
+  "oracle-dynamic": "Dynamic Price Market",
+};
+
+export const useMarketDetails = (market: CalculatedMarket) => {
+  if (!market) return {};
+
+  const capacityInQuote = market.capacityToken === market.quoteToken.symbol;
+
+  const maxPayout = !capacityInQuote
+    ? market.currentCapacity < Number(market.maxPayout)
+      ? market.currentCapacity
+      : market.maxPayout
+    : market.maxPayout;
+
+  const vestingDate = formatDate.short(new Date(market.vesting * 1000));
+
+  const vestingLabel =
+    market.vestingType === "fixed-term"
+      ? market.formattedLongVesting
+      : vestingDate;
+
+  const startDate = market.start && new Date(market.start * 1000);
+  const isFutureMarket =
+    !!startDate && dateMath.isBefore(new Date(), startDate);
+
+  const type = getMarketTypeByAuctioneer(market.auctioneer);
+  const marketTypeLabel = pricingLabels[type];
+
+  const discountLabel =
+    !isNaN(market.discount) &&
+    market.discount !== Infinity &&
+    market.discount !== -Infinity
+      ? formatCurrency.trimToken(market.discount).concat("%")
+      : "Unknown";
+
+  const maxPayoutLabel =
+    Number(maxPayout) > 1
+      ? formatCurrency.trimToLengthSymbol(Number(maxPayout))
+      : formatCurrency.trimToken(maxPayout);
+
+  const capacity =
+    Number(market.currentCapacity) > 1
+      ? formatCurrency.trimToLengthSymbol(Number(market.currentCapacity))
+      : formatCurrency.trimToken(market.currentCapacity);
+
+  return {
+    startDate,
+    isFutureMarket,
+    marketTypeLabel,
+    discountLabel,
+    maxPayoutLabel,
+    capacity,
+    vestingLabel: vestingLabel.includes("Immediate")
+      ? "Immediate"
+      : vestingLabel,
+  };
+};

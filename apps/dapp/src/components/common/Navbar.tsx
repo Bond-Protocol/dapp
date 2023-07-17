@@ -1,56 +1,47 @@
 import { ConnectButton } from "components/common";
 import { ProtocolLogo } from "ui";
-import { NavbarTabs } from "./NavbarTabs";
+import { NavbarTabs, NavbarTabsProps } from "./NavbarTabs";
 import { useNavigate } from "react-router-dom";
-import { ReactComponent as MenuIcon } from "assets/icons/menu.svg";
-import { useState } from "react";
-import { ClickAwayListener, PopperUnstyled } from "@mui/base";
+import { useMediaQueries } from "hooks/useMediaQueries";
+import { useAccount } from "wagmi";
 
-export const Navbar = () => {
-  const navigate = useNavigate();
-  const [showNavbar, setShowNavbar] = useState(false);
+export const Navbar = ({ hide }: { hide?: boolean }) => {
+  const routerNavigate = useNavigate();
+  const { isTabletOrMobile } = useMediaQueries();
+  const { isConnected } = useAccount();
+
+  const navigate = (path: string) => {
+    window.scrollTo(0, 0);
+    routerNavigate(path);
+  };
 
   return (
-    <div>
-      <div className="mx-auto flex h-[96px] w-full max-w-[1440px] items-center justify-between px-5">
-        <div className="flex w-1/3">
-          <ProtocolLogo navigate={navigate} className="py-6" />
-        </div>
-        <NavbarTabs onClickTab={navigate} className="hidden w-1/3 md:flex" />
-        <div className="flex w-2/3 select-none justify-end md:w-1/3">
-          <ConnectButton />
-          <div
-            className="my-auto ml-2 rounded-lg border p-1 md:hidden"
-            onClick={(e) => {
-              e.preventDefault();
-              setShowNavbar((prev) => !prev);
-            }}
-          >
-            <MenuIcon className="fill-white" />
-          </div>
-        </div>
+    <div className="mx-auto flex h-full w-full max-w-[1440px] items-center justify-between p-2 px-3 pt-1 md:h-[96px] md:px-5 md:py-0">
+      <div className="flex w-1/3 items-center gap-x-2">
+        <ProtocolLogo
+          small={isTabletOrMobile}
+          navigate={navigate}
+          className="py-3 md:py-6"
+        />
+        {isConnected && isTabletOrMobile && (
+          <ConnectButton iconWidth={28} hideAccount />
+        )}
       </div>
-      <PopperUnstyled open={showNavbar}>
-        <ClickAwayListener
-          onClickAway={(e) => {
-            e.preventDefault();
-            setShowNavbar(false);
-          }}
-        >
-          <div
-            className={`absolute left-[100vw] top-[10vh] z-10 h-[70vh] w-[55vw] justify-end rounded-lg bg-light-base/70 px-4 py-6 backdrop-blur transition-all duration-300 ${
-              showNavbar ? "flex -translate-x-[55vw]" : "hidden"
-            }`}
-          >
-            <NavbarTabs
-              onClickTab={(path) => {
-                setShowNavbar(false);
-                navigate(path);
-              }}
-            />
-          </div>
-        </ClickAwayListener>
-      </PopperUnstyled>
+
+      <NavbarTabs onClickTab={navigate} className="hidden w-1/3 md:flex" />
+      <div className="flex w-2/3 select-none justify-end md:w-1/3">
+        <ConnectButton hideChain={isTabletOrMobile} />
+      </div>
+    </div>
+  );
+};
+
+export const MobileNavtabs = (
+  props: Pick<NavbarTabsProps, "labels" | "tabs">
+) => {
+  return (
+    <div className="sticky bottom-0 bg-light-base py-1.5">
+      <NavbarTabs {...props} />
     </div>
   );
 };

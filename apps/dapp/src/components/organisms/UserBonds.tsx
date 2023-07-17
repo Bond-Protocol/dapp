@@ -25,7 +25,12 @@ export const UserBonds = () => {
           {formatCurrency.usdFormatter.format(userClaimable)}
         </InfoLabel>
       </div>
-      <BondList title="Balance" isLoading={isLoading} data={ownerBalances} />
+      <BondList
+        className="mt-10"
+        title="Balance"
+        isLoading={isLoading}
+        data={ownerBalances}
+      />
       {isTabletOrMobile && <div className="mb-10">{tbvElement}</div>}
       <TransactionHistory
         title="Bond History"

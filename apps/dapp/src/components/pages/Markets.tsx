@@ -16,7 +16,9 @@ export const Markets = () => {
           subtitle={"Instantly acquire tokens at a discount"}
         />
       </div>
-      <MarketList />
+      <div className="-mt-14">
+        <MarketList />
+      </div>
       {!isTabletOrMobile && (
         <ActionCard
           className="mb-6 mt-8"

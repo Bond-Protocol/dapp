@@ -10,8 +10,17 @@ export default {
     "@storybook/addon-interactions",
     "@storybook/preset-typescript",
   ],
+  docs: {
+    autodocs: true,
+  },
   framework: {
     name: "@storybook/react-vite",
     options: {},
+  },
+  refs: {
+    app: {
+      title: "Core App",
+      url: "http://localhost:6007",
+    },
   },
 };

@@ -159,6 +159,7 @@ export const PaginatedTable = ({
 
   const hideSearchbar =
     props.hideSearchbar || filters.some((f) => f.type === "search");
+  const hideFilters = filters.length === 0 && props.disableSearch;
 
   return (
     <div className={"pb-20 " + props.className}>
@@ -190,9 +191,9 @@ export const PaginatedTable = ({
             />
           )}
 
-          {!!mappedFilters.length && (
+          {!hideFilters && (
             <FilterBox
-              className="mr-4 md:mr-0"
+              className="mr-1"
               handleFilterClick={onClickFilter}
               activeFilters={activeFilters}
               filters={mappedFilters}

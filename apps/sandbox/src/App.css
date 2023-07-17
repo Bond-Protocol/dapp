@@ -1,0 +1,9 @@
+#root {
+  max-width: 1440px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.main-container {
+  padding-bottom: 10vh;
+}

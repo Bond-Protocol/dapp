@@ -8,18 +8,19 @@ import {
 } from "../generated/graphql";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { useTestnetMode } from "hooks/useTestnet";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import {
   calculateTrimDigits,
   getBalance,
-  trim,
   Token,
+  trim,
 } from "@bond-protocol/contract-library";
 import { BigNumberish } from "ethers";
 import { useTokens } from "context";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
+import axios from "axios";
 
 export type TweakedBondPurchase = BondPurchase & {
   txUrl: string;
@@ -30,9 +31,7 @@ export type TweakedBondPurchase = BondPurchase & {
 
 const currentTime = Math.trunc(Date.now() / 1000);
 
-const hasClosed = (market: Market) =>
-  dateMath.isBefore(new Date(market.conclusion * 1000), new Date()) ||
-  market.hasClosed;
+const API_ENDPOINT = import.meta.env.VITE_API_URL;
 
 export const useDashboardLoader = () => {
   const { address } = useAccount();
@@ -49,13 +48,21 @@ export const useDashboardLoader = () => {
   const [ownerBalances, setOwnerBalances] = useState<Partial<OwnerBalance>[]>(
     []
   );
-  const [bondPurchases, setBondPurchases] = useState<TweakedBondPurchase[]>([]);
+  const [bondPurchases, setBondPurchases] = useState([]);
   const [allMarkets, setAllMarkets] = useState<Market[]>([]);
   const [bondsIssued, setBondsIssued] = useState(0);
   const [uniqueBonders, setUniqueBonders] = useState(0);
   const [tbv, setTbv] = useState(0);
   const [userTbv, setUserTbv] = useState(0);
   const [userClaimable, setUserClaimable] = useState(0);
+
+  const loadBondPurchases = useCallback(async () => {
+    if (!address) return;
+    const response = await axios.get(
+      API_ENDPOINT + `users/${address}/bondPurchases`
+    );
+    return response.data;
+  }, []);
 
   useEffect(() => {
     if (isLoading || !address) return;
@@ -68,10 +75,11 @@ export const useDashboardLoader = () => {
       dashboardData,
       "bondTokens"
     );
-    const bondPurchases = concatSubgraphQueryResultArrays(
-      dashboardData,
-      "bondPurchases"
-    );
+
+    loadBondPurchases().then((response) => {
+      setBondPurchases(response.bondPurchases);
+      setUserTbv(response.tbvUsd);
+    });
 
     const markets = concatSubgraphQueryResultArrays(dashboardData, "markets");
     const uniqueBonderCounts = concatSubgraphQueryResultArrays(
@@ -100,6 +108,7 @@ export const useDashboardLoader = () => {
     const fetchErc20OwnerBalances = async () => {
       await Promise.allSettled(promises);
 
+      let userClaimable = 0;
       const updatedBonds = [...ownerBalances, ...erc20OwnerBalances].map(
         (bond: Partial<OwnerBalance>) => {
           if (!bond.bondToken || !bond.bondToken.underlying) return;
@@ -116,6 +125,9 @@ export const useDashboardLoader = () => {
           const usdPriceNumber: number = underlying?.price
             ? underlying.price * Number(balance)
             : 0;
+
+          if (canClaim && !isNaN(usdPriceNumber))
+            userClaimable += usdPriceNumber;
 
           const usdPriceString: string = usdPriceNumber
             ? trim(usdPriceNumber, calculateTrimDigits(usdPriceNumber))
@@ -135,31 +147,11 @@ export const useDashboardLoader = () => {
         }
       );
 
-      const claimable = updatedBonds.reduce((total, b) => {
-        return b?.canClaim && !isNaN(b.usdPriceNumber)
-          ? total + b?.usdPriceNumber
-          : total;
-      }, 0);
-
-      setUserClaimable(claimable);
       //@ts-ignore
       setOwnerBalances(updatedBonds);
+      setUserClaimable(userClaimable);
     };
 
-    setBondPurchases(
-      tokens
-        ? bondPurchases.map((p: any) => {
-            const tokens = {
-              payoutToken: getByAddress(p.payoutToken?.address),
-              quoteToken: getByAddress(p.quoteToken?.address),
-            };
-            return {
-              ...p,
-              ...tokens,
-            };
-          })
-        : bondPurchases
-    );
     setAllMarkets(markets);
 
     uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
@@ -183,20 +175,6 @@ export const useDashboardLoader = () => {
 
     setBondsIssued(pastBonds);
   }, [allMarkets]);
-
-  //Calculates TBV for user purchases
-  useEffect(() => {
-    const hasPurchases = !!bondPurchases.length;
-    const hasPrices = tokens?.some((t) => !!t.price);
-
-    if (hasPrices && hasPurchases) {
-      const tbv = bondPurchases.reduce((tbv, purchase) => {
-        const price = getByAddress(purchase.payoutToken?.address)?.price ?? 0;
-        return tbv + price * purchase.payout;
-      }, 0);
-      setUserTbv(tbv);
-    }
-  }, [tokens, bondPurchases.length]);
 
   //Calculates market stats and adds token details to each market
   useEffect(() => {
@@ -242,20 +220,6 @@ export const useDashboardLoader = () => {
       setAllMarkets(updated);
     }
   }, [tokens, allMarkets.length]);
-
-  //Calculates TBV for purchases
-  useEffect(() => {
-    const hasPurchases = !!bondPurchases.length;
-    const hasPrices = tokens?.some((t) => !!t.price);
-
-    if (hasPrices && hasPurchases) {
-      const tbv = bondPurchases.reduce((tbv, purchase) => {
-        const price = getByAddress(purchase.payoutToken?.address)?.price ?? 0;
-        return tbv + price * purchase.payout;
-      }, 0);
-      setUserTbv(tbv);
-    }
-  }, [tokens, bondPurchases.length]);
 
   //Calculates claimable value for purchases
 

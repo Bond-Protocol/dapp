@@ -1,7 +1,7 @@
 import { StoryFn, Meta } from "@storybook/react";
 import { BondPriceChart } from "components";
 
-import data from "./mock-data";
+import data from "../mock-data/chart";
 
 export default {
   title: "Components/Charts/BondPriceChart",

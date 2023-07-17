@@ -140,6 +140,11 @@ export function useCalculatedMarkets() {
         (market: CalculatedMarket) =>
           market.owner.toLowerCase() === address?.toLowerCase()
       ),
+    getByChainAndId: (chainId: number | string, id: number | string) =>
+      calculatedMarkets.find(
+        ({ marketId, chainId: marketChainId }) =>
+          marketId === Number(id) && marketChainId === chainId
+      ),
     refetchAllMarkets,
     refetchOne,
     isSomeLoading,
