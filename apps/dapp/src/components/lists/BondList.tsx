@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useMediaQueries } from "hooks/useMediaQueries";
-import { useEmbedContext } from "..";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -69,11 +68,13 @@ export const tableColumns: Array<Column<any>> = [
       const { data: signer } = useSigner();
       const [tx, setTx] = useState<any>();
 
-      const bondChainId = Number(props?.data?.bond?.bondToken?.chainId);
-      const isCorrectNetwork = bondChainId === chain?.id;
+      const chainId = props?.data?.bond?.bondToken.chainId;
+
+      const isCorrectNetwork =
+        Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(bondChainId);
+        switchNetwork?.(Number(props?.data?.bond?.bondToken?.chainId));
       };
 
       async function redeemBond(bond: Partial<OwnerBalance>) {
@@ -112,7 +113,6 @@ export const tableColumns: Array<Column<any>> = [
           <TransactionWizard
             chainId={chainId}
             open={open}
-            chainId={bondChainId.toString()}
             onSubmit={() => redeemBond(props?.data?.bond)}
             onClose={() => setOpen(false)}
             SuccessDialog={() => <div>Bond claimed!</div>}
@@ -129,24 +129,19 @@ const mobileColumns = tableColumns.filter((c) => c.accessor !== "value");
 export const BondList = ({ data = [], ...props }: any) => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
-  const { ownerAddress, isEmbed } = useEmbedContext();
-
-  const searchString = isEmbed ? `?owner=${ownerAddress}` : "";
 
   return (
-    <div className={props.className}>
+    <div className="mt-10">
       <PaginatedTable
         title={props.title ?? <div />}
-        hideSearchbar={isTabletOrMobile || props.disableSearch}
-        disableSearch={props.disableSearch}
+        hideSearchbar={isTabletOrMobile}
         defaultSort="vesting"
         columns={isTabletOrMobile ? mobileColumns : tableColumns}
         data={data}
         loading={props.isLoading}
         fallback={{
           title: "YOU HAVE NO PENDING BONDS",
-          onClick: () =>
-            navigate((isEmbed ? "/embed" : "") + "/markets" + searchString),
+          onClick: () => navigate("/markets"),
           buttonText: "Explore Bond Markets",
         }}
       />
