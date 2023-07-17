@@ -110,6 +110,7 @@ export const tableColumns: Array<Column<any>> = [
             Claim
           </Button>
           <TransactionWizard
+            chainId={chainId}
             open={open}
             chainId={bondChainId.toString()}
             onSubmit={() => redeemBond(props?.data?.bond)}
