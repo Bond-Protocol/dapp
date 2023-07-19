@@ -5,9 +5,9 @@ type ValuesProps = {
   className?: string;
 };
 
-const tbv = "$33M";
-const markets = "20";
-const bonds = "2K";
+const tbv = "$60M";
+const markets = "200";
+const bonds = "3K";
 
 export const Values = (props: ValuesProps) => {
   return (
@@ -20,7 +20,7 @@ export const Values = (props: ValuesProps) => {
           </InfoLabel>
         </div>
         <div className="grow lg:w-1/3">
-          <InfoLabel label="Bonds Markets">
+          <InfoLabel label="Bond Markets">
             {markets}
             <span className="text-[32px]">+</span>
           </InfoLabel>
