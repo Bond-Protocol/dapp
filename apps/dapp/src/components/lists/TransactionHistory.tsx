@@ -26,6 +26,7 @@ const blockExplorer: Column<any> = {
       value: `${start}...${end}`,
       subtext: purchase.txUrl,
       searchValue: txHash,
+      csvValues: [txHash],
     };
   },
   Component: (props) => {
@@ -228,8 +229,8 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
             `PAYOUT AMOUNT (${props.market?.payoutToken.symbol})`,
             "PAYOUT AMOUNT (USD)",
             "DISCOUNT",
-            "ADDRESS",
             "TX HASH",
+            "ADDRESS",
           ]
         }
       />
