@@ -75,8 +75,21 @@ export const ProjectionChart = (
           state.priceModels[state.priceModel]?.maxDiscountFromCurrent
         ),
       }),
-    [props.data.length]
-  );
+    [
+        props.data.length,
+        useTokenPrices,
+        targetDiscount,
+        state.capacity,
+        state.priceModels[state.priceModel]?.initialPrice,
+        state.priceModels[state.priceModel]?.minPrice,
+        state.durationInDays,
+        state.depositInterval,
+        state.priceModels[state.priceModel]?.fixedDiscount,
+        state.priceModels[state.priceModel]?.baseDiscount,
+        state.priceModels[state.priceModel]?.targetIntervalDiscount,
+        state.priceModels[state.priceModel]?.fixedPrice,
+        state.priceModels[state.priceModel]?.maxDiscountFromCurrent
+    ]);
 
   if (!Boolean(props.data.length)) {
     return (
