@@ -215,13 +215,13 @@ export const CreateMarketController = () => {
         state.payoutToken.decimals,
         auctioneer,
         signer,
-        state.capacity.toString()
+        state.recommendedAllowance.toString()
       );
 
       await tx.wait(1);
       dispatch({
         type: CreateMarketAction.UPDATE_ALLOWANCE,
-        value: state.capacity,
+        value: state.recommendedAllowance,
       });
     } catch (e) {
       console.log({ e });
