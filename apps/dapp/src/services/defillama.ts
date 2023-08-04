@@ -39,11 +39,8 @@ export const fetchPrice = async (
     ? address.join(",")
     : `${getNameFromChainId(Number(chainId))}:${address}`;
 
-  const endpoint = `${DEFILLAMA_ENDPOINT}/prices/current/${ids}`;
-
-  const response = await generateFetcher(endpoint)();
-
-  return formatResponse(response.coins, chainId);
+  const endpoint = `${import.meta.env.VITE_API_URL}prices?ids=${ids}`
+  return await generateFetcher(endpoint)();
 };
 
 type ChartOptionsDefillama = {
