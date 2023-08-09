@@ -27,7 +27,7 @@ export default {
     return {
       app: {
         title: "Core App",
-        url: "http://dapp.storybook.bondprotocol.finance",
+        url: "https://storybook-dapp.vercel.app",
       },
     };
   },
