@@ -1,4 +1,5 @@
 export default {
+  framework: "@storybook/react-vite",
   stories: [
     //"../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
@@ -13,14 +14,21 @@ export default {
   docs: {
     autodocs: true,
   },
-  framework: {
-    name: "@storybook/react-vite",
-    options: {},
-  },
-  refs: {
-    app: {
-      title: "Core App",
-      url: "http://localhost:6007",
-    },
+  refs: (_config, { configType }) => {
+    if (configType === "DEVELOPMENT") {
+      return {
+        app: {
+          title: "Core App",
+          url: "http://localhost:6007",
+        },
+      };
+    }
+
+    return {
+      app: {
+        title: "Core App",
+        url: "http://storybook-core.bondprotocol.finance",
+      },
+    };
   },
 };

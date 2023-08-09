@@ -1,17 +1,34 @@
+import path, { dirname, join } from "path";
 import type { StorybookConfig } from "@storybook/react-vite";
+import { mergeConfig } from "vite";
+
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
+  framework: getAbsolutePath("@storybook/react-vite"),
+  stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
+    getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@storybook/addon-essentials"),
+    getAbsolutePath("@storybook/addon-interactions"),
+    getAbsolutePath("@storybook/preset-typescript"),
   ],
-  framework: {
-    name: "@storybook/react-vite",
-    options: {},
-  },
-  docs: {
-    autodocs: "tag",
+  docs: { autodocs: "tag" },
+  viteFinal: async (config) => {
+    return mergeConfig(config, {
+      resolve: {
+        alias: {
+          ui: path.join(__dirname, "../../../node_modules/ui"),
+        },
+      },
+    });
   },
 };
+
 export default config;
+
+/**
+ * This function is used to resolve the absolute path of a package.
+ * It is needed in projects that use Yarn PnP or are set up within a monorepo.
+ */
+function getAbsolutePath(value: string): any {
+  return dirname(require.resolve(join(value, "package.json")));
+}
