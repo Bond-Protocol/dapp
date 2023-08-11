@@ -1,21 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 
-import {
-  Navbar,
-  Values,
-  WinWin,
-  CardProps,
-  Footer,
-  Grid,
-  Hero,
-  LinkButton,
-  Head,
-  Background,
-} from "./";
+import { Navbar, Footer, Head, Background } from "./";
 import { GAContainer } from "./GAContainer";
-import { TheProblem } from "./TheProblem";
-
-import data from "../data";
 
 const headConfig = {
   title: "Bond Protocol",
