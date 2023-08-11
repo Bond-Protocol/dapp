@@ -17,6 +17,7 @@ const links = [
   { url: data.links.docs, label: "Docs" },
   { url: data.links.audits, label: "Security" },
   { url: data.links.medium, label: "Blog" },
+  { url: "/hello", label: "Contact Us" },
 ];
 
 export const Navbar = () => {
@@ -29,7 +30,7 @@ export const Navbar = () => {
           alt="bondprotocol_logo"
           src="/logo-long.svg"
         />
-        <div className="hidden w-min gap-x-5 md:flex">
+        <div className="hidden w-fit gap-x-5 md:flex">
           {links.map((l, i) => (
             <Navlink {...l} key={i} />
           ))}
