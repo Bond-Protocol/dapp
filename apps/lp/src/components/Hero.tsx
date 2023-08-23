@@ -1,4 +1,4 @@
-import { LinkButton } from "./LinkButton";
+import { LinkButton } from "./common/LinkButton";
 import Image from "next/image";
 import data from "../data";
 import ArrowRight from "../assets/arrow-right.svg";

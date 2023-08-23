@@ -1,5 +1,4 @@
-import { LinkButton } from "./LinkButton";
-import { TextBlock } from "./TextBlock";
+import { LinkButton, TextBlock } from "./common";
 import ArrowRight from "../assets/arrow-right.svg";
 import data from "../data";
 

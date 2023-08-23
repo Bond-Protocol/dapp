@@ -40,9 +40,11 @@ const links = {
   medium: "https://medium.com/@Bond_Protocol",
 };
 
-export default {
+const data = {
   protocols,
   links,
   auditors,
   bounties,
 };
+
+export default data;

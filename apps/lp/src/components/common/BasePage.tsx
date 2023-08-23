@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
-
-import { Navbar, Footer, Head, Background } from "./";
-import { GAContainer } from "./GAContainer";
+import { Navbar, Footer, Head } from "./";
+import { GAContainer } from "../GAContainer";
+import { Background } from "../Background";
 
 const headConfig = {
   title: "Bond Protocol",
