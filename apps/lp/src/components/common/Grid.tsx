@@ -23,6 +23,7 @@ export const Card = ({
   homepage,
   name,
   className,
+  hasHover,
 }: CardProps) => {
   return (
     <a href={homepage} target="_blank" rel="noreferrer">
@@ -39,17 +40,25 @@ export const Card = ({
           />
         </div>
         <div className="select-none text-center font-bold md:w-2/3 lg:-ml-3 lg:text-left">
-          <p className="group-hover:hidden"> {name} </p>
-          <p className="text-light-secondary hidden group-hover:block">
-            Visit website
-          </p>
+          <p className={!hasHover ? "group-hover:hidden" : ""}> {name} </p>
+          {!hasHover && (
+            <p className="text-light-secondary hidden group-hover:block">
+              Visit website
+            </p>
+          )}
         </div>
       </div>
     </a>
   );
 };
 
-export const BiggerCard = ({ logoUrl, url, name, className }: CardProps) => {
+export const BiggerCard = ({
+  logoUrl,
+  url,
+  name,
+  className,
+  hasHover,
+}: CardProps) => {
   return (
     <a href={url} target="_blank" rel="noreferrer">
       <div
@@ -92,4 +101,17 @@ export const Grid = (props: GridProps) => {
       </div>
     </div>
   );
+};
+
+export const DetailedGrid = (props: GridProps) => {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? "details-popper" : undefined;
+
+  return <Grid {...props} />;
 };

@@ -14,7 +14,7 @@ const links = [
   { url: data.links.docs, label: "Docs", external: true },
   { url: data.links.audits, label: "Security", external: true },
   { url: data.links.medium, label: "Blog", external: true },
-  { url: "", label: "About Us", links: sublinks, type: "menu" },
+  { url: "", label: "About", links: sublinks, type: "menu" },
   { url: "/hello", label: "Contact Us" },
 ];
 
