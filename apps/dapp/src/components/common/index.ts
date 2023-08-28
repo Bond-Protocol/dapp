@@ -4,3 +4,4 @@ export * from "./Navbar";
 export * from "./NavbarTabs";
 export * from "./PageHeader";
 export * from "./PageNavigation";
+export * from "./SignInButton";
