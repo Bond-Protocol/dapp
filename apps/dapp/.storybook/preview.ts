@@ -1,4 +1,4 @@
-import "../../../packages/ui/src/style.css";
+import "ui/style.css";
 import theme, { colors } from "./theme";
 
 export const parameters = {
