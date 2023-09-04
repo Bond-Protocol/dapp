@@ -21,7 +21,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         </div>
       )}
       <div
-        className={`flex flex-col justify-center ${
+        className={`flex flex-col justify-center bg-white/5 ${
           props.isFutureMarket ? "w-full" : "md:w-1/2"
         }`}
       >
@@ -35,17 +35,6 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
                 new Date(market.start * 1000)
               )}`}
               value={formatDate.short(new Date(market.start * 1000))}
-            />
-          )}
-          {market.conclusion && (
-            <SummaryLabel
-              small
-              className="w-full text-center"
-              subtext="MARKET END DATE"
-              tooltip={`Market will close and no longer be available on ${formatDate.long(
-                new Date(market.conclusion * 1000)
-              )}`}
-              value={formatDate.short(new Date(market.conclusion * 1000))}
             />
           )}
         </div>

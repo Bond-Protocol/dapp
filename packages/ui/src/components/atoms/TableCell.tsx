@@ -10,7 +10,9 @@ export const TableCell = forwardRef(function TableCell(
   ref: React.ForwardedRef<HTMLTableCellElement>
 ) {
   const CellType = heading ? "th" : "td";
-  const style = heading ? "font-fraktion uppercase" : "border-gray-700";
+  const style = heading
+    ? "font-fraktion uppercase border-light-grey-500"
+    : "border-gray-700";
 
   return (
     <CellType

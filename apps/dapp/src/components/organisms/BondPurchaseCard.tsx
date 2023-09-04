@@ -298,7 +298,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   };
 
   return (
-    <div className="h-full">
+    <div className="h-full p-4">
       <div className="flex h-full flex-col justify-between">
         <InputCard
           onChange={setAmount}

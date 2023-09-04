@@ -26,7 +26,7 @@ export const TableHeading = ({
       heading
       className={`${
         props.onClick && "cursor-pointer"
-      } w-2 select-none pb-2 pt-1.5 leading-none tracking-wide ${
+      } w-2 select-none bg-white/5 py-1 pb-1 leading-none tracking-wide ${
         props.className
       }`}
     >

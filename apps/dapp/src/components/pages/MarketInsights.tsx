@@ -3,11 +3,12 @@ import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { PageHeader, PageNavigation } from "components/common";
-import { InfoLabel, Loading } from "ui";
+import { dateMath, InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
+import { MarketStatusChip } from "components/common/MarketStatusChip";
 
 export const MarketInsights = () => {
   const { id, chainId } = useParams();
@@ -29,6 +30,8 @@ export const MarketInsights = () => {
     capacity,
   } = useMarketDetails(market);
 
+  console.log({ market });
+
   if (!market) return <Loading content={meme()} />;
 
   return (
@@ -47,6 +50,7 @@ export const MarketInsights = () => {
           icon={market.payoutToken.logoUrl}
           underTitle={marketTypeLabel}
           className="place-self-start self-start justify-self-start"
+          chip={<MarketStatusChip market={market} />}
         />
       </PageNavigation>
       <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
