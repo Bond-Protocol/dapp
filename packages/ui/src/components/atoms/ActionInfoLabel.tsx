@@ -50,7 +50,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
   };
 
   return (
-    <div className={`${props.className}`}>
+    <div className={`font-mono ${props.className}`}>
       <div className="flex justify-between">
         {!props.editable && !props.link && (
           <div className={`my-auto ${isEdited ? "text-light-secondary" : ""}`}>
@@ -94,7 +94,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
           <Tooltip
             content={props.tooltip}
             iconWidth={13.3}
-            iconClassname={`pb-[1px] ml-0.5 fill-light-grey-400 ${props.tooltipClassName}`}
+            iconClassname={`pb-[1px] ml-1 fill-light-grey-400 ${props.tooltipClassName}`}
           />
         )}
         {props.copy && (

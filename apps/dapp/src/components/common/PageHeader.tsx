@@ -6,10 +6,12 @@ export interface PageHeaderProps extends TokenLogoProps {
   subtitle?: string;
   underTitle?: string | React.ReactNode;
   className?: string;
+  chip?: React.ReactNode;
 }
 
 export const PageHeader = (props: PageHeaderProps) => {
   const { isTabletOrMobile } = useMediaQueries();
+
   return (
     <div className="w-full px-4 md:px-0">
       <div className={`flex select-none font-bold ${props.className}`}>
@@ -18,8 +20,11 @@ export const PageHeader = (props: PageHeaderProps) => {
         )}
         <div className="my-auto">
           {props.title && (
-            <div className={`my-auto font-fraktion text-5xl leading-10`}>
-              {props.title}
+            <div className="flex gap-x-2">
+              <div className={`my-auto font-fraktion text-5xl leading-10`}>
+                {props.title}
+              </div>
+              {props.chip && <div>{props.chip}</div>}
             </div>
           )}
           {props.underTitle && (
