@@ -20,6 +20,7 @@ export const LongCopyPage = (props: LongCopyPageProps) => {
         </div>
         {props.content.map((c, i: number) => (
           <TextCard
+            key={i}
             title={c.title}
             description={c.description}
             className={

@@ -6,6 +6,7 @@ export type CardProps = {
   name?: string;
   homepage?: string;
   className?: string;
+  hasHover?: boolean;
 };
 
 export type GridProps = {
@@ -101,17 +102,4 @@ export const Grid = (props: GridProps) => {
       </div>
     </div>
   );
-};
-
-export const DetailedGrid = (props: GridProps) => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
-  };
-
-  const open = Boolean(anchorEl);
-  const id = open ? "details-popper" : undefined;
-
-  return <Grid {...props} />;
 };
