@@ -11,18 +11,18 @@ const sublinks = [
 ];
 
 const links = [
+  { url: "", label: "About", links: sublinks, type: "menu" },
+  { url: data.links.medium, label: "Blog", external: true },
   { url: data.links.docs, label: "Docs", external: true },
   { url: data.links.audits, label: "Security", external: true },
-  { url: data.links.medium, label: "Blog", external: true },
-  { url: "", label: "About", links: sublinks, type: "menu" },
   { url: "/hello", label: "Contact Us" },
 ];
 
 export const Navbar = () => {
   return (
-    <div className="navbar-bg fixed w-full bg-black z-40 bg-black/40 p-4 px-4 md:py-8">
+    <div className="navbar-bg fixed z-40 w-full bg-black bg-black/40 p-4 px-4 md:py-8">
       <div className="mx-auto flex max-w-[400px] justify-between md:max-w-[1440px]">
-        <Link href="/">
+        <Link className="my-auto" href="/">
           <Image
             width={115}
             height={56}

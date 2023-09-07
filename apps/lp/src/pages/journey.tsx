@@ -9,7 +9,7 @@ const IMPACT =
   "Across several issuers, our permissionless bond marketplace has facilitated over $60 million in Total Bonded Value — empowering treasury diversification, funding for runway and growth initiatives, protocol-owned liquidity acquisition, and strategic asset acquisition. And with over 4000 bondings, the opportunity for users to acquire their favorite governance tokens at a discount while providing massive value to the protocol has proven to be a win-win scenario.";
 
 const OLM =
-  "Our journey doesn’t stop there. Options Liquidity Mining <link to products page> went live on (blank for now), a powerful addition to our product suite that marks a new standard for emissions management.";
+  "Our journey doesn’t stop there. Options Liquidity Mining went live in September, a powerful addition to our product suite that marks a new standard for emissions management.";
 
 const WORK_WITH_US = `
 If there's a product you envision, a tool you're missing, or an enhancement you seek, we're all ears. Let's work together to build what you need.
