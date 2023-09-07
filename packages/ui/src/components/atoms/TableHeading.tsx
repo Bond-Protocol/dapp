@@ -30,6 +30,9 @@ export const TableHeading = ({
         props.className
       }`}
     >
+      {!props.alignEnd && props.tooltip && (
+        <Tooltip iconClassname="fill-white mr-0.5" content={props.tooltip} />
+      )}
       {isSorting && props.alignEnd && (
         <div
           className="my-auto mr-1 cursor-pointer "
@@ -57,7 +60,7 @@ export const TableHeading = ({
           />
         </div>
       )}
-      {props.tooltip && (
+      {props.alignEnd && props.tooltip && (
         <Tooltip iconClassname="fill-white" content={props.tooltip} />
       )}
     </TableCell>

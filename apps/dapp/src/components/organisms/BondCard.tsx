@@ -3,6 +3,7 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondPriceChart } from "components/organisms/BondPriceChart";
 import { BondPurchaseCard } from "components/organisms";
 import { formatDate, SummaryLabel } from "ui";
+import { BondPurchaseController } from "./BondPurchaseController";
 
 export type BondCardProps = {
   market: CalculatedMarket;
@@ -21,7 +22,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         </div>
       )}
       <div
-        className={`flex flex-col justify-center bg-white/5 ${
+        className={`flex flex-col ${
           props.isFutureMarket ? "w-full" : "md:w-1/2"
         }`}
       >
@@ -38,7 +39,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
             />
           )}
         </div>
-        {!props.isFutureMarket && <BondPurchaseCard market={market} />}
+        {!props.isFutureMarket && <BondPurchaseController market={market} />}
       </div>
     </div>
   );

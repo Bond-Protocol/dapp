@@ -48,14 +48,16 @@ export const useTokenAllowance = (
     tokenDecimals: number,
     auctioneer: string
   ) => {
-    const approved = await approveSpending(
-      tokenAddress,
-      tokenDecimals,
-      auctioneer,
-      signer
-    );
-    const confirmed = await approved.wait();
-    void fetchAndSetAllowance();
+    if (signer) {
+      const approved = await approveSpending(
+        tokenAddress,
+        tokenDecimals,
+        auctioneer,
+        signer
+      );
+      const confirmed = await approved.wait();
+      void fetchAndSetAllowance();
+    } else throw new Error("No signer connected");
   };
 
   useEffect(() => {

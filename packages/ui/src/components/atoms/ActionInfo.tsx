@@ -1,8 +1,8 @@
 import { ActionInfoLabel, ActionInfoLabelProps } from "./ActionInfoLabel";
 
 export interface ActionInfoProps extends ActionInfoLabelProps {
-  leftLabel?: string;
-  rightLabel?: string;
+  leftLabel?: string | React.ReactNode;
+  rightLabel?: string | React.ReactNode;
 }
 
 /**
@@ -19,6 +19,7 @@ export const ActionInfo = (props: ActionInfoProps) => {
         tooltip={props.tooltip}
       />
       <ActionInfoLabel
+        editable={false}
         value={props.rightLabel}
         link={props.link}
         className="font-semibold"

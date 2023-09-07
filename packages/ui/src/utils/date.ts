@@ -4,6 +4,8 @@ import fnsAddMonths from "date-fns/addMonths";
 import fnsIsBefore from "date-fns/isBefore";
 import fnsAddDays from "date-fns/addDays";
 import { wrapWithErrorHandler } from "./error-handler";
+import intervalToDuration from "date-fns/intervalToDuration";
+import { formatDuration } from "date-fns";
 
 // Format
 export const shorter = (date: Date) => format(date, "yy.MM.dd");
@@ -42,6 +44,33 @@ export const getUtcDate = (date: Date) => {
   return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000); // create a new date instance in UTC timezone
 };
 */
+
+const distanceFormat = {
+  years: "{{count}}Y",
+  days: "{{count}}D",
+  months: "{{count}}M",
+  weeks: "{{count}}W",
+  hours: "{{count}}H",
+  minutes: "{{count}}M",
+  seconds: "{{count}}S",
+};
+
+export const interval = (start: Date, end: Date) => {
+  const duration: Record<string, number> = intervalToDuration({ start, end });
+
+  //return formatDuration(duration, { format: ["Y", "M", "W", "D", "H", "M", "S"], locale: { code: "en_US" }, });
+  return Object.keys(duration)
+    .map((unit, i, arr) => {
+      if (duration[unit] === 0) {
+        if (i === 0 || duration[arr[i - 1]] === 0) return null;
+      }
+      //@ts-ignore
+      return distanceFormat[unit].replace("{{count}}", duration[unit]);
+    })
+    .filter(Boolean)
+    .join(" ");
+};
+
 export const formatDate = wrapWithErrorHandler({
   shorter,
   short,
@@ -49,6 +78,7 @@ export const formatDate = wrapWithErrorHandler({
   dateAndTime,
   dayMonthTime,
   distanceToNow,
+  interval,
 });
 
 export const dateMath = wrapWithErrorHandler({

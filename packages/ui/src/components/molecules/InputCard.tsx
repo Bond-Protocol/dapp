@@ -29,7 +29,7 @@ export const InputCard = ({
   };
 
   const handleChange = (amount: string) => {
-    let checkedAmount = amount;
+    let checkedAmount = String(amount);
 
     if (amount.indexOf("e") !== -1) {
       const index = amount.indexOf("e") + 2;
@@ -44,9 +44,10 @@ export const InputCard = ({
 
   return (
     <>
-      <div className={`mb-1 flex justify-between ${className}`}>
+      <div className={`mb-1 flex justify-end ${className}`}>
         <div className="my-auto text-xs">
-          Balance: {balance + " " + market?.quoteToken?.symbol}
+          <span className="text-light-grey-400">Balance: </span>
+          {balance + " " + market?.quoteToken?.symbol}
         </div>
       </div>
       <div className="flex w-full gap-2">
@@ -54,6 +55,7 @@ export const InputCard = ({
           value={value}
           placeholder="Enter Amount to Bond"
           onChange={(event: React.BaseSyntheticEvent) => {
+            console.log({ event });
             handleChange(event.target.value);
           }}
           startAdornment={
