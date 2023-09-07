@@ -24,7 +24,7 @@ export default function Home() {
           content={data.protocols as CardProps[]}
         />
         <div className="pt-20">
-          <LinkButton href={data.links.verify} size="lg" variant="ghost">
+          <LinkButton target="_self" href="/hello" size="lg" variant="ghost">
             Become a Partner
           </LinkButton>
         </div>

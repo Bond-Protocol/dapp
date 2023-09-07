@@ -1,9 +1,8 @@
-import { LinkButton } from "./LinkButton";
+import { LinkButton, TextBlock } from "./common";
 import Image from "next/image";
 import data from "../data";
-import { TextBlock } from "./TextBlock";
 
-export type InfoLabelProps = {
+export type LabelProps = {
   title: string;
   tooltip?: string;
   content: React.ReactNode;
@@ -33,7 +32,7 @@ const treasury = {
 const content = [price, liquidity, tokens, treasury];
 const smolContent = [price, tokens, liquidity, treasury];
 
-export const InvertedInfoLabel = (props: InfoLabelProps) => {
+export const InvertedInfoLabel = (props: LabelProps) => {
   return (
     <div
       className={`flex h-[120px] w-full flex-col justify-evenly overflow-hidden bg-white/[.05] text-center backdrop-blur-lg lg:items-center ${props.className}`}

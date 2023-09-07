@@ -1,9 +1,11 @@
+import { useRouter } from "next/router";
 import Script from "next/script";
 
 export default function HelloPage() {
   return (
     <div className="min-h-[75vh]">
       <div
+        className="z-40"
         data-tf-widget="VVyP9rqt"
         data-tf-opacity="100"
         data-tf-inline-on-mobile
