@@ -6,7 +6,7 @@ import { useSymbolInput } from "src/hooks/use-symbol-input";
 import { useEffect, useState } from "react";
 
 export interface ActionInfoLabelProps {
-  value?: string;
+  value?: string | React.ReactNode;
   tooltip?: string;
   link?: string;
   copy?: string;
@@ -20,7 +20,7 @@ export interface ActionInfoLabelProps {
 
 export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
   const { value, onBlur, onChange, onFocus } = useSymbolInput(
-    props.value,
+    String(props.value),
     props.symbol,
     true
   );
@@ -53,7 +53,11 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
     <div className={`font-mono ${props.className}`}>
       <div className="flex justify-between">
         {!props.editable && !props.link && (
-          <div className={`my-auto ${isEdited ? "text-light-secondary" : ""}`}>
+          <div
+            className={`my-auto ${
+              props.editable && isEdited ? "text-light-secondary" : ""
+            }`}
+          >
             {props.value}
           </div>
         )}

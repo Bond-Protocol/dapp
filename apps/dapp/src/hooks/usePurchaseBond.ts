@@ -9,6 +9,7 @@ import {
   CalculatedMarket,
 } from "@bond-protocol/contract-library";
 import { Provider } from "@ethersproject/providers";
+import { providers } from "services/owned-providers";
 
 export const usePurchaseBond = () => {
   const approveSpending = async (
@@ -54,16 +55,12 @@ export const usePurchaseBond = () => {
       decimals: number,
       marketId: number,
       referralAddress: string,
-      provider: Provider
+      chainId: string
     ): Promise<BigNumberish> => {
+      const provider = providers[chainId];
+
       try {
-        return payoutFor(
-          marketId,
-          amount,
-          decimals,
-          referralAddress,
-          provider
-        );
+        return payoutFor(marketId, amount, decimals, referralAddress, provider);
       } catch (e) {
         console.log(e);
         return BigNumber.from(0);

@@ -27,7 +27,7 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
       <TabsListUnstyled
         componentsProps={{
           root: {
-            className: "my-8 mt-2 flex justify-around",
+            className: "flex justify-around",
           },
         }}
       >
@@ -41,7 +41,7 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
             componentsProps={{
               root: {
                 className: `
-                 border-b-2 w-full font-mono font-bold tracking-widest uppercase rounded-t-lg px-6 py-4 select-none 
+                 border-b-2 w-full font-mono font-bold tracking-widest uppercase rounded-t-lg px-6 pb-2 select-none 
                  ${
                    selected === i
                      ? "border-white"

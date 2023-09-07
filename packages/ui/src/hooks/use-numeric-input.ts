@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 
-export const useNumericInput = (initialValue = "0", isPercentual?: boolean) => {
+export const useNumericInput = (initialValue = "", isPercentual?: boolean) => {
   const [value, setValue] = useState<string>(initialValue);
 
   useEffect(() => {
     let updated = value ?? initialValue;
-    updated = isPercentual ? `${updated}%` : parseFloat(updated).toString();
+    updated = isPercentual ? `${updated}%` : updated;
 
     setValue(updated);
   }, [isPercentual]);

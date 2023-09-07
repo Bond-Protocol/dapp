@@ -68,7 +68,7 @@ export const Select = (props: SelectProps) => {
         ))}
       </SelectUnstyled>
       <div
-        className={`absolute top-3.5 right-[10px] transform transition-all ${
+        className={`absolute right-[10px] top-3.5 transform transition-all ${
           open ? "rotate-180" : "rotate-0"
         }`}
       >

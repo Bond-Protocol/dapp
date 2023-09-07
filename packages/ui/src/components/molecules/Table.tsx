@@ -29,7 +29,10 @@ export interface TableProps {
   //fallback?: React.ReactNode;
   emptyFallback?: string;
   emptyRows?: number;
-  handleSorting: (field: string, sortOrder: string) => void;
+  className?: string;
+  headClassName?: string;
+  bodyClassName?: string;
+  handleSorting?: (field: string, sortOrder: string) => void;
 }
 
 export const Table = ({ data = [], ...props }: TableProps) => {
@@ -42,7 +45,7 @@ export const Table = ({ data = [], ...props }: TableProps) => {
 
   return (
     <>
-      <table className="w-full table-fixed">
+      <table className={"w-full table-fixed" + " " + props.className}>
         <colgroup>
           {props.columns.map((c, i) => (
             <col key={i} className={c.width && c.width} />
@@ -54,9 +57,11 @@ export const Table = ({ data = [], ...props }: TableProps) => {
           defaultSortField={props.defaultSort}
           defaultSortOrder={defaultSortOrder}
           hasData={!!data}
+          className={props.headClassName}
         />
         {!props.loading && (
           <TableBody
+            className={props.bodyClassName}
             emptyRows={props.emptyRows}
             columns={props.columns}
             rows={data}
@@ -73,6 +78,7 @@ export interface TableHeadProps {
   defaultSortField?: string;
   defaultSortOrder: SortOrder;
   hasData?: boolean;
+  className?: string;
 }
 
 export const TableHead = (props: TableHeadProps) => {
@@ -103,8 +109,8 @@ export const TableHead = (props: TableHeadProps) => {
   }, [props.defaultSortField, props.hasData]);
 
   return (
-    <thead className="">
-      <tr className="child:pl-5 border-y border-white/25 ">
+    <thead className={"border-y border-white/25 " + (props.className ?? "")}>
+      <tr className="child:pl-5 ">
         {props.columns.map((field) => (
           <TableHeading
             isSorting={sortField === field.accessor}
@@ -131,11 +137,17 @@ export interface TableBodyProps {
   columns: Column<unknown>[];
   rows?: Array<Record<string, Cell>>;
   emptyRows?: number;
+  className?: string;
 }
 
-export const TableBody = ({ columns, rows, emptyRows }: TableBodyProps) => {
+export const TableBody = ({
+  columns,
+  rows,
+  emptyRows,
+  className,
+}: TableBodyProps) => {
   return (
-    <tbody className="w-full">
+    <tbody className={"w-full" + " " + className}>
       {rows?.map((row, i) => {
         return (
           <tr
