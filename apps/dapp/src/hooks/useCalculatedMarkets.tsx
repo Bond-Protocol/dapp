@@ -2,7 +2,10 @@ import { useQueries } from "react-query";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  getBlockExplorer,
+} from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
 import { useTokens } from "hooks";
@@ -44,7 +47,16 @@ export function useCalculatedMarkets() {
         updatedMarket
       );
 
-      return { ...result, start: market.start, conclusion: market.conclusion };
+      const blockExplorer = getBlockExplorer(result.chainId, "address");
+
+      console.log({ blockExplorer });
+      return {
+        ...result,
+        start: market.start,
+        conclusion: market.conclusion,
+        blockExplorerUrl: blockExplorer.blockExplorerUrl,
+        blockExplorerName: blockExplorer.blockExplorerName,
+      };
     } catch (e) {
       console.log(
         `ProtocolError: Failed to calculate market ${market.id} \n`,

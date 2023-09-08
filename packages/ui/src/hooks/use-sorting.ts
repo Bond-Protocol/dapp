@@ -14,7 +14,7 @@ export const useSorting = (
     } else {
       setData(rawData ?? []);
     }
-  }, [rawData, rawData?.length]);
+  }, [rawData?.length]);
 
   const sort = (sortField: string, sortOrder: string) => {
     if (sortField) {

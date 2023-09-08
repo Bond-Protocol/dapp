@@ -2,6 +2,7 @@ import {
   CalculatedMarket,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
+import { TransactionWizard } from "components/modals/TransactionWizard";
 import { BondButton } from "components/organisms/BondButton";
 import defillama from "services/defillama";
 import {
@@ -12,8 +13,10 @@ import {
   formatDate,
   Button,
   dateMath,
+  formatCurrency,
 } from "ui";
 import { useAccount } from "wagmi";
+import { LimitOrderConfirmationDialog } from "./LimitOrderConfirmationDialog";
 import { useLimitOrder } from "./use-limit-order";
 
 const options = [
@@ -64,25 +67,46 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           order.expiry
         )}
       />
-      <BondButton
-        showConnect={!account.isConnected}
-        showPurchaseLink={!allowance.hasSufficientBalance}
+      <TransactionWizard
+        titles={{ standby: "Limit Order Confirmation" }}
+        open={true}
         chainId={props.market.chainId}
-        quoteTokenSymbol={props.market.quoteToken.symbol}
-        purchaseLink={defillama.getSwapURL(
-          props.market.chainId,
-          props.market.quoteToken.address
+        //@ts-ignore
+        onSubmit={() => {
+          console.log("submit");
+        }}
+        onClose={() => {}}
+        InitialDialog={(args) => (
+          <LimitOrderConfirmationDialog
+            quoteLogo={props.market.quoteToken.logoURI}
+            payoutLogo={props.market.payoutToken.logoURI}
+            payout={"1000"}
+            amountIn={`0.01 ${props.market.quoteToken.symbol}/${props.market.payoutToken.symbol}`}
+            vestingTime={"7 D"}
+            expiry={new Date()}
+            market={props.market}
+          />
         )}
-      >
-        <Button
-          className="mt-4 w-full"
-          disabled={!allowance.hasSufficientBalance}
-        >
-          {!allowance.hasSufficientAllowance && allowance.hasSufficientBalance
-            ? "APPROVE"
-            : "PLACE ORDER"}
-        </Button>
-      </BondButton>
+      />
+      {/* <BondButton */}
+      {/*   showConnect={!account.isConnected} */}{" "}
+      {/*   showPurchaseLink={!allowance.hasSufficientBalance} */}
+      {/*   chainId={props.market.chainId} */}
+      {/*   quoteTokenSymbol={props.market.quoteToken.symbol} */}
+      {/*   purchaseLink={defillama.getSwapURL( */}
+      {/*     props.market.chainId, */}
+      {/*     props.market.quoteToken.address */}
+      {/*   )} */}
+      {/* > */}
+      {/*   <Button */}
+      {/*     className="mt-4 w-full" */}
+      {/*     disabled={!allowance.hasSufficientBalance} */}
+      {/*   > */}
+      {/*     {!allowance.hasSufficientAllowance && allowance.hasSufficientBalance */}
+      {/*       ? "APPROVE" */}
+      {/*       : "PLACE ORDER"} */}
+      {/*   </Button> */}
+      {/* </BondButton> */}
     </div>
   );
 };
@@ -115,9 +139,13 @@ function generateSummaryFields(
     },
     {
       leftLabel: "You will get",
-      rightLabel: `${!isFinite(payout) ? "?" : payout} ${
-        market.payoutToken.symbol
-      }`,
+      rightLabel: `${
+        !isFinite(payout)
+          ? "?"
+          : payout < 999
+          ? formatCurrency.trimToken(payout)
+          : formatCurrency.longFormatter.format(payout)
+      } ${market.payoutToken.symbol}`,
     },
     {
       leftLabel: "Order expires on",
