@@ -1,8 +1,19 @@
-import addSeconds from "date-fns/addSeconds";
-import { Column, formatCurrency, formatDate, Icon, useSorting } from "ui";
-import { Table, toTableData } from "ui";
+import {
+  Button,
+  Column,
+  formatCurrency,
+  formatDate,
+  getDiscountColor,
+  getDiscountPercentage,
+  Icon,
+  useSorting,
+  Table,
+  toTableData,
+} from "ui";
+
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import { Popper } from "components/common/Popper";
 
 export type LimitOrderListProps = {
   orders: Order[];
@@ -10,6 +21,7 @@ export type LimitOrderListProps = {
 };
 
 type Order = {
+  id?: number;
   marketPrice?: number;
   price: string | number;
   discount: string | number;
@@ -25,9 +37,16 @@ const columns: Column<Order>[] = [
     width: "w-[33%]",
     tooltip: "Limit order tooltip",
     formatter: (order) => {
+      const discount = getDiscountPercentage(
+        order.marketPrice ?? 0,
+        Number(order.price)
+      );
+
+      const color = getDiscountColor(order.marketPrice ?? 0, discount);
+
       return {
         value: order.price,
-        subtext: `${order.discount}%`,
+        subtext: <span className={color}>•{discount.toFixed(2) ?? "??"}%</span>,
       };
     },
   },
@@ -42,6 +61,7 @@ const columns: Column<Order>[] = [
           : formatCurrency.longFormatter.format(Number(order.amount));
       return {
         value: amount,
+        sortValue: order.amount,
         subtext: <span className="text-xs">{order.symbol}</span>,
       };
     },
@@ -54,6 +74,7 @@ const columns: Column<Order>[] = [
     formatter: (order) => {
       const result = formatDate.interval(new Date(), order.expiry);
       return {
+        sortValue: order.expiry.getTime(),
         value: result,
       };
     },
@@ -67,13 +88,24 @@ const columns: Column<Order>[] = [
     },
     Component: (props) => {
       //const order = useLimitOrder();
+      //return <div>ok</div>;
       return (
-        <div className="relative right-1.5">
-          <Icon
-            className="hover:cursor-pointer"
-            width={24}
-            src={dotsVerticalIcon}
-          />
+        <div key={props.key} className="relative">
+          <Popper
+            TriggerElement={({ onClick }) => (
+              <div onClick={onClick} className="relative right-1.5">
+                <Icon
+                  className="hover:cursor-pointer"
+                  width={24}
+                  src={dotsVerticalIcon}
+                />
+              </div>
+            )}
+          >
+            <div className="w-full rounded-lg bg-light-tooltip p-4">
+              <Button variant="ghost">Cancel Order</Button>
+            </div>
+          </Popper>
         </div>
       );
     },
@@ -89,7 +121,7 @@ const sampleData = [
     expiry: new Date(2023, 8, 9, 9, 0),
   },
   {
-    price: 70,
+    price: 72,
     discount: "8.14",
     amount: "0.0012340234",
     symbol: "ALCX-ETH SLP",
@@ -104,7 +136,7 @@ const sampleData = [
     expiry: new Date(2023, 8, 15, 11, 32),
   },
   {
-    price: 70,
+    price: 74,
     discount: "8.14",
     amount: "400",
     symbol: "ALCX-ETH SLP",
@@ -112,42 +144,49 @@ const sampleData = [
   },
 
   {
-    price: 80,
+    price: 81,
     discount: "2.14",
     amount: "200",
     symbol: "ALCX-ETH SLP",
     expiry: new Date(2023, 8, 8, 11, 0),
   },
   {
-    price: 70,
+    price: 77,
     discount: "8.14",
     amount: "40000000000",
     symbol: "ALCX-ETH SLP",
     expiry: new Date(2023, 8, 8, 11, 0),
   },
-];
+].map((d) => ({ ...d, marketPrice: 82 }));
 
 export const LimitOrderList = (props: LimitOrderListProps) => {
-  const [cols, setCols] = useState<Order[]>(sampleData);
-  const [sortedData, sort] = useSorting(
-    sampleData.map((r) => toTableData(columns, r))
+  const data = useMemo(
+    () => (props.orders || sampleData).map((o) => toTableData(columns, o)),
+    [props.orders]
   );
-  useEffect(() => {
-    let interval: any;
-    //if (!!props.orders.length && !cols.length) {
-    interval = setInterval(() => {
-      const previous = !!cols.length ? cols : props.orders;
 
-      const updated = previous.map((o) => ({
-        ...o,
-        expiry: addSeconds(o.expiry, 1),
-      }));
-      setCols(updated);
-    }, 1000);
-    //}
+  const [cols, setCols] = useState<any[]>(sampleData);
 
-    return () => clearInterval(interval);
-  }, []);
+  const [sortedData, sort] = useSorting(
+    cols.map((r) => toTableData(columns, r))
+  );
+
+  // useEffect(() => {
+  //   let interval: any;
+  //   //if (!!props.orders.length && !cols.length) {
+  //   interval = setInterval(() => {
+  //     const previous = !!cols.length ? cols : props.orders;
+
+  //     const updated = previous.map((o) => ({
+  //       ...o,
+  //       expiry: addSeconds(o.expiry, 1),
+  //     }));
+  //     setCols(updated);
+  //   }, 1000);
+  //   //}
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   return (
     <div className="p-4">

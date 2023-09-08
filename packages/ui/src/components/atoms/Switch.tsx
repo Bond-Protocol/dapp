@@ -28,6 +28,7 @@ const slotProps = {
 
 export type SwitchProps = SwitchUnstyledProps & {
   label?: string;
+  labelClassName?: string;
 };
 
 export const Switch = (props: SwitchProps) => {
@@ -37,7 +38,11 @@ export const Switch = (props: SwitchProps) => {
       <SwitchUnstyled componentsProps={slotProps} {...props} />
 
       {props.label && (
-        <p className="text-light-grey-400 text-sm font-light">{props.label}</p>
+        <p
+          className={`text-light-grey-400 text-sm font-light ${props.labelClassName}`}
+        >
+          {props.label}
+        </p>
       )}
     </div>
   );
