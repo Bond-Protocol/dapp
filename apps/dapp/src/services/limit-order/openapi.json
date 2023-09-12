@@ -1,0 +1,1435 @@
+{
+  "openapi": "3.1.0",
+  "info": { "version": "0.0.1", "title": "Order Services API" },
+  "servers": [
+    { "description": "Public Server", "url": "http://localhost:8080" },
+    { "description": "Private Server", "url": "http://localhost:8081" }
+  ],
+  "paths": {
+    "/auth/nonce": {
+      "get": {
+        "summary": "Get a nonce for a sign in request.",
+        "operationId": "getNonce",
+        "responses": {
+          "200": {
+            "description": "Nonce has been created.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "500": { "description": "Error creating a nonce." }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "summary": "Signs the user in, creating and returning a JWT",
+        "operationId": "signIn",
+        "requestBody": {
+          "description": "The Sign in With Ethereum message and signature.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SigninData" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully signed in.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JWTPair" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - nonce is invalid or does not match nonce in signature."
+          },
+          "500": { "description": "Error creating a nonce." }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "summary": "Checks a provided refresh token, returns a new access token and refresh token.",
+        "operationId": "refreshAuth",
+        "requestBody": {
+          "description": "The user's current refresh token.",
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "string" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully refreshed tokens.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/JWTPair" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - refresh token provided is not valid."
+          },
+          "500": { "description": "Error refreshing tokens." }
+        }
+      }
+    },
+    "/auth/test": {
+      "get": {
+        "summary": "Tests whether signed in user can view address provided in params.",
+        "operationId": "testAuth",
+        "responses": {
+          "200": {
+            "description": "User is authorized to view the address.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "401": { "description": "Unauthorized." }
+        }
+      }
+    },
+    "/configs": {
+      "get": {
+        "summary": "Gets all Configs",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/ConfigArrayResponse" },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Configs or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/configs/chain/{chain_id}": {
+      "get": {
+        "summary": "Gets all Configs for the specified chain",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/ChainIdParameter" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/ConfigArrayResponse" },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Configs or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/configs/new": {
+      "post": {
+        "summary": "Creates a new Config",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "requestBody": {
+          "description": "A ConfigRequest object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ConfigRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created new Config.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Success message.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid ConfigRequest object."
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error creating new Config." }
+        }
+      }
+    },
+    "/configs/remove": {
+      "post": {
+        "summary": "Removes an existing Config",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "requestBody": {
+          "description": "A Config object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Config" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully removed Config.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Success message.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": { "description": "Bad Request - Config does not exist." },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error removing Config." }
+        }
+      }
+    },
+    "/configs/update/add_auctioneer/{auctioneer}": {
+      "post": {
+        "summary": "Adds an Auctioneer to an existing Config",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/AuctioneerAddressParameter" }
+        ],
+        "requestBody": {
+          "description": "A Config object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Config" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added Auctioneer to Config.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Success message.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Config does not exist or Auctioneer already exists in Config."
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error updating Config." }
+        }
+      }
+    },
+    "/configs/update/remove_auctioneer/{auctioneer}": {
+      "post": {
+        "summary": "Adds an Auctioneer to an existing Config",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/AuctioneerAddressParameter" }
+        ],
+        "requestBody": {
+          "description": "A Config object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Config" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully removed Auctioneer from Config.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Success message.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Config does not exist or Auctioneer does not exist in Config."
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error updating Config." }
+        }
+      }
+    },
+    "/external-services": {
+      "get": {
+        "summary": "Gets all ExternalServices",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ExternalServicesArrayResponse"
+          },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get ExternalServices or failed to serialize response."
+          }
+        }
+      },
+      "post": {
+        "summary": "Sets External Services for a chain",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "requestBody": {
+          "description": "An ExternalServices object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ExternalServices" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully set External Services.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Success message.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid ExternalServices object."
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error setting External Services." }
+        }
+      }
+    },
+    "/external-services/remove/{chain_id}": {
+      "post": {
+        "summary": "Removes External Services for a chain",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/ChainIdParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully removed External Services.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Success message.",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - External Services not set for specified chain."
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error removing External Services." }
+        }
+      }
+    },
+    "/external-services/chain/{chain_id}": {
+      "get": {
+        "summary": "Gets External Services for a chain",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/ChainIdParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "The ExternalServices object for the specified chain.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExternalServices" }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - External Services not set for specified chain."
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error getting External Services." }
+        }
+      }
+    },
+    "/fees/estimate": {
+      "get": {
+        "summary": "Estimates fees for an Order",
+        "parameters": [
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "requestBody": {
+          "description": "An Order object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Order" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The estimated fees for the Order",
+            "content": {
+              "application/json": { "schema": { "type": "integer" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Cannot estimate gas for specified chain."
+          },
+          "500": { "description": "Error estimating fees." }
+        }
+      }
+    },
+    "/fees/current/{order_digest}": {
+      "get": {
+        "summary": "Gets current fee estimate for an Order",
+        "parameters": [
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/OrderDigestParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "The current estimated fees for the Order",
+            "content": {
+              "application/json": { "schema": { "type": "integer" } }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Cannot estimate gas for specified chain."
+          },
+          "500": { "description": "Error estimating fees." }
+        }
+      }
+    },
+    "/markets/{market_id}": {
+      "get": {
+        "summary": "Retrieve market data.",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/MarketIdParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "The market ID.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Market" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Market or failed to serialize response."
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new market.",
+        "parameters": [
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/MarketIdParameter" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/MarketIdResponse" },
+          "400": { "description": "Bad Request - Market Config is not valid." },
+          "500": { "description": "Error creating market." }
+        }
+      }
+    },
+    "/markets/{market_id}/close": {
+      "post": {
+        "summary": "Close an existing market.",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/MarketIdParameter" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/MarketIdResponse" },
+          "400": { "description": "Bad Request - Failed to close market." },
+          "401": { "description": "Unauthorized." }
+        }
+      }
+    },
+    "/markets": {
+      "get": {
+        "summary": "Get all markets",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/MarketArrayResponse" },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Markets or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/markets/active": {
+      "get": {
+        "summary": "Get all markets marked as active",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/MarketArrayResponse" },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Markets or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/markets/live": {
+      "get": {
+        "summary": "Get all markets marked as live",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/MarketArrayResponse" },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Markets or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/markets/upcoming": {
+      "get": {
+        "summary": "Get all markets marked as upcoming",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": { "$ref": "#/components/responses/MarketArrayResponse" },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Markets or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/orders/new": {
+      "post": {
+        "summary": "Submit a new order.",
+        "parameters": [
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "operationId": "createOrder",
+        "requestBody": {
+          "description": "A signed OrderRequest.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/OrderRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully submitted OrderRequest.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": { "description": "Bad Request - OrderRequest is not valid." },
+          "500": { "description": "Error processing OrderRequest." }
+        }
+      }
+    },
+    "/orders/address/{account_address}": {
+      "get": {
+        "summary": "Get Orders for user address.",
+        "operationId": "getOrdersByAddress",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PublicAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/AccountAddressParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of Orders for the specified address.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Order" }
+                }
+              }
+            }
+          },
+          "500": { "description": "Error finding Orders." }
+        }
+      }
+    },
+    "/orders/address/{account_address}/active": {
+      "get": {
+        "summary": "Get active Orders for user address.",
+        "operationId": "getActiveOrdersByAddress",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PublicAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/AccountAddressParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of active Orders for the specified address.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Order" }
+                }
+              }
+            }
+          },
+          "500": { "description": "Error finding Orders." }
+        }
+      }
+    },
+    "/orders/{order_id}/filled": {
+      "post": {
+        "summary": "Sets an Order as filled.",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/OrderIdParameter" }
+        ],
+        "requestBody": {
+          "description": "The amount that has been filled.",
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "integer" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "The ID of the updated Order.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": { "description": "Failed to mark Order as filled." },
+          "401": { "description": "Unauthorized." }
+        }
+      }
+    },
+    "/orders/{order_id}": {
+      "get": {
+        "summary": "Gets the specified Order.",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/OrderIdParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested Order.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Order or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/orders/market/{market_id}": {
+      "get": {
+        "summary": "Get Orders for the specified Market.",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/MarketIdParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of Orders for the specified Market.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Order" }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Orders or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/orders/market/{market_id}/active": {
+      "get": {
+        "summary": "Get active Orders for the specified Market.",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/MarketIdParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of active Orders for the specified Market.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Order" }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Orders or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/permissions": {
+      "get": {
+        "summary": "Get all Permissions",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of all Permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Permission" }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Permissions or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/permissions/address/{address}": {
+      "get": {
+        "summary": "Get Permission for specified address",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/AddressParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission for specified address.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Permission" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Permission or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/permissions/key/{api_key}": {
+      "get": {
+        "summary": "Get Permission for specified API Key",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/ApiKeyParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission for specified API Key.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Permission" }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": {
+            "description": "Failed to get Permission or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/permissions/admins": {
+      "get": {
+        "summary": "Get addresses with admin permissions",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of addresses with admin permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "description": "Addresses with admin permissions.",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error finding admins." }
+        }
+      }
+    },
+    "/permissions/executors": {
+      "get": {
+        "summary": "Get addresses with executor permissions.",
+        "parameters": [
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of addresses with executor permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "description": "Addresses with executor permissions",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Error finding executors." }
+        }
+      }
+    },
+    "/permissions/market_trackers": {
+      "get": {
+        "summary": "Get addresses with Market Tracker permissions.",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": {
+            "description": "An array of addresses with Market Tracker permissions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "description": "Addresses with Market Tracker permissions",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Error finding Market Tracker." }
+        }
+      }
+    },
+    "/permissions/new": {
+      "post": {
+        "summary": "Create a new Permission",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "requestBody": {
+          "description": "A PermissionRequest object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PermissionRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "An api key giving the requested Permission.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": {
+            "description": "Role is invalid or address already has a role"
+          },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Failed to create Permission." }
+        }
+      }
+    },
+    "/permissions/remove": {
+      "post": {
+        "summary": "Remove an existing Permission",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "requestBody": {
+          "description": "A PermissionRequest object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PermissionRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A success message.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": { "description": "Address does not have a role" },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Failed to change Permission." }
+        }
+      }
+    },
+    "/permissions/change": {
+      "post": {
+        "summary": "Update an existing Permission",
+        "parameters": [
+          { "$ref": "#/components/securitySchemes/PrivateAuthorizationHeader" },
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "requestBody": {
+          "description": "The Address to update Permissions for",
+          "required": true,
+          "content": { "application/json": { "schema": { "type": "string" } } }
+        },
+        "responses": {
+          "200": {
+            "description": "A success message.",
+            "content": {
+              "application/json": { "schema": { "type": "string" } }
+            }
+          },
+          "400": { "description": "Address does not have a role" },
+          "401": { "description": "Unauthorized." },
+          "500": { "description": "Failed to remove Permission." }
+        }
+      }
+    },
+    "/quote_tokens": {
+      "get": {
+        "summary": "Returns all quote tokens on the chain specified in the X-Chain_Id header",
+        "parameters": [
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of quote token addresses.",
+            "content": { "application/json": { "schema": { "type": "array" } } }
+          },
+          "500": {
+            "description": "Failed to get quote tokens or failed to serialize response."
+          }
+        }
+      }
+    },
+    "/quote_tokens/{address}": {
+      "get": {
+        "summary": "Checks whether the specified quote token is approved.",
+        "parameters": [
+          { "$ref": "#/components/headers/X-Chain-Id" },
+          { "$ref": "#/components/headers/X-Aggregator" },
+          { "$ref": "#/components/headers/X-Settlement" },
+          { "$ref": "#/components/parameters/AddressParameter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether or not the quote token is approved.",
+            "content": {
+              "application/json": { "schema": { "type": "boolean" } }
+            }
+          },
+          "500": {
+            "description": "Failed to get approval status or failed to serialize response."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Config": {
+        "description": "An API service Config object",
+        "type": "object",
+        "properties": {
+          "chain_id": {
+            "description": "The Config's chain_id",
+            "type": "integer"
+          },
+          "aggregator": {
+            "description": "The Config's Aggregator contract address",
+            "type": "string"
+          },
+          "settlement": {
+            "description": "The Config's Settlement contract address",
+            "type": "string"
+          }
+        }
+      },
+      "ConfigRequest": {
+        "description": "Parameters for a request to create a new Config",
+        "type": "object",
+        "properties": {
+          "chain_id": {
+            "description": "The Config's chain_id",
+            "type": "integer"
+          },
+          "aggregator": {
+            "description": "The Config's Aggregator contract address",
+            "type": "string"
+          },
+          "settlement": {
+            "description": "The Config's Settlement contract address",
+            "type": "string"
+          },
+          "auctioneers": {
+            "description": "A list of the Config's Auctioneer contract addresses",
+            "type": "array"
+          }
+        }
+      },
+      "ExternalServices": {
+        "description": "External API configuration",
+        "type": "object",
+        "properties": {
+          "chain_id": {
+            "description": "The chain_id for the services",
+            "type": "integer"
+          },
+          "rpc_url": { "description": "An RPC endpoint", "type": "string" },
+          "owlracle_abbr": {
+            "description": "Chain name abbreviation used by Owlracle API",
+            "type": "string"
+          },
+          "hist_gas_price": {
+            "description": "Historical gas price",
+            "type": "integer"
+          },
+          "gas_price_last_updated": {
+            "description": "Timestamp of last gas price update",
+            "type": "integer"
+          }
+        }
+      },
+      "JWTPair": {
+        "description": "A JSON object containing two string fields, access_token and refresh_token.",
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "the access token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "the refresh token"
+          }
+        }
+      },
+      "SigninData": {
+        "description": "A JSON object containing two string fields, a Sign in With Ethereum message and signature. The nonce found in the decoded signature should match the nonce in the message."
+      },
+      "OrderRequest": {
+        "description": "Parameters for an order, including a signature.",
+        "type": "object",
+        "properties": {
+          "market_id": {
+            "description": "The id of the market an order is being placed for.",
+            "type": "string"
+          },
+          "recipient": {
+            "description": "The address which will receive the purchased tokens.",
+            "type": "string"
+          },
+          "referrer": {
+            "description": "The address which will receive the referral fee.",
+            "type": "string"
+          },
+          "amount": {
+            "description": "The amount of tokens to purchase.",
+            "type": "string"
+          },
+          "min_amount_out": {
+            "description": "The minimum number of tokens the recipient is willing to receive.",
+            "type": "string"
+          },
+          "max_fee": {
+            "description": "The maximum fee the recipient will pay.",
+            "type": "string"
+          },
+          "submitted": {
+            "description": "Timestamp at which the order was submitted.",
+            "type": "string"
+          },
+          "deadline": {
+            "description": "Timestamp at which the order expires.",
+            "type": "string"
+          },
+          "user": {
+            "description": "Address of the user who submitted the order.",
+            "type": "string"
+          },
+          "signature": {
+            "description": "Signature for a tx containing the same order data.",
+            "type": "string"
+          }
+        }
+      },
+      "Order": {
+        "description": "Details of an existing order.",
+        "type": "object",
+        "properties": {
+          "market_id": {
+            "description": "The id of the market an order is being placed for.",
+            "type": "string"
+          },
+          "recipient": {
+            "description": "The address which will receive the purchased tokens.",
+            "type": "string"
+          },
+          "referrer": {
+            "description": "The address which will receive the referral fee.",
+            "type": "string"
+          },
+          "amount": {
+            "description": "The amount of tokens to purchase.",
+            "type": "string"
+          },
+          "min_amount_out": {
+            "description": "The minimum number of tokens the recipient is willing to receive.",
+            "type": "string"
+          },
+          "max_fee": {
+            "description": "The maximum fee the recipient will pay.",
+            "type": "string"
+          },
+          "submitted": {
+            "description": "Timestamp at which the order was submitted.",
+            "type": "string"
+          },
+          "deadline": {
+            "description": "Timestamp at which the order expires.",
+            "type": "string"
+          },
+          "user": {
+            "description": "Address of the user who submitted the order.",
+            "type": "string"
+          }
+        }
+      },
+      "Market": {
+        "description": "Record of a Market.",
+        "type": "object",
+        "properties": {
+          "market_id": {
+            "description": "The ID of the Market.",
+            "type": "integer"
+          },
+          "chain_id": {
+            "description": "The ID of the chain on which the Market is running.",
+            "type": "integer"
+          },
+          "aggregator": {
+            "description": "The address of the Market's Aggregator contract.",
+            "type": "string"
+          },
+          "active": {
+            "description": "Whether or not the Market is currently active.",
+            "type": "boolean"
+          },
+          "start": {
+            "description": "Timestamp for the Market start.",
+            "type": "integer"
+          },
+          "conclusion": {
+            "description": "Timestamp for the Market end.",
+            "type": "integer"
+          },
+          "payout_token": {
+            "description": "The address of the Market's Payout Token.",
+            "type": "string"
+          },
+          "quote_token": {
+            "description": "The address of the Market's Quote Token.",
+            "type": "string"
+          }
+        }
+      },
+      "Permission": {
+        "description": "A User with permission to use the private api",
+        "type": "object",
+        "properties": {
+          "api_key": {
+            "description": "The API key for this Permission",
+            "type": "string"
+          },
+          "address": {
+            "description": "The address of the user with the Permission",
+            "type": "string"
+          },
+          "role": { "description": "The Role the user holds", "type": "string" }
+        }
+      },
+      "PermissionRequest": {
+        "description": "Data required to create a new Permission",
+        "type": "object",
+        "properties": {
+          "address": {
+            "description": "The address to be given a Permission",
+            "type": "string"
+          },
+          "role": {
+            "description": "The role to be given to the specified Address",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "PublicAuthorizationHeader": {
+        "name": "Authorization",
+        "description": "JWT Bearer Token",
+        "type": "apiKey",
+        "in": "header"
+      },
+      "PrivateAuthorizationHeader": {
+        "name": "Authorization",
+        "description": "API Key",
+        "type": "apiKey",
+        "in": "header"
+      }
+    },
+    "headers": {
+      "X-Chain-Id": {
+        "description": "The chain id to check",
+        "schema": { "type": "integer" }
+      },
+      "X-Aggregator": {
+        "description": "The address of the aggregator contract",
+        "schema": { "type": "string" }
+      },
+      "X-Settlement": {
+        "description": "The address of the settlement contract",
+        "schema": { "type": "string" }
+      }
+    },
+    "parameters": {
+      "AccountAddressParameter": {
+        "in": "path",
+        "description": "The address of the Account being queried",
+        "name": "account_address",
+        "schema": { "type": "string" },
+        "required": true
+      },
+      "AddressParameter": {
+        "in": "path",
+        "description": "The address being queried",
+        "name": "address",
+        "schema": { "type": "string" },
+        "required": true
+      },
+      "AuctioneerAddressParameter": {
+        "in": "path",
+        "description": "The address of an Auctioneer contract to add",
+        "name": "auctioneer",
+        "schema": { "type": "string" },
+        "required": true
+      },
+      "ApiKeyParameter": {
+        "in": "path",
+        "description": "The API key being queried",
+        "name": "api_key",
+        "schema": { "type": "string" },
+        "required": true
+      },
+      "ChainIdParameter": {
+        "in": "path",
+        "description": "The ID of a chain",
+        "name": "chain_id",
+        "schema": { "type": "integer" },
+        "required": true
+      },
+      "MarketIdParameter": {
+        "in": "path",
+        "description": "The ID of a market.",
+        "name": "market_id",
+        "schema": { "type": "integer" },
+        "required": true
+      },
+      "OrderIdParameter": {
+        "in": "path",
+        "description": "The ID of the Order being queried",
+        "name": "account_address",
+        "schema": { "type": "integer" },
+        "required": true
+      },
+      "OrderDigestParameter": {
+        "in": "path",
+        "description": "A digest of an Order",
+        "name": "order_digest",
+        "schema": { "type": "string" },
+        "required": true
+      }
+    },
+    "responses": {
+      "ConfigArrayResponse": {
+        "description": "An array containing Config records.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/Config" }
+            }
+          }
+        }
+      },
+      "ExternalServicesArrayResponse": {
+        "description": "An array containing ExternalServices records.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/ExternalServices" }
+            }
+          }
+        }
+      },
+      "MarketIdResponse": {
+        "description": "The ID of a market.",
+        "content": { "application/json": { "schema": { "type": "integer" } } }
+      },
+      "MarketArrayResponse": {
+        "description": "An array containing Market records.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/components/schemas/Market" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
