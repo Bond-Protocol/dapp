@@ -1,23 +1,16 @@
 import OpenAPIClient from "openapi-axios-client";
 import definition from "src/openapi.json";
-import type { Client as OrderClient } from "src/types/openapi";
+import { Order, Client as OrderClient } from "src/types/openapi";
+
+//@ts-ignore
+const client = new OpenAPIClient({ definition, strict: true });
+client.init<OrderClient>();
 
 export class ApiClient {
-  private client: OpenAPIClient;
   private api!: OrderClient;
 
   constructor() {
-    //@ts-ignore
-    this.client = new OpenAPIClient({ definition, strict: true });
-    this.client.init<OrderClient>();
-
-    this.client.getClient<OrderClient>().then((api) => {
-      this.api = api;
-    });
-  }
-
-  async init() {
-    this.api = await this.client.getClient<OrderClient>();
+    client.getClient<OrderClient>().then((api) => (this.api = api));
   }
 
   async getAuthNonce() {
@@ -41,8 +34,50 @@ export class ApiClient {
     );
   }
 
-  async testToken({ address, chainId }: { address: string; chainId: number }) {
-    return this.api.testAuth({});
+  async testToken({
+    address,
+    chainId,
+    token,
+  }: {
+    address: string;
+    chainId: number;
+    token: string;
+  }) {
+    return this.api.testAuth(
+      { address },
+      null,
+      this.makeHeaders({ token, chainId })
+    );
+  }
+
+  async createOrder({
+    order,
+    chainId,
+  }: {
+    chainId: number;
+    order: Required<Order>;
+  }) {
+    return this.api.createOrder(
+      null,
+      order,
+      this.makeHeaders({ chainId, isPost: true })
+    );
+  }
+
+  async listByAddress({
+    chainId,
+    address,
+    token,
+  }: {
+    chainId: number;
+    token: string;
+    address: string;
+  }) {
+    return this.api.getOrdersByAddress(
+      { address },
+      null,
+      this.makeHeaders({ chainId, token })
+    );
   }
 
   private makeHeaders({

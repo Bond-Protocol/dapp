@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
-import orderService from "./order-service";
+import orderService, { OrderConfig } from "./order-service";
 
 const getAccessToken = () => sessionStorage.getItem("order_access_token");
 const getRefreshToken = () => sessionStorage.getItem("order_refresh_token");
@@ -30,10 +30,23 @@ export const useOrderApi = () => {
     }
   };
 
-  const refreshAccessToken = async () => {};
+  const createOrder = async (order: OrderConfig) => {
+    const token = getAccessToken();
+    if (!chain || !address || !token) return;
+
+    const response = await orderService.createOrder({
+      chainId: chain?.id,
+      address,
+      token,
+      ...order,
+    });
+
+    console.log({ response });
+  };
 
   return {
     signIn,
+    createOrder,
     getAccessToken,
     getRefreshToken,
   };
