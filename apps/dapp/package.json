@@ -17,8 +17,9 @@
     "codegen": "graphql-codegen --config codegen.ts",
     "storybook": "storybook dev -p 6007 --no-open --quiet",
     "build-storybook": "storybook build",
-    "openapi:codegen": "npx openapi-client-axios-typegen ./src/services/limit-order/api-definition.json > src/types/openapi.d.ts",
-    "openapi:make-file": "node ./scripts/make-openapi-config.js"
+    "openapi:codegen": "npx openapi-client-axios-typegen ./src/openapi.json > src/types/openapi.d.ts",
+    "openapi:make-file": "node ./scripts/make-openapi-config.js",
+    "openapi": "yarn openapi:make-file && yarn openapi:codegen"
   },
   "dependencies": {
     "@bond-protocol/contract-library": "*",

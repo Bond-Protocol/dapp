@@ -81,7 +81,7 @@ paths:
   /configs:
     get:
       summary: Gets all Configs
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -96,11 +96,12 @@ paths:
   /configs/chain/{chain_id}:
     get:
       summary: Gets all Configs for the specified chain
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/ChainIdParameter"
       responses:
         200:
@@ -112,7 +113,7 @@ paths:
   /configs/new:
     post:
       summary: Creates a new Config
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -141,7 +142,7 @@ paths:
   /configs/remove:
     post:
       summary: Removes an existing Config
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -170,11 +171,12 @@ paths:
   /configs/update/add_auctioneer/{auctioneer}:
     post:
       summary: Adds an Auctioneer to an existing Config
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/AuctioneerAddressParameter"
       requestBody:
         description: A Config object.
@@ -200,11 +202,12 @@ paths:
   /configs/update/remove_auctioneer/{auctioneer}:
     post:
       summary: Adds an Auctioneer to an existing Config
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/AuctioneerAddressParameter"
       requestBody:
         description: A Config object.
@@ -230,7 +233,7 @@ paths:
   /external-services:
     get:
       summary: Gets all ExternalServices
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -244,7 +247,7 @@ paths:
           description: Failed to get ExternalServices or failed to serialize response.
     post:
       summary: Sets External Services for a chain
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -273,11 +276,12 @@ paths:
   /external-services/remove/{chain_id}:
     post:
       summary: Removes External Services for a chain
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/ChainIdParameter"
       responses:
         200:
@@ -296,11 +300,12 @@ paths:
   /external-services/chain/{chain_id}:
     get:
       summary: Gets External Services for a chain
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/ChainIdParameter"
       responses:
         200:
@@ -318,7 +323,7 @@ paths:
   /fees/estimate:
     get:
       summary: Estimates fees for an Order
-      parameters:
+      headers:
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
@@ -343,10 +348,11 @@ paths:
   /fees/current/{order_digest}:
     get:
       summary: Gets current fee estimate for an Order
-      parameters:
+      headers:
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/OrderDigestParameter"
       responses:
         200:
@@ -362,11 +368,12 @@ paths:
   /markets/{market_id}:
     get:
       summary: Retrieve market data.
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/MarketIdParameter"
       responses:
         200:
@@ -381,10 +388,11 @@ paths:
           description: Failed to get Market or failed to serialize response.
     post:
       summary: Create a new market.
-      parameters:
+      headers:
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/MarketIdParameter"
       responses:
         200:
@@ -396,11 +404,12 @@ paths:
   /markets/{market_id}/close:
     post:
       summary: Close an existing market.
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/MarketIdParameter"
       responses:
         200:
@@ -412,7 +421,7 @@ paths:
   /markets:
     get:
       summary: Get all markets
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -427,7 +436,7 @@ paths:
   /markets/active:
     get:
       summary: Get all markets marked as active
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -442,7 +451,7 @@ paths:
   /markets/live:
     get:
       summary: Get all markets marked as live
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -457,7 +466,7 @@ paths:
   /markets/upcoming:
     get:
       summary: Get all markets marked as upcoming
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -472,11 +481,11 @@ paths:
   /orders/new:
     post:
       summary: Submit a new order.
-      parameters:
+      operationId: createOrder
+      headers:
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
-      operationId: createOrder
       requestBody:
         description: A signed OrderRequest.
         required: true
@@ -499,60 +508,11 @@ paths:
     get:
       summary: Get Orders for user address.
       operationId: getOrdersByAddress
-      parameters:
-        - $ref: "#/components/securitySchemes/PublicAuthorizationHeader"
-        - $ref: "#/components/headers/X-Chain-Id"
-        - $ref: "#/components/headers/X-Aggregator"
-        - $ref: "#/components/headers/X-Settlement"
-        - $ref: "#/components/parameters/AccountAddressParameter"
-      responses:
-        200:
-          description: An array of Orders for the specified address.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Order"
-        500:
-          description: Error finding Orders.
-  /orders/address/{account_address}/active:
-    get:
-      summary: Get active Orders for user address.
-      operationId: getActiveOrdersByAddress
-      parameters:
-        - $ref: "#/components/securitySchemes/PublicAuthorizationHeader"
-        - $ref: "#/components/headers/X-Chain-Id"
-        - $ref: "#/components/headers/X-Aggregator"
-        - $ref: "#/components/headers/X-Settlement"
-        - $ref: "#/components/parameters/AccountAddressParameter"
-      responses:
-        200:
-          description: An array of active Orders for the specified address.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Order"
-        500:
-          description: Error finding Orders.
-  /orders/{order_id}/filled:
-    post:
-      summary: Sets an Order as filled.
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
-        - $ref: "#/components/parameters/OrderIdParameter"
-      requestBody:
-        description: The amount that has been filled.
-        required: true
-        content:
-          application/json:
-            schema:
-              type: integer
       responses:
         200:
           description: The ID of the updated Order.
@@ -567,11 +527,12 @@ paths:
   /orders/{order_id}:
     get:
       summary: Gets the specified Order.
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/OrderIdParameter"
       responses:
         200:
@@ -587,11 +548,13 @@ paths:
   /orders/market/{market_id}:
     get:
       summary: Get Orders for the specified Market.
-      parameters:
+
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/MarketIdParameter"
       responses:
         200:
@@ -609,11 +572,13 @@ paths:
   /orders/market/{market_id}/active:
     get:
       summary: Get active Orders for the specified Market.
-      parameters:
+      operationId: getActiveOrdersByMarket
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/MarketIdParameter"
       responses:
         200:
@@ -631,7 +596,7 @@ paths:
   /permissions:
     get:
       summary: Get all Permissions
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -652,11 +617,12 @@ paths:
   /permissions/address/{address}:
     get:
       summary: Get Permission for specified address
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/AddressParameter"
       responses:
         200:
@@ -672,11 +638,12 @@ paths:
   /permissions/key/{api_key}:
     get:
       summary: Get Permission for specified API Key
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/ApiKeyParameter"
       responses:
         200:
@@ -692,7 +659,7 @@ paths:
   /permissions/admins:
     get:
       summary: Get addresses with admin permissions
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -714,7 +681,7 @@ paths:
   /permissions/executors:
     get:
       summary: Get addresses with executor permissions.
-      parameters:
+      headers:
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
@@ -733,7 +700,7 @@ paths:
   /permissions/market_trackers:
     get:
       summary: Get addresses with Market Tracker permissions.
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -755,7 +722,7 @@ paths:
   /permissions/new:
     post:
       summary: Create a new Permission
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -783,7 +750,7 @@ paths:
   /permissions/remove:
     post:
       summary: Remove an existing Permission
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -811,7 +778,7 @@ paths:
   /permissions/change:
     post:
       summary: Update an existing Permission
-      parameters:
+      headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
@@ -839,7 +806,7 @@ paths:
   /quote_tokens:
     get:
       summary: Returns all quote tokens on the chain specified in the X-Chain_Id header
-      parameters:
+      headers:
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
@@ -855,10 +822,11 @@ paths:
   /quote_tokens/{address}:
     get:
       summary: Checks whether the specified quote token is approved.
-      parameters:
+      headers:
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
+      parameters:
         - $ref: "#/components/parameters/AddressParameter"
       responses:
         200:
