@@ -112,6 +112,9 @@ export const dynamicFormatter = (value: string | number, currency = true) => {
 export const trimToken = (value: any) =>
   trim(value, calculateTrimDigits(value));
 
+export const amount = (value: number | string) =>
+  value < 1000 ? trimToken(value) : longFormatter.format(Number(value));
+
 export const trimToLengthSymbol = (num: number) => {
   if (num < 1) return num;
   const symbols = ["", "k", "M", "B", "T", "Q", "GMI"]; // array of symbols to use for each magnitude of number
@@ -132,4 +135,5 @@ export const formatCurrency = {
   usdFullFormatter,
   trimToLengthSymbol,
   trimToken,
+  amount,
 };

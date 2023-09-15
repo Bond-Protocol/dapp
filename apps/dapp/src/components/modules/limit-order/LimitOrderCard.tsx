@@ -4,6 +4,7 @@ import {
 } from "@bond-protocol/contract-library";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { BondButton } from "components/organisms/BondButton";
+import { useState } from "react";
 import defillama from "services/defillama";
 import {
   InputCard,
@@ -16,18 +17,28 @@ import {
   formatCurrency,
 } from "ui";
 import { useAccount } from "wagmi";
+import { useLimitOrderForMarket } from "./limit-order-context";
 import { LimitOrderConfirmationDialog } from "./LimitOrderConfirmationDialog";
-import { useLimitOrder } from "./use-limit-order";
-
-const options = [
-  { label: "1 day", id: 1 },
-  { label: "3 days", id: 3 },
-  { label: "7 days", id: 7 },
-];
 
 export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
+  const options = [
+    { label: "1 day", id: 1 },
+    { label: "3 days", id: 3 },
+    { label: "7 days", id: 7 },
+  ].filter(
+    (
+      o // remove dates that after market end date
+    ) =>
+      !dateMath.isBefore(
+        new Date(props.market.conclusion! * 1000),
+        dateMath.addDays(new Date(), o.id)
+      )
+  );
+
   const account = useAccount();
-  const { allowance, ...order } = useLimitOrder(props.market);
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  const { allowance, ...order } = useLimitOrderForMarket();
 
   return (
     <div className="p-4">
@@ -44,18 +55,19 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           </div>
           <Select
             options={options}
-            //@ts-ignore
-            defaultValue={options[0].id}
-            onChange={(_e, value) => order.setExpiry(Number(value))}
+            //TODO: afx -> needs improving, have a better way to handle expiry
+            defaultValue={(options[0]?.id ?? 1).toString()}
+            onChange={(_e: any, value: string | null) =>
+              order.setExpiry(Number(value))
+            }
           />
         </div>
       </div>
       <InputCard
-        tokenIcon={props.market.quoteToken.logoURI}
         className="mt-4"
+        tokenIcon={props.market.quoteToken.logoURI}
         market={props.market}
-        value={order.amount}
-        //@ts-ignore
+        value={order.amount?.toString()}
         onChange={order.setAmount}
       />
       <ActionInfoList
@@ -69,44 +81,34 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       />
       <TransactionWizard
         titles={{ standby: "Limit Order Confirmation" }}
-        open={true}
+        open={isConfirming}
         chainId={props.market.chainId}
-        //@ts-ignore
-        onSubmit={() => {
-          console.log("submit");
-        }}
-        onClose={() => {}}
-        InitialDialog={(args) => (
-          <LimitOrderConfirmationDialog
-            quoteLogo={props.market.quoteToken.logoURI}
-            payoutLogo={props.market.payoutToken.logoURI}
-            payout={"1000"}
-            amountIn={`0.01 ${props.market.quoteToken.symbol}/${props.market.payoutToken.symbol}`}
-            vestingTime={"7 D"}
-            expiry={new Date()}
-            market={props.market}
-          />
+        onSubmit={() => order.createOrder()}
+        onClose={() => setIsConfirming(false)}
+        InitialDialog={(args: any) => (
+          <LimitOrderConfirmationDialog {...args} market={props.market} />
         )}
       />
-      {/* <BondButton */}
-      {/*   showConnect={!account.isConnected} */}{" "}
-      {/*   showPurchaseLink={!allowance.hasSufficientBalance} */}
-      {/*   chainId={props.market.chainId} */}
-      {/*   quoteTokenSymbol={props.market.quoteToken.symbol} */}
-      {/*   purchaseLink={defillama.getSwapURL( */}
-      {/*     props.market.chainId, */}
-      {/*     props.market.quoteToken.address */}
-      {/*   )} */}
-      {/* > */}
-      {/*   <Button */}
-      {/*     className="mt-4 w-full" */}
-      {/*     disabled={!allowance.hasSufficientBalance} */}
-      {/*   > */}
-      {/*     {!allowance.hasSufficientAllowance && allowance.hasSufficientBalance */}
-      {/*       ? "APPROVE" */}
-      {/*       : "PLACE ORDER"} */}
-      {/*   </Button> */}
-      {/* </BondButton> */}
+      <BondButton
+        showConnect={!account.isConnected}
+        showPurchaseLink={!allowance.hasSufficientBalance}
+        chainId={props.market.chainId}
+        quoteTokenSymbol={props.market.quoteToken.symbol}
+        purchaseLink={defillama.getSwapURL(
+          props.market.chainId,
+          props.market.quoteToken.address
+        )}
+      >
+        <Button
+          className="mt-4 w-full"
+          //disabled={!allowance.hasSufficientBalance}
+          onClick={() => setIsConfirming(true)}
+        >
+          {!allowance.hasSufficientAllowance && allowance.hasSufficientBalance
+            ? "APPROVE"
+            : "PLACE ORDER"}
+        </Button>
+      </BondButton>
     </div>
   );
 };

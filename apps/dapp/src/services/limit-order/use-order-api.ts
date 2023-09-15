@@ -23,6 +23,7 @@ export const useOrderApi = () => {
     try {
       const response = await orderService.signIn(chainId, address);
 
+      console.log({ response });
       setAccessToken(response?.data.access_token!);
       setRefreshToken(response?.data.refresh_token!);
     } catch (e) {
@@ -31,8 +32,11 @@ export const useOrderApi = () => {
   };
 
   const createOrder = async (order: OrderConfig) => {
+    console.log("call createOrder");
     const token = getAccessToken();
+    console.log({ token, chain, address });
     if (!chain || !address || !token) return;
+    console.log({ order });
 
     const response = await orderService.createOrder({
       chainId: chain?.id,

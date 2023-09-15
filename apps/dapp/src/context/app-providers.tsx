@@ -7,22 +7,25 @@ import { MarketProvider } from "./market-context";
 import { TokenProvider } from "./token-context";
 import { TokenlistProvider } from "./tokenlist-context";
 import { DashboardProvider } from "context/dashboard-context";
+import { AuthProvider } from "./auth-provider";
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <ReactQueryProvider>
       <EvmProvider>
-        <SubgraphProvider>
-          <TokenProvider>
-            <MarketProvider>
-              <DashboardProvider>
-                <TokenlistProvider>
-                  <Router>{children}</Router>
-                </TokenlistProvider>
-              </DashboardProvider>
-            </MarketProvider>
-          </TokenProvider>
-        </SubgraphProvider>
+        <AuthProvider>
+          <SubgraphProvider>
+            <TokenProvider>
+              <MarketProvider>
+                <DashboardProvider>
+                  <TokenlistProvider>
+                    <Router>{children}</Router>
+                  </TokenlistProvider>
+                </DashboardProvider>
+              </MarketProvider>
+            </TokenProvider>
+          </SubgraphProvider>
+        </AuthProvider>
       </EvmProvider>
     </ReactQueryProvider>
   );

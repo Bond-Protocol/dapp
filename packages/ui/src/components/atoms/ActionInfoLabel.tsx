@@ -67,6 +67,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
             href={props.link}
             className={props.linkClassName}
           >
+            {/*@ts-ignore*/}
             {props.value}
           </Link>
         )}

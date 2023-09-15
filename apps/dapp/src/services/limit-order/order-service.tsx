@@ -60,14 +60,13 @@ const createOrder = async ({
   token,
   ...rest
 }: CreateOrderArgs) => {
-  const test = await orderApi.testToken({ chainId, address, token });
-  console.log({ test });
+  //const test = await orderApi.testToken({ chainId, address, token });
+  //console.log({ test });
 
   const result = await orderApi.createOrder({
     chainId,
     order: generateOrder(rest),
   });
-  console.log({ result });
 };
 
 const listAllOrders = async ({ chainId, token, address }: BasicOrderArgs) => {

@@ -21,7 +21,7 @@ paths:
                 type: string
         500:
           description: Error creating a nonce.
-  /auth/signin:
+  /auth/sign_in:
     post:
       summary: Signs the user in, creating and returning a JWT
       operationId: signIn
@@ -409,7 +409,7 @@ paths:
         - $ref: "#/components/headers/X-Chain-Id"
         - $ref: "#/components/headers/X-Aggregator"
         - $ref: "#/components/headers/X-Settlement"
-      parameters:
+      parameters: 
         - $ref: "#/components/parameters/MarketIdParameter"
       responses:
         200:
@@ -548,7 +548,6 @@ paths:
   /orders/market/{market_id}:
     get:
       summary: Get Orders for the specified Market.
-
       headers:
         - $ref: "#/components/securitySchemes/PrivateAuthorizationHeader"
         - $ref: "#/components/headers/X-Chain-Id"
