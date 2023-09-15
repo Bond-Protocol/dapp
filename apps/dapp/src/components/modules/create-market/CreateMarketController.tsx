@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAccount, useNetwork, useSigner } from "wagmi";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import * as contractLib from "@bond-protocol/contract-library";
 import {
-  checkOraclePairValidity,
   getAddressesForType,
   getBlockExplorer,
   getOracleDecimals,
@@ -13,7 +12,6 @@ import { CreateMarketAction, CreateMarketState, useCreateMarket } from "ui";
 import { doPriceMath } from "./helpers";
 import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
-import { useTokenlists } from "context/tokenlist-context";
 import { usePurchaseBond } from "hooks";
 import { CreateMarketScreen } from "./CreateMarketScreen";
 import { useTokenlistLoader } from "services/use-tokenlist-loader-v2";
@@ -71,7 +69,7 @@ export const CreateMarketController = () => {
   const [creationHash, setCreationHash] = useState("");
   const [created, setCreated] = useState(false);
   const [isOraclePairValid, setIsOraclePairValid] = useState(false);
-  const [oraclePrice, setOraclePrice] = useState<BigNumber>();
+  const [oraclePrice, setOraclePrice] = useState<string>();
   const [oracleMessage, setOracleMessage] = useState("");
 
   const blockExplorer = getBlockExplorer(
@@ -100,20 +98,15 @@ export const CreateMarketController = () => {
 
     setOracleMessage("");
     setIsOraclePairValid(false);
+    if (!state.oracleAddress) return;
 
     async function checkOracle() {
       if (!network?.chain?.id) return;
 
       try {
-        const valid = await checkOraclePairValidity(
-          // @ts-ignore
-          state.oracleAddress,
-          state.payoutToken.address,
-          state.quoteToken.address,
-          providers[network?.chain?.id]
-        );
+        const valid = ethers.utils.isAddress(state.oracleAddress!);
         setIsOraclePairValid(valid);
-        if (!valid) setOracleMessage("Unsupported Token Pair!");
+        if (!valid) setOracleMessage("Invalid Oracle Address");
       } catch (e) {
         setIsOraclePairValid(false);
         setOracleMessage("Invalid Oracle Address!");
@@ -127,45 +120,50 @@ export const CreateMarketController = () => {
     if (!isOraclePairValid) {
       //@ts-ignore
       setOraclePrice(0);
-      setOracleMessage("");
+      setOracleMessage(!state.oracleAddress ? "" : "Invalid Oracle Address");
       return;
     }
 
     async function checkOracle() {
-      const price = await getOraclePrice(
-        // @ts-ignore
-        state.oracleAddress,
-        state.payoutToken.address,
-        state.quoteToken.address,
-        // @ts-ignore
-        providers[network?.chain?.id]
-      );
+      try {
+        const price = await getOraclePrice(
+          // @ts-ignore
+          state.oracleAddress,
+          state.payoutToken.address,
+          state.quoteToken.address,
+          // @ts-ignore
+          providers[network?.chain?.id]
+        );
 
-      const decimals = await getOracleDecimals(
-        // @ts-ignore
-        state.oracleAddress,
-        state.payoutToken.address,
-        state.quoteToken.address,
-        // @ts-ignore
-        providers[network?.chain?.id]
-      );
-      const adjustedPrice = ethers.utils.formatUnits(price, decimals);
+        const decimals = await getOracleDecimals(
+          // @ts-ignore
+          state.oracleAddress,
+          state.payoutToken.address,
+          state.quoteToken.address,
+          // @ts-ignore
+          providers[network?.chain?.id]
+        );
 
-      dispatch({
-        type: CreateMarketAction.UPDATE_PRICE_RATES,
-        value: {
-          priceModel: state.priceModel,
-          rate: adjustedPrice.toString(),
-        },
-      });
+        const adjustedPrice = ethers.utils.formatUnits(price, decimals);
 
-      // @ts-ignore
-      setOraclePrice(adjustedPrice);
-      setOracleMessage("Using Oracle Price!");
+        dispatch({
+          type: CreateMarketAction.UPDATE_PRICE_RATES,
+          value: {
+            priceModel: state.priceModel,
+            rate: adjustedPrice.toString(),
+          },
+        });
+        setOraclePrice(adjustedPrice);
+        setOracleMessage("Using Oracle price \\o/");
+      } catch (e) {
+        setIsOraclePairValid(false);
+        setOracleMessage("Failed to retrieve price or decimals from oracle");
+        console.error(e);
+      }
     }
 
     checkOracle();
-  }, [isOraclePairValid]);
+  }, [isOraclePairValid, state.oracleAddress]);
 
   const fetchAllowance = async (state: CreateMarketState) => {
     if (!state.payoutToken.address) return;

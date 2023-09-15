@@ -15,7 +15,7 @@ import {
 } from '../contract-helper';
 import {
   Auctioneer__factory,
-  BondChainlinkOracle__factory,
+  IBondOracle__factory,
   CalculatedMarket,
   ERC1155__factory,
   FixedExpirationTeller__factory,
@@ -212,21 +212,23 @@ export async function changeApproval(
   }
 }
 
-export async function checkOraclePairValidity(
-  oracleAddress: string,
-  payoutTokenAddress: string,
-  quoteTokenAddress: string,
-  provider: Provider,
-): Promise<boolean> {
-  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+// export async function checkOraclePairValidity(
+//   oracleAddress: string,
+//   payoutTokenAddress: string,
+//   quoteTokenAddress: string,
+//   provider: Provider,
+// ): Promise<boolean> {
+//   console.log('first');
+//   const oracle = IBondOracle__factory.connect(oracleAddress, provider);
+//   console.log('here');
 
-  try {
-    return oracle.supportedPairs(payoutTokenAddress, quoteTokenAddress, {});
-  } catch (e) {
-    console.log(e);
-    throw e;
-  }
-}
+//   try {
+//     return oracle.supportedPairs(payoutTokenAddress, quoteTokenAddress, {});
+//   } catch (e) {
+//     console.log(e);
+//     throw e;
+//   }
+// }
 
 export async function getOraclePrice(
   oracleAddress: string,
@@ -234,7 +236,7 @@ export async function getOraclePrice(
   quoteTokenAddress: string,
   provider: Provider,
 ): Promise<BigNumberish> {
-  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+  const oracle = IBondOracle__factory.connect(oracleAddress, provider);
 
   try {
     return oracle['currentPrice(address,address)'](
@@ -253,7 +255,7 @@ export async function getOracleDecimals(
   quoteTokenAddress: string,
   provider: Provider,
 ): Promise<BigNumberish> {
-  const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
+  const oracle = IBondOracle__factory.connect(oracleAddress, provider);
 
   try {
     return oracle['decimals(address,address)'](

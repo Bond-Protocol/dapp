@@ -1,0 +1,966 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id_",
+          "type": "uint256"
+        }
+      ],
+      "name": "currentPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract ERC20",
+          "name": "quoteToken_",
+          "type": "address"
+        },
+        {
+          "internalType": "contract ERC20",
+          "name": "payoutToken_",
+          "type": "address"
+        }
+      ],
+      "name": "currentPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id_",
+          "type": "uint256"
+        }
+      ],
+      "name": "decimals",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract ERC20",
+          "name": "quoteToken_",
+          "type": "address"
+        },
+        {
+          "internalType": "contract ERC20",
+          "name": "payoutToken_",
+          "type": "address"
+        }
+      ],
+      "name": "decimals",
+      "outputs": [
+        {
+          "internalType": "uint8",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id_",
+          "type": "uint256"
+        },
+        {
+          "internalType": "contract ERC20",
+          "name": "quoteToken_",
+          "type": "address"
+        },
+        {
+          "internalType": "contract ERC20",
+          "name": "payoutToken_",
+          "type": "address"
+        }
+      ],
+      "name": "registerMarket",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "currentPrice(address,address)": "831e81a4",
+    "currentPrice(uint256)": "7a3c4c17",
+    "decimals(address,address)": "58e2d3a8",
+    "decimals(uint256)": "3f47e662",
+    "registerMarket(uint256,address,address)": "5538adb7"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"id_\",\"type\":\"uint256\"}],\"name\":\"currentPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contract ERC20\",\"name\":\"quoteToken_\",\"type\":\"address\"},{\"internalType\":\"contract ERC20\",\"name\":\"payoutToken_\",\"type\":\"address\"}],\"name\":\"currentPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"id_\",\"type\":\"uint256\"}],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contract ERC20\",\"name\":\"quoteToken_\",\"type\":\"address\"},{\"internalType\":\"contract ERC20\",\"name\":\"payoutToken_\",\"type\":\"address\"}],\"name\":\"decimals\",\"outputs\":[{\"internalType\":\"uint8\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"id_\",\"type\":\"uint256\"},{\"internalType\":\"contract ERC20\",\"name\":\"quoteToken_\",\"type\":\"address\"},{\"internalType\":\"contract ERC20\",\"name\":\"payoutToken_\",\"type\":\"address\"}],\"name\":\"registerMarket\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"currentPrice(address,address)\":{\"notice\":\"Returns the price as a ratio of quote tokens to base tokens for the provided token pair scaled by 10^decimals\"},\"currentPrice(uint256)\":{\"notice\":\"Returns the price as a ratio of quote tokens to base tokens for the provided market id scaled by 10^decimals\"},\"decimals(address,address)\":{\"notice\":\"Returns the number of configured decimals of the price value for the provided token pair\"},\"decimals(uint256)\":{\"notice\":\"Returns the number of configured decimals of the price value for the provided market id\"},\"registerMarket(uint256,address,address)\":{\"notice\":\"Register a new bond market on the oracle\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/interfaces/IBondOracle.sol\":\"IBondOracle\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":100000},\"remappings\":[\":clones-with-immutable-args/=lib/clones-with-immutable-args/src/\",\":clones/=lib/clones-with-immutable-args/src/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":openzeppelin/=lib/openzeppelin-contracts/contracts/\",\":solidity-code-metrics/=node_modules/solidity-code-metrics/\",\":solmate/=lib/solmate/src/\",\":weird-erc20/=lib/solmate/lib/weird-erc20/src/\"]},\"sources\":{\"lib/solmate/src/tokens/ERC20.sol\":{\"keccak256\":\"0x698cdbf614109fafc2bf00057b60715fa3aba9dad447c42f4f8b749ae16ce84f\",\"license\":\"AGPL-3.0-only\",\"urls\":[\"bzz-raw://49a39e71d6bde571d04722c90fd42591af806d29d8cbd4cd96f35e443702d899\",\"dweb:/ipfs/QmefLxMt6w2it9daQQFdBTtPeCWDhSqhNWuxQy8e7WrNVr\"]},\"src/interfaces/IBondOracle.sol\":{\"keccak256\":\"0x7a88cb925d998d049fee844aa714b2b6e8255475f2c5f0b309a5c9213f28d532\",\"license\":\"AGPL-3.0\",\"urls\":[\"bzz-raw://d0777ceee20b5aa166a35b0ecdb394f7abb36bbcbec48b5f885c92269a16ebcd\",\"dweb:/ipfs/QmQpMZEAMmzbo3b1jYfit7s4JHE2KjBd6DQxfaHC9tHNxC\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.15+commit.e14f2714"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "currentPrice",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "contract ERC20",
+              "name": "quoteToken_",
+              "type": "address"
+            },
+            {
+              "internalType": "contract ERC20",
+              "name": "payoutToken_",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "currentPrice",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "decimals",
+          "outputs": [
+            {
+              "internalType": "uint8",
+              "name": "",
+              "type": "uint8"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "contract ERC20",
+              "name": "quoteToken_",
+              "type": "address"
+            },
+            {
+              "internalType": "contract ERC20",
+              "name": "payoutToken_",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "decimals",
+          "outputs": [
+            {
+              "internalType": "uint8",
+              "name": "",
+              "type": "uint8"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "contract ERC20",
+              "name": "quoteToken_",
+              "type": "address"
+            },
+            {
+              "internalType": "contract ERC20",
+              "name": "payoutToken_",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "registerMarket"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {
+          "currentPrice(address,address)": {
+            "notice": "Returns the price as a ratio of quote tokens to base tokens for the provided token pair scaled by 10^decimals"
+          },
+          "currentPrice(uint256)": {
+            "notice": "Returns the price as a ratio of quote tokens to base tokens for the provided market id scaled by 10^decimals"
+          },
+          "decimals(address,address)": {
+            "notice": "Returns the number of configured decimals of the price value for the provided token pair"
+          },
+          "decimals(uint256)": {
+            "notice": "Returns the number of configured decimals of the price value for the provided market id"
+          },
+          "registerMarket(uint256,address,address)": {
+            "notice": "Register a new bond market on the oracle"
+          }
+        },
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "clones-with-immutable-args/=lib/clones-with-immutable-args/src/",
+        "clones/=lib/clones-with-immutable-args/src/",
+        "ds-test/=lib/ds-test/src/",
+        "forge-std/=lib/forge-std/src/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "openzeppelin/=lib/openzeppelin-contracts/contracts/",
+        "solidity-code-metrics/=node_modules/solidity-code-metrics/",
+        "solmate/=lib/solmate/src/",
+        "weird-erc20/=lib/solmate/lib/weird-erc20/src/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 100000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/interfaces/IBondOracle.sol": "IBondOracle"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "lib/solmate/src/tokens/ERC20.sol": {
+        "keccak256": "0x698cdbf614109fafc2bf00057b60715fa3aba9dad447c42f4f8b749ae16ce84f",
+        "urls": [
+          "bzz-raw://49a39e71d6bde571d04722c90fd42591af806d29d8cbd4cd96f35e443702d899",
+          "dweb:/ipfs/QmefLxMt6w2it9daQQFdBTtPeCWDhSqhNWuxQy8e7WrNVr"
+        ],
+        "license": "AGPL-3.0-only"
+      },
+      "src/interfaces/IBondOracle.sol": {
+        "keccak256": "0x7a88cb925d998d049fee844aa714b2b6e8255475f2c5f0b309a5c9213f28d532",
+        "urls": [
+          "bzz-raw://d0777ceee20b5aa166a35b0ecdb394f7abb36bbcbec48b5f885c92269a16ebcd",
+          "dweb:/ipfs/QmQpMZEAMmzbo3b1jYfit7s4JHE2KjBd6DQxfaHC9tHNxC"
+        ],
+        "license": "AGPL-3.0"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/interfaces/IBondOracle.sol",
+    "id": 43971,
+    "exportedSymbols": {
+      "ERC20": [
+        30350
+      ],
+      "IBondOracle": [
+        43970
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "37:1070:56",
+    "nodes": [
+      {
+        "id": 43915,
+        "nodeType": "PragmaDirective",
+        "src": "37:24:56",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          ">=",
+          "0.8",
+          ".0"
+        ]
+      },
+      {
+        "id": 43917,
+        "nodeType": "ImportDirective",
+        "src": "63:47:56",
+        "nodes": [],
+        "absolutePath": "lib/solmate/src/tokens/ERC20.sol",
+        "file": "solmate/tokens/ERC20.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 43971,
+        "sourceUnit": 30351,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 43916,
+              "name": "ERC20",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 30350,
+              "src": "71:5:56",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 43970,
+        "nodeType": "ContractDefinition",
+        "src": "112:994:56",
+        "nodes": [
+          {
+            "id": 43929,
+            "nodeType": "FunctionDefinition",
+            "src": "197:115:56",
+            "nodes": [],
+            "documentation": {
+              "id": 43918,
+              "nodeType": "StructuredDocumentation",
+              "src": "140:52:56",
+              "text": "@notice Register a new bond market on the oracle"
+            },
+            "functionSelector": "5538adb7",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "registerMarket",
+            "nameLocation": "206:14:56",
+            "parameters": {
+              "id": 43927,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43920,
+                  "mutability": "mutable",
+                  "name": "id_",
+                  "nameLocation": "238:3:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43929,
+                  "src": "230:11:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43919,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "230:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43923,
+                  "mutability": "mutable",
+                  "name": "quoteToken_",
+                  "nameLocation": "257:11:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43929,
+                  "src": "251:17:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43922,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43921,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "251:5:56"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "251:5:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43926,
+                  "mutability": "mutable",
+                  "name": "payoutToken_",
+                  "nameLocation": "284:12:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43929,
+                  "src": "278:18:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43925,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43924,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "278:5:56"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "278:5:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "220:82:56"
+            },
+            "returnParameters": {
+              "id": 43928,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "311:0:56"
+            },
+            "scope": 43970,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 43937,
+            "nodeType": "FunctionDefinition",
+            "src": "443:67:56",
+            "nodes": [],
+            "documentation": {
+              "id": 43930,
+              "nodeType": "StructuredDocumentation",
+              "src": "318:120:56",
+              "text": "@notice Returns the price as a ratio of quote tokens to base tokens for the provided market id scaled by 10^decimals"
+            },
+            "functionSelector": "7a3c4c17",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "currentPrice",
+            "nameLocation": "452:12:56",
+            "parameters": {
+              "id": 43933,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43932,
+                  "mutability": "mutable",
+                  "name": "id_",
+                  "nameLocation": "473:3:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43937,
+                  "src": "465:11:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43931,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "465:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "464:13:56"
+            },
+            "returnParameters": {
+              "id": 43936,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43935,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43937,
+                  "src": "501:7:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43934,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "501:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "500:9:56"
+            },
+            "scope": 43970,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 43949,
+            "nodeType": "FunctionDefinition",
+            "src": "642:93:56",
+            "nodes": [],
+            "documentation": {
+              "id": 43938,
+              "nodeType": "StructuredDocumentation",
+              "src": "516:121:56",
+              "text": "@notice Returns the price as a ratio of quote tokens to base tokens for the provided token pair scaled by 10^decimals"
+            },
+            "functionSelector": "831e81a4",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "currentPrice",
+            "nameLocation": "651:12:56",
+            "parameters": {
+              "id": 43945,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43941,
+                  "mutability": "mutable",
+                  "name": "quoteToken_",
+                  "nameLocation": "670:11:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43949,
+                  "src": "664:17:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43940,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43939,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "664:5:56"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "664:5:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43944,
+                  "mutability": "mutable",
+                  "name": "payoutToken_",
+                  "nameLocation": "689:12:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43949,
+                  "src": "683:18:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43943,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43942,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "683:5:56"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "683:5:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "663:39:56"
+            },
+            "returnParameters": {
+              "id": 43948,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43947,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43949,
+                  "src": "726:7:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43946,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "726:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "725:9:56"
+            },
+            "scope": 43970,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 43957,
+            "nodeType": "FunctionDefinition",
+            "src": "845:61:56",
+            "nodes": [],
+            "documentation": {
+              "id": 43950,
+              "nodeType": "StructuredDocumentation",
+              "src": "741:99:56",
+              "text": "@notice Returns the number of configured decimals of the price value for the provided market id"
+            },
+            "functionSelector": "3f47e662",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "decimals",
+            "nameLocation": "854:8:56",
+            "parameters": {
+              "id": 43953,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43952,
+                  "mutability": "mutable",
+                  "name": "id_",
+                  "nameLocation": "871:3:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43957,
+                  "src": "863:11:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43951,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "863:7:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "862:13:56"
+            },
+            "returnParameters": {
+              "id": 43956,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43955,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43957,
+                  "src": "899:5:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 43954,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "899:5:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "898:7:56"
+            },
+            "scope": 43970,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 43969,
+            "nodeType": "FunctionDefinition",
+            "src": "1017:87:56",
+            "nodes": [],
+            "documentation": {
+              "id": 43958,
+              "nodeType": "StructuredDocumentation",
+              "src": "912:100:56",
+              "text": "@notice Returns the number of configured decimals of the price value for the provided token pair"
+            },
+            "functionSelector": "58e2d3a8",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "decimals",
+            "nameLocation": "1026:8:56",
+            "parameters": {
+              "id": 43965,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43961,
+                  "mutability": "mutable",
+                  "name": "quoteToken_",
+                  "nameLocation": "1041:11:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43969,
+                  "src": "1035:17:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43960,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43959,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "1035:5:56"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "1035:5:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43964,
+                  "mutability": "mutable",
+                  "name": "payoutToken_",
+                  "nameLocation": "1060:12:56",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43969,
+                  "src": "1054:18:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43963,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43962,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "1054:5:56"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "1054:5:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1034:39:56"
+            },
+            "returnParameters": {
+              "id": 43968,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43967,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43969,
+                  "src": "1097:5:56",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint8",
+                    "typeString": "uint8"
+                  },
+                  "typeName": {
+                    "id": 43966,
+                    "name": "uint8",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1097:5:56",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint8",
+                      "typeString": "uint8"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1096:7:56"
+            },
+            "scope": 43970,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IBondOracle",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          43970
+        ],
+        "name": "IBondOracle",
+        "nameLocation": "122:11:56",
+        "scope": 43971,
+        "usedErrors": []
+      }
+    ],
+    "license": "AGPL-3.0"
+  },
+  "id": 56
+}
