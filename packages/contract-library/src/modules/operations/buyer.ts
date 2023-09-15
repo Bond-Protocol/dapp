@@ -221,7 +221,7 @@ export async function checkOraclePairValidity(
   const oracle = BondChainlinkOracle__factory.connect(oracleAddress, provider);
 
   try {
-    return oracle.supportedPairs(payoutTokenAddress, quoteTokenAddress, {});
+    return oracle.supportedPairs(quoteTokenAddress, payoutTokenAddress, {});
   } catch (e) {
     console.log(e);
     throw e;

@@ -1,8 +1,5 @@
-import path, { dirname, join } from "path";
-import type { StorybookConfig } from "@storybook/react-vite";
-import { mergeConfig } from "vite";
-
-const config: StorybookConfig = {
+import { dirname, join } from "path";
+export default {
   framework: getAbsolutePath("@storybook/react-vite"),
   stories: ["../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
@@ -11,22 +8,27 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-interactions"),
     getAbsolutePath("@storybook/preset-typescript"),
   ],
-  docs: { autodocs: "tag" },
-  viteFinal: async (config, { configType }) => {
+  docs: {
+    autodocs: true,
+  },
+  refs: (_config, { configType }) => {
     if (configType === "DEVELOPMENT") {
-      return mergeConfig(config, {
-        resolve: {
-          alias: {
-            ui: path.join(__dirname, "../../../node_modules/ui"),
-          },
+      return {
+        app: {
+          title: "Core App",
+          url: "http://localhost:6007",
         },
-      });
+      };
     }
-    return config;
+
+    return {
+      app: {
+        title: "Core App",
+        url: "https://storybook-dapp.vercel.app",
+      },
+    };
   },
 };
-
-export default config;
 
 /**
  * This function is used to resolve the absolute path of a package.

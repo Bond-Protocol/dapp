@@ -50,11 +50,12 @@ export const useDiscoverToken = () => {
     try {
       const [token] = await defillama.fetchPrice(address, chainId);
       //@ts-ignore
-      if (token.price) {
+      if (token?.price) {
         return { token, source: "defillama" };
       }
 
       const onChainToken = await fetchOnChain(address, chainId);
+
       if (onChainToken.decimals) {
         return { token: onChainToken, source: "on-chain" };
       }

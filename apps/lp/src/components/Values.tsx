@@ -1,5 +1,4 @@
-import { TextBlock } from "./TextBlock";
-import { InfoLabel } from "./InfoLabel";
+import { TextBlock, InfoLabel } from "./common";
 
 type ValuesProps = {
   className?: string;

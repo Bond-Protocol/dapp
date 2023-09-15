@@ -41,7 +41,8 @@
       "inputs": ["src"]
     },
     "build:storybook": {
-      "dependsOn": []
+      "dependsOn": [],
+      "outputs": ["storybook-static"]
     },
     "format": {
       "outputs": []
