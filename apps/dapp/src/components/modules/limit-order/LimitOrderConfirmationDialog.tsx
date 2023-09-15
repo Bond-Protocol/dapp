@@ -4,40 +4,48 @@ import {
   ActionInfoList,
   ButtonGroup,
   Checkbox,
+  formatCurrency,
   formatDate,
   SummaryLabel,
   SummaryRow,
   Switch,
 } from "ui";
+import { useLimitOrderForMarket } from "./limit-order-context";
 
 export type LimitOrderConfirmationDialogProps = {
   market: CalculatedMarket;
   payout?: string;
   amountIn: string;
+  limitPrice: string;
   expiry: Date;
   orderContract?: string;
+  onSubmit: () => void;
+  onClose: () => void;
 };
 
 export const LimitOrderConfirmationDialog = (
   props: LimitOrderConfirmationDialogProps
 ) => {
   const [autoCancel, setAutoCancel] = useState(true);
+  const order = useLimitOrderForMarket();
 
   const fields = [
     {
       leftLabel: "Min amount to receive",
-      rightLabel: props.payout,
+      rightLabel: `${formatCurrency.amount(order.payout)} ${
+        props.market.payoutToken.symbol
+      }`,
       tooltip: "Only if bid is successful",
     },
     {
       leftLabel: "Order Expires on",
-      rightLabel: formatDate.short(props.expiry),
+      rightLabel: formatDate.short(order.expiry),
     },
-    { leftLabel: "Max Fee", tooltip: "", rightLabel: 1 },
+    { leftLabel: "Max Fee", tooltip: "", rightLabel: "" },
     {
       leftLabel: "Limit Order contract",
       rightLabel: `View on ${props.market.blockExplorerName}`,
-      link: `${props.market.blockExplorerUrl}${props.orderContract}}`,
+      link: `${props.market.blockExplorerUrl} ${props.orderContract}}`,
     },
   ];
 
@@ -48,13 +56,13 @@ export const LimitOrderConfirmationDialog = (
         <div className="grid grid-cols-[1fr_32px_1fr]">
           <SummaryLabel
             icon={props.market.quoteToken.logoURI}
-            value={`${props.payout} ${props.market.payoutToken.symbol}`}
+            value={`${formatCurrency.amount(order.amount)}`}
             subtext="You Bond"
             className="uppercase"
           />
           <div className="flex items-center justify-center">@</div>
           <SummaryLabel
-            value={props.amountIn}
+            value={`${order.price} ${props.market.quoteToken.symbol}/${props.market.payoutToken.symbol}`}
             subtext="Limit Price"
             className="uppercase"
           />
@@ -63,7 +71,9 @@ export const LimitOrderConfirmationDialog = (
         <SummaryRow
           className="mt-1"
           leftLabel="You will get"
-          rightLabel={props.payout}
+          rightLabel={`${formatCurrency.amount(order.payout)} ${
+            props.market.payoutToken.symbol
+          }`}
         />
 
         <SummaryRow
@@ -99,8 +109,8 @@ export const LimitOrderConfirmationDialog = (
         className="mt-4"
         leftLabel="Cancel"
         rightLabel="Place Order"
-        onClickLeft={() => {}}
-        onClickRight={() => {}}
+        onClickLeft={props.onClose}
+        onClickRight={props.onSubmit}
       />
     </div>
   );
