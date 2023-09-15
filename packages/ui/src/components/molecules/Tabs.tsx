@@ -22,12 +22,12 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
   return (
     <TabsUnstyled
       value={selected}
-      className={`overflow-hidden rounded-t-lg border-transparent ${props.className}`}
+      className={`h-full overflow-hidden rounded-t-lg border-transparent ${props.className}`}
     >
       <TabsListUnstyled
         componentsProps={{
           root: {
-            className: "flex justify-around",
+            className: "flex justify-around ",
           },
         }}
       >
@@ -41,7 +41,7 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
             componentsProps={{
               root: {
                 className: `
-                 border-b-2 w-full font-mono font-bold tracking-widest uppercase rounded-t-lg px-6 pb-2 select-none 
+                 border-b-2 h-full w-full font-mono font-bold tracking-widest uppercase rounded-t-lg px-6 pb-2 select-none 
                  ${
                    selected === i
                      ? "border-white"
@@ -56,7 +56,7 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
       </TabsListUnstyled>
       {Children.map(children, (component, i) => {
         return (
-          <TabPanelUnstyled value={i} key={i}>
+          <TabPanelUnstyled className="h-full" value={i} key={i}>
             {component}
           </TabPanelUnstyled>
         );
