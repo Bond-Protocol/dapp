@@ -19,16 +19,15 @@ export const BondPurchaseController = ({
           <BondPurchaseCard market={market} />{" "}
         </div>
         <div className="h-full bg-white/5">
-          <RequiresAuth title="Sign in to place orders">
-            <LimitOrderCard market={market} />{" "}
-          </RequiresAuth>
+          <LimitOrderCard market={market} />
         </div>
         <div className="h-full bg-white/5">
           <RequiresAuth
             title="Sign in to see your orders"
             subtitle="We're protecting you against impersonating"
           >
-            <LimitOrderList />
+            {/*TODO: Implement*/}
+            <LimitOrderList orders={[]} onCancelAll={() => {}} />
           </RequiresAuth>
         </div>
       </Tabs>

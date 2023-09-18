@@ -39,6 +39,7 @@ export const fetchPrice = async (
     ? address.join(",")
     : `${getNameFromChainId(Number(chainId))}:${address}`;
 
+  if (!ids) return new Promise(() => {});
   const endpoint = `${import.meta.env.VITE_API_URL}prices?ids=${ids}`;
   return await generateFetcher(endpoint)();
 };

@@ -1,4 +1,4 @@
-import {ConnectButton, Profile} from "components/common";
+import { ConnectButton, Profile } from "components/common";
 import { ProtocolLogo } from "ui";
 import { NavbarTabs, NavbarTabsProps } from "./NavbarTabs";
 import { useNavigate } from "react-router-dom";
@@ -32,9 +32,6 @@ export const Navbar = ({ hide }: { hide?: boolean }) => {
       <div className="flex w-2/3 select-none justify-end md:w-1/3">
         <ConnectButton hideChain={isTabletOrMobile} />
       </div>
-        <div className="flex w-2/3 select-none justify-end md:w-1/3">
-            <Profile />
-        </div>
     </div>
   );
 };
