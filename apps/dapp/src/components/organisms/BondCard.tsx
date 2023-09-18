@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondPriceChart } from "components/organisms/BondPriceChart";
-import { BondPurchaseCard } from "components/organisms";
 import { formatDate, SummaryLabel } from "ui";
 import { BondPurchaseController } from "./BondPurchaseController";
 
@@ -22,7 +21,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         </div>
       )}
       <div
-        className={`flex flex-col ${
+        className={`flex min-h-[420px] flex-col ${
           props.isFutureMarket ? "w-full" : "md:w-1/2"
         }`}
       >

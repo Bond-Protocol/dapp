@@ -20,7 +20,7 @@ export type LimitOrderConfirmationDialogProps = {
   expiry: Date;
   orderContract?: string;
   onSubmit: () => void;
-  onClose: () => void;
+  onCancel: () => void;
 };
 
 export const LimitOrderConfirmationDialog = (
@@ -109,7 +109,7 @@ export const LimitOrderConfirmationDialog = (
         className="mt-4"
         leftLabel="Cancel"
         rightLabel="Place Order"
-        onClickLeft={props.onClose}
+        onClickLeft={props.onCancel}
         onClickRight={props.onSubmit}
       />
     </div>

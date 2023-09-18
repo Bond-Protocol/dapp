@@ -1,4 +1,3 @@
-//@ts-nocheck
 import {
   CartesianGrid,
   Line,
@@ -25,6 +24,7 @@ export type BondPriceChartProps = {
   useTokenRatio?: boolean;
   className?: string;
   disableTooltip?: boolean;
+  id?: string;
 };
 
 export const BondPriceChart = (props: BondPriceChartProps) => {
@@ -32,8 +32,24 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
     return <div className="h-full w-full" />;
   }
 
+  const [last] = props.data.slice(-1);
+
   return (
-    <div className={`h-full w-full ${props.className}`}>
+    <div className={`group relative z-10 h-full w-full ${props.className}`}>
+      {!props.disableTooltip && (
+        <>
+          <div className="border-light-grey-400 absolute right-1 top-4 z-20 h-[87%] border-l transition-all group-hover:opacity-0 group-hover:transition-none" />
+          <div className="absolute right-0 top-0 z-20 mt-1 transition-all group-hover:opacity-0">
+            <BondPriceChartTooltip
+              id="fixed"
+              payoutTokenSymbol={props.payoutTokenSymbol}
+              quoteTokenSymbol={props.quoteTokenSymbol}
+              useTokenRatio={props.useTokenRatio}
+              payload={[{ payload: last }]}
+            />
+          </div>
+        </>
+      )}
       <ResponsiveContainer minWidth={300} minHeight={260}>
         <Chart data={props.data}>
           <XAxis
@@ -60,19 +76,6 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
             dataKey="discountedPrice"
             strokeDasharray="6 2"
             strokeWidth={2}
-          />
-          <Line
-            dot={false}
-            stroke="#F2A94A"
-            dataKey="initialPrice"
-            strokeDasharray="6 2"
-            strokeWidth={2}
-          />
-          <Line
-            dot={false}
-            strokeWidth={1}
-            stroke="#FF0606"
-            dataKey="minPrice"
           />
           {!props.disableTooltip && (
             <Tooltip

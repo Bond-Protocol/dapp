@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount, useNetwork } from "wagmi";
 import orderService, { OrderConfig } from "./order-service";
 
@@ -13,6 +13,13 @@ export const useOrderApi = () => {
   const { chain } = useNetwork();
   const { address } = useAccount();
   const [state, setState] = useState<{ loading: boolean }>();
+
+  useEffect(() => {
+    // Clear access token everytime the address changes
+    if (getAccessToken()) {
+      setAccessToken("");
+    }
+  }, [address]);
 
   const signIn = async () => {
     const chainId = chain?.id;
