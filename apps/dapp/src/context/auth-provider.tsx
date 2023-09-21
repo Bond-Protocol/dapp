@@ -1,9 +1,11 @@
-import { createContext, useContext } from "react";
-import { useOrderApi } from "services/limit-order/use-order-api";
+import { createContext, useContext, useState } from "react";
+import { useAuthApi } from "hooks/useAuth";
 
 type AuthContextState = {
+  isLoading: boolean;
   isAuthenticated: boolean;
   signIn: Function;
+  getAccessToken: () => string | null;
 };
 
 const initialState = {} as AuthContextState;
@@ -14,13 +16,15 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const auth = useOrderApi();
+  const auth = useAuthApi();
 
   return (
     <AuthContext.Provider
       value={{
+        isLoading: !!auth.isLoading,
         signIn: auth.signIn,
         isAuthenticated: !!auth.getAccessToken(),
+        getAccessToken: auth.getAccessToken,
       }}
     >
       {children}

@@ -19,6 +19,7 @@ export const Select = (props: SelectProps) => {
   const [open, setOpen] = useState(false);
 
   const onChange = (e: any, value: any) => {
+    console.log({ value });
     setSelected(value);
     props.onChange && props.onChange(e, value);
   };

@@ -6,6 +6,7 @@ export const SelectDateDialog = (props: {
   onClose: Function;
   defaultDate?: Date;
   defaultTime?: string;
+  limitDate?: Date;
 }) => {
   const [date, setDate] = useState<Date>(props.defaultDate ?? new Date());
   const [invalid, setInvalid] = useState<boolean>(
@@ -18,13 +19,15 @@ export const SelectDateDialog = (props: {
 
     props.onClose(e);
 
-    props.onSubmit(date);
+    props.onSubmit({ value: date });
   };
 
+  console.log("limitdate", props.limitDate);
   return (
     <div className="flex flex-col items-center justify-center">
       <DatePicker
         showTime
+        to={props.limitDate}
         onChange={({ date, invalid }) => {
           setDate(date);
           setInvalid(!!invalid);
