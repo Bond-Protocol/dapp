@@ -2,7 +2,9 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { LimitOrderProvider } from "components/modules/limit-order/limit-order-context";
 import { LimitOrderCard } from "components/modules/limit-order/LimitOrderCard";
 import { LimitOrderList } from "components/modules/limit-order/LimitOrderList";
+import { RequiresLimitOrderSupport } from "components/modules/limit-order/RequiresLimitOrderSupport";
 import { RequiresAuth } from "components/utility/RequiresAuth";
+import { useState } from "react";
 import { Tabs } from "ui";
 import { BondPurchaseCard } from "./BondPurchaseCard";
 
@@ -12,23 +14,41 @@ export const BondPurchaseController = ({
   market: CalculatedMarket;
 }) => {
   const tabs = [{ label: "Bond" }, { label: "Limit" }, { label: "Orders" }];
+  const [selected, setSelected] = useState(0);
+  const isSupported = true;
+
   return (
     <LimitOrderProvider market={market}>
-      <Tabs className="h-full" tabs={tabs}>
-        <div className="bg-white/5">
+      <Tabs
+        value={selected}
+        onClick={setSelected}
+        className="h-full"
+        tabs={tabs}
+      >
+        <div className="h-full  bg-white/5">
           <BondPurchaseCard market={market} />{" "}
         </div>
         <div className="h-full bg-white/5">
-          <LimitOrderCard market={market} />
+          <RequiresLimitOrderSupport
+            onClick={() => setSelected(0)}
+            isSupported={isSupported}
+          >
+            <LimitOrderCard market={market} />
+          </RequiresLimitOrderSupport>
         </div>
         <div className="h-full bg-white/5">
-          <RequiresAuth
-            title="Sign in to see your orders"
-            subtitle="We're protecting you against impersonating"
+          <RequiresLimitOrderSupport
+            onClick={() => setSelected(0)}
+            isSupported={isSupported}
           >
-            {/*TODO: Implement*/}
-            <LimitOrderList orders={[]} onCancelAll={() => {}} />
-          </RequiresAuth>
+            <RequiresAuth
+              title="Sign in to see your orders"
+              subtitle="We're protecting you against impersonating"
+            >
+              {/*TODO: Implement*/}
+              <LimitOrderList orders={[]} onCancelAll={() => {}} />
+            </RequiresAuth>
+          </RequiresLimitOrderSupport>
         </div>
       </Tabs>
     </LimitOrderProvider>

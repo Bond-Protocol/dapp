@@ -1,4 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from "react";
+import { AppBackdrop } from "components/common/AppBackdrop";
+import { Component, ErrorInfo, ReactNode } from "react";
 
 interface Props {
   children?: ReactNode;
@@ -30,13 +31,12 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="h-[100vh] w-full flex-col items-center bg-black p-8 text-center">
+        <div className="h-[100vh] w-full flex-col items-center bg-light-base p-8 text-center">
           <div className="m-auto flex w-[50%] flex-col place-items-center justify-center border-4 border-light-primary p-8">
-            <p className="text-light-alert">
+            <img src="https://media.tenor.com/Q0pWc115TqsAAAAd/shit-shet.gif" />
+            <p className="text-lg text-light-alert">
               {this.state.error?.name}: {this.state.error?.message}
             </p>
-            <div className="text-light-alert">{this.state.error?.message}</div>
-
             <div className="mt-4 text-left text-xs">
               {this.state.errorInfo?.componentStack}
             </div>

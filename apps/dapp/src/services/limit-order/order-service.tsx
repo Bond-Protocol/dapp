@@ -1,6 +1,6 @@
 import { environment } from "src/environment";
 import { SiweMessage } from "siwe";
-import { signMessage, signTypedData } from "@wagmi/core";
+import { Address, signMessage, signTypedData } from "@wagmi/core";
 import { orderApi } from "./api-client";
 import { Order } from "src/types/openapi";
 
@@ -15,7 +15,7 @@ export type OrderConfig = Required<Omit<Required<Order>, "submitted">>;
 
 type BasicOrderArgs = {
   chainId: number;
-  address: string;
+  address: string | Address;
   token: string;
 };
 
@@ -75,6 +75,7 @@ const listAllOrders = async ({ chainId, token, address }: BasicOrderArgs) => {
 };
 
 const listByMarket = async () => {};
+
 const cancelOrder = async () => {};
 const cancelAllOrders = async () => {};
 
