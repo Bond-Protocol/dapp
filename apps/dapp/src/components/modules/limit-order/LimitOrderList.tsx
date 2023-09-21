@@ -199,7 +199,7 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
           Cancel All
         </button>
       </div>
-      <div className="max-h-64 w-full overflow-y-auto">
+      <div className="max-h-[300px] w-full overflow-y-auto">
         <Table
           handleSorting={sort}
           className="w-full border-collapse backdrop-blur"

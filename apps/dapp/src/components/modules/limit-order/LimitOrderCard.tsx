@@ -15,6 +15,8 @@ import {
   Button,
   dateMath,
   formatCurrency,
+  SelectModal,
+  SelectDateDialog,
 } from "ui";
 import { useAccount } from "wagmi";
 import { useLimitOrderForMarket } from "./limit-order-context";
@@ -25,6 +27,8 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
     { label: "1 day", id: 1 },
     { label: "3 days", id: 3 },
     { label: "7 days", id: 7 },
+    { label: "14 days", id: 14 },
+    { label: "30 days", id: 30 },
   ].filter(
     (
       o // remove dates that after market end date
@@ -50,16 +54,21 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           onChange={order.setPrice}
         />
         <div className="w-full">
-          <div className="mb-1 text-sm font-light text-light-grey-400">
-            Order Expiry
-          </div>
-          <Select
+          <SelectModal
+            label="Order Expiry"
             options={options}
-            //TODO: afx -> needs improving, have a better way to handle expiry
-            defaultValue={(options[0]?.id ?? 1).toString()}
-            onChange={(_e: any, value: string | null) =>
-              order.setExpiry(Number(value))
-            }
+            defaultValue={options[0].id}
+            ModalContent={(args) => (
+              <SelectDateDialog
+                {...args}
+                limitDate={new Date(props?.market?.conclusion * 1000)}
+              />
+            )}
+            title="Select Order Expiry Date"
+            onSubmit={({ value }) => {
+              //TODO: afx -> clean up, SelectDateDialog is inconsistent with other dialogs
+              order.setExpiry(value?.value ?? value);
+            }}
           />
         </div>
       </div>
@@ -101,6 +110,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       >
         <Button
           className="mt-4 w-full"
+          disabled={!order.price || !order.amount || !order.expiry}
           //disabled={!allowance.hasSufficientBalance}
           onClick={() => setIsConfirming(true)}
         >
@@ -117,7 +127,7 @@ function generateSummaryFields(
   market: CalculatedMarket,
   payout: number,
   discount: string | number,
-  expiry: number
+  expiry: Date
 ) {
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
     market.chainId,
@@ -151,7 +161,11 @@ function generateSummaryFields(
     },
     {
       leftLabel: "Order expires on",
-      rightLabel: formatDate.short(dateMath.addDays(new Date(), expiry)),
+      rightLabel: formatDate.short(expiry),
+    },
+    {
+      leftLabel: "Max fee",
+      rightLabel: 1 + " " + market.quoteToken.symbol,
     },
     {
       leftLabel: "Limit Order Contract",

@@ -21,7 +21,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         </div>
       )}
       <div
-        className={`flex min-h-[420px] flex-col ${
+        className={`flex min-h-[430px] flex-col ${
           props.isFutureMarket ? "w-full" : "md:w-1/2"
         }`}
       >

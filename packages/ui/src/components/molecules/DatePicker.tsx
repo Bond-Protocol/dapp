@@ -32,13 +32,14 @@ export const DatePicker = (
     defaultDate?: Date;
     defaultTime?: string;
     from?: Date;
+    to?: Date;
   }
 ) => {
   const [date, setDate] = useState<Date>();
   const { time, setTime, matcher } = useTimeInput(props.defaultTime);
 
   const fromDate = props.from ?? new Date();
-  const toDate = new Date(Date.now() + 270 * 24 * 60 * 60 * 1000);
+  const toDate = props.to ?? dateMath.addDays(new Date(), 270);
 
   useEffect(() => {
     if (!props.showTime) return;

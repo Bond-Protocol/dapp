@@ -12,7 +12,7 @@ export const useLimitOrder = (market: CalculatedMarket) => {
   const { value: price, onChange: setPrice } = useNumericInput();
   //const { value: amount, onChange: setAmount } = useNumericInput();
   const [amount, setAmount] = useState<string>();
-  const [expiry, setExpiry] = useState<number>();
+  const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
   const api = useOrderApi();
 
   const provider = providers[market.chainId];
@@ -48,9 +48,18 @@ export const useLimitOrder = (market: CalculatedMarket) => {
       user: address,
       referrer: address,
       max_fee: "1",
-      deadline: dateMath.addDays(new Date(), expiry).getTime().toString(),
+      deadline: expiry.getTime().toString(),
     });
     console.log({ res });
+  };
+
+  const updateExpiry = (expiry: number | Date) => {
+    const date =
+      typeof expiry === "number"
+        ? dateMath.addDays(new Date(), expiry)
+        : expiry;
+
+    setExpiry(date);
   };
 
   return {
@@ -61,7 +70,7 @@ export const useLimitOrder = (market: CalculatedMarket) => {
     amount,
     payout,
     setPrice,
-    setExpiry,
+    setExpiry: updateExpiry,
     setAmount,
     createOrder,
   };

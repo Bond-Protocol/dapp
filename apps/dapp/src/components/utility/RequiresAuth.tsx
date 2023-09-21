@@ -12,19 +12,8 @@ type RequiresAuthProps = {
 
 export const RequiresAuth = ({ children, ...props }: RequiresAuthProps) => {
   const { isConnected } = useAccount();
-  //const { connectAsync, connect } = useConnect();
-  const { openConnectModal } = useConnectModal();
 
   const auth = useAuth();
-
-  const connectAndSign = async () => {
-    console.log("conn");
-    //const con = await openConnectModal();
-    console.log({ con });
-    const sign = await auth.signIn();
-
-    console.log({ sign });
-  };
 
   return auth.isAuthenticated ? (
     <>{children}</>
@@ -36,10 +25,17 @@ export const RequiresAuth = ({ children, ...props }: RequiresAuthProps) => {
       {props.subtitle && <p>{props.subtitle}</p>}
       <div className="mt-4">
         {isConnected ? (
-          <Button onClick={() => auth.signIn}>Sign In</Button>
+          <Button disabled={auth.isLoading} onClick={() => auth.signIn()}>
+            {auth.isLoading ? "Confirm in your wallet" : "Sign in"}
+          </Button>
         ) : (
           <ConnectButton />
         )}
+      </div>
+      <div className={auth.isLoading ? "opacity-100" : "opacity-0"}>
+        <p className="mt-2 text-center text-xs text-light-grey-400">
+          This action won't cost gas
+        </p>
       </div>
     </div>
   );
