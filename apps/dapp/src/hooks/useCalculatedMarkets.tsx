@@ -115,7 +115,7 @@ export function useCalculatedMarkets() {
     const marketTokensDontHaveLogos = calculatedMarkets.every(
       (m) =>
         m.quoteToken.logoURI?.includes("placeholder") ||
-        m.quoteToken.logoURI?.includes("placeholder")
+        m.payoutToken.logoURI?.includes("placeholder")
     );
 
     if (marketsExist && tokensHaveLogos && marketTokensDontHaveLogos) {

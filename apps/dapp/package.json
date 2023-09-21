@@ -17,7 +17,7 @@
     "codegen": "graphql-codegen --config codegen.ts",
     "storybook": "storybook dev -p 6007 --no-open --quiet",
     "build-storybook": "storybook build",
-    "openapi:codegen": "npx openapi-client-axios-typegen ./src/openapi.json > src/types/openapi.d.ts",
+    "openapi:codegen": "npx openapi-client-axios-typegen ./src/openapi.json > src/types/openapi.d.ts && echo 'export type Order = Order;' >> src/types/openapi.d.ts",
     "openapi:make-file": "node ./scripts/make-openapi-config.js",
     "openapi": "yarn openapi:make-file && yarn openapi:codegen"
   },
@@ -36,7 +36,7 @@
     "graphql-request": "^4.3.0",
     "jotai": "^1.7.6",
     "openapi-axios-client": "^5.2.4",
-    "openapi-client-axios": "7.3.3",
+    "openapi-client-axios": "^7.3.3",
     "react": "^18.0.0",
     "react-charts": "^3.0.0-beta.50",
     "react-csv": "^2.2.2",

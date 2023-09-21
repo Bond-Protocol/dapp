@@ -14,6 +14,7 @@ import {
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
 import { useMemo, useState } from "react";
 import { Popper } from "components/common/Popper";
+import { useOrderApi } from "services/limit-order/use-order-api";
 
 export type LimitOrderListProps = {
   orders: Order[];
@@ -166,6 +167,11 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
   );
 
   const [cols, setCols] = useState<any[]>(sampleData);
+  const orderApi = useOrderApi();
+
+  const _data = useMemo(async () => {
+    return await orderApi.list();
+  }, []);
 
   const [sortedData, sort] = useSorting(
     cols.map((r) => toTableData(columns, r))

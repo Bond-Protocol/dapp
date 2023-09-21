@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Children, FC, useState } from "react";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import TabsListUnstyled from "@mui/base/TabsListUnstyled";
@@ -7,9 +6,9 @@ import TabPanelUnstyled from "@mui/base/TabPanelUnstyled";
 
 type TabProps = {
   className?: string;
-  children?: React.ReactNode;
   value?: number;
   largeTab?: boolean;
+  onClick?: (value: any) => void;
   tabs: Array<{
     label: string;
     handleClick?: (i?: number) => void;
@@ -17,7 +16,14 @@ type TabProps = {
 };
 
 export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
-  const [selected, setSelected] = useState(value || 0);
+  const [current, setCurrent] = useState(value || 0);
+  const handleSelect = (value: number) => {
+    setCurrent(value);
+
+    props.onClick?.(value);
+  };
+
+  const selected = value ?? current;
 
   return (
     <TabsUnstyled
@@ -31,12 +37,12 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
           },
         }}
       >
-        {tabs.map(({ label, handleClick }, i) => (
+        {tabs.map((tab, i) => (
           <TabUnstyled
             key={i}
             onClick={() => {
-              setSelected(i);
-              handleClick && handleClick(i);
+              handleSelect(i);
+              tab.handleClick?.(i);
             }}
             componentsProps={{
               root: {
@@ -50,13 +56,14 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
               },
             }}
           >
-            {label}
+            {tab.label}
           </TabUnstyled>
         ))}
       </TabsListUnstyled>
       {Children.map(children, (component, i) => {
         return (
           <TabPanelUnstyled className="h-full" value={i} key={i}>
+            {/*@ts-ignore*/}
             {component}
           </TabPanelUnstyled>
         );

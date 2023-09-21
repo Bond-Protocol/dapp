@@ -27,11 +27,7 @@ export class ApiClient {
     signature: string;
     chainId: number;
   }) {
-    return this.api.signIn(
-      undefined,
-      { message, signature },
-      this.makeHeaders({ chainId, isPost: true })
-    );
+    return this.api.signIn(null, { message, signature });
   }
 
   async testToken({
@@ -74,7 +70,7 @@ export class ApiClient {
     address: string;
   }) {
     return this.api.getOrdersByAddress(
-      { address },
+      { account_address: address },
       null,
       this.makeHeaders({ chainId, token })
     );
@@ -83,8 +79,8 @@ export class ApiClient {
   private makeHeaders({
     token,
     chainId,
-    aggregator = "",
-    settlement = "",
+    aggregator = "0x0000000000000000000000000000000000000001",
+    settlement = "0x0000000000000000000000000000000000000001",
     isPost,
   }: {
     chainId: number;
@@ -93,10 +89,12 @@ export class ApiClient {
     settlement?: string;
     isPost?: boolean;
   }) {
+    const _chainId = chainId.toString();
+
     const headers: Record<string, string> = {
-      "x-chain-id": chainId.toString(),
-      "x-aggregator": aggregator,
-      "x-settlement": settlement,
+      "X-Chain-Id": _chainId,
+      "X-Aggregator": aggregator,
+      "X-Settlement": settlement,
     };
 
     if (token) headers["Authorization"] = `Bearer ${token}`;
