@@ -96,7 +96,7 @@ export const useDashboardLoader = () => {
             const toNumber = Number(result);
             toNumber > 0 &&
               erc20OwnerBalances.push({
-                balance: toNumber,
+                balance: result,
                 bondToken: bondToken,
                 owner: address,
               });
