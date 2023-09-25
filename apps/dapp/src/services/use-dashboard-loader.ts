@@ -116,7 +116,13 @@ export const useDashboardLoader = () => {
           const now = new Date(Date.now());
           const canClaim = now >= date;
 
-          const underlying = getByAddress(bond.bondToken?.underlying.address);
+          //Some tokens are missing the address in the underlying component, we take them from the id
+          //Added for poker night bonds, should rarely be the used and should be removed
+          let tokenAddress = bond.bondToken.underlying?.address;
+          let updated =
+            tokenAddress ?? bond.bondToken.underlying.id.split("_")[1];
+
+          const underlying = getByAddress(updated);
 
           let balance: number | string =
             bond.balance / Math.pow(10, bond.bondToken.underlying.decimals);
