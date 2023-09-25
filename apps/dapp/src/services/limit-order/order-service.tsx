@@ -1,13 +1,15 @@
 import { environment } from "src/environment";
 import { SiweMessage } from "siwe";
 import { Address, signMessage, signTypedData } from "@wagmi/core";
-import { orderApi } from "./api-client";
+import { orderApi as orderClient } from "./api-client";
 import { Order } from "src/types/openapi";
+import { BigNumber } from "ethers";
 
-const messageSettings = {
-  statement: "Sign in with Ethereum to the Bond Protocol app.",
+const defaultStatement = "Sign in with Ethereum to the Bond Protocol app.";
+
+const basicMessage = {
   domain: "bondprotocol.finance",
-  uri: "https://bondprotocol.finance",
+  uri: "https://app.bondprotocol.finance",
   version: "1",
 };
 
@@ -21,57 +23,75 @@ type BasicOrderArgs = {
 
 type CreateOrderArgs = BasicOrderArgs & OrderConfig;
 
-const generateOrder = (order: OrderConfig): Required<Order> => {
-  return {
-    ...order,
-    submitted: Date.now().toString(),
-  };
+const sign = async (
+  chainId: number,
+  address: string,
+  statement = defaultStatement
+) => {
+  const { data: nonce } = await orderClient.api.getNonce();
+
+  const message = new SiweMessage({
+    ...basicMessage,
+    statement,
+    address,
+    chainId,
+    nonce,
+  }).prepareMessage();
+
+  const signature = await signMessage({ message });
+
+  return { message, signature };
 };
 
-const signIn = async (
-  chainId: number,
-  address: string //: Promise<{ data: { access_token: string; refresh_token: string} }>
-) => {
+const signIn = async (chainId: number, address: string) => {
   try {
-    const nonce = await orderApi.getAuthNonce();
+    const { message, signature } = await sign(chainId, address);
 
-    const message = new SiweMessage({
-      ...messageSettings,
-      address,
-      chainId,
-      nonce,
-    }).prepareMessage();
-
-    const signature = await signMessage({ message });
-
-    return orderApi.signIn({
+    return orderClient.api.signIn(null, {
       message,
       signature,
-      chainId,
     });
   } catch (e) {
     console.error(`Failed to sign in`, e);
   }
 };
 
-const createOrder = async ({
-  chainId,
-  address,
-  token,
-  ...rest
-}: CreateOrderArgs) => {
-  //const test = await orderApi.testToken({ chainId, address, token });
-  //console.log({ test });
+const createOrder = async ({ chainId, ...order }: CreateOrderArgs) => {
+  const { signature } = await sign(chainId, order.address);
 
-  const result = await orderApi.createOrder({
-    chainId,
-    order: generateOrder(rest),
-  });
+  try {
+    const response = await orderClient.api.createOrder(
+      null,
+      { ...order, signature },
+      { headers: orderClient.makeHeaders({ chainId }) }
+    );
+  } catch (e) {
+    console.error(`Failed to create an order`, e);
+    throw e;
+  }
 };
 
 const listAllOrders = async ({ chainId, token, address }: BasicOrderArgs) => {
-  const orders = await orderApi.listByAddress({ chainId, address, token });
-  console.log({ orders });
+  const response = await orderClient.api.getOrdersByAddress(address, null, {
+    headers: orderClient.makeHeaders({ chainId, token }),
+  });
+
+  const filters = ["recipient", "referrer", "user"];
+  const dates = ["submitted", "deadline"];
+
+  return response.data.map((o) => {
+    return Object.entries(o).reduce((acc, [name, value]) => {
+      let updated = value;
+      if (!filters.includes(name)) {
+        updated = BigNumber.from(value).toString();
+        if (dates.includes(name)) {
+          updated = new Date(Number(updated.toString()));
+        }
+      }
+
+      return { ...acc, [name]: updated };
+    }, {});
+  });
 };
 
 const listByMarket = async () => {};

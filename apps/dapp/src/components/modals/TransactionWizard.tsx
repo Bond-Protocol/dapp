@@ -10,7 +10,7 @@ import { ContractTransaction } from "ethers";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
 import { Address } from "wagmi";
 
-enum TX_STATUS {
+enum TxStatus {
   /** Waiting, transaction hasn't been sent to signer*/
   STANDBY = "standby",
   /** Transaction has been sent to signer and is pending signature */
@@ -21,9 +21,7 @@ enum TX_STATUS {
   FAILED = "failed",
 }
 
-type TxStatus = `${TX_STATUS}`;
-
-type TxStepHandler = {
+export type TxStepHandler = {
   title?: string;
   element: React.ReactNode;
 };
@@ -51,7 +49,7 @@ export const TransactionWizard = ({
   InitialDialog,
   ...props
 }: TransactionWizardProps) => {
-  const [status, setStatus] = useState<TxStatus>(TX_STATUS.STANDBY);
+  const [status, setStatus] = useState<TxStatus>(TxStatus.STANDBY);
   const [hash, setHash] = useState<Address>();
   const [txError, setTxError] = useState<Error>();
   const [result, setResult] = useState<any>();
@@ -64,7 +62,7 @@ export const TransactionWizard = ({
   //Assume transaction is pending signature if no initial dialog is provided
   useEffect(() => {
     if (!InitialDialog) {
-      TX_STATUS.SIGNING;
+      TxStatus.SIGNING;
     }
   });
 
@@ -72,7 +70,7 @@ export const TransactionWizard = ({
 
   const handleSubmit = async (chainId?: number, ...args: any[]) => {
     const chain = String(props.chainId ?? chainId ?? 1);
-    setStatus(TX_STATUS.SIGNING);
+    setStatus(TxStatus.SIGNING);
 
     try {
       const tx = await props.onSubmit(chain, ...args);
@@ -83,7 +81,7 @@ export const TransactionWizard = ({
     } catch (e) {
       console.error("WizardError:", e);
       setTxError(e as Error);
-      setStatus(TX_STATUS.FAILED);
+      setStatus(TxStatus.FAILED);
     }
   };
 
@@ -91,16 +89,16 @@ export const TransactionWizard = ({
     try {
       if (tx) {
         setHash(tx.hash as Address);
-        setStatus(TX_STATUS.WAITING);
+        setStatus(TxStatus.WAITING);
 
         const result = await tx.wait(1);
         setResult(result);
-        setStatus(TX_STATUS.SUCCESS);
+        setStatus(TxStatus.SUCCESS);
       }
     } catch (e) {
       console.error("WizardError:", e);
       setTxError(e as Error);
-      setStatus(TX_STATUS.FAILED);
+      setStatus(TxStatus.FAILED);
     }
   };
 
@@ -108,13 +106,13 @@ export const TransactionWizard = ({
   useEffect(() => {
     async function handleExternallyStartedTx() {
       if (props.signingTx) {
-        setStatus(TX_STATUS.SIGNING);
+        setStatus(TxStatus.SIGNING);
         try {
           const tx = await props.signingTx;
           handleTx(tx);
         } catch (e) {
           setTxError(e as Error);
-          setStatus(TX_STATUS.FAILED);
+          setStatus(TxStatus.FAILED);
         }
       }
     }
@@ -125,7 +123,7 @@ export const TransactionWizard = ({
   const closeModal = () => {
     props.onClose();
     setOpen(false);
-    setStatus(TX_STATUS.STANDBY);
+    setStatus(TxStatus.STANDBY);
   };
 
   const clear = () => {
@@ -136,13 +134,13 @@ export const TransactionWizard = ({
 
   const restart = () => {
     clear();
-    setStatus(TX_STATUS.STANDBY);
+    setStatus(TxStatus.STANDBY);
   };
 
   const retry = () => {
     clear();
     handleSubmit();
-    setStatus(TX_STATUS.SIGNING);
+    setStatus(TxStatus.SIGNING);
   };
 
   const StartDialog = InitialDialog ?? (() => <div />);

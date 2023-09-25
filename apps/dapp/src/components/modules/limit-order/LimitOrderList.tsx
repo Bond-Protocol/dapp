@@ -12,13 +12,15 @@ import {
 } from "ui";
 
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Popper } from "components/common/Popper";
 import { useOrderApi } from "services/limit-order/use-order-api";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 export type LimitOrderListProps = {
-  orders: Order[];
   onCancelAll: () => void;
+  onClickPlaceOrder: () => void;
+  market: CalculatedMarket;
 };
 
 type Order = {
@@ -27,27 +29,33 @@ type Order = {
   price: string | number;
   discount: string | number;
   amount: string | number;
+  min_amount_out: string | number;
   symbol: string;
   expiry: Date;
+  deadline: Date;
 };
 
-const columns: Column<Order>[] = [
+const columns: Column<Order & { market: CalculatedMarket }>[] = [
   {
     label: "Limit Price",
     accessor: "price",
     width: "w-[33%]",
     tooltip: "Limit order tooltip",
     formatter: (order) => {
+      const totalValue =
+        Number(order.amount) * Number(order.market.quoteToken.price);
+      const price = totalValue / Number(order.min_amount_out);
+
       const discount = getDiscountPercentage(
-        order.marketPrice ?? 0,
-        Number(order.price)
+        order.market.payoutToken.price ?? 0,
+        Number(price)
       );
 
-      const color = getDiscountColor(order.marketPrice ?? 0, discount);
+      const color = getDiscountColor(discount, order.marketPrice ?? 0);
 
       return {
-        value: order.price,
-        subtext: <span className={color}>•{discount.toFixed(2) ?? "??"}%</span>,
+        value: formatCurrency.trimToken(price),
+        subtext: <span className={color}>{discount.toFixed(2) ?? "??"}%</span>,
       };
     },
   },
@@ -63,7 +71,9 @@ const columns: Column<Order>[] = [
       return {
         value: amount,
         sortValue: order.amount,
-        subtext: <span className="text-xs">{order.symbol}</span>,
+        subtext: (
+          <span className="text-xs">{order.market.quoteToken.symbol}</span>
+        ),
       };
     },
   },
@@ -73,9 +83,9 @@ const columns: Column<Order>[] = [
     width: "w-[33%]",
     alignEnd: true,
     formatter: (order) => {
-      const result = formatDate.interval(new Date(), order.expiry);
+      const result = formatDate.interval(new Date(), order.deadline);
       return {
-        sortValue: order.expiry.getTime(),
+        sortValue: order.deadline.getTime(),
         value: result,
       };
     },
@@ -88,8 +98,6 @@ const columns: Column<Order>[] = [
       return { value: order.price };
     },
     Component: (props) => {
-      //const order = useLimitOrder();
-      //return <div>ok</div>;
       return (
         <div key={props.key} className="relative">
           <Popper
@@ -113,89 +121,26 @@ const columns: Column<Order>[] = [
   },
 ];
 
-const sampleData = [
-  {
-    price: 80,
-    discount: "2.14",
-    amount: "20000000",
-    symbol: "ALCX-ETH SLP",
-    expiry: new Date(2023, 8, 9, 9, 0),
-  },
-  {
-    price: 72,
-    discount: "8.14",
-    amount: "0.0012340234",
-    symbol: "ALCX-ETH SLP",
-    expiry: new Date(2023, 8, 18, 5, 43),
-  },
-
-  {
-    price: 80,
-    discount: "2.14",
-    amount: "0.000001234234",
-    symbol: "ALCX-ETH SLP",
-    expiry: new Date(2023, 8, 15, 11, 32),
-  },
-  {
-    price: 74,
-    discount: "8.14",
-    amount: "400",
-    symbol: "ALCX-ETH SLP",
-    expiry: new Date(2023, 8, 28, 10, 0),
-  },
-
-  {
-    price: 81,
-    discount: "2.14",
-    amount: "200",
-    symbol: "ALCX-ETH SLP",
-    expiry: new Date(2023, 8, 8, 11, 0),
-  },
-  {
-    price: 77,
-    discount: "8.14",
-    amount: "40000000000",
-    symbol: "ALCX-ETH SLP",
-    expiry: new Date(2023, 8, 8, 11, 0),
-  },
-].map((d) => ({ ...d, marketPrice: 82 }));
-
 export const LimitOrderList = (props: LimitOrderListProps) => {
-  const data = useMemo(
-    () => (props.orders || sampleData).map((o) => toTableData(columns, o)),
-    [props.orders]
-  );
-
-  const [cols, setCols] = useState<any[]>(sampleData);
   const orderApi = useOrderApi();
+  const [cols, setCols] = useState<any[]>([]);
 
-  const _data = useMemo(async () => {
-    return await orderApi.list();
+  useEffect(() => {
+    async function loadList() {
+      const data = await orderApi.list();
+      const withMarket = data.map((d) => ({ ...d, market: props.market }));
+      setCols(withMarket);
+    }
+
+    loadList();
   }, []);
 
   const [sortedData, sort] = useSorting(
     cols.map((r) => toTableData(columns, r))
   );
 
-  // useEffect(() => {
-  //   let interval: any;
-  //   //if (!!props.orders.length && !cols.length) {
-  //   interval = setInterval(() => {
-  //     const previous = !!cols.length ? cols : props.orders;
-
-  //     const updated = previous.map((o) => ({
-  //       ...o,
-  //       expiry: addSeconds(o.expiry, 1),
-  //     }));
-  //     setCols(updated);
-  //   }, 1000);
-  //   //}
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
   return (
-    <div className="p-4">
+    <div className="h-full p-4 ">
       <div className="flex justify-between p-4 pb-2 pt-0 font-fraktion uppercase">
         <h4 className="text-2xl font-semibold ">Open Orders</h4>
         <button
@@ -205,7 +150,7 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
           Cancel All
         </button>
       </div>
-      <div className="max-h-[300px] w-full overflow-y-auto">
+      <div className="h-full max-h-[300px] w-full overflow-y-auto">
         <Table
           handleSorting={sort}
           className="w-full border-collapse backdrop-blur"
@@ -215,6 +160,14 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
           data={sortedData}
           columns={columns}
         />
+        {!sortedData.length && (
+          <div className="mt-8 flex h-[80%] flex-col items-center justify-center text-center ">
+            <div className="my-auto text-2xl">
+              You don't have any orders yet
+            </div>
+            <Button onClick={props.onClickPlaceOrder}>Place Order</Button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -7,21 +7,20 @@ import type {
 } from 'openapi-client-axios'; 
 
 declare namespace Components {
-    namespace Parameters {
-        export type AccountAddressParameter = string;
-        export type AddressParameter = string;
-        export type ChainIdParameter = number;
-    }
-    export interface PathParameters {
-        AccountAddressParameter?: Parameters.AccountAddressParameter;
-        AddressParameter?: Parameters.AddressParameter;
-        ChainIdParameter?: Parameters.ChainIdParameter;
-    }
     namespace Schemas {
         /**
          * A JSON object containing two string fields, access_token and refresh_token.
          */
-        export type JWTPair = string;
+        export interface JWTPair {
+            /**
+             * A JWT refresh token
+             */
+            refresh_token?: string;
+            /**
+             * A JWT access token
+             */
+            access_token?: string;
+        }
         /**
          * Details of an existing order.
          */
@@ -111,21 +110,20 @@ declare namespace Components {
         /**
          * A JSON object containing two string fields, a Sign in With Ethereum message and signature. The nonce found in the decoded signature should match the nonce in the message.
          */
-        export type SigninData = any;
+        export interface SigninData {
+            /**
+             * The messaged use with SIWE
+             */
+            message?: string;
+            /**
+             * The SIWE Signature
+             */
+            signature?: string;
+        }
     }
 }
 declare namespace Paths {
     namespace CreateOrder {
-        export interface HeaderParameters {
-            "X-Chain-Id"?: Parameters.XChainId;
-            "X-Aggregator"?: Parameters.XAggregator;
-            "X-Settlement"?: Parameters.XSettlement;
-        }
-        namespace Parameters {
-            export type XAggregator = string;
-            export type XChainId = number;
-            export type XSettlement = string;
-        }
         export type RequestBody = /* Parameters for an order, including a signature. */ Components.Schemas.OrderRequest;
         namespace Responses {
             export type $200 = string;
@@ -136,16 +134,6 @@ declare namespace Paths {
         }
     }
     namespace EstimateFee {
-        export interface HeaderParameters {
-            "X-Chain-Id"?: Parameters.XChainId;
-            "X-Aggregator"?: Parameters.XAggregator;
-            "X-Settlement"?: Parameters.XSettlement;
-        }
-        namespace Parameters {
-            export type XAggregator = string;
-            export type XChainId = number;
-            export type XSettlement = string;
-        }
         export type RequestBody = /* Details of an existing order. */ Components.Schemas.Order;
         namespace Responses {
             export type $200 = number;
@@ -155,25 +143,28 @@ declare namespace Paths {
             }
         }
     }
-    namespace GetActiveOrdersByAddress {
+    namespace FeesEstimate {
         export interface HeaderParameters {
-            Authorization?: Parameters.Authorization;
-            "X-Chain-Id"?: Parameters.XChainId;
-            "X-Aggregator"?: Parameters.XAggregator;
-            "X-Settlement"?: Parameters.XSettlement;
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
         }
         namespace Parameters {
-            export type AccountAddress = string;
-            export type Authorization = string;
             export type XAggregator = string;
             export type XChainId = number;
             export type XSettlement = string;
         }
-        export interface PathParameters {
-            account_address: Parameters.AccountAddress;
-        }
+    }
+    namespace GetActiveOrdersByAddress {
         namespace Responses {
             export type $200 = /* Details of an existing order. */ Components.Schemas.Order[];
+            export interface $500 {
+            }
+        }
+    }
+    namespace GetExecutors {
+        namespace Responses {
+            export type $200 = string[];
             export interface $500 {
             }
         }
@@ -186,85 +177,108 @@ declare namespace Paths {
         }
     }
     namespace GetOrdersByAddress {
-        export interface HeaderParameters {
-            Authorization?: Parameters.Authorization;
-            "X-Chain-Id"?: Parameters.XChainId;
-            "X-Aggregator"?: Parameters.XAggregator;
-            "X-Settlement"?: Parameters.XSettlement;
-        }
-        namespace Parameters {
-            export type AccountAddress = string;
-            export type Authorization = string;
-            export type XAggregator = string;
-            export type XChainId = number;
-            export type XSettlement = string;
-        }
-        export interface PathParameters {
-            account_address: Parameters.AccountAddress;
-        }
         namespace Responses {
             export type $200 = /* Details of an existing order. */ Components.Schemas.Order[];
             export interface $500 {
             }
         }
     }
-    namespace GetQuoteTokens {
-        export interface HeaderParameters {
-            "X-Chain-Id"?: Parameters.XChainId;
-            "X-Aggregator"?: Parameters.XAggregator;
-            "X-Settlement"?: Parameters.XSettlement;
-        }
-        namespace Parameters {
-            export type XAggregator = string;
-            export type XChainId = number;
-            export type XSettlement = string;
-        }
+    namespace GetSupportedQuoteTokens {
         namespace Responses {
             export type $200 = string[];
             export interface $500 {
             }
         }
     }
-    namespace QuoteTokens {
-        namespace Get {
-            export interface HeaderParameters {
-                "X-Chain-Id"?: Parameters.XChainId;
-                "X-Aggregator"?: Parameters.XAggregator;
-                "X-Settlement"?: Parameters.XSettlement;
-            }
-            namespace Parameters {
-                export type XAggregator = string;
-                export type XChainId = number;
-                export type XSettlement = string;
-            }
-            namespace Responses {
-                export type $200 = any[];
-                export interface $500 {
-                }
+    namespace IsTokenSupported {
+        namespace Responses {
+            export type $200 = boolean;
+            export interface $500 {
             }
         }
     }
+    namespace OrdersAddress$Address {
+        export interface HeaderParameters {
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
+        }
+        namespace Parameters {
+            export type Address = string;
+            export type XAggregator = string;
+            export type XChainId = number;
+            export type XSettlement = string;
+        }
+        export interface PathParameters {
+            address: Parameters.Address;
+        }
+    }
+    namespace OrdersAddress$AddressActive {
+        export interface HeaderParameters {
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
+        }
+        namespace Parameters {
+            export type Address = string;
+            export type XAggregator = string;
+            export type XChainId = number;
+            export type XSettlement = string;
+        }
+        export interface PathParameters {
+            address: Parameters.Address;
+        }
+    }
+    namespace OrdersNew {
+        export interface HeaderParameters {
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
+        }
+        namespace Parameters {
+            export type XAggregator = string;
+            export type XChainId = number;
+            export type XSettlement = string;
+        }
+    }
+    namespace PermissionsExecutors {
+        export interface HeaderParameters {
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
+        }
+        namespace Parameters {
+            export type XAggregator = string;
+            export type XChainId = number;
+            export type XSettlement = string;
+        }
+    }
+    namespace QuoteTokens {
+        export interface HeaderParameters {
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
+        }
+        namespace Parameters {
+            export type XAggregator = string;
+            export type XChainId = number;
+            export type XSettlement = string;
+        }
+    }
     namespace QuoteTokens$Address {
-        namespace Get {
-            export interface HeaderParameters {
-                "X-Chain-Id"?: Parameters.XChainId;
-                "X-Aggregator"?: Parameters.XAggregator;
-                "X-Settlement"?: Parameters.XSettlement;
-            }
-            namespace Parameters {
-                export type Address = string;
-                export type XAggregator = string;
-                export type XChainId = number;
-                export type XSettlement = string;
-            }
-            export interface PathParameters {
-                address: Parameters.Address;
-            }
-            namespace Responses {
-                export type $200 = boolean;
-                export interface $500 {
-                }
-            }
+        export interface HeaderParameters {
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
+        }
+        namespace Parameters {
+            export type Address = string;
+            export type XAggregator = string;
+            export type XChainId = number;
+            export type XSettlement = string;
+        }
+        export interface PathParameters {
+            address: Parameters.Address;
         }
     }
     namespace RefreshAuth {
@@ -333,7 +347,7 @@ export interface OperationMethods {
    * estimateFee - Estimates fees for an Order
    */
   'estimateFee'(
-    parameters?: Parameters<Paths.EstimateFee.HeaderParameters> | null,
+    parameters?: Parameters<Paths.FeesEstimate.HeaderParameters> | null,
     data?: Paths.EstimateFee.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.EstimateFee.Responses.$200>
@@ -341,7 +355,7 @@ export interface OperationMethods {
    * createOrder - Submit a new order.
    */
   'createOrder'(
-    parameters?: Parameters<Paths.CreateOrder.HeaderParameters> | null,
+    parameters?: Parameters<Paths.OrdersNew.HeaderParameters> | null,
     data?: Paths.CreateOrder.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.CreateOrder.Responses.$200>
@@ -349,7 +363,7 @@ export interface OperationMethods {
    * getOrdersByAddress - Get Orders for user address.
    */
   'getOrdersByAddress'(
-    parameters?: Parameters<Paths.GetOrdersByAddress.PathParameters & Paths.GetOrdersByAddress.HeaderParameters> | null,
+    parameters?: Parameters<Paths.OrdersAddress$Address.PathParameters & Paths.OrdersAddress$Address.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetOrdersByAddress.Responses.$200>
@@ -357,18 +371,34 @@ export interface OperationMethods {
    * getActiveOrdersByAddress - Get active Orders for user address.
    */
   'getActiveOrdersByAddress'(
-    parameters?: Parameters<Paths.GetActiveOrdersByAddress.PathParameters & Paths.GetActiveOrdersByAddress.HeaderParameters> | null,
+    parameters?: Parameters<Paths.OrdersAddress$AddressActive.PathParameters & Paths.OrdersAddress$AddressActive.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetActiveOrdersByAddress.Responses.$200>
   /**
-   * getQuoteTokens - Get addresses with executor permissions.
+   * getExecutors - Get addresses with executor permissions.
    */
-  'getQuoteTokens'(
-    parameters?: Parameters<Paths.GetQuoteTokens.HeaderParameters> | null,
+  'getExecutors'(
+    parameters?: Parameters<Paths.PermissionsExecutors.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetQuoteTokens.Responses.$200>
+  ): OperationResponse<Paths.GetExecutors.Responses.$200>
+  /**
+   * getSupportedQuoteTokens - Returns all quote tokens on the chain specified in the X-Chain_Id header
+   */
+  'getSupportedQuoteTokens'(
+    parameters?: Parameters<Paths.QuoteTokens.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetSupportedQuoteTokens.Responses.$200>
+  /**
+   * isTokenSupported - Checks whether the specified quote token is approved.
+   */
+  'isTokenSupported'(
+    parameters?: Parameters<Paths.QuoteTokens$Address.PathParameters & Paths.QuoteTokens$Address.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.IsTokenSupported.Responses.$200>
 }
 
 export interface PathsDictionary {
@@ -417,7 +447,7 @@ export interface PathsDictionary {
      * estimateFee - Estimates fees for an Order
      */
     'get'(
-      parameters?: Parameters<Paths.EstimateFee.HeaderParameters> | null,
+      parameters?: Parameters<Paths.FeesEstimate.HeaderParameters> | null,
       data?: Paths.EstimateFee.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.EstimateFee.Responses.$200>
@@ -427,44 +457,60 @@ export interface PathsDictionary {
      * createOrder - Submit a new order.
      */
     'post'(
-      parameters?: Parameters<Paths.CreateOrder.HeaderParameters> | null,
+      parameters?: Parameters<Paths.OrdersNew.HeaderParameters> | null,
       data?: Paths.CreateOrder.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.CreateOrder.Responses.$200>
   }
-  ['/orders/address/{account_address}']: {
+  ['/orders/address/{address}']: {
     /**
      * getOrdersByAddress - Get Orders for user address.
      */
     'get'(
-      parameters?: Parameters<Paths.GetOrdersByAddress.PathParameters & Paths.GetOrdersByAddress.HeaderParameters> | null,
+      parameters?: Parameters<Paths.OrdersAddress$Address.PathParameters & Paths.OrdersAddress$Address.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetOrdersByAddress.Responses.$200>
   }
-  ['/orders/address/{account_address}/active']: {
+  ['/orders/address/{address}/active']: {
     /**
      * getActiveOrdersByAddress - Get active Orders for user address.
      */
     'get'(
-      parameters?: Parameters<Paths.GetActiveOrdersByAddress.PathParameters & Paths.GetActiveOrdersByAddress.HeaderParameters> | null,
+      parameters?: Parameters<Paths.OrdersAddress$AddressActive.PathParameters & Paths.OrdersAddress$AddressActive.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetActiveOrdersByAddress.Responses.$200>
   }
   ['/permissions/executors']: {
     /**
-     * getQuoteTokens - Get addresses with executor permissions.
+     * getExecutors - Get addresses with executor permissions.
      */
     'get'(
-      parameters?: Parameters<Paths.GetQuoteTokens.HeaderParameters> | null,
+      parameters?: Parameters<Paths.PermissionsExecutors.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetQuoteTokens.Responses.$200>
+    ): OperationResponse<Paths.GetExecutors.Responses.$200>
   }
   ['/quote_tokens']: {
+    /**
+     * getSupportedQuoteTokens - Returns all quote tokens on the chain specified in the X-Chain_Id header
+     */
+    'get'(
+      parameters?: Parameters<Paths.QuoteTokens.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetSupportedQuoteTokens.Responses.$200>
   }
   ['/quote_tokens/{address}']: {
+    /**
+     * isTokenSupported - Checks whether the specified quote token is approved.
+     */
+    'get'(
+      parameters?: Parameters<Paths.QuoteTokens$Address.PathParameters & Paths.QuoteTokens$Address.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.IsTokenSupported.Responses.$200>
   }
 }
 

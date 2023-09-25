@@ -1,5 +1,5 @@
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   ActionInfoList,
   ButtonGroup,
@@ -29,25 +29,28 @@ export const LimitOrderConfirmationDialog = (
   const [autoCancel, setAutoCancel] = useState(true);
   const order = useLimitOrderForMarket();
 
-  const fields = [
-    {
-      leftLabel: "Min amount to receive",
-      rightLabel: `${formatCurrency.amount(order.payout)} ${
-        props.market.payoutToken.symbol
-      }`,
-      tooltip: "Only if bid is successful",
-    },
-    {
-      leftLabel: "Order Expires on",
-      rightLabel: formatDate.short(order.expiry),
-    },
-    { leftLabel: "Max Fee", tooltip: "", rightLabel: "" },
-    {
-      leftLabel: "Limit Order contract",
-      rightLabel: `View on ${props.market.blockExplorerName}`,
-      link: `${props.market.blockExplorerUrl} ${props.orderContract}}`,
-    },
-  ];
+  const fields = useMemo(
+    () => [
+      {
+        leftLabel: "Min amount to receive",
+        rightLabel: `${formatCurrency.amount(order.payout)} ${
+          props.market.payoutToken.symbol
+        }`,
+        tooltip: "Only if bid is successful",
+      },
+      {
+        leftLabel: "Order Expires on",
+        rightLabel: formatDate.short(order.expiry),
+      },
+      { leftLabel: "Max Fee", tooltip: "", rightLabel: "" },
+      {
+        leftLabel: "Limit Order contract",
+        rightLabel: `View on ${props.market.blockExplorerName}`,
+        link: `${props.market.blockExplorerUrl} ${props.orderContract}}`,
+      },
+    ],
+    [props.market, order.payout, order.expiry]
+  );
 
   return (
     <div className="text-[15px] font-light">
@@ -56,7 +59,7 @@ export const LimitOrderConfirmationDialog = (
         <div className="grid grid-cols-[1fr_32px_1fr]">
           <SummaryLabel
             icon={props.market.quoteToken.logoURI}
-            value={`${formatCurrency.amount(order.amount)}`}
+            value={`${formatCurrency.amount(order.amount ?? 0)}`}
             subtext="You Bond"
             className="uppercase"
           />

@@ -2,14 +2,13 @@ import {
   CalculatedMarket,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
-import { TransactionWizard } from "components/modals/TransactionWizard";
+import { QueryWizard } from "components/common/QueryWizard";
 import { BondButton } from "components/organisms/BondButton";
 import { useState } from "react";
 import defillama from "services/defillama";
 import {
   InputCard,
   Input,
-  Select,
   ActionInfoList,
   formatDate,
   Button,
@@ -22,27 +21,28 @@ import { useAccount } from "wagmi";
 import { useLimitOrderForMarket } from "./limit-order-context";
 import { LimitOrderConfirmationDialog } from "./LimitOrderConfirmationDialog";
 
+const selectExpiryOptions = [
+  { label: "1 day", id: 1 },
+  { label: "3 days", id: 3 },
+  { label: "7 days", id: 7 },
+  { label: "14 days", id: 14 },
+  { label: "30 days", id: 30 },
+];
+
 export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
-  const options = [
-    { label: "1 day", id: 1 },
-    { label: "3 days", id: 3 },
-    { label: "7 days", id: 7 },
-    { label: "14 days", id: 14 },
-    { label: "30 days", id: 30 },
-  ].filter(
-    (
-      o // remove dates that after market end date
-    ) =>
+  const account = useAccount();
+  const { allowance, ...order } = useLimitOrderForMarket();
+
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  // remove dates that go past market conclusion
+  const options = selectExpiryOptions.filter(
+    (o) =>
       !dateMath.isBefore(
         new Date(props.market.conclusion! * 1000),
         dateMath.addDays(new Date(), o.id)
       )
   );
-
-  const account = useAccount();
-  const [isConfirming, setIsConfirming] = useState(false);
-
-  const { allowance, ...order } = useLimitOrderForMarket();
 
   return (
     <div className="p-4">
@@ -61,7 +61,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
             ModalContent={(args) => (
               <SelectDateDialog
                 {...args}
-                limitDate={new Date(props?.market?.conclusion * 1000)}
+                limitDate={new Date(props?.market?.conclusion! * 1000)}
               />
             )}
             title="Select Order Expiry Date"
@@ -85,19 +85,22 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           props.market,
           Number(order.payout),
           order.discount + "",
-          order.expiry
+          order.expiry,
+          order.price
         )}
       />
-      <TransactionWizard
-        titles={{ standby: "Limit Order Confirmation" }}
-        open={isConfirming}
-        chainId={props.market.chainId}
-        onSubmit={() => order.createOrder()}
-        onClose={() => setIsConfirming(false)}
-        InitialDialog={(args: any) => (
-          <LimitOrderConfirmationDialog {...args} market={props.market} />
-        )}
-      />
+      {isConfirming && (
+        <QueryWizard
+          open={isConfirming}
+          onSubmit={() => order.createOrder()}
+          onClose={() => setIsConfirming(false)}
+          title="Confirm Order"
+          StartDialog={(args: any) => (
+            <LimitOrderConfirmationDialog {...args} market={props.market} />
+          )}
+          SuccessDialog={() => <div>Order placed successfully!</div>}
+        />
+      )}
       <BondButton
         showConnect={!account.isConnected}
         showPurchaseLink={!allowance.hasSufficientBalance}
@@ -127,37 +130,45 @@ function generateSummaryFields(
   market: CalculatedMarket,
   payout: number,
   discount: string | number,
-  expiry: Date
+  expiry: Date,
+  price: string
 ) {
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
     market.chainId,
     "address"
   );
 
+  const isValidPrice = !!Number(price) && isFinite(Number(price));
+  const isDiscountPositive = Math.sign(Number(discount)) > 0;
   return [
     {
       leftLabel: "Discount to Current",
       rightLabel: (
         <span
           className={
-            Math.sign(Number(discount)) > 0
-              ? "text-light-success"
-              : "text-light-alert"
+            isValidPrice
+              ? isDiscountPositive
+                ? "text-light-success"
+                : "text-light-alert"
+              : ""
           }
         >
-          {Number(discount).toFixed(2)}%
+          {isValidPrice
+            ? Number(discount).toFixed(2).concat("%")
+            : "Set price to view discount"}
         </span>
       ),
     },
     {
       leftLabel: "You will get",
       rightLabel: `${
-        !isFinite(payout)
-          ? "?"
-          : payout < 999
-          ? formatCurrency.trimToken(payout)
-          : formatCurrency.longFormatter.format(payout)
-      } ${market.payoutToken.symbol}`,
+        isFinite(payout) && payout != 0
+          ? payout < 999
+            ? formatCurrency.trimToken(payout) + ` ${market.payoutToken.symbol}`
+            : formatCurrency.longFormatter.format(payout) +
+              ` ${market.payoutToken.symbol}`
+          : `Set amount and price to view payout`
+      }`,
     },
     {
       leftLabel: "Order expires on",
