@@ -46,7 +46,11 @@ export const BondPurchaseController = ({
               subtitle="We're protecting you against impersonating"
             >
               {/*TODO: Implement*/}
-              <LimitOrderList orders={[]} onCancelAll={() => {}} />
+              <LimitOrderList
+                market={market}
+                onClickPlaceOrder={() => setSelected(1)}
+                onCancelAll={() => {}}
+              />
             </RequiresAuth>
           </RequiresLimitOrderSupport>
         </div>

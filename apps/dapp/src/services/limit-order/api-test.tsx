@@ -9,7 +9,6 @@ export const ApiTestElement = () => {
   return (
     <div>
       <Button onClick={() => auth.signIn()}>Sign in</Button>
-      <Button onClick={() => api.createOrder({})}>Create Order</Button>
       <Button variant="secondary" onClick={api.signIn}>
         Cancel Order
       </Button>

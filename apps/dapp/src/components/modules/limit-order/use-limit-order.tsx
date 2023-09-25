@@ -7,10 +7,10 @@ import { calcDiscountPercentage } from "src/utils/calculate-percentage";
 import { dateMath, useNumericInput } from "ui";
 import { useOrderApi } from "services/limit-order/use-order-api";
 import { BigNumber } from "ethers";
+import { toHex } from "src/utils/bignumber";
 
 export const useLimitOrder = (market: CalculatedMarket) => {
   const { value: price, onChange: setPrice } = useNumericInput();
-  //const { value: amount, onChange: setAmount } = useNumericInput();
   const [amount, setAmount] = useState<string>();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
   const api = useOrderApi();
@@ -32,25 +32,32 @@ export const useLimitOrder = (market: CalculatedMarket) => {
 
   const discount = calcDiscountPercentage(market.fullPrice, Number(price));
   const payout =
-    ((amount ?? 0) * (market?.quoteToken?.price ?? 0)) / Number(price);
+    (Number(amount) * (market?.quoteToken?.price ?? 0)) / Number(price);
 
   const createOrder = async () => {
-    console.log("UselimitOrder-CreateOrder");
-    console.log({ amount, price, expiry, address });
     if (!amount || !price || !expiry || !address)
       throw new Error("Missing properties for creating an order");
 
-    const res = await api.createOrder({
+    const values = {
       market_id: String(market.marketId),
       amount: amount.toString(),
-      min_amount_out: BigNumber.from(amount).toString(),
+      min_amount_out: payout.toFixed(0),
+      deadline: expiry.getTime().toString(),
+      submitted: new Date().getTime().toString(),
+      max_fee: "1",
+    };
+
+    const hexed = {
+      ...toHex(values),
       recipient: address,
       user: address,
       referrer: address,
-      max_fee: "1",
-      deadline: expiry.getTime().toString(),
-    });
-    console.log({ res });
+    };
+
+    console.log({ hexed });
+    const response = await api.createOrder(hexed);
+
+    console.log({ res: response });
   };
 
   const updateExpiry = (expiry: number | Date) => {
