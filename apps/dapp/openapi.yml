@@ -5,11 +5,23 @@ info:
 servers:
   - description: Local environment
     url: http://localhost:8080
+tags:
+  - name: Authentication
+    description: Endpoints for authenticating users to retrieve order data.
+  - name: Orders
+    description: Endpoints for submitting and retrieving orders.
+  - name: Fees
+    description: Endpoints for estimating fees for order submission.
+  - name: Permissions
+    description: Endpoints for getting data about permissioned addresses.
+  - name: Quote Tokens
+    description: Endpoints for getting data about approved quote tokens.
 paths:
   /auth/nonce:
     get:
       summary: Get a nonce for a sign in request.
       operationId: getNonce
+      tags: [Authentication]
       responses:
         200:
           description: Nonce has been created.
@@ -23,6 +35,7 @@ paths:
     post:
       summary: Signs the user in, creating and returning a JWT.
       operationId: signIn
+      tags: [Authentication]
       requestBody:
         description: The Sign in With Ethereum message and signature.
         required: true
@@ -45,6 +58,7 @@ paths:
     post:
       summary: Checks a provided refresh token, returns a new access token and refresh token.
       operationId: refreshAuth
+      tags: [Authentication]
       requestBody:
         description: The user's current refresh token.
         required: true
@@ -63,10 +77,18 @@ paths:
           description: Bad Request - refresh token provided is not valid.
         500:
           description: Error refreshing tokens.
-  /auth/test:
+  /auth/test/{address}:
     get:
       summary: Tests whether signed in user can view address provided in params.
       operationId: testAuth
+      parameters:
+        - name: address
+          in: path
+          description: The address being queried
+          schema:
+            type: string
+          required: true
+      tags: [Authentication]
       responses:
         200:
           description: User is authorized to view the address.
@@ -76,6 +98,8 @@ paths:
                 type: string
         401:
           description: Unauthorized.
+      security:
+        - JWTAuthorization: []
   /fees/estimate:
     parameters:
       - name: x-chain-id
@@ -99,6 +123,7 @@ paths:
     get:
       summary: Estimates fees for an Order
       operationId: estimateFee
+      tags: [Fees]
       requestBody:
         description: An Order object.
         required: true
@@ -140,6 +165,7 @@ paths:
     post:
       summary: Submit a new order.
       operationId: createOrder
+      tags: [Orders]
       requestBody:
         description: A signed OrderRequest.
         required: true
@@ -158,6 +184,108 @@ paths:
           description: Bad Request - OrderRequest is not valid.
         500:
           description: Error processing OrderRequest.
+  /orders/address/{address}/order/{digest}/cancel:
+    parameters:
+      - name: address
+        in: path
+        description: The user address that created the order
+        schema:
+          type: string
+        required: true
+      - name: digest
+        in: path
+        description: The digest of the order being cancelled
+        schema:
+          type: string
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    post:
+      summary: Cancel an order.
+      operationId: cancelOrderByDigest
+      tags: [Orders]
+      responses:
+        200:
+          description: Successfully cancelled order.
+          content:
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Bad Request - Order digest is not valid or active.
+        401:
+          description: Unauthorized - User is not authorized to cancel order.
+        500:
+          description: Error processing request.
+      security:
+        - JWTAuthorization: []
+  /orders/address/{address}/market/{market_id}/cancel:
+    parameters:
+      - name: address
+        in: path
+        description: The user address that created the order
+        schema:
+          type: string
+        required: true
+      - name: market_id
+        in: path
+        description: The id of the market to cancel orders for
+        schema:
+          type: integer
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    post:
+      summary: Cancel all orders for a market.
+      operationId: cancelOrder
+      tags: [Orders]
+      responses:
+        200:
+          description: Order cancellation successful.
+          content:
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Bad Request - Market is not active, cancellation not required.
+        401:
+          description: Unauthorized - User is not authorized to cancel order.
+        500:
+          description: Error processing request.
+      security:
+        - JWTAuthorization: []
   /orders/address/{address}:
     parameters:
       - name: address
@@ -187,6 +315,7 @@ paths:
     get:
       summary: Get Orders for user address.
       operationId: getOrdersByAddress
+      tags: [Orders]
       responses:
         200:
           description: An array of Orders for the specified address.
@@ -229,6 +358,7 @@ paths:
     get:
       summary: Get active Orders for user address.
       operationId: getActiveOrdersByAddress
+      tags: [Orders]
       responses:
         200:
           description: An array of active Orders for the specified address.
@@ -264,7 +394,7 @@ paths:
         required: true
     get:
       summary: Get addresses with executor permissions.
-      operationId: getExecutors
+      tags: [Permissions]
       responses:
         200:
           description: An array of addresses with executor permissions.
@@ -299,7 +429,8 @@ paths:
         required: true
     get:
       summary: Returns all quote tokens on the chain specified in the X-Chain_Id header
-      operationId: getSupportedQuoteTokens
+      operationId: getSupportedQuoteTokens 
+      tags: [Quote Tokens]
       responses:
         200:
           description: A list of quote token addresses.
@@ -312,11 +443,11 @@ paths:
                   type: string
         500:
           description: Failed to get quote tokens or failed to serialize response.
-  /quote_tokens/{address}:
+  /quote_tokens/{token_address}:
     parameters:
-      - name: address
+      - name: token_address
         in: path
-        description: The address being queried
+        description: Address of the quote token to check
         schema:
           type: string
         required: true
@@ -341,6 +472,7 @@ paths:
     get:
       summary: Checks whether the specified quote token is approved.
       operationId: isTokenSupported
+      tags: [Quote Tokens]
       responses:
         200:
           description: Whether or not the quote token is approved.

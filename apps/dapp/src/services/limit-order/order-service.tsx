@@ -1,6 +1,5 @@
-import { environment } from "src/environment";
 import { SiweMessage } from "siwe";
-import { Address, signMessage, signTypedData } from "@wagmi/core";
+import { Address, signMessage } from "@wagmi/core";
 import { orderApi as orderClient } from "./api-client";
 import { Order } from "src/types/openapi";
 import { BigNumber } from "ethers";
@@ -65,6 +64,7 @@ const createOrder = async ({ chainId, ...order }: CreateOrderArgs) => {
       { ...order, signature },
       { headers: orderClient.makeHeaders({ chainId }) }
     );
+    return response;
   } catch (e) {
     console.error(`Failed to create an order`, e);
     throw e;

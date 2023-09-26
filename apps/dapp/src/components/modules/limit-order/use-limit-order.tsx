@@ -6,7 +6,6 @@ import { useState } from "react";
 import { calcDiscountPercentage } from "src/utils/calculate-percentage";
 import { dateMath, useNumericInput } from "ui";
 import { useOrderApi } from "services/limit-order/use-order-api";
-import { BigNumber } from "ethers";
 import { toHex } from "src/utils/bignumber";
 
 export const useLimitOrder = (market: CalculatedMarket) => {
@@ -38,24 +37,24 @@ export const useLimitOrder = (market: CalculatedMarket) => {
     if (!amount || !price || !expiry || !address)
       throw new Error("Missing properties for creating an order");
 
-    const values = {
+    const decimalValues = {
       market_id: String(market.marketId),
-      amount: amount.toString(),
+      amount,
       min_amount_out: payout.toFixed(0),
-      deadline: expiry.getTime().toString(),
-      submitted: new Date().getTime().toString(),
+      deadline: expiry.getTime(),
+      submitted: new Date().getTime(),
       max_fee: "1",
     };
 
-    const hexed = {
-      ...toHex(values),
+    const order = {
+      ...toHex(decimalValues),
       recipient: address,
       user: address,
       referrer: address,
     };
 
-    console.log({ hexed });
-    const response = await api.createOrder(hexed);
+    console.log({ hexed: order });
+    const response = await api.createOrder(order);
 
     console.log({ res: response });
   };
