@@ -18,9 +18,8 @@ import { useOrderApi } from "services/limit-order/use-order-api";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 export type LimitOrderListProps = {
-  onCancelAll: () => void;
-  onClickPlaceOrder: () => void;
   market: CalculatedMarket;
+  onClickPlaceOrder: () => void;
 };
 
 type Order = {
@@ -98,10 +97,13 @@ const columns: Column<Order & { market: CalculatedMarket }>[] = [
       return { value: order.price };
     },
     Component: (props) => {
+      const o = useOrderApi(props.data.market);
+
       return (
         <div key={props.key} className="relative">
           <Popper
             TriggerElement={({ onClick }) => (
+              //@ts-ignore
               <div onClick={onClick} className="relative right-1.5">
                 <Icon
                   className="hover:cursor-pointer"
@@ -112,7 +114,14 @@ const columns: Column<Order & { market: CalculatedMarket }>[] = [
             )}
           >
             <div className="w-full rounded-lg bg-light-tooltip p-4">
-              <Button variant="ghost">Cancel Order</Button>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  o.cancelOrder(props.data.digest);
+                }}
+              >
+                Cancel Order
+              </Button>
             </div>
           </Popper>
         </div>
@@ -122,13 +131,16 @@ const columns: Column<Order & { market: CalculatedMarket }>[] = [
 ];
 
 export const LimitOrderList = (props: LimitOrderListProps) => {
-  const orderApi = useOrderApi();
+  const orderApi = useOrderApi(props.market);
   const [cols, setCols] = useState<any[]>([]);
 
   useEffect(() => {
     async function loadList() {
       const data = await orderApi.list();
-      const withMarket = data.map((d) => ({ ...d, market: props.market }));
+      const withMarket = data
+        //@ts-ignore
+        .filter((order) => order?.status === "Active")
+        .map((d) => ({ ...d, market: props.market }));
       setCols(withMarket);
     }
 
@@ -144,7 +156,9 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
       <div className="flex justify-between p-4 pb-2 pt-0 font-fraktion uppercase">
         <h4 className="text-2xl font-semibold ">Open Orders</h4>
         <button
-          onClick={props.onCancelAll}
+          onClick={() =>
+            orderApi.cancelAllOrders(props.market?.marketId?.toString())
+          }
           className="my-auto font-bold uppercase tracking-widest transition-all hover:text-light-secondary"
         >
           Cancel All
@@ -162,10 +176,14 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
         />
         {!sortedData.length && (
           <div className="mt-8 flex h-[80%] flex-col items-center justify-center text-center ">
-            <div className="my-auto text-2xl">
-              You don't have any orders yet
+            <div>
+              <div className="my-auto text-2xl">
+                You don't have any orders yet
+              </div>
+              <Button className="mt-4" onClick={props.onClickPlaceOrder}>
+                Place Order
+              </Button>
             </div>
-            <Button onClick={props.onClickPlaceOrder}>Place Order</Button>
           </div>
         )}
       </div>

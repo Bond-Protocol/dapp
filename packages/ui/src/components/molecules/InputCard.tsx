@@ -1,5 +1,6 @@
 import { Input } from "../atoms/Input";
 import { TokenLogo } from "..";
+import { formatCurrency } from "src/utils";
 
 export type InputCardProps = {
   balance?: string;
@@ -47,7 +48,7 @@ export const InputCard = ({
       <div className={`mb-1 flex justify-end ${className}`}>
         <div className="my-auto text-xs">
           <span className="text-light-grey-400">Balance: </span>
-          {balance + " " + market?.quoteToken?.symbol}
+          {formatCurrency.amount(balance) + " " + market?.quoteToken?.symbol}
         </div>
       </div>
       <div className="flex w-full gap-2">

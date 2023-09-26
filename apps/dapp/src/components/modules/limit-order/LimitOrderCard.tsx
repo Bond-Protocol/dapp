@@ -57,15 +57,16 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           <SelectModal
             label="Order Expiry"
             options={options}
+            //@ts-ignore
             defaultValue={options[0].id}
-            ModalContent={(args) => (
+            ModalContent={(args: any) => (
               <SelectDateDialog
                 {...args}
                 limitDate={new Date(props?.market?.conclusion! * 1000)}
               />
             )}
             title="Select Order Expiry Date"
-            onSubmit={({ value }) => {
+            onSubmit={({ value }: any) => {
               //TODO: afx -> clean up, SelectDateDialog is inconsistent with other dialogs
               order.setExpiry(value?.value ?? value);
             }}
@@ -76,6 +77,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
         className="mt-4"
         tokenIcon={props.market.quoteToken.logoURI}
         market={props.market}
+        balance={allowance.balance}
         value={order.amount?.toString()}
         onChange={order.setAmount}
       />
@@ -153,9 +155,7 @@ function generateSummaryFields(
               : ""
           }
         >
-          {isValidPrice
-            ? Number(discount).toFixed(2).concat("%")
-            : "Set price to view discount"}
+          {isValidPrice ? Number(discount).toFixed(2).concat("%") : "-"}
         </span>
       ),
     },
@@ -167,12 +167,12 @@ function generateSummaryFields(
             ? formatCurrency.trimToken(payout) + ` ${market.payoutToken.symbol}`
             : formatCurrency.longFormatter.format(payout) +
               ` ${market.payoutToken.symbol}`
-          : `Set amount and price to view payout`
+          : `-`
       }`,
     },
     {
       leftLabel: "Order expires on",
-      rightLabel: formatDate.short(expiry),
+      rightLabel: expiry ? formatDate.short(expiry) : "-",
     },
     {
       leftLabel: "Max fee",
