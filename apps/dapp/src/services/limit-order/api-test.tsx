@@ -4,14 +4,10 @@ import { useOrderApi } from "./use-order-api";
 
 export const ApiTestElement = () => {
   const auth = useAuth();
-  const api = useOrderApi();
 
   return (
     <div>
       <Button onClick={() => auth.signIn()}>Sign in</Button>
-      <Button variant="secondary" onClick={api.signIn}>
-        Cancel Order
-      </Button>
     </div>
   );
 };

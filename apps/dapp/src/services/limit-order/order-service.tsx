@@ -17,7 +17,7 @@ export type OrderConfig = Required<Omit<Required<Order>, "submitted">>;
 type BasicOrderArgs = {
   chainId: number;
   address: string | Address;
-  token: string;
+  token?: string;
 };
 
 type CreateOrderArgs = BasicOrderArgs & OrderConfig;
@@ -76,7 +76,7 @@ const listAllOrders = async ({ chainId, token, address }: BasicOrderArgs) => {
     headers: orderClient.makeHeaders({ chainId, token }),
   });
 
-  const filters = ["recipient", "referrer", "user"];
+  const filters = ["status", "recipient", "referrer", "user"];
   const dates = ["submitted", "deadline"];
 
   return response.data.map((o) => {
@@ -94,13 +94,57 @@ const listAllOrders = async ({ chainId, token, address }: BasicOrderArgs) => {
   });
 };
 
-const listByMarket = async () => {};
+const cancelOrder = async ({
+  chainId,
+  address,
+  digest,
+  token,
+}: {
+  chainId: number;
+  address: string;
+  digest: string;
+  token: string;
+}) => {
+  const response = await orderClient.api.cancelOrderByDigest(
+    //@ts-ignore
+    {
+      address,
+      digest: BigNumber.from(digest).toHexString(),
+    },
+    null,
+    { headers: orderClient.makeHeaders({ chainId, token }) }
+  );
+  return response;
+};
 
-const cancelOrder = async () => {};
-const cancelAllOrders = async () => {};
+const cancelAllOrders = async ({
+  chainId,
+  marketId,
+  address,
+  token,
+}: {
+  chainId: number;
+  marketId: string;
+  address: string;
+  token: string;
+}) => {
+  //@ts-ignore
+  const response = await orderClient.api.cancelOrder(
+    //@ts-ignore
+    {
+      address,
+      market_id: BigNumber.from(marketId).toHexString(),
+    },
+    null,
+    { headers: orderClient.makeHeaders({ chainId, token }) }
+  );
+  return response;
+};
 
 export default {
   signIn,
   createOrder,
+  cancelOrder,
+  cancelAllOrders,
   listAllOrders,
 };

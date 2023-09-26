@@ -1,3 +1,5 @@
+import { useQuery } from "react-query";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { useAuth } from "context/auth-provider";
 import { useAccount, useChainId, useNetwork } from "wagmi";
 import orderService, { OrderConfig } from "./order-service";
@@ -19,32 +21,29 @@ const sampleOrders = [
   },
 ].map((d) => ({ ...d, marketPrice: 82 }));
 
-export const useOrderApi = () => {
+export const useOrderApi = (market: CalculatedMarket) => {
   const { address } = useAccount();
-  const chainId = useChainId();
+  const chainId = Number(market.chainId);
   const auth = useAuth();
 
   const createOrder = async (order: OrderConfig) => {
     const token = auth.getAccessToken();
 
-    if (!chainId || !address) {
+    if (!address) {
       throw new Error(
-        `Failed to create order -> missing properties ${address} ${chainId}`
+        `Failed to create order -> missing properties ${address}`
       );
     }
-    console.log({ order });
 
     const response = await orderService.createOrder({
       chainId,
       address,
-      token,
       ...order,
     });
-    console.log({ response });
+    return response;
   };
 
   const list = async () => {
-    //return sampleOrders;
     const token = auth.getAccessToken();
 
     if (!chainId || !token || !address) {
@@ -60,8 +59,43 @@ export const useOrderApi = () => {
     return response;
   };
 
+  const cancelOrder = async (digest: string) => {
+    const token = auth.getAccessToken();
+    if (!token) {
+      return;
+    }
+
+    const response = await orderService.cancelOrder({
+      token,
+      chainId,
+      digest,
+      address: address as string,
+    });
+    return response;
+  };
+
+  const cancelAllOrders = async (marketId: string) => {
+    const token = auth.getAccessToken();
+
+    if (!token) {
+      return;
+    }
+
+    const response = await orderService.cancelAllOrders({
+      chainId,
+      address: address as string,
+      marketId,
+      token,
+    });
+
+    console.log({ response });
+    return response;
+  };
+
   return {
-    createOrder,
     list,
+    createOrder,
+    cancelOrder,
+    cancelAllOrders,
   };
 };

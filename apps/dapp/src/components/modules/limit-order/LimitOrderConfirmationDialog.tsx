@@ -56,7 +56,7 @@ export const LimitOrderConfirmationDialog = (
     <div className="text-[15px] font-light">
       <div>
         <span className="text-left font-fraktion uppercase">Limit Order</span>
-        <div className="grid grid-cols-[1fr_32px_1fr]">
+        <div className="grid grid-cols-[auto_32px_auto]">
           <SummaryLabel
             icon={props.market.quoteToken.logoURI}
             value={`${formatCurrency.amount(order.amount ?? 0)}`}

@@ -38,7 +38,6 @@ export const useAuthApi = () => {
       setAccessToken(response?.data.access_token!);
       setRefreshToken(response?.data.refresh_token!);
       setIsAuthenticated(true);
-      setLoading(false);
     } catch (e) {
       console.error(e);
     } finally {

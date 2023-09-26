@@ -12,7 +12,7 @@ export const useLimitOrder = (market: CalculatedMarket) => {
   const { value: price, onChange: setPrice } = useNumericInput();
   const [amount, setAmount] = useState<string>();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
-  const api = useOrderApi();
+  const api = useOrderApi(market);
 
   const provider = providers[market.chainId];
   const { data: signer } = useSigner();

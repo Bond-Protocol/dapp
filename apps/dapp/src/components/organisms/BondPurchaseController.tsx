@@ -45,11 +45,9 @@ export const BondPurchaseController = ({
               title="Sign in to see your orders"
               subtitle="We're protecting you against impersonating"
             >
-              {/*TODO: Implement*/}
               <LimitOrderList
                 market={market}
                 onClickPlaceOrder={() => setSelected(1)}
-                onCancelAll={() => {}}
               />
             </RequiresAuth>
           </RequiresLimitOrderSupport>
