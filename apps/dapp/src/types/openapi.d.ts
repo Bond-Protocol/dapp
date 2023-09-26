@@ -123,6 +123,28 @@ declare namespace Components {
     }
 }
 declare namespace Paths {
+    namespace CancelOrder {
+        namespace Responses {
+            export type $200 = string;
+            export interface $400 {
+            }
+            export interface $401 {
+            }
+            export interface $500 {
+            }
+        }
+    }
+    namespace CancelOrderByDigest {
+        namespace Responses {
+            export type $200 = string;
+            export interface $400 {
+            }
+            export interface $401 {
+            }
+            export interface $500 {
+            }
+        }
+    }
     namespace CreateOrder {
         export type RequestBody = /* Parameters for an order, including a signature. */ Components.Schemas.OrderRequest;
         namespace Responses {
@@ -158,13 +180,6 @@ declare namespace Paths {
     namespace GetActiveOrdersByAddress {
         namespace Responses {
             export type $200 = /* Details of an existing order. */ Components.Schemas.Order[];
-            export interface $500 {
-            }
-        }
-    }
-    namespace GetExecutors {
-        namespace Responses {
-            export type $200 = string[];
             export interface $500 {
             }
         }
@@ -229,6 +244,42 @@ declare namespace Paths {
             address: Parameters.Address;
         }
     }
+    namespace OrdersAddress$AddressMarket$MarketIdCancel {
+        export interface HeaderParameters {
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
+        }
+        namespace Parameters {
+            export type Address = string;
+            export type MarketId = number;
+            export type XAggregator = string;
+            export type XChainId = number;
+            export type XSettlement = string;
+        }
+        export interface PathParameters {
+            address: Parameters.Address;
+            market_id: Parameters.MarketId;
+        }
+    }
+    namespace OrdersAddress$AddressOrder$DigestCancel {
+        export interface HeaderParameters {
+            "x-chain-id": Parameters.XChainId;
+            "x-aggregator": Parameters.XAggregator;
+            "x-settlement": Parameters.XSettlement;
+        }
+        namespace Parameters {
+            export type Address = string;
+            export type Digest = string;
+            export type XAggregator = string;
+            export type XChainId = number;
+            export type XSettlement = string;
+        }
+        export interface PathParameters {
+            address: Parameters.Address;
+            digest: Parameters.Digest;
+        }
+    }
     namespace OrdersNew {
         export interface HeaderParameters {
             "x-chain-id": Parameters.XChainId;
@@ -242,6 +293,13 @@ declare namespace Paths {
         }
     }
     namespace PermissionsExecutors {
+        namespace Get {
+            namespace Responses {
+                export type $200 = string[];
+                export interface $500 {
+                }
+            }
+        }
         export interface HeaderParameters {
             "x-chain-id": Parameters.XChainId;
             "x-aggregator": Parameters.XAggregator;
@@ -265,20 +323,20 @@ declare namespace Paths {
             export type XSettlement = string;
         }
     }
-    namespace QuoteTokens$Address {
+    namespace QuoteTokens$TokenAddress {
         export interface HeaderParameters {
             "x-chain-id": Parameters.XChainId;
             "x-aggregator": Parameters.XAggregator;
             "x-settlement": Parameters.XSettlement;
         }
         namespace Parameters {
-            export type Address = string;
+            export type TokenAddress = string;
             export type XAggregator = string;
             export type XChainId = number;
             export type XSettlement = string;
         }
         export interface PathParameters {
-            address: Parameters.Address;
+            token_address: Parameters.TokenAddress;
         }
     }
     namespace RefreshAuth {
@@ -302,6 +360,12 @@ declare namespace Paths {
         }
     }
     namespace TestAuth {
+        namespace Parameters {
+            export type Address = string;
+        }
+        export interface PathParameters {
+            address: Parameters.Address;
+        }
         namespace Responses {
             export type $200 = string;
             export interface $401 {
@@ -339,7 +403,7 @@ export interface OperationMethods {
    * testAuth - Tests whether signed in user can view address provided in params.
    */
   'testAuth'(
-    parameters?: Parameters<UnknownParamsObject> | null,
+    parameters?: Parameters<Paths.TestAuth.PathParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.TestAuth.Responses.$200>
@@ -360,6 +424,22 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.CreateOrder.Responses.$200>
   /**
+   * cancelOrderByDigest - Cancel an order.
+   */
+  'cancelOrderByDigest'(
+    parameters?: Parameters<Paths.OrdersAddress$AddressOrder$DigestCancel.PathParameters & Paths.OrdersAddress$AddressOrder$DigestCancel.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.CancelOrderByDigest.Responses.$200>
+  /**
+   * cancelOrder - Cancel all orders for a market.
+   */
+  'cancelOrder'(
+    parameters?: Parameters<Paths.OrdersAddress$AddressMarket$MarketIdCancel.PathParameters & Paths.OrdersAddress$AddressMarket$MarketIdCancel.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.CancelOrder.Responses.$200>
+  /**
    * getOrdersByAddress - Get Orders for user address.
    */
   'getOrdersByAddress'(
@@ -376,14 +456,6 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetActiveOrdersByAddress.Responses.$200>
   /**
-   * getExecutors - Get addresses with executor permissions.
-   */
-  'getExecutors'(
-    parameters?: Parameters<Paths.PermissionsExecutors.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetExecutors.Responses.$200>
-  /**
    * getSupportedQuoteTokens - Returns all quote tokens on the chain specified in the X-Chain_Id header
    */
   'getSupportedQuoteTokens'(
@@ -395,7 +467,7 @@ export interface OperationMethods {
    * isTokenSupported - Checks whether the specified quote token is approved.
    */
   'isTokenSupported'(
-    parameters?: Parameters<Paths.QuoteTokens$Address.PathParameters & Paths.QuoteTokens$Address.HeaderParameters> | null,
+    parameters?: Parameters<Paths.QuoteTokens$TokenAddress.PathParameters & Paths.QuoteTokens$TokenAddress.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.IsTokenSupported.Responses.$200>
@@ -432,12 +504,12 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.RefreshAuth.Responses.$200>
   }
-  ['/auth/test']: {
+  ['/auth/test/{address}']: {
     /**
      * testAuth - Tests whether signed in user can view address provided in params.
      */
     'get'(
-      parameters?: Parameters<UnknownParamsObject> | null,
+      parameters?: Parameters<Paths.TestAuth.PathParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.TestAuth.Responses.$200>
@@ -462,6 +534,26 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.CreateOrder.Responses.$200>
   }
+  ['/orders/address/{address}/order/{digest}/cancel']: {
+    /**
+     * cancelOrderByDigest - Cancel an order.
+     */
+    'post'(
+      parameters?: Parameters<Paths.OrdersAddress$AddressOrder$DigestCancel.PathParameters & Paths.OrdersAddress$AddressOrder$DigestCancel.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.CancelOrderByDigest.Responses.$200>
+  }
+  ['/orders/address/{address}/market/{market_id}/cancel']: {
+    /**
+     * cancelOrder - Cancel all orders for a market.
+     */
+    'post'(
+      parameters?: Parameters<Paths.OrdersAddress$AddressMarket$MarketIdCancel.PathParameters & Paths.OrdersAddress$AddressMarket$MarketIdCancel.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.CancelOrder.Responses.$200>
+  }
   ['/orders/address/{address}']: {
     /**
      * getOrdersByAddress - Get Orders for user address.
@@ -483,14 +575,6 @@ export interface PathsDictionary {
     ): OperationResponse<Paths.GetActiveOrdersByAddress.Responses.$200>
   }
   ['/permissions/executors']: {
-    /**
-     * getExecutors - Get addresses with executor permissions.
-     */
-    'get'(
-      parameters?: Parameters<Paths.PermissionsExecutors.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetExecutors.Responses.$200>
   }
   ['/quote_tokens']: {
     /**
@@ -502,12 +586,12 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetSupportedQuoteTokens.Responses.$200>
   }
-  ['/quote_tokens/{address}']: {
+  ['/quote_tokens/{token_address}']: {
     /**
      * isTokenSupported - Checks whether the specified quote token is approved.
      */
     'get'(
-      parameters?: Parameters<Paths.QuoteTokens$Address.PathParameters & Paths.QuoteTokens$Address.HeaderParameters> | null,
+      parameters?: Parameters<Paths.QuoteTokens$TokenAddress.PathParameters & Paths.QuoteTokens$TokenAddress.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.IsTokenSupported.Responses.$200>

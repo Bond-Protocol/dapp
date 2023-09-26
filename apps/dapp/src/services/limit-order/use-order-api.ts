@@ -40,6 +40,7 @@ export const useOrderApi = () => {
       token,
       ...order,
     });
+    console.log({ response });
   };
 
   const list = async () => {
