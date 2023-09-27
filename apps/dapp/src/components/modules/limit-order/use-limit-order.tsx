@@ -7,6 +7,7 @@ import { calcDiscountPercentage } from "src/utils/calculate-percentage";
 import { dateMath, useNumericInput } from "ui";
 import { useOrderApi } from "services/limit-order/use-order-api";
 import { toHex } from "src/utils/bignumber";
+import { BigNumber, ethers } from "ethers";
 
 export const useLimitOrder = (market: CalculatedMarket) => {
   const { value: price, onChange: setPrice } = useNumericInput();
@@ -37,10 +38,20 @@ export const useLimitOrder = (market: CalculatedMarket) => {
     if (!amount || !price || !expiry || !address)
       throw new Error("Missing properties for creating an order");
 
+    const adjustedAmount = ethers.utils.parseUnits(
+      amount.toString(),
+      market.quoteToken.decimals
+    );
+
+    const minAmountOut = ethers.utils.parseUnits(
+      payout.toString(),
+      market.payoutToken.decimals
+    );
+
     const decimalValues = {
       market_id: String(market.marketId),
-      amount,
-      min_amount_out: payout.toFixed(0),
+      amount: adjustedAmount,
+      min_amount_out: minAmountOut,
       deadline: expiry.getTime(),
       submitted: new Date().getTime(),
       max_fee: "1",

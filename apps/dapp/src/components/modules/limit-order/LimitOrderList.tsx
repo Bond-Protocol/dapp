@@ -97,7 +97,7 @@ const columns: Column<Order & { market: CalculatedMarket }>[] = [
       return { value: order.price };
     },
     Component: (props) => {
-      const o = useOrderApi(props.data.market);
+      const api = useOrderApi(props.data.market);
 
       return (
         <div key={props.key} className="relative">
@@ -117,7 +117,7 @@ const columns: Column<Order & { market: CalculatedMarket }>[] = [
               <Button
                 variant="ghost"
                 onClick={() => {
-                  o.cancelOrder(props.data.digest);
+                  api.cancelOrder(props.data.digest);
                 }}
               >
                 Cancel Order
@@ -141,6 +141,7 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
         //@ts-ignore
         .filter((order) => order?.status === "Active")
         .map((d) => ({ ...d, market: props.market }));
+
       setCols(withMarket);
     }
 
