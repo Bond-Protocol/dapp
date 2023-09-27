@@ -10,7 +10,7 @@ import {
   SummaryRow,
   Switch,
 } from "ui";
-import { useLimitOrderForMarket } from "./limit-order-context";
+import { useLimitOrderForMarket } from "./use-limit-order";
 
 export type LimitOrderConfirmationDialogProps = {
   market: CalculatedMarket;

@@ -18,7 +18,7 @@ import {
   SelectDateDialog,
 } from "ui";
 import { useAccount } from "wagmi";
-import { useLimitOrderForMarket } from "./limit-order-context";
+import { useLimitOrderForMarket } from "./use-limit-order";
 import { LimitOrderConfirmationDialog } from "./LimitOrderConfirmationDialog";
 
 const selectExpiryOptions = [

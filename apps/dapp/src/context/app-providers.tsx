@@ -8,8 +8,10 @@ import { MarketProvider } from "./market-context";
 import { TokenProvider } from "./token-context";
 import { TokenlistProvider } from "./tokenlist-context";
 import { DashboardProvider } from "context/dashboard-context";
-import { AuthProvider } from "./auth-provider";
-import { OrderServiceProvider } from "./global-order-context";
+import {
+  AuthProvider,
+  OrderServiceProvider,
+} from "components/modules/limit-order";
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (

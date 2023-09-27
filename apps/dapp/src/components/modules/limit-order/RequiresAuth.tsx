@@ -1,8 +1,8 @@
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useAuth } from "context/auth-provider";
 import { Button } from "ui";
-import { useAccount, useConnect } from "wagmi";
-import { ConnectButton } from "..";
+import { useAccount } from "wagmi";
+
+import { ConnectButton } from "components";
+import { useAuth } from "./use-auth";
 
 type RequiresAuthProps = {
   title: string;

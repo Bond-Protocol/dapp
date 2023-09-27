@@ -15,14 +15,12 @@ import {
   EmbeddedPurchaseCard,
   EmbeddedDashboard,
 } from "components/modules/embed";
-import { ApiTestElement } from "services/limit-order/api-test";
 
 export const RouteMap: FC = () => {
   return (
     <>
       <Switch>
         <Route path="/" element={<TokenList />} />
-        <Route path="/test-api" element={<ApiTestElement />} />{" "}
         <Route path="/dashboard" element={<Dashboard />} />{" "}
         <Route path="/markets" element={<Markets />} />
         <Route path="/tokens" element={<TokenList />} />

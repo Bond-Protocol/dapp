@@ -1,15 +1,41 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { useTokenAllowance } from "hooks/useTokenAllowance";
+import { useState, createContext, useContext } from "react";
 import { useAccount, useSigner } from "wagmi";
-import { providers } from "services/owned-providers";
-import { useState } from "react";
-import { calcDiscountPercentage } from "src/utils/calculate-percentage";
-import { dateMath, useNumericInput } from "ui";
-import { useOrderApi } from "services/limit-order/use-order-api";
-import { toHex } from "src/utils/bignumber";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 
-export const useLimitOrder = (market: CalculatedMarket) => {
+import { dateMath, useNumericInput } from "ui";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
+
+import { useTokenAllowance } from "hooks/useTokenAllowance";
+import { providers } from "services/owned-providers";
+import { calcDiscountPercentage } from "src/utils/calculate-percentage";
+import { toHex } from "src/utils/bignumber";
+
+import { useOrderApi } from "./use-order-api";
+
+export type ILimitOrderContext = {
+  allowance: ReturnType<typeof useTokenAllowance>;
+  discount?: number;
+  price?: string;
+  expiry?: Date;
+  amount?: string;
+  payout?: number;
+  setPrice: Function;
+  setExpiry: Function;
+  setAmount: Function;
+  createOrder: Function;
+};
+
+const LimitOrderContext = createContext<ILimitOrderContext>(
+  {} as ILimitOrderContext
+);
+
+export const LimitOrderProvider = ({
+  children,
+  market,
+}: {
+  children: React.ReactNode;
+  market: CalculatedMarket;
+}) => {
   const { value: price, onChange: setPrice } = useNumericInput();
   const [amount, setAmount] = useState<string>();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
@@ -64,12 +90,7 @@ export const useLimitOrder = (market: CalculatedMarket) => {
       referrer: address,
     };
 
-    try {
-      return api.createOrder(order);
-    } catch (e) {
-      console.log("ON SECOND HOOK", { e });
-      throw e;
-    }
+    return api.createOrder(order);
   };
 
   const updateExpiry = (expiry: number | Date) => {
@@ -81,7 +102,7 @@ export const useLimitOrder = (market: CalculatedMarket) => {
     setExpiry(date);
   };
 
-  return {
+  const order = {
     allowance,
     discount,
     price,
@@ -93,4 +114,14 @@ export const useLimitOrder = (market: CalculatedMarket) => {
     setAmount,
     createOrder,
   };
+
+  return (
+    <LimitOrderContext.Provider value={order}>
+      {children}
+    </LimitOrderContext.Provider>
+  );
+};
+
+export const useLimitOrderForMarket = () => {
+  return useContext(LimitOrderContext);
 };

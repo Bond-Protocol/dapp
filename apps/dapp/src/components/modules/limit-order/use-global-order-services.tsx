@@ -1,6 +1,6 @@
 import { TokenBase } from "@bond-protocol/contract-library";
-import { createContext, FC, useContext, useEffect, useState } from "react";
-import orderService from "services/limit-order/order-service";
+import { createContext, useContext } from "react";
+import { orderService } from "services/order-service";
 import { useQuery } from "wagmi";
 
 type OrderServiceContext = {
