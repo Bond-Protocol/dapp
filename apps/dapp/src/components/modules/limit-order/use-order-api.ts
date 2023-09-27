@@ -1,7 +1,7 @@
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { useAuth } from "context/auth-provider";
+import { useAuth } from "./use-auth";
 import { useAccount } from "wagmi";
-import orderService, { OrderConfig } from "./order-service";
+import { orderService, OrderConfig } from "services/order-service";
 
 export const useOrderApi = (market: CalculatedMarket) => {
   const { address } = useAccount();

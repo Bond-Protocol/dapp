@@ -1,12 +1,17 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { LimitOrderProvider } from "components/modules/limit-order/limit-order-context";
-import { LimitOrderCard } from "components/modules/limit-order/LimitOrderCard";
-import { LimitOrderList } from "components/modules/limit-order/LimitOrderList";
-import { RequiresLimitOrderSupport } from "components/modules/limit-order/RequiresLimitOrderSupport";
-import { RequiresAuth } from "components/utility/RequiresAuth";
-import { useOrderService } from "context/global-order-context";
 import { useState } from "react";
+
+import type { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Tabs } from "ui";
+
+import {
+  LimitOrderProvider,
+  LimitOrderCard,
+  LimitOrderList,
+  RequiresAuth,
+  RequiresLimitOrderSupport,
+  useOrderService,
+} from "components/modules/limit-order";
+
 import { BondPurchaseCard } from "./BondPurchaseCard";
 
 export const BondPurchaseController = ({
@@ -28,7 +33,7 @@ export const BondPurchaseController = ({
         className="h-full"
         tabs={tabs}
       >
-        <div className="h-full  bg-white/5">
+        <div className="h-full bg-white/5">
           <BondPurchaseCard market={market} />{" "}
         </div>
         <div className="h-full bg-white/5">

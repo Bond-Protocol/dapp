@@ -14,7 +14,7 @@ import {
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
 import { useEffect, useState } from "react";
 import { Popper } from "components/common/Popper";
-import { useOrderApi } from "services/limit-order/use-order-api";
+import { useOrderApi } from "./use-order-api";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Order } from "src/types/openapi";
 
