@@ -1,7 +1,6 @@
 import OpenAPIClient from "openapi-axios-client";
 import definition from "src/openapi.json";
 import { Client as OrderClient } from "src/types/openapi";
-const getAccessToken = () => sessionStorage.getItem("order_access_token");
 const getRefreshToken = () => sessionStorage.getItem("order_refresh_token");
 const setAccessToken = (token: string) =>
   sessionStorage.setItem("order_access_token", token);
@@ -17,33 +16,34 @@ export class ApiClient {
 
   constructor() {
     client.getClient<OrderClient>().then((api) => {
+      //Setup an interceptor to attempt a token refresh on a 401
       api.interceptors.response.use(
         (res) => res,
         async (err) => {
           const originalConfig = err.config;
-          console.log({ originalConfig, err });
           if (
             originalConfig.url !== "/auth/sign_in" &&
-            originalConfig.url !== "/auth/refresh" &&
-            err.response.status === 401
+            originalConfig.url !== "/auth/refresh"
           ) {
             if (err.response.status === 401 && !originalConfig._retry) {
               originalConfig._retry = true;
             }
 
-            const refreshToken = getRefreshToken() ?? "";
+            const refreshToken = getRefreshToken();
 
-            try {
-              const response = await api.refreshAuth(null, refreshToken);
-              setAccessToken(response.data.access_token!);
-              setRefreshToken(response.data.refresh_token!);
+            if (refreshToken) {
+              try {
+                const response = await api.refreshAuth(null, refreshToken);
+                setAccessToken(response.data.access_token!);
+                setRefreshToken(response.data.refresh_token!);
 
-              originalConfig.headers.Authorization = `Bearer ${response.data.access_token}`;
+                originalConfig.headers.Authorization = `Bearer ${response.data.access_token}`;
 
-              return api(originalConfig);
-            } catch (e) {
-              originalConfig._retry = false;
-              return Promise.reject(e);
+                return api(originalConfig);
+              } catch (e) {
+                originalConfig._retry = false;
+                return Promise.reject(e);
+              }
             }
           }
         }

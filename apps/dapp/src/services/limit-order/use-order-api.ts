@@ -27,8 +27,6 @@ export const useOrderApi = (market: CalculatedMarket) => {
   const auth = useAuth();
 
   const createOrder = async (order: OrderConfig) => {
-    const token = auth.getAccessToken();
-
     if (!address) {
       throw new Error(
         `Failed to create order -> missing properties ${address}`
@@ -54,6 +52,7 @@ export const useOrderApi = (market: CalculatedMarket) => {
       chainId,
       address,
       token,
+      market,
     });
 
     return response;
@@ -88,7 +87,6 @@ export const useOrderApi = (market: CalculatedMarket) => {
       token,
     });
 
-    console.log({ response });
     return response;
   };
 

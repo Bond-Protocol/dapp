@@ -2,7 +2,8 @@ import { SiweMessage } from "siwe";
 import { Address, signMessage } from "@wagmi/core";
 import { orderApi as orderClient } from "./api-client";
 import { Order } from "src/types/openapi";
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 const defaultStatement = "Sign in with Ethereum to the Bond Protocol app.";
 
@@ -71,21 +72,46 @@ const createOrder = async ({ chainId, ...order }: CreateOrderArgs) => {
   }
 };
 
-const listAllOrders = async ({ chainId, token, address }: BasicOrderArgs) => {
+const listAllOrders = async ({
+  chainId,
+  token,
+  address,
+  market,
+}: BasicOrderArgs & { market: CalculatedMarket }) => {
   const response = await orderClient.api.getOrdersByAddress(address, null, {
     headers: orderClient.makeHeaders({ chainId, token }),
   });
 
-  const filters = ["status", "recipient", "referrer", "user"];
+  const filters = ["marketId", "status", "recipient", "referrer", "user"];
   const dates = ["submitted", "deadline"];
 
+  //Most values come as 255 bit hex-encoded number,
+  //so we want to convert them to human readable
   return response.data.map((o) => {
     return Object.entries(o).reduce((acc, [name, value]) => {
       let updated = value;
+
       if (!filters.includes(name)) {
         updated = BigNumber.from(value).toString();
+
         if (dates.includes(name)) {
+          //Timestamps get converted to dates
           updated = new Date(Number(updated.toString()));
+        }
+
+        //Tokens need to be decimal adjusted
+        if (name === "amount") {
+          updated = ethers.utils.formatUnits(
+            updated,
+            market.quoteToken.decimals
+          );
+        }
+
+        if (name === "min_amount_out") {
+          updated = ethers.utils.formatUnits(
+            updated,
+            market.payoutToken.decimals
+          );
         }
       }
 
