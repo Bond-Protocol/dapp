@@ -1,25 +1,7 @@
-import { useQuery } from "react-query";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { useAuth } from "context/auth-provider";
-import { useAccount, useChainId, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import orderService, { OrderConfig } from "./order-service";
-
-const sampleOrders = [
-  {
-    price: 81,
-    discount: "2.14",
-    amount: "200",
-    symbol: "ALCX-ETH SLP",
-    expiry: new Date(2023, 8, 8, 11, 0),
-  },
-  {
-    price: 77,
-    discount: "8.14",
-    amount: "40000000000",
-    symbol: "ALCX-ETH SLP",
-    expiry: new Date(2023, 8, 8, 11, 0),
-  },
-].map((d) => ({ ...d, marketPrice: 82 }));
 
 export const useOrderApi = (market: CalculatedMarket) => {
   const { address } = useAccount();

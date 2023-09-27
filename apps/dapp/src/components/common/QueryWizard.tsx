@@ -39,9 +39,14 @@ export const QueryWizard = ({
       const response = await props.onSubmit();
       setResponse(response);
       setStatus(Status.SUCCESS);
-    } catch (e) {
-      setStatus(Status.LOADING);
+    } catch (e: any) {
+      if (e.name === "UserRejectedRequestError") {
+        setOpen(false);
+        props.onClose?.();
+      }
+
       setError(e as Error);
+      setStatus(Status.ERROR);
     }
   };
 
@@ -51,13 +56,20 @@ export const QueryWizard = ({
       element: <StartDialog onSubmit={handleSubmit} />,
     },
     loading: {
-      title: "Waiting confirmation",
-      element: <div className="h-full text-center">Any moment now...</div>,
+      title: "Awaiting signature",
+      element: (
+        <div className="h-full p-4 text-center">
+          <div> Sign the order with your wallet</div>
+          <div className="mt-2 text-sm text-light-grey-400">
+            (This won't cost any gas)
+          </div>
+        </div>
+      ),
     },
     success: {
       title: "Success",
       element: (
-        <div>
+        <div className="p-4">
           {typeof SuccessDialog === "function" ? (
             <SuccessDialog {...response} />
           ) : (
@@ -68,7 +80,12 @@ export const QueryWizard = ({
     },
     error: {
       title: "Ooops",
-      element: <div>{`${error?.name} ${error?.message}`}</div>,
+      element: (
+        <div className="p-4 text-center">
+          <div>{error?.name}</div>
+          <div className="text-sm">{error?.message}</div>
+        </div>
+      ),
     },
   };
 

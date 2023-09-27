@@ -94,7 +94,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       {isConfirming && (
         <QueryWizard
           open={isConfirming}
-          onSubmit={() => order.createOrder()}
+          onSubmit={order.createOrder}
           onClose={() => setIsConfirming(false)}
           title="Confirm Order"
           StartDialog={(args: any) => (
