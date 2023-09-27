@@ -49,7 +49,6 @@ export const useLimitOrder = (market: CalculatedMarket) => {
     );
 
     const decimalValues = {
-      market_id: String(market.marketId),
       amount: adjustedAmount,
       min_amount_out: minAmountOut,
       deadline: expiry.getTime(),
@@ -59,15 +58,13 @@ export const useLimitOrder = (market: CalculatedMarket) => {
 
     const order = {
       ...toHex(decimalValues),
+      market_id: market.marketId,
       recipient: address,
       user: address,
       referrer: address,
     };
 
-    console.log({ hexed: order });
-    const response = await api.createOrder(order);
-
-    console.log({ res: response });
+    return api.createOrder(order);
   };
 
   const updateExpiry = (expiry: number | Date) => {

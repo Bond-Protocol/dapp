@@ -82,7 +82,7 @@ const listAllOrders = async ({
     headers: orderClient.makeHeaders({ chainId, token }),
   });
 
-  const filters = ["marketId", "status", "recipient", "referrer", "user"];
+  const filters = ["market_id", "status", "recipient", "referrer", "user"];
   const dates = ["submitted", "deadline"];
 
   //Most values come as 255 bit hex-encoded number,
@@ -156,15 +156,17 @@ const cancelAllOrders = async ({
 }) => {
   //@ts-ignore
   const response = await orderClient.api.cancelOrder(
-    //@ts-ignore
-    {
-      address,
-      market_id: BigNumber.from(marketId).toHexString(),
-    },
+    { address, market_id: Number(marketId) },
     null,
     { headers: orderClient.makeHeaders({ chainId, token }) }
   );
   return response;
+};
+
+const getSupportedTokens = async () => {
+  return orderClient.api.getSupportedQuoteTokens(null, null, {
+    headers: orderClient.makeHeaders({ chainId: 1 }),
+  });
 };
 
 export default {
@@ -173,4 +175,5 @@ export default {
   cancelOrder,
   cancelAllOrders,
   listAllOrders,
+  getSupportedTokens,
 };

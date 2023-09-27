@@ -4,7 +4,7 @@ info:
   title: Order Services Public API
 servers:
   - description: Local environment
-    url: http://localhost:8080
+    url: http://localhost:8081
 tags:
   - name: Authentication
     description: Endpoints for authenticating users to retrieve order data.
@@ -429,7 +429,7 @@ paths:
         required: true
     get:
       summary: Returns all quote tokens on the chain specified in the X-Chain_Id header
-      operationId: getSupportedQuoteTokens 
+      operationId: getSupportedQuoteTokens
       tags: [Quote Tokens]
       responses:
         200:

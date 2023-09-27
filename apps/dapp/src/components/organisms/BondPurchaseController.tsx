@@ -4,6 +4,7 @@ import { LimitOrderCard } from "components/modules/limit-order/LimitOrderCard";
 import { LimitOrderList } from "components/modules/limit-order/LimitOrderList";
 import { RequiresLimitOrderSupport } from "components/modules/limit-order/RequiresLimitOrderSupport";
 import { RequiresAuth } from "components/utility/RequiresAuth";
+import { useOrderService } from "context/global-order-context";
 import { useState } from "react";
 import { Tabs } from "ui";
 import { BondPurchaseCard } from "./BondPurchaseCard";
@@ -15,7 +16,9 @@ export const BondPurchaseController = ({
 }) => {
   const tabs = [{ label: "Bond" }, { label: "Limit" }, { label: "Orders" }];
   const [selected, setSelected] = useState(0);
-  const isSupported = true;
+
+  const { isTokenSupported } = useOrderService();
+  const isSupported = isTokenSupported(market.quoteToken);
 
   return (
     <LimitOrderProvider market={market}>
