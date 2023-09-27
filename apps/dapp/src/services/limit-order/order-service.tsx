@@ -65,8 +65,9 @@ const createOrder = async ({ chainId, ...order }: CreateOrderArgs) => {
       { ...order, signature },
       { headers: orderClient.makeHeaders({ chainId }) }
     );
+    console.log({ response });
     return response;
-  } catch (e) {
+  } catch (e: any) {
     console.error(`Failed to create an order`, e);
     throw e;
   }
@@ -156,6 +157,7 @@ const cancelAllOrders = async ({
 }) => {
   //@ts-ignore
   const response = await orderClient.api.cancelOrder(
+    //@ts-ignore
     { address, market_id: Number(marketId) },
     null,
     { headers: orderClient.makeHeaders({ chainId, token }) }

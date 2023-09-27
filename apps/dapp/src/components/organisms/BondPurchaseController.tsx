@@ -15,7 +15,7 @@ export const BondPurchaseController = ({
   market: CalculatedMarket;
 }) => {
   const tabs = [{ label: "Bond" }, { label: "Limit" }, { label: "Orders" }];
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState(1);
 
   const { isTokenSupported } = useOrderService();
   const isSupported = isTokenSupported(market.quoteToken);

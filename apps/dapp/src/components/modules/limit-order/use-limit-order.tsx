@@ -64,7 +64,12 @@ export const useLimitOrder = (market: CalculatedMarket) => {
       referrer: address,
     };
 
-    return api.createOrder(order);
+    try {
+      return api.createOrder(order);
+    } catch (e) {
+      console.log("ON SECOND HOOK", { e });
+      throw e;
+    }
   };
 
   const updateExpiry = (expiry: number | Date) => {

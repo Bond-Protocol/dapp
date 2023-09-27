@@ -17,38 +17,7 @@ export class ApiClient {
   constructor() {
     client.getClient<OrderClient>().then((api) => {
       //Setup an interceptor to attempt a token refresh on a 401
-      api.interceptors.response.use(
-        (res) => res,
-        async (err) => {
-          const originalConfig = err.config;
-          if (
-            originalConfig.url !== "/auth/sign_in" &&
-            originalConfig.url !== "/auth/refresh" &&
-            err.response.status === 401
-          ) {
-            if (err.response.status === 401 && !originalConfig._retry) {
-              originalConfig._retry = true;
-            }
-
-            const refreshToken = getRefreshToken();
-
-            if (refreshToken) {
-              try {
-                const response = await api.refreshAuth(null, refreshToken);
-                setAccessToken(response.data.access_token!);
-                setRefreshToken(response.data.refresh_token!);
-
-                originalConfig.headers.Authorization = `Bearer ${response.data.access_token}`;
-
-                return api(originalConfig);
-              } catch (e) {
-                originalConfig._retry = false;
-                return Promise.reject(e);
-              }
-            }
-          }
-        }
-      );
+      api.interceptors.response.use((res) => res, refreshTokenInterceptor(api));
       this.api = api;
     });
   }
@@ -76,6 +45,40 @@ export class ApiClient {
 
     return headers;
   }
+}
+
+function refreshTokenInterceptor(api: OrderClient) {
+  return async (err: any) => {
+    const originalConfig = err.config;
+    if (
+      originalConfig.url !== "/auth/sign_in" &&
+      originalConfig.url !== "/auth/refresh" &&
+      err.response.status === 401
+    ) {
+      if (err.response.status === 401 && !originalConfig._retry) {
+        originalConfig._retry = true;
+      }
+
+      const refreshToken = getRefreshToken();
+
+      if (refreshToken) {
+        try {
+          const response = await api.refreshAuth(null, refreshToken);
+          setAccessToken(response.data.access_token!);
+          setRefreshToken(response.data.refresh_token!);
+
+          originalConfig.headers.Authorization = `Bearer ${response.data.access_token}`;
+
+          return api(originalConfig);
+        } catch (e) {
+          originalConfig._retry = false;
+          return Promise.reject(e);
+        }
+      }
+    } else {
+      throw err;
+    }
+  };
 }
 
 export const orderApi = new ApiClient();
