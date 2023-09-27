@@ -16,22 +16,11 @@ import { useEffect, useState } from "react";
 import { Popper } from "components/common/Popper";
 import { useOrderApi } from "services/limit-order/use-order-api";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { Order } from "src/types/openapi";
 
 export type LimitOrderListProps = {
   market: CalculatedMarket;
   onClickPlaceOrder: () => void;
-};
-
-type Order = {
-  id?: number;
-  marketPrice?: number;
-  price: string | number;
-  discount: string | number;
-  amount: string | number;
-  min_amount_out: string | number;
-  symbol: string;
-  expiry: Date;
-  deadline: Date;
 };
 
 const columns: Column<Order & { market: CalculatedMarket }>[] = [
@@ -136,10 +125,14 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
 
   useEffect(() => {
     async function loadList() {
-      const data = await orderApi.list();
+      //@ts-ignore
+      const data: Order[] = await orderApi.list();
       const withMarket = data
-        //@ts-ignore
-        .filter((order) => order?.status === "Active")
+        .filter(
+          (order) =>
+            order?.status === "Active" &&
+            order.market_id === props.market.marketId
+        )
         .map((d) => ({ ...d, market: props.market }));
 
       setCols(withMarket);

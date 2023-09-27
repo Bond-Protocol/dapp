@@ -48,14 +48,12 @@ export const useOrderApi = (market: CalculatedMarket) => {
       throw new Error("Not Authenticated");
     }
 
-    const response = await orderService.listAllOrders({
+    return orderService.listAllOrders({
       chainId,
       address,
       token,
       market,
     });
-
-    return response;
   };
 
   const cancelOrder = async (digest: string) => {

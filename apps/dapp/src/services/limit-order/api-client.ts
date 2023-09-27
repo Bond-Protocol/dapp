@@ -23,7 +23,8 @@ export class ApiClient {
           const originalConfig = err.config;
           if (
             originalConfig.url !== "/auth/sign_in" &&
-            originalConfig.url !== "/auth/refresh"
+            originalConfig.url !== "/auth/refresh" &&
+            err.response.status === 401
           ) {
             if (err.response.status === 401 && !originalConfig._retry) {
               originalConfig._retry = true;
@@ -57,13 +58,11 @@ export class ApiClient {
     chainId,
     aggregator = "0x0000000000000000000000000000000000000001",
     settlement = "0x0000000000000000000000000000000000000001",
-    isPost,
   }: {
     chainId: number;
     token?: string;
     aggregator?: string;
     settlement?: string;
-    isPost?: boolean;
   }) {
     const headers: Record<string, string | number> = {
       "x-chain-id": chainId,
@@ -76,8 +75,6 @@ export class ApiClient {
     }
 
     return headers;
-
-    //return { headers };
   }
 }
 
