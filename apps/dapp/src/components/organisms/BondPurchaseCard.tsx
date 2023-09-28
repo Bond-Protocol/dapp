@@ -299,6 +299,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     <div className="p-4">
       <div className="mt-6 flex h-full flex-col justify-between">
         <InputCard
+          //@ts-ignore
           onChange={setAmount}
           value={amount}
           balance={balance}
