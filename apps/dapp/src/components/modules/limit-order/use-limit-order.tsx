@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, createContext, useContext } from "react";
 import { useAccount, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 
@@ -20,9 +20,9 @@ export type ILimitOrderContext = {
   expiry?: Date;
   amount?: string;
   payout?: number;
-  setPrice: () => void;
+  setPrice: (e: React.BaseSyntheticEvent<HTMLInputElement>) => void;
   setExpiry: (date: Date) => void;
-  setAmount: () => void;
+  setAmount: (value: string) => void;
   createOrder: () => Promise<unknown>;
   estimateFee: Function;
 };

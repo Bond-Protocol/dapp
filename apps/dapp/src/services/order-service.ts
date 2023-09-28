@@ -161,6 +161,12 @@ export class ApiClient {
     });
   }
 
+  async getSupportedTokensByChain(chainId: number) {
+    return this.api.getSupportedQuoteTokens(null, null, {
+      headers: this.makeHeaders({ chainId }),
+    });
+  }
+
   async cancelOrder({
     chainId,
     address,
