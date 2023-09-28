@@ -22,5 +22,13 @@
     "symbol": "LINK",
     "logoURI": "https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png",
     "decimals": 18
+  },
+  {
+    "address": "0x0595328847AF962F951a4f8F8eE9A3Bf261e4f6b",
+    "chainId": 5,
+    "name": "Olympus",
+    "symbol": "OHM",
+    "logoURI": "https://assets.coingecko.com/coins/images/14483/large/token_OHM_%281%29.png",
+    "decimals": 9
   }
 ]
