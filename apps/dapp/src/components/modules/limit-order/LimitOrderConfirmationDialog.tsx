@@ -33,14 +33,14 @@ export const LimitOrderConfirmationDialog = (
     () => [
       {
         leftLabel: "Min amount to receive",
-        rightLabel: `${formatCurrency.amount(order.payout)} ${
+        rightLabel: `${formatCurrency.amount(order.payout ?? 0)} ${
           props.market.payoutToken.symbol
         }`,
         tooltip: "Only if bid is successful",
       },
       {
         leftLabel: "Order Expires on",
-        rightLabel: formatDate.short(order.expiry),
+        rightLabel: order.expiry ? formatDate.short(order.expiry) : "",
       },
       { leftLabel: "Max Fee", tooltip: "", rightLabel: "" },
       {
@@ -74,7 +74,7 @@ export const LimitOrderConfirmationDialog = (
         <SummaryRow
           className="mt-1"
           leftLabel="You will get"
-          rightLabel={`${formatCurrency.amount(order.payout)} ${
+          rightLabel={`${formatCurrency.amount(order.payout ?? 0)} ${
             props.market.payoutToken.symbol
           }`}
         />

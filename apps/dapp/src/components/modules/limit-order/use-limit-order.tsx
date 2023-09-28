@@ -1,6 +1,6 @@
-import { useState, createContext, useContext } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import { useAccount, useSigner } from "wagmi";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 import { dateMath, useNumericInput } from "ui";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
@@ -11,6 +11,7 @@ import { calcDiscountPercentage } from "src/utils/calculate-percentage";
 import { toHex } from "src/utils/bignumber";
 
 import { useOrderApi } from "./use-order-api";
+import { orderService } from "services/order-service";
 
 export type ILimitOrderContext = {
   allowance: ReturnType<typeof useTokenAllowance>;
@@ -19,10 +20,11 @@ export type ILimitOrderContext = {
   expiry?: Date;
   amount?: string;
   payout?: number;
-  setPrice: Function;
-  setExpiry: Function;
-  setAmount: Function;
-  createOrder: Function;
+  setPrice: () => void;
+  setExpiry: (date: Date) => void;
+  setAmount: () => void;
+  createOrder: () => Promise<unknown>;
+  estimateFee: Function;
 };
 
 const LimitOrderContext = createContext<ILimitOrderContext>(
@@ -39,6 +41,7 @@ export const LimitOrderProvider = ({
   const { value: price, onChange: setPrice } = useNumericInput();
   const [amount, setAmount] = useState<string>();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
+  const [fee, setFee] = useState<number>();
   const api = useOrderApi(market);
 
   const provider = providers[market.chainId];
@@ -60,7 +63,7 @@ export const LimitOrderProvider = ({
   const payout =
     (Number(amount) * (market?.quoteToken?.price ?? 0)) / Number(price);
 
-  const createOrder = async () => {
+  const generateOrder = () => {
     if (!amount || !price || !expiry || !address)
       throw new Error("Missing properties for creating an order");
 
@@ -82,15 +85,34 @@ export const LimitOrderProvider = ({
       max_fee: "1",
     };
 
-    const order = {
+    return {
       ...toHex(decimalValues),
       market_id: market.marketId,
       recipient: address,
       user: address,
       referrer: address,
     };
+  };
 
-    return api.createOrder(order);
+  const estimateFee = async () => {
+    if (price && amount && expiry) {
+      const order = generateOrder();
+      //TODO: prob missing conversion in backend
+      //@ts-ignore
+      order.market_id = BigNumber.from(order.market_id).toHexString();
+
+      const response = await orderService.estimateFee(
+        Number(market.chainId),
+        order
+      );
+
+      console.log({ response });
+      setFee(response.data);
+    }
+  };
+
+  const createOrder = async () => {
+    return api.createOrder(generateOrder());
   };
 
   const updateExpiry = (expiry: number | Date) => {
@@ -113,6 +135,7 @@ export const LimitOrderProvider = ({
     setExpiry: updateExpiry,
     setAmount,
     createOrder,
+    estimateFee,
   };
 
   return (

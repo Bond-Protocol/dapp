@@ -8,21 +8,6 @@ export const useOrderApi = (market: CalculatedMarket) => {
   const chainId = Number(market.chainId);
   const auth = useAuth();
 
-  const createOrder = async (order: OrderConfig) => {
-    if (!address) {
-      throw new Error(
-        `Failed to create order -> missing properties ${address}`
-      );
-    }
-
-    const response = await orderService.createOrder({
-      chainId,
-      address,
-      ...order,
-    });
-    return response;
-  };
-
   const list = async () => {
     const token = auth.getAccessToken();
 
@@ -36,6 +21,25 @@ export const useOrderApi = (market: CalculatedMarket) => {
       token,
       market,
     });
+  };
+
+  const estimateFee = async (chainId: number, order: string) => {
+    return orderService.estimateFee(chainId, order);
+  };
+
+  const createOrder = async (order: OrderConfig) => {
+    if (!address) {
+      throw new Error(
+        `Failed to create order -> missing properties ${address}`
+      );
+    }
+
+    const response = await orderService.createOrder({
+      chainId,
+      address,
+      ...order,
+    });
+    return response;
   };
 
   const cancelOrder = async (digest: string) => {
@@ -72,6 +76,7 @@ export const useOrderApi = (market: CalculatedMarket) => {
 
   return {
     list,
+    estimateFee,
     createOrder,
     cancelOrder,
     cancelAllOrders,

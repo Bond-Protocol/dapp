@@ -4,7 +4,7 @@ import {
 } from "@bond-protocol/contract-library";
 import { QueryWizard } from "components/common/QueryWizard";
 import { BondButton } from "components/organisms/BondButton";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import defillama from "services/defillama";
 import {
   InputCard,
@@ -33,6 +33,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
   const account = useAccount();
   const { allowance, ...order } = useLimitOrderForMarket();
 
+  const timer = useRef<number>();
   const [isConfirming, setIsConfirming] = useState(false);
 
   // remove dates that go past market conclusion
@@ -44,6 +45,13 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       )
   );
 
+  const handleKeyUp = () => {
+    clearTimeout(timer.current);
+    timer.current = setTimeout(order.estimateFee, 3500);
+  };
+
+  const handleKeyDown = () => clearTimeout(timer.current);
+
   return (
     <div className="p-4">
       <div className="flex justify-between gap-x-2">
@@ -52,6 +60,8 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           label="Limit Price"
           value={order.price}
           onChange={order.setPrice}
+          onKeyUp={handleKeyUp}
+          onKeyDown={handleKeyDown}
         />
         <div className="w-full">
           <SelectModal
@@ -80,15 +90,16 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
         balance={allowance.balance}
         value={order.amount?.toString()}
         onChange={order.setAmount}
+        onKeyUp={handleKeyUp}
+        onKeyDown={handleKeyDown}
       />
       <ActionInfoList
-        //@ts-ignore
         fields={generateSummaryFields(
           props.market,
           Number(order.payout),
-          order.discount + "",
-          order.expiry,
-          order.price
+          order.discount ?? "",
+          order.expiry ?? new Date(),
+          order.price ?? ""
         )}
       />
       {isConfirming && (

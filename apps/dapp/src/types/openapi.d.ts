@@ -518,7 +518,7 @@ export interface PathsDictionary {
     /**
      * estimateFee - Estimates fees for an Order
      */
-    'get'(
+    'post'(
       parameters?: Parameters<Paths.FeesEstimate.HeaderParameters> | null,
       data?: Paths.EstimateFee.RequestBody,
       config?: AxiosRequestConfig  
