@@ -69,7 +69,7 @@ export const QueryWizard = ({
     success: {
       title: "Success",
       element: (
-        <div className="p-4">
+        <div className="p-4 text-center">
           {typeof SuccessDialog === "function" ? (
             <SuccessDialog {...response} />
           ) : (

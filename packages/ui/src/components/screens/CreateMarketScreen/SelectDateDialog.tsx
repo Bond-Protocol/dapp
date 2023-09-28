@@ -22,7 +22,6 @@ export const SelectDateDialog = (props: {
     props.onSubmit({ value: date });
   };
 
-  console.log("limitdate", props.limitDate);
   return (
     <div className="flex flex-col items-center justify-center">
       <DatePicker
