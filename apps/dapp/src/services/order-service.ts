@@ -99,7 +99,7 @@ export class ApiClient {
     const filters = ["market_id", "status", "recipient", "referrer", "user"];
     const dates = ["submitted", "deadline"];
 
-    //Most values come as 255 bit hex-encoded number,
+    //Most values come as 256 bit hex-encoded number,
     //so we want to convert them to human readable
     return response.data.map((o) => {
       return Object.entries(o).reduce((acc, [name, value]) => {
@@ -174,14 +174,20 @@ export class ApiClient {
   }) {
     const response = await this.api.cancelOrderByDigest(
       //@ts-ignore
-      {
-        address,
-        digest: BigNumber.from(digest).toHexString(),
-      },
+      { address, digest: BigNumber.from(digest).toHexString() },
       null,
       { headers: this.makeHeaders({ chainId, token }) }
     );
     return response;
+  }
+
+  async estimateFee(chainId: number, order: Order) {
+    return this.api.estimateFee(null, order, {
+      headers: {
+        ...this.makeHeaders({ chainId }),
+        "Content-Type": "application/json",
+      },
+    });
   }
 
   private makeHeaders({
@@ -201,9 +207,7 @@ export class ApiClient {
       "x-settlement": settlement,
     };
 
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
-    }
+    if (token) headers.Authorization = `Bearer ${token}`;
 
     return headers;
   }

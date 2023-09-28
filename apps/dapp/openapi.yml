@@ -120,7 +120,7 @@ paths:
         schema:
           type: string
         required: true
-    get:
+    post:
       summary: Estimates fees for an Order
       operationId: estimateFee
       tags: [Fees]
