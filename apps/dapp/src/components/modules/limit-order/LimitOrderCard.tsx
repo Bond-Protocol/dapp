@@ -63,6 +63,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           onKeyUp={handleKeyUp}
           onKeyDown={handleKeyDown}
         />
+
         <div className="w-full">
           <SelectModal
             label="Order Expiry"
@@ -72,6 +73,12 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
             ModalContent={(args: any) => (
               <SelectDateDialog
                 {...args}
+                onSubmit={({ value }: any) => {
+                  args.onSubmit({
+                    value,
+                    label: formatDate.dateAndTime(value),
+                  });
+                }}
                 limitDate={new Date(props?.market?.conclusion! * 1000)}
               />
             )}
@@ -83,6 +90,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           />
         </div>
       </div>
+
       <InputCard
         className="mt-4"
         tokenIcon={props.market.quoteToken.logoURI}
@@ -93,6 +101,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
         onKeyUp={handleKeyUp}
         onKeyDown={handleKeyDown}
       />
+
       <ActionInfoList
         fields={generateSummaryFields(
           props.market,
@@ -102,6 +111,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           order.price ?? ""
         )}
       />
+
       {isConfirming && (
         <QueryWizard
           open={isConfirming}
@@ -114,6 +124,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           SuccessDialog={() => <div>Order placed successfully!</div>}
         />
       )}
+
       <BondButton
         showConnect={!account.isConnected}
         showPurchaseLink={!allowance.hasSufficientBalance}

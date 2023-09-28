@@ -11,7 +11,7 @@ import { formatDuration } from "date-fns";
 export const shorter = (date: Date) => format(date, "yy.MM.dd");
 export const short = (date: Date) => format(date, "yyyy.MM.dd");
 export const long = (date: Date) => format(date, "PP pp");
-export const dayMonthTime = (date: Date) => format(date, "MM/dd p");
+export const dayMonthTime = (date: Date) => format(date, "dd.MM p");
 export const dateAndTime = (date: Date) => format(date, "yyyy.MM.dd - HH:mm z");
 export const distanceToNow = (date: Date) => formatDistanceToNow(date);
 
