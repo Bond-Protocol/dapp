@@ -20,6 +20,7 @@ export type ILimitOrderContext = {
   expiry?: Date;
   amount?: string;
   payout?: number;
+  maxFee?: number;
   setPrice: (e: React.BaseSyntheticEvent<HTMLInputElement>) => void;
   setExpiry: (date: Date) => void;
   setAmount: (value: string) => void;
@@ -41,7 +42,7 @@ export const LimitOrderProvider = ({
   const { value: price, onChange: setPrice } = useNumericInput();
   const [amount, setAmount] = useState<string>();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
-  const [fee, setFee] = useState<number>();
+  const [maxFee, setMaxFee] = useState<number>();
   const api = useOrderApi(market);
 
   const provider = providers[market.chainId];
@@ -77,12 +78,17 @@ export const LimitOrderProvider = ({
       market.payoutToken.decimals
     );
 
+    const adjustedMaxFee = ethers.utils.parseUnits(
+      maxFee?.toString() ?? "0",
+      market.quoteToken.decimals
+    );
+
     const decimalValues = {
       amount: adjustedAmount,
       min_amount_out: minAmountOut,
       deadline: expiry.getTime(),
       submitted: new Date().getTime(),
-      max_fee: "1",
+      max_fee: adjustedMaxFee,
     };
 
     return {
@@ -95,20 +101,14 @@ export const LimitOrderProvider = ({
   };
 
   const estimateFee = async () => {
-    if (price && amount && expiry) {
-      const order = generateOrder();
-      //TODO: prob missing conversion in backend
-      //@ts-ignore
-      order.market_id = BigNumber.from(order.market_id).toHexString();
-
       const response = await orderService.estimateFee(
         Number(market.chainId),
-        order
+        market.marketId,
       );
 
-      console.log({ response });
-      setFee(response.data);
-    }
+      let hexFee = BigNumber.from(response.data);
+      let fee = Number(ethers.utils.formatUnits(hexFee, market.quoteToken.decimals));
+      setMaxFee(fee);
   };
 
   const createOrder = async () => {
@@ -131,6 +131,7 @@ export const LimitOrderProvider = ({
     expiry,
     amount,
     payout,
+    maxFee,
     setPrice,
     setExpiry: updateExpiry,
     setAmount,

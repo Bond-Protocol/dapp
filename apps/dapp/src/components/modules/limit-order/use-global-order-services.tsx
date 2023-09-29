@@ -35,7 +35,7 @@ export const OrderServiceProvider = ({
   const isTokenSupported = (token: TokenBase) => {
     return supportedTokens.some(
       //@ts-ignore types need fixing
-      (t) => t.address === token.address && t.chain_id === token.chainId
+      (t) => String(t.address).toLowerCase() === token.address.toLowerCase() && Number(t.chain_id) === token.chainId
     );
   };
 
