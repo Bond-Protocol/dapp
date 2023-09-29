@@ -1,4 +1,7 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  getAddresses,
+} from "@bond-protocol/contract-library";
 import { BigNumber, ethers } from "ethers";
 import OpenAPIClient from "openapi-axios-client";
 import { SiweMessage } from "siwe";
@@ -7,18 +10,16 @@ import { Client as OrderClient } from "src/types/openapi";
 import { Address, signMessage } from "@wagmi/core";
 import { Order } from "src/types/openapi";
 
-const getAccessToken = () => sessionStorage.getItem("order_access_token");
-const getRefreshToken = () => sessionStorage.getItem("order_refresh_token");
-const setAccessToken = (token: string) =>
-  sessionStorage.setItem("order_access_token", token);
-const setRefreshToken = (token: string) =>
-  sessionStorage.setItem("order_refresh_token", token);
+const AGGREGATOR_ADDRESS = getAddresses("1").aggregator; //For now all chains share the same address, so no need to desambiguate
+const SETTLEMENT_ADDRESS = "0x0000000000000000000000000000000000000001";
 
 export const TokenStorage = {
-  getAccessToken,
-  getRefreshToken,
-  setAccessToken,
-  setRefreshToken,
+  getAccessToken: () => sessionStorage.getItem("order_access_token"),
+  getRefreshToken: () => sessionStorage.getItem("order_refresh_token"),
+  setAccessToken: (token: string) =>
+    sessionStorage.setItem("order_access_token", token),
+  setRefreshToken: (token: string) =>
+    sessionStorage.setItem("order_refresh_token", token),
 };
 
 const defaultStatement = "Sign in with Ethereum to the Bond Protocol app.";
@@ -199,8 +200,8 @@ export class ApiClient {
   private makeHeaders({
     token,
     chainId,
-    aggregator = "0x0000000000000000000000000000000000000001",
-    settlement = "0x0000000000000000000000000000000000000001",
+    aggregator = AGGREGATOR_ADDRESS,
+    settlement = SETTLEMENT_ADDRESS,
   }: {
     chainId: number;
     token?: string;
@@ -252,13 +253,13 @@ function refreshTokenInterceptor(api: OrderClient) {
         originalConfig._retry = true;
       }
 
-      const refreshToken = getRefreshToken();
+      const refreshToken = TokenStorage.getRefreshToken();
 
       if (refreshToken) {
         try {
           const response = await api.refreshAuth(null, refreshToken);
-          setAccessToken(response.data.access_token!);
-          setRefreshToken(response.data.refresh_token!);
+          TokenStorage.setAccessToken(response.data.access_token!);
+          TokenStorage.setRefreshToken(response.data.refresh_token!);
 
           originalConfig.headers.Authorization = `Bearer ${response.data.access_token}`;
 
