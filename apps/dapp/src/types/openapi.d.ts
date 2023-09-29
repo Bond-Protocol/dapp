@@ -156,25 +156,28 @@ declare namespace Paths {
         }
     }
     namespace EstimateFee {
-        export type RequestBody = /* Details of an existing order. */ Components.Schemas.Order;
         namespace Responses {
-            export type $200 = number;
+            export type $200 = string;
             export interface $400 {
             }
             export interface $500 {
             }
         }
     }
-    namespace FeesEstimate {
+    namespace FeesEstimate$MarketId {
         export interface HeaderParameters {
             "x-chain-id": Parameters.XChainId;
             "x-aggregator": Parameters.XAggregator;
             "x-settlement": Parameters.XSettlement;
         }
         namespace Parameters {
+            export type MarketId = number;
             export type XAggregator = string;
             export type XChainId = number;
             export type XSettlement = string;
+        }
+        export interface PathParameters {
+            market_id?: Parameters.MarketId;
         }
     }
     namespace GetActiveOrdersByAddress {
@@ -411,8 +414,8 @@ export interface OperationMethods {
    * estimateFee - Estimates fees for an Order
    */
   'estimateFee'(
-    parameters?: Parameters<Paths.FeesEstimate.HeaderParameters> | null,
-    data?: Paths.EstimateFee.RequestBody,
+    parameters?: Parameters<Paths.FeesEstimate$MarketId.PathParameters & Paths.FeesEstimate$MarketId.HeaderParameters> | null,
+    data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.EstimateFee.Responses.$200>
   /**
@@ -514,13 +517,13 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.TestAuth.Responses.$200>
   }
-  ['/fees/estimate']: {
+  ['/fees/estimate/{market_id}']: {
     /**
      * estimateFee - Estimates fees for an Order
      */
-    'post'(
-      parameters?: Parameters<Paths.FeesEstimate.HeaderParameters> | null,
-      data?: Paths.EstimateFee.RequestBody,
+    'get'(
+      parameters?: Parameters<Paths.FeesEstimate$MarketId.PathParameters & Paths.FeesEstimate$MarketId.HeaderParameters> | null,
+      data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.EstimateFee.Responses.$200>
   }

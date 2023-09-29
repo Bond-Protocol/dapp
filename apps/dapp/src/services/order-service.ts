@@ -11,7 +11,7 @@ import { Address, signMessage } from "@wagmi/core";
 import { Order } from "src/types/openapi";
 
 const AGGREGATOR_ADDRESS = getAddresses("1").aggregator; //For now all chains share the same address, so no need to desambiguate
-const SETTLEMENT_ADDRESS = "0x0000000000000000000000000000000000000001";
+const SETTLEMENT_ADDRESS = "0x007105A0052bD5fB5cC198134E7DECE1E74D95bB";
 
 export const TokenStorage = {
   getAccessToken: () => sessionStorage.getItem("order_access_token"),
@@ -188,13 +188,13 @@ export class ApiClient {
     return response;
   }
 
-  async estimateFee(chainId: number, order: Order) {
-    return this.api.estimateFee(null, order, {
-      headers: {
-        ...this.makeHeaders({ chainId }),
-        "Content-Type": "application/json",
-      },
-    });
+  async estimateFee(chainId: number, marketId: number) {
+    return this.api.estimateFee(
+      //@ts-ignore
+      { market_id: marketId },
+      null,
+      { headers: this.makeHeaders({ chainId }) },
+    );
   }
 
   private makeHeaders({

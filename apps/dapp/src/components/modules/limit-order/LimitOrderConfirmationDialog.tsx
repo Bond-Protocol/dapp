@@ -42,7 +42,12 @@ export const LimitOrderConfirmationDialog = (
         leftLabel: "Order Expires on",
         rightLabel: order.expiry ? formatDate.short(order.expiry) : "",
       },
-      { leftLabel: "Max Fee", tooltip: "", rightLabel: "" },
+      { leftLabel: "Max Fee",
+        rightLabel: `${formatCurrency.amount(order.maxFee ?? 0)} ${
+          props.market.quoteToken.symbol
+        }`,
+        tooltip: "This is the maximum amount of fees you will pay for this order. The executor will try to reduce this amount as much as possible.",
+      },
       {
         leftLabel: "Limit Order contract",
         rightLabel: `View on ${props.market.blockExplorerName}`,

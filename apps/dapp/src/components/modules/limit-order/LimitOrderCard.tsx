@@ -33,6 +33,8 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
   const account = useAccount();
   const { allowance, ...order } = useLimitOrderForMarket();
 
+  // order.estimateFee();
+
   const timer = useRef<number>();
   const [isConfirming, setIsConfirming] = useState(false);
 
@@ -110,7 +112,8 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           Number(order.payout),
           order.discount ?? "",
           order.expiry ?? new Date(),
-          order.price ?? ""
+          order.price ?? "",
+          Number(order.maxFee),
         )}
       />
 
@@ -157,7 +160,8 @@ function generateSummaryFields(
   payout: number,
   discount: string | number,
   expiry: Date,
-  price: string
+  price: string,
+  maxFee: number,
 ) {
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
     market.chainId,
@@ -200,7 +204,14 @@ function generateSummaryFields(
     },
     {
       leftLabel: "Max fee",
-      rightLabel: 1 + " " + market.quoteToken.symbol,
+      rightLabel: `${
+        isFinite(maxFee) && maxFee != 0
+          ? maxFee < 999
+            ? formatCurrency.trimToken(maxFee) + ` ${market.quoteToken.symbol}`
+            : formatCurrency.longFormatter.format(maxFee) +
+              ` ${market.quoteToken.symbol}`
+          : `-`
+      }`,
     },
     {
       leftLabel: "Limit Order Contract",
