@@ -4,7 +4,7 @@ import {
 } from "@bond-protocol/contract-library";
 import { QueryWizard } from "components/common/QueryWizard";
 import { BondButton } from "components/organisms/BondButton";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import defillama from "services/defillama";
 import {
   InputCard,
@@ -33,7 +33,6 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
   const account = useAccount();
   const { allowance, ...order } = useLimitOrderForMarket();
 
-  const timer = useRef<number>();
   const [isConfirming, setIsConfirming] = useState(false);
 
   // remove dates that go past market conclusion
@@ -45,12 +44,16 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       )
   );
 
-  const handleKeyUp = () => {
-    clearTimeout(timer.current);
-    timer.current = setTimeout(order.estimateFee, 3500);
-  };
+  const approveSpending = () =>
+    allowance.approve(
+      props.market.quoteToken.address,
+      props.market.quoteToken.decimals,
+      props.market.auctioneer
+    );
 
-  const handleKeyDown = () => clearTimeout(timer.current);
+  const onClickPlaceOrder = !allowance.hasSufficientAllowance
+    ? () => approveSpending()
+    : () => setIsConfirming(true);
 
   return (
     <div className="p-4">
@@ -61,8 +64,6 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           value={order.price}
           //@ts-ignore
           onChange={order.setPrice}
-          onKeyUp={handleKeyUp}
-          onKeyDown={handleKeyDown}
         />
 
         <div className="w-full">
@@ -100,18 +101,13 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
         value={order.amount?.toString()}
         //@ts-ignore
         onChange={(value: string) => order.setAmount(value)}
-        onKeyUp={handleKeyUp}
-        onKeyDown={handleKeyDown}
       />
 
       <ActionInfoList
-        fields={generateSummaryFields(
-          props.market,
-          Number(order.payout),
-          order.discount ?? "",
-          order.expiry ?? new Date(),
-          order.price ?? ""
-        )}
+        fields={generateSummaryFields({
+          market: props.market,
+          ...order,
+        })}
       />
 
       {isConfirming && (
@@ -139,9 +135,13 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       >
         <Button
           className="mt-4 w-full"
-          disabled={!order.price || !order.amount || !order.expiry}
-          //disabled={!allowance.hasSufficientBalance}
-          onClick={() => setIsConfirming(true)}
+          disabled={
+            !order.price ||
+            !order.amount ||
+            !order.expiry ||
+            !allowance.hasSufficientBalance
+          }
+          onClick={onClickPlaceOrder}
         >
           {!allowance.hasSufficientAllowance && allowance.hasSufficientBalance
             ? "APPROVE"
@@ -152,13 +152,21 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
   );
 };
 
-function generateSummaryFields(
-  market: CalculatedMarket,
-  payout: number,
-  discount: string | number,
-  expiry: Date,
-  price: string
-) {
+function generateSummaryFields({
+  market,
+  payout = "",
+  discount = "",
+  expiry = new Date(),
+  price = "",
+  fee = "",
+}: {
+  market: CalculatedMarket;
+  payout: string;
+  discount: string | number;
+  expiry: Date;
+  price: string;
+  fee: string;
+}) {
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
     market.chainId,
     "address"
@@ -166,6 +174,8 @@ function generateSummaryFields(
 
   const isValidPrice = !!Number(price) && isFinite(Number(price));
   const isDiscountPositive = Math.sign(Number(discount)) > 0;
+  const updatedPayout = Number(payout);
+
   return [
     {
       leftLabel: "Discount to Current",
@@ -186,10 +196,11 @@ function generateSummaryFields(
     {
       leftLabel: "You will get",
       rightLabel: `${
-        isFinite(payout) && payout != 0
-          ? payout < 999
-            ? formatCurrency.trimToken(payout) + ` ${market.payoutToken.symbol}`
-            : formatCurrency.longFormatter.format(payout) +
+        isFinite(updatedPayout) && updatedPayout != 0
+          ? updatedPayout < 999
+            ? formatCurrency.trimToken(updatedPayout) +
+              ` ${market.payoutToken.symbol}`
+            : formatCurrency.longFormatter.format(updatedPayout) +
               ` ${market.payoutToken.symbol}`
           : `-`
       }`,
@@ -200,7 +211,7 @@ function generateSummaryFields(
     },
     {
       leftLabel: "Max fee",
-      rightLabel: 1 + " " + market.quoteToken.symbol,
+      rightLabel: `${fee} ${market.quoteToken.symbol}`,
     },
     {
       leftLabel: "Limit Order Contract",

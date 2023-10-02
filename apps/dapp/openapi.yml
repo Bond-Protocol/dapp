@@ -100,7 +100,8 @@ paths:
           description: Unauthorized.
       security:
         - JWTAuthorization: []
-  /fees/estimate:
+
+  /fees/estimate/{market_id}:
     parameters:
       - name: x-chain-id
         in: header
@@ -120,24 +121,24 @@ paths:
         schema:
           type: string
         required: true
-    post:
-      summary: Estimates fees for an Order
+    get:
       operationId: estimateFee
+      summary: Estimates fees for an Order on the provided Market.
+      parameters:
+        - name: market_id
+          in: path
+          description: The id of the market to get a fee estimate for.
+          schema:
+            type: integer
+          required: true
       tags: [Fees]
-      requestBody:
-        description: An Order object.
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Order"
       responses:
         200:
-          description: The estimated fees for the Order
+          description: The estimated fee for an Order on the market in quote token decimals (hexadecimal representation).
           content:
             application/json:
               schema:
-                type: integer
+                type: string
         400:
           description: Bad Request - Cannot estimate gas for specified chain.
         500:
