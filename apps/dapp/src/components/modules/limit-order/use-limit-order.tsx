@@ -1,4 +1,4 @@
-import { useState, createContext, useContext } from "react";
+import { useState, createContext, useContext, useEffect } from "react";
 import { useAccount, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 
@@ -25,7 +25,6 @@ export type ILimitOrderContext = {
   setExpiry: (date: Date) => void;
   setAmount: (value: string) => void;
   createOrder: () => Promise<unknown>;
-  estimateFee: Function;
 };
 
 const LimitOrderContext = createContext<ILimitOrderContext>(
@@ -100,16 +99,21 @@ export const LimitOrderProvider = ({
     };
   };
 
-  const estimateFee = async () => {
+  useEffect(() => {
+    const estimateFee = async () => {
       const response = await orderService.estimateFee(
         Number(market.chainId),
-        market.marketId,
+        market.marketId
       );
 
       let hexFee = BigNumber.from(response.data);
-      let fee = Number(ethers.utils.formatUnits(hexFee, market.quoteToken.decimals));
+      let fee = Number(
+        ethers.utils.formatUnits(hexFee, market.quoteToken.decimals)
+      );
       setMaxFee(fee);
-  };
+    };
+    estimateFee();
+  }, []);
 
   const createOrder = async () => {
     return api.createOrder(generateOrder());
@@ -136,7 +140,6 @@ export const LimitOrderProvider = ({
     setExpiry: updateExpiry,
     setAmount,
     createOrder,
-    estimateFee,
   };
 
   return (

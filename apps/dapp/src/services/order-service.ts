@@ -193,7 +193,7 @@ export class ApiClient {
       //@ts-ignore
       { market_id: marketId },
       null,
-      { headers: this.makeHeaders({ chainId }) },
+      { headers: this.makeHeaders({ chainId }) }
     );
   }
 
