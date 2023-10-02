@@ -116,6 +116,7 @@ export const LimitOrderProvider = ({
   }, []);
 
   const createOrder = async () => {
+    //@ts-ignore
     return api.createOrder(generateOrder());
   };
 

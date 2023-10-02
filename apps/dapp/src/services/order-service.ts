@@ -30,7 +30,8 @@ const basicMessage = {
   version: "1",
 };
 
-export type OrderConfig = Required<Omit<Required<Order>, "submitted">>;
+export type OrderConfig = Required<Order>;
+export type OrderRequest = Required<Omit<Order, "signature">>;
 
 type BasicOrderArgs = {
   chainId: number;
@@ -70,9 +71,11 @@ export class ApiClient {
     }
   }
 
-  async createOrder({ chainId, ...order }: CreateOrderArgs) {
-    const { signature } = await this.sign(chainId, order.address);
-
+  async createOrder({
+    chainId,
+    signature,
+    ...order
+  }: CreateOrderArgs & { signature: any }) {
     try {
       const response = await this.api.createOrder(
         null,

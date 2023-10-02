@@ -1,7 +1,25 @@
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { useAuth } from "./use-auth";
 import { useAccount } from "wagmi";
-import { orderService, OrderConfig } from "services/order-service";
+import { signTypedData } from "@wagmi/core";
+import {
+  orderService,
+  OrderConfig,
+  OrderRequest,
+} from "services/order-service";
+const orderTypedDataTypes = {
+  Order: [
+    { name: "market_id", type: "string" },
+    { name: "amount", type: "string" },
+    { name: "min_amount_out", type: "string" },
+    { name: "max_fee", type: "string" },
+    { name: "submitted", type: "string" },
+    { name: "deadline", type: "string" },
+    { name: "user", type: "address" },
+    { name: "recipient", type: "address" },
+    { name: "referrer", type: "address" },
+  ],
+} as const;
 
 export const useOrderApi = (market: CalculatedMarket) => {
   const { address } = useAccount();
@@ -27,6 +45,25 @@ export const useOrderApi = (market: CalculatedMarket) => {
     return orderService.estimateFee(chainId, marketId);
   };
 
+  const signOrder = async (order: OrderConfig) => {
+    const domain = {
+      name: "Bond Protocol Orders",
+      version: "0.0.7",
+      chainId,
+    } as const;
+
+    const types = orderTypedDataTypes;
+
+    return signTypedData({
+      domain,
+      //@ts-ignore
+      //TODO: Docs and types aren't matching, prob neeeds a wagmi update
+      //needs testing
+      value: order,
+      types,
+      primaryType: "Order",
+    });
+  };
   const createOrder = async (order: OrderConfig) => {
     if (!address) {
       throw new Error(
@@ -34,10 +71,13 @@ export const useOrderApi = (market: CalculatedMarket) => {
       );
     }
 
+    const signature = await signOrder(order);
+
     const response = await orderService.createOrder({
+      ...order,
       chainId,
       address,
-      ...order,
+      signature,
     });
     return response;
   };
