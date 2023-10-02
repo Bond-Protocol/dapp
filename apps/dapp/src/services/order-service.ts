@@ -188,10 +188,11 @@ export class ApiClient {
     return response;
   }
 
-  async estimateFee(chainId: number, marketId: number) {
-    return this.api.estimateFee(marketId, null, {
+  async estimateFee(chainId: number, order: Order) {
+    return this.api.estimateFee(null, order, {
       headers: {
         ...this.makeHeaders({ chainId }),
+        "Content-Type": "application/json",
       },
     });
   }

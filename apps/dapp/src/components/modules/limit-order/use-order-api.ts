@@ -23,8 +23,8 @@ export const useOrderApi = (market: CalculatedMarket) => {
     });
   };
 
-  const estimateFee = async (chainId: number, marketId: number) => {
-    return orderService.estimateFee(chainId, marketId);
+  const estimateFee = async (chainId: number, order: string) => {
+    return orderService.estimateFee(chainId, order);
   };
 
   const createOrder = async (order: OrderConfig) => {

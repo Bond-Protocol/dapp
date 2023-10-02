@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, createContext, useContext } from "react";
 import { useAccount, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 
@@ -12,20 +12,19 @@ import { toHex } from "src/utils/bignumber";
 
 import { useOrderApi } from "./use-order-api";
 import { orderService } from "services/order-service";
-import { formatUnits } from "ethers/lib/utils.js";
 
 export type ILimitOrderContext = {
   allowance: ReturnType<typeof useTokenAllowance>;
-  discount: number;
-  price: string;
-  expiry: Date;
-  amount: string;
-  payout: string;
-  fee: string;
+  discount?: number;
+  price?: string;
+  expiry?: Date;
+  amount?: string;
+  payout?: number;
   setPrice: (e: React.BaseSyntheticEvent<HTMLInputElement>) => void;
   setExpiry: (date: Date) => void;
   setAmount: (value: string) => void;
   createOrder: () => Promise<unknown>;
+  estimateFee: Function;
 };
 
 const LimitOrderContext = createContext<ILimitOrderContext>(
@@ -40,9 +39,9 @@ export const LimitOrderProvider = ({
   market: CalculatedMarket;
 }) => {
   const { value: price, onChange: setPrice } = useNumericInput();
-  const [amount, setAmount] = useState<string>("");
+  const [amount, setAmount] = useState<string>();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
-  const [fee, setFee] = useState<string>("");
+  const [fee, setFee] = useState<number>();
   const api = useOrderApi(market);
 
   const provider = providers[market.chainId];
@@ -61,25 +60,8 @@ export const LimitOrderProvider = ({
   );
 
   const discount = calcDiscountPercentage(market.fullPrice, Number(price));
-  const payout = (
-    (Number(amount) * (market?.quoteToken?.price ?? 0)) /
-    Number(price)
-  ).toString();
-
-  useEffect(() => {
-    async function estimateFee() {
-      //TODO: check if right value when the setup is complete
-      const response = await orderService.estimateFee(
-        Number(market.chainId),
-        market.marketId
-      );
-
-      const fee = formatUnits(response.data, market.quoteToken.decimals);
-      setFee(fee);
-    }
-
-    estimateFee();
-  }, []);
+  const payout =
+    (Number(amount) * (market?.quoteToken?.price ?? 0)) / Number(price);
 
   const generateOrder = () => {
     if (!amount || !price || !expiry || !address)
@@ -112,6 +94,23 @@ export const LimitOrderProvider = ({
     };
   };
 
+  const estimateFee = async () => {
+    if (price && amount && expiry) {
+      const order = generateOrder();
+      //TODO: prob missing conversion in backend
+      //@ts-ignore
+      order.market_id = BigNumber.from(order.market_id).toHexString();
+
+      const response = await orderService.estimateFee(
+        Number(market.chainId),
+        order
+      );
+
+      console.log({ response });
+      setFee(response.data);
+    }
+  };
+
   const createOrder = async () => {
     return api.createOrder(generateOrder());
   };
@@ -132,11 +131,11 @@ export const LimitOrderProvider = ({
     expiry,
     amount,
     payout,
-    fee,
     setPrice,
     setExpiry: updateExpiry,
     setAmount,
     createOrder,
+    estimateFee,
   };
 
   return (
