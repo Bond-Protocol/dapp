@@ -33,9 +33,6 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
   const account = useAccount();
   const { allowance, ...order } = useLimitOrderForMarket();
 
-  // order.estimateFee();
-
-  const timer = useRef<number>();
   const [isConfirming, setIsConfirming] = useState(false);
 
   // remove dates that go past market conclusion
@@ -47,13 +44,6 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       )
   );
 
-  const handleKeyUp = () => {
-    clearTimeout(timer.current);
-    timer.current = setTimeout(order.estimateFee, 3500);
-  };
-
-  const handleKeyDown = () => clearTimeout(timer.current);
-
   return (
     <div className="p-4">
       <div className="flex justify-between gap-x-2">
@@ -63,8 +53,6 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           value={order.price}
           //@ts-ignore
           onChange={order.setPrice}
-          onKeyUp={handleKeyUp}
-          onKeyDown={handleKeyDown}
         />
 
         <div className="w-full">
@@ -102,8 +90,6 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
         value={order.amount?.toString()}
         //@ts-ignore
         onChange={(value: string) => order.setAmount(value)}
-        onKeyUp={handleKeyUp}
-        onKeyDown={handleKeyDown}
       />
 
       <ActionInfoList
@@ -113,7 +99,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           order.discount ?? "",
           order.expiry ?? new Date(),
           order.price ?? "",
-          Number(order.maxFee),
+          Number(order.maxFee)
         )}
       />
 
@@ -161,7 +147,7 @@ function generateSummaryFields(
   discount: string | number,
   expiry: Date,
   price: string,
-  maxFee: number,
+  maxFee: number
 ) {
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
     market.chainId,
