@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+//@ts-nocheck
+>>>>>>> 2c6e7907 (dashboard wip)
 import {
   Button,
   Column,
@@ -13,7 +17,7 @@ import {
 } from "ui";
 
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Popper } from "components/common/Popper";
 import { useOrderApi } from "./use-order-api";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
@@ -22,7 +26,8 @@ import { useLimitOrderForMarket } from "./use-limit-order";
 import { CancelOrderDialog } from "./CancelOrderDialog";
 
 export type LimitOrderListProps = {
-  market: CalculatedMarket;
+  market?: CalculatedMarket;
+  showAll?: boolean;
   onClickPlaceOrder: () => void;
 };
 
@@ -230,7 +235,7 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
           bodyClassName="overflow-y-auto "
           emptyRows={0}
           data={sortedData}
-          columns={columns}
+          columns={limitOrderColumns}
         />
         {!sortedData.length && !showReApprove && (
           <div className="mt-8 flex h-[80%] flex-col items-center justify-center text-center ">

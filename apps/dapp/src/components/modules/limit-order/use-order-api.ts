@@ -76,6 +76,10 @@ export const useOrderApi = () => {
     return response;
   };
 
+  const cancelAllOrdersForAllMarkets = async (markets: number[]) => {
+    return [];
+  };
+
   return {
     list,
     estimateFee,
