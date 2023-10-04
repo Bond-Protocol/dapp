@@ -7,7 +7,7 @@ import OpenAPIClient from "openapi-axios-client";
 import { SiweMessage } from "siwe";
 import definition from "src/openapi.json";
 import { Client as OrderClient } from "src/types/openapi";
-import { Address, signMessage } from "@wagmi/core";
+import { Address, signMessage, signTypedData } from "@wagmi/core";
 import { Order } from "src/types/openapi";
 
 const AGGREGATOR_ADDRESS = getAddresses("1").aggregator; //For now all chains share the same address, so no need to desambiguate
@@ -69,6 +69,38 @@ export class ApiClient {
     } catch (e) {
       console.error(`Failed to sign in`, e);
     }
+  }
+
+  async signOrder(order: OrderConfig, chainId: number) {
+    const domain = {
+      name: "Bond Protocol Orders",
+      version: "1.0.0",
+      chainId,
+      veryfingContract: getAddresses(chainId.toString()).settlement,
+    } as const;
+
+    const types = {
+      Order: [
+        { name: "market_id", type: "uint64" },
+        { name: "amount", type: "uint256" },
+        { name: "min_amount_out", type: "uint256" },
+        { name: "max_fee", type: "uint256" },
+        { name: "submitted", type: "string" },
+        { name: "deadline", type: "string" },
+        { name: "user", type: "address" },
+        { name: "recipient", type: "address" },
+        { name: "referrer", type: "address" },
+      ],
+    };
+
+    return signTypedData({
+      domain,
+      types,
+      //@ts-ignore
+      //TODO: Docs and types aren't matching, prob neeeds a wagmi update
+      //needs testing
+      value: order,
+    });
   }
 
   async createOrder({
