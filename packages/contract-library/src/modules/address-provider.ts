@@ -81,7 +81,7 @@ const goerliAddresses: ContractAddresses = {
   fixedTermFPAAuctioneer: '0xF7F9A96cDBFEFd70BDa14a8f30EC503b16bCe9b1',
   fixedTermOFDAAuctioneer: '0xF70FDAae514a8b48B83caDa51C0847B46Bb698bd',
   fixedTermOSDAAuctioneer: '0xF705DA9476a172408e1B94b2A7B2eF595A91C29b',
-  settlement: '0x0071053EA7f2125d06552ceB2c5f08609aAD63C0',
+  settlement: '0x0071054d0A541daC3CAfA2152cA3f122B356a2Ff',
 };
 
 const arbitrumMainnetAddresses: ContractAddresses = {

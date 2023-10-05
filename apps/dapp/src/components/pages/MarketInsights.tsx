@@ -30,8 +30,6 @@ export const MarketInsights = () => {
     capacity,
   } = useMarketDetails(market);
 
-  console.log({ market });
-
   if (!market) return <Loading content={meme()} />;
 
   return (

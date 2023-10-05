@@ -58,10 +58,7 @@ export const InputCard = ({
           {...props}
           value={value}
           placeholder="Enter Amount to Bond"
-          onChange={(event: React.BaseSyntheticEvent) => {
-            console.log({ event });
-            handleChange(event.target.value);
-          }}
+          onChange={(event: React.BaseSyntheticEvent) => handleChange(event.target.value)}
           startAdornment={
             <TokenLogo uneven className="ml-2" icon={tokenIcon} />
           }

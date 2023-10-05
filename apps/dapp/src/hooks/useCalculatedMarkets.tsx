@@ -49,7 +49,6 @@ export function useCalculatedMarkets() {
 
       const blockExplorer = getBlockExplorer(result.chainId, "address");
 
-      console.log({ blockExplorer });
       return {
         ...result,
         start: market.start,
