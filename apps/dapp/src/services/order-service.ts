@@ -11,7 +11,7 @@ import { Address, signMessage, signTypedData } from "@wagmi/core";
 import { Order } from "src/types/openapi";
 
 const AGGREGATOR_ADDRESS = getAddresses("1").aggregator; //For now all chains share the same address, so no need to desambiguate
-const SETTLEMENT_ADDRESS = "0x007105A0052bD5fB5cC198134E7DECE1E74D95bB";
+const SETTLEMENT_ADDRESS = getAddresses("5").settlement;
 
 export const TokenStorage = {
   getAccessToken: () => sessionStorage.getItem("order_access_token"),
@@ -73,33 +73,46 @@ export class ApiClient {
 
   async signOrder(order: OrderConfig, chainId: number) {
     const domain = {
-      name: "Bond Protocol Orders",
-      version: "1.0.0",
+      name: "Bond Protocol Limit Orders",
+      version: "v1.0.0",
       chainId,
-      veryfingContract: getAddresses(chainId.toString()).settlement,
+      verifyingContract: getAddresses(chainId.toString()).settlement as `0x${string}`
     } as const;
 
     const types = {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
       Order: [
-        { name: "market_id", type: "uint64" },
-        { name: "amount", type: "uint256" },
-        { name: "min_amount_out", type: "uint256" },
-        { name: "max_fee", type: "uint256" },
-        { name: "submitted", type: "string" },
-        { name: "deadline", type: "string" },
-        { name: "user", type: "address" },
+        { name: "marketId", type: "uint256" },
         { name: "recipient", type: "address" },
         { name: "referrer", type: "address" },
+        { name: "amount", type: "uint256" },
+        { name: "minAmountOut", type: "uint256" },
+        { name: "maxFee", type: "uint256" },
+        { name: "submitted", type: "uint256" },
+        { name: "deadline", type: "uint256" },
+        { name: "user", type: "address" },
       ],
     };
-
+    const value = {
+      marketId: BigNumber.from(order.market_id).toHexString(),
+      recipient: order.recipient,
+      referrer: order.referrer,
+      amount: order.amount,
+      minAmountOut: order.min_amount_out,
+      maxFee: order.max_fee,
+      submitted: order.submitted,
+      deadline: order.deadline,
+      user: order.user,
+    };
     return signTypedData({
       domain,
       types,
-      //@ts-ignore
-      //TODO: Docs and types aren't matching, prob neeeds a wagmi update
-      //needs testing
-      value: order,
+      value
     });
   }
 

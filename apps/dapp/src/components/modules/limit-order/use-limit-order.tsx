@@ -85,8 +85,8 @@ export const LimitOrderProvider = ({
     const decimalValues = {
       amount: adjustedAmount,
       min_amount_out: minAmountOut,
-      deadline: expiry.getTime(),
-      submitted: new Date().getTime(),
+      deadline: Math.round(expiry.getTime() / 1000),
+      submitted: Math.round(new Date().getTime() / 1000),
       max_fee: adjustedMaxFee,
     };
 
