@@ -83,5 +83,6 @@ export const useTokenAllowance = (
     balance,
     hasSufficientAllowance,
     hasSufficientBalance,
+    needsToApprove: !hasSufficientAllowance && hasSufficientBalance,
   };
 };

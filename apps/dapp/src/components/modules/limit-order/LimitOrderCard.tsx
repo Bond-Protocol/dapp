@@ -1,5 +1,6 @@
 import {
   CalculatedMarket,
+  getAddresses,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
 import { QueryWizard } from "components/common/QueryWizard";
@@ -128,13 +129,24 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       >
         <Button
           className="mt-4 w-full"
-          disabled={!order.price || !order.amount || !order.expiry}
-          //disabled={!allowance.hasSufficientBalance}
-          onClick={() => setIsConfirming(true)}
+          disabled={
+            !order.price ||
+            !order.amount ||
+            !order.expiry ||
+            !allowance.hasSufficientBalance
+          }
+          onClick={
+            allowance.needsToApprove
+              ? () =>
+                  allowance.approve(
+                    props.market.quoteToken.address,
+                    props.market.quoteToken.decimals,
+                    getAddresses(props.market.chainId.toString()).settlement
+                  )
+              : () => setIsConfirming(true)
+          }
         >
-          {!allowance.hasSufficientAllowance && allowance.hasSufficientBalance
-            ? "APPROVE"
-            : "PLACE ORDER"}
+          {allowance.needsToApprove ? "APPROVE" : "PLACE ORDER"}
         </Button>
       </BondButton>
     </div>
