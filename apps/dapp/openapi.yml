@@ -122,11 +122,12 @@ paths:
         required: true
       - name: market_id
         in: path
-        description: The id of the market an order is being placed for.
+        description: The id of the market to get a fee estimate for.
         schema:
           type: integer
+        required: true
     get:
-      summary: Estimates fees for an Order
+      summary: Estimates fees for an Order on the provided Market.
       operationId: estimateFee
       tags: [Fees]
       responses:
@@ -173,7 +174,7 @@ paths:
               $ref: "#/components/schemas/OrderRequest"
       responses:
         200:
-          description: Successfully submitted OrderRequest.
+          description: The digest of the submitted order.
           content:
             application/json:
               schema:
@@ -267,7 +268,7 @@ paths:
         required: true
     post:
       summary: Cancel all orders for a market.
-      operationId: cancelOrder
+      operationId: cancelAllOrdersByMarket
       tags: [Orders]
       responses:
         200:
@@ -370,8 +371,20 @@ paths:
           description: Error finding Orders.
       security:
         - JWTAuthorization: []
-  /permissions/executors:
+  /orders/address/{address}/market/{market_id}:
     parameters:
+      - name: address
+        in: path
+        description: The address being queried
+        schema:
+          type: string
+        required: true
+      - name: market_id
+        in: path
+        description: The id of the market to get orders for
+        schema:
+          type: integer
+        required: true
       - name: x-chain-id
         in: header
         description: The ID of a chain
@@ -390,6 +403,73 @@ paths:
         schema:
           type: string
         required: true
+    get:
+      summary: Get Orders for user address for a specific market.
+      operationId: getUserOrdersByMarket
+      tags: [Orders]
+      responses:
+        200:
+          description: An array of Orders for the specified address.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        500:
+          description: Error finding Orders.
+      security:
+        - JWTAuthorization: []
+  /orders/address/{address}/market/{market_id}/active:
+    parameters:
+      - name: address
+        in: path
+        description: The address being queried
+        schema:
+          type: string
+        required: true
+      - name: market_id
+        in: path
+        description: The id of the market to get orders for
+        schema:
+          type: integer
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Get active Orders for user address for a specific market.
+      operationId: getActiveUserOrdersByMarket
+      tags: [Orders]
+      responses:
+        200:
+          description: An array of active Orders for the specified address.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        500:
+          description: Error finding Orders.
+      security:
+        - JWTAuthorization: []
+  /permissions/executors:
     get:
       summary: Get addresses with executor permissions.
       tags: [Permissions]
@@ -469,7 +549,7 @@ paths:
         required: true
     get:
       summary: Checks whether the specified quote token is approved.
-      operationId: isTokenSupported
+      operationId: isQuoteTokenSupported
       tags: [Quote Tokens]
       responses:
         200:
@@ -486,22 +566,24 @@ components:
       description: A JSON object containing two string fields, access_token and refresh_token.
       type: object
       properties:
-        refresh_token:
-          type: string
-          description: A JWT refresh token
         access_token:
           type: string
           description: A JWT access token
+        refresh_token:
+          type: string
+          description: A JWT refresh token
+
     SigninData:
       description: A JSON object containing two string fields, a Sign in With Ethereum message and signature. The nonce found in the decoded signature should match the nonce in the message.
       type: object
       properties:
         message:
-          description: The messaged use with SIWE
+          description: The messaged use with Sign-In with Ethereum
           type: string
         signature:
-          description: The SIWE Signature
+          description: The Sign-In with Ethereum Signature
           type: string
+
     OrderRequest:
       description: Parameters for an order, including a signature.
       type: object
@@ -540,6 +622,9 @@ components:
       description: Details of an existing order.
       type: object
       properties:
+        digest:
+          description: The hash digest of the order. Used to uniquely identify an order.
+          type: string
         market_id:
           description: The id of the market an order is being placed for.
           type: string
@@ -566,6 +651,24 @@ components:
           type: string
         user:
           description: Address of the user who submitted the order.
+          type: string
+        signature:
+          description: Signature of the order digest by the user. Not provided by API.
+          type: string
+        chain_id:
+          description: The ID of the chain the order was submitted on.
+          type: integer
+        aggregator:
+          description: The address of the aggregator that the order was submitted to.
+          type: string
+        settlement:
+          description: The address of the settlement contract that the order was submitted to.
+          type: string
+        filled:
+          description: The amount of quote tokens that have been filled for the order.
+          type: string
+        status:
+          description: The status of the order. Statuses are Active, Pending, Executed, Cancelled
           type: string
   securitySchemes:
     JWTAuthorization:
