@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { BigNumber, BigNumberish, ContractTransaction, Signer } from "ethers";
 import {
   changeApproval,
+  changeTellerAllowance,
   estimatePurchaseGas,
   getAllowance,
   payoutFor,
@@ -17,16 +18,13 @@ export const usePurchaseBond = () => {
     tokenDecimals: number,
     auctioneer: string,
     signer: Signer,
-    capacity = "1000000000"
+    capacity = "1000000000",
+    isNotTeller = false
   ): Promise<ContractTransaction> => {
     if (!signer) throw Error("Not connected");
-    return changeApproval(
-      tokenAddress,
-      tokenDecimals,
-      auctioneer,
-      capacity,
-      signer
-    );
+    const handler = isNotTeller ? changeApproval : changeTellerAllowance;
+
+    return handler(tokenAddress, tokenDecimals, auctioneer, capacity, signer);
   };
 
   const getTokenAllowance = async (

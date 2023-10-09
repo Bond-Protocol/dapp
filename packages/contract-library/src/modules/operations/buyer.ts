@@ -191,15 +191,37 @@ export async function getAllowance(
 export async function changeApproval(
   tokenAddress: string,
   tokenDecimals: number,
-  auctioneerAddress: string,
+  targetAddress: string,
   value: string,
   signer: Signer,
 ): Promise<ContractTransaction> {
   const token = IERC20__factory.connect(tokenAddress, signer);
+
+  try {
+    return token.approve(
+      targetAddress,
+      ethers.utils.parseUnits(value, tokenDecimals).toString(),
+    );
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function changeTellerAllowance(
+  tokenAddress: string,
+  tokenDecimals: number,
+  auctioneerAddress: string,
+  value: string,
+  signer: Signer,
+) {
+  const token = IERC20__factory.connect(tokenAddress, signer);
+
   const auctioneerContract = Auctioneer__factory.connect(
     auctioneerAddress,
     signer,
   );
+
   try {
     const tellerAddress = await auctioneerContract.getTeller();
     return token.approve(

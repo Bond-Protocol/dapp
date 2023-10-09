@@ -13,10 +13,11 @@ export const useTokenAllowance = (
   tokenAddress: string,
   tokenDecimals: number,
   networkId: string,
-  auctioneer: string,
+  targetAddress: string,
   amount: string,
   provider: Provider,
-  signer: Signer
+  signer: Signer,
+  isNotAuctioneerContract = false //TODO: improve this, wonky fix to allow approving all contracts vs bond tellers
 ) => {
   const [balance, setBalance] = useState<string>("0");
   const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
@@ -35,13 +36,13 @@ export const useTokenAllowance = (
     const allowance = await getTokenAllowance(
       tokenAddress,
       userAddress,
-      auctioneer,
+      targetAddress,
       tokenDecimals,
       provider
     );
 
     setAllowance(allowance.toString());
-  }, [tokenAddress, userAddress, auctioneer, networkId, getTokenAllowance]);
+  }, [tokenAddress, userAddress, targetAddress, networkId, getTokenAllowance]);
 
   const approve = async (
     tokenAddress: string,
@@ -53,7 +54,9 @@ export const useTokenAllowance = (
         tokenAddress,
         tokenDecimals,
         auctioneer,
-        signer
+        signer,
+        "1000000000",
+        isNotAuctioneerContract
       );
       const confirmed = await approved.wait();
       void fetchAndSetAllowance();
