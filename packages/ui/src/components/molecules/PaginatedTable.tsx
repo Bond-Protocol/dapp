@@ -88,9 +88,10 @@ export const PaginatedTable = ({
   };
 
   const mappedFilters: Filter[] =
-    props.hideSearchbar && !props.disableSearch
+    !props.hideSearchbar && !props.disableSearch
       ? [searchFilter, ...filters]
       : filters;
+
   const [activeFilters, setActiveFilters] = useState<Filter[]>(
     mappedFilters.filter((f) => f.startActive)
   );
@@ -98,22 +99,23 @@ export const PaginatedTable = ({
   const tableData = useMemo(
     () =>
       props.data
-        ?.filter((d) =>
-          activeFilters?.every((f) =>
-            f.type === "search"
-              ? filterRowByText(d, textToFilter)
-              : f.handler(d)
-          )
-        )
         ?.map((d) => {
           const row = toTableData(props.columns, d);
           if (props.onClickRow) {
             row.onClick = () => props.onClickRow?.(d);
           }
           return row;
-        }),
+        })
 
-    [props.data, props.columns, activeFilters.length]
+        ?.filter((cell) =>
+          activeFilters?.every((f) =>
+            f.type === "search"
+              ? filterRowByText(cell, textToFilter)
+              : f.handler(cell)
+          )
+        ),
+
+    [props.data, props.columns, activeFilters.length, textToFilter]
   );
 
   const onClickFilter = (id: string) => {
@@ -186,7 +188,19 @@ export const PaginatedTable = ({
           {!hideSearchbar && (
             <SearchBar
               value={textToFilter}
-              onChange={setTextToFilter}
+              onChange={(value) => {
+                if (value && !activeFilters.some((f) => f.type === "search")) {
+                  setActiveFilters((prev) => [...prev, SEARCH_FILTER]);
+                }
+
+                if (!value) {
+                  setActiveFilters(
+                    activeFilters.filter((f) => f.type !== "search")
+                  );
+                }
+
+                setTextToFilter(value);
+              }}
               className={"max-w-xs justify-self-end"}
             />
           )}
