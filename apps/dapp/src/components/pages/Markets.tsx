@@ -3,6 +3,7 @@ import { PageHeader } from "components/common";
 import { ActionCard } from "ui";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueries } from "hooks/useMediaQueries";
+import { PastMarketList } from "components/lists/PastMarketList";
 
 export const Markets = () => {
   const navigate = useNavigate();
@@ -18,6 +19,9 @@ export const Markets = () => {
       </div>
       <div className="-mt-14">
         <MarketList />
+      </div>
+      <div>
+        <PastMarketList />
       </div>
       {!isTabletOrMobile && (
         <ActionCard

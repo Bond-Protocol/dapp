@@ -49,7 +49,7 @@ const endColumn: Column<CalculatedMarket> = {
   },
 };
 
-const tableColumns = [
+export const pastMarketColumns = [
   {
     label: "Capacity",
     accessor: "capacity",
@@ -92,6 +92,7 @@ const tableColumns = [
         subtext: quoteUsd,
         icon: market.quoteToken.logoURI,
         chainChip: chain?.image,
+        sortValue: market.total?.quoteUsd,
       };
     },
   },
@@ -117,9 +118,9 @@ const tableColumns = [
     alignEnd: true,
     tooltip: "Total bonds acquired / by unique addresses",
     formatter: (market: any) => {
-      const total = market.bondPurchases.length;
+      const total = market.bondPurchases?.length;
       const unique = new Set(
-        market.bondPurchases.map((p: any) => p.recipient.toLowerCase())
+        market.bondPurchases?.map((p: any) => p.recipient.toLowerCase())
       ).size;
       return {
         value: total ? total : "-",
@@ -146,8 +147,11 @@ const tableColumns = [
       };
     },
   },
-
   endColumn,
+];
+
+const tableColumns = [
+  ...pastMarketColumns,
   {
     label: "",
     accessor: "",

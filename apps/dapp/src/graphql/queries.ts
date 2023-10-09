@@ -319,3 +319,50 @@ export const getMarketsById = gql`
     }
   }
 `;
+
+export const getClosedMarkets = gql`
+  query getClosedMarkets {
+    markets(where: { hasClosed: true }) {
+      id
+      conclusion
+      chainId
+      capacity
+      capacityInQuote
+      creationBlockTimestamp
+      hasClosed
+      marketId
+      minPrice
+      isInstantSwap
+      network
+      name
+      owner
+      totalBondedAmount
+      totalPayoutAmount
+      vesting
+      vestingType
+      bondPurchases(first: 1000) {
+        id
+        payout
+        amount
+        timestamp
+        purchasePrice
+        recipient
+      }
+
+      payoutToken {
+        address
+        chainId
+        decimals
+        name
+        symbol
+      }
+      quoteToken {
+        address
+        chainId
+        decimals
+        name
+        symbol
+      }
+    }
+  }
+`;
