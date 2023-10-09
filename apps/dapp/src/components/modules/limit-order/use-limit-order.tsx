@@ -3,7 +3,10 @@ import { useAccount, useSigner } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 
 import { dateMath, useNumericInput } from "ui";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  getAddresses,
+} from "@bond-protocol/contract-library";
 
 import { useTokenAllowance } from "hooks/useTokenAllowance";
 import { providers } from "services/owned-providers";
@@ -53,10 +56,11 @@ export const LimitOrderProvider = ({
     market.quoteToken.address,
     market.quoteToken.decimals,
     market.chainId,
-    market.auctioneer,
-    amount?.toString() ?? "",
+    getAddresses(market.chainId).settlement,
+    amount?.toString() ?? "0",
     provider,
-    signer!
+    signer!,
+    true
   );
 
   const discount = calcDiscountPercentage(market.fullPrice, Number(price));
