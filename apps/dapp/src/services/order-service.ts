@@ -10,9 +10,6 @@ import { Client as OrderClient } from "src/types/openapi";
 import { Address, signMessage, signTypedData } from "@wagmi/core";
 import { Order } from "src/types/openapi";
 
-const AGGREGATOR_ADDRESS = getAddresses("1").aggregator; //For now all chains share the same address, so no need to desambiguate
-const SETTLEMENT_ADDRESS = getAddresses("5").settlement;
-
 export const TokenStorage = {
   getAccessToken: () => sessionStorage.getItem("order_access_token"),
   getRefreshToken: () => sessionStorage.getItem("order_refresh_token"),
@@ -247,19 +244,16 @@ export class ApiClient {
 
   private makeHeaders({
     token,
-    chainId,
-    aggregator = AGGREGATOR_ADDRESS,
-    settlement = SETTLEMENT_ADDRESS,
+    chainId
   }: {
     chainId: number;
     token?: string;
-    aggregator?: string;
-    settlement?: string;
   }) {
+    const chainAddresses = getAddresses(chainId.toString());
     const headers: Record<string, string | number> = {
       "x-chain-id": chainId,
-      "x-aggregator": aggregator,
-      "x-settlement": settlement,
+      "x-aggregator": chainAddresses.aggregator,
+      "x-settlement": chainAddresses.settlement,
     };
 
     if (token) headers.Authorization = `Bearer ${token}`;
