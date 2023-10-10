@@ -2,20 +2,24 @@ import { useMarkets } from "context/market-context";
 import { Filter, PaginatedTable } from "ui";
 import { pastMarketColumns } from "./UserMarketList";
 
-const tableColumns = pastMarketColumns.map((t) => ({
-  ...t,
-  width: "w-full",
-}));
+const columnFilters = ["capacity"];
+const tableColumns = pastMarketColumns
+  .map((col) => ({
+    ...col,
+    width: "w-full",
+    alignEnd: false,
+  }))
+  .filter((c) => !columnFilters.includes(c.accessor));
 
 const filters: Filter[] = [
   {
     type: "switch",
     id: "knownValue",
-    label: "Show unknown value",
-    handler: (args) => {
-      console.log({ args });
-
-      return true;
+    label: "Hide unknown value",
+    startActive: true,
+    handler: (cell) => {
+      const market = cell;
+      return market?.total?.quoteUsd && market?.total?.payoutUsd;
     },
   },
 ];

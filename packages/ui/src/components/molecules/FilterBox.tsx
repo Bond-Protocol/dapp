@@ -3,13 +3,13 @@ import { ClickAwayListener, PopperUnstyled } from "@mui/base";
 import { Input, SearchBar, Switch } from "..";
 import { ReactComponent as FilterIcon } from "../../assets/icons/sliders.svg";
 
-type FilterTypes = "switch" | "search";
+type FilterTypes = "switch" | "search" | "global";
 
 export type Filter = {
   id: string;
   type: FilterTypes;
   label?: string;
-  handler: (arg: any) => Boolean | void;
+  handler: (arg?: any) => Boolean | void;
   startActive?: boolean;
 };
 
@@ -23,6 +23,7 @@ export type FilterBoxProps = {
 const components: Record<FilterTypes, (props: any) => JSX.Element> = {
   switch: Switch,
   search: Input,
+  global: Switch,
 };
 
 export const FilterBox = (props: FilterBoxProps) => {
@@ -60,33 +61,37 @@ export const FilterBox = (props: FilterBoxProps) => {
           <div className="bg-light-black min-w-[320px] rounded-lg p-4 transition-all">
             <div className="mb-3 text-lg">Filters</div>
             <div className="mb-3 flex flex-col gap-y-2">
-              {props.filters.map((f) => {
-                const FilterComponent = components[f.type];
+              {props.filters
+                .filter((f) => f.type !== "search")
+                .map((f) => {
+                  const FilterComponent = components[f.type];
 
-                if (f.type === "search") {
+                  // if (f.type === "search") {
+                  //   return (
+                  //     <SearchBar
+                  //       className="mb-2"
+                  //       label={f.label}
+                  //       value={text}
+                  //       onChange={(value: string) => {
+                  //         setText(value);
+                  //         f.handler(value);
+                  //       }}
+                  //     />
+                  //   );
+                  // }
+
                   return (
-                    <SearchBar
-                      className="mb-2"
+                    <FilterComponent
                       label={f.label}
-                      value={text}
-                      onChange={(value: string) => {
-                        setText(value);
-                        f.handler(value);
-                      }}
+                      defaultChecked={props.activeFilters.some(
+                        (active) => active.id === f.id
+                      )}
+                      onClick={(args: any) =>
+                        props.handleFilterClick(f.id, args)
+                      }
                     />
                   );
-                }
-
-                return (
-                  <FilterComponent
-                    label={f.label}
-                    defaultChecked={props.activeFilters.some(
-                      (active) => active.id === f.id
-                    )}
-                    onClick={(args: any) => props.handleFilterClick(f.id, args)}
-                  />
-                );
-              })}
+                })}
             </div>
           </div>
         </ClickAwayListener>

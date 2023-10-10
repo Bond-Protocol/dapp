@@ -15,6 +15,7 @@ export interface Column<T> {
   alignEnd?: boolean;
   unsortable?: boolean;
   width?: string;
+  tooltip?: string;
   Component?: (props: any) => JSX.Element;
   formatter?: (element: T) => Cell;
   defaultSortOrder?: SortOrder;
