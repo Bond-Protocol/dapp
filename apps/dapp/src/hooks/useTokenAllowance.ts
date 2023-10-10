@@ -38,7 +38,8 @@ export const useTokenAllowance = (
       userAddress,
       targetAddress,
       tokenDecimals,
-      provider
+      provider,
+      isNotAuctioneerContract
     );
 
     setAllowance(allowance.toString());

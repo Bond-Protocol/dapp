@@ -171,6 +171,17 @@ export async function getBalance1155(
 export async function getAllowance(
   tokenAddress: string,
   holderAddress: string,
+  targetAddress: string,
+  provider: Provider,
+): Promise<BigNumberish> {
+  const token = IERC20__factory.connect(tokenAddress, provider);
+
+  return token.allowance(holderAddress, targetAddress);
+}
+
+export async function getTellerAllowance(
+  tokenAddress: string,
+  holderAddress: string,
   auctioneerAddress: string,
   provider: Provider,
 ): Promise<BigNumberish> {
@@ -179,6 +190,7 @@ export async function getAllowance(
     auctioneerAddress,
     provider,
   );
+
   try {
     const tellerAddress = await auctioneerContract.getTeller();
     return token.allowance(holderAddress, tellerAddress);
