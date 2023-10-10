@@ -3,6 +3,7 @@ import { BigNumber, BigNumberish, ContractTransaction, Signer } from "ethers";
 import {
   changeApproval,
   changeTellerAllowance,
+  getTellerAllowance,
   estimatePurchaseGas,
   getAllowance,
   payoutFor,
@@ -30,14 +31,16 @@ export const usePurchaseBond = () => {
   const getTokenAllowance = async (
     tokenAddress: string,
     address: string,
-    auctioneer: string,
+    targetAddress: string,
     decimals: number,
-    provider: Provider
+    provider: Provider,
+    isNotTeller = false
   ) => {
-    const allowance: BigNumberish = await getAllowance(
+    const handler = isNotTeller ? getAllowance : getTellerAllowance;
+    const allowance: BigNumberish = await handler(
       tokenAddress,
       address,
-      auctioneer,
+      targetAddress,
       provider
     );
     return Number(allowance) / Math.pow(10, decimals);
