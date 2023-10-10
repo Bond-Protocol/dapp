@@ -56,7 +56,7 @@ export const useTokenAllowance = (
         tokenDecimals,
         auctioneer,
         signer,
-        "1000000000",
+        amount,
         isNotAuctioneerContract
       );
       const confirmed = await approved.wait();
