@@ -1,21 +1,22 @@
+import { Address } from 'viem';
 import { BOND_TYPE } from 'src/modules/contract-helper';
 
 export type ContractAddresses = {
-  authority: string;
-  aggregator: string;
-  fixedExpiryTeller: string;
-  fixedExpirySDAAuctioneer: string;
-  fixedExpirySDAv1_1Auctioneer: string;
-  fixedExpiryFPAAuctioneer: string;
-  fixedExpiryOFDAAuctioneer: string;
-  fixedExpiryOSDAAuctioneer: string;
-  fixedTermTeller: string;
-  fixedTermSDAAuctioneer: string;
-  fixedTermSDAv1_1Auctioneer: string;
-  fixedTermFPAAuctioneer: string;
-  fixedTermOFDAAuctioneer: string;
-  fixedTermOSDAAuctioneer: string;
-  settlement: string;
+  authority: Address;
+  aggregator: Address;
+  fixedExpiryTeller: Address;
+  fixedExpirySDAAuctioneer: Address;
+  fixedExpirySDAv1_1Auctioneer: Address;
+  fixedExpiryFPAAuctioneer: Address;
+  fixedExpiryOFDAAuctioneer: Address;
+  fixedExpiryOSDAAuctioneer: Address;
+  fixedTermTeller: Address;
+  fixedTermSDAAuctioneer: Address;
+  fixedTermSDAv1_1Auctioneer: Address;
+  fixedTermFPAAuctioneer: Address;
+  fixedTermOFDAAuctioneer: Address;
+  fixedTermOSDAAuctioneer: Address;
+  settlement: Address;
 };
 
 export type AddressesForType = {
@@ -173,6 +174,18 @@ const addressesByChain: { [key: string]: ContractAddresses } = {
   '420': optimismGoerliAddresses,
   'optimism-goerli': optimismGoerliAddresses,
 };
+
+const addressesByChainId: Record<number, ContractAddresses> = {
+  1: mainnetAddresses,
+  5: goerliAddresses,
+  42161: arbitrumMainnetAddresses,
+  421613: arbitrumGoerliAddresses,
+  10: optimismMainnetAddresses,
+  420: optimismGoerliAddresses,
+};
+
+export const getAddressesV2 = (chainId: number) =>
+  addressesByChainId[chainId] ?? mainnetAddresses;
 
 export const getAddresses = (chainId: string): ContractAddresses => {
   return addressesByChain[chainId] || mainnetAddresses;

@@ -22,7 +22,7 @@
     "format": "prettier --write ./src/**/*.ts",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "prepublishOnly": "yarn build",
-    "typechain": "typechain --target ethers-v5 --out-dir src/types/contracts 'src/abis/**/*.json'"
+    "typechain": "typechain --target viem --out-dir src/types/contracts-viem 'src/abis/**/*.json'"
   },
   "lint-staged": {
     "**/src/{**/*,*}.{ts,tsx}": [
@@ -42,6 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "auto-changelog": "^2.3.0",
+    "concurrently": "^7.6.0",
     "eslint": "^7.32.0",
     "eslint-config-custom": "*",
     "eslint-config-prettier": "8.5.0",
@@ -55,8 +56,7 @@
     "tsc-alias": "^1.5.0",
     "tsconfig": "*",
     "typedoc": "^0.22.5",
-    "typescript": "4.4.3",
-    "concurrently": "^7.6.0"
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.6.6",
@@ -64,7 +64,8 @@
     "@typechain/ethers-v5": "^10.0.0",
     "date-fns": "^2.29.1",
     "encoding": "^0.1.13",
-    "typechain": "^8.0.0"
+    "typechain": "^8.0.0",
+    "viem": "^1.16.3"
   },
   "description": "contract-library is a library for building applications that can interact with the Bond Protocol contracts from within JavaScript runtimes.",
   "bugs": {
