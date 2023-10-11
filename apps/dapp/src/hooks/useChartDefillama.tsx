@@ -2,7 +2,11 @@ import { useQuery } from "react-query";
 import type { Token } from "@bond-protocol/contract-library";
 import defillama from "services/defillama";
 
-export const useChartDefillama = (tokens: Token[], days = 7) => {
+export const useChartDefillama = (
+  tokens: { address: string; chainId: number }[],
+  days = 7,
+  start?: number
+) => {
   const enabled = tokens.every((t) => !!t.address && !!t.chainId);
   const queryIds = enabled
     ? tokens.map(defillama.utils.toDefillamaQueryId)
@@ -11,7 +15,7 @@ export const useChartDefillama = (tokens: Token[], days = 7) => {
 
   const { data: chart, ...chartQuery } = useQuery({
     queryKey: `defillama-chart-${queryIds}-${days}d`,
-    queryFn: () => defillama.fetchChart(queryIds, { chainId, days }),
+    queryFn: () => defillama.fetchChart(queryIds, { chainId, days, start }),
     enabled,
   });
 

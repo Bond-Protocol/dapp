@@ -1,13 +1,15 @@
 import { useMarkets } from "context/market-context";
 import { Filter, PaginatedTable } from "ui";
+import { viewColumn } from "./columns";
 import { pastMarketColumns } from "./UserMarketList";
 
 const columnFilters = ["capacity"];
-const tableColumns = pastMarketColumns
+
+const tableColumns = [...pastMarketColumns, viewColumn]
   .map((col) => ({
     ...col,
     width: "w-full",
-    alignEnd: false,
+    alignEnd: col.accessor === "view",
   }))
   .filter((c) => !columnFilters.includes(c.accessor));
 

@@ -324,6 +324,7 @@ export const getClosedMarkets = gql`
   query getClosedMarkets {
     markets(where: { hasClosed: true }) {
       id
+      auctioneer
       conclusion
       chainId
       capacity
@@ -346,6 +347,7 @@ export const getClosedMarkets = gql`
         amount
         timestamp
         purchasePrice
+        postPurchasePrice
         recipient
       }
 

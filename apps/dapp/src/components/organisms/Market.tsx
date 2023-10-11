@@ -8,18 +8,21 @@ import { TransactionHistory } from "components/lists";
 import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
-import { usePastMarkets } from "hooks/usePastMarkets";
-import { Market } from "src/generated";
 
-export const PastMarketInsights = () => {
-  const { id, chainId } = useParams();
+export const Market = ({ market }: { market: CalculatedMarket }) => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
-  const { closedMarkets } = useMarkets();
-  const market = closedMarkets.find(
-    (mkt: Market) => mkt.marketId === id && mkt.chainId === chainId
-  );
-  console.log({ market });
+
+  const {
+    maxPayoutLabel,
+    discountLabel,
+    vestingLabel,
+    isFutureMarket,
+    marketTypeLabel,
+    capacity,
+  } = useMarketDetails(market);
+
+  if (!market) return <Loading content={meme()} />;
 
   return (
     <div className="pb-4">

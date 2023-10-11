@@ -39,13 +39,14 @@ export const fetchPrice = async (
     ? address.join(",")
     : `${getNameFromChainId(Number(chainId))}:${address}`;
 
-  const endpoint = `${import.meta.env.VITE_API_URL}prices?ids=${ids}`
+  const endpoint = `${import.meta.env.VITE_API_URL}prices?ids=${ids}`;
   return await generateFetcher(endpoint)();
 };
 
 type ChartOptionsDefillama = {
   chainId: number;
   days: number;
+  start?: number;
 };
 
 export const fetchChart = async (
@@ -58,7 +59,8 @@ export const fetchChart = async (
     ? address.join(",")
     : `${chain}:${address}`;
 
-  const from = getUnixTime(sub(Date.now(), { days: options.days }));
+  const from =
+    options.start ?? getUnixTime(sub(Date.now(), { days: options.days }));
 
   const endpoint = `${DEFILLAMA_ENDPOINT}/chart/${ids}`;
   const period = "1h";
