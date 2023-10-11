@@ -1,11 +1,11 @@
 import { useMarkets } from "context/market-context";
 import { Filter, PaginatedTable } from "ui";
 import { viewColumn } from "./columns";
-import { pastMarketColumns } from "./UserMarketList";
+import { closedMarketColumns } from "./UserMarketList";
 
 const columnFilters = ["capacity"];
 
-const tableColumns = [...pastMarketColumns, viewColumn]
+const tableColumns = [...closedMarketColumns, viewColumn]
   .map((col) => ({
     ...col,
     width: "w-full",
@@ -25,7 +25,8 @@ const filters: Filter[] = [
     },
   },
 ];
-export const PastMarketList = () => {
+
+export const ClosedMarketList = () => {
   const { closedMarkets } = useMarkets();
 
   return (

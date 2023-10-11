@@ -120,7 +120,7 @@ const avgRateColumn = {
   },
 };
 
-export const pastMarketColumns = [
+export const closedMarketColumns = [
   {
     label: "Capacity",
     accessor: "capacity",
@@ -165,7 +165,7 @@ export const columns = {
 };
 
 const tableColumns = [
-  ...pastMarketColumns,
+  ...closedMarketColumns,
   {
     label: "",
     accessor: "",

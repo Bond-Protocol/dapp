@@ -165,8 +165,7 @@ export const useClosedMarketChart = (market: Market) => {
   const quote = chart.find((t) => t.address === market.quoteToken.address);
   const payout = chart.find((t) => t.address === market.payoutToken.address);
 
-  //@ts-ignore
-  const dataset: BondPriceDatapoint[] = useMemo(
+  const baseDataset: BondPriceDatapoint[] = useMemo(
     () =>
       createBondPurchaseDataset({
         payoutTokenHistory: payout?.prices!,
@@ -176,17 +175,28 @@ export const useClosedMarketChart = (market: Market) => {
     [payout?.prices, quote?.prices, market.bondPurchases]
   );
 
-  const interpolated = useMemo(
+  const dataset = useMemo(
     () =>
-      interpolate(dataset).map((data) => ({
+      interpolate(baseDataset).map((data) => ({
         ...data,
         discount: calcDiscountPercentage(
           Number(data?.price),
           Number(data?.discountedPrice)
         ),
       })),
-    [dataset]
+    [baseDataset]
   );
 
-  return { dataset: interpolated, isLoading };
+  const timestamps = market.bondPurchases?.map((b) => b.timestamp * 1000) ?? [];
+  const pricedPurchases = baseDataset
+    .filter((data) => timestamps.includes(data.timestamp!))
+    .map((data) => ({
+      ...data,
+      discount: calcDiscountPercentage(
+        Number(data?.price),
+        Number(data?.discountedPrice)
+      ),
+    }));
+
+  return { dataset, pricedPurchases, isLoading };
 };

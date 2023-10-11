@@ -3,20 +3,20 @@ import { PageHeader } from "components/common";
 import { ActionCard, Filter } from "ui";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueries } from "hooks/useMediaQueries";
-import { PastMarketList } from "components/lists/PastMarketList";
+import { ClosedMarketList } from "components/lists/ClosedMarketList";
 import { useState } from "react";
 
 export const Markets = () => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
   const scrollUp = () => window.scrollTo(0, 0);
-  const [showPastMarkets, setShowPastMarkets] = useState(false);
+  const [showClosedMarkets, setShowClosedMarkets] = useState(false);
 
-  const pastMarketFilter: Filter = {
+  const closedMarketFilter: Filter = {
     id: "past-markets",
     label: "Show past markets",
     type: "global",
-    handler: () => setShowPastMarkets((prev) => !prev),
+    handler: () => setShowClosedMarkets((prev) => !prev),
   };
 
   return (
@@ -28,11 +28,11 @@ export const Markets = () => {
         />
       </div>
       <div className="-mt-14">
-        <MarketList filters={[pastMarketFilter]} />
+        <MarketList filters={[closedMarketFilter]} />
       </div>
-      {showPastMarkets && (
+      {showClosedMarkets && (
         <div>
-          <PastMarketList />
+          <ClosedMarketList />
         </div>
       )}
       {!isTabletOrMobile && (

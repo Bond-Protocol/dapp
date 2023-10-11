@@ -22,7 +22,11 @@ export type PastMarket = Market & MarketTotals;
 export const ClosedMarket = ({ market }: { market: PastMarket }) => {
   const navigate = useNavigate();
   const marketTypeLabel = getMarketLabels(market);
-  const { dataset } = useClosedMarketChart(market);
+  const { dataset, pricedPurchases } = useClosedMarketChart(market);
+
+  const avgDiscount =
+    pricedPurchases.reduce((total, element) => total + element.discount, 0) /
+    pricedPurchases.length;
 
   return (
     <div className="pb-4">
@@ -42,7 +46,7 @@ export const ClosedMarket = ({ market }: { market: PastMarket }) => {
           className="place-self-start self-start justify-self-start"
         />
       </PageNavigation>
-      <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
+      <div className="mb-4 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
         <InfoLabel label="Total Payout">
           {formatCurrency.dynamicFormatter(market?.total?.payout, false)}
           <span className="ml-1 text-xl">{market.payoutToken.symbol}</span>
@@ -52,14 +56,27 @@ export const ClosedMarket = ({ market }: { market: PastMarket }) => {
           {formatCurrency.dynamicFormatter(market?.total?.quote, false)}
           <span className="ml-1 text-xl">{market.quoteToken.symbol}</span>
         </InfoLabel>
+      </div>
 
+      <div className="mb-16 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
+        <InfoLabel label="Total Bonds">
+          {market.bondPurchases?.length}
+        </InfoLabel>
         <InfoLabel label="Average Exchange Rate">
           {formatCurrency.trimToken(market.total.avgPrice)}
           <span className="ml-1 text-xl">
             {market.quoteToken.symbol} per {market.payoutToken.symbol}
           </span>
         </InfoLabel>
+
+        <InfoLabel
+          label="Average Discount"
+          className={avgDiscount > 0 ? "text-light-success" : "text-red-300"}
+        >
+          {avgDiscount.toFixed(2)}%
+        </InfoLabel>
       </div>
+
       <BondPriceChart
         data={dataset}
         payoutTokenSymbol={market.payoutToken.symbol}
