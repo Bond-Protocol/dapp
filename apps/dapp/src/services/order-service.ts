@@ -149,7 +149,19 @@ export class ApiClient {
       headers: this.makeHeaders({ chainId, token }),
     });
 
-    const filters = ["market_id", "status", "recipient", "referrer", "user"];
+    const filters = [
+      "digest",
+      "aggregator",
+      "settlement",
+      "market_id",
+      "status",
+      "recipient",
+      "referrer",
+      "user",
+      "chainId",
+      "signature",
+    ];
+
     const dates = ["submitted", "deadline"];
 
     //Most values come as 256 bit hex-encoded number,

@@ -128,7 +128,6 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
 
   useEffect(() => {
     async function loadList() {
-      //@ts-ignore
       const data: Order[] = await orderApi.list();
       const withMarket = data
         .filter(
