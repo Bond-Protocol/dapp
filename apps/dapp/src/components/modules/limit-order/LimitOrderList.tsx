@@ -34,7 +34,7 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     tooltip: "Limit order tooltip",
     formatter: (order) => {
       const totalValue =
-        Number(order.amount) * Number(order.market.quoteToken.price);
+        Number(order.amount) * Number(order.market?.quoteToken.price);
       const price = totalValue / Number(order.min_amount_out);
 
       const discount = getDiscountPercentage(
@@ -44,7 +44,7 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
 
       const color = getDiscountColor(
         discount,
-        order.market.payoutToken.price ?? 0
+        order.market?.payoutToken.price ?? 0
       );
 
       return {
@@ -66,7 +66,7 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
         value: amount,
         sortValue: order.amount,
         subtext: (
-          <span className="text-xs">{order.market.quoteToken.symbol}</span>
+          <span className="text-xs">{order.market?.quoteToken.symbol}</span>
         ),
       };
     },
@@ -126,6 +126,7 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
   const orderApi = useOrderApi(props.market);
   const [cols, setCols] = useState<any[]>([]);
 
+  console.log("market", props.market);
   useEffect(() => {
     async function loadList() {
       const data: Order[] = await orderApi.list();
@@ -133,7 +134,7 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
         .filter(
           (order) =>
             order?.status === "Active" &&
-            order.market_id === props.market.marketId
+            order.market_id === props.market?.marketId
         )
         .map((d) => ({ ...d, market: props.market }));
 
