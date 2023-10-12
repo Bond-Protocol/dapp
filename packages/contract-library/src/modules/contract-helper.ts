@@ -1,11 +1,13 @@
 import { Provider } from '@ethersproject/providers';
-import { PublicClient, WalletClient, getContract } from 'viem';
+import { Abi, PublicClient, WalletClient, getContract } from 'viem';
 import { BigNumberish, Signer } from 'ethers';
 import {
   getAddresses,
   getAddressesForType,
   getAddressesV2,
 } from './address-provider';
+import * as contracts from '../contracts';
+
 import {
   Aggregator,
   Aggregator__factory,
@@ -41,7 +43,9 @@ import {
   FixedTermTeller__factory,
 } from 'types';
 import { abiMap as Abis } from './abi-map';
-import abi from '../abis/protocol/BondFixedTermOFDA.json'
+
+import bftofda from '../abis/protocol/BondFixedTermOFDA.json';
+import { aggregatorABI } from '../contracts';
 
 export enum BOND_TYPE {
   FIXED_EXPIRY_DEPRECATED = 'fixed-expiration',
@@ -92,8 +96,7 @@ export async function getAggregator(
 export async function getAggregatorV2(publicClient: PublicClient) {
   const chainId = getChainIdV2(publicClient);
   const address = getAddressesV2(chainId).aggregator;
-  const contract =  getContract({ address, abi, publicClient });
-  contract.
+  const contract = getContract({ address, abi: aggregatorABI, publicClient });
 }
 
 export async function getAuthority(
@@ -210,34 +213,34 @@ export function getAuctioneerFactoryForName(
   let factory;
   switch (auctioneerName) {
     case 'BondFixedExpCDA':
-      factory = BondFixedExpCDA__factory;
+      factory = contracts.getFixedExpirySdaAuctioneer;
       break;
     case 'BondFixedExpSDAv1_1':
-      factory = BondFixedExpSDAv1_1__factory;
+      factory = contracts.getFixedExpirySdAv1_1Auctioneer;
       break;
     case 'BondFixedExpFPA':
-      factory = BondFixedExpFPA__factory;
+      factory = contracts.getFixedExpiryFpaAuctioneer;
       break;
     case 'BondFixedExpOFDA':
-      factory = BondFixedExpOFDA__factory;
+      factory = contracts.getFixedExpiryOfdaAuctioneer;
       break;
     case 'BondFixedExpOSDA':
-      factory = BondFixedExpOSDA__factory;
+      factory = contracts.getFixedExpiryOfdaAuctioneer;
       break;
     case 'BondFixedTermCDA':
-      factory = BondFixedTermCDA__factory;
+      factory = contracts.getFixedTermSdaAuctioneer;
       break;
     case 'BondFixedTermSDAv1_1':
-      factory = BondFixedTermSDAv1_1__factory;
+      factory = contracts.getFixedExpirySdAv1_1Auctioneer;
       break;
     case 'BondFixedTermFPA':
-      factory = BondFixedTermFPA__factory;
+      factory = contracts.getFixedTermFpaAuctioneer;
       break;
     case 'BondFixedTermOFDA':
-      factory = BondFixedTermOFDA__factory;
+      factory = contracts.getFixedTermOfdaAuctioneer;
       break;
     case 'BondFixedTermOSDA':
-      factory = BondFixedTermOSDA__factory;
+      factory = contracts.getFixedTermOsdaAuctioneer;
       break;
     default:
       throw Error(
@@ -248,5 +251,5 @@ export function getAuctioneerFactoryForName(
       );
   }
 
-  return factory.connect(auctioneerAddress, provider);
+  return factory({address: auctioneerAddress, client:});
 }
