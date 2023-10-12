@@ -6,7 +6,7 @@ import { BigNumber, ethers } from "ethers";
 import OpenAPIClient from "openapi-axios-client";
 import { SiweMessage } from "siwe";
 import definition from "src/openapi.json";
-import { Client as OrderClient } from "src/types/openapi";
+import { Client as LimitOrderApiClient } from "src/types/openapi";
 import { Address, signMessage, signTypedData } from "@wagmi/core";
 import { Order } from "src/types/openapi";
 import { orderApiServerMap } from "src/config";
@@ -46,15 +46,15 @@ type CreateOrderArgs = BasicOrderArgs & OrderConfig;
 
 //@ts-ignore
 const client = new OpenAPIClient({ definition, strict: true });
-client.init<OrderClient>();
+client.init<LimitOrderApiClient>();
 
 type NewType = BasicOrderArgs;
 
 export class ApiClient {
-  api!: OrderClient;
+  api!: LimitOrderApiClient;
 
   constructor() {
-    client.getClient<OrderClient>().then((api) => {
+    client.getClient<LimitOrderApiClient>().then((api) => {
       //Setup an interceptor to attempt a token refresh on a 401
       api.interceptors.response.use((res) => res, refreshTokenInterceptor(api));
       this.api = api;
@@ -209,20 +209,13 @@ export class ApiClient {
     address: string;
     token: string;
   }) {
-    //@ts-ignore
-    const response = await this.api.cancelOrder(
+    const response = await this.api.cancelAllOrdersByMarket(
       //@ts-ignore
       { address, market_id: Number(marketId) },
       null,
       { headers: this.makeHeaders({ chainId, token }) }
     );
     return response;
-  }
-
-  async getSupportedTokens() {
-    return this.api.getSupportedQuoteTokens(null, null, {
-      headers: this.makeHeaders({ chainId: 1 }),
-    });
   }
 
   async getSupportedTokensByChain(chainId: number) {
@@ -295,7 +288,7 @@ export class ApiClient {
 }
 
 //Error interceptor that attempts to refresh a JWT token
-function refreshTokenInterceptor(api: OrderClient) {
+function refreshTokenInterceptor(api: LimitOrderApiClient) {
   return async (err: any) => {
     const originalConfig = err.config;
     if (
