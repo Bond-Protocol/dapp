@@ -9,6 +9,12 @@ import definition from "src/openapi.json";
 import { Client as OrderClient } from "src/types/openapi";
 import { Address, signMessage, signTypedData } from "@wagmi/core";
 import { Order } from "src/types/openapi";
+import { orderApiServerMap } from "src/config";
+import { environment } from "src/environment";
+
+//SETUP API SERVER BASED ON ENVIRONMENT
+const server = orderApiServerMap[environment.current];
+definition.servers = [server];
 
 export const TokenStorage = {
   getAccessToken: () => sessionStorage.getItem("order_access_token"),
@@ -73,7 +79,8 @@ export class ApiClient {
       name: "Bond Protocol Limit Orders",
       version: "v1.0.0",
       chainId,
-      verifyingContract: getAddresses(chainId.toString()).settlement as `0x${string}`
+      verifyingContract: getAddresses(chainId.toString())
+        .settlement as `0x${string}`,
     } as const;
 
     const types = {
@@ -109,7 +116,7 @@ export class ApiClient {
     return signTypedData({
       domain,
       types,
-      value
+      value,
     });
   }
 
@@ -242,13 +249,7 @@ export class ApiClient {
     );
   }
 
-  private makeHeaders({
-    token,
-    chainId
-  }: {
-    chainId: number;
-    token?: string;
-  }) {
+  private makeHeaders({ token, chainId }: { chainId: number; token?: string }) {
     const chainAddresses = getAddresses(chainId.toString());
     const headers: Record<string, string | number> = {
       "x-chain-id": chainId,
