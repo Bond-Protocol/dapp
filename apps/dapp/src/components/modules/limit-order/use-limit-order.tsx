@@ -22,7 +22,7 @@ export type ILimitOrderContext = {
   price?: string;
   expiry?: Date;
   amount?: string;
-  payout?: number;
+  payout?: string;
   maxFee?: number;
   setPrice: (e: React.BaseSyntheticEvent<HTMLInputElement>) => void;
   setExpiry: (date: Date) => void;
@@ -65,8 +65,12 @@ export const LimitOrderProvider = ({
 
   const discount = calcDiscountPercentage(market.fullPrice, Number(price));
 
-  const payout =
-    (Number(amount) * (market?.quoteToken?.price ?? 0)) / Number(price);
+  const payout = (
+    (Number(amount) * (market?.quoteToken?.price ?? 0)) /
+    Number(price)
+  )
+    .toFixed(market.payoutToken.decimals)
+    .toString();
 
   const generateOrder = () => {
     if (!amount || !price || !expiry || !address)
@@ -78,7 +82,7 @@ export const LimitOrderProvider = ({
     );
 
     const minAmountOut = ethers.utils.parseUnits(
-      payout.toString(),
+      payout,
       market.payoutToken.decimals
     );
 
