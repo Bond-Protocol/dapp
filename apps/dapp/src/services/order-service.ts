@@ -131,7 +131,6 @@ export class ApiClient {
         { ...order, signature },
         { headers: this.makeHeaders({ chainId }) }
       );
-      console.log({ response });
       return response;
     } catch (e: any) {
       console.error(`Failed to create an order`, e);
