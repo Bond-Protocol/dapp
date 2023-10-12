@@ -77,7 +77,11 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     width: "w-[33%]",
     alignEnd: true,
     formatter: (order) => {
-      const result = formatDate.interval(new Date(), new Date(order.deadline));
+      console.log({ order });
+      const result = formatDate.interval(
+        new Date(),
+        new Date(order.deadline * 1000)
+      );
       return {
         sortValue: order.deadline.getTime(),
         value: result,
@@ -88,8 +92,15 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     label: "",
     accessor: "close",
     width: "w-[12%]",
+    formatter: (args) => {
+      return {
+        value: args,
+        data: args,
+      };
+    },
+
     Component: (props) => {
-      const api = useOrderApi(props.data.market);
+      const api = useOrderApi(props.data?.market);
 
       return (
         <div key={props.key} className="relative">

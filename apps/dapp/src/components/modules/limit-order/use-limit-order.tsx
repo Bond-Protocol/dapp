@@ -64,6 +64,7 @@ export const LimitOrderProvider = ({
   );
 
   const discount = calcDiscountPercentage(market.fullPrice, Number(price));
+
   const payout =
     (Number(amount) * (market?.quoteToken?.price ?? 0)) / Number(price);
 
