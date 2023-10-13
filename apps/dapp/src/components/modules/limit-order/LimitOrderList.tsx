@@ -10,6 +10,7 @@ import {
   Table,
   toTableData,
   Loading,
+  Modal,
 } from "ui";
 
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
@@ -141,6 +142,7 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
 export const LimitOrderList = (props: LimitOrderListProps) => {
   const orderApi = useOrderApi();
   const { orders } = useLimitOrderForMarket();
+  const [cancelingAll, setCancellingAll] = useState(false);
 
   const [sortedData, sort] = useSorting(
     orders.list.map((r) => toTableData(columns, r))
@@ -148,16 +150,53 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
 
   return (
     <div className="h-full p-4 ">
+      <Modal
+        open={cancelingAll}
+        title="Cancel all orders"
+        onClickClose={() => setCancellingAll(false)}
+      >
+        <div className="p-4">
+          <div className="text-center ">
+            This action will cancel all orders, are you sure?
+          </div>
+          <div className="mt-2 text-center text-sm text-light-grey-400">
+            (It won't cost any gas)
+          </div>
+          <div className="mt-6 flex w-full justify-center gap-x-2">
+            <Button
+              size="lg"
+              className="w-1/2"
+              variant="ghost"
+              onClick={() => setCancellingAll(false)}
+            >
+              Go back
+            </Button>
+            <Button
+              size="lg"
+              className="w-1/2"
+              onClick={async () => {
+                try {
+                  await orderApi.cancelAllOrders(
+                    props.market?.marketId?.toString(),
+                    Number(props.market.chainId)
+                  );
+                  orders.query.refetch();
+                } catch (e) {
+                  console.error(e);
+                } finally {
+                  setCancellingAll(false);
+                }
+              }}
+            >
+              Confirm
+            </Button>
+          </div>
+        </div>
+      </Modal>
       <div className="flex justify-between p-4 pb-2 pt-0 font-fraktion uppercase">
         <h4 className="text-2xl font-semibold ">Open Orders</h4>
         <button
-          onClick={async () => {
-            await orderApi.cancelAllOrders(
-              props.market?.marketId?.toString(),
-              Number(props.market.chainId)
-            );
-            orders.query.refetch();
-          }}
+          onClick={() => setCancellingAll(true)}
           className="my-auto font-bold uppercase tracking-widest transition-all hover:text-light-secondary"
         >
           Cancel All
