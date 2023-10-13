@@ -33,7 +33,7 @@ const basicMessage = {
   version: "1",
 };
 
-export type OrderConfig = Required<Order>;
+export type OrderConfig = Order;
 export type OrderRequest = Required<Omit<Order, "signature">>;
 
 type BasicOrderArgs = {
@@ -72,7 +72,7 @@ export class ApiClient {
     }
   }
 
-  async signOrder(order: OrderConfig, chainId: number) {
+  async signOrder(order: Order, chainId: number) {
     const domain = {
       name: "Bond Protocol Limit Orders",
       version: "v1.0.0",
@@ -136,64 +136,48 @@ export class ApiClient {
     }
   }
 
-  async listAllOrders({
-    chainId,
-    token,
-    address,
-    market,
-  }: BasicOrderArgs & { market: CalculatedMarket }) {
+  parseOrder(order: Order, market: CalculatedMarket) {
+    const fields = ["amount", "filled", "max_fee", "min_amount_out", "price"];
+    const dates = ["submitted", "deadline"];
+
+    return Object.entries(order).reduce((acc, [name, value]) => {
+      let updated = value;
+
+      if (dates.includes(name)) {
+        //Timestamps get converted to dates
+        updated = new Date(Number(updated.toString()));
+      }
+
+      if (fields.includes(name)) {
+        updated = BigNumber.from(value).toString();
+        //Tokens need to be decimal adjusted
+        if (name === "amount") {
+          updated = ethers.utils.formatUnits(
+            updated,
+            market.quoteToken.decimals
+          );
+        }
+
+        if (name === "min_amount_out") {
+          updated = ethers.utils.formatUnits(
+            updated,
+            market.payoutToken.decimals
+          );
+        }
+      }
+
+      return { ...acc, [name]: updated };
+    }, {});
+  }
+
+  async listAllOrders({ chainId, token, address }: BasicOrderArgs) {
     const response = await this.api.getOrdersByAddress(address, null, {
       headers: this.makeHeaders({ chainId, token }),
     });
 
-    const filters = [
-      "digest",
-      "aggregator",
-      "settlement",
-      "market_id",
-      "status",
-      "recipient",
-      "referrer",
-      "user",
-      "chainId",
-      "signature",
-    ];
-
-    const dates = ["submitted", "deadline"];
-
     //Most values come as 256 bit hex-encoded number,
     //so we want to convert them to human readable
-    return response.data.map((o) => {
-      return Object.entries(o).reduce((acc, [name, value]) => {
-        let updated = value;
-
-        if (!filters.includes(name)) {
-          updated = BigNumber.from(value).toString();
-
-          if (dates.includes(name)) {
-            //Timestamps get converted to dates
-            updated = new Date(Number(updated.toString()));
-          }
-
-          //Tokens need to be decimal adjusted
-          if (name === "amount") {
-            updated = ethers.utils.formatUnits(
-              updated,
-              market.quoteToken.decimals
-            );
-          }
-
-          if (name === "min_amount_out") {
-            updated = ethers.utils.formatUnits(
-              updated,
-              market.payoutToken.decimals
-            );
-          }
-        }
-
-        return { ...acc, [name]: updated };
-      }, {});
-    });
+    return response.data;
   }
 
   async cancelAllOrders({

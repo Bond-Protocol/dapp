@@ -15,9 +15,13 @@ import { toHex } from "src/utils/bignumber";
 
 import { useOrderApi } from "./use-order-api";
 import { orderService } from "services/order-service";
+import { Order } from "src/types/openapi";
+import { useLimitOrderList } from "./use-limit-order-list";
 
 export type ILimitOrderContext = {
   allowance: ReturnType<typeof useTokenAllowance>;
+  orders: ReturnType<typeof useLimitOrderList>;
+  market: CalculatedMarket;
   discount?: number;
   price?: string;
   expiry?: Date;
@@ -45,7 +49,8 @@ export const LimitOrderProvider = ({
   const [amount, setAmount] = useState<string>();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
   const [maxFee, setMaxFee] = useState<number>();
-  const api = useOrderApi(market);
+  const api = useOrderApi();
+  const orders = useLimitOrderList(market);
 
   const provider = providers[market.chainId];
   const { data: signer } = useSigner();
@@ -101,11 +106,11 @@ export const LimitOrderProvider = ({
 
     return {
       ...toHex(decimalValues),
-      market_id: market.marketId,
+      market_id: market.marketId.toString(),
       recipient: address,
       user: address,
       referrer: address,
-    };
+    } as Order;
   };
 
   useEffect(() => {
@@ -125,8 +130,7 @@ export const LimitOrderProvider = ({
   }, []);
 
   const createOrder = async () => {
-    //@ts-ignore
-    return api.createOrder(generateOrder());
+    return api.createOrder(generateOrder(), Number(market.chainId));
   };
 
   const updateExpiry = (expiry: number | Date) => {
@@ -150,6 +154,8 @@ export const LimitOrderProvider = ({
     setExpiry: updateExpiry,
     setAmount,
     createOrder,
+    orders,
+    market,
   };
 
   return (

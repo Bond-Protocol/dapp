@@ -61,7 +61,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
             label="Order Expiry"
             options={options}
             //@ts-ignore
-            defaultValue={options[0].id}
+            defaultValue={options[0]?.id}
             ModalContent={(args: any) => (
               <SelectDateDialog
                 {...args}

@@ -1,4 +1,3 @@
-//@ts-nocheck
 import {
   Button,
   Column,
@@ -10,6 +9,7 @@ import {
   useSorting,
   Table,
   toTableData,
+  Loading,
 } from "ui";
 
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
@@ -19,6 +19,8 @@ import { useOrderApi } from "./use-order-api";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { Order } from "src/types/openapi";
 import { OrderConfig } from "services/order-service";
+import { useQuery } from "react-query";
+import { useLimitOrderForMarket } from "./use-limit-order";
 
 export type LimitOrderListProps = {
   market: CalculatedMarket;
@@ -48,7 +50,7 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
       );
 
       return {
-        value: formatCurrency.usdFormatter.format(price),
+        value: formatCurrency.usdFullFormatter.format(price),
         subtext: <span className={color}>{discount.toFixed(2) ?? "??"}%</span>,
       };
     },
@@ -94,15 +96,10 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     label: "",
     accessor: "close",
     width: "w-[12%]",
-    formatter: (args: any) => {
-      return {
-        value: args,
-        data: args,
-      };
-    },
-
-    Component: (props) => {
-      const api = useOrderApi(props.data?.market);
+    formatter: (args: any) => ({ value: args, data: args }),
+    Component: (props: any) => {
+      const api = useOrderApi();
+      const { orders, market } = useLimitOrderForMarket();
 
       return (
         <div key={props.key} className="relative">
@@ -121,8 +118,14 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
             <div className="w-full rounded-lg bg-light-tooltip p-4">
               <Button
                 variant="ghost"
-                onClick={() => {
-                  api.cancelOrder(props.data.digest);
+                onClick={async () => {
+                  console.log({ props, market });
+                  await api.cancelOrder(
+                    props.data.digest,
+                    Number(market.chainId)
+                  );
+
+                  orders?.query?.refetch();
                 }}
               >
                 Cancel Order
@@ -136,29 +139,11 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
 ];
 
 export const LimitOrderList = (props: LimitOrderListProps) => {
-  const orderApi = useOrderApi(props.market);
-  const [cols, setCols] = useState<any[]>([]);
-
-  console.log("market", props.market);
-  useEffect(() => {
-    async function loadList() {
-      const data: Order[] = await orderApi.list();
-      const withMarket = data
-        .filter(
-          (order) =>
-            order?.status === "Active" &&
-            order.market_id === props.market?.marketId
-        )
-        .map((d) => ({ ...d, market: props.market }));
-
-      setCols(withMarket);
-    }
-
-    loadList();
-  }, []);
+  const orderApi = useOrderApi();
+  const { orders } = useLimitOrderForMarket();
 
   const [sortedData, sort] = useSorting(
-    cols.map((r) => toTableData(columns, r))
+    orders.list.map((r) => toTableData(columns, r))
   );
 
   return (
@@ -166,9 +151,13 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
       <div className="flex justify-between p-4 pb-2 pt-0 font-fraktion uppercase">
         <h4 className="text-2xl font-semibold ">Open Orders</h4>
         <button
-          onClick={() =>
-            orderApi.cancelAllOrders(props.market?.marketId?.toString())
-          }
+          onClick={async () => {
+            await orderApi.cancelAllOrders(
+              props.market?.marketId?.toString(),
+              Number(props.market.chainId)
+            );
+            orders.query.refetch();
+          }}
           className="my-auto font-bold uppercase tracking-widest transition-all hover:text-light-secondary"
         >
           Cancel All
@@ -187,12 +176,18 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
         {!sortedData.length && (
           <div className="mt-8 flex h-[80%] flex-col items-center justify-center text-center ">
             <div>
-              <div className="my-auto text-2xl">
-                You don't have any orders yet
-              </div>
-              <Button className="mt-4" onClick={props.onClickPlaceOrder}>
-                Place Order
-              </Button>
+              {orders.isLoading ? (
+                <div className="my-auto text-2xl">Loading your orders</div>
+              ) : (
+                <>
+                  <div className="my-auto text-2xl">
+                    You don't have any orders yet
+                  </div>
+                  <Button className="mt-4" onClick={props.onClickPlaceOrder}>
+                    Place Order
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         )}
