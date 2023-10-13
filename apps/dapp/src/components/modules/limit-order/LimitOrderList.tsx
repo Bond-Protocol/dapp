@@ -1,5 +1,4 @@
 //@ts-nocheck
-
 import {
   Button,
   Column,
@@ -31,7 +30,8 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     label: "Limit Price",
     accessor: "price",
     width: "w-[33%]",
-    tooltip: "Limit order tooltip",
+    tooltip:
+      "The USD price of the asset at which you expect the order to execute",
     formatter: (order) => {
       const totalValue =
         Number(order.amount) * Number(order.market?.quoteToken.price);
@@ -48,7 +48,7 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
       );
 
       return {
-        value: formatCurrency.trimToken(price),
+        value: formatCurrency.usdFormatter.format(price),
         subtext: <span className={color}>{discount.toFixed(2) ?? "??"}%</span>,
       };
     },
@@ -77,14 +77,16 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     width: "w-[33%]",
     alignEnd: true,
     formatter: (order) => {
-      console.log({ order });
-      const result = formatDate.interval(
+      const deadline = new Date(Number(order.deadline) * 1000);
+
+      const timeInterval = formatDate.interval(
         new Date(),
-        new Date(order.deadline * 1000)
+        new Date(Number(order.deadline) * 1000)
       );
+
       return {
-        sortValue: order.deadline.getTime(),
-        value: result,
+        sortValue: new Date(deadline).getTime(),
+        value: timeInterval,
       };
     },
   },
@@ -92,7 +94,7 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     label: "",
     accessor: "close",
     width: "w-[12%]",
-    formatter: (args) => {
+    formatter: (args: any) => {
       return {
         value: args,
         data: args,

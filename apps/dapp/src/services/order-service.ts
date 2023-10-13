@@ -48,8 +48,6 @@ type CreateOrderArgs = BasicOrderArgs & OrderConfig;
 const client = new OpenAPIClient({ definition, strict: true });
 client.init<LimitOrderApiClient>();
 
-type NewType = BasicOrderArgs;
-
 export class ApiClient {
   api!: LimitOrderApiClient;
 
@@ -143,7 +141,7 @@ export class ApiClient {
     token,
     address,
     market,
-  }: NewType & { market: CalculatedMarket }) {
+  }: BasicOrderArgs & { market: CalculatedMarket }) {
     const response = await this.api.getOrdersByAddress(address, null, {
       headers: this.makeHeaders({ chainId, token }),
     });
@@ -304,7 +302,11 @@ function refreshTokenInterceptor(api: LimitOrderApiClient) {
 
       if (refreshToken) {
         try {
-          const response = await api.refreshAuth(null, refreshToken);
+          const response = await api.refreshAuth(null, refreshToken, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
           TokenStorage.setAccessToken(response.data.access_token!);
           TokenStorage.setRefreshToken(response.data.refresh_token!);
 
