@@ -101,7 +101,7 @@ export class ApiClient {
       ],
     };
     const value = {
-      marketId: BigNumber.from(order.market_id).toHexString(),
+      marketId: Number(order.market_id),
       recipient: order.recipient,
       referrer: order.referrer,
       amount: order.amount,
