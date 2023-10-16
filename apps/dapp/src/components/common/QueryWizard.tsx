@@ -26,7 +26,7 @@ export const QueryWizard = ({
   const [open, setOpen] = useState<boolean>(!!props.open);
   const [response, setResponse] = useState<any>({});
   const [status, setStatus] = useState<Status>(Status.IDLE);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error & any>();
 
   useEffect(() => {
     setOpen(!!props.open);
@@ -84,6 +84,7 @@ export const QueryWizard = ({
         <div className="p-4 text-center">
           <div>{error?.name}</div>
           <div className="text-sm">{error?.message}</div>
+          <div className="text-sm">{error?.response?.data}</div>
         </div>
       ),
     },
