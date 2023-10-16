@@ -104,9 +104,10 @@ export const LimitOrderProvider = ({
       max_fee: adjustedMaxFee,
     };
 
+    //@ts-ignore TODO: update Order market_id to number openyaml
     return {
       ...toHex(decimalValues),
-      market_id: market.marketId.toString(),
+      market_id: Number(market.marketId),
       recipient: address,
       user: address,
       referrer: address,
