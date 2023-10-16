@@ -518,7 +518,14 @@ paths:
                 type: array
                 items:
                   description: Quote token address
-                  type: string
+                  type: object
+                  properties:
+                    - name: address
+                      type: string
+                      description: The token contract address
+                    - name: chain_id
+                      type: string
+                      description: The token contract chain id
         500:
           description: Failed to get quote tokens or failed to serialize response.
   /quote_tokens/{token_address}:

@@ -48,7 +48,8 @@ export const useTokenAllowance = (
   const approve = async (
     tokenAddress: string,
     tokenDecimals: number,
-    auctioneer: string
+    auctioneer: string,
+    overrideAmount?: string
   ) => {
     if (signer) {
       const approved = await approveSpending(
@@ -56,7 +57,7 @@ export const useTokenAllowance = (
         tokenDecimals,
         auctioneer,
         signer,
-        amount,
+        overrideAmount ?? amount,
         isNotAuctioneerContract
       );
       const confirmed = await approved.wait();

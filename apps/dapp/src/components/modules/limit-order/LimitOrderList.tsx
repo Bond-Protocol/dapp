@@ -9,19 +9,17 @@ import {
   useSorting,
   Table,
   toTableData,
-  Loading,
   Modal,
 } from "ui";
 
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Popper } from "components/common/Popper";
 import { useOrderApi } from "./use-order-api";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { Order } from "src/types/openapi";
 import { OrderConfig } from "services/order-service";
-import { useQuery } from "react-query";
 import { useLimitOrderForMarket } from "./use-limit-order";
+import { CancelOrderDialog } from "./CancelOrderDialog";
 
 export type LimitOrderListProps = {
   market: CalculatedMarket;
@@ -139,14 +137,44 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
   },
 ];
 
+const ReApproveAllowanceCard = (props: {
+  market: CalculatedMarket;
+  onSubmit: () => void;
+  requiredAllowance: string;
+  currentAllowance: string;
+}) => (
+  <div className="item absolute inset-0  top-32 flex flex-col justify-center">
+    <div className="z-20 flex w-full flex-col items-center justify-center ">
+      <div className="font-fraktion text-2xl font-bold uppercase">
+        Re-Approve Token to enable Orders
+      </div>
+      <div className="mt-4">
+        You have revoked approval of {props.market.quoteToken.symbol}
+      </div>
+      {Number(props.currentAllowance) > 0 && (
+        <div className="my-2 text-sm text-light-grey-400">
+          You have approved{" "}
+          {formatCurrency.dynamicFormatter(props.currentAllowance, false)} out
+          of
+          {formatCurrency.dynamicFormatter(props.requiredAllowance, false)}{" "}
+          {props.market.quoteToken.symbol} required
+        </div>
+      )}
+      <Button onClick={props.onSubmit}>Approve</Button>
+    </div>
+  </div>
+);
+
 export const LimitOrderList = (props: LimitOrderListProps) => {
   const orderApi = useOrderApi();
-  const { orders } = useLimitOrderForMarket();
+  const { orders, allowance } = useLimitOrderForMarket();
   const [cancelingAll, setCancellingAll] = useState(false);
 
   const [sortedData, sort] = useSorting(
     orders.list.map((r) => toTableData(columns, r))
   );
+
+  const showReApprove = !allowance.hasSuffiencentAllowanceForAllOrders;
 
   return (
     <div className="h-full p-4 ">
@@ -155,43 +183,22 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
         title="Cancel all orders"
         onClickClose={() => setCancellingAll(false)}
       >
-        <div className="p-4">
-          <div className="text-center ">
-            This action will cancel all orders, are you sure?
-          </div>
-          <div className="mt-2 text-center text-sm text-light-grey-400">
-            (It won't cost any gas)
-          </div>
-          <div className="mt-6 flex w-full justify-center gap-x-2">
-            <Button
-              size="lg"
-              className="w-1/2"
-              variant="ghost"
-              onClick={() => setCancellingAll(false)}
-            >
-              Go back
-            </Button>
-            <Button
-              size="lg"
-              className="w-1/2"
-              onClick={async () => {
-                try {
-                  await orderApi.cancelAllOrders(
-                    props.market?.marketId?.toString(),
-                    Number(props.market.chainId)
-                  );
-                  orders.query.refetch();
-                } catch (e) {
-                  console.error(e);
-                } finally {
-                  setCancellingAll(false);
-                }
-              }}
-            >
-              Confirm
-            </Button>
-          </div>
-        </div>
+        <CancelOrderDialog
+          onCancel={() => setCancellingAll(false)}
+          onSubmit={async () => {
+            try {
+              await orderApi.cancelAllOrders(
+                props.market?.marketId?.toString(),
+                Number(props.market.chainId)
+              );
+              orders.query.refetch();
+            } catch (e) {
+              console.error(e);
+            } finally {
+              setCancellingAll(false);
+            }
+          }}
+        />
       </Modal>
       <div className="flex justify-between p-4 pb-2 pt-0 font-fraktion uppercase">
         <h4 className="text-2xl font-semibold ">Open Orders</h4>
@@ -203,16 +210,29 @@ export const LimitOrderList = (props: LimitOrderListProps) => {
         </button>
       </div>
       <div className="h-full max-h-[300px] w-full overflow-y-auto">
+        {showReApprove && (
+          <div className="relative z-10">
+            <ReApproveAllowanceCard
+              market={props.market}
+              requiredAllowance={allowance.requiredAllowance}
+              currentAllowance={allowance.allowance}
+              onSubmit={allowance.approveRequiredAmount}
+            />
+          </div>
+        )}
+
         <Table
           handleSorting={sort}
-          className="w-full border-collapse backdrop-blur"
+          className={`w-full border-collapse backdrop-blur ${
+            showReApprove ? "blur" : ""
+          }`}
           headClassName="sticky child:w-full top-0 w-full border-none bg-light-base bg-gradient-to-r from-white/5 to-white/5"
           bodyClassName="overflow-y-auto "
           emptyRows={0}
           data={sortedData}
           columns={columns}
         />
-        {!sortedData.length && (
+        {!sortedData.length && !showReApprove && (
           <div className="mt-8 flex h-[80%] flex-col items-center justify-center text-center ">
             <div>
               {orders.isLoading ? (

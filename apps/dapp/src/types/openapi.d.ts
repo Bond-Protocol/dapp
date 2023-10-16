@@ -238,7 +238,16 @@ declare namespace Paths {
     }
     namespace GetSupportedQuoteTokens {
         namespace Responses {
-            export type $200 = string[];
+            export type $200 = {
+                /**
+                 * The token contract address
+                 */
+                $0?: string;
+                /**
+                 * The token contract chain id
+                 */
+                $1?: string;
+            }[];
             export interface $500 {
             }
         }

@@ -8,8 +8,6 @@ import {
   getAddresses,
 } from "@bond-protocol/contract-library";
 
-import { useTokenAllowance } from "hooks/useTokenAllowance";
-import { providers } from "services/owned-providers";
 import { calcDiscountPercentage } from "src/utils/calculate-percentage";
 import { toHex } from "src/utils/bignumber";
 
@@ -17,9 +15,12 @@ import { useOrderApi } from "./use-order-api";
 import { orderService } from "services/order-service";
 import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
+import { useLimitOrderAllowance } from "./use-limit-order-allowance";
 
 export type ILimitOrderContext = {
-  allowance: ReturnType<typeof useTokenAllowance>;
+  allowance: ReturnType<typeof useLimitOrderAllowance> & {
+    approveRequiredAmount: () => void;
+  };
   orders: ReturnType<typeof useLimitOrderList>;
   market: CalculatedMarket;
   discount?: number;
@@ -46,27 +47,15 @@ export const LimitOrderProvider = ({
   market: CalculatedMarket;
 }) => {
   const { value: price, onChange: setPrice } = useNumericInput();
-  const [amount, setAmount] = useState<string>();
+  const [amount, setAmount] = useState<string>("");
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
   const [maxFee, setMaxFee] = useState<number>();
   const api = useOrderApi();
   const orders = useLimitOrderList(market);
 
-  const provider = providers[market.chainId];
-  const { data: signer } = useSigner();
-  const { address } = useAccount();
+  const allowance = useLimitOrderAllowance(market, amount, orders.list);
 
-  const allowance = useTokenAllowance(
-    address ?? "",
-    market.quoteToken.address,
-    market.quoteToken.decimals,
-    market.chainId,
-    getAddresses(market.chainId).settlement,
-    amount?.toString() ?? "0",
-    provider,
-    signer!,
-    true
-  );
+  const { address } = useAccount();
 
   const discount = calcDiscountPercentage(market.fullPrice, Number(price));
 
@@ -143,8 +132,20 @@ export const LimitOrderProvider = ({
     setExpiry(date);
   };
 
+  const approveRequiredAmount = () => {
+    return allowance.approve(
+      market.quoteToken.address,
+      market.quoteToken.decimals,
+      getAddresses(market.chainId).settlement,
+      allowance.requiredAllowance
+    );
+  };
+
   const order = {
-    allowance,
+    allowance: {
+      ...allowance,
+      approveRequiredAmount,
+    },
     discount,
     price,
     expiry,
