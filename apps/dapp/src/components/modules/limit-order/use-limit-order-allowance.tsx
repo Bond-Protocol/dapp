@@ -1,0 +1,70 @@
+import {
+  CalculatedMarket,
+  getAddresses,
+} from "@bond-protocol/contract-library";
+import { useTokenAllowance } from "hooks/useTokenAllowance";
+import { useAccount, useSigner } from "wagmi";
+import { providers } from "services/owned-providers";
+import { Order } from "src/types/openapi";
+import { useMarkets } from "context/market-context";
+import { BigNumber } from "ethers";
+import { useMemo } from "react";
+
+export const useLimitOrderAllowance = (
+  market: CalculatedMarket,
+  amount: string,
+  orders: Order[]
+) => {
+  const { address } = useAccount();
+  const { data: signer } = useSigner();
+  const { allMarkets } = useMarkets();
+
+  const requiredAllowance = useMemo(
+    () =>
+      orders
+        .filter((o) => o.status === "Active")
+        .filter((element) => {
+          const marketsWithSameToken = allMarkets
+            .filter(
+              (m) =>
+                m.quoteToken.address === market.quoteToken.address &&
+                m.quoteToken.chainId === market.quoteToken.chainId
+            )
+            .map((mkt) => mkt.marketId);
+
+          return marketsWithSameToken.includes(Number(element.market_id));
+        })
+        .reduce(
+          (total, order) => total.add(Number(order.amount) ?? 0),
+          BigNumber.from(0)
+        ),
+    [market, amount, orders]
+  );
+
+  const requiredAllowanceForNextOrder = requiredAllowance.add(
+    amount.length ? amount : 0
+  );
+  const provider = providers[market.chainId];
+
+  const allowance = useTokenAllowance(
+    address ?? "",
+    market.quoteToken.address,
+    market.quoteToken.decimals,
+    market.chainId,
+    getAddresses(market.chainId).settlement,
+    requiredAllowanceForNextOrder.toString(),
+    provider,
+    signer!,
+    true
+  );
+
+  const hasSuffiencentAllowanceForAllOrders =
+    !orders?.length ||
+    Number(allowance.allowance) >= Number(requiredAllowance.toString());
+
+  return {
+    hasSuffiencentAllowanceForAllOrders,
+    requiredAllowance: requiredAllowance.toString(),
+    ...allowance,
+  };
+};

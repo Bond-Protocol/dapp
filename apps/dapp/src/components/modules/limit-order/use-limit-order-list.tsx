@@ -22,8 +22,6 @@ export const useLimitOrderList = (market: CalculatedMarket) => {
     setOrders(withMarket);
   }
 
-  const enabled = !!market && auth.isAuthenticated;
-  console.log(enabled);
   const query = useQuery(["list-orders", market.id, market.chainId], {
     queryFn: loadList,
     enabled: !!market && auth.isAuthenticated,

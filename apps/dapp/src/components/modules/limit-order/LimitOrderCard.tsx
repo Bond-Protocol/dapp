@@ -5,7 +5,7 @@ import {
 } from "@bond-protocol/contract-library";
 import { QueryWizard } from "components/common/QueryWizard";
 import { BondButton } from "components/organisms/BondButton";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import defillama from "services/defillama";
 import {
   InputCard,

@@ -34,8 +34,11 @@ export const OrderServiceProvider = ({
 
   const isTokenSupported = (token: TokenBase) => {
     return supportedTokens.some(
-      //@ts-ignore types need fixing
-      (t) => String(t.address).toLowerCase() === token.address.toLowerCase() && Number(t.chain_id) === token.chainId
+      (t) =>
+        //@ts-ignore types need fixing
+        String(t.address).toLowerCase() === token.address.toLowerCase() &&
+        //@ts-ignore types need fixing
+        Number(t.chain_id) === token.chainId
     );
   };
 

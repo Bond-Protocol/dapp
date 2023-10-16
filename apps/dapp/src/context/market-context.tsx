@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 
 const initialState = {
-  allMarkets: [],
+  allMarkets: [] as CalculatedMarket[],
   getMarketsForOwner: (address: string) => ({} as CalculatedMarket[]),
   getByChainAndId: (chain: string | number, id: string | number) =>
     ({} as CalculatedMarket),
