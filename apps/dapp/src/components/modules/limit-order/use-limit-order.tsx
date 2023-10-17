@@ -16,10 +16,12 @@ import { orderService } from "services/order-service";
 import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
+import { AsyncLocalStorage } from "async_hooks";
 
 export type ILimitOrderContext = {
   allowance: ReturnType<typeof useLimitOrderAllowance> & {
     approveRequiredAmount: () => void;
+    approveRequiredForNextOrder: () => void;
   };
   orders: ReturnType<typeof useLimitOrderList>;
   market: CalculatedMarket;
@@ -141,10 +143,20 @@ export const LimitOrderProvider = ({
     );
   };
 
+  const approveRequiredForNextOrder = () => {
+    return allowance.approve(
+      market.quoteToken.address,
+      market.quoteToken.decimals,
+      getAddresses(market.chainId).settlement,
+      allowance.requiredAllowanceForNextOrder.toString()
+    );
+  };
+
   const order = {
     allowance: {
       ...allowance,
       approveRequiredAmount,
+      approveRequiredForNextOrder,
     },
     discount,
     price,

@@ -24,7 +24,6 @@ export const BondPurchaseController = ({
 
   const { isTokenSupported } = useOrderService();
   const isSupported = isTokenSupported(market.quoteToken);
-  console.log({ market });
 
   return (
     <LimitOrderProvider market={market}>

@@ -10,6 +10,7 @@ import {
   SummaryRow,
   Switch,
 } from "ui";
+import { useAuth } from "./use-auth";
 import { useLimitOrderForMarket } from "./use-limit-order";
 
 export type LimitOrderConfirmationDialogProps = {
@@ -28,6 +29,9 @@ export const LimitOrderConfirmationDialog = (
 ) => {
   const [autoCancel, setAutoCancel] = useState(true);
   const order = useLimitOrderForMarket();
+  const auth = useAuth();
+
+  const needsApprove = !order.allowance.hasSuffiencentAllowanceForNextOrder;
 
   const fields = useMemo(
     () => [
@@ -42,11 +46,13 @@ export const LimitOrderConfirmationDialog = (
         leftLabel: "Order Expires on",
         rightLabel: order.expiry ? formatDate.short(order.expiry) : "",
       },
-      { leftLabel: "Max Fee",
+      {
+        leftLabel: "Max Fee",
         rightLabel: `${formatCurrency.amount(order.maxFee ?? 0)} ${
           props.market.quoteToken.symbol
         }`,
-        tooltip: "This is the maximum amount of fees you will pay for this order. The executor will try to reduce this amount as much as possible.",
+        tooltip:
+          "This is the maximum amount of fees you will pay for this order. The executor will try to reduce this amount as much as possible.",
       },
       {
         leftLabel: "Limit Order contract",
@@ -116,9 +122,21 @@ export const LimitOrderConfirmationDialog = (
       <ButtonGroup
         className="mt-4"
         leftLabel="Cancel"
-        rightLabel="Place Order"
+        rightLabel={
+          !auth.isAuthenticated
+            ? "Sign In"
+            : needsApprove
+            ? "Approve"
+            : "Place Order"
+        }
         onClickLeft={props.onCancel}
-        onClickRight={props.onSubmit}
+        onClickRight={
+          !auth.isAuthenticated
+            ? auth.signIn
+            : needsApprove
+            ? order.allowance.approveRequiredForNextOrder
+            : props.onSubmit
+        }
       />
     </div>
   );
