@@ -60,11 +60,17 @@ export const useLimitOrderAllowance = (
 
   const hasSuffiencentAllowanceForAllOrders =
     !orders?.length ||
-    Number(allowance.allowance) >= Number(requiredAllowance.toString());
+    Number(allowance.allowance) >= requiredAllowance.toNumber();
+
+  const hasSuffiencentAllowanceForNextOrder =
+    !orders?.length ||
+    Number(allowance.allowance) >= requiredAllowanceForNextOrder.toNumber();
 
   return {
     hasSuffiencentAllowanceForAllOrders,
+    hasSuffiencentAllowanceForNextOrder,
     requiredAllowance: requiredAllowance.toString(),
+    requiredAllowanceForNextOrder: requiredAllowanceForNextOrder.toNumber(),
     ...allowance,
   };
 };

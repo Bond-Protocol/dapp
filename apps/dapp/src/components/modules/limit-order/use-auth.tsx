@@ -6,7 +6,7 @@ import { orderService, TokenStorage } from "services/order-service";
 type AuthContextState = {
   isLoading: boolean;
   isAuthenticated: boolean;
-  signIn: Function;
+  signIn: () => void;
   getAccessToken: () => string | null;
 };
 

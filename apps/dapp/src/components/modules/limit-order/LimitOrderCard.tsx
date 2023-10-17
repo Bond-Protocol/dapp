@@ -135,18 +135,9 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
             !order.expiry ||
             !allowance.hasSufficientBalance
           }
-          onClick={
-            allowance.needsToApprove
-              ? () =>
-                  allowance.approve(
-                    props.market.quoteToken.address,
-                    props.market.quoteToken.decimals,
-                    getAddresses(props.market.chainId.toString()).settlement
-                  )
-              : () => setIsConfirming(true)
-          }
+          onClick={() => setIsConfirming(true)}
         >
-          {allowance.needsToApprove ? "APPROVE" : "PLACE ORDER"}
+          Place Order
         </Button>
       </BondButton>
     </div>

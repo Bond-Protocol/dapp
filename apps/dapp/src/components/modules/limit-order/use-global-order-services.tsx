@@ -25,7 +25,7 @@ export const OrderServiceProvider = ({
 }) => {
   const queries = useQueries(
     ACTIVE_CHAIN_IDS.map((chainId) => ({
-      queryKey: ["orders/supportedtokens", chainId],
+      queryKey: ["orders/supported-tokens", chainId],
       queryFn: () => orderService.getSupportedTokensByChain(chainId),
     }))
   );

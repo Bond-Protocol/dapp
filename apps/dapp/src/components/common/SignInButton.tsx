@@ -69,7 +69,6 @@ function SignInButton({
       setState((x) => ({ ...x, loading: false }));
       onSuccess({ address });
     } catch (error) {
-      console.log(error);
       setState((x) => ({ ...x, loading: false, nonce: undefined }));
     }
   };
