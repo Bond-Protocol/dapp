@@ -1,60 +1,26 @@
-import { WalletClient } from 'viem';
-import {
-  getFixedTermOfdaAuctioneer,
-  getFixedExpirySdaAuctioneer,
-  getFixedExpirySdAv1_1Auctioneer,
-  getFixedExpiryFpaAuctioneer,
-  getFixedExpiryOfdaAuctioneer,
-  getFixedTermSdaAuctioneer,
-  getFixedTermFpaAuctioneer,
-  getFixedTermOsdaAuctioneer,
-} from '../contracts';
+import { Address, PublicClient, WalletClient, getContract } from 'viem';
+import contracts, { Auctioneers, abiMap, auctioneerMap } from './contract-map';
+import { getAddressesV2 } from './address-provider';
+import { aggregatorABI } from 'src/contracts';
+
+export function getChainId(client: PublicClient | WalletClient) {
+  const chainId = client.chain?.id;
+  if (!chainId) throw new Error('Unable to get Chain Id from client');
+  return chainId;
+}
 
 export function getAuctioneerFactoryForName(
-  auctioneerName: string,
-  auctioneerAddress: string,
-  client: WalletClient,
+  auctioneerName: Auctioneers,
+  address: Address,
+  publicClient: PublicClient,
 ) {
-  let factory;
-  switch (auctioneerName) {
-    case 'BondFixedExpCDA':
-      factory = getFixedExpirySdaAuctioneer;
-      break;
-    case 'BondFixedExpSDAv1_1':
-      factory = getFixedExpirySdAv1_1Auctioneer;
-      break;
-    case 'BondFixedExpFPA':
-      factory = getFixedExpiryFpaAuctioneer;
-      break;
-    case 'BondFixedExpOFDA':
-      factory = getFixedExpiryOfdaAuctioneer;
-      break;
-    case 'BondFixedExpOSDA':
-      factory = getFixedExpiryOfdaAuctioneer;
-      break;
-    case 'BondFixedTermCDA':
-      factory = getFixedTermSdaAuctioneer;
-      break;
-    case 'BondFixedTermSDAv1_1':
-      factory = getFixedExpirySdAv1_1Auctioneer;
-      break;
-    case 'BondFixedTermFPA':
-      factory = getFixedTermFpaAuctioneer;
-      break;
-    case 'BondFixedTermOFDA':
-      factory = getFixedTermOfdaAuctioneer;
-      break;
-    case 'BondFixedTermOSDA':
-      factory = getFixedTermOsdaAuctioneer;
-      break;
-    default:
-      throw Error(
-        'Auctioneer Factory Not Found for ' +
-          auctioneerName +
-          ' ' +
-          auctioneerAddress,
-      );
-  }
+  let abi = auctioneerMap[auctioneerName];
 
-  return factory({ address: auctioneerAddress, publicClient: client });
+  return getContract({ publicClient, address, abi });
+}
+
+export function getAggregator(publicClient: PublicClient) {
+  const chainId = getChainId(publicClient);
+  const address = getAddressesV2(chainId).aggregator;
+  return getContract({ publicClient, address, abi: abiMap.aggregator });
 }

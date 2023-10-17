@@ -77,11 +77,6 @@ export const getChainId = async (
   return chainId.toString();
 };
 
-export function getChainIdV2(client: PublicClient | WalletClient) {
-  const chainId = client.chain?.id;
-  if (!chainId) throw new Error('Unable to get Chain Id from client');
-  return chainId;
-}
 
 export async function getAggregator(
   providerOrSigner: Provider | Signer,
@@ -91,12 +86,6 @@ export async function getAggregator(
     getAddresses(chainId).aggregator,
     providerOrSigner,
   );
-}
-
-export async function getAggregatorV2(publicClient: PublicClient) {
-  const chainId = getChainIdV2(publicClient);
-  const address = getAddressesV2(chainId).aggregator;
-  const contract = getContract({ address, abi: aggregatorABI, publicClient });
 }
 
 export async function getAuthority(
