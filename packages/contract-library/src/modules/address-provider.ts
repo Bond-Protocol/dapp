@@ -1,5 +1,7 @@
-import { Address } from 'viem';
+import { Address, PublicClient } from 'viem';
 import { BOND_TYPE } from 'src/modules/contract-helper';
+import { getChainId } from './contract-helper-v2';
+import { BondType, auctioneerAddressesByType } from './enums';
 
 export type ContractAddresses = {
   authority: Address;
@@ -178,12 +180,26 @@ const addressesByChainId: Record<number, ContractAddresses> = {
   420: optimismGoerliAddresses,
 };
 
-export const getAddressesV2 = (chainId: number) =>
-  addressesByChainId[chainId] ?? mainnetAddresses;
+export const getAddressesV2 = (publicClient: PublicClient) => {
+  const chainId = getChainId(publicClient);
+  return addressesByChainId[chainId] ?? mainnetAddresses;
+};
 
 export const getAddresses = (chainId: string): ContractAddresses => {
   return addressesByChain[chainId] || mainnetAddresses;
 };
+
+export function getAuctioneerByBondType(
+  publicClient: PublicClient,
+  type: BondType,
+): Address {
+  const addresses = getAddressesV2(publicClient);
+  const name = auctioneerAddressesByType[type];
+
+  return addresses[name];
+}
+
+export function getAddressForTypeV2() {}
 
 export const getAddressesForType = (
   chain_id: number | string | { id: string; label: string },

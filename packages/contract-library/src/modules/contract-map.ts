@@ -1,46 +1,33 @@
-import * as abis from '../contracts';
+import * as abiFiles from '../contracts';
 
-export enum Auctioneers {
-  BondFixedExpCDA = 'BondFixedExpCDA',
-  BondFixedExpSDAv1_1 = 'BondFixedExpSDAv1_1',
-  BondFixedExpFPA = 'BondFixedExpFPA',
-  BondFixedExpOFDA = 'BondFixedExpOFDA',
-  BondFixedExpOSDA = 'BondFixedExpOSDA',
-  BondFixedTermCDA = 'BondFixedTermCDA',
-  BondFixedTermSDAv1_1 = 'BondFixedTermSDAv1_1',
-  BondFixedTermFPA = 'BondFixedTermFPA',
-  BondFixedTermOFDA = 'BondFixedTermOFDA',
-  BondFixedTermOSDA = 'BondFixedTermOSDA',
-}
-
-export const abiMap = {
-  authority: abis.authorityABI,
-  aggregator: abis.aggregatorABI,
-  fixedExpiryTeller: abis.fixedExpiryTellerABI,
-  fixedExpirySDAAuctioneer: abis.fixedExpirySdaAuctioneerABI,
-  fixedExpirySDAv1_1Auctioneer: abis.fixedExpirySdAv1_1AuctioneerABI,
-  fixedExpiryFPAAuctioneer: abis.fixedExpiryFpaAuctioneerABI,
-  fixedExpiryOFDAAuctioneer: abis.fixedExpiryOfdaAuctioneerABI,
-  fixedExpiryOSDAAuctioneer: abis.fixedExpiryOsdaAuctioneerABI,
-  fixedTermTeller: abis.fixedTermTellerABI,
-  fixedTermSDAAuctioneer: abis.fixedTermSdaAuctioneerABI,
-  fixedTermSDAv1_1Auctioneer: abis.fixedTermSdAv1_1AuctioneerABI,
-  fixedTermFPAAuctioneer: abis.fixedTermFpaAuctioneerABI,
-  fixedTermOFDAAuctioneer: abis.fixedTermOfdaAuctioneerABI,
-  fixedTermOSDAAuctioneer: abis.fixedTermOsdaAuctioneerABI,
+export const abis = {
+  authority: abiFiles.authorityABI,
+  aggregator: abiFiles.aggregatorABI,
+  fixedExpiryTeller: abiFiles.fixedExpiryTellerABI,
+  fixedExpirySDAAuctioneer: abiFiles.fixedExpirySdaAuctioneerABI,
+  fixedExpirySDAv1_1Auctioneer: abiFiles.fixedExpirySdAv1_1AuctioneerABI,
+  fixedExpiryFPAAuctioneer: abiFiles.fixedExpiryFpaAuctioneerABI,
+  fixedExpiryOFDAAuctioneer: abiFiles.fixedExpiryOfdaAuctioneerABI,
+  fixedExpiryOSDAAuctioneer: abiFiles.fixedExpiryOsdaAuctioneerABI,
+  fixedTermTeller: abiFiles.fixedTermTellerABI,
+  fixedTermSDAAuctioneer: abiFiles.fixedTermSdaAuctioneerABI,
+  fixedTermSDAv1_1Auctioneer: abiFiles.fixedTermSdAv1_1AuctioneerABI,
+  fixedTermFPAAuctioneer: abiFiles.fixedTermFpaAuctioneerABI,
+  fixedTermOFDAAuctioneer: abiFiles.fixedTermOfdaAuctioneerABI,
+  fixedTermOSDAAuctioneer: abiFiles.fixedTermOsdaAuctioneerABI,
 };
 
-export const auctioneerMap = {
-  BondFixedExpCDA: abiMap.fixedExpirySDAAuctioneer,
-  BondFixedExpSDAv1_1: abiMap.fixedExpirySDAv1_1Auctioneer,
-  BondFixedExpFPA: abiMap.fixedExpiryFPAAuctioneer,
-  BondFixedExpOFDA: abiMap.fixedExpiryOFDAAuctioneer,
-  BondFixedExpOSDA: abiMap.fixedExpiryOSDAAuctioneer,
-  BondFixedTermCDA: abiMap.fixedTermSDAAuctioneer,
-  BondFixedTermSDAv1_1: abiMap.fixedTermSDAv1_1Auctioneer,
-  BondFixedTermFPA: abiMap.fixedTermFPAAuctioneer,
-  BondFixedTermOFDA: abiMap.fixedTermOFDAAuctioneer,
-  BondFixedTermOSDA: abiMap.fixedTermOSDAAuctioneer,
+export const auctioneerAbis = {
+  BondFixedExpCDA: abis.fixedExpirySDAAuctioneer,
+  BondFixedExpSDAv1_1: abis.fixedExpirySDAv1_1Auctioneer,
+  BondFixedExpFPA: abis.fixedExpiryFPAAuctioneer,
+  BondFixedExpOFDA: abis.fixedExpiryOFDAAuctioneer,
+  BondFixedExpOSDA: abis.fixedExpiryOSDAAuctioneer,
+  BondFixedTermCDA: abis.fixedTermSDAAuctioneer,
+  BondFixedTermSDAv1_1: abis.fixedTermSDAv1_1Auctioneer,
+  BondFixedTermFPA: abis.fixedTermFPAAuctioneer,
+  BondFixedTermOFDA: abis.fixedTermOFDAAuctioneer,
+  BondFixedTermOSDA: abis.fixedTermOSDAAuctioneer,
 };
 
-export default abiMap;
+export default abis;

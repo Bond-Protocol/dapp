@@ -1,7 +1,7 @@
 import { Address, PublicClient, WalletClient, getContract } from 'viem';
-import contracts, { Auctioneers, abiMap, auctioneerMap } from './contract-map';
-import { getAddressesV2 } from './address-provider';
-import { aggregatorABI } from 'src/contracts';
+import { abis, auctioneerAbis } from './contract-map';
+import { getAuctioneerByBondType, getAddressesV2 } from './address-provider';
+import { Auctioneers, BondType, auctioneersByType } from './enums';
 
 export function getChainId(client: PublicClient | WalletClient) {
   const chainId = client.chain?.id;
@@ -14,13 +14,58 @@ export function getAuctioneerFactoryForName(
   address: Address,
   publicClient: PublicClient,
 ) {
-  let abi = auctioneerMap[auctioneerName];
+  let abi = auctioneerAbis[auctioneerName];
 
   return getContract({ publicClient, address, abi });
 }
 
 export function getAggregator(publicClient: PublicClient) {
-  const chainId = getChainId(publicClient);
-  const address = getAddressesV2(chainId).aggregator;
-  return getContract({ publicClient, address, abi: abiMap.aggregator });
+  const address = getAddressesV2(publicClient).aggregator;
+
+  return getContract({ publicClient, address, abi: abis.aggregator });
+}
+
+export function getAuthorithy(publicClient: PublicClient) {
+  const address = getAddressesV2(publicClient).authority;
+
+  return getContract({ publicClient, address, abi: abis.authority });
+}
+
+export function getBaseTeller(walletClient: WalletClient, address: Address) {
+  return getContract({ walletClient, abi: abis.teller, address });
+}
+
+export function getTeller(publicClient: PublicClient, bondType: BondType) {
+  const { teller } = getAddressesForType(publicClient, bondType);
+
+  const abi = bondType.includes('term')
+    ? abis.fixedTermTeller
+    : abis.fixedExpiryTeller;
+
+  return getContract({ publicClient, address: teller, abi });
+}
+
+export function getAddressesForType(
+  publicClient: PublicClient,
+  bondType: BondType,
+) {
+  const { fixedTermTeller, fixedExpiryTeller } = getAddressesV2(publicClient);
+
+  const isFixedTerm = bondType.includes('term');
+
+  const teller = isFixedTerm ? fixedTermTeller : fixedExpiryTeller;
+
+  const auctioneer = getAuctioneerByBondType(publicClient, bondType);
+
+  return { teller, auctioneer };
+}
+
+export function getAuctioneerForCreate(
+  publicClient: PublicClient,
+  bondType: BondType,
+) {
+  const abi = auctioneersByType[bondType];
+  const address = getAuctioneerByBondType(publicClient, bondType);
+
+  return getContract({ publicClient, abi, address });
 }

@@ -1,11 +1,11 @@
 import { defineConfig } from '@wagmi/cli';
 import { actions } from '@wagmi/cli/plugins';
 
-import { abiMap } from './src/modules/abi-map';
+import { abis } from './src/modules/contract-map';
 
 export default defineConfig({
   out: 'src/contracts.ts',
-  contracts: Object.entries(abiMap).map(([name, abi]) => ({
+  contracts: Object.entries(abis).map(([name, abi]) => ({
     name,
     abi: abi.abi,
   })),
