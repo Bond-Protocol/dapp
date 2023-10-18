@@ -303,6 +303,205 @@ export const authorityABI = [
 ] as const;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// baseTeller
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const baseTellerABI = [
+  { type: 'error', inputs: [], name: 'Teller_InvalidCallback' },
+  { type: 'error', inputs: [], name: 'Teller_InvalidParams' },
+  { type: 'error', inputs: [], name: 'Teller_NotAuthorized' },
+  {
+    type: 'error',
+    inputs: [
+      { name: 'underlying', internalType: 'contract ERC20', type: 'address' },
+      { name: 'expiry', internalType: 'uint48', type: 'uint48' },
+    ],
+    name: 'Teller_TokenDoesNotExist',
+  },
+  {
+    type: 'error',
+    inputs: [{ name: 'maturesOn', internalType: 'uint48', type: 'uint48' }],
+    name: 'Teller_TokenNotMatured',
+  },
+  { type: 'error', inputs: [], name: 'Teller_UnsupportedToken' },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'newAuthority',
+        internalType: 'contract Authority',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'AuthorityUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
+      {
+        name: 'referrer',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'payout',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'Bonded',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'user', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'newOwner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+    ],
+    name: 'OwnerUpdated',
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'FEE_DECIMALS',
+    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'authority',
+    outputs: [
+      { name: '', internalType: 'contract Authority', type: 'address' },
+    ],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'tokens_', internalType: 'contract ERC20[]', type: 'address[]' },
+      { name: 'to_', internalType: 'address', type: 'address' },
+    ],
+    name: 'claimFees',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'createFeeDiscount',
+    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'referrer_', internalType: 'address', type: 'address' }],
+    name: 'getFee',
+    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'owner',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'protocolFee',
+    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'recipient_', internalType: 'address', type: 'address' },
+      { name: 'referrer_', internalType: 'address', type: 'address' },
+      { name: 'id_', internalType: 'uint256', type: 'uint256' },
+      { name: 'amount_', internalType: 'uint256', type: 'uint256' },
+      { name: 'minAmountOut_', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'purchase',
+    outputs: [
+      { name: '', internalType: 'uint256', type: 'uint256' },
+      { name: '', internalType: 'uint48', type: 'uint48' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: '', internalType: 'address', type: 'address' }],
+    name: 'referrerFees',
+    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: '', internalType: 'address', type: 'address' },
+      { name: '', internalType: 'contract ERC20', type: 'address' },
+    ],
+    name: 'rewards',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      {
+        name: 'newAuthority',
+        internalType: 'contract Authority',
+        type: 'address',
+      },
+    ],
+    name: 'setAuthority',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
+    name: 'setOwner',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: 'fee_', internalType: 'uint48', type: 'uint48' }],
+    name: 'setProtocolFee',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: 'fee_', internalType: 'uint48', type: 'uint48' }],
+    name: 'setReferrerFee',
+    outputs: [],
+  },
+] as const;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // fixedExpiryFPAAuctioneer
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

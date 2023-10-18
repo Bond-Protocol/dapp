@@ -3,6 +3,7 @@ import * as abiFiles from '../contracts';
 export const abis = {
   authority: abiFiles.authorityABI,
   aggregator: abiFiles.aggregatorABI,
+  baseTeller: abiFiles.baseTellerABI,
   fixedExpiryTeller: abiFiles.fixedExpiryTellerABI,
   fixedExpirySDAAuctioneer: abiFiles.fixedExpirySdaAuctioneerABI,
   fixedExpirySDAv1_1Auctioneer: abiFiles.fixedExpirySdAv1_1AuctioneerABI,

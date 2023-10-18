@@ -32,7 +32,7 @@ export function getAuthorithy(publicClient: PublicClient) {
 }
 
 export function getBaseTeller(walletClient: WalletClient, address: Address) {
-  return getContract({ walletClient, abi: abis.teller, address });
+  return getContract({ walletClient, abi: abis.baseTeller, address });
 }
 
 export function getTeller(publicClient: PublicClient, bondType: BondType) {
