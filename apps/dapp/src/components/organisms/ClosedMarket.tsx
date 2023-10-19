@@ -42,7 +42,7 @@ export const ClosedMarket = ({ market }: { market: PastMarket }) => {
         <PageHeader
           title={`${market.payoutToken?.symbol} BOND`}
           subtitle={marketTypeLabel}
-          icon={market.payoutToken?.logoUrl}
+          icon={market.payoutToken?.logoURI}
           className="place-self-start self-start justify-self-start"
         />
       </PageNavigation>
