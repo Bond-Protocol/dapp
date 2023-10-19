@@ -31,6 +31,7 @@
       "outputs": ["src/**/contracts", "src/"]
     },
     "codegen": {
+      "inputs": ["src/graphql"],
       "outputs": ["src/generated/graphql.ts"]
     },
     "generate": {
