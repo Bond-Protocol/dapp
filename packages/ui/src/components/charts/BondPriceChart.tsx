@@ -39,7 +39,7 @@ export const BondPriceChart = (props: BondPriceChartProps) => {
       {!props.disableTooltip && (
         <>
           <div className="border-light-grey-400 absolute right-1 top-4 h-[87%] border-l transition-all group-hover:opacity-0 group-hover:transition-none" />
-          <div className="absolute right-0 top-0 mt-1 transition-all group-hover:opacity-0">
+          <div className="absolute left-0 top-0 z-10 mt-1 transition-all group-hover:opacity-0">
             <BondPriceChartTooltip
               id="fixed"
               payoutTokenSymbol={props.payoutTokenSymbol}

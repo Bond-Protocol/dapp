@@ -38,7 +38,7 @@ export const Market = ({ market }: { market: CalculatedMarket }) => {
       >
         <PageHeader
           title={`${market.payoutToken.symbol} BOND`}
-          icon={market.payoutToken.logoUrl}
+          icon={market.payoutToken.logoURI}
           underTitle={marketTypeLabel}
           className="place-self-start self-start justify-self-start"
           chip={<MarketStatusChip market={market} />}
