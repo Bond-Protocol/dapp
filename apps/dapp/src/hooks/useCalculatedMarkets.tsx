@@ -33,11 +33,7 @@ export function useCalculatedMarkets() {
     const quoteToken = getByAddress(market.quoteToken.address);
     const payoutToken = getByAddress(market.payoutToken.address);
 
-    let updatedMarket = { ...market };
-    // @ts-ignore
-    quoteToken && (updatedMarket.quoteToken = quoteToken);
-    // @ts-ignore
-    payoutToken && (updatedMarket.payoutToken = payoutToken);
+    let updatedMarket = { ...market, quoteToken, payoutToken };
 
     try {
       const result = await contractLibrary.calcMarket(
@@ -142,7 +138,6 @@ export function useCalculatedMarkets() {
   };
 
   const isSomeLoading = () => Object.values(isLoading).some((x) => x);
-
   return {
     allMarkets: calculatedMarkets,
     getMarketsForOwner: (address: string) =>

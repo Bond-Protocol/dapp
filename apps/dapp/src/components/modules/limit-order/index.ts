@@ -1,7 +1,7 @@
 export * from "./LimitOrderCard";
 export * from "./LimitOrderConfirmationDialog";
 export * from "./LimitOrderFallback";
-export * from "./LimitOrderList";
+export * from "./LimitOrderListForMarket";
 export * from "./RequiresLimitOrderSupport";
 export * from "./RequiresAuth";
 
