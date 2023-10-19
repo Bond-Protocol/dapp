@@ -20,7 +20,7 @@ type MarketListProps = {
   filterText?: string;
   hideSearchbar?: boolean;
   title?: string;
-  filters: Filter[];
+  filters?: Filter[];
 };
 
 const defaultFilters: Filter[] = [

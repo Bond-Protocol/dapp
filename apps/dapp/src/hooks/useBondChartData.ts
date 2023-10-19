@@ -83,7 +83,7 @@ const createBondPurchaseDataset = ({
   ];
 };
 
-export const useBondChartData = (market: Market, dayRange = 90) => {
+export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
   //@ts-ignore
 
   const {
