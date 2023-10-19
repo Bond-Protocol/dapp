@@ -1,4 +1,4 @@
-import { ConnectButton, Profile } from "components/common";
+import { ConnectButton } from "components/common";
 import { ProtocolLogo } from "ui";
 import { NavbarTabs, NavbarTabsProps } from "./NavbarTabs";
 import { useNavigate } from "react-router-dom";

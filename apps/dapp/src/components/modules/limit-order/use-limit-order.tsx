@@ -16,7 +16,6 @@ import { orderService } from "services/order-service";
 import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
-import { AsyncLocalStorage } from "async_hooks";
 
 export type ILimitOrderContext = {
   allowance: ReturnType<typeof useLimitOrderAllowance> & {
@@ -31,7 +30,7 @@ export type ILimitOrderContext = {
   amount?: string;
   payout?: string;
   maxFee?: number;
-  setPrice: (e: React.BaseSyntheticEvent<HTMLInputElement>) => void;
+  setPrice: (args: any) => void;
   setExpiry: (date: Date) => void;
   setAmount: (value: string) => void;
   createOrder: () => Promise<unknown>;

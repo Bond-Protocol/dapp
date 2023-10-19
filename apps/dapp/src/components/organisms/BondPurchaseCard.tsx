@@ -304,7 +304,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           value={amount}
           balance={balance}
           market={market}
-          tokenIcon={market.quoteToken.logoUrl}
+          tokenIcon={market.quoteToken.logoURI}
         />
         <ShowWarning
           market={market}

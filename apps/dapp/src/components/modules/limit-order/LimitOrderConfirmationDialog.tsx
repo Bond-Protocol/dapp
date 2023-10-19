@@ -24,6 +24,26 @@ export type LimitOrderConfirmationDialogProps = {
   onCancel: () => void;
 };
 
+const TokenAmountLabel = ({
+  amount,
+  symbol,
+  icon,
+}: {
+  amount: any;
+  symbol: string;
+  icon?: string;
+}) => {
+  return (
+    <div className="flex items-center">
+      {formatCurrency.amount(amount)}
+      <div className="mx-1">
+        <img width={16} height={16} src={icon} />
+      </div>
+      {symbol}
+    </div>
+  );
+};
+
 export const LimitOrderConfirmationDialog = (
   props: LimitOrderConfirmationDialogProps
 ) => {
@@ -37,9 +57,13 @@ export const LimitOrderConfirmationDialog = (
     () => [
       {
         leftLabel: "Min amount to receive",
-        rightLabel: `${formatCurrency.amount(order.payout ?? 0)} ${
-          props.market.payoutToken.symbol
-        }`,
+        rightLabel: (
+          <TokenAmountLabel
+            amount={order.payout ?? 0}
+            symbol={props.market.payoutToken.symbol}
+            icon={props.market.payoutToken.logoURI}
+          />
+        ),
         tooltip: "Only if bid is successful",
       },
       {
@@ -48,9 +72,13 @@ export const LimitOrderConfirmationDialog = (
       },
       {
         leftLabel: "Max Fee",
-        rightLabel: `${formatCurrency.amount(order.maxFee ?? 0)} ${
-          props.market.quoteToken.symbol
-        }`,
+        rightLabel: (
+          <TokenAmountLabel
+            amount={order.maxFee ?? 0}
+            symbol={props.market.quoteToken.symbol}
+            icon={props.market.quoteToken.logoURI}
+          />
+        ),
         tooltip:
           "This is the maximum amount of fees you will pay for this order. The executor will try to reduce this amount as much as possible.",
       },
@@ -60,7 +88,7 @@ export const LimitOrderConfirmationDialog = (
         link: `${props.market.blockExplorerUrl} ${props.orderContract}}`,
       },
     ],
-    [props.market, order.payout, order.expiry]
+    [props.market, order]
   );
 
   return (
@@ -85,9 +113,13 @@ export const LimitOrderConfirmationDialog = (
         <SummaryRow
           className="mt-1"
           leftLabel="You will get"
-          rightLabel={`${formatCurrency.amount(order.payout ?? 0)} ${
-            props.market.payoutToken.symbol
-          }`}
+          rightLabel={
+            <TokenAmountLabel
+              amount={order.payout ?? 0}
+              icon={props.market.payoutToken.logoURI}
+              symbol={props.market.payoutToken.symbol}
+            />
+          }
         />
 
         <SummaryRow

@@ -1,11 +1,8 @@
+import { useState } from "react";
 import {
   CalculatedMarket,
-  getAddresses,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
-import { QueryWizard } from "components/common/QueryWizard";
-import { BondButton } from "components/organisms/BondButton";
-import { useState } from "react";
 import defillama from "services/defillama";
 import {
   InputCard,
@@ -19,6 +16,8 @@ import {
   SelectDateDialog,
 } from "ui";
 import { useAccount } from "wagmi";
+import { QueryWizard } from "components/common/QueryWizard";
+import { BondButton } from "components/organisms/BondButton";
 import { useLimitOrderForMarket } from "./use-limit-order";
 import { LimitOrderConfirmationDialog } from "./LimitOrderConfirmationDialog";
 
