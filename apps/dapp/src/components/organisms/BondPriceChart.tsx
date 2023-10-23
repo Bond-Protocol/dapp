@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import {
   BondPriceChart as BaseBondPriceChart,
   Chip,

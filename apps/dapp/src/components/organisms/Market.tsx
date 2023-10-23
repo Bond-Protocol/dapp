@@ -9,16 +9,9 @@ import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
 
-export const MarketInsights = () => {
-  const { id, chainId } = useParams();
+export const Market = ({ market }: { market: CalculatedMarket }) => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
-
-  const { allMarkets: markets } = useMarkets();
-  const market: CalculatedMarket = markets.find(
-    ({ marketId, chainId: marketChainId }) =>
-      marketId === Number(id) && marketChainId === chainId
-  )!;
 
   const {
     maxPayoutLabel,

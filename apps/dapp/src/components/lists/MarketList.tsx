@@ -20,6 +20,7 @@ type MarketListProps = {
   filterText?: string;
   hideSearchbar?: boolean;
   title?: string;
+  filters?: Filter[];
 };
 
 const defaultFilters: Filter[] = [
@@ -41,6 +42,7 @@ const defaultFilters: Filter[] = [
 export const MarketList: FC<MarketListProps> = ({
   allowManagement,
   token,
+  filters = [],
   ...props
 }) => {
   const { isTabletOrMobile } = useMediaQueries();
@@ -61,7 +63,7 @@ export const MarketList: FC<MarketListProps> = ({
     onClick: () => navigate("/create"),
   };
 
-  const filters = defaultFilters;
+  const allFilters = [...defaultFilters, ...filters];
 
   let columns = token ? tokenColumns : tableColumns;
   columns = isEmbed ? embedColumns : columns;
@@ -76,7 +78,7 @@ export const MarketList: FC<MarketListProps> = ({
       filterText={props.filterText}
       defaultSort="discount"
       columns={columns}
-      filters={isEmbed ? [] : filters}
+      filters={isEmbed ? [] : allFilters}
       data={filteredMarkets}
       onClickRow={(market: CalculatedMarket) => {
         window.scrollTo(0, 0);

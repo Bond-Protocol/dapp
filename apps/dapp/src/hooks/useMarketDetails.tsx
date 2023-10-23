@@ -3,6 +3,7 @@ import {
   getMarketTypeByAuctioneer,
   MarketPricing,
 } from "@bond-protocol/contract-library";
+import { PastMarket } from "components/organisms/ClosedMarket";
 import { dateMath, formatCurrency, formatDate } from "ui";
 
 const pricingLabels: Record<MarketPricing, string> = {
@@ -12,16 +13,22 @@ const pricingLabels: Record<MarketPricing, string> = {
   "oracle-dynamic": "Dynamic Price Market",
 };
 
+export const getMarketLabels = (market: { auctioneer: string }) => {
+  const type = getMarketTypeByAuctioneer(market.auctioneer);
+  return pricingLabels[type];
+};
+
 export const useMarketDetails = (market: CalculatedMarket) => {
   if (!market) return {};
 
   const capacityInQuote = market.capacityToken === market.quoteToken.symbol;
 
-  const maxPayout = !capacityInQuote
-    ? market.currentCapacity < Number(market.maxPayout)
-      ? market.currentCapacity
-      : market.maxPayout
-    : market.maxPayout;
+  const maxPayout =
+    (!capacityInQuote
+      ? market.currentCapacity < Number(market.maxPayout)
+        ? market.currentCapacity
+        : market.maxPayout
+      : market.maxPayout) ?? 0;
 
   const vestingDate = formatDate.short(new Date(market.vesting * 1000));
 
@@ -52,7 +59,7 @@ export const useMarketDetails = (market: CalculatedMarket) => {
   const capacity =
     Number(market.currentCapacity) > 1
       ? formatCurrency.trimToLengthSymbol(Number(market.currentCapacity))
-      : formatCurrency.trimToken(market.currentCapacity);
+      : formatCurrency.trimToken(market.currentCapacity ?? 0);
 
   return {
     startDate,
@@ -61,7 +68,7 @@ export const useMarketDetails = (market: CalculatedMarket) => {
     discountLabel,
     maxPayoutLabel,
     capacity,
-    vestingLabel: vestingLabel.includes("Immediate")
+    vestingLabel: vestingLabel?.includes("Immediate")
       ? "Immediate"
       : vestingLabel,
   };

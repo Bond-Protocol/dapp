@@ -27,6 +27,8 @@ const hasMarketExpiredOrClosed = ({ conclusion, hasClosed }: Market) => {
 const endColumn: Column<CalculatedMarket> = {
   label: "End Date",
   accessor: "conclusion",
+  tooltip:
+    "The configured end date, however markets may be closed manually before it",
   formatter: (market) => {
     return {
       value: formatDate.short(new Date(Number(market.conclusion) * 1000)),
@@ -49,7 +51,76 @@ const endColumn: Column<CalculatedMarket> = {
   },
 };
 
-const tableColumns = [
+const receivedColumn = {
+  label: "Received",
+  accessor: "quote",
+  formatter: (market: any) => {
+    const quote = formatCurrency.longFormatter.format(market.total?.quote);
+    const quoteUsd = formatCurrency.usdFormatter.format(market.total?.quoteUsd);
+    const chain = CHAINS.get(market.chainId);
+    return {
+      value: quote + " " + market.quoteToken.symbol,
+      subtext: quoteUsd,
+      icon: market.quoteToken.logoURI,
+      chainChip: chain?.image,
+      sortValue: market.total?.quoteUsd,
+    };
+  },
+};
+const paidColumn = {
+  label: "Paid",
+  accessor: "payout",
+  formatter: (market: any) => {
+    const payout = formatCurrency.longFormatter.format(market.total?.payout);
+    const usdPayout = formatCurrency.usdFormatter.format(
+      market.total?.payoutUsd
+    );
+    return {
+      value: payout + " " + market.payoutToken.symbol,
+      subtext: usdPayout,
+      icon: market.payoutToken.logoURI,
+      sortValue: market.total?.payoutUsd,
+    };
+  },
+};
+const totalBondColumn = {
+  label: "Bonds",
+  accessor: "bonds",
+  width: "w-[8%]",
+  alignEnd: true,
+  tooltip: "Total bonds acquired / by unique addresses",
+  formatter: (market: any) => {
+    const total = market.bondPurchases?.length;
+    const unique = new Set(
+      market.bondPurchases?.map((p: any) => p.recipient.toLowerCase())
+    ).size;
+    return {
+      value: total ? total : "-",
+      subtext: total ? `/${unique}` : "",
+    };
+  },
+};
+
+const avgRateColumn = {
+  label: "Avg Rate",
+  accessor: "price",
+  tooltip: "Average exchange rate at which bonds were purchased",
+  formatter: (market: any) => {
+    //const avgUsd = market.total.avgPrice * market.payoutToken.price;
+    const hasPurchases = !!market.bondPurchases?.length;
+
+    return {
+      value: hasPurchases
+        ? formatCurrency.trimToken(market.total?.avgPrice)
+        : "-",
+      subtext: hasPurchases
+        ? market.quoteToken.symbol + " per " + market.payoutToken.symbol
+        : "",
+    };
+  },
+};
+
+export const closedMarketColumns = [
   {
     label: "Capacity",
     accessor: "capacity",
@@ -78,76 +149,23 @@ const tableColumns = [
     },
   },
 
-  {
-    label: "Received",
-    accessor: "quote",
-    formatter: (market: any) => {
-      const quote = formatCurrency.longFormatter.format(market.total?.quote);
-      const quoteUsd = formatCurrency.usdFormatter.format(
-        market.total?.quoteUsd
-      );
-      const chain = CHAINS.get(market.chainId);
-      return {
-        value: quote + " " + market.quoteToken.symbol,
-        subtext: quoteUsd,
-        icon: market.quoteToken.logoURI,
-        chainChip: chain?.image,
-      };
-    },
-  },
-  {
-    label: "Paid",
-    accessor: "payout",
-    formatter: (market: any) => {
-      const payout = formatCurrency.longFormatter.format(market.total?.payout);
-      const usdPayout = formatCurrency.usdFormatter.format(
-        market.total?.payoutUsd
-      );
-      return {
-        value: payout + " " + market.payoutToken.symbol,
-        subtext: usdPayout,
-        icon: market.payoutToken.logoURI,
-      };
-    },
-  },
-  {
-    label: "Bonds",
-    accessor: "bonds",
-    width: "w-[8%]",
-    alignEnd: true,
-    tooltip: "Total bonds acquired / by unique addresses",
-    formatter: (market: any) => {
-      const total = market.bondPurchases.length;
-      const unique = new Set(
-        market.bondPurchases.map((p: any) => p.recipient.toLowerCase())
-      ).size;
-      return {
-        value: total ? total : "-",
-        subtext: total ? `/${unique}` : "",
-      };
-    },
-  },
-
-  {
-    label: "Avg Rate",
-    accessor: "price",
-    tooltip: "Average exchange rate at which bonds were purchased",
-    formatter: (market: any) => {
-      //const avgUsd = market.total.avgPrice * market.payoutToken.price;
-      const hasPurchases = !!market.bondPurchases?.length;
-
-      return {
-        value: hasPurchases
-          ? formatCurrency.trimToken(market.total?.avgPrice)
-          : "-",
-        subtext: hasPurchases
-          ? market.quoteToken.symbol + " per " + market.payoutToken.symbol
-          : "",
-      };
-    },
-  },
-
+  receivedColumn,
+  paidColumn,
+  totalBondColumn,
+  avgRateColumn,
   endColumn,
+];
+
+export const columns = {
+  receivedColumn,
+  paidColumn,
+  totalBondColumn,
+  avgRateColumn,
+  endColumn,
+};
+
+const tableColumns = [
+  ...closedMarketColumns,
   {
     label: "",
     accessor: "",

@@ -1,5 +1,5 @@
 import { CSVLink } from "react-csv";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Cell, Column, Table, TableProps } from "./Table";
 import { useSorting } from "hooks/use-sorting";
 import { Button, Filter, FilterBox, Loading, Tooltip } from "components";
@@ -59,6 +59,7 @@ export type PaginatedTableProps = Omit<TableProps, "handleSorting"> & {
   csvFilename?: string;
   fallback?: FallbackProps;
   filters?: Filter[];
+  globalFilters?: Filter[];
   onClickRow?: (args: any) => void;
 };
 
@@ -99,6 +100,11 @@ export const PaginatedTable = ({
   const tableData = useMemo(
     () =>
       props.data
+        ?.filter((c) => {
+          return activeFilters?.every((f) => {
+            return f.type === "search" || f.type === "global" || f.handler(c);
+          });
+        })
         ?.map((d) => {
           const row = toTableData(props.columns, d);
           if (props.onClickRow) {
@@ -108,10 +114,10 @@ export const PaginatedTable = ({
         })
 
         ?.filter((cell) =>
-          activeFilters?.every((f) =>
-            f.type === "search"
-              ? filterRowByText(cell, textToFilter)
-              : f.handler(cell)
+          activeFilters?.every(
+            (f) =>
+              (f.type !== "search" && f.type === "global") ||
+              filterRowByText(cell, textToFilter)
           )
         ),
 
@@ -121,6 +127,10 @@ export const PaginatedTable = ({
   const onClickFilter = (id: string) => {
     const filter = mappedFilters.find((f) => f.id === id)!;
     const activeFilter = activeFilters.find((f) => f.id === id);
+
+    if (filter.type === "global") {
+      filter.handler();
+    }
 
     setActiveFilters(
       activeFilter

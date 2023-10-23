@@ -1,13 +1,24 @@
 import { MarketList } from "..";
 import { PageHeader } from "components/common";
-import { ActionCard } from "ui";
+import { ActionCard, Filter } from "ui";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueries } from "hooks/useMediaQueries";
+import { ClosedMarketList } from "components/lists/ClosedMarketList";
+import { useState } from "react";
 
 export const Markets = () => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
   const scrollUp = () => window.scrollTo(0, 0);
+  const [showClosedMarkets, setShowClosedMarkets] = useState(false);
+
+  const closedMarketFilter: Filter = {
+    id: "past-markets",
+    label: "Show past markets",
+    type: "global",
+    handler: () => setShowClosedMarkets((prev) => !prev),
+  };
+
   return (
     <>
       <div className="flex items-end justify-between py-2 md:-mb-[54px]">
@@ -17,8 +28,13 @@ export const Markets = () => {
         />
       </div>
       <div className="-mt-14">
-        <MarketList />
+        <MarketList filters={[closedMarketFilter]} />
       </div>
+      {showClosedMarkets && (
+        <div>
+          <ClosedMarketList />
+        </div>
+      )}
       {!isTabletOrMobile && (
         <ActionCard
           className="mb-6 mt-8"

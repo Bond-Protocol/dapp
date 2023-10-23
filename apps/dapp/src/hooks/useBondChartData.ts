@@ -1,6 +1,7 @@
 import {
   BondPurchase,
   ListBondPurchasesPerMarketQuery,
+  Market,
   useListBondPurchasesPerMarketQuery,
 } from "../generated/graphql";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
@@ -9,8 +10,9 @@ import type { BondPriceDatapoint } from "ui";
 import { calcDiscountPercentage } from "../utils/calculate-percentage";
 import { interpolate } from "../utils/interpolate-price";
 import { subgraphEndpoints } from "../services";
-import { isAfter, sub } from "date-fns";
+import { differenceInDays, isAfter, sub } from "date-fns";
 import { useChartDefillama } from "./useChartDefillama";
+import { useMemo } from "react";
 
 type PriceDataArray = Array<{ timestamp: number; price: number }>;
 
@@ -141,4 +143,61 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
       })),
     isInvalid: !isValid,
   };
+};
+
+export const useClosedMarketChart = (market: Market) => {
+  const [lastPurchase] =
+    market.bondPurchases
+      ?.sort((a, b) =>
+        a.timestamp.localeCompare(b.timestamp, { numeric: true })
+      )
+      .slice(-1) ?? [];
+
+  const endDate = new Date(lastPurchase.timestamp * 1000);
+  const startDate = new Date(market.creationBlockTimestamp * 1000);
+  const days = differenceInDays(endDate, startDate);
+
+  const { chart, isLoading } = useChartDefillama(
+    [market.quoteToken, market.payoutToken],
+    days,
+    market.creationBlockTimestamp
+  );
+
+  const quote = chart.find((t) => t.address === market.quoteToken.address);
+  const payout = chart.find((t) => t.address === market.payoutToken.address);
+
+  const baseDataset: BondPriceDatapoint[] = useMemo(
+    () =>
+      createBondPurchaseDataset({
+        payoutTokenHistory: payout?.prices!,
+        quoteTokenHistory: quote?.prices!,
+        bondPurchases: market?.bondPurchases as BondPurchase[],
+      }),
+    [payout?.prices, quote?.prices, market.bondPurchases]
+  );
+
+  const dataset = useMemo(
+    () =>
+      interpolate(baseDataset).map((data) => ({
+        ...data,
+        discount: calcDiscountPercentage(
+          Number(data?.price),
+          Number(data?.discountedPrice)
+        ),
+      })),
+    [baseDataset]
+  );
+
+  const timestamps = market.bondPurchases?.map((b) => b.timestamp * 1000) ?? [];
+  const pricedPurchases = baseDataset
+    .filter((data) => timestamps.includes(data.timestamp!))
+    .map((data) => ({
+      ...data,
+      discount: calcDiscountPercentage(
+        Number(data?.price),
+        Number(data?.discountedPrice)
+      ),
+    }));
+
+  return { dataset, pricedPurchases, isLoading };
 };
