@@ -146,11 +146,12 @@ export const useBondChartData = (market: CalculatedMarket, dayRange = 90) => {
 };
 
 export const useClosedMarketChart = (market: Market) => {
-  const [lastPurchase] = market
-    .bondPurchases!?.sort((a, b) =>
-      a.timestamp.localeCompare(b.timestamp, { numeric: true })
-    )
-    .slice(-1);
+  const [lastPurchase] =
+    market.bondPurchases
+      ?.sort((a, b) =>
+        a.timestamp.localeCompare(b.timestamp, { numeric: true })
+      )
+      .slice(-1) ?? [];
 
   const endDate = new Date(lastPurchase.timestamp * 1000);
   const startDate = new Date(market.creationBlockTimestamp * 1000);

@@ -1,5 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { BondPriceChart, formatCurrency, InfoLabel } from "ui";
+import {
+  BondPriceChart,
+  formatCurrency,
+  InfoLabel,
+  PlaceholderChart,
+} from "ui";
 import { PageHeader, PageNavigation } from "components/common";
 import { TransactionHistory } from "components/lists";
 import { getMarketLabels } from "hooks/useMarketDetails";
@@ -76,14 +81,18 @@ export const ClosedMarket = ({ market }: { market: PastMarket }) => {
           label="Average Discount"
           className={avgDiscount > 0 ? "text-light-success" : "text-red-300"}
         >
-          {isFinite(avgDiscount) ? `${avgDiscount}%` : "-"}
+          {isFinite(avgDiscount) ? `${discount}%` : "-"}
         </InfoLabel>
       </div>
 
-      <BondPriceChart
-        data={dataset}
-        payoutTokenSymbol={market.payoutToken.symbol}
-      />
+      {dataset.length > 2 ? (
+        <PlaceholderChart message="Loading performance data" />
+      ) : (
+        <BondPriceChart
+          data={dataset}
+          payoutTokenSymbol={market.payoutToken.symbol}
+        />
+      )}
 
       <TransactionHistory className="mt-20" market={market} />
     </div>
