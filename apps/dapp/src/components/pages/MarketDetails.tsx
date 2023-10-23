@@ -19,10 +19,11 @@ export const MarketDetails = () => {
 
   if (!market) return <Loading />;
   const hasClosed =
+    //@ts-ignore
     market?.hasClosed ||
+    //@ts-ignore
     Number(market?.conclusion) < new Date().getTime() * 1000;
 
-  //@ts-ignore TODO: improve
   return hasClosed ? (
     <ClosedMarket market={market} />
   ) : (
