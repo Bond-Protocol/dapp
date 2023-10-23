@@ -18,9 +18,12 @@ export const MarketDetails = () => {
   )!;
 
   if (!market) return <Loading />;
+  const hasClosed =
+    market?.hasClosed ||
+    Number(market?.conclusion) < new Date().getTime() * 1000;
 
   //@ts-ignore TODO: improve
-  return market.hasClosed ? (
+  return hasClosed ? (
     <ClosedMarket market={market} />
   ) : (
     <Market market={market} />

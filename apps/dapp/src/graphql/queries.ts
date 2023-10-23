@@ -321,8 +321,8 @@ export const getMarketsById = gql`
 `;
 
 export const getClosedMarkets = gql`
-  query getClosedMarkets {
-    markets(where: { hasClosed: true }) {
+  query getClosedMarkets($currentTime: BigInt!) {
+    markets(where: { conclusion_lt: $currentTime }) {
       id
       auctioneer
       conclusion

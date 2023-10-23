@@ -1,5 +1,4 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { getSubgraphQueries } from "services/subgraph-endpoints";
 import { Market, useGetClosedMarketsQuery } from "src/generated";
 import { concatSubgraphQueryResultArrays } from "src/utils/concatSubgraphQueryResultArrays";
@@ -7,7 +6,8 @@ import { useSubgraphLoadingCheck } from "./useSubgraphLoadingCheck";
 import { useTokens } from "./useTokens";
 
 export const usePastMarkets = () => {
-  const queries = getSubgraphQueries(useGetClosedMarketsQuery);
+  const currentTime = useMemo(() => Math.trunc(Date.now() / 1000), []);
+  const queries = getSubgraphQueries(useGetClosedMarketsQuery, { currentTime });
   const { isLoading } = useSubgraphLoadingCheck(queries);
   const { getByAddress, tokens } = useTokens();
 
@@ -39,7 +39,11 @@ const updateClosedMarkets = (getByAddress: Function, market: Market) => {
 
       let avgPrice = all.avgPrice + Number(p.purchasePrice);
 
-      if (i === arr.length - 1) {
+      if (market.marketId === "99") {
+        console.log({ avgPrice, all, i });
+      }
+
+      if (i === arr.length - 1 && arr.length !== 1) {
         avgPrice = avgPrice / i;
       }
 
@@ -53,6 +57,9 @@ const updateClosedMarkets = (getByAddress: Function, market: Market) => {
     },
     { quoteUsd: 0, payoutUsd: 0, quote: 0, payout: 0, avgPrice: 0 }
   );
+  if (total?.avgPrice === Infinity) {
+    console.log({ market });
+  }
   return {
     ...market,
     total,
