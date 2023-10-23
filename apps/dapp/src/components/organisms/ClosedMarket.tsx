@@ -28,6 +28,8 @@ export const ClosedMarket = ({ market }: { market: PastMarket }) => {
     pricedPurchases.reduce((total, element) => total + element.discount, 0) /
     pricedPurchases.length;
 
+  const discount = avgDiscount.toFixed(2);
+
   return (
     <div className="pb-4">
       <PageNavigation
@@ -74,7 +76,7 @@ export const ClosedMarket = ({ market }: { market: PastMarket }) => {
           label="Average Discount"
           className={avgDiscount > 0 ? "text-light-success" : "text-red-300"}
         >
-          {avgDiscount.toFixed(2)}%
+          {isFinite(avgDiscount) ? `${avgDiscount}%` : "-"}
         </InfoLabel>
       </div>
 
