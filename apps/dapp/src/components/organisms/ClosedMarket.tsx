@@ -8,7 +8,7 @@ import {
 import { PageHeader, PageNavigation } from "components/common";
 import { TransactionHistory } from "components/lists";
 import { getMarketLabels } from "hooks/useMarketDetails";
-import { Market } from "src/generated";
+import { Market } from "src/generated/graphql";
 import { useClosedMarketChart } from "hooks/useBondChartData";
 
 type MarketTotals = {
