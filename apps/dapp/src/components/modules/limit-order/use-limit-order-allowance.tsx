@@ -27,9 +27,12 @@ export const useLimitOrderAllowance = (
           const marketsWithSameToken = allMarkets
             .filter(
               (m) =>
+                //@ts-ignore
                 m.quoteToken.address === market.quoteToken.address &&
+                //@ts-ignore
                 m.quoteToken.chainId === market.quoteToken.chainId
             )
+            //@ts-ignore
             .map((mkt) => mkt.marketId);
 
           return marketsWithSameToken.includes(Number(element.market_id));

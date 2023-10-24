@@ -189,8 +189,8 @@ export const LimitOrderListForMarket = (props: LimitOrderListProps) => {
           onSubmit={async () => {
             try {
               await orderApi.cancelAllOrders(
-                props.market?.marketId?.toString(),
-                Number(props.market.chainId)
+                props.market?.marketId?.toString() ?? "",
+                Number(props.market?.chainId)
               );
               orders.query.refetch();
             } catch (e) {
@@ -214,6 +214,7 @@ export const LimitOrderListForMarket = (props: LimitOrderListProps) => {
         {showReApprove && (
           <div className="relative z-10">
             <ReApproveAllowanceCard
+              //@ts-ignore
               market={props.market}
               requiredAllowance={allowance.requiredAllowance}
               currentAllowance={allowance.allowance}
@@ -231,7 +232,7 @@ export const LimitOrderListForMarket = (props: LimitOrderListProps) => {
           bodyClassName="overflow-y-auto "
           emptyRows={0}
           data={sortedData}
-          columns={limitOrderColumns}
+          columns={columns}
         />
         {!sortedData.length && !showReApprove && (
           <div className="mt-8 flex h-[80%] flex-col items-center justify-center text-center ">
