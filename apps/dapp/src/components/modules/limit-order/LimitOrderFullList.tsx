@@ -154,8 +154,9 @@ export const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     formatter: (args: any) => args,
     Component: (order: any) => {
       const api = useOrderApi();
+
       const onCancel = async () => {
-        await api.cancelOrder(order.digest, order.market_id);
+        await api.cancelOrder(order.digest, order.chain_id);
       };
 
       if (order.status === "Active") {
@@ -217,20 +218,22 @@ export const LimitOrderFullList = () => {
     queries
       .flatMap((q) => q.data)
       .filter((q) => !!q)
+      // .map((d) => {
+      //   d.refetch = () => queries.forEach((q) => q.refetch());
+      //   return d;
+      // })
       //@ts-ignore
       .sort((a, b) => b.deadline - a.deadline) ?? [];
 
   return (
-    <div className="mt-10">
-      <PaginatedTable
-        //@ts-ignore
-        filters={filters}
-        loading={queries.every((q) => q.isLoading)}
-        title="Orders"
-        emptyRows={0}
-        data={allOrders}
-        columns={columns}
-      />
-    </div>
+    <PaginatedTable
+      //@ts-ignore
+      filters={filters}
+      loading={queries.every((q) => q.isLoading)}
+      title="Orders"
+      emptyRows={0}
+      data={allOrders}
+      columns={columns}
+    />
   );
 };

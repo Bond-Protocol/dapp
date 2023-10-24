@@ -44,6 +44,8 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
       )
   );
 
+  const defaultExpiry = options[options.length - 1]?.id;
+
   return (
     <div className="p-4">
       <div className="flex justify-between gap-x-2">
@@ -60,7 +62,7 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
             label="Order Expiry"
             options={options}
             //@ts-ignore
-            defaultValue={options.slice(-1)?.id}
+            defaultValue={defaultExpiry}
             ModalContent={(args: any) => (
               <SelectDateDialog
                 {...args}

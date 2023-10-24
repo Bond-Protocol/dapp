@@ -4,8 +4,6 @@ import { LimitOrderFullList } from "components/modules/limit-order/LimitOrderFul
 import { UserBonds } from "components/organisms/UserBonds";
 import { UserMarkets } from "components/organisms/UserMarkets";
 import { RequiresWallet } from "components/utility/RequiresWallet";
-import { useDashboard } from "context/dashboard-context";
-import { useMediaQueries } from "hooks/useMediaQueries";
 import { Tabs } from "ui";
 
 const tabs = [
@@ -15,19 +13,17 @@ const tabs = [
 ];
 
 export const Dashboard = () => {
-  const { isTabletOrMobile } = useMediaQueries();
-  const dashboard = useDashboard();
-  const hasMarkets = !!dashboard.allMarkets.length;
-
   return (
     <div className="h-full min-h-[90vh]">
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
         <Tabs tabs={tabs} className="mt-10 pb-20">
           <UserBonds />
-          <RequiresAuth title="Sign in to see your orders">
-            <LimitOrderFullList />
-          </RequiresAuth>
+          <div className="mt-10">
+            <RequiresAuth title="Sign in to see your orders">
+              <LimitOrderFullList />
+            </RequiresAuth>
+          </div>
           <UserMarkets />
         </Tabs>
       </RequiresWallet>
