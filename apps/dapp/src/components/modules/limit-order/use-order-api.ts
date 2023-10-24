@@ -24,6 +24,20 @@ export const useOrderApi = () => {
     return orders.map((o) => orderService.parseOrder(o, market));
   };
 
+  const listRaw = (chainId: number) => {
+    const token = auth.getAccessToken();
+
+    if (!token || !address) {
+      throw new Error("Not Authenticated");
+    }
+
+    return orderService.listAllOrders({
+      chainId,
+      address,
+      token,
+    });
+  };
+
   const estimateFee = async (chainId: number, marketId: number) => {
     return orderService.estimateFee(chainId, marketId);
   };
@@ -78,6 +92,7 @@ export const useOrderApi = () => {
 
   return {
     list,
+    listRaw,
     estimateFee,
     createOrder,
     cancelOrder,

@@ -6,7 +6,7 @@ import { Tabs } from "ui";
 import {
   LimitOrderProvider,
   LimitOrderCard,
-  LimitOrderList,
+  LimitOrderListForMarket,
   RequiresAuth,
   RequiresLimitOrderSupport,
   useOrderService,
@@ -53,7 +53,7 @@ export const BondPurchaseController = ({
               title="Sign in to see your orders"
               subtitle="We're protecting you against impersonating"
             >
-              <LimitOrderList
+              <LimitOrderListForMarket
                 market={market}
                 onClickPlaceOrder={() => setSelected(1)}
               />
