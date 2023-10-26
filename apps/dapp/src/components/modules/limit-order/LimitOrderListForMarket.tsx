@@ -45,8 +45,8 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
       );
 
       const color = getDiscountColor(
-        discount,
-        order.market?.payoutToken.price ?? 0
+        order.market?.payoutToken.price ?? 0,
+        price
       );
 
       return {

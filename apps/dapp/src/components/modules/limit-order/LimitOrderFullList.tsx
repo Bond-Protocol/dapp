@@ -5,7 +5,6 @@ import { useOrderApi } from "./use-order-api";
 import { OrderConfig, orderService } from "services/order-service";
 import {
   PaginatedTable,
-  TokenLogo,
   Column,
   Button,
   getDiscountPercentage,
@@ -51,8 +50,8 @@ export const limitOrderBaseColumns: Column<
       );
 
       const color = getDiscountColor(
-        discount,
-        order.market?.payoutToken?.price ?? 0
+        order.market?.payoutToken?.price ?? 0,
+        price
       );
 
       return {
@@ -91,14 +90,20 @@ export const limitOrderExpiryColumn = {
     if (order.status === "Executed") {
       return {
         sortValue: 0,
-        value: <Chip className="border-light-success">Executed</Chip>,
+        value: (
+          <Chip className="border-light-success text-light-success">
+            Executed
+          </Chip>
+        ),
       };
     }
 
     if (order.status === "Cancelled") {
       return {
         sortValue: -1,
-        value: <Chip className="border-light-alert">Canceled</Chip>,
+        value: (
+          <Chip className="border-light-alert text-light-alert">Canceled</Chip>
+        ),
       };
     }
 

@@ -60,7 +60,7 @@ export const Modal = ({ title, ...props }: ModalProps) => {
   return (
     <ModalUnstyled
       componentsProps={{
-        root: { className: "fixed inset-0" },
+        root: { className: "fixed inset-0 z-20" },
         backdrop: { className: "outline-0 bg-none" },
       }}
       open={props.open}
