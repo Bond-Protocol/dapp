@@ -32,7 +32,7 @@ export type ILimitOrderContext = {
   maxFee?: number;
   setPrice: (args: any) => void;
   setExpiry: (date: Date) => void;
-  setAmount: (value: number) => void;
+  setAmount: (value: any) => void;
   createOrder: () => Promise<unknown>;
 };
 
