@@ -12,9 +12,11 @@ import {
   getDiscountColor,
   formatCurrency,
   formatDate,
+  Label,
 } from "ui";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket, CHAINS } from "@bond-protocol/contract-library";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
 const Chip = ({
   children,
@@ -81,7 +83,6 @@ export const limitOrderBaseColumns: Column<
 export const limitOrderExpiryColumn = {
   label: "Expires",
   accessor: "expiry",
-  alignEnd: true,
   formatter: (order: any) => {
     const deadline = new Date(Number(order.deadline) * 1000);
 
@@ -112,21 +113,30 @@ export const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
   {
     label: "Market",
     accessor: "market",
+    Component: (props) => {
+      const navigate = useNavigate();
+      const order = props.data;
+      return (
+        <Label
+          className="cursor-pointer hover:underline"
+          onClick={() =>
+            navigate(`/market/${order.chain_id}/${order.market_id}`)
+          }
+          {...props}
+        />
+      );
+    },
     formatter: (order: any) => {
       const { quoteToken, payoutToken } = order.market;
 
+      const chain = CHAINS.get(order.chain_id?.toString());
       const value = `${payoutToken.symbol}-${quoteToken.symbol}`;
+
       return {
         searchValue: value,
-        value: (
-          <div className="flex items-center gap-x-2">
-            <TokenLogo
-              icon={payoutToken.logoURI}
-              pairIcon={quoteToken.logoURI}
-            />
-            <div className="font-fraktion text-lg font-bold">{value}</div>
-          </div>
-        ),
+        value,
+        pairIcon: quoteToken.logoURI,
+        icon: payoutToken.logoURI,
       };
     },
   },
@@ -218,10 +228,11 @@ export const LimitOrderFullList = () => {
     queries
       .flatMap((q) => q.data)
       .filter((q) => !!q)
-      // .map((d) => {
-      //   d.refetch = () => queries.forEach((q) => q.refetch());
-      //   return d;
-      // })
+      .map((d) => {
+        //@ts-ignore
+        d.refetch = () => queries.forEach((q) => q.refetch());
+        return d;
+      })
       //@ts-ignore
       .sort((a, b) => b.deadline - a.deadline) ?? [];
 

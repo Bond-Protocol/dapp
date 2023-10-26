@@ -7,7 +7,7 @@ import { useAccount, useSigner } from "wagmi";
 import { providers } from "services/owned-providers";
 import { Order } from "src/types/openapi";
 import { useMarkets } from "context/market-context";
-import { BigNumber } from "ethers";
+import { FixedNumber } from "ethers";
 import { useMemo } from "react";
 
 export const useLimitOrderAllowance = (
@@ -38,14 +38,17 @@ export const useLimitOrderAllowance = (
           return marketsWithSameToken.includes(Number(element.market_id));
         })
         .reduce(
-          (total, order) => total.add(Number(order.amount) ?? 0),
-          BigNumber.from(0)
+          (total, order) =>
+            total.addUnsafe(FixedNumber.from(order.amount) ?? 0),
+          FixedNumber.from(0)
         ),
     [market, amount, orders]
   );
 
-  const requiredAllowanceForNextOrder = requiredAllowance.add(
-    amount.length ? amount : 0
+  const requiredAllowanceForNextOrder = requiredAllowance.addUnsafe(
+    FixedNumber.from(
+      amount.length ? Number(amount).toFixed(market.quoteToken.decimals) : 0
+    )
   );
 
   const provider = providers[market.chainId];
@@ -63,16 +66,18 @@ export const useLimitOrderAllowance = (
   );
 
   const hasSuffiencentAllowanceForAllOrders =
-    Number(allowance.allowance) >= requiredAllowance.toNumber();
+    Number(allowance.allowance) >= requiredAllowance.toUnsafeFloat();
 
   const hasSuffiencentAllowanceForNextOrder =
-    Number(allowance.allowance) >= requiredAllowanceForNextOrder.toNumber();
+    Number(allowance.allowance) >=
+    requiredAllowanceForNextOrder.toUnsafeFloat();
 
   return {
     hasSuffiencentAllowanceForAllOrders,
     hasSuffiencentAllowanceForNextOrder,
     requiredAllowance: requiredAllowance.toString(),
-    requiredAllowanceForNextOrder: requiredAllowanceForNextOrder.toNumber(),
+    requiredAllowanceForNextOrder:
+      requiredAllowanceForNextOrder.toUnsafeFloat(),
     ...allowance,
   };
 };

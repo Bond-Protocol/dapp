@@ -53,7 +53,6 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
           placeholder="Enter the order price"
           label="Limit Price"
           value={order.price}
-          //@ts-ignore
           onChange={order.setPrice}
         />
 
@@ -91,7 +90,10 @@ export const LimitOrderCard = (props: { market: CalculatedMarket }) => {
         balance={allowance.balance}
         value={order.amount?.toString()}
         //@ts-ignore
-        onChange={(value: string) => order.setAmount(value)}
+        onChange={(value: string) => {
+          //@ts-ignore
+          order.setAmount({ target: { value } });
+        }}
       />
 
       <ActionInfoList

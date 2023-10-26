@@ -32,7 +32,7 @@ export type ILimitOrderContext = {
   maxFee?: number;
   setPrice: (args: any) => void;
   setExpiry: (date: Date) => void;
-  setAmount: (value: string) => void;
+  setAmount: (value: number) => void;
   createOrder: () => Promise<unknown>;
 };
 
@@ -48,7 +48,7 @@ export const LimitOrderProvider = ({
   market: CalculatedMarket;
 }) => {
   const { value: price, onChange: setPrice } = useNumericInput();
-  const [amount, setAmount] = useState<string>("");
+  const { value: amount, onChange: setAmount } = useNumericInput();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
   const [maxFee, setMaxFee] = useState<number>();
   const api = useOrderApi();
@@ -121,7 +121,11 @@ export const LimitOrderProvider = ({
   }, []);
 
   const createOrder = async () => {
-    return api.createOrder(generateOrder(), Number(market.chainId));
+    const result = await api.createOrder(
+      generateOrder(),
+      Number(market.chainId)
+    );
+    await orders.query.refetch();
   };
 
   const updateExpiry = (expiry: number | Date) => {
