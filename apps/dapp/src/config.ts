@@ -13,7 +13,7 @@ export const orderApiServerMap = {
   },
 
   [ENVIRONMENT.STAGING]: {
-    url: "",
+    url: "https://public-api-server-production.up.railway.app/",
     description: "Staging Server",
   },
 
