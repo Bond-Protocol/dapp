@@ -47,6 +47,7 @@ export const useLimitOrderAllowance = (
   const requiredAllowanceForNextOrder = requiredAllowance.add(
     amount.length ? amount : 0
   );
+
   const provider = providers[market.chainId];
 
   const allowance = useTokenAllowance(
@@ -62,11 +63,11 @@ export const useLimitOrderAllowance = (
   );
 
   const hasSuffiencentAllowanceForAllOrders =
-    !orders?.length ||
+    !orders?.length &&
     Number(allowance.allowance) >= requiredAllowance.toNumber();
 
   const hasSuffiencentAllowanceForNextOrder =
-    !orders?.length ||
+    !orders?.length &&
     Number(allowance.allowance) >= requiredAllowanceForNextOrder.toNumber();
 
   return {
