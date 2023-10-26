@@ -54,8 +54,9 @@
     "tsconfig": "*",
     "ui": "*",
     "use-deep-compare-effect": "^1.8.1",
+    "viem": "^1.17.1",
     "viteconfig": "*",
-    "wagmi": "0.12.17"
+    "wagmi": "1.4.5"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",

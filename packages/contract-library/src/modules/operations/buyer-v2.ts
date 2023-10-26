@@ -1,5 +1,5 @@
 import { Address, PublicClient, WalletClient, parseUnits } from 'viem';
-import { getBaseTeller, getTeller } from '../contract-helper-v2';
+import { getBaseTeller, getTeller } from '../contract-helper-slim';
 
 type PurchaseArgs = {
   walletClient: WalletClient;
@@ -18,18 +18,15 @@ export async function purchase({
   tellerAddress,
   ...args
 }: PurchaseArgs) {
-  const teller = getBaseTeller(walletClient, tellerAddress);
-
-  const amount = parseUnits(args.amount, args.quoteDecimals);
-  const minAmountOut = parseUnits(args.minAmountOut, args.payoutDecimals);
-
-  const callArgs = [
-    args.recipientAddress,
-    args.referrer,
-    args.id,
-    amount,
-    minAmountOut,
-  ] as const;
-
-  return teller.write.purchase(callArgs, {});
+  // const teller = getBaseTeller(walletClient, tellerAddress);
+  // const amount = parseUnits(args.amount, args.quoteDecimals);
+  // const minAmountOut = parseUnits(args.minAmountOut, args.payoutDecimals);
+  // const callArgs = [
+  //   args.recipientAddress,
+  //   args.referrer,
+  //   args.id,
+  //   amount,
+  //   minAmountOut,
+  // ] as const;
+  // return teller.write.purchase(callArgs, {});
 }

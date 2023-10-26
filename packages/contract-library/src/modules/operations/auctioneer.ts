@@ -8,7 +8,7 @@ import {
   getAuctioneerForCreate,
   getAuctioneerFromAggregator,
 } from 'modules/contract-helper';
-import auctioneerAbi from 'src/abis/protocol/auctioneer.json';
+import auctioneerAbi from 'src/abis/protocol/IBondAuctioneer.json';
 
 export async function closeMarket(
   id: BigNumberish,

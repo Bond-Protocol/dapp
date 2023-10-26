@@ -13,7 +13,7 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 
 import type { FC, ReactNode } from "react";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -25,6 +25,7 @@ import {
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
 import { CHAINS } from "@bond-protocol/contract-library";
+import { alchemyProvider } from "wagmi/dist/providers/alchemy";
 
 const getIconsForChains = (c: any) => {
   const logoUrl = Array.from(CHAINS.values()).find(
@@ -34,15 +35,11 @@ const getIconsForChains = (c: any) => {
   return { ...c, logoUrl };
 };
 
-export const testnets = [
-  goerli,
-  arbitrumGoerli,
-  optimismGoerli,
-  //polygonMumbai,
-  //avalancheFuji,
-].map(getIconsForChains);
+export const testnets = [goerli, arbitrumGoerli, optimismGoerli].map(
+  getIconsForChains
+);
 
-export const mainnets = [mainnet, arbitrum, optimism].map(getIconsForChains);
+export const mainnets = [mainnet, arbitrum, optimism];
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS = environment.isTestnet ? testnets : mainnets;
@@ -51,45 +48,32 @@ export const MAINNETS = mainnets;
 
 const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 
-const { chains, provider } = configureChains(
+const { chains, publicClient } = configureChains(
   environment.isTestnet ? testnets : mainnets,
-  [publicProvider()]
+  [
+    alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_MAINNET_KEY }),
+    publicProvider(),
+  ]
 );
 
 const connectors = connectorsForWallets([
   {
     groupName: "Recommended",
     wallets: [
-      metaMaskWallet({
-        chains,
-        projectId: projectId,
-      }),
-      rainbowWallet({
-        chains,
-        projectId: projectId,
-      }),
-      coinbaseWallet({
-        appName: "BondProtocol",
-        chains: chains,
-      }),
-      walletConnectWallet({
-        chains,
-        projectId: projectId,
-      }),
+      metaMaskWallet({ chains, projectId }),
+      rainbowWallet({ chains, projectId }),
+      coinbaseWallet({ appName: "BondProtocol", chains }),
+      walletConnectWallet({ chains, projectId }),
       injectedWallet({ chains, shimDisconnect: true }),
     ],
   },
 ]);
 
-const client = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-});
+const config = createConfig({ publicClient, connectors });
 
 export const EvmProvider: FC<{ children?: ReactNode }> = ({ children }) => {
   return (
-    <WagmiConfig client={client}>
+    <WagmiConfig config={config}>
       <RainbowKitProvider theme={darkTheme()} chains={chains}>
         {children}
       </RainbowKitProvider>
