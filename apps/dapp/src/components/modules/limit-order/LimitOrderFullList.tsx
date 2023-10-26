@@ -167,6 +167,7 @@ export const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
 
       const onCancel = async () => {
         await api.cancelOrder(order.digest, order.chain_id);
+        order.refetch();
       };
 
       if (order.status === "Active") {
