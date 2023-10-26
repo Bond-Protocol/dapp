@@ -4,283 +4,51 @@
 
 export const aggregatorABI = [
   {
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-    inputs: [
-      { name: 'guardian_', internalType: 'address', type: 'address' },
-      {
-        name: 'authority_',
-        internalType: 'contract Authority',
-        type: 'address',
-      },
-    ],
-  },
-  {
-    type: 'error',
-    inputs: [{ name: 'auctioneer_', internalType: 'address', type: 'address' }],
-    name: 'Aggregator_AlreadyRegistered',
-  },
-  { type: 'error', inputs: [], name: 'Aggregator_InvalidParams' },
-  { type: 'error', inputs: [], name: 'Aggregator_OnlyAuctioneer' },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'user', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'newAuthority',
-        internalType: 'contract Authority',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'AuthorityUpdated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'user', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'newOwner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'OwnerUpdated',
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', internalType: 'uint8', type: 'uint8' }],
   },
   {
     stateMutability: 'view',
     type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'auctioneers',
+    inputs: [],
+    name: 'description',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: '_roundId', internalType: 'uint80', type: 'uint80' }],
+    name: 'getRoundData',
     outputs: [
-      { name: '', internalType: 'contract IBondAuctioneer', type: 'address' },
+      { name: 'roundId', internalType: 'uint80', type: 'uint80' },
+      { name: 'answer', internalType: 'int256', type: 'int256' },
+      { name: 'startedAt', internalType: 'uint256', type: 'uint256' },
+      { name: 'updatedAt', internalType: 'uint256', type: 'uint256' },
+      { name: 'answeredInRound', internalType: 'uint80', type: 'uint80' },
     ],
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
-    name: 'authority',
+    name: 'latestRoundData',
     outputs: [
-      { name: '', internalType: 'contract Authority', type: 'address' },
+      { name: 'roundId', internalType: 'uint80', type: 'uint80' },
+      { name: 'answer', internalType: 'int256', type: 'int256' },
+      { name: 'startedAt', internalType: 'uint256', type: 'uint256' },
+      { name: 'updatedAt', internalType: 'uint256', type: 'uint256' },
+      { name: 'answeredInRound', internalType: 'uint80', type: 'uint80' },
     ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
-    name: 'currentCapacity',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'payout_', internalType: 'address', type: 'address' },
-      { name: 'quote_', internalType: 'address', type: 'address' },
-      { name: 'amountIn_', internalType: 'uint256', type: 'uint256' },
-      { name: 'minAmountOut_', internalType: 'uint256', type: 'uint256' },
-      { name: 'maxExpiry_', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'findMarketFor',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
-    name: 'getAuctioneer',
-    outputs: [
-      { name: '', internalType: 'contract IBondAuctioneer', type: 'address' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
-    name: 'getTeller',
-    outputs: [
-      { name: '', internalType: 'contract IBondTeller', type: 'address' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
-    name: 'isInstantSwap',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
-    name: 'isLive',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'firstIndex_', internalType: 'uint256', type: 'uint256' },
-      { name: 'lastIndex_', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'liveMarketsBetween',
-    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'owner_', internalType: 'address', type: 'address' },
-      { name: 'firstIndex_', internalType: 'uint256', type: 'uint256' },
-      { name: 'lastIndex_', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'liveMarketsBy',
-    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'token_', internalType: 'address', type: 'address' },
-      { name: 'isPayout_', internalType: 'bool', type: 'bool' },
-    ],
-    name: 'liveMarketsFor',
-    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
   },
   {
     stateMutability: 'view',
     type: 'function',
     inputs: [],
-    name: 'marketCounter',
+    name: 'version',
     outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
-    name: 'marketPrice',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
-    name: 'marketScale',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'payout_', internalType: 'address', type: 'address' },
-      { name: 'quote_', internalType: 'address', type: 'address' },
-    ],
-    name: 'marketsFor',
-    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: '', internalType: 'address', type: 'address' },
-      { name: '', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'marketsForPayout',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: '', internalType: 'address', type: 'address' },
-      { name: '', internalType: 'uint256', type: 'uint256' },
-    ],
-    name: 'marketsForQuote',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-    name: 'marketsToAuctioneers',
-    outputs: [
-      { name: '', internalType: 'contract IBondAuctioneer', type: 'address' },
-    ],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'id_', internalType: 'uint256', type: 'uint256' },
-      { name: 'referrer_', internalType: 'address', type: 'address' },
-    ],
-    name: 'maxAmountAccepted',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: 'amount_', internalType: 'uint256', type: 'uint256' },
-      { name: 'id_', internalType: 'uint256', type: 'uint256' },
-      { name: 'referrer_', internalType: 'address', type: 'address' },
-    ],
-    name: 'payoutFor',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'auctioneer_',
-        internalType: 'contract IBondAuctioneer',
-        type: 'address',
-      },
-    ],
-    name: 'registerAuctioneer',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      { name: 'payoutToken_', internalType: 'contract ERC20', type: 'address' },
-      { name: 'quoteToken_', internalType: 'contract ERC20', type: 'address' },
-    ],
-    name: 'registerMarket',
-    outputs: [{ name: 'marketId', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [
-      {
-        name: 'newAuthority',
-        internalType: 'contract Authority',
-        type: 'address',
-      },
-    ],
-    name: 'setAuthority',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
-    name: 'setOwner',
-    outputs: [],
   },
 ] as const;
 
@@ -307,93 +75,6 @@ export const authorityABI = [
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export const baseTellerABI = [
-  { type: 'error', inputs: [], name: 'Teller_InvalidCallback' },
-  { type: 'error', inputs: [], name: 'Teller_InvalidParams' },
-  { type: 'error', inputs: [], name: 'Teller_NotAuthorized' },
-  {
-    type: 'error',
-    inputs: [
-      { name: 'underlying', internalType: 'contract ERC20', type: 'address' },
-      { name: 'expiry', internalType: 'uint48', type: 'uint48' },
-    ],
-    name: 'Teller_TokenDoesNotExist',
-  },
-  {
-    type: 'error',
-    inputs: [{ name: 'maturesOn', internalType: 'uint48', type: 'uint48' }],
-    name: 'Teller_TokenNotMatured',
-  },
-  { type: 'error', inputs: [], name: 'Teller_UnsupportedToken' },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'user', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'newAuthority',
-        internalType: 'contract Authority',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'AuthorityUpdated',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'id', internalType: 'uint256', type: 'uint256', indexed: true },
-      {
-        name: 'referrer',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-      {
-        name: 'amount',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-      {
-        name: 'payout',
-        internalType: 'uint256',
-        type: 'uint256',
-        indexed: false,
-      },
-    ],
-    name: 'Bonded',
-  },
-  {
-    type: 'event',
-    anonymous: false,
-    inputs: [
-      { name: 'user', internalType: 'address', type: 'address', indexed: true },
-      {
-        name: 'newOwner',
-        internalType: 'address',
-        type: 'address',
-        indexed: true,
-      },
-    ],
-    name: 'OwnerUpdated',
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'FEE_DECIMALS',
-    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'authority',
-    outputs: [
-      { name: '', internalType: 'contract Authority', type: 'address' },
-    ],
-  },
   {
     stateMutability: 'nonpayable',
     type: 'function',
@@ -407,29 +88,8 @@ export const baseTellerABI = [
   {
     stateMutability: 'view',
     type: 'function',
-    inputs: [],
-    name: 'createFeeDiscount',
-    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
     inputs: [{ name: 'referrer_', internalType: 'address', type: 'address' }],
     name: 'getFee',
-    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'owner',
-    outputs: [{ name: '', internalType: 'address', type: 'address' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [],
-    name: 'protocolFee',
     outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
   },
   {
@@ -449,40 +109,10 @@ export const baseTellerABI = [
     ],
   },
   {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [{ name: '', internalType: 'address', type: 'address' }],
-    name: 'referrerFees',
-    outputs: [{ name: '', internalType: 'uint48', type: 'uint48' }],
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    inputs: [
-      { name: '', internalType: 'address', type: 'address' },
-      { name: '', internalType: 'contract ERC20', type: 'address' },
-    ],
-    name: 'rewards',
-    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
-  },
-  {
     stateMutability: 'nonpayable',
     type: 'function',
-    inputs: [
-      {
-        name: 'newAuthority',
-        internalType: 'contract Authority',
-        type: 'address',
-      },
-    ],
-    name: 'setAuthority',
-    outputs: [],
-  },
-  {
-    stateMutability: 'nonpayable',
-    type: 'function',
-    inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
-    name: 'setOwner',
+    inputs: [{ name: 'discount_', internalType: 'uint48', type: 'uint48' }],
+    name: 'setCreateFeeDiscount',
     outputs: [],
   },
   {
@@ -670,7 +300,7 @@ export const fixedExpiryFpaAuctioneerABI = [
       { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'quoteToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'vesting', internalType: 'uint48', type: 'uint48' },
-      { name: 'maxPayout', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPayout_', internalType: 'uint256', type: 'uint256' },
     ],
   },
   {
@@ -942,6 +572,7 @@ export const fixedExpiryOfdaAuctioneerABI = [
   { type: 'error', inputs: [], name: 'Auctioneer_NotAuthorized' },
   { type: 'error', inputs: [], name: 'Auctioneer_NotEnoughCapacity' },
   { type: 'error', inputs: [], name: 'Auctioneer_OnlyMarketOwner' },
+  { type: 'error', inputs: [], name: 'Auctioneer_OraclePriceZero' },
   {
     type: 'event',
     anonymous: false,
@@ -1068,7 +699,7 @@ export const fixedExpiryOfdaAuctioneerABI = [
       { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'quoteToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'vesting', internalType: 'uint48', type: 'uint48' },
-      { name: 'maxPayout', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPayout_', internalType: 'uint256', type: 'uint256' },
     ],
   },
   {
@@ -1491,7 +1122,7 @@ export const fixedExpiryOsdaAuctioneerABI = [
       { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'quoteToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'vesting', internalType: 'uint48', type: 'uint48' },
-      { name: 'maxPayout', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPayout_', internalType: 'uint256', type: 'uint256' },
     ],
   },
   {
@@ -1762,11 +1393,7 @@ export const fixedExpirySdaAuctioneerABI = [
   { type: 'error', inputs: [], name: 'Auctioneer_InitialPriceLessThanMin' },
   { type: 'error', inputs: [], name: 'Auctioneer_InvalidCallback' },
   { type: 'error', inputs: [], name: 'Auctioneer_InvalidParams' },
-  {
-    type: 'error',
-    inputs: [{ name: 'conclusion_', internalType: 'uint256', type: 'uint256' }],
-    name: 'Auctioneer_MarketConcluded',
-  },
+  { type: 'error', inputs: [], name: 'Auctioneer_MarketNotActive' },
   { type: 'error', inputs: [], name: 'Auctioneer_MaxPayoutExceeded' },
   { type: 'error', inputs: [], name: 'Auctioneer_NewMarketsNotAllowed' },
   { type: 'error', inputs: [], name: 'Auctioneer_NotAuthorized' },
@@ -1785,6 +1412,49 @@ export const fixedExpirySdaAuctioneerABI = [
       },
     ],
     name: 'AuthorityUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'defaultTuneInterval',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'defaultTuneAdjustment',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'minDebtDecayInterval',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'minDepositInterval',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'minMarketDuration',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'minDebtBuffer',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+    ],
+    name: 'DefaultsUpdated',
   },
   {
     type: 'event',
@@ -1964,7 +1634,7 @@ export const fixedExpirySdaAuctioneerABI = [
       { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'quoteToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'vesting', internalType: 'uint48', type: 'uint48' },
-      { name: 'maxPayout', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPayout_', internalType: 'uint256', type: 'uint256' },
     ],
   },
   {
@@ -2037,12 +1707,18 @@ export const fixedExpirySdaAuctioneerABI = [
   {
     stateMutability: 'view',
     type: 'function',
+    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
+    name: 'maxPayout',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
     inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     name: 'metadata',
     outputs: [
       { name: 'lastTune', internalType: 'uint48', type: 'uint48' },
       { name: 'lastDecay', internalType: 'uint48', type: 'uint48' },
-      { name: 'length', internalType: 'uint32', type: 'uint32' },
       { name: 'depositInterval', internalType: 'uint32', type: 'uint32' },
       { name: 'tuneInterval', internalType: 'uint32', type: 'uint32' },
       { name: 'tuneAdjustmentDelay', internalType: 'uint32', type: 'uint32' },
@@ -2208,8 +1884,9 @@ export const fixedExpirySdaAuctioneerABI = [
     outputs: [
       { name: 'controlVariable', internalType: 'uint256', type: 'uint256' },
       { name: 'maxDebt', internalType: 'uint256', type: 'uint256' },
-      { name: 'vesting', internalType: 'uint48', type: 'uint48' },
+      { name: 'start', internalType: 'uint48', type: 'uint48' },
       { name: 'conclusion', internalType: 'uint48', type: 'uint48' },
+      { name: 'vesting', internalType: 'uint48', type: 'uint48' },
     ],
   },
 ] as const;
@@ -2942,6 +2619,18 @@ export const fixedExpiryTellerABI = [
   {
     stateMutability: 'view',
     type: 'function',
+    inputs: [
+      { name: 'underlying_', internalType: 'contract ERC20', type: 'address' },
+      { name: 'expiry_', internalType: 'uint48', type: 'uint48' },
+    ],
+    name: 'getBondToken',
+    outputs: [
+      { name: '', internalType: 'contract ERC20BondToken', type: 'address' },
+    ],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
     inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
     name: 'getBondTokenForMarket',
     outputs: [
@@ -3027,6 +2716,13 @@ export const fixedExpiryTellerABI = [
       },
     ],
     name: 'setAuthority',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [{ name: 'discount_', internalType: 'uint48', type: 'uint48' }],
+    name: 'setCreateFeeDiscount',
     outputs: [],
   },
   {
@@ -3221,7 +2917,7 @@ export const fixedTermFpaAuctioneerABI = [
       { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'quoteToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'vesting', internalType: 'uint48', type: 'uint48' },
-      { name: 'maxPayout', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPayout_', internalType: 'uint256', type: 'uint256' },
     ],
   },
   {
@@ -3493,6 +3189,7 @@ export const fixedTermOfdaAuctioneerABI = [
   { type: 'error', inputs: [], name: 'Auctioneer_NotAuthorized' },
   { type: 'error', inputs: [], name: 'Auctioneer_NotEnoughCapacity' },
   { type: 'error', inputs: [], name: 'Auctioneer_OnlyMarketOwner' },
+  { type: 'error', inputs: [], name: 'Auctioneer_OraclePriceZero' },
   {
     type: 'event',
     anonymous: false,
@@ -3619,7 +3316,7 @@ export const fixedTermOfdaAuctioneerABI = [
       { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'quoteToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'vesting', internalType: 'uint48', type: 'uint48' },
-      { name: 'maxPayout', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPayout_', internalType: 'uint256', type: 'uint256' },
     ],
   },
   {
@@ -4042,7 +3739,7 @@ export const fixedTermOsdaAuctioneerABI = [
       { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'quoteToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'vesting', internalType: 'uint48', type: 'uint48' },
-      { name: 'maxPayout', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPayout_', internalType: 'uint256', type: 'uint256' },
     ],
   },
   {
@@ -4313,11 +4010,7 @@ export const fixedTermSdaAuctioneerABI = [
   { type: 'error', inputs: [], name: 'Auctioneer_InitialPriceLessThanMin' },
   { type: 'error', inputs: [], name: 'Auctioneer_InvalidCallback' },
   { type: 'error', inputs: [], name: 'Auctioneer_InvalidParams' },
-  {
-    type: 'error',
-    inputs: [{ name: 'conclusion_', internalType: 'uint256', type: 'uint256' }],
-    name: 'Auctioneer_MarketConcluded',
-  },
+  { type: 'error', inputs: [], name: 'Auctioneer_MarketNotActive' },
   { type: 'error', inputs: [], name: 'Auctioneer_MaxPayoutExceeded' },
   { type: 'error', inputs: [], name: 'Auctioneer_NewMarketsNotAllowed' },
   { type: 'error', inputs: [], name: 'Auctioneer_NotAuthorized' },
@@ -4336,6 +4029,49 @@ export const fixedTermSdaAuctioneerABI = [
       },
     ],
     name: 'AuthorityUpdated',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'defaultTuneInterval',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'defaultTuneAdjustment',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'minDebtDecayInterval',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'minDepositInterval',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'minMarketDuration',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+      {
+        name: 'minDebtBuffer',
+        internalType: 'uint32',
+        type: 'uint32',
+        indexed: false,
+      },
+    ],
+    name: 'DefaultsUpdated',
   },
   {
     type: 'event',
@@ -4515,7 +4251,7 @@ export const fixedTermSdaAuctioneerABI = [
       { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'quoteToken', internalType: 'contract ERC20', type: 'address' },
       { name: 'vesting', internalType: 'uint48', type: 'uint48' },
-      { name: 'maxPayout', internalType: 'uint256', type: 'uint256' },
+      { name: 'maxPayout_', internalType: 'uint256', type: 'uint256' },
     ],
   },
   {
@@ -4588,12 +4324,18 @@ export const fixedTermSdaAuctioneerABI = [
   {
     stateMutability: 'view',
     type: 'function',
+    inputs: [{ name: 'id_', internalType: 'uint256', type: 'uint256' }],
+    name: 'maxPayout',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
     inputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
     name: 'metadata',
     outputs: [
       { name: 'lastTune', internalType: 'uint48', type: 'uint48' },
       { name: 'lastDecay', internalType: 'uint48', type: 'uint48' },
-      { name: 'length', internalType: 'uint32', type: 'uint32' },
       { name: 'depositInterval', internalType: 'uint32', type: 'uint32' },
       { name: 'tuneInterval', internalType: 'uint32', type: 'uint32' },
       { name: 'tuneAdjustmentDelay', internalType: 'uint32', type: 'uint32' },
@@ -4759,8 +4501,9 @@ export const fixedTermSdaAuctioneerABI = [
     outputs: [
       { name: 'controlVariable', internalType: 'uint256', type: 'uint256' },
       { name: 'maxDebt', internalType: 'uint256', type: 'uint256' },
-      { name: 'vesting', internalType: 'uint48', type: 'uint48' },
+      { name: 'start', internalType: 'uint48', type: 'uint48' },
       { name: 'conclusion', internalType: 'uint48', type: 'uint48' },
+      { name: 'vesting', internalType: 'uint48', type: 'uint48' },
     ],
   },
 ] as const;
@@ -5406,7 +5149,7 @@ export const fixedTermTellerABI = [
         indexed: false,
       },
       {
-        name: 'payoutToken',
+        name: 'underlying',
         internalType: 'contract ERC20',
         type: 'address',
         indexed: true,
@@ -5713,6 +5456,13 @@ export const fixedTermTellerABI = [
   {
     stateMutability: 'nonpayable',
     type: 'function',
+    inputs: [{ name: 'discount_', internalType: 'uint48', type: 'uint48' }],
+    name: 'setCreateFeeDiscount',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
     inputs: [{ name: 'newOwner', internalType: 'address', type: 'address' }],
     name: 'setOwner',
     outputs: [],
@@ -5745,7 +5495,8 @@ export const fixedTermTellerABI = [
     name: 'tokenMetadata',
     outputs: [
       { name: 'active', internalType: 'bool', type: 'bool' },
-      { name: 'payoutToken', internalType: 'contract ERC20', type: 'address' },
+      { name: 'underlying', internalType: 'contract ERC20', type: 'address' },
+      { name: 'decimals', internalType: 'uint8', type: 'uint8' },
       { name: 'expiry', internalType: 'uint48', type: 'uint48' },
       { name: 'supply', internalType: 'uint256', type: 'uint256' },
     ],

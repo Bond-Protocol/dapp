@@ -22,10 +22,14 @@ export async function purchase({
 
   const amount = parseUnits(args.amount, args.quoteDecimals);
   const minAmountOut = parseUnits(args.minAmountOut, args.payoutDecimals);
-  const callArgs = [ args.recipientAddress, args.referrer,
+
+  const callArgs = [
+    args.recipientAddress,
+    args.referrer,
     args.id,
     amount,
     minAmountOut,
-  ]
+  ] as const;
 
-  return teller.write.purchase()
+  return teller.write.purchase(callArgs, {});
+}
