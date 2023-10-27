@@ -1,6 +1,6 @@
 import { SearchBar } from "components/molecules/SearchBar";
 import { IconCarousel, IconCarouselProps, Label } from "..";
-import type { Token } from "@bond-protocol/contract-library";
+import type { Token } from "types";
 
 export type SelectTokenDialogProps = {
   onSubmit: Function;

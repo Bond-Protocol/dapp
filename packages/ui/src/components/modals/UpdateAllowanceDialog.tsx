@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import { Button, Input, Label } from "components";
 import { formatCurrency } from "src/utils";
 

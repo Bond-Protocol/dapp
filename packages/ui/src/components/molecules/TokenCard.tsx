@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { TooltipWrapper } from "src/components";
-import { CHAINS } from "@bond-protocol/contract-library";
+import { CHAINS } from "types";
 
 export type TokenCardProps = {
   token: any;

@@ -22,8 +22,17 @@ import {
 } from "utils";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { useEffect, useState } from "react";
-import { getBlockExplorer } from "@bond-protocol/contract-library";
+import { CHAINS } from "types";
 
+export const getBlockExplorer = (chainId: string, subpath = "") => {
+  return {
+    blockExplorerUrl: CHAINS.get(chainId)?.blockExplorerUrls[0].replace(
+      "#",
+      subpath
+    ),
+    blockExplorerName: CHAINS.get(chainId)?.blockExplorerName,
+  };
+};
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
 

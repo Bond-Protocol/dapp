@@ -6,11 +6,7 @@ import {
   usdFormatter,
   usdLongFormatter,
 } from "src";
-import {
-  CalculatedMarket,
-  calculateTrimDigits,
-  CHAINS,
-} from "@bond-protocol/contract-library";
+import { CalculatedMarket, CHAINS } from "types";
 
 export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",
@@ -121,7 +117,7 @@ const tbv: Column<CalculatedMarket> = {
   accessor: "tbvUsd",
   width: "w-[7%]",
   formatter: (market) => {
-    const digits = calculateTrimDigits(market.totalBondedAmount);
+    const digits = 2;
     const totalBondedAmount = new Intl.NumberFormat("en-US", {
       maximumFractionDigits: digits,
       minimumFractionDigits: digits,

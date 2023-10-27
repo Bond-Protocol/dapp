@@ -1,4 +1,4 @@
-import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
+import { calculateTrimDigits, trim } from "./trim";
 
 export const twoDigitFormatter = (value: string | number) => {
   return new Intl.NumberFormat("en-US", {
