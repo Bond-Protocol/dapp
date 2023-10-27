@@ -4,9 +4,9 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { usePastMarkets } from "hooks/usePastMarkets";
 
 const initialState = {
-  allMarkets: [],
+  allMarkets: [] as CalculatedMarket[],
   closedMarkets: [],
-  everyMarket: [],
+  everyMarket: [] as CalculatedMarket[],
   getMarketsForOwner: (address: string) => ({} as CalculatedMarket[]),
   getByChainAndId: (chain: string | number, id: string | number) =>
     ({} as CalculatedMarket),

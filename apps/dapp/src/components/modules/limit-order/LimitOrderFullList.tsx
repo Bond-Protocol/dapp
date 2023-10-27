@@ -214,12 +214,12 @@ export const LimitOrderFullList = () => {
         orders.listRaw(chainId).then((result) => {
           return result.map((order) => {
             const market = everyMarket.find(
-              //@ts-ignore
               (mkt) => Number(mkt.marketId) === Number(order.market_id)
             );
             if (!market) {
               return order;
             }
+
             return {
               ...orderService.parseOrder(order, market),
               market,
@@ -239,8 +239,9 @@ export const LimitOrderFullList = () => {
         d.refetch = () => queries.forEach((q) => q.refetch());
         return d;
       })
+
       //@ts-ignore
-      .sort((a, b) => b.deadline - a.deadline) ?? [];
+      .sort((a, b) => b?.deadline - a?.deadline) ?? [];
 
   return (
     <PaginatedTable

@@ -14,6 +14,7 @@ export const MarketDetails = () => {
 
   const market: CalculatedMarket | PastMarket = allMarkets.find(
     ({ marketId, chainId: marketChainId }) =>
+      //@ts-ignore
       marketId == id && marketChainId === chainId
   )!;
 
@@ -28,6 +29,7 @@ export const MarketDetails = () => {
 
   //@ts-ignore TODO: improve
   return hasClosed ? (
+    //@ts-ignore
     <ClosedMarket market={market} />
   ) : (
     <Market market={market} />

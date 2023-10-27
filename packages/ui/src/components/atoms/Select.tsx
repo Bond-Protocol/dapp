@@ -7,6 +7,7 @@ import { Logo } from "./TokenLogo";
 
 export type SelectOptions = TokenLabelProps & {
   id: number | string;
+  defaultValue?: number | string;
   image?: string;
 };
 

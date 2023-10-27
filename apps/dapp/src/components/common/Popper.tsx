@@ -28,8 +28,7 @@ export const Popper = ({ TriggerElement, ...props }: PopperProps) => {
       <TriggerElement onClick={handleClick} onClose={handleClose} />
       <MuiPopper open={open} anchorEl={anchorEl} id={id}>
         <ClickAwayListener onClickAway={handleClose}>
-          {/*@ts-ignore*/}
-          {props.children}
+          <>{props.children}</>
         </ClickAwayListener>
       </MuiPopper>
     </div>
