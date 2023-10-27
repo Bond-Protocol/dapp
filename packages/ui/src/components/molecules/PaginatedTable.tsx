@@ -171,7 +171,7 @@ export const PaginatedTable = ({
 
   const hideSearchbar =
     props.hideSearchbar || filters.some((f) => f.type === "search");
-  const hideFilters = filters.length === 0 && props.disableSearch;
+  const hideFilters = filters.length === 0 || props.disableSearch;
 
   return (
     <div className={"pb-20 " + props.className}>
@@ -187,14 +187,6 @@ export const PaginatedTable = ({
         </div>
 
         <div className="mb-2 flex h-min items-center gap-x-1 pr-2">
-          {props.csvHeaders && (
-            <Tooltip content="Download Transaction History as CSV">
-              <CSVLink data={csvData()} filename={props.csvFilename}>
-                <DownloadIcon height={32} width={32} />
-              </CSVLink>
-            </Tooltip>
-          )}
-
           {!hideSearchbar && (
             <SearchBar
               value={textToFilter}
@@ -222,6 +214,14 @@ export const PaginatedTable = ({
               activeFilters={activeFilters}
               filters={mappedFilters}
             />
+          )}
+
+          {props.csvHeaders && (
+            <Tooltip content="Download Transaction History as CSV">
+              <CSVLink data={csvData()} filename={props.csvFilename}>
+                <DownloadIcon height={32} width={32} />
+              </CSVLink>
+            </Tooltip>
           )}
         </div>
       </div>

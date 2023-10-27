@@ -196,7 +196,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           market.quoteToken.decimals,
           market.marketId,
           referralAddress,
-          provider
+          market.chainId
         )
       );
 
@@ -287,25 +287,24 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   const goToMarkets = () => {
     setShowModal(false);
-    console.log({ isEmbed }, "here");
     navigate((isEmbed ? "/embed" : "") + "/markets");
   };
 
   const goToBondDetails = () => {
     setShowModal(false);
-    console.log({ isEmbed }, "here");
     navigate((isEmbed ? "/embed" : "") + "/dashboard");
   };
 
   return (
-    <div className="h-full">
-      <div className="flex h-full flex-col justify-between">
+    <div className="p-4">
+      <div className="mt-6 flex h-full flex-col justify-between">
         <InputCard
+          //@ts-ignore
           onChange={setAmount}
           value={amount}
           balance={balance}
           market={market}
-          tokenIcon={market.quoteToken.logoUrl}
+          tokenIcon={market.quoteToken.logoURI}
         />
         <ShowWarning
           market={market}
@@ -325,7 +324,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         >
           <Button
             disabled={!hasSufficientBalance}
-            className="h- mt-4 w-full"
+            className="mt-4 w-full"
             onClick={onClickBond}
           >
             {!hasSufficientAllowance && hasSufficientBalance
@@ -339,7 +338,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         chainId={market.chainId}
         onSubmit={submitTx}
         onClose={() => setShowModal(false)}
-        InitialDialog={(args) => (
+        InitialDialog={(args: any) => (
           <PurchaseConfirmDialog
             {...args}
             amount={`${formatCurrency.trimToken(amount)} ${
@@ -358,7 +357,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
             blockExplorerURL={blockExplorerUrl}
           />
         )}
-        SuccessDialog={(args) => (
+        SuccessDialog={(args: any) => (
           <PurchaseSuccessDialog
             {...args}
             goToMarkets={goToMarkets}

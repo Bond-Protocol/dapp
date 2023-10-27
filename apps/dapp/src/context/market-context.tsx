@@ -4,8 +4,9 @@ import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { usePastMarkets } from "hooks/usePastMarkets";
 
 const initialState = {
-  allMarkets: [],
+  allMarkets: [] as CalculatedMarket[],
   closedMarkets: [],
+  everyMarket: [] as CalculatedMarket[],
   getMarketsForOwner: (address: string) => ({} as CalculatedMarket[]),
   getByChainAndId: (chain: string | number, id: string | number) =>
     ({} as CalculatedMarket),
@@ -30,10 +31,13 @@ export const useMarkets = () => {
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
   const calculatedMarkets = useCalculatedMarkets();
   const { markets: closedMarkets } = usePastMarkets();
+  const everyMarket = [...calculatedMarkets.allMarkets, ...closedMarkets];
 
   return (
-    // @ts-ignore
-    <MarketContext.Provider value={{ ...calculatedMarkets, closedMarkets }}>
+    <MarketContext.Provider
+      // @ts-ignore
+      value={{ ...calculatedMarkets, everyMarket, closedMarkets }}
+    >
       {children}
     </MarketContext.Provider>
   );

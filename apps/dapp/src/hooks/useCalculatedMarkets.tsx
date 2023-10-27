@@ -2,7 +2,10 @@ import { useQueries } from "react-query";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import * as contractLibrary from "@bond-protocol/contract-library";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import {
+  CalculatedMarket,
+  getBlockExplorer,
+} from "@bond-protocol/contract-library";
 import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
 import { useTokens } from "hooks";
@@ -30,11 +33,7 @@ export function useCalculatedMarkets() {
     const quoteToken = getByAddress(market.quoteToken.address);
     const payoutToken = getByAddress(market.payoutToken.address);
 
-    let updatedMarket = { ...market };
-    // @ts-ignore
-    quoteToken && (updatedMarket.quoteToken = quoteToken);
-    // @ts-ignore
-    payoutToken && (updatedMarket.payoutToken = payoutToken);
+    let updatedMarket = { ...market, quoteToken, payoutToken };
 
     try {
       const result = await contractLibrary.calcMarket(
@@ -44,13 +43,20 @@ export function useCalculatedMarkets() {
         updatedMarket
       );
 
-      return { ...result, start: market.start, conclusion: market.conclusion };
+      const blockExplorer = getBlockExplorer(result.chainId, "address");
+
+      return {
+        ...result,
+        start: market.start,
+        conclusion: market.conclusion,
+        blockExplorerUrl: blockExplorer.blockExplorerUrl,
+        blockExplorerName: blockExplorer.blockExplorerName,
+      };
     } catch (e) {
       console.log(
         `ProtocolError: Failed to calculate market ${market.id} \n`,
         e
       );
-      console.log(market);
       return market;
     }
   };
@@ -103,7 +109,7 @@ export function useCalculatedMarkets() {
     const marketTokensDontHaveLogos = calculatedMarkets.every(
       (m) =>
         m.quoteToken.logoURI?.includes("placeholder") ||
-        m.quoteToken.logoURI?.includes("placeholder")
+        m.payoutToken.logoURI?.includes("placeholder")
     );
 
     if (marketsExist && tokensHaveLogos && marketTokensDontHaveLogos) {
@@ -132,7 +138,6 @@ export function useCalculatedMarkets() {
   };
 
   const isSomeLoading = () => Object.values(isLoading).some((x) => x);
-
   return {
     allMarkets: calculatedMarkets,
     getMarketsForOwner: (address: string) =>

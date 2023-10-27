@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bond-protocol/bond-library": "*",
     "@mui/base": "5.0.0-beta.11",
     "@next/font": "13.1.1",
     "@vercel/analytics": "^0.1.8",

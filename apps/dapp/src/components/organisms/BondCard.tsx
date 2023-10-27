@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { BondPriceChart } from "components/organisms/BondPriceChart";
-import { BondPurchaseCard } from "components/organisms";
 import { formatDate, SummaryLabel } from "ui";
+import { BondPurchaseController } from "./BondPurchaseController";
 
 export type BondCardProps = {
   market: CalculatedMarket;
@@ -21,7 +21,7 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         </div>
       )}
       <div
-        className={`flex flex-col justify-center ${
+        className={`flex min-h-[430px] flex-col ${
           props.isFutureMarket ? "w-full" : "md:w-1/2"
         }`}
       >
@@ -37,19 +37,8 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
               value={formatDate.short(new Date(market.start * 1000))}
             />
           )}
-          {market.conclusion && (
-            <SummaryLabel
-              small
-              className="w-full text-center"
-              subtext="MARKET END DATE"
-              tooltip={`Market will close and no longer be available on ${formatDate.long(
-                new Date(market.conclusion * 1000)
-              )}`}
-              value={formatDate.short(new Date(market.conclusion * 1000))}
-            />
-          )}
         </div>
-        {!props.isFutureMarket && <BondPurchaseCard market={market} />}
+        {!props.isFutureMarket && <BondPurchaseController market={market} />}
       </div>
     </div>
   );

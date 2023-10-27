@@ -1,0 +1,686 @@
+openapi: 3.1.0
+info:
+  version: 0.0.1
+  title: Order Services Public API
+servers:
+  - description: Local environment
+    url: http://localhost:8081
+tags:
+  - name: Authentication
+    description: Endpoints for authenticating users to retrieve order data.
+  - name: Orders
+    description: Endpoints for submitting and retrieving orders.
+  - name: Fees
+    description: Endpoints for estimating fees for order submission.
+  - name: Permissions
+    description: Endpoints for getting data about permissioned addresses.
+  - name: Quote Tokens
+    description: Endpoints for getting data about approved quote tokens.
+paths:
+  /auth/nonce:
+    get:
+      summary: Get a nonce for a sign in request.
+      operationId: getNonce
+      tags: [Authentication]
+      responses:
+        200:
+          description: Nonce has been created.
+          content:
+            application/json:
+              schema:
+                type: string
+        500:
+          description: Error creating a nonce.
+  /auth/sign_in:
+    post:
+      summary: Signs the user in, creating and returning a JWT.
+      operationId: signIn
+      tags: [Authentication]
+      requestBody:
+        description: The Sign in With Ethereum message and signature.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SigninData"
+      responses:
+        200:
+          description: Successfully signed in.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JWTPair"
+        400:
+          description: Bad Request - nonce is invalid or does not match nonce in signature.
+        500:
+          description: Error creating a nonce.
+  /auth/refresh:
+    post:
+      summary: Checks a provided refresh token, returns a new access token and refresh token.
+      operationId: refreshAuth
+      tags: [Authentication]
+      requestBody:
+        description: The user's current refresh token.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        200:
+          description: Successfully refreshed tokens.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JWTPair"
+        400:
+          description: Bad Request - refresh token provided is not valid.
+        500:
+          description: Error refreshing tokens.
+  /auth/test/{address}:
+    get:
+      summary: Tests whether signed in user can view address provided in params.
+      operationId: testAuth
+      parameters:
+        - name: address
+          in: path
+          description: The address being queried
+          schema:
+            type: string
+          required: true
+      tags: [Authentication]
+      responses:
+        200:
+          description: User is authorized to view the address.
+          content:
+            application/json:
+              schema:
+                type: string
+        401:
+          description: Unauthorized.
+      security:
+        - JWTAuthorization: []
+  /fees/estimate/{market_id}:
+    parameters:
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+      - name: market_id
+        in: path
+        description: The id of the market to get a fee estimate for.
+        schema:
+          type: integer
+        required: true
+    get:
+      summary: Estimates fees for an Order on the provided Market.
+      operationId: estimateFee
+      tags: [Fees]
+      responses:
+        200:
+          description: The estimated fee for an Order on the market in quote token decimals (hexadecimal representation).
+          content:
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Bad Request - Cannot estimate gas for specified chain.
+        500:
+          description: Error estimating fees.
+  /orders/new:
+    parameters:
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    post:
+      summary: Submit a new order.
+      operationId: createOrder
+      tags: [Orders]
+      requestBody:
+        description: A signed OrderRequest.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequest"
+      responses:
+        200:
+          description: The digest of the submitted order.
+          content:
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Bad Request - OrderRequest is not valid.
+        500:
+          description: Error processing OrderRequest.
+  /orders/address/{address}/order/{digest}/cancel:
+    parameters:
+      - name: address
+        in: path
+        description: The user address that created the order
+        schema:
+          type: string
+        required: true
+      - name: digest
+        in: path
+        description: The digest of the order being cancelled
+        schema:
+          type: string
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    post:
+      summary: Cancel an order.
+      operationId: cancelOrderByDigest
+      tags: [Orders]
+      responses:
+        200:
+          description: Successfully cancelled order.
+          content:
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Bad Request - Order digest is not valid or active.
+        401:
+          description: Unauthorized - User is not authorized to cancel order.
+        500:
+          description: Error processing request.
+      security:
+        - JWTAuthorization: []
+  /orders/address/{address}/market/{market_id}/cancel:
+    parameters:
+      - name: address
+        in: path
+        description: The user address that created the order
+        schema:
+          type: string
+        required: true
+      - name: market_id
+        in: path
+        description: The id of the market to cancel orders for
+        schema:
+          type: integer
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    post:
+      summary: Cancel all orders for a market.
+      operationId: cancelAllOrdersByMarket
+      tags: [Orders]
+      responses:
+        200:
+          description: Order cancellation successful.
+          content:
+            application/json:
+              schema:
+                type: string
+        400:
+          description: Bad Request - Market is not active, cancellation not required.
+        401:
+          description: Unauthorized - User is not authorized to cancel order.
+        500:
+          description: Error processing request.
+      security:
+        - JWTAuthorization: []
+  /orders/address/{address}:
+    parameters:
+      - name: address
+        in: path
+        description: The address being queried
+        schema:
+          type: string
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Get Orders for user address.
+      operationId: getOrdersByAddress
+      tags: [Orders]
+      responses:
+        200:
+          description: An array of Orders for the specified address.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        500:
+          description: Error finding Orders.
+      security:
+        - JWTAuthorization: []
+  /orders/address/{address}/active:
+    parameters:
+      - name: address
+        in: path
+        description: The address being queried
+        schema:
+          type: string
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Get active Orders for user address.
+      operationId: getActiveOrdersByAddress
+      tags: [Orders]
+      responses:
+        200:
+          description: An array of active Orders for the specified address.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        500:
+          description: Error finding Orders.
+      security:
+        - JWTAuthorization: []
+  /orders/address/{address}/market/{market_id}:
+    parameters:
+      - name: address
+        in: path
+        description: The address being queried
+        schema:
+          type: string
+        required: true
+      - name: market_id
+        in: path
+        description: The id of the market to get orders for
+        schema:
+          type: integer
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Get Orders for user address for a specific market.
+      operationId: getUserOrdersByMarket
+      tags: [Orders]
+      responses:
+        200:
+          description: An array of Orders for the specified address.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        500:
+          description: Error finding Orders.
+      security:
+        - JWTAuthorization: []
+  /orders/address/{address}/market/{market_id}/active:
+    parameters:
+      - name: address
+        in: path
+        description: The address being queried
+        schema:
+          type: string
+        required: true
+      - name: market_id
+        in: path
+        description: The id of the market to get orders for
+        schema:
+          type: integer
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Get active Orders for user address for a specific market.
+      operationId: getActiveUserOrdersByMarket
+      tags: [Orders]
+      responses:
+        200:
+          description: An array of active Orders for the specified address.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        500:
+          description: Error finding Orders.
+      security:
+        - JWTAuthorization: []
+  /permissions/executors:
+    get:
+      summary: Get addresses with executor permissions.
+      tags: [Permissions]
+      responses:
+        200:
+          description: An array of addresses with executor permissions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  description: Addresses with executor permissions
+                  type: string
+        500:
+          description: Error finding executors.
+  /quote_tokens:
+    parameters:
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Returns all quote tokens on the chain specified in the X-Chain_Id header
+      operationId: getSupportedQuoteTokens
+      tags: [Quote Tokens]
+      responses:
+        200:
+          description: A list of quote token addresses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  description: Quote token address
+                  type: object
+                  properties:
+                    - name: address
+                      type: string
+                      description: The token contract address
+                    - name: chain_id
+                      type: string
+                      description: The token contract chain id
+        500:
+          description: Failed to get quote tokens or failed to serialize response.
+  /quote_tokens/{token_address}:
+    parameters:
+      - name: token_address
+        in: path
+        description: Address of the quote token to check
+        schema:
+          type: string
+        required: true
+      - name: x-chain-id
+        in: header
+        description: The ID of a chain
+        schema:
+          type: integer
+        required: true
+      - name: x-aggregator
+        in: header
+        description: The address of the aggregator contract
+        schema:
+          type: string
+        required: true
+      - name: x-settlement
+        in: header
+        description: The address of the settlement contract
+        schema:
+          type: string
+        required: true
+    get:
+      summary: Checks whether the specified quote token is approved.
+      operationId: isQuoteTokenSupported
+      tags: [Quote Tokens]
+      responses:
+        200:
+          description: Whether or not the quote token is approved.
+          content:
+            application/json:
+              schema:
+                type: boolean
+        500:
+          description: Failed to get approval status or failed to serialize response.
+components:
+  schemas:
+    JWTPair:
+      description: A JSON object containing two string fields, access_token and refresh_token.
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: A JWT access token
+        refresh_token:
+          type: string
+          description: A JWT refresh token
+
+    SigninData:
+      description: A JSON object containing two string fields, a Sign in With Ethereum message and signature. The nonce found in the decoded signature should match the nonce in the message.
+      type: object
+      properties:
+        message:
+          description: The messaged use with Sign-In with Ethereum
+          type: string
+        signature:
+          description: The Sign-In with Ethereum Signature
+          type: string
+
+    OrderRequest:
+      description: Parameters for an order, including a signature.
+      type: object
+      properties:
+        market_id:
+          description: The id of the market an order is being placed for.
+          type: string
+        recipient:
+          description: The address which will receive the purchased tokens.
+          type: string
+        referrer:
+          description: The address which will receive the referral fee.
+          type: string
+        amount:
+          description: The amount of tokens to purchase.
+          type: string
+        min_amount_out:
+          description: The minimum number of tokens the recipient is willing to receive.
+          type: string
+        max_fee:
+          description: The maximum fee the recipient will pay.
+          type: string
+        submitted:
+          description: Timestamp at which the order was submitted.
+          type: string
+        deadline:
+          description: Timestamp at which the order expires.
+          type: string
+        user:
+          description: Address of the user who submitted the order.
+          type: string
+        signature:
+          description: Signature for a tx containing the same order data.
+          type: string
+    Order:
+      description: Details of an existing order.
+      type: object
+      properties:
+        digest:
+          description: The hash digest of the order. Used to uniquely identify an order.
+          type: string
+        market_id:
+          description: The id of the market an order is being placed for.
+          type: string
+        recipient:
+          description: The address which will receive the purchased tokens.
+          type: string
+        referrer:
+          description: The address which will receive the referral fee.
+          type: string
+        amount:
+          description: The amount of tokens to purchase.
+          type: string
+        min_amount_out:
+          description: The minimum number of tokens the recipient is willing to receive.
+          type: string
+        max_fee:
+          description: The maximum fee the recipient will pay.
+          type: string
+        submitted:
+          description: Timestamp at which the order was submitted.
+          type: string
+        deadline:
+          description: Timestamp at which the order expires.
+          type: string
+        user:
+          description: Address of the user who submitted the order.
+          type: string
+        signature:
+          description: Signature of the order digest by the user. Not provided by API.
+          type: string
+        chain_id:
+          description: The ID of the chain the order was submitted on.
+          type: integer
+        aggregator:
+          description: The address of the aggregator that the order was submitted to.
+          type: string
+        settlement:
+          description: The address of the settlement contract that the order was submitted to.
+          type: string
+        filled:
+          description: The amount of quote tokens that have been filled for the order.
+          type: string
+        status:
+          description: The status of the order. Statuses are Active, Pending, Executed, Cancelled
+          type: string
+  securitySchemes:
+    JWTAuthorization:
+      name: Authorization
+      description: JWT Bearer Token
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
