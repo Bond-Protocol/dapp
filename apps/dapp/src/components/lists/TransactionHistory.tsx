@@ -1,11 +1,11 @@
 import { format } from "date-fns";
 import {
-  CalculatedMarket,
   calculateTrimDigits,
   getBlockExplorer,
   trim,
   trimAsNumber,
 } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { BondPurchase } from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFullFormatter } from "src/utils/format";

@@ -1,32 +1,32 @@
-import { PromiseOrValue } from './contracts/common';
+import { Address } from 'viem';
 import { BigNumberish } from 'ethers';
 
 export type CreateMarketParams = {
-  payoutToken: PromiseOrValue<string>;
-  quoteToken: PromiseOrValue<string>;
-  callbackAddr: PromiseOrValue<string>;
-  capacityInQuote: PromiseOrValue<boolean>;
-  capacity: PromiseOrValue<BigNumberish>;
-  debtBuffer: PromiseOrValue<BigNumberish>;
-  vesting: PromiseOrValue<BigNumberish>;
-  start: PromiseOrValue<BigNumberish>;
-  conclusion?: PromiseOrValue<BigNumberish>;
-  duration?: PromiseOrValue<BigNumberish>;
-  depositInterval: PromiseOrValue<BigNumberish>;
-  scaleAdjustment?: PromiseOrValue<BigNumberish>;
-  formattedPrice?: PromiseOrValue<BigNumberish>;
-  formattedInitialPrice?: PromiseOrValue<BigNumberish>;
-  formattedMinimumPrice?: PromiseOrValue<BigNumberish>;
-  oracle?: PromiseOrValue<string>;
-  fixedDiscount?: PromiseOrValue<BigNumberish>;
-  maxDiscountFromCurrent?: PromiseOrValue<BigNumberish>;
-  baseDiscount?: PromiseOrValue<BigNumberish>;
-  targetIntervalDiscount?: PromiseOrValue<BigNumberish>;
+  payoutToken: string;
+  quoteToken: string;
+  callbackAddr: string;
+  capacityInQuote: boolean;
+  capacity: BigNumberish;
+  debtBuffer: BigNumberish;
+  vesting: BigNumberish;
+  start: BigNumberish;
+  conclusion?: BigNumberish;
+  duration?: BigNumberish;
+  depositInterval: BigNumberish;
+  scaleAdjustment?: BigNumberish;
+  formattedPrice?: BigNumberish;
+  formattedInitialPrice?: BigNumberish;
+  formattedMinimumPrice?: BigNumberish;
+  oracle?: string;
+  fixedDiscount?: BigNumberish;
+  maxDiscountFromCurrent?: BigNumberish;
+  baseDiscount?: BigNumberish;
+  targetIntervalDiscount?: BigNumberish;
 };
 
 export interface TokenBase {
   chainId: number;
-  address: string;
+  address: Address;
 }
 
 export interface Token extends TokenBase {
@@ -40,7 +40,7 @@ export interface Token extends TokenBase {
   };
   payoutTokenTbvs?: any[];
   usedAsPayout?: boolean;
-  price?: number;
+  price: number;
   id?: string;
   purchaseLink?: string;
   logoUrl?: string;
@@ -75,9 +75,9 @@ export interface PrecalculatedMarket {
   id: string;
   chainId: string;
   name: string;
-  auctioneer: string;
-  teller: string;
-  owner: string;
+  auctioneer: Address;
+  teller: Address;
+  owner: Address;
   vesting: number;
   vestingType: string;
   payoutToken: Token;
@@ -86,7 +86,7 @@ export interface PrecalculatedMarket {
   totalBondedAmount: number;
   totalPayoutAmount: number;
   creationBlockTimestamp: number;
-  callbackAddress: string;
+  callbackAddress: Address;
   bondsIssued: number;
 }
 
@@ -95,25 +95,21 @@ export interface CalculatedMarket {
   chainId: string;
   auctioneer: string;
   teller: string;
-  marketId: number;
+  marketId: bigint;
   discount: number;
   discountedPrice: number;
-  formattedDiscountedPrice: string;
   quoteTokensPerPayoutToken: number;
   fullPrice: number;
-  formattedFullPrice: string;
   maxAmountAccepted: string;
   maxPayout: string;
   maxPayoutUsd: number;
   ownerBalance: string;
   ownerAllowance: string;
-  formattedMaxPayoutUsd: string;
   vesting: number;
   vestingType: string;
-  formattedShortVesting: string;
-  formattedLongVesting: string;
   currentCapacity: number;
-  capacityToken: string;
+  capacityToken: Token;
+  isCapacityInQuote: boolean;
   owner: string;
   quoteToken: LpToken;
   payoutToken: Token;
@@ -122,7 +118,6 @@ export interface CalculatedMarket {
   totalBondedAmount: number;
   totalPayoutAmount: number;
   tbvUsd: number;
-  formattedTbvUsd: string;
   creationBlockTimestamp: number;
   creationDate: string;
   callbackAddress: string;
@@ -131,4 +126,10 @@ export interface CalculatedMarket {
   conclusion?: number;
   blockExplorerName?: string;
   blockExplorerUrl?: string;
+  formattedFullPrice: string;
+  formattedMaxPayoutUsd: string;
+  formattedDiscountedPrice: string;
+  formattedShortVesting: string;
+  formattedLongVesting: string;
+  formattedTbvUsd: string;
 }

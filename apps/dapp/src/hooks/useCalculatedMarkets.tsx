@@ -1,15 +1,17 @@
+import { CalculatedMarket, PrecalculatedMarket } from "types";
+import { Address, PublicClient, formatUnits, getContract } from "viem";
 import { useQueries } from "react-query";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import * as contractLibrary from "@bond-protocol/contract-library";
 import {
-  CalculatedMarket,
-  getBlockExplorer,
+  Auctioneer,
+  getAuctioneerAbiForName,
+  abis,
 } from "@bond-protocol/contract-library";
-import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
 import { useTokens } from "hooks";
 import { useSubgraph } from "hooks/useSubgraph";
+import { usePublicClient } from "wagmi";
 
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
@@ -19,9 +21,9 @@ export function useCalculatedMarkets() {
   const [calculatedMarkets, setCalculatedMarkets] = useState<
     CalculatedMarket[]
   >([]);
+  const publicClient = usePublicClient();
 
-  const calculateMarket = async (market: Market) => {
-    const requestProvider = providers[market.chainId];
+  const calcMarket = async (market: Market) => {
     const obsoleteAuctioneers = [
       "0x007f7a58103a31109f848df1a14f7020e1f1b28a",
       "0x007f7a6012a5e03f6f388dd9f19fd1d754cfc128",
@@ -36,27 +38,20 @@ export function useCalculatedMarkets() {
     let updatedMarket = { ...market, quoteToken, payoutToken };
 
     try {
-      const result = await contractLibrary.calcMarket(
-        requestProvider,
-        FEE_ADDRESS,
-        // @ts-ignore
-        updatedMarket
+      const result = await calculateMarket(
+        //@ts-ignore
+        updatedMarket,
+        publicClient,
+        FEE_ADDRESS
       );
 
-      const blockExplorer = getBlockExplorer(result.chainId, "address");
-
-      return {
-        ...result,
-        start: market.start,
-        conclusion: market.conclusion,
-        blockExplorerUrl: blockExplorer.blockExplorerUrl,
-        blockExplorerName: blockExplorer.blockExplorerName,
-      };
+      return { ...result, start: market.start, conclusion: market.conclusion };
     } catch (e) {
       console.log(
         `ProtocolError: Failed to calculate market ${market.id} \n`,
         e
       );
+      console.log(market);
       return market;
     }
   };
@@ -64,7 +59,7 @@ export function useCalculatedMarkets() {
   const calculateAllMarkets = useQueries(
     markets.map((market: Market) => ({
       queryKey: market.id,
-      queryFn: () => calculateMarket(market),
+      queryFn: () => calcMarket(market),
       enabled: tokens.length > 0,
     }))
   );
@@ -148,7 +143,7 @@ export function useCalculatedMarkets() {
     getByChainAndId: (chainId: number | string, id: number | string) =>
       calculatedMarkets.find(
         ({ marketId, chainId: marketChainId }) =>
-          marketId === Number(id) && marketChainId === chainId
+          marketId.toString() === id && marketChainId === chainId
       ),
     refetchAllMarkets,
     refetchOne,
@@ -157,5 +152,151 @@ export function useCalculatedMarkets() {
       market: isMarketLoading,
       priceCalcs: isCalculatingAll,
     },
+  };
+}
+
+export async function calculateMarket(
+  subgraphMarket: PrecalculatedMarket,
+  publicClient: PublicClient,
+  referrerAddress: Address = `0x${"0".repeat(40)}`
+): Promise<CalculatedMarket> {
+  const market = createBaseMarket(subgraphMarket);
+  const { quoteToken, payoutToken } = market;
+
+  const auctioneerAbi = getAuctioneerAbiForName(market.name as Auctioneer);
+
+  const auctioneerContract = getContract({
+    abi: auctioneerAbi,
+    address: market.auctioneer as Address,
+    publicClient,
+  });
+
+  const payoutTokenContract = getContract({
+    abi: abis.erc20,
+    address: payoutToken.address as Address,
+    publicClient,
+  });
+
+  const [
+    ownerPayoutBalance,
+    ownerPayoutAllowance,
+    _currentCapacity,
+    marketPrice,
+    marketScale,
+    marketInfo,
+    isLive,
+    markets,
+    maxAmountAccepted,
+  ] = await Promise.all([
+    payoutTokenContract.read.balanceOf([market.owner]),
+    payoutTokenContract.read.allowance([market.owner, market.teller]),
+    auctioneerContract.read.currentCapacity([market.marketId]),
+    auctioneerContract.read.marketPrice([market.marketId]),
+    auctioneerContract.read.marketScale([market.marketId]),
+    auctioneerContract.read.getMarketInfoForPurchase([market.marketId]),
+    auctioneerContract.read.isLive([market.marketId]),
+    auctioneerContract.read.markets([market.marketId]),
+    auctioneerContract.read.maxAmountAccepted([
+      market.marketId,
+      referrerAddress,
+    ]),
+  ]);
+
+  const baseScale =
+    10n ** BigInt(36 + payoutToken.decimals - quoteToken.decimals);
+
+  // The price decimal scaling for a market is split between the price value and the scale value
+  // to be able to support a broader range of inputs. Specifically, half of it is in the scale and
+  // half in the price. To normalize the price value for display, we can add the half that is in
+  // the scale factor back to it.
+  const shift = baseScale / marketScale;
+  const price = marketPrice * shift;
+  const quoteTokensPerPayoutToken = price / 10n ** 36n;
+
+  const adjustedQuote = formatUnits(
+    quoteTokensPerPayoutToken,
+    quoteToken.decimals
+  );
+
+  const discountedPrice = Number(adjustedQuote) * (quoteToken.price ?? 0);
+
+  const discount =
+    (discountedPrice - (payoutToken.price ?? 0) / (payoutToken.price ?? 0)) *
+    100;
+
+  const maxAccepted = formatUnits(
+    BigInt(Number(maxAmountAccepted) - Number(maxAmountAccepted) * 0.005),
+    quoteToken.decimals
+  );
+
+  const [_maxPayout] = marketInfo.slice(-1);
+
+  const maxPayout = formatUnits(BigInt(_maxPayout), payoutToken.decimals);
+
+  const maxPayoutUsd =
+    payoutToken.price! > 0 ? Number(maxPayout) * market.payoutToken.price! : 0;
+
+  const ownerBalance = formatUnits(ownerPayoutBalance, payoutToken.decimals);
+
+  const ownerAllowance =
+    ownerPayoutAllowance / 10n ** BigInt(payoutToken.decimals);
+
+  const isCapacityInQuote = markets[4];
+
+  const currentCapacity = formatUnits(
+    _currentCapacity,
+    isCapacityInQuote ? quoteToken.decimals : payoutToken.decimals
+  );
+
+  const capacityToken = isCapacityInQuote ? quoteToken : payoutToken;
+
+  const fullPrice = payoutToken.price ?? 0;
+
+  return {
+    ...market,
+    isLive,
+    quoteTokensPerPayoutToken: Number(quoteTokensPerPayoutToken.toString()),
+    discountedPrice,
+    maxAmountAccepted: maxAccepted.toString(),
+    maxPayout,
+    maxPayoutUsd,
+    ownerBalance,
+    ownerAllowance: ownerAllowance.toString(),
+    isCapacityInQuote,
+    currentCapacity: Number(currentCapacity),
+    capacityToken,
+    fullPrice,
+    discount,
+
+    formattedFullPrice: "",
+    formattedMaxPayoutUsd: "",
+    formattedDiscountedPrice: "",
+    formattedShortVesting: "",
+    formattedLongVesting: "",
+    formattedTbvUsd: "",
+  };
+}
+
+function createBaseMarket(market: PrecalculatedMarket) {
+  return {
+    ...market,
+    marketId: BigInt(market.id.slice(market.id.lastIndexOf("_") + 1)),
+    discount: 0,
+    discountedPrice: 0,
+    formattedDiscountedPrice: "",
+    quoteTokensPerPayoutToken: "",
+    fullPrice: 0,
+    formattedFullPrice: "",
+    maxAmountAccepted: "",
+    maxPayout: "",
+    maxPayoutUsd: 0,
+    ownerBalance: "",
+    ownerAllowance: "",
+    currentCapacity: 0,
+    capacityToken: "",
+    isLive: false,
+    tbvUsd: 0,
+    formattedTbvUsd: "",
+    creationDate: "",
   };
 }

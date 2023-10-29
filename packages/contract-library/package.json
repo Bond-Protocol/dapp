@@ -1,14 +1,10 @@
 {
   "name": "@bond-protocol/contract-library",
-  "version": "0.0.42",
-  "author": "spaceturtleship <spaceturtleship@protonmail.com>",
+  "version": "1.0.0",
+  "author": "BondLabs",
   "license": "MIT",
   "engines": {
-    "node": ">=14"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Bond-Protocol/contract-library.git"
+    "node": ">=16"
   },
   "files": [
     "dist/**/*"
@@ -19,30 +15,13 @@
     "clean": "rm -rf ./dist",
     "build": "tsc --build && tsc-alias -v",
     "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
-    "format": "prettier --write ./src/**/*.ts",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "prepublishOnly": "yarn build",
-    "typechain": "typechain --target viem --out-dir src/types/contracts-viem 'src/abis/**/*.json'"
+    "make:abis": "wagmi generate"
   },
-  "lint-staged": {
-    "**/src/{**/*,*}.{ts,tsx}": [
-      "prettier --write",
-      "eslint --max-warnings 0"
-    ]
+  "dependencies": {
+    "viem": "1.17.2"
   },
   "devDependencies": {
-    "@dethcrypto/eth-sdk": "^0.3.2",
-    "@dethcrypto/eth-sdk-client": "^0.1.6",
-    "@ethersproject/abi": "^5.6.3",
-    "@ssen/eslint-config": "^2.0.1",
-    "@ssen/prettier-config": "^2.0.1",
-    "@types/bn.js": "^5.1.0",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.10.3",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "@typescript-eslint/parser": "^4.33.0",
     "@wagmi/cli": "^1.5.2",
-    "auto-changelog": "^2.3.0",
     "concurrently": "^7.6.0",
     "eslint": "^7.32.0",
     "eslint-config-custom": "*",
@@ -50,14 +29,13 @@
     "ethers": "^5.6.8",
     "husky": "^7.0.2",
     "jest": "^27.2.4",
-    "lint-staged": "^11.2.6",
     "prettier": "2.7.1",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "tsc-alias": "^1.5.0",
     "tsconfig": "*",
     "typedoc": "^0.22.5",
-    "typescript": "^5.0.4"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@ethersproject/providers": "^5.6.6",
@@ -69,8 +47,8 @@
     "viem": "^1.16.3"
   },
   "description": "contract-library is a library for building applications that can interact with the Bond Protocol contracts from within JavaScript runtimes.",
+  "homepage": "https://github.com/Bond-Protocol/contract-library#readme",
   "bugs": {
     "url": "https://github.com/Bond-Protocol/contract-library/issues"
-  },
-  "homepage": "https://github.com/Bond-Protocol/contract-library#readme"
+  }
 }

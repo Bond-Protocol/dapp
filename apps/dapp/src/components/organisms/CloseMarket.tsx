@@ -1,20 +1,18 @@
-import { CalculatedMarket, closeMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { TransactionWizard } from "components/modals/TransactionWizard";
+import { useCloseMarket } from "hooks/contracts/useCloseMarket";
 import { useState } from "react";
-import { Button, CloseMarketDialog, Modal, TransactionHashDialog } from "ui";
-import { useSigner } from "wagmi";
+import { Button, CloseMarketDialog } from "ui";
 
 export type CloseMarketProps = {
   market: CalculatedMarket;
 };
-export const CloseMarket = (props: CloseMarketProps) => {
+export const CloseMarket = ({ market }: CloseMarketProps) => {
   const [closing, setClosing] = useState(false);
-  const { data: signer } = useSigner();
+  const closeMarket = useCloseMarket(market);
 
   const handleClose = async () => {
-    if (!signer) return;
-
-    return closeMarket(props.market.marketId, signer!, {});
+    return closeMarket.write();
   };
 
   return (
@@ -30,11 +28,12 @@ export const CloseMarket = (props: CloseMarketProps) => {
 
       <TransactionWizard
         open={closing}
+        //@ts-ignore
         onSubmit={handleClose}
         onClose={() => setClosing(false)}
         titles={{ standby: "Close Bond Market" }}
         InitialDialog={(args) => (
-          <CloseMarketDialog market={props.market} {...args} />
+          <CloseMarketDialog market={market} {...args} />
         )}
       />
     </>

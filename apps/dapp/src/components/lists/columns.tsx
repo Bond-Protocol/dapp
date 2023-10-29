@@ -6,11 +6,10 @@ import {
   usdLongFormatter,
 } from "src/utils/format";
 import {
-  CalculatedMarket,
   calculateTrimDigits,
-  CHAINS,
   getBlockExplorer,
 } from "@bond-protocol/contract-library";
+import { CalculatedMarket, CHAINS } from "types";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -66,7 +65,7 @@ export const discountColumn: Column<CalculatedMarket> = {
         market.discount !== -Infinity
           ? market.discount + "%"
           : "Unknown",
-      sortValue: value.includes("Unknown") ? 100 : market.discount + 100,
+      sortValue: value?.includes("Unknown") ? 100 : market.discount + 100,
     };
   },
 };
@@ -99,7 +98,7 @@ const vesting: Column<CalculatedMarket> = {
       ? add(Date.now(), { seconds: market.vesting })
       : market.vesting * 1000;
 
-    const term = market.formattedShortVesting.includes("Immediate")
+    const term = market.formattedShortVesting?.includes("Immediate")
       ? " Instant Swap"
       : market.formattedShortVesting + " Term";
 
@@ -181,7 +180,10 @@ export const viewColumn: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[10%]",
   unsortable: true,
-  formatter: (market) => ({ value: market.marketId, subtext: market.chainId }),
+  formatter: (market) => ({
+    value: Number(market.marketId),
+    subtext: market.chainId,
+  }),
   Component: (props: any) => {
     const navigate = useNavigate();
 

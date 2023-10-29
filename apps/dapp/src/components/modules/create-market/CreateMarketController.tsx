@@ -1,89 +1,59 @@
 import { useEffect, useState } from "react";
-import { useAccount, useNetwork, useSigner } from "wagmi";
-import { BigNumber, ethers } from "ethers";
+import { Address, useAccount, useNetwork, usePublicClient } from "wagmi";
 import * as contractLib from "@bond-protocol/contract-library";
+import { CHAIN_ID } from "types";
 import {
   checkOraclePairValidity,
   getAddressesForType,
   getBlockExplorer,
   getOracleDecimals,
   getOraclePrice,
+  BondType,
 } from "@bond-protocol/contract-library";
 import { CreateMarketAction, CreateMarketState, useCreateMarket } from "ui";
 import { doPriceMath } from "./helpers";
-import { providers } from "services";
 import { useProjectionChartData } from "hooks/useProjectionChart";
-import { useTokenlists } from "context/tokenlist-context";
-import { usePurchaseBond } from "hooks";
 import { CreateMarketScreen } from "./CreateMarketScreen";
 import { useTokenlistLoader } from "services/use-tokenlist-loader-v2";
-
-function getBondType(state: CreateMarketState, chainId: string) {
-  chainId = chainId.toString();
-  switch (state.priceModel) {
-    case "dynamic":
-      /*
-       SDA v1.1 has not been deployed to Ethereum Mainnet
-       It has been deployed to Goerli, but using the old SDA contracts for consistency
-      */
-      if (
-        chainId === contractLib.CHAIN_ID.ETHEREUM_MAINNET ||
-        chainId === contractLib.CHAIN_ID.GOERLI_TESTNET
-      ) {
-        return state.vestingType === "term"
-          ? contractLib.BOND_TYPE.FIXED_TERM_SDA
-          : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA;
-      }
-      return state.vestingType === "term"
-        ? contractLib.BOND_TYPE.FIXED_TERM_SDA_V1_1
-        : contractLib.BOND_TYPE.FIXED_EXPIRY_SDA_V1_1;
-    case "static":
-      return state.vestingType === "term"
-        ? contractLib.BOND_TYPE.FIXED_TERM_FPA
-        : contractLib.BOND_TYPE.FIXED_EXPIRY_FPA;
-    case "oracle-dynamic":
-      return state.vestingType === "term"
-        ? contractLib.BOND_TYPE.FIXED_TERM_OSDA
-        : contractLib.BOND_TYPE.FIXED_EXPIRY_OSDA;
-    case "oracle-static":
-      return state.vestingType === "term"
-        ? contractLib.BOND_TYPE.FIXED_TERM_OFDA
-        : contractLib.BOND_TYPE.FIXED_EXPIRY_OFDA;
-  }
-}
-
-const getAuctioneer = (chain: string, state: CreateMarketState) => {
-  return getAddressesForType(chain, getBondType(state, chain)).auctioneer;
-};
-
-const getTeller = (chain: string, state: CreateMarketState) => {
-  return getAddressesForType(chain, getBondType(state, chain)).teller;
-};
+import { parseUnits, formatUnits } from "viem";
+import { useAllowance } from "hooks/contracts/useAllowance";
+import { useCreateMarket as useCreateMarketContract } from "hooks/contracts/useCreateMarket";
 
 export const CreateMarketController = () => {
-  const { data: signer } = useSigner();
-  const { isConnected } = useAccount();
-  const network = useNetwork();
-  const [state, dispatch] = useCreateMarket();
-  const { tokens } = useTokenlistLoader();
-  const { getTokenAllowance, approveSpending } = usePurchaseBond();
   const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState("");
   const [created, setCreated] = useState(false);
   const [isOraclePairValid, setIsOraclePairValid] = useState(false);
-  const [oraclePrice, setOraclePrice] = useState<BigNumber>();
+  const [oraclePrice, setOraclePrice] = useState<number>();
   const [oracleMessage, setOracleMessage] = useState("");
 
-  const blockExplorer = getBlockExplorer(
-    String(network?.chain?.id) || "1",
-    "tx"
-  );
+  const { address, isConnected } = useAccount();
+  const network = useNetwork();
+  const publicClient = usePublicClient();
+
+  const { tokens } = useTokenlistLoader();
+  const [state, dispatch] = useCreateMarket();
+
+  const __allowance = useAllowance({
+    tokenAddress: state.payoutToken.address as Address,
+    decimals: state.payoutToken.decimals,
+    chainId: network.chain?.id,
+  });
+
+  const createMarket = useCreateMarketContract({
+    bondType: getBondType(state, network.chain?.id.toString() ?? "1"),
+  });
 
   const projectionData = useProjectionChartData({
     quoteToken: state.quoteToken,
     payoutToken: state.payoutToken,
     dayRange: state.durationInDays,
   });
+
+  const blockExplorer = getBlockExplorer(
+    String(network?.chain?.id) || "1",
+    "tx"
+  );
 
   useEffect(() => {
     if (
@@ -105,14 +75,14 @@ export const CreateMarketController = () => {
       if (!network?.chain?.id) return;
 
       try {
-        const valid = await checkOraclePairValidity(
-          // @ts-ignore
-          state.oracleAddress,
-          state.payoutToken.address,
-          state.quoteToken.address,
-          providers[network?.chain?.id]
-        );
+        const valid = await checkOraclePairValidity({
+          oracleAddress: state.oracleAddress as Address,
+          quoteTokenAddress: state.quoteToken.address as Address,
+          payoutTokenAddress: state.payoutToken.address as Address,
+          publicClient,
+        });
         setIsOraclePairValid(valid);
+
         if (!valid) setOracleMessage("Unsupported Token Pair!");
       } catch (e) {
         setIsOraclePairValid(false);
@@ -124,6 +94,16 @@ export const CreateMarketController = () => {
   }, [state.oracle, state.oracleAddress, state.payoutToken, state.quoteToken]);
 
   useEffect(() => {
+    const chainId = Number(network.chain?.id);
+    if (chainId && chainId !== state.chainId) {
+      dispatch({
+        type: CreateMarketAction.UPDATE_CHAIN_ID,
+        value: chainId,
+      });
+    }
+  }, [network.chain?.id]);
+
+  useEffect(() => {
     if (!isOraclePairValid) {
       //@ts-ignore
       setOraclePrice(0);
@@ -132,24 +112,19 @@ export const CreateMarketController = () => {
     }
 
     async function checkOracle() {
-      const price = await getOraclePrice(
-        // @ts-ignore
-        state.oracleAddress,
-        state.payoutToken.address,
-        state.quoteToken.address,
-        // @ts-ignore
-        providers[network?.chain?.id]
-      );
+      const config = {
+        oracleAddress: state.oracleAddress as Address,
+        quoteTokenAddress: state.quoteToken.address as Address,
+        payoutTokenAddress: state.payoutToken.address as Address,
+        publicClient,
+      };
 
-      const decimals = await getOracleDecimals(
-        // @ts-ignore
-        state.oracleAddress,
-        state.payoutToken.address,
-        state.quoteToken.address,
-        // @ts-ignore
-        providers[network?.chain?.id]
-      );
-      const adjustedPrice = ethers.utils.formatUnits(price, decimals);
+      const [price, decimals] = await Promise.all([
+        getOraclePrice(config),
+        getOracleDecimals(config),
+      ]);
+
+      const adjustedPrice = formatUnits(price, decimals);
 
       dispatch({
         type: CreateMarketAction.UPDATE_PRICE_RATES,
@@ -167,67 +142,19 @@ export const CreateMarketController = () => {
     checkOracle();
   }, [isOraclePairValid]);
 
-  const fetchAllowance = async (state: CreateMarketState) => {
-    if (!state.payoutToken.address) return;
-
-    if (!network.chain?.id) throw new Error("Unspecified chain");
-
-    if (!signer) return 0;
-
-    const address = await signer.getAddress();
-
-    const chain = {
-      id: String(network?.chain?.id),
-      label: network.chain.name,
-    };
-
-    const auctioneer = getAuctioneer(chain.id?.toString(), state);
-
-    const allowance = await getTokenAllowance(
-      state.payoutToken.address,
-      address,
-      auctioneer,
-      state.payoutToken.decimals,
-      providers[chain?.id]
-    );
-
-    return allowance ? allowance.toString() : 0;
+  const fetchAllowance = () => {
+    return __allowance.currentAllowance;
   };
 
   const approveCapacitySpending = async () => {
-    if (!state.payoutToken.address) return;
-
     if (!network.chain?.id) throw new Error("Unspecified chain");
 
-    if (!signer) return 0;
+    const auctioneer = getAuctioneer(network.chain?.id.toString(), state);
 
-    const chain = {
-      id: network?.chain?.id,
-      label: network.chain.name,
-    };
-
-    const auctioneer = getAuctioneer(chain?.id.toString(), state);
-
-    try {
-      setAllowanceTx(true);
-      const tx = await approveSpending(
-        state.payoutToken.address,
-        state.payoutToken.decimals,
-        auctioneer,
-        signer,
-        state.recommendedAllowance.toString()
-      );
-
-      await tx.wait(1);
-      dispatch({
-        type: CreateMarketAction.UPDATE_ALLOWANCE,
-        value: state.recommendedAllowance,
-      });
-    } catch (e) {
-      console.log({ e });
-    } finally {
-      setAllowanceTx(false);
-    }
+    __allowance.write(
+      auctioneer as Address,
+      state.recommendedAllowance.toString()
+    );
   };
 
   const configureMarket = (state: CreateMarketState) => {
@@ -287,14 +214,12 @@ export const CreateMarketController = () => {
         quoteToken: state.quoteToken.address,
         payoutToken: state.payoutToken.address,
         callbackAddr: "0x0000000000000000000000000000000000000000",
-        capacity: ethers.utils
-          .parseUnits(
-            state.capacity.toString(),
-            state.capacityType === "payout"
-              ? state.payoutToken?.decimals
-              : state.quoteToken?.decimals
-          )
-          .toString(),
+        capacity: parseUnits(
+          state.capacity.toString(),
+          state.capacityType === "payout"
+            ? state.payoutToken?.decimals
+            : state.quoteToken?.decimals
+        ).toString(),
         capacityInQuote: state.capacityType === "quote",
         formattedInitialPrice: formattedInitialPrice.toString(),
         formattedMinimumPrice: formattedMinimumPrice.toString(),
@@ -331,10 +256,9 @@ export const CreateMarketController = () => {
   const getTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
 
-    return contractLib.createMarketMultisig(
-      //@ts-ignore
-      config?.marketParams,
-      config?.bondType
+    return contractLib.encodeCreateMarket(
+      config?.marketParams as contractLib.CreateMarketParams,
+      config?.bondType as contractLib.BondType
     );
   };
 
@@ -342,10 +266,10 @@ export const CreateMarketController = () => {
     const config = configureMarket(state);
     const tellerAddress = getTeller(String(config?.chain), state);
 
-    return contractLib.getApproveTxBytecode(
-      tellerAddress,
-      state.recommendedAllowanceDecimalAdjusted
-    );
+    return contractLib.encodeApproveSpending({
+      address: tellerAddress as Address,
+      amount: BigInt(state.recommendedAllowanceDecimalAdjusted),
+    });
   };
 
   const onSubmit = async (state: CreateMarketState) => {
@@ -353,15 +277,11 @@ export const CreateMarketController = () => {
     const gasEstimate = await estimateGas(state);
 
     try {
-      const tx = await contractLib.createMarket(
+      const tx = await createMarket.writeAsync(
         //@ts-ignore
-        config?.marketParams,
-        config?.bondType,
-        signer,
-        { gasLimit: gasEstimate }
+        config?.marketParams
       );
       setCreationHash(tx.hash);
-      await tx.wait(1);
       setCreated(true);
     } catch (e) {
       console.log(e);
@@ -373,30 +293,22 @@ export const CreateMarketController = () => {
   const estimateGas = async (state: CreateMarketState) => {
     const config = configureMarket(state);
 
+    if (!config?.marketParams || !config.bondType) {
+      return;
+    }
+
     try {
       let estimate = await contractLib.estimateGasCreateMarket(
-        //@ts-ignore
-        config.marketParams,
-        //@ts-ignore
-        config.bondType,
-        signer,
-        {}
+        config.marketParams as contractLib.CreateMarketParams,
+        config.bondType as contractLib.BondType,
+        publicClient
       );
+
       return estimate.toString();
     } catch (e) {
       return "Error estimating gas - contact us!";
     }
   };
-
-  useEffect(() => {
-    const chainId = Number(network.chain?.id);
-    if (chainId && chainId !== state.chainId) {
-      dispatch({
-        type: CreateMarketAction.UPDATE_CHAIN_ID,
-        value: chainId,
-      });
-    }
-  }, [network.chain?.id]);
 
   return (
     <>
@@ -410,12 +322,12 @@ export const CreateMarketController = () => {
         onSubmitMultisigCreation={setCreationHash}
         //@ts-ignore
         estimateGas={estimateGas}
+        //@ts-ignore
         fetchAllowance={fetchAllowance}
         getAuctioneer={getAuctioneer}
         getTeller={getTeller}
         getTxBytecode={getTxBytecode}
         getApproveTxBytecode={getApproveTxBytecode}
-        provider={providers[network.chain?.id as number]}
         chain={String(network.chain?.id)}
         projectionData={projectionData.prices}
         isAllowanceTxPending={allowanceTx}
@@ -433,3 +345,47 @@ export const CreateMarketController = () => {
     </>
   );
 };
+
+function getBondType(state: CreateMarketState, chainId: string) {
+  chainId = chainId.toString();
+  switch (state.priceModel) {
+    case "dynamic":
+      /*
+       SDA v1.1 has not been deployed to Ethereum Mainnet
+       It has been deployed to Goerli, but using the old SDA contracts for consistency
+      */
+      if (
+        chainId === CHAIN_ID.ETHEREUM_MAINNET ||
+        chainId === CHAIN_ID.GOERLI_TESTNET
+      ) {
+        return state.vestingType === "term"
+          ? BondType.FIXED_TERM_SDA
+          : BondType.FIXED_EXPIRY_SDA;
+      }
+      return state.vestingType === "term"
+        ? BondType.FIXED_TERM_SDA_V1_1
+        : BondType.FIXED_EXPIRY_SDA_V1_1;
+    case "static":
+      return state.vestingType === "term"
+        ? BondType.FIXED_TERM_FPA
+        : BondType.FIXED_EXPIRY_FPA;
+    case "oracle-dynamic":
+      return state.vestingType === "term"
+        ? BondType.FIXED_TERM_OSDA
+        : BondType.FIXED_EXPIRY_OSDA;
+    case "oracle-static":
+      return state.vestingType === "term"
+        ? BondType.FIXED_TERM_OFDA
+        : BondType.FIXED_EXPIRY_OFDA;
+  }
+}
+
+function getAuctioneer(chainId: string, state: CreateMarketState) {
+  return getAddressesForType(Number(chainId), getBondType(state, chainId))
+    .auctioneer;
+}
+
+function getTeller(chainId: string, state: CreateMarketState) {
+  return getAddressesForType(Number(chainId), getBondType(state, chainId))
+    .teller;
+}

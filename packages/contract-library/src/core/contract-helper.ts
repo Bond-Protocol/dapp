@@ -1,7 +1,12 @@
 import { Address, PublicClient, WalletClient } from 'viem';
-import { abis, auctioneerAbis } from './contract-map';
-import { getAuctioneerByBondType, getAddressesV2 } from './address-provider';
-import { Auctioneers, BondType, auctioneersByType } from './enums';
+import {
+  getAuctioneerByBondType,
+  getAddressesV2,
+  Auctioneer,
+  BondType,
+  auctioneersByType,
+} from 'core';
+import { abis, auctioneerAbis } from 'abis';
 
 export function getChainId(client: PublicClient | WalletClient) {
   const chainId = client.chain?.id;
@@ -9,13 +14,8 @@ export function getChainId(client: PublicClient | WalletClient) {
   return chainId;
 }
 
-export function getAuctioneerFactoryForName(
-  auctioneerName: Auctioneers,
-  address: Address,
-) {
-  let abi = auctioneerAbis[auctioneerName];
-
-  return { address, abi };
+export function getAuctioneerAbiForName(auctioneerName: Auctioneer) {
+  return auctioneerAbis[auctioneerName];
 }
 
 export function getAggregator(chainId: number) {

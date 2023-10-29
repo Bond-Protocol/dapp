@@ -1,7 +1,6 @@
-import { getSubgraphQueries, providers } from "services";
+import { getSubgraphQueries } from "services";
 import {
   BondPurchase,
-  BondToken,
   Market,
   OwnerBalance,
   useGetDashboardDataQuery,
@@ -12,11 +11,9 @@ import { useCallback, useEffect, useState } from "react";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import {
   calculateTrimDigits,
-  getBalance,
   Token,
   trim,
 } from "@bond-protocol/contract-library";
-import { BigNumberish } from "ethers";
 import { useTokens } from "context";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
@@ -89,21 +86,21 @@ export const useDashboardLoader = () => {
 
     const erc20OwnerBalances: Partial<OwnerBalance>[] = [];
     const promises: Promise<any>[] = [];
-    bondTokens.forEach((bondToken: BondToken) => {
-      promises.push(
-        getBalance(bondToken.id, address, providers[bondToken.chainId]).then(
-          (result: BigNumberish) => {
-            const toNumber = Number(result);
-            toNumber > 0 &&
-              erc20OwnerBalances.push({
-                balance: result,
-                bondToken: bondToken,
-                owner: address,
-              });
-          }
-        )
-      );
-    });
+    // bondTokens.forEach((bondToken: BondToken) => {
+    //   promises.push(
+    //     getBalance(bondToken.id, address, providers[bondToken.chainId]).then(
+    //       (result: BigNumberish) => {
+    //         const toNumber = Number(result);
+    //         toNumber > 0 &&
+    //           erc20OwnerBalances.push({
+    //             balance: result,
+    //             bondToken: bondToken,
+    //             owner: address,
+    //           });
+    //       }
+    //     )
+    //   );
+    // });
 
     const fetchErc20OwnerBalances = async () => {
       await Promise.allSettled(promises);

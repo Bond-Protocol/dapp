@@ -1,6 +1,6 @@
 import { useCalculatedMarkets } from "hooks/useCalculatedMarkets";
 import { createContext, useContext } from "react";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { usePastMarkets } from "hooks/usePastMarkets";
 
 const initialState = {

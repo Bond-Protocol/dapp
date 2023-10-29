@@ -22,10 +22,10 @@ import {
   optimism,
   optimismGoerli,
 } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
 import { CHAINS } from "@bond-protocol/contract-library";
-import { alchemyProvider } from "wagmi/dist/providers/alchemy";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
 
 const getIconsForChains = (c: any) => {
   const logoUrl = Array.from(CHAINS.values()).find(
@@ -71,7 +71,9 @@ const connectors = connectorsForWallets([
 
 const config = createConfig({ publicClient, connectors });
 
-export const EvmProvider: FC<{ children?: ReactNode }> = ({ children }) => {
+export const BlockchainProvider: FC<{ children?: ReactNode }> = ({
+  children,
+}) => {
   return (
     <WagmiConfig config={config}>
       <RainbowKitProvider theme={darkTheme()} chains={chains}>

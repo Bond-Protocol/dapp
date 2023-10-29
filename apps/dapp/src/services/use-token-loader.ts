@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import { testnetTokenlist, tokenlist } from "hooks";
 import * as defillama from "./defillama";
 import { usdFormatter } from "../utils/format";
@@ -22,6 +22,7 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
 };
 
 export const fetchAndMatchPricesForTestnet = async () => {
+  //@ts-ignore fix: how to type a prop coming out of a json
   const pricedTokens = await fetchPrices(tokenlist);
 
   return testnetTokenlist.map((t) => {

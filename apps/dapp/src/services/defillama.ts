@@ -1,6 +1,6 @@
 import { sub, getUnixTime } from "date-fns";
 import { generateFetcher } from "./custom-queries";
-import { ACTIVE_CHAINS, MAINNETS } from "context/evm-provider";
+import { ACTIVE_CHAINS, MAINNETS } from "context/blockchain-provider";
 
 export const DEFILLAMA_ENDPOINT = "https://coins.llama.fi";
 

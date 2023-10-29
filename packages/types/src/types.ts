@@ -69,25 +69,21 @@ export interface CalculatedMarket {
   chainId: string;
   auctioneer: string;
   teller: string;
-  marketId: number;
+  marketId: bigint;
   discount: number;
   discountedPrice: number;
-  formattedDiscountedPrice: string;
   quoteTokensPerPayoutToken: number;
   fullPrice: number;
-  formattedFullPrice: string;
   maxAmountAccepted: string;
   maxPayout: string;
   maxPayoutUsd: number;
   ownerBalance: string;
   ownerAllowance: string;
-  formattedMaxPayoutUsd: string;
   vesting: number;
   vestingType: string;
-  formattedShortVesting: string;
-  formattedLongVesting: string;
   currentCapacity: number;
-  capacityToken: string;
+  capacityToken: Token;
+  isCapacityInQuote: boolean;
   owner: string;
   quoteToken: LpToken;
   payoutToken: Token;
@@ -96,11 +92,31 @@ export interface CalculatedMarket {
   totalBondedAmount: number;
   totalPayoutAmount: number;
   tbvUsd: number;
-  formattedTbvUsd: string;
   creationBlockTimestamp: number;
   creationDate: string;
   callbackAddress: string;
   bondsIssued: number;
   start?: number;
   conclusion?: number;
+  formattedFullPrice: string;
+  formattedMaxPayoutUsd: string;
+  formattedDiscountedPrice: string;
+  formattedShortVesting: string;
+  formattedLongVesting: string;
+  formattedTbvUsd: string;
+}
+
+export enum BOND_TYPE {
+  FIXED_EXPIRY_DEPRECATED = "fixed-expiration",
+  FIXED_EXPIRY_SDA = "fixed-expiry-sda",
+  FIXED_EXPIRY_SDA_V1_1 = "fixed-expiry-sda-v1_1",
+  FIXED_EXPIRY_FPA = "fixed-expiry-fpa",
+  FIXED_EXPIRY_OFDA = "fixed-expiry-ofda",
+  FIXED_EXPIRY_OSDA = "fixed-expiry-osda",
+  FIXED_TERM_DEPRECATED = "fixed-term",
+  FIXED_TERM_SDA = "fixed-term-sda",
+  FIXED_TERM_SDA_V1_1 = "fixed-term-sda-v1_1",
+  FIXED_TERM_FPA = "fixed-term-fpa",
+  FIXED_TERM_OFDA = "fixed-term-ofda",
+  FIXED_TERM_OSDA = "fixed-term-osda",
 }

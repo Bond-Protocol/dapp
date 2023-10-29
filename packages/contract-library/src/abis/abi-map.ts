@@ -1,8 +1,9 @@
-import * as abiFiles from '../contracts';
+import * as abiFiles from './generated';
 
 export const abis = {
   authority: abiFiles.authorityABI,
   aggregator: abiFiles.aggregatorABI,
+  baseAuctioneer: abiFiles.baseAuctioneerABI,
   baseTeller: abiFiles.baseTellerABI,
   fixedExpiryTeller: abiFiles.fixedExpiryTellerABI,
   fixedExpirySDAAuctioneer: abiFiles.fixedExpirySdaAuctioneerABI,
@@ -16,6 +17,9 @@ export const abis = {
   fixedTermFPAAuctioneer: abiFiles.fixedTermFpaAuctioneerABI,
   fixedTermOFDAAuctioneer: abiFiles.fixedTermOfdaAuctioneerABI,
   fixedTermOSDAAuctioneer: abiFiles.fixedTermOsdaAuctioneerABI,
+
+  erc20: abiFiles.erc20ABI,
+  chainlinkOracle: abiFiles.bondChainlinkOracleABI,
 };
 
 export const auctioneerAbis = {

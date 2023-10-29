@@ -1,12 +1,7 @@
 import { FC, useEffect, useState } from "react";
-import {
-  CalculatedMarket,
-  calculateTrimDigits,
-  formatLongNumber,
-  getBlockExplorer,
-  trim,
-} from "@bond-protocol/contract-library";
-import { useGasPrice, usePurchaseBond, useTokenAllowance } from "hooks";
+
+import { getBlockExplorer } from "@bond-protocol/contract-library";
+import { useTokenAllowance } from "hooks";
 import {
   ActionInfoList,
   Button,
@@ -17,14 +12,16 @@ import {
   PurchaseSuccessDialog,
 } from "ui";
 import { BondButton } from "./BondButton";
-import { useAccount, useSigner } from "wagmi";
+import { Address, useAccount, useFeeData } from "wagmi";
 import { useNativeCurrency } from "hooks/useNativeCurrency";
-import { providers } from "services/owned-providers";
 import add from "date-fns/add";
 import defillama from "services/defillama";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useNavigate } from "react-router-dom";
 import { useIsEmbed } from "hooks/useIsEmbed";
+import { usePurchase } from "hooks/contracts/usePurchase";
+import { CalculatedMarket } from "types";
+import { formatUnits } from "viem";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -105,24 +102,18 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     gasPrice: "0",
     usdPrice: "0",
   });
-  const { data: signer } = useSigner();
 
-  const provider = providers[market.chainId];
   const { address, isConnected } = useAccount();
 
-  const { getGasPrice } = useGasPrice();
-  const { bond, estimateBond, getPayoutFor } = usePurchaseBond();
+  const { data: gas } = useFeeData();
+
+  const bond = usePurchase(market);
+
   const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
     useTokenAllowance(
-      // @ts-ignore
-      address,
-      market.quoteToken.address,
+      market.quoteToken.address as Address,
       market.quoteToken.decimals,
-      market.chainId,
-      market.auctioneer,
-      amount,
-      provider,
-      signer
+      market.chainId
     );
 
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
@@ -147,72 +138,41 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     ? NO_REFERRAL_ADDRESS
     : REFERRAL_ADDRESS;
 
-  const setGasFee = () => {
-    const estimate = Number(gasPrice.gasPrice) * Number(estimatedGas);
-    const usdEstimate = Number(gasPrice.usdPrice) * Number(estimatedGas);
-    setNetworkFee(trim(estimate, calculateTrimDigits(estimate)));
-    setNetworkFeeUsd(trim(usdEstimate, calculateTrimDigits(usdEstimate)));
-  };
-
   const vestingLabel =
     market.vestingType === "fixed-term"
       ? market.formattedLongVesting
       : market.formattedShortVesting;
 
-  const fetchAndSetGas = async () => {
-    const amountForEstimate =
-      Number(amount) > 0
-        ? amount
-        : String(Number(market.maxAmountAccepted) * 0.9);
-
-    try {
-      const [gas, price] = await Promise.all([
-        estimate(amountForEstimate),
-        getGasPrice(nativeCurrency, nativeCurrencyPrice, provider),
-      ]);
-
-      setEstimatedGas(Number(gas?.toString()));
-      setGasPrice(price);
-    } catch (e) {}
-  };
-
   useEffect(() => {
-    fetchAndSetGas();
+    const setGasFee = async () => {
+      const gas = await bond.estimateBondGas(
+        Number(amount),
+        payout,
+        0.05,
+        `0x${"0".repeat(40)}`
+      );
+      const price = Number(gasPrice?.gasPrice);
+      const usdCost = Number(gas) * price;
+
+      setNetworkFee(formatCurrency.trimToken(gas));
+      setNetworkFeeUsd(formatCurrency.usdFormatter.format(usdCost));
+    };
+
+    setGasFee();
   }, [payout]);
 
   useEffect(() => {
-    if (signer) fetchAndSetGas();
-  }, [signer]);
-
-  useEffect(() => {
-    if (gasPrice && estimatedGas) setGasFee();
-  }, [gasPrice, estimatedGas]);
-
-  useEffect(() => {
     const updatePayout = async () => {
-      let payout = Number(
-        await getPayoutFor(
-          amount,
-          market.quoteToken.decimals,
-          market.marketId,
-          referralAddress,
-          market.chainId
-        )
-      );
+      let payout = await bond.getPayoutFor({ amount });
+      let formattedPayout = formatUnits(payout, market.payoutToken.decimals);
 
-      payout = formatLongNumber(payout, market.payoutToken.decimals);
-      setPayout(trim(payout, calculateTrimDigits(payout)).toString());
+      setPayout(formatCurrency.trimToken(formattedPayout));
     };
 
-    void updatePayout();
-  }, [amount, getPayoutFor, market.marketId, market.auctioneer]);
+    updatePayout();
+  }, [amount]);
 
-  const approveSpending = () =>
-    approve(
-      market.quoteToken.address,
-      market.quoteToken.decimals,
-      market.auctioneer
-    );
+  const approveSpending = () => approve(market.auctioneer as Address, amount);
 
   const onClickBond = !hasSufficientAllowance
     ? () => approveSpending()
@@ -254,35 +214,13 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     },
   ];
 
-  const estimate = (amount: string) => {
-    if (!address) return;
-
-    try {
-      return estimateBond(
-        address,
-        amount,
-        payout,
-        0.05,
-        market,
-        referralAddress,
-        signer!
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const submitTx = () => {
     if (!address) throw new Error("Not Connected");
-    return bond(
-      address,
-      amount,
-      payout,
-      0.05,
-      market,
-      referralAddress,
-      signer!
-    );
+    return bond.write({
+      slippage: 0.05,
+      amountIn: Number(amount),
+      amountOut: Number(payout),
+    });
   };
 
   const goToMarkets = () => {
@@ -336,6 +274,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
       <TransactionWizard
         open={showModal}
         chainId={market.chainId}
+        //@ts-ignore
         onSubmit={submitTx}
         onClose={() => setShowModal(false)}
         InitialDialog={(args: any) => (

@@ -1,9 +1,10 @@
 import {
-  CalculatedMarket,
   getMarketTypeByAuctioneer,
   MarketPricing,
 } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { PastMarket } from "components/organisms/ClosedMarket";
+
 import { dateMath, formatCurrency, formatDate } from "ui";
 
 const pricingLabels: Record<MarketPricing, string> = {

@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import { useTokenLoader } from "services/use-token-loader";
 
 export type ITokenContext = {

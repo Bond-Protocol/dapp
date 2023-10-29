@@ -35,7 +35,9 @@ export const longerFormatter = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 8,
 });
 
-export const getRateMod = (value: string | number) => {
+export const getRateMod = (_value: string | number) => {
+  const value = Number(_value);
+
   let rateMod;
 
   if (value > 0.1 && value <= 1) {
@@ -61,8 +63,9 @@ export const getRateMod = (value: string | number) => {
   return rateMod;
 };
 
-export const getPriceScale = (value: string | number) => {
+export const getPriceScale = (_value: string | number) => {
   let scale;
+  const value = Number(_value);
 
   if (value >= 1000) {
     scale = 0;

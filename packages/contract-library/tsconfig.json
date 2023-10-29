@@ -4,6 +4,9 @@
     "outDir": "dist/src",
     "rootDir": "src",
     "strict": true,
+    "types": [
+      "viem"
+    ],
     "lib": [
       "ESNext"
     ],
@@ -18,13 +21,13 @@
       "modules/*": [
         "modules/*"
       ],
-      "types/*": [
-        "types/*"
-      ]
     }
   },
   "include": [
     "src",
     "src/**/*.json"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

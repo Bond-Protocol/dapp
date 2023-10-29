@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import { testnetTokenlist, tokenlist } from "hooks";
 import * as defillama from "./defillama";
 import { useDiscoverToken } from "hooks/useDiscoverToken";

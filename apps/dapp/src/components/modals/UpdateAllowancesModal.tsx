@@ -15,6 +15,7 @@ export const UpdateAllowanceModal = (props: UpdateAllowanceModalProps) => {
 
   const handleSubmit = (chainId: string | number, ...args: any[]) => {
     setChainId(Number(chainId));
+    //@ts-ignore
     return allowanceControl.updateAllowance(...args);
   };
 
@@ -22,6 +23,7 @@ export const UpdateAllowanceModal = (props: UpdateAllowanceModalProps) => {
     <TransactionWizard
       open={props.open}
       onClose={props.onClose}
+      //@ts-ignore
       onSubmit={handleSubmit}
       chainId={chainId}
       InitialDialog={(args) => (

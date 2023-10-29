@@ -1,12 +1,13 @@
 import { Button, Column, formatDate, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "src/utils/format";
-import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { useNetwork, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
-import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
+import { BondType } from "@bond-protocol/contract-library";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useMediaQueries } from "hooks/useMediaQueries";
+import { useRedeemBond } from "hooks/contracts/useRedeem";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -65,8 +66,15 @@ export const tableColumns: Array<Column<any>> = [
       const [open, setOpen] = useState(false);
       const { chain } = useNetwork();
       const { switchNetwork } = useSwitchNetwork();
-      const { data: signer } = useSigner();
       const [tx, setTx] = useState<any>();
+
+      const bond: OwnerBalance = props.data.bond;
+      const redeem = useRedeemBond({
+        bond,
+        bondType: "" as BondType,
+        marketId: 1,
+        tellerAddress: "0x123",
+      });
 
       const chainId = props?.data?.bond?.bondToken.chainId;
 
@@ -77,22 +85,10 @@ export const tableColumns: Array<Column<any>> = [
         switchNetwork?.(Number(props?.data?.bond?.bondToken?.chainId));
       };
 
-      async function redeemBond(bond: Partial<OwnerBalance>) {
-        if (!bond.bondToken || !signer) return;
-        return redeem(
-          bond.bondToken.id,
-          bond.bondToken.type as BOND_TYPE,
-          bond.balance.toString(),
-          signer,
-          bond.bondToken.teller,
-          {}
-        );
-      }
-
       const claim = () => {
         setOpen(true);
-        const tx = redeemBond(props?.data?.bond);
-        setTx(tx);
+        const tx = redeem.write();
+        return "";
       };
 
       const handleClaim = isCorrectNetwork
@@ -113,7 +109,8 @@ export const tableColumns: Array<Column<any>> = [
           <TransactionWizard
             chainId={chainId}
             open={open}
-            onSubmit={() => redeemBond(props?.data?.bond)}
+            //@ts-ignore
+            onSubmit={() => claim()}
             onClose={() => setOpen(false)}
             SuccessDialog={() => <div>Bond claimed!</div>}
             signingTx={tx}

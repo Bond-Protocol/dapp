@@ -74,7 +74,7 @@
     "tailwindconfig": "*",
     "tailwindcss": "^3.3.1",
     "tsconfig": "*",
-    "typescript": "^4.5.2",
+    "typescript": "^5.2.2",
     "vite-plugin-dts": "^1.7.1",
     "viteconfig": "*",
     "types": "*"

@@ -1,14 +1,14 @@
 import { useChainId } from "wagmi";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import {
   ImportTokenDialog,
   SelectTokenDialog,
   SelectTokenDialogProps,
 } from "ui";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
-import { ACTIVE_CHAINS } from "context/evm-provider";
+import { ACTIVE_CHAINS } from "context/blockchain-provider";
 import { useTokenlists } from "context/tokenlist-context";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {

@@ -16,9 +16,9 @@ export const EmbeddedPurchaseCard = (props: { market?: CalculatedMarket }) => {
     <div className="w-full">
       <div className="flex h-full gap-x-1 pb-2">
         <BondPriceLabel
+          {...market.payoutToken}
           bondPrice={market.formattedDiscountedPrice}
           price={market.payoutToken.price ?? 0}
-          {...market.payoutToken}
         />
         <SummaryLabel
           tooltip="The current discount available from this market. Green = discount, buy. Red = premium, do not buy."

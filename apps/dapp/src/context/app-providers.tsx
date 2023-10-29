@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { HashRouter as Router } from "react-router-dom";
 
-import { EvmProvider } from "./evm-provider";
+import { BlockchainProvider } from "./blockchain-provider";
 import { ReactQueryProvider } from "./react-query-provider";
 import { SubgraphProvider } from "./subgraph-context";
 import { MarketProvider } from "./market-context";
@@ -16,23 +16,21 @@ import {
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <ReactQueryProvider>
-      <EvmProvider>
+      <BlockchainProvider>
         <AuthProvider>
           <SubgraphProvider>
             <TokenProvider>
               <MarketProvider>
-                <OrderServiceProvider>
-                  <DashboardProvider>
-                    <TokenlistProvider>
-                      <Router>{children}</Router>
-                    </TokenlistProvider>
-                  </DashboardProvider>
-                </OrderServiceProvider>
+                <DashboardProvider>
+                  <TokenlistProvider>
+                    <Router>{children}</Router>
+                  </TokenlistProvider>
+                </DashboardProvider>
               </MarketProvider>
             </TokenProvider>
           </SubgraphProvider>
         </AuthProvider>
-      </EvmProvider>
+      </BlockchainProvider>
     </ReactQueryProvider>
   );
 };
@@ -40,9 +38,9 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
 export const DevProviders: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <ReactQueryProvider>
-      <EvmProvider>
+      <BlockchainProvider>
         <Router>{children}</Router>
-      </EvmProvider>
+      </BlockchainProvider>
     </ReactQueryProvider>
   );
 };

@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { PageHeader, PageNavigation } from "components/common";
 import { dateMath, InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
@@ -87,7 +87,7 @@ export const Market = ({ market }: { market: CalculatedMarket }) => {
           tooltip="The remaining amount of tokens to be bonded in this market"
         >
           {capacity}
-          <span className="ml-1 text-xl">{market.capacityToken}</span>
+          <span className="ml-1 text-xl">{market.capacityToken.symbol}</span>
         </InfoLabel>
       </div>
 

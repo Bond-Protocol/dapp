@@ -1,7 +1,7 @@
-import { abis } from './contract-map';
+import { abis } from 'abis';
 import { ContractAddresses } from './address-provider';
 
-export enum Auctioneers {
+export enum Auctioneer {
   BondFixedExpCDA = 'BondFixedExpCDA',
   BondFixedExpSDAv1_1 = 'BondFixedExpSDAv1_1',
   BondFixedExpFPA = 'BondFixedExpFPA',

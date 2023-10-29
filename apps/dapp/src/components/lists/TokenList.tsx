@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
 import { useEffect, useState } from "react";
 import { meme } from "src/utils/words";
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import { numericSort } from "services";
 import { useSubgraph } from "hooks/useSubgraph";
 import { environment } from "src/environment";

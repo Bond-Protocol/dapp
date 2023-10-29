@@ -15,6 +15,6 @@ export const formatVestingTerm = (market: CalculatedMarket) => {
 };
 
 export default {
-  formatLongNumber,
+    formatLongNumber,
   formatVestingTerm,
 };

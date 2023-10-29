@@ -1,5 +1,4 @@
 import { Address } from 'viem';
-import { BOND_TYPE } from 'src/modules/contract-helper';
 import { BondType, auctioneerAddressesByType } from './enums';
 
 export type ContractAddresses = {
@@ -196,67 +195,3 @@ export function getAuctioneerByBondType(
 
   return addresses[name];
 }
-
-export function getAddressForTypeV2() {}
-
-export const getAddressesForType = (
-  chain_id: number | string | { id: string; label: string },
-  bondType: BOND_TYPE,
-): AddressesForType => {
-  let id = typeof chain_id === 'object' ? chain_id.id : String(chain_id);
-
-  switch (bondType) {
-    case BOND_TYPE.FIXED_EXPIRY_SDA:
-    case BOND_TYPE.FIXED_EXPIRY_DEPRECATED:
-      return {
-        teller: getAddresses(id).fixedExpiryTeller,
-        auctioneer: getAddresses(id).fixedExpirySDAAuctioneer,
-      };
-    case BOND_TYPE.FIXED_EXPIRY_SDA_V1_1:
-      return {
-        teller: getAddresses(id).fixedExpiryTeller,
-        auctioneer: getAddresses(id).fixedExpirySDAv1_1Auctioneer,
-      };
-    case BOND_TYPE.FIXED_EXPIRY_FPA:
-      return {
-        teller: getAddresses(id).fixedExpiryTeller,
-        auctioneer: getAddresses(id).fixedExpiryFPAAuctioneer,
-      };
-    case BOND_TYPE.FIXED_EXPIRY_OFDA:
-      return {
-        teller: getAddresses(id).fixedExpiryTeller,
-        auctioneer: getAddresses(id).fixedExpiryOFDAAuctioneer,
-      };
-    case BOND_TYPE.FIXED_EXPIRY_OSDA:
-      return {
-        teller: getAddresses(id).fixedExpiryTeller,
-        auctioneer: getAddresses(id).fixedExpiryOSDAAuctioneer,
-      };
-    case BOND_TYPE.FIXED_TERM_SDA:
-    case BOND_TYPE.FIXED_TERM_DEPRECATED:
-      return {
-        teller: getAddresses(id).fixedTermTeller,
-        auctioneer: getAddresses(id).fixedTermSDAAuctioneer,
-      };
-    case BOND_TYPE.FIXED_TERM_SDA_V1_1:
-      return {
-        teller: getAddresses(id).fixedTermTeller,
-        auctioneer: getAddresses(id).fixedTermSDAv1_1Auctioneer,
-      };
-    case BOND_TYPE.FIXED_TERM_FPA:
-      return {
-        teller: getAddresses(id).fixedTermTeller,
-        auctioneer: getAddresses(id).fixedTermFPAAuctioneer,
-      };
-    case BOND_TYPE.FIXED_TERM_OFDA:
-      return {
-        teller: getAddresses(id).fixedTermTeller,
-        auctioneer: getAddresses(id).fixedTermOFDAAuctioneer,
-      };
-    case BOND_TYPE.FIXED_TERM_OSDA:
-      return {
-        teller: getAddresses(id).fixedTermTeller,
-        auctioneer: getAddresses(id).fixedTermOSDAAuctioneer,
-      };
-  }
-};
