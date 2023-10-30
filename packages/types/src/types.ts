@@ -1,6 +1,8 @@
+type Address = `0x${string}}`;
+
 export interface TokenBase {
   chainId: number;
-  address: string;
+  address: Address;
 }
 
 export interface Token extends TokenBase {
@@ -49,9 +51,9 @@ export interface PrecalculatedMarket {
   id: string;
   chainId: string;
   name: string;
-  auctioneer: string;
-  teller: string;
-  owner: string;
+  auctioneer: Address;
+  teller: Address;
+  owner: Address;
   vesting: number;
   vestingType: string;
   payoutToken: Token;
@@ -60,15 +62,11 @@ export interface PrecalculatedMarket {
   totalBondedAmount: number;
   totalPayoutAmount: number;
   creationBlockTimestamp: number;
-  callbackAddress: string;
+  callbackAddress: Address;
   bondsIssued: number;
 }
 
-export interface CalculatedMarket {
-  id: string;
-  chainId: string;
-  auctioneer: string;
-  teller: string;
+export interface CalculatedMarket extends PrecalculatedMarket {
   marketId: bigint;
   discount: number;
   discountedPrice: number;
@@ -79,34 +77,25 @@ export interface CalculatedMarket {
   maxPayoutUsd: number;
   ownerBalance: string;
   ownerAllowance: string;
-  vesting: number;
-  vestingType: string;
   currentCapacity: number;
   capacityToken: Token;
   isCapacityInQuote: boolean;
-  owner: string;
-  quoteToken: LpToken;
-  payoutToken: Token;
   isLive: boolean;
-  isInstantSwap: boolean;
-  totalBondedAmount: number;
-  totalPayoutAmount: number;
   tbvUsd: number;
-  creationBlockTimestamp: number;
   creationDate: string;
-  callbackAddress: string;
-  bondsIssued: number;
   start?: number;
   conclusion?: number;
-  formattedFullPrice: string;
-  formattedMaxPayoutUsd: string;
-  formattedDiscountedPrice: string;
-  formattedShortVesting: string;
-  formattedLongVesting: string;
-  formattedTbvUsd: string;
+  formatted: {
+    fullPrice: string;
+    maxPayoutUsd: string;
+    discountedPrice: string;
+    shortVesting: string;
+    longVesting: string;
+    tbvUsd: string;
+  };
 }
 
-export enum BOND_TYPE {
+export enum BondType {
   FIXED_EXPIRY_DEPRECATED = "fixed-expiration",
   FIXED_EXPIRY_SDA = "fixed-expiry-sda",
   FIXED_EXPIRY_SDA_V1_1 = "fixed-expiry-sda-v1_1",
@@ -120,3 +109,26 @@ export enum BOND_TYPE {
   FIXED_TERM_OFDA = "fixed-term-ofda",
   FIXED_TERM_OSDA = "fixed-term-osda",
 }
+
+export type CreateMarketParams = {
+  payoutToken: string;
+  quoteToken: string;
+  callbackAddr: string;
+  capacityInQuote: boolean;
+  capacity: any;
+  debtBuffer: any;
+  vesting: any;
+  start: any;
+  conclusion?: any;
+  duration?: any;
+  depositInterval: any;
+  scaleAdjustment?: any;
+  formattedPrice?: any;
+  formattedInitialPrice?: any;
+  formattedMinimumPrice?: any;
+  oracle?: string;
+  fixedDiscount?: any;
+  maxDiscountFromCurrent?: any;
+  baseDiscount?: any;
+  targetIntervalDiscount?: any;
+};

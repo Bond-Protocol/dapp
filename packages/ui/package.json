@@ -77,7 +77,8 @@
     "typescript": "^5.2.2",
     "vite-plugin-dts": "^1.7.1",
     "viteconfig": "*",
-    "types": "*"
+    "types": "*",
+    "formatters": "*"
   },
   "dependencies": {
     "@mui/base": "^5.0.0-alpha.88",

@@ -9,15 +9,12 @@ import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { useTestnetMode } from "hooks/useTestnet";
 import { useCallback, useEffect, useState } from "react";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
-import {
-  calculateTrimDigits,
-  Token,
-  trim,
-} from "@bond-protocol/contract-library";
+import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 import { useTokens } from "context";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
 import axios from "axios";
+import { Token } from "types";
 
 export type TweakedBondPurchase = BondPurchase & {
   txUrl: string;

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Address, useAccount, useNetwork, usePublicClient } from "wagmi";
 import * as contractLib from "@bond-protocol/contract-library";
-import { CHAIN_ID } from "types";
+import { CHAIN_ID, CreateMarketParams } from "types";
 import {
   checkOraclePairValidity,
   getAddressesForType,
@@ -257,7 +257,7 @@ export const CreateMarketController = () => {
     const config = configureMarket(state);
 
     return contractLib.encodeCreateMarket(
-      config?.marketParams as contractLib.CreateMarketParams,
+      config?.marketParams as CreateMarketParams,
       config?.bondType as contractLib.BondType
     );
   };
@@ -299,7 +299,7 @@ export const CreateMarketController = () => {
 
     try {
       let estimate = await contractLib.estimateGasCreateMarket(
-        config.marketParams as contractLib.CreateMarketParams,
+        config.marketParams as CreateMarketParams,
         config.bondType as contractLib.BondType,
         publicClient
       );

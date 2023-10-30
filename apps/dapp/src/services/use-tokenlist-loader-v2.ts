@@ -19,6 +19,7 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
 };
 
 export const fetchAndMatchPricesForTestnet = async () => {
+  //@ts-ignore
   const pricedTokens = await fetchPrices(tokenlist);
 
   return testnetTokenlist.map((t) => {
@@ -58,7 +59,8 @@ export const useTokenlistLoader = () => {
 
       const pricedTokens = environment.isTestnet
         ? await fetchAndMatchPricesForTestnet()
-        : await fetchPrices(tokens);
+        : //@ts-ignore
+          await fetchPrices(tokens);
 
       setTokens(pricedTokens);
       setFetchExtended(false);

@@ -21,6 +21,7 @@ export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
     return <PlaceholderChart message={"Loading performance data"} />;
   }
 
+  //@ts-ignore
   if (!dataset || purchases?.length! < 2 || market?.quoteToken?.lpPair) {
     return (
       <PlaceholderChart

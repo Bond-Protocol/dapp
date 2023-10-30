@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Icon, Input, InputProps } from "..";
-import { longerFormatter } from "utils";
+import { longerFormatter } from "formatters";
 
 export type TokenQuantityInputProps = InputProps & {
   symbol?: string;

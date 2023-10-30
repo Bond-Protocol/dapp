@@ -10,7 +10,7 @@ const fetchOnChain = async (
   address: Address,
   chainId: number,
   publicClient: PublicClient
-): Promise<Omit<Token, "price">> => {
+): Promise<Omit<Token, "price" | "address"> & { address: Address }> => {
   try {
     const contract = getContract({
       address,
@@ -48,7 +48,7 @@ export const useDiscoverToken = () => {
   const publicClient = usePublicClient();
 
   const discover = async (
-    address: string,
+    address: Address,
     chainId: number
   ): Promise<{ token: Token; source: string }> => {
     setLoading(true);
@@ -57,16 +57,14 @@ export const useDiscoverToken = () => {
       const [token] = await defillama.fetchPrice(address, chainId);
       //@ts-ignore
       if (token?.price) {
+        //@ts-ignore
         return { token, source: "defillama" };
       }
 
-      const onChainToken = await fetchOnChain(
-        address as Address,
-        chainId,
-        publicClient
-      );
+      const onChainToken = await fetchOnChain(address, chainId, publicClient);
 
       if (onChainToken.decimals) {
+        //@ts-ignore
         return { token: onChainToken, source: "on-chain" };
       }
     } catch (e) {

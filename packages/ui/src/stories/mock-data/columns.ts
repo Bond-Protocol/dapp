@@ -30,9 +30,9 @@ const bondPrice: Column<CalculatedMarket> = {
   formatter: (market) => {
     return {
       icon: market.payoutToken.logoURI,
-      value: market.formattedDiscountedPrice,
-      subtext: market.formattedFullPrice
-        ? market.formattedFullPrice + " Market"
+      value: market.formatted.discountedPrice,
+      subtext: market.formatted.fullPrice
+        ? market.formatted.fullPrice + " Market"
         : "Unknown",
     };
   },
@@ -91,9 +91,9 @@ const vesting: Column<CalculatedMarket> = {
     const isTerm = market.vestingType === "fixed-term";
     const sort = market.vesting * 1000;
 
-    const term = market.formattedShortVesting.includes("Immediate")
+    const term = market.formatted.shortVesting.includes("Immediate")
       ? " Instant Swap"
-      : market.formattedShortVesting + " Term";
+      : market.formatted.shortVesting + " Term";
 
     return {
       value: formatDate.short(new Date(sort)),

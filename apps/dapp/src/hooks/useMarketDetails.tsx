@@ -35,7 +35,7 @@ export const useMarketDetails = (market: CalculatedMarket) => {
 
   const vestingLabel =
     market.vestingType === "fixed-term"
-      ? market.formattedLongVesting
+      ? market.formatted.longVesting
       : vestingDate;
 
   const startDate = market.start && new Date(market.start * 1000);

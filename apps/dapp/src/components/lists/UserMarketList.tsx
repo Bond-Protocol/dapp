@@ -1,4 +1,4 @@
-import { CalculatedMarket, CHAINS } from "@bond-protocol/contract-library";
+import { CalculatedMarket, CHAINS } from "types";
 import {
   Button,
   Column,

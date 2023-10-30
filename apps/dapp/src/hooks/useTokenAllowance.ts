@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { calculateTrimDigits, trim } from "ui";
+import { calculateTrimDigits, trim } from "formatters";
 import { Address, useBalance } from "wagmi";
 import { useAllowance } from "./contracts/useAllowance";
 

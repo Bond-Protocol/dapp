@@ -1,4 +1,4 @@
-export class BondProtocolError extends Error {
+export class BondFormatterError extends Error {
   constructor(message: string, prefix = "") {
     super(`${prefix}: ${message}`);
     this.name = this.constructor.name;
@@ -7,7 +7,7 @@ export class BondProtocolError extends Error {
 }
 
 export const defaultErrorHandler = (error: Error) => {
-  console.error(new BondProtocolError(error.message));
+  console.error(new BondFormatterError(error.message));
   return "invalid";
 };
 

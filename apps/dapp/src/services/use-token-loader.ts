@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Token } from "types";
 import { testnetTokenlist, tokenlist } from "hooks";
 import * as defillama from "./defillama";
-import { usdFormatter } from "../utils/format";
+import { usdFormatter } from "formatters";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { environment } from "src/environment";
 import { useSubgraph } from "hooks/useSubgraph";

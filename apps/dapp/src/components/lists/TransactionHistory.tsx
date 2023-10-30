@@ -8,7 +8,7 @@ import {
 import { CalculatedMarket } from "types";
 import { BondPurchase } from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
-import { longFormatter, usdFullFormatter } from "src/utils/format";
+import { longFormatter, usdFullFormatter } from "formatters";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMediaQueries } from "hooks";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";

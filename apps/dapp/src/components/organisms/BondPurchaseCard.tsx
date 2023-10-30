@@ -29,7 +29,8 @@ export type BondPurchaseCard = {
 };
 
 const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
-const NO_REFERRAL_ADDRESS = "0x0000000000000000000000000000000000000000";
+const NO_REFERRAL_ADDRESS: Address =
+  "0x0000000000000000000000000000000000000000";
 const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
 
 const ShowWarning = ({
@@ -126,10 +127,10 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   );
 
   const showOwnerBalanceWarning =
-    market.callbackAddress === "0x0000000000000000000000000000000000000000" &&
+    market.callbackAddress === NO_REFERRAL_ADDRESS &&
     Number(market.maxPayout) > Number(market.ownerBalance);
   const showOwnerAllowanceWarning =
-    market.callbackAddress === "0x0000000000000000000000000000000000000000" &&
+    market.callbackAddress === NO_REFERRAL_ADDRESS &&
     Number(market.maxPayout) > Number(market.ownerAllowance);
 
   const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
@@ -140,8 +141,8 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   const vestingLabel =
     market.vestingType === "fixed-term"
-      ? market.formattedLongVesting
-      : market.formattedShortVesting;
+      ? market.formatted.longVesting
+      : market.formatted.shortVesting;
 
   useEffect(() => {
     const setGasFee = async () => {

@@ -26,6 +26,7 @@ import { environment } from "src/environment";
 import { CHAINS } from "@bond-protocol/contract-library";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import { createPublicClient, http } from "viem";
 
 const getIconsForChains = (c: any) => {
   const logoUrl = Array.from(CHAINS.values()).find(
@@ -70,6 +71,18 @@ const connectors = connectorsForWallets([
 ]);
 
 const config = createConfig({ publicClient, connectors });
+
+export const clients = {
+  1: createPublicClient({
+    chain: mainnet,
+    transport: http(),
+  }),
+
+  42161: createPublicClient({
+    chain: arbitrum,
+    transport: http(),
+  }),
+};
 
 export const BlockchainProvider: FC<{ children?: ReactNode }> = ({
   children,

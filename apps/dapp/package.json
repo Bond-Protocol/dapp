@@ -22,6 +22,7 @@
     "openapi": "yarn openapi:make-file && yarn openapi:codegen"
   },
   "dependencies": {
+    "formatters": "*",
     "@bond-protocol/contract-library": "*",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@mui/base": "^5.0.0-alpha.88",

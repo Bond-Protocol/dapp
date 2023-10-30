@@ -1,10 +1,6 @@
 import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
 import { add } from "date-fns";
-import {
-  longFormatter,
-  usdFormatter,
-  usdLongFormatter,
-} from "src/utils/format";
+import { longFormatter, usdFormatter, usdLongFormatter } from "formatters";
 import {
   calculateTrimDigits,
   getBlockExplorer,
@@ -35,9 +31,9 @@ const bondPrice: Column<CalculatedMarket> = {
   formatter: (market) => {
     return {
       icon: market.payoutToken.logoURI,
-      value: market.formattedDiscountedPrice,
-      subtext: market.formattedFullPrice
-        ? market.formattedFullPrice + " Market"
+      value: market.formatted?.discountedPrice,
+      subtext: market.formatted?.fullPrice
+        ? market.formatted?.fullPrice + " Market"
         : "Unknown",
     };
   },
@@ -98,9 +94,9 @@ const vesting: Column<CalculatedMarket> = {
       ? add(Date.now(), { seconds: market.vesting })
       : market.vesting * 1000;
 
-    const term = market.formattedShortVesting?.includes("Immediate")
+    const term = market.formatted?.shortVesting?.includes("Immediate")
       ? " Instant Swap"
-      : market.formattedShortVesting + " Term";
+      : market.formatted?.shortVesting + " Term";
 
     return {
       value: formatDate.short(new Date(sort)),

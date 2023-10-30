@@ -10,6 +10,7 @@ import {
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/blockchain-provider";
 import { useTokenlists } from "context/tokenlist-context";
+import { isAddress } from "viem";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
   chainId: number;
@@ -34,7 +35,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   useEffect(() => {
     async function fetchUnknownToken() {
       const address = filter.trim();
-      if (ethers.utils.isAddress(address)) {
+      if (isAddress(address)) {
         try {
           setLoading(true);
           const { token, source } = await discover(address, chainId);

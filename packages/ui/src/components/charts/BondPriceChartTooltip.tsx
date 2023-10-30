@@ -1,4 +1,9 @@
-import { calculateTrimDigits, formatCurrency, formatDate, trim } from "utils";
+import {
+  calculateTrimDigits,
+  formatCurrency,
+  formatDate,
+  trim,
+} from "formatters";
 
 export const getDiscountColor = (price: number, discount: number) => {
   if (price === discount) return "text-white";

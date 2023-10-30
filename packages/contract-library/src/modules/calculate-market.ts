@@ -1,28 +1,29 @@
 import { CalculatedMarket, PrecalculatedMarket } from 'types';
 import { Address, PublicClient, formatUnits, getContract } from 'viem';
+import { formatDate, usdFullFormatter } from 'formatters';
 import { Auctioneer, getAuctioneerAbiForName } from 'core';
 import { abis } from 'abis';
-
 
 export async function calculateMarket(
   subgraphMarket: PrecalculatedMarket,
   publicClient: PublicClient,
-  referrerAddress: Address = `0x${'0'.repeat(40)}`,
+  referrerAddress: Address = `0x${"0".repeat(40)}`
 ): Promise<CalculatedMarket> {
   const market = createBaseMarket(subgraphMarket);
   const { quoteToken, payoutToken } = market;
 
+  if (!quoteToken.price || !payoutToken.price) return market;
   const auctioneerAbi = getAuctioneerAbiForName(market.name as Auctioneer);
 
   const auctioneerContract = getContract({
     abi: auctioneerAbi,
-    address: market.auctioneer,
+    address: market.auctioneer as Address,
     publicClient,
   });
 
   const payoutTokenContract = getContract({
     abi: abis.erc20,
-    address: payoutToken.address,
+    address: payoutToken.address as Address,
     publicClient,
   });
 
@@ -62,23 +63,28 @@ export async function calculateMarket(
   const price = marketPrice * shift;
   const quoteTokensPerPayoutToken = price / 10n ** 36n;
 
-  const discountedPrice = Number(
-    quoteTokensPerPayoutToken * BigInt(quoteToken.price),
+  const adjustedQuote = formatUnits(
+    quoteTokensPerPayoutToken,
+    quoteToken.decimals
   );
 
-  const discount =
-    ((discountedPrice - payoutToken.price) / payoutToken.price) * 100;
+  const discountedPrice = Number(adjustedQuote) * (quoteToken.price ?? 0);
 
-  const maxAccepted =
-    (maxAmountAccepted - maxAmountAccepted * BigInt(0.005)) /
-    10n ** BigInt(quoteToken.decimals);
+  const discount =
+    (discountedPrice - (payoutToken.price ?? 0) / (payoutToken.price ?? 0)) *
+    100;
+
+  const maxAccepted = formatUnits(
+    BigInt(Number(maxAmountAccepted) - Number(maxAmountAccepted) * 0.005),
+    quoteToken.decimals
+  );
 
   const [_maxPayout] = marketInfo.slice(-1);
 
   const maxPayout = formatUnits(BigInt(_maxPayout), payoutToken.decimals);
 
   const maxPayoutUsd =
-    payoutToken.price > 0 ? Number(maxPayout) * market.payoutToken.price : 0;
+    payoutToken.price! > 0 ? Number(maxPayout) * market.payoutToken.price! : 0;
 
   const ownerBalance = formatUnits(ownerPayoutBalance, payoutToken.decimals);
 
@@ -89,12 +95,12 @@ export async function calculateMarket(
 
   const currentCapacity = formatUnits(
     _currentCapacity,
-    isCapacityInQuote ? quoteToken.decimals : payoutToken.decimals,
+    isCapacityInQuote ? quoteToken.decimals : payoutToken.decimals
   );
 
   const capacityToken = isCapacityInQuote ? quoteToken : payoutToken;
 
-  const fullPrice = payoutToken.price;
+  const fullPrice = payoutToken.price ?? 0;
 
   return {
     ...market,
@@ -111,36 +117,49 @@ export async function calculateMarket(
     capacityToken,
     fullPrice,
     discount,
-
-  formattedFullPrice: "",
-  formattedMaxPayoutUsd: "",
-  formattedDiscountedPrice: "",
-  formattedShortVesting: "",
-  formattedLongVesting: "",
-  formattedTbvUsd: "",
-    }
+    formatted: {
+      fullPrice: usdFullFormatter.format(fullPrice),
+      discountedPrice: usdFullFormatter.format(discountedPrice),
+      maxPayoutUsd: usdFullFormatter.format(maxPayoutUsd),
+      tbvUsd: usdFullFormatter.format(
+        market.totalBondedAmount * quoteToken.price
+      ),
+      shortVesting: market.isInstantSwap
+        ? "Immediate"
+        : formatDate.short(new Date(market.vesting * 1000)),
+      longVesting: market.isInstantSwap
+        ? "Immediate Payout"
+        : formatDate.long(new Date(market.vesting * 1000)),
+    },
+  };
 }
-
-function createBaseMarket(market: PrecalculatedMarket) {
+function createBaseMarket(market: PrecalculatedMarket): CalculatedMarket {
   return {
     ...market,
-    marketId: BigInt(market.id.slice(market.id.lastIndexOf('_') + 1)),
+    capacityToken: market.payoutToken,
+    marketId: BigInt(market.id.slice(market.id.lastIndexOf("_") + 1)),
     discount: 0,
     discountedPrice: 0,
-    formattedDiscountedPrice: '',
-    quoteTokensPerPayoutToken: '',
+    quoteTokensPerPayoutToken: 0,
+
     fullPrice: 0,
-    formattedFullPrice: '',
-    maxAmountAccepted: '',
-    maxPayout: '',
+    maxAmountAccepted: "",
+    maxPayout: "",
     maxPayoutUsd: 0,
-    ownerBalance: '',
-    ownerAllowance: '',
+    ownerBalance: "",
+    ownerAllowance: "",
     currentCapacity: 0,
-    capacityToken: '',
     isLive: false,
     tbvUsd: 0,
-    formattedTbvUsd: '',
-    creationDate: '',
+    creationDate: "",
+    isCapacityInQuote: false,
+    formatted: {
+      fullPrice: "Unknown",
+      discountedPrice: "Unknown",
+      tbvUsd: "Unknown",
+      maxPayoutUsd: "Unknown",
+      shortVesting: "Unknown",
+      longVesting: "Unknown",
+    },
   };
 }

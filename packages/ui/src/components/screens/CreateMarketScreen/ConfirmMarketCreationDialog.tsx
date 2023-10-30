@@ -19,7 +19,7 @@ import {
   formatCurrency,
   formatDate,
   trim,
-} from "utils";
+} from "formatters";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { useEffect, useState } from "react";
 import { CHAINS } from "types";
