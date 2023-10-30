@@ -63,7 +63,7 @@ const mainnetAddresses: ContractAddresses = {
   fixedTermFPAAuctioneer: '0xF7F9Ae2415F8Cb89BEebf9662A19f2393e7065e0',
   fixedTermOFDAAuctioneer: '',
   fixedTermOSDAAuctioneer: '',
-  settlement: '',
+  settlement: '0x007105D27BCe31CcFFA76Fc191886e944606E34a',
 };
 
 const goerliAddresses: ContractAddresses = {
@@ -99,7 +99,7 @@ const arbitrumMainnetAddresses: ContractAddresses = {
   fixedTermFPAAuctioneer: '0xF7F9A96cDBFEFd70BDa14a8f30EC503b16bCe9b1',
   fixedTermOFDAAuctioneer: '0xF70FDAae514a8b48B83caDa51C0847B46Bb698bd',
   fixedTermOSDAAuctioneer: '0xF705DA9476a172408e1B94b2A7B2eF595A91C29b',
-  settlement: '',
+  settlement: '0x007105D27BCe31CcFFA76Fc191886e944606E34a',
 };
 
 const arbitrumGoerliAddresses: ContractAddresses = {

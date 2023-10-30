@@ -18,7 +18,7 @@ export const orderApiServerMap = {
   },
 
   [ENVIRONMENT.PRODUCTION]: {
-    url: "",
+    url: "https://public-api-server-production.up.railway.app/",
     description: "Production Server",
   },
 };
