@@ -1,14 +1,12 @@
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import {
   ActionInfoList,
   ButtonGroup,
-  Checkbox,
   formatCurrency,
   formatDate,
   SummaryLabel,
   SummaryRow,
-  Switch,
 } from "ui";
 import { useAuth } from "./use-auth";
 import { useLimitOrderForMarket } from "./use-limit-order";
@@ -47,7 +45,7 @@ const TokenAmountLabel = ({
 export const LimitOrderConfirmationDialog = (
   props: LimitOrderConfirmationDialogProps
 ) => {
-  const [autoCancel, setAutoCancel] = useState(true);
+  //const [autoCancel, setAutoCancel] = useState(true);
   const order = useLimitOrderForMarket();
   const auth = useAuth();
 
@@ -131,23 +129,23 @@ export const LimitOrderConfirmationDialog = (
         <h4 className="mt-2 text-left font-fraktion">DETAILS</h4>
         <ActionInfoList fields={fields} />
       </div>
-      <div className="mt-2 bg-white/5 px-2 py-1.5">
-        <Switch
-          defaultChecked={autoCancel}
-          onClick={() => setAutoCancel((prev) => !prev)}
-          labelClassName="text-white/90 font-semibold"
-          label="Auto-cancel order in extreme market conditions"
-        />
-        {!autoCancel && (
-          <div className="mt-2">
-            <Checkbox label="I undertand" />
-            <p className="mt-1 w-[380px] pl-6 font-mono text-sm leading-none text-light-grey">
-              By disabling auto-cancel, I understand that my order will execute
-              if market price is below limit price
-            </p>
-          </div>
-        )}
-      </div>
+      {/* <div className="mt-2 bg-white/5 px-2 py-1.5"> */}
+      {/*   <Switch */}
+      {/*     defaultChecked={autoCancel} */}
+      {/*     onClick={() => setAutoCancel((prev) => !prev)} */}
+      {/*     labelClassName="text-white/90 font-semibold" */}
+      {/*     label="Auto-cancel order in extreme market conditions" */}
+      {/*   /> */}
+      {/*   {!autoCancel && ( */}
+      {/*     <div className="mt-2"> */}
+      {/*       <Checkbox label="I undertand" /> */}
+      {/*       <p className="mt-1 w-[380px] pl-6 font-mono text-sm leading-none text-light-grey"> */}
+      {/*         By disabling auto-cancel, I understand that my order will execute */}
+      {/*         if market price is below limit price */}
+      {/*       </p> */}
+      {/*     </div> */}
+      {/*   )} */}
+      {/* </div> */}
       <div className="mt-1 text-sm text-light-grey-500">
         You can cancel orders at any time in the "Orders" tab.
       </div>
