@@ -120,7 +120,7 @@ export const LimitOrderConfirmationDialog = (
           <div className="flex items-center justify-center">@</div>
           <SummaryLabel
             value={`${formattedPrice} ${props.market.quoteToken.symbol}/${props.market.payoutToken.symbol}`}
-            subtext="Limit Pricr"
+            subtext="Limit Price"
             className="uppercase"
           />
         </div>
