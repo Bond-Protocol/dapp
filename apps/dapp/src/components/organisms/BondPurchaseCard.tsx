@@ -1,12 +1,10 @@
 import { FC, useEffect, useState } from "react";
 
-import { getBlockExplorer } from "@bond-protocol/contract-library";
 import { useTokenAllowance } from "hooks";
 import {
   ActionInfoList,
   Button,
   formatCurrency,
-  formatDate,
   InputCard,
   PurchaseConfirmDialog,
   PurchaseSuccessDialog,
@@ -14,14 +12,12 @@ import {
 import { BondButton } from "./BondButton";
 import { Address, useAccount, useFeeData } from "wagmi";
 import { useNativeCurrency } from "hooks/useNativeCurrency";
-import add from "date-fns/add";
 import defillama from "services/defillama";
-import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useNavigate } from "react-router-dom";
 import { useIsEmbed } from "hooks/useIsEmbed";
 import { usePurchase } from "hooks/contracts/usePurchase";
 import { CalculatedMarket } from "types";
-import { formatEther, formatGwei, formatUnits } from "viem";
+import { formatEther, formatUnits } from "viem";
 import { TransactionVizard } from "components/modals/TransactionVizard";
 
 export type BondPurchaseCard = {
@@ -35,6 +31,8 @@ const NO_REFERRAL_ADDRESS: Address =
   "0x0000000000000000000000000000000000000000";
 const NO_FRONTEND_FEE_OWNERS =
   import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS ?? "";
+
+const DEFAULT_SLIPPAGE = 0.05;
 
 const ShowWarning = ({
   market,
@@ -108,14 +106,15 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const [networkFee, setNetworkFee] = useState("0");
   const [networkFeeUsd, setNetworkFeeUsd] = useState("0");
 
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
 
   const { data: gasData } = useFeeData({ chainId: Number(market.chainId) });
 
   const bond = usePurchase(market, {
     amountIn: amount,
     amountOut: payout,
-    slippage: 0.05,
+    referrer: referralAddress,
+    slippage: DEFAULT_SLIPPAGE,
   });
 
   const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
@@ -172,7 +171,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     updatePayout();
   }, [amount]);
 
-  console.log({ hasSufficientAllowance, hasSufficientBalance });
   const onClickBond = !hasSufficientAllowance
     ? () => approve()
     : () => setShowModal(true);
@@ -210,16 +208,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     },
   ];
 
-  const submitTx = () => {
-    if (!address) throw new Error("Not Connected");
-    return bond.write({
-      slippage: 0.05,
-      amountIn: Number(amount),
-      amountOut: Number(payout),
-      referrer: referralAddress,
-    });
-  };
-
   const goToMarkets = () => {
     setShowModal(false);
     navigate((isEmbed ? "/embed" : "") + "/markets");
@@ -230,7 +218,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     navigate((isEmbed ? "/embed" : "") + "/dashboard");
   };
 
-  console.log({ showModal });
   return (
     <div className="p-4">
       <div className="flex h-full flex-col justify-between">
@@ -274,8 +261,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           //@ts-ignore
           txStatus={bond}
           chainId={market.chainId}
-          //@ts-ignore
-          onSubmit={submitTx}
+          onSubmit={() => bond.write()}
           onClose={() => setShowModal(false)}
           InitialDialog={(args) => (
             <PurchaseConfirmDialog

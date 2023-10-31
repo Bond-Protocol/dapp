@@ -9,8 +9,12 @@ import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { useTestnetMode } from "hooks/useTestnet";
 import { useCallback, useEffect, useState } from "react";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
-import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
-import { useTokens } from "context";
+import {
+  calculateTrimDigits,
+  getBalance,
+  trim,
+} from "@bond-protocol/contract-library";
+import { clients, useTokens } from "context";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
 import axios from "axios";
@@ -59,51 +63,53 @@ export const useDashboardLoader = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoading || !address) return;
+    async function load() {
+      if (isLoading || !address) return;
 
-    const ownerBalances = concatSubgraphQueryResultArrays(
-      dashboardData,
-      "ownerBalances"
-    );
-    const bondTokens = concatSubgraphQueryResultArrays(
-      dashboardData,
-      "bondTokens"
-    );
+      const ownerBalances = concatSubgraphQueryResultArrays(
+        dashboardData,
+        "ownerBalances"
+      );
+      const bondTokens = concatSubgraphQueryResultArrays(
+        dashboardData,
+        "bondTokens"
+      );
 
-    loadBondPurchases().then((response) => {
-      setBondPurchases(response.bondPurchases);
-      setUserTbv(response.tbvUsd);
-    });
+      loadBondPurchases().then((response) => {
+        setBondPurchases(response.bondPurchases);
+        setUserTbv(response.tbvUsd);
+      });
 
-    const markets = concatSubgraphQueryResultArrays(dashboardData, "markets");
-    const uniqueBonderCounts = concatSubgraphQueryResultArrays(
-      dashboardData,
-      "uniqueBonderCounts"
-    );
+      const markets = concatSubgraphQueryResultArrays(dashboardData, "markets");
+      const uniqueBonderCounts = concatSubgraphQueryResultArrays(
+        dashboardData,
+        "uniqueBonderCounts"
+      );
 
-    const erc20OwnerBalances: Partial<OwnerBalance>[] = [];
-    const promises: Promise<any>[] = [];
-    // bondTokens.forEach((bondToken: BondToken) => {
-    //   promises.push(
-    //     getBalance(bondToken.id, address, providers[bondToken.chainId]).then(
-    //       (result: BigNumberish) => {
-    //         const toNumber = Number(result);
-    //         toNumber > 0 &&
-    //           erc20OwnerBalances.push({
-    //             balance: result,
-    //             bondToken: bondToken,
-    //             owner: address,
-    //           });
-    //       }
-    //     )
-    //   );
-    // });
+      const erc20OwnerBalances: any[] = await Promise.all(
+        bondTokens.map(async (bondToken: any) => {
+          const client = clients[bondToken.chainId];
+          const _balance = await getBalance(
+            bondToken.id,
+            address,
+            client
+          ).then();
+          const balance = Number(_balance);
 
-    const fetchErc20OwnerBalances = async () => {
-      await Promise.allSettled(promises);
+          return {
+            balance,
+            bondToken: bondToken,
+            owner: address,
+          };
+        })
+      );
+
+      const balances = erc20OwnerBalances
+        .flatMap((q) => q)
+        .filter((q) => !!q.balance);
 
       let userClaimable = 0;
-      const updatedBonds = [...ownerBalances, ...erc20OwnerBalances].map(
+      const updatedBonds = [...ownerBalances, ...balances].map(
         (bond: Partial<OwnerBalance>) => {
           if (!bond.bondToken || !bond.bondToken.underlying) return;
           const date = new Date(bond.bondToken.expiry * 1000);
@@ -150,13 +156,14 @@ export const useDashboardLoader = () => {
       //@ts-ignore
       setOwnerBalances(updatedBonds);
       setUserClaimable(userClaimable);
-    };
 
-    setAllMarkets(markets);
+      setAllMarkets(markets);
 
-    uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
+      uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
 
-    fetchErc20OwnerBalances();
+      fetchErc20OwnerBalances();
+    }
+    load();
   }, [tokens, isLoading, isTestnet]);
 
   //Calculate user markets TBV and total bonds

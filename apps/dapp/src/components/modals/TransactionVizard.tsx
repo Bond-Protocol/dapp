@@ -8,7 +8,7 @@ import {
 
 import { ContractTransaction } from "ethers";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
-import { Address, useContractWrite } from "wagmi";
+import { Address, useContractWrite, useWaitForTransaction } from "wagmi";
 
 enum TX_STATUS {
   /** Waiting, transaction hasn't been sent to signer*/
@@ -34,7 +34,7 @@ export type TransactionVizardProps = {
   /** Handler to close the wizard from within it */
   onClose: () => void;
   /** Should call the transaction and return it */
-  onSubmit: () => Promise<{ hash: string }>;
+  onSubmit: () => Promise<any>;
   /** The initial dialog of the wizard, usually the transaction summary/starter */
   InitialDialog?: (props: any) => JSX.Element;
   /** The dialog show if the transaction succeeds */
@@ -45,7 +45,7 @@ export type TransactionVizardProps = {
   signingTx?: Promise<ContractTransaction>;
   /** Optional titles for every stage */
   titles?: Partial<Record<TxStatus, string>>;
-  txStatus?: ReturnType<typeof useContractWrite>;
+  txStatus: ReturnType<typeof useContractWrite>;
 } & Partial<TransactionHashDialogProps>;
 
 export const TransactionVizard = ({
@@ -57,25 +57,24 @@ export const TransactionVizard = ({
   const [hash, setHash] = useState<Address>();
   const [txError, setTxError] = useState<Error>();
   const [result, setResult] = useState<any>();
+  const tx = useWaitForTransaction({
+    hash,
+  });
 
-  console.log({ txStatus });
   useEffect(() => {
-    if (txStatus?.isLoading) {
-      console.log("isloading");
+    if (tx.isFetching) {
       setStatus(TX_STATUS.WAITING);
     }
 
-    if (txStatus?.isSuccess) {
-      console.log("isSuccess");
+    if (tx.isSuccess) {
       setStatus(TX_STATUS.SUCCESS);
     }
 
-    if (txStatus?.isError) {
-      console.log("iserror");
+    if (txStatus.isError || tx.isError) {
       setStatus(TX_STATUS.FAILED);
       setTxError(txStatus.error!);
     }
-  }, [txStatus?.isLoading, txStatus?.isError, txStatus?.isSuccess]);
+  }, [tx, txStatus]);
 
   //Assume transaction is pending signature if no initial dialog is provided
   useEffect(() => {
@@ -89,7 +88,6 @@ export const TransactionVizard = ({
   const handleSubmit = async (chainId?: number, ...args: any[]) => {
     setStatus(TX_STATUS.SIGNING);
     const data = await props.onSubmit();
-    console.log("after submit");
 
     setHash(data?.hash as Address);
   };
@@ -115,7 +113,7 @@ export const TransactionVizard = ({
 
   const closeModal = () => {
     props.onClose();
-    setStatus(TX_STATUS.STANDBY);
+    restart();
   };
 
   const clear = () => {
@@ -134,7 +132,6 @@ export const TransactionVizard = ({
     handleSubmit();
     setStatus(TX_STATUS.SIGNING);
   };
-  console.log(status, { txStatus });
 
   const StartDialog = InitialDialog ?? (() => <div />);
 

@@ -17,7 +17,7 @@ type PurchaseArgs = {
   referrer?: Address;
   amountIn: number;
   amountOut: number;
-  slippage: number;
+  slippage?: number;
 };
 
 const NULL_ADDRESS: Address = `0x${"0".repeat(40)}`;
@@ -40,10 +40,9 @@ export const usePurchase = (market: CalculatedMarket, args: PurchaseArgs) => {
 
   const contract = useContractWrite(config);
 
-  const write = async ({ slippage = 0, ...args }: PurchaseArgs) => {
+  const write = async () => {
     if (!address) throw new Error("Not Connected");
 
-    //@ts-ignore
     return contract.writeAsync?.();
   };
 
@@ -63,12 +62,7 @@ export const usePurchase = (market: CalculatedMarket, args: PurchaseArgs) => {
     });
   };
 
-  const estimateBondGas = async (
-    amount = 0,
-    payout = "0",
-    slippage = 0.05,
-    referrerAddress = NULL_ADDRESS
-  ) => {
+  const estimateBondGas = async (referrerAddress = NULL_ADDRESS) => {
     const [address, _referrer, marketId, amountIn, amountOut] = purchaseArgs;
 
     return estimateBondPurchaseGas({
@@ -109,7 +103,8 @@ function formatPurchaseArgs({
     market.quoteToken.decimals
   );
 
-  const minAmountOut = args.amountOut - args.amountOut * (args.slippage / 100);
+  const minAmountOut =
+    args.amountOut - args.amountOut * (args.slippage ?? 0.05 / 100);
 
   const amountOut = parseUnits(
     minAmountOut.toFixed(market.payoutToken.decimals),

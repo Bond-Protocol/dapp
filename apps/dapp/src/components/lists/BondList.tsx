@@ -69,6 +69,7 @@ export const tableColumns: Array<Column<any>> = [
       const [tx, setTx] = useState<any>();
 
       const bond: OwnerBalance = props.data.bond;
+      console.log({ bond }, props);
       const redeem = useRedeemBond({
         bond,
         bondType: "" as BondType,
