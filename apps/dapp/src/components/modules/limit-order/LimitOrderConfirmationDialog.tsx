@@ -1,10 +1,12 @@
 import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { socials } from "components/common";
 import { useMemo } from "react";
 import {
   ActionInfoList,
   ButtonGroup,
   formatCurrency,
   formatDate,
+  Link,
   SummaryLabel,
   SummaryRow,
 } from "ui";
@@ -70,13 +72,11 @@ export const LimitOrderConfirmationDialog = (
       },
       {
         leftLabel: "Max Fee",
-        rightLabel: (
-          <TokenAmountLabel
-            amount={order.maxFee ?? 0}
-            symbol={props.market.quoteToken.symbol}
-            icon={props.market.quoteToken.logoURI}
-          />
-        ),
+        editable: true,
+        onChange: (value: string) => order.setMaxFee(Number(value)),
+        symbol: props.market.quoteToken.symbol,
+        logoURI: props.market.quoteToken.logoURI,
+        rightLabel: order.maxFee,
         tooltip:
           "This is the maximum amount of fees you will pay for this order. The executor will try to reduce this amount as much as possible.",
       },
@@ -86,7 +86,7 @@ export const LimitOrderConfirmationDialog = (
         link: `${props.market.blockExplorerUrl} ${props.orderContract}}`,
       },
     ],
-    [props.market, order]
+    [props.market, order.maxFee, order.payout, order.expiry]
   );
 
   return (
@@ -146,6 +146,17 @@ export const LimitOrderConfirmationDialog = (
       {/*     </div> */}
       {/*   )} */}
       {/* </div> */}
+
+      {!order.maxFee && (
+        <div className="mx-auto mt-1 max-w-[360px] text-center text-xs text-light-alert opacity-80">
+          Looks like we're currently unable to estimate the max fee, you may set
+          it manually above or wait for the system to resume. If this persists
+          for long, try reaching out in our{" "}
+          <a className="cursor-pointer text-white" href={socials.discord}>
+            Discord Server
+          </a>
+        </div>
+      )}
       <div className="mt-1 text-sm text-light-grey-500">
         You can cancel orders at any time in the "Orders" tab.
       </div>

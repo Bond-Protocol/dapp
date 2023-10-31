@@ -1,5 +1,5 @@
 import { InputUnstyled } from "@mui/base";
-import { Link, Tooltip } from "components";
+import { Icon, Link, Tooltip } from "components";
 import { Copy } from "components/atoms/Copy";
 import { ReactComponent as EditIcon } from "assets/icons/edit-icon.svg";
 import { useSymbolInput } from "src/hooks/use-symbol-input";
@@ -15,6 +15,7 @@ export interface ActionInfoLabelProps {
   symbol?: string;
   linkClassName?: string;
   tooltipClassName?: string;
+  logoURI?: string;
   onChange?: (value: string) => void;
 }
 
@@ -28,19 +29,14 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
 
   const handleChange = (e: React.BaseSyntheticEvent) => {
     const value = onChange(e);
-    props.onChange && props.onChange(value);
+    //props.onChange && props.onChange(value);
   };
 
   const isEdited = value !== props.value + (props.symbol ?? "");
 
-  useEffect(() => {
-    return () => {
-      props.onChange && props.onChange("");
-    };
-  }, []);
-
   const handleBlur = (args: any) => {
     onBlur(args);
+    props.onChange?.(value);
     setEditing(false);
   };
 
@@ -84,7 +80,13 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
             onBlur={handleBlur}
             onFocus={handleFocus}
             onChange={handleChange}
-            endAdornment={<EditIcon className="ml-1" />}
+            endAdornment={
+              <div className="font-fraktion ml-1 flex place-items-center items-center gap-x-1">
+                {props.logoURI && <Icon width={16} src={props.logoURI} />}
+                {props.symbol}
+                <EditIcon className="ml-1" />
+              </div>
+            }
             componentsProps={{
               root: { className: "flex items-center" },
               input: {

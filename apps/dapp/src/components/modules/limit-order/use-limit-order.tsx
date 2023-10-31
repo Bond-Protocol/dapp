@@ -18,6 +18,7 @@ import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
 
 export type ILimitOrderContext = {
+  setMaxFee(value: number): any;
   allowance: ReturnType<typeof useLimitOrderAllowance> & {
     approveRequiredAmount: () => void;
     approveRequiredForNextOrder: () => void;
@@ -167,6 +168,7 @@ export const LimitOrderProvider = ({
     amount,
     payout,
     maxFee,
+    setMaxFee,
     setPrice,
     setExpiry: updateExpiry,
     setAmount,

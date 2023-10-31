@@ -19,9 +19,12 @@ export const ActionInfo = (props: ActionInfoProps) => {
         tooltip={props.tooltip}
       />
       <ActionInfoLabel
-        editable={false}
+        editable={props.editable}
         value={props.rightLabel}
         link={props.link}
+        onChange={props.onChange}
+        symbol={props.symbol}
+        logoURI={props.logoURI}
         className="font-semibold"
       />
     </div>
