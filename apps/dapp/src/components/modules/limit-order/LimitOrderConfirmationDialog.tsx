@@ -9,7 +9,6 @@ import {
   formatDate,
   SummaryLabel,
   SummaryRow,
-  TooltipWrapper,
   trimToken,
 } from "ui";
 import { useAuth } from "./use-auth";
@@ -101,10 +100,7 @@ export const LimitOrderConfirmationDialog = (
     [props.market, order.maxFee, order.payout, order.expiry]
   );
 
-  const formattedPrice =
-    Number(order.price) < 1
-      ? trimToken(order.price)
-      : formatCurrency.twoDigitFormatter(order.price ?? 0);
+  const formattedPrice = trimToken(Number(order.amount) / Number(order.payout));
   const endDate = new Date(props.market.vesting * 1000);
   const formattedVesting = props.market.vestingType.includes("expiration")
     ? formatDistanceToNowStrict(endDate, { unit: "day" })
@@ -124,7 +120,7 @@ export const LimitOrderConfirmationDialog = (
           <div className="flex items-center justify-center">@</div>
           <SummaryLabel
             value={`${formattedPrice} ${props.market.quoteToken.symbol}/${props.market.payoutToken.symbol}`}
-            subtext="Limit Price"
+            subtext="Limit Pricr"
             className="uppercase"
           />
         </div>
