@@ -32,8 +32,6 @@ export type BondPurchaseArgs = {
   marketId: number | bigint;
   amountIn: bigint;
   amountOut: bigint;
-  chainId: number;
-  bondType: BondType;
 };
 
 export function estimateBondPurchaseGas({
@@ -44,16 +42,12 @@ export function estimateBondPurchaseGas({
   marketId,
   amountIn,
   amountOut,
-  bondType,
-  chainId,
 }: BondPurchaseArgs) {
-  //const abi = abis.baseTeller;
-  const abi = getTeller(chainId, bondType);
+  const abi = abis.baseTeller;
 
   return publicClient.estimateContractGas({
     address: tellerAddress,
     account: recipientAddress,
-    //@ts-ignore
     abi,
     functionName: "purchase",
     args: [

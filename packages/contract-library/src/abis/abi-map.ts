@@ -1,4 +1,4 @@
-import * as abiFiles from './generated';
+import * as abiFiles from "./generated";
 
 export const abis = {
   authority: abiFiles.authorityABI,
@@ -19,7 +19,7 @@ export const abis = {
   fixedTermOSDAAuctioneer: abiFiles.fixedTermOsdaAuctioneerABI,
 
   erc20: abiFiles.erc20ABI,
-  chainlinkOracle: abiFiles.bondChainlinkOracleABI,
+  chainlinkOracle: abiFiles.chainlinkOracleABI,
 };
 
 export const auctioneerAbis = {

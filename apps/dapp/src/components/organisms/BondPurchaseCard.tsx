@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { useIsEmbed } from "hooks/useIsEmbed";
 import { usePurchase } from "hooks/contracts/usePurchase";
 import { CalculatedMarket } from "types";
-import { formatUnits } from "viem";
+import { formatEther, formatGwei, formatUnits } from "viem";
 import { TransactionVizard } from "components/modals/TransactionVizard";
 
 export type BondPurchaseCard = {
@@ -29,10 +29,12 @@ export type BondPurchaseCard = {
   disabled?: boolean;
 };
 
-const REFERRAL_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
+const REFERRAL_ADDRESS = import.meta.env
+  .VITE_MARKET_REFERRAL_ADDRESS as Address;
 const NO_REFERRAL_ADDRESS: Address =
   "0x0000000000000000000000000000000000000000";
-const NO_FRONTEND_FEE_OWNERS = import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS;
+const NO_FRONTEND_FEE_OWNERS =
+  import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS ?? "";
 
 const ShowWarning = ({
   market,
@@ -92,39 +94,38 @@ const ShowWarning = ({
 };
 
 export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
+  const referralAddress = NO_FRONTEND_FEE_OWNERS?.includes(
+    market.chainId.concat("_").concat(market.owner)
+  )
+    ? NO_REFERRAL_ADDRESS
+    : REFERRAL_ADDRESS;
+
   const isEmbed = useIsEmbed();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [amount, setAmount] = useState<string>("0");
-  const [payout, setPayout] = useState<string>("0");
+  const [amount, setAmount] = useState<number>(0);
+  const [payout, setPayout] = useState<number>(0);
   const [networkFee, setNetworkFee] = useState("0");
   const [networkFeeUsd, setNetworkFeeUsd] = useState("0");
-  const [estimatedGas, setEstimatedGas] = useState(0);
-  const [gasPrice, setGasPrice] = useState({
-    gasPrice: "0",
-    usdPrice: "0",
-  });
 
   const { address, isConnected } = useAccount();
 
-  const { data: gasData } = useFeeData();
-  console.log({ gasData });
+  const { data: gasData } = useFeeData({ chainId: Number(market.chainId) });
 
-  const bond = usePurchase(market);
+  const bond = usePurchase(market, {
+    amountIn: amount,
+    amountOut: payout,
+    slippage: 0.05,
+  });
 
   const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
     useTokenAllowance(
       market.quoteToken.address as Address,
       market.quoteToken.decimals,
       market.chainId,
-      amount,
+      amount.toString(),
       market.teller
     );
-
-  const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
-    market.chainId,
-    "address"
-  );
 
   const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
     market.chainId
@@ -133,15 +134,10 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const showOwnerBalanceWarning =
     market.callbackAddress === NO_REFERRAL_ADDRESS &&
     Number(market.maxPayout) > Number(market.ownerBalance);
+
   const showOwnerAllowanceWarning =
     market.callbackAddress === NO_REFERRAL_ADDRESS &&
     Number(market.maxPayout) > Number(market.ownerAllowance);
-
-  const referralAddress = NO_FRONTEND_FEE_OWNERS.includes(
-    market.chainId.concat("_").concat(market.owner)
-  )
-    ? NO_REFERRAL_ADDRESS
-    : REFERRAL_ADDRESS;
 
   const vestingLabel =
     market.vestingType === "fixed-term"
@@ -152,11 +148,14 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     const setGasFee = async () => {
       if (!amount) return;
       const gas = await bond.estimateBondGas();
-      const price = Number(gasData?.formatted.gasPrice);
-      const nativeCost = Number(gas) * price;
+      const gasPrice = gasData?.gasPrice ?? 0n;
 
-      setNetworkFee(formatCurrency.trimToken(nativeCost));
-      //setNetworkFeeUsd(formatCurrency.usdFormatter.format(usdCost));
+      const cost = formatEther(gas * gasPrice);
+
+      const usdCost = Number(cost) * nativeCurrencyPrice;
+
+      setNetworkFee(formatCurrency.trimToken(cost));
+      setNetworkFeeUsd(formatCurrency.usdFormatter.format(usdCost));
     };
 
     setGasFee();
@@ -164,15 +163,16 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   useEffect(() => {
     const updatePayout = async () => {
-      let payout = await bond.getPayoutFor({ amount });
+      let payout = await bond.getPayoutFor({ amount: amount.toString() });
       let formattedPayout = formatUnits(payout, market.payoutToken.decimals);
 
-      setPayout(formatCurrency.trimToken(formattedPayout));
+      setPayout(Number(formatCurrency.trimToken(formattedPayout)));
     };
 
     updatePayout();
   }, [amount]);
 
+  console.log({ hasSufficientAllowance, hasSufficientBalance });
   const onClickBond = !hasSufficientAllowance
     ? () => approve()
     : () => setShowModal(true);
@@ -197,14 +197,16 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     },
     {
       leftLabel: "Estimated Gas Fee",
-      rightLabel: `${networkFee} ${nativeCurrency.symbol}`,
+      rightLabel: `${networkFee} ${nativeCurrency.symbol} (~${
+        networkFeeUsd ?? "?"
+      })`,
       tooltip:
         "Estimated gas fee for this transaction. NOTE: gas fees fluctuate and the price displayed may not be the price you pay.",
     },
     {
       leftLabel: "Bond Contract",
-      rightLabel: `View on ${blockExplorerName}`,
-      link: blockExplorerUrl + market.teller,
+      rightLabel: `View on ${market.blockExplorer.name}`,
+      link: market.blockExplorer.url + market.teller,
     },
   ];
 
@@ -214,6 +216,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
       slippage: 0.05,
       amountIn: Number(amount),
       amountOut: Number(payout),
+      referrer: referralAddress,
     });
   };
 
@@ -227,13 +230,13 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     navigate((isEmbed ? "/embed" : "") + "/dashboard");
   };
 
+  console.log({ showModal });
   return (
     <div className="p-4">
       <div className="flex h-full flex-col justify-between">
         <InputCard
-          //@ts-ignore
-          onChange={setAmount}
-          value={amount}
+          onChange={(amount) => setAmount(Number(amount))}
+          value={amount.toString()}
           balance={balance}
           market={market}
           tokenIcon={market.quoteToken.logoURI}
@@ -265,29 +268,34 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           </Button>
         </BondButton>
       </div>
-      <TransactionVizard
-        open={showModal}
-        chainId={market.chainId}
-        onSubmit={submitTx}
-        onClose={() => setShowModal(false)}
-        InitialDialog={(args: any) => (
-          <PurchaseConfirmDialog
-            {...args}
-            market={market}
-            amount={amount}
-            payout={payout}
-            vestingTime={vestingLabel}
-            networkFee={`${networkFee} ${nativeCurrency.symbol}`}
-          />
-        )}
-        SuccessDialog={(args: any) => (
-          <PurchaseSuccessDialog
-            {...args}
-            goToMarkets={goToMarkets}
-            goToBondDetails={goToBondDetails}
-          />
-        )}
-      />
+      {showModal && (
+        <TransactionVizard
+          open={showModal}
+          //@ts-ignore
+          txStatus={bond}
+          chainId={market.chainId}
+          //@ts-ignore
+          onSubmit={submitTx}
+          onClose={() => setShowModal(false)}
+          InitialDialog={(args) => (
+            <PurchaseConfirmDialog
+              {...args}
+              market={market}
+              amount={amount}
+              payout={payout}
+              vestingTime={vestingLabel}
+              networkFee={`${networkFee} ${nativeCurrency.symbol}`}
+            />
+          )}
+          SuccessDialog={(args) => (
+            <PurchaseSuccessDialog
+              {...args}
+              goToMarkets={goToMarkets}
+              goToBondDetails={goToBondDetails}
+            />
+          )}
+        />
+      )}
     </div>
   );
 };

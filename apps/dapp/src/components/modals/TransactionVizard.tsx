@@ -8,7 +8,7 @@ import {
 
 import { ContractTransaction } from "ethers";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
-import { Address } from "wagmi";
+import { Address, useContractWrite } from "wagmi";
 
 enum TX_STATUS {
   /** Waiting, transaction hasn't been sent to signer*/
@@ -45,57 +45,53 @@ export type TransactionVizardProps = {
   signingTx?: Promise<ContractTransaction>;
   /** Optional titles for every stage */
   titles?: Partial<Record<TxStatus, string>>;
+  txStatus?: ReturnType<typeof useContractWrite>;
 } & Partial<TransactionHashDialogProps>;
 
 export const TransactionVizard = ({
   InitialDialog,
+  txStatus,
   ...props
 }: TransactionVizardProps) => {
   const [status, setStatus] = useState<TxStatus>(TX_STATUS.STANDBY);
   const [hash, setHash] = useState<Address>();
   const [txError, setTxError] = useState<Error>();
   const [result, setResult] = useState<any>();
-  const [open, setOpen] = useState(props.open);
 
+  console.log({ txStatus });
   useEffect(() => {
-    setOpen(props.open);
-  }, [props.open]);
+    if (txStatus?.isLoading) {
+      console.log("isloading");
+      setStatus(TX_STATUS.WAITING);
+    }
+
+    if (txStatus?.isSuccess) {
+      console.log("isSuccess");
+      setStatus(TX_STATUS.SUCCESS);
+    }
+
+    if (txStatus?.isError) {
+      console.log("iserror");
+      setStatus(TX_STATUS.FAILED);
+      setTxError(txStatus.error!);
+    }
+  }, [txStatus?.isLoading, txStatus?.isError, txStatus?.isSuccess]);
 
   //Assume transaction is pending signature if no initial dialog is provided
   useEffect(() => {
     if (!InitialDialog) {
       TX_STATUS.SIGNING;
     }
-  });
+  }, []);
 
   const blockExplorer = getBlockExplorer(String(props?.chainId) ?? "1", "tx");
 
   const handleSubmit = async (chainId?: number, ...args: any[]) => {
     setStatus(TX_STATUS.SIGNING);
+    const data = await props.onSubmit();
+    console.log("after submit");
 
-    try {
-      const handler = props.onSubmit;
-
-      setStatus(TX_STATUS.WAITING);
-
-      const { hash } = await handler();
-
-      setHash(hash as Address);
-      setStatus(TX_STATUS.SUCCESS);
-    } catch (e) {
-      console.error("WizardError:", e);
-      setTxError(e as Error);
-      setStatus(TX_STATUS.FAILED);
-    }
-  };
-
-  const handleTx = async (handler: () => Promise<{ hash: string }>) => {
-    try {
-    } catch (e) {
-      console.error("WizardError:", e);
-      setTxError(e as Error);
-      setStatus(TX_STATUS.FAILED);
-    }
+    setHash(data?.hash as Address);
   };
 
   //Handles a tx started externally rather than via the first dialog
@@ -119,7 +115,6 @@ export const TransactionVizard = ({
 
   const closeModal = () => {
     props.onClose();
-    setOpen(false);
     setStatus(TX_STATUS.STANDBY);
   };
 
@@ -139,6 +134,7 @@ export const TransactionVizard = ({
     handleSubmit();
     setStatus(TX_STATUS.SIGNING);
   };
+  console.log(status, { txStatus });
 
   const StartDialog = InitialDialog ?? (() => <div />);
 
@@ -190,9 +186,10 @@ export const TransactionVizard = ({
   };
 
   const current = handlers[status];
+  console.log({ current });
 
   return (
-    <Modal title={current.title} open={open} onClickClose={closeModal}>
+    <Modal title={current.title} open={props.open} onClickClose={closeModal}>
       {current.element}
     </Modal>
   );

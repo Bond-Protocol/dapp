@@ -1,4 +1,9 @@
-import { Address, useAccount, useContractWrite, usePublicClient } from "wagmi";
+import {
+  Address,
+  useAccount,
+  useContractWrite,
+  usePrepareContractWrite,
+} from "wagmi";
 import {
   estimateBondPayout,
   estimateBondPurchaseGas,
@@ -17,38 +22,29 @@ type PurchaseArgs = {
 
 const NULL_ADDRESS: Address = `0x${"0".repeat(40)}`;
 
-export const usePurchase = (market: CalculatedMarket) => {
+export const usePurchase = (market: CalculatedMarket, args: PurchaseArgs) => {
   const { abi } = getBaseTeller(market.teller as Address);
   const publicClient = clients[Number(market.chainId)];
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
 
-  const contract = useContractWrite({
+  const purchaseArgs = formatPurchaseArgs({ market, args, address: address! });
+
+  const { config } = usePrepareContractWrite({
     abi,
     address: market.teller as Address,
     functionName: "purchase",
     chainId: Number(market.chainId),
+    args: purchaseArgs,
+    enabled: isConnected,
   });
+
+  const contract = useContractWrite(config);
 
   const write = async ({ slippage = 0, ...args }: PurchaseArgs) => {
     if (!address) throw new Error("Not Connected");
 
-    const amountIn = parseUnits(
-      args.amountIn.toFixed(market.quoteToken.decimals),
-      market.quoteToken.decimals
-    );
-
-    const minAmountOut = args.amountOut - args.amountOut * (slippage / 100);
-
-    const amountOut = parseUnits(
-      minAmountOut.toFixed(market.payoutToken.decimals),
-      market.payoutToken.decimals
-    );
-
-    const referrer = args.referrer ?? NULL_ADDRESS;
-
-    return contract.writeAsync({
-      args: [address, referrer, BigInt(market.marketId), amountIn, amountOut],
-    });
+    //@ts-ignore
+    return contract.writeAsync?.();
   };
 
   const getPayoutFor = async ({
@@ -68,29 +64,21 @@ export const usePurchase = (market: CalculatedMarket) => {
   };
 
   const estimateBondGas = async (
-    amount = 1,
-    payout = "1",
+    amount = 0,
+    payout = "0",
     slippage = 0.05,
     referrerAddress = NULL_ADDRESS
   ) => {
-    const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
+    const [address, _referrer, marketId, amountIn, amountOut] = purchaseArgs;
 
     return estimateBondPurchaseGas({
-      bondType: market.vestingType,
-      chainId: Number(market.id),
       publicClient,
       referrerAddress: referrerAddress as Address,
       recipientAddress: address as Address,
       tellerAddress: market.teller as Address,
-      marketId: market.marketId,
-      amountIn: parseUnits(
-        amount.toFixed(market.quoteToken.decimals),
-        market.quoteToken.decimals
-      ),
-      amountOut: parseUnits(
-        minimumOut.toFixed(market.payoutToken.decimals),
-        market.payoutToken.decimals
-      ),
+      marketId,
+      amountIn,
+      amountOut,
     });
   };
 
@@ -105,4 +93,29 @@ export const usePurchase = (market: CalculatedMarket) => {
 
 function getMaxBondableAmount(balance: string, maxAmountAccepted: string) {
   return Math.min(Number(balance), Number(maxAmountAccepted));
+}
+
+function formatPurchaseArgs({
+  market,
+  address,
+  args,
+}: {
+  market: CalculatedMarket;
+  args: PurchaseArgs;
+  address: Address;
+}): [Address, Address, bigint, bigint, bigint] {
+  const amountIn = parseUnits(
+    args.amountIn.toFixed(market.quoteToken.decimals),
+    market.quoteToken.decimals
+  );
+
+  const minAmountOut = args.amountOut - args.amountOut * (args.slippage / 100);
+
+  const amountOut = parseUnits(
+    minAmountOut.toFixed(market.payoutToken.decimals),
+    market.payoutToken.decimals
+  );
+
+  const referrer = args.referrer ?? NULL_ADDRESS;
+  return [address, referrer, BigInt(market.marketId), amountIn, amountOut];
 }
