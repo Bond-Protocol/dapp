@@ -24,6 +24,7 @@ export const useTokenAllowance = (
   const [allowance, setAllowance] = useState<string>("0");
   const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
   const { approveSpending, getTokenAllowance } = usePurchaseBond();
+  const [isApproving, setIsApproving] = useState(false);
 
   const fetchAndSetBalance = useCallback(async () => {
     const result = await getBalance(tokenAddress, userAddress, provider);
@@ -52,15 +53,22 @@ export const useTokenAllowance = (
     overrideAmount?: string
   ) => {
     if (signer) {
-      const approved = await approveSpending(
-        tokenAddress,
-        tokenDecimals,
-        auctioneer,
-        signer,
-        overrideAmount ?? amount,
-        isNotAuctioneerContract
-      );
-      const confirmed = await approved.wait();
+      setIsApproving(true);
+      try {
+        const approved = await approveSpending(
+          tokenAddress,
+          tokenDecimals,
+          auctioneer,
+          signer,
+          overrideAmount ?? amount,
+          isNotAuctioneerContract
+        );
+        const confirmed = await approved.wait();
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setIsApproving(false);
+      }
       void fetchAndSetAllowance();
     } else throw new Error("No signer connected");
   };
@@ -88,6 +96,7 @@ export const useTokenAllowance = (
     balance,
     hasSufficientAllowance,
     hasSufficientBalance,
+    isApproving,
     needsToApprove: !hasSufficientAllowance && hasSufficientBalance,
   };
 };

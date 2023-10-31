@@ -1,17 +1,20 @@
 import { CalculatedMarket } from "@bond-protocol/contract-library";
 import { socials } from "components/common";
+import { formatDistanceToNowStrict } from "date-fns";
 import { useMemo } from "react";
 import {
   ActionInfoList,
   ButtonGroup,
   formatCurrency,
   formatDate,
-  Link,
   SummaryLabel,
   SummaryRow,
+  TooltipWrapper,
+  trimToken,
 } from "ui";
 import { useAuth } from "./use-auth";
 import { useLimitOrderForMarket } from "./use-limit-order";
+import { ReactComponent as Timer } from "assets/icons/timer.svg";
 
 export type LimitOrderConfirmationDialogProps = {
   market: CalculatedMarket;
@@ -40,6 +43,15 @@ const TokenAmountLabel = ({
         <img width={16} height={16} src={icon} />
       </div>
       {symbol}
+    </div>
+  );
+};
+
+const ApprovingLabel = () => {
+  return (
+    <div className="flex w-full justify-center">
+      Pending
+      <Timer width={32} />
     </div>
   );
 };
@@ -89,6 +101,15 @@ export const LimitOrderConfirmationDialog = (
     [props.market, order.maxFee, order.payout, order.expiry]
   );
 
+  const formattedPrice =
+    Number(order.price) < 1
+      ? trimToken(order.price)
+      : formatCurrency.twoDigitFormatter(order.price ?? 0);
+  const endDate = new Date(props.market.vesting * 1000);
+  const formattedVesting = props.market.vestingType.includes("expiration")
+    ? formatDistanceToNowStrict(endDate, { unit: "day" })
+    : props.market.formattedShortVesting;
+
   return (
     <div className="text-[15px] font-light">
       <div>
@@ -102,7 +123,7 @@ export const LimitOrderConfirmationDialog = (
           />
           <div className="flex items-center justify-center">@</div>
           <SummaryLabel
-            value={`${order.price} ${props.market.quoteToken.symbol}/${props.market.payoutToken.symbol}`}
+            value={`${formattedPrice} ${props.market.quoteToken.symbol}/${props.market.payoutToken.symbol}`}
             subtext="Limit Price"
             className="uppercase"
           />
@@ -123,7 +144,7 @@ export const LimitOrderConfirmationDialog = (
         <SummaryRow
           className="mt-1"
           leftLabel="Vested in"
-          rightLabel={props.market.formattedShortVesting}
+          rightLabel={formattedVesting}
         />
 
         <h4 className="mt-2 text-left font-fraktion">DETAILS</h4>
@@ -164,12 +185,17 @@ export const LimitOrderConfirmationDialog = (
         className="mt-4"
         leftLabel="Cancel"
         rightLabel={
-          !auth.isAuthenticated
-            ? "Sign In"
-            : needsApprove
-            ? "Approve"
-            : "Place Order"
+          !auth.isAuthenticated ? (
+            "Sign In"
+          ) : order.allowance.isApproving ? (
+            <ApprovingLabel />
+          ) : needsApprove ? (
+            "Approve"
+          ) : (
+            "Place Order"
+          )
         }
+        disabled={order.allowance.isApproving}
         onClickLeft={props.onCancel}
         onClickRight={
           !auth.isAuthenticated

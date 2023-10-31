@@ -53,7 +53,7 @@ export const QueryWizard = ({
   const handlers: Record<Status, TxStepHandler> = {
     idle: {
       title: props.title,
-      element: <StartDialog onSubmit={handleSubmit} />,
+      element: <StartDialog onCancel={props.onClose} onSubmit={handleSubmit} />,
     },
     loading: {
       title: "Awaiting signature",

@@ -1,12 +1,15 @@
 import { Button } from "components/atoms/Button";
+import { TooltipWrapper } from "../atoms";
 
 export interface ButtonGroupProps {
   className?: string;
   leftLabel?: string;
-  rightLabel?: string;
+  rightLabel?: string | React.ReactNode;
   onClickLeft?: () => void;
   onClickRight?: () => void;
   disabled?: boolean;
+  pendingAction?: boolean;
+  tooltip?: string;
 }
 
 export const ButtonGroup = (props: ButtonGroupProps) => {
@@ -20,14 +23,16 @@ export const ButtonGroup = (props: ButtonGroupProps) => {
         >
           {props.leftLabel}
         </Button>
-        <Button
-          thin
-          disabled={props.disabled}
-          className="w-1/2"
-          onClick={props.onClickRight}
-        >
-          {props.rightLabel}
-        </Button>
+        <TooltipWrapper content={props.tooltip}>
+          <Button
+            thin
+            disabled={props.disabled}
+            className="w-1/2"
+            onClick={props.onClickRight}
+          >
+            <>{props.rightLabel}</>
+          </Button>
+        </TooltipWrapper>
       </div>
     </div>
   );

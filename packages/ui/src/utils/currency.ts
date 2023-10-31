@@ -1,5 +1,11 @@
 import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 
+export const twoDigitFormatter = (value: string | number) => {
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value));
+};
 export const usdFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "usd",
@@ -137,4 +143,5 @@ export const formatCurrency = {
   trimToLengthSymbol,
   trimToken,
   amount,
+  twoDigitFormatter,
 };
