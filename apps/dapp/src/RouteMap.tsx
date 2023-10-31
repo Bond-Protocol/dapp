@@ -27,6 +27,9 @@ export const RouteMap: FC = () => {
         <Route path="/market/:chainId/:id" element={<MarketDetails />} />
         <Route path="/create" element={<CreateMarket />} />
         <Route path="/tokens/:chainId/:address" element={<TokenPage />} />
+        <Route path="/terms" element={<PolicyPage {...terms} />} />
+        <Route path="/privacy" element={<PolicyPage {...privacyPolicy} />} />
+        <Route path="/cookies" element={<PolicyPage {...cookiePolicy} />} />
       </Switch>
     </>
   );

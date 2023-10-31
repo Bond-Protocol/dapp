@@ -22,6 +22,7 @@ import { useIsEmbed } from "hooks/useIsEmbed";
 import { usePurchase } from "hooks/contracts/usePurchase";
 import { CalculatedMarket } from "types";
 import { formatUnits } from "viem";
+import { TransactionVizard } from "components/modals/TransactionVizard";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -106,7 +107,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   const { address, isConnected } = useAccount();
 
-  const { data: gas } = useFeeData();
+  const { data: gasData } = useFeeData();
 
   const bond = usePurchase(market);
 
@@ -114,7 +115,9 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     useTokenAllowance(
       market.quoteToken.address as Address,
       market.quoteToken.decimals,
-      market.chainId
+      market.chainId,
+      amount,
+      market.teller
     );
 
   const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
@@ -123,7 +126,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   );
 
   const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
-    market.chainId || "0"
+    market.chainId
   );
 
   const showOwnerBalanceWarning =
@@ -152,8 +155,8 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         0.05,
         `0x${"0".repeat(40)}`
       );
-      const price = Number(gasPrice?.gasPrice);
-      const usdCost = Number(gas) * price;
+      const price = Number(gasData?.formatted.gasPrice);
+      const usdCost = Number(gas) * nativeCurrencyPrice;
 
       setNetworkFee(formatCurrency.trimToken(gas));
       setNetworkFeeUsd(formatCurrency.usdFormatter.format(usdCost));
@@ -173,16 +176,9 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     updatePayout();
   }, [amount]);
 
-  const approveSpending = () => approve(market.auctioneer as Address, amount);
-
   const onClickBond = !hasSufficientAllowance
-    ? () => approveSpending()
+    ? () => approve()
     : () => setShowModal(true);
-
-  const isTerm = market.vestingType === "fixed-term";
-  const vestingTimestamp = isTerm
-    ? add(Date.now(), { seconds: market.vesting })
-    : market.vesting * 1000;
 
   const summaryFields = [
     {
@@ -191,7 +187,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     },
     {
       leftLabel: "Vested on",
-      rightLabel: `${formatDate.short(new Date(vestingTimestamp))}`,
+      rightLabel: `${market.formatted.shortVesting}`,
       tooltip: "The date in which you can claim your bond",
     },
     {
@@ -272,29 +268,19 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           </Button>
         </BondButton>
       </div>
-      <TransactionWizard
+      <TransactionVizard
         open={showModal}
         chainId={market.chainId}
-        //@ts-ignore
         onSubmit={submitTx}
         onClose={() => setShowModal(false)}
         InitialDialog={(args: any) => (
           <PurchaseConfirmDialog
             {...args}
-            amount={`${formatCurrency.trimToken(amount)} ${
-              market.quoteToken.symbol
-            }`}
-            payout={`${Number(payout).toFixed(4)} ${market.payoutToken.symbol}`}
-            discount={market.discount}
-            issuer={market.payoutToken.name}
+            market={market}
+            amount={amount}
+            payout={payout}
             vestingTime={vestingLabel}
-            auctioneerAddress={market.auctioneer}
-            tellerAddress={market.teller}
-            payoutLogo={market.payoutToken.logoURI}
-            quoteLogo={market.quoteToken.logoURI}
             networkFee={`${networkFee} ${nativeCurrency.symbol}`}
-            blockExplorerName={blockExplorerName}
-            blockExplorerURL={blockExplorerUrl}
           />
         )}
         SuccessDialog={(args: any) => (

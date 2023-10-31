@@ -94,7 +94,7 @@ const vesting: Column<CalculatedMarket> = {
       ? add(Date.now(), { seconds: market.vesting })
       : market.vesting * 1000;
 
-    const term = market.formatted?.shortVesting?.includes("Immediate")
+    const term = market.formatted?.shortVesting?.includes("Instant")
       ? " Instant Swap"
       : market.formatted?.shortVesting + " Term";
 
@@ -130,9 +130,7 @@ const tbv: Column<CalculatedMarket> = {
       .concat(" " + market.quoteToken.symbol);
 
     return {
-      value: !isNaN(market.tbvUsd)
-        ? usdLongFormatter.format(market.tbvUsd)
-        : totalBondedAmount,
+      value: market.formatted?.tbvUsd,
       sortValue: market.tbvUsd,
     };
   },

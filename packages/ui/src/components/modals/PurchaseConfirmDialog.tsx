@@ -3,21 +3,16 @@ import { Checkbox, Link, SummaryLabel } from "components/atoms";
 import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
 import { SummaryList, SummaryRow } from "../molecules";
 import { useState } from "react";
+import { CalculatedMarket } from "types";
+import { formatCurrency } from "formatters";
 
 export type PurchaseConfirmDialogProps = {
-  issuer?: string;
   amount?: string;
   payout?: string;
-  discount?: number;
   vestingTime?: string;
   contract?: string;
-  tellerAddress: string;
-  auctioneerAddress: string;
-  blockExplorerName: string;
-  blockExplorerURL: string;
-  payoutLogo?: string;
-  quoteLogo?: string;
   networkFee?: string;
+  market: CalculatedMarket;
   onSubmit: () => void;
   onCancel: () => void;
 };
@@ -28,16 +23,13 @@ const unknownWarning =
   " We cannot calculate a discount for this market as we are missing price data for one or both of the tokens. Please double check you wish to purchase at this price before continuing. ";
 
 export const PurchaseConfirmDialog = ({
-  issuer,
   vestingTime = "?",
   amount = "0",
   payout = "0",
-  discount = 0,
   contract = "",
   onCancel,
   onSubmit,
-  blockExplorerURL,
-  blockExplorerName,
+  market,
   ...props
 }: PurchaseConfirmDialogProps) => {
   const [accepted, setAccepted] = useState(false);
@@ -50,27 +42,34 @@ export const PurchaseConfirmDialog = ({
     },
     {
       leftLabel: "Auction contract",
-      rightLabel: "View on " + blockExplorerName,
-      link: `${blockExplorerURL}/${props.auctioneerAddress}`,
+      rightLabel: "View on " + market.blockExplorer.name,
+      link: `${market.blockExplorer.url}/${market.auctioneer}`,
     },
     {
       leftLabel: "Teller contract",
-      rightLabel: "View on " + blockExplorerName,
-      link: `${blockExplorerURL}/${props.tellerAddress}`,
+      rightLabel: "View on " + market.blockExplorer.name,
+      link: `${market.blockExplorer.url}/${market.teller}`,
     },
   ];
 
-  const hasWarning = discount < 0 || isNaN(discount);
+  const hasWarning = market.discount < 0 || isNaN(market.discount);
 
   const cantSubmit = hasWarning && !accepted;
+  const formattedAmount = `${formatCurrency.trimToken(amount)} ${
+    market.quoteToken.symbol
+  }`;
+
+  const formattedPayout = `${Number(payout).toFixed(4)} ${
+    market.payoutToken.symbol
+  }`;
 
   return (
     <div className="mt-4 text-center text-[15px] font-light">
       <div>
         <div className="grid grid-cols-[auto_32px_auto]">
           <SummaryLabel
-            icon={props.quoteLogo}
-            value={amount}
+            icon={market.quoteToken.logoURI}
+            value={formattedAmount}
             subtext="You Bond"
             className="uppercase"
           />
@@ -78,8 +77,8 @@ export const PurchaseConfirmDialog = ({
             <Arrow className="rotate-90" />
           </div>
           <SummaryLabel
-            icon={props.payoutLogo}
-            value={payout}
+            icon={market.quoteToken.logoURI}
+            value={formattedPayout}
             subtext="You Get"
             className="uppercase"
           />
@@ -95,8 +94,8 @@ export const PurchaseConfirmDialog = ({
       {hasWarning && (
         <div className="m-4 text-left font-mono text-sm ">
           <div className="text-red-500">
-            {discount < 0 && <p> {warning} </p>}
-            {isNaN(discount) && <p>{unknownWarning}</p>}
+            {market.discount < 0 && <p> {warning} </p>}
+            {isNaN(market.discount) && <p>{unknownWarning}</p>}
           </div>
           <Checkbox
             onChange={(value) => setAccepted(value)}

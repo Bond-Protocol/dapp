@@ -1,40 +1,56 @@
-import { useCallback, useState } from "react";
-import { calculateTrimDigits, trim } from "formatters";
-import { Address, useBalance } from "wagmi";
+import { trimToken } from "formatters";
+import { Address, useAccount, useBalance } from "wagmi";
 import { useAllowance } from "./contracts/useAllowance";
+import { parseUnits } from "viem";
+import { useMemo } from "react";
 
 export const useTokenAllowance = (
   tokenAddress: Address,
   tokenDecimals: number,
-  networkId: string
+  networkId: string,
+  amount: string,
+  spender: Address
 ) => {
-  const [balance, setBalance] = useState<string>("0");
-  const [hasSufficientBalance, setHasSufficientBalance] = useState(false);
-  const [allowance, setAllowance] = useState<string>("0");
-  const [hasSufficientAllowance, setHasSufficientAllowance] = useState(false);
+  const { address } = useAccount();
 
-  const b = useBalance({ token: tokenAddress, chainId: Number(networkId) });
-  const all = useAllowance({
+  const { data: balance } = useBalance({
+    address,
+    token: tokenAddress,
+    chainId: Number(networkId),
+  });
+
+  const allowance = useAllowance({
+    ownerAddress: address as Address,
     tokenAddress,
+    amount,
+    spenderAddress: spender,
     decimals: tokenDecimals,
     chainId: Number(networkId),
   });
 
-  const fetchAndSetBalance = useCallback(async () => {
-    const result = 0; //await getBalance(tokenAddress, userAddress, provider);
-
-    const balance = Number(result || "0") / Math.pow(10, tokenDecimals);
-    setBalance(trim(balance, calculateTrimDigits(balance)));
-  }, []);
-
-  const approve = async (teller: Address, amount: string) => {
-    all.write(teller, amount);
+  const approve = async () => {
+    const res = await allowance.writeAsync();
+    const ress = await allowance.allowance.refetch();
+    console.log({ res, ress });
   };
+
+  const parsedAmount = parseUnits(amount, tokenDecimals);
+
+  const hasSufficientAllowance = useMemo(
+    () => (allowance.currentAllowance ?? 0n) >= parsedAmount,
+    [allowance.allowance.data]
+  );
+
+  const hasSufficientBalance = useMemo(
+    () => (balance?.value ?? 0n) >= parsedAmount,
+    [balance, amount]
+  );
+  console.log({ hasSufficientBalance, hasSufficientAllowance });
 
   return {
     approve,
     allowance,
-    balance,
+    balance: trimToken(balance?.formatted ?? 0),
     hasSufficientAllowance,
     hasSufficientBalance,
     needsToApprove: !hasSufficientAllowance && hasSufficientBalance,

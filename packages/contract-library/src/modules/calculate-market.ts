@@ -1,8 +1,16 @@
-import { CalculatedMarket, PrecalculatedMarket } from 'types';
-import { Address, PublicClient, formatUnits, getContract } from 'viem';
-import { formatDate, usdFullFormatter } from 'formatters';
-import { Auctioneer, getAuctioneerAbiForName } from 'core';
-import { abis } from 'abis';
+import { CalculatedMarket, PrecalculatedMarket } from "types";
+import { Address, PublicClient, formatUnits, getContract } from "viem";
+import {
+  formatDate,
+  intervalToDuration,
+  trimAsNumber,
+  trimToken,
+  usdFullFormatter,
+  usdLongFormatter,
+} from "formatters";
+import { Auctioneer, getAuctioneerAbiForName } from "core";
+import { abis } from "abis";
+import * as chains from "viem/chains";
 
 export async function calculateMarket(
   subgraphMarket: PrecalculatedMarket,
@@ -13,19 +21,20 @@ export async function calculateMarket(
   const { quoteToken, payoutToken } = market;
 
   if (!quoteToken.price || !payoutToken.price) return market;
-  const auctioneerAbi = getAuctioneerAbiForName(market.name as Auctioneer);
 
   const auctioneerContract = getContract({
-    abi: auctioneerAbi,
-    address: market.auctioneer as Address,
+    abi: getAuctioneerAbiForName(market.name as Auctioneer),
+    address: market.auctioneer,
     publicClient,
   });
 
   const payoutTokenContract = getContract({
     abi: abis.erc20,
-    address: payoutToken.address as Address,
+    address: payoutToken.address,
     publicClient,
   });
+
+  const marketId = BigInt(market.marketId);
 
   const [
     ownerPayoutBalance,
@@ -36,60 +45,64 @@ export async function calculateMarket(
     marketInfo,
     isLive,
     markets,
-    maxAmountAccepted,
+    _maxAmountAccepted,
   ] = await Promise.all([
     payoutTokenContract.read.balanceOf([market.owner]),
     payoutTokenContract.read.allowance([market.owner, market.teller]),
-    auctioneerContract.read.currentCapacity([market.marketId]),
-    auctioneerContract.read.marketPrice([market.marketId]),
-    auctioneerContract.read.marketScale([market.marketId]),
-    auctioneerContract.read.getMarketInfoForPurchase([market.marketId]),
-    auctioneerContract.read.isLive([market.marketId]),
-    auctioneerContract.read.markets([market.marketId]),
-    auctioneerContract.read.maxAmountAccepted([
-      market.marketId,
-      referrerAddress,
-    ]),
+    auctioneerContract.read.currentCapacity([marketId]),
+    auctioneerContract.read.marketPrice([marketId]),
+    auctioneerContract.read.marketScale([marketId]),
+    auctioneerContract.read.getMarketInfoForPurchase([marketId]),
+    auctioneerContract.read.isLive([marketId]),
+    auctioneerContract.read.markets([marketId]),
+    auctioneerContract.read.maxAmountAccepted([marketId, referrerAddress]),
   ]);
 
-  const baseScale =
-    10n ** BigInt(36 + payoutToken.decimals - quoteToken.decimals);
+  const baseScale = Math.pow(
+    10,
+    36 + payoutToken.decimals - quoteToken.decimals
+  );
 
   // The price decimal scaling for a market is split between the price value and the scale value
   // to be able to support a broader range of inputs. Specifically, half of it is in the scale and
   // half in the price. To normalize the price value for display, we can add the half that is in
   // the scale factor back to it.
-  const shift = baseScale / marketScale;
-  const price = marketPrice * shift;
-  const quoteTokensPerPayoutToken = price / 10n ** 36n;
+  const shift = baseScale / Number(marketScale);
+  const price = Number(marketPrice) * shift;
+  const quoteTokensPerPayoutToken = Number(price) / Math.pow(10, 36);
 
-  const adjustedQuote = formatUnits(
-    quoteTokensPerPayoutToken,
-    quoteToken.decimals
-  );
+  // const adjustedQuote = formatUnits(
+  //   quoteTokensPerPayoutToken,
+  //   quoteToken.decimals
+  // );
 
-  const discountedPrice = Number(adjustedQuote) * (quoteToken.price ?? 0);
+  const discountedPrice = Number(quoteTokensPerPayoutToken) * quoteToken.price;
+  const _discount = (
+    ((discountedPrice - payoutToken.price) / payoutToken.price) *
+    100
+  ).toFixed(2);
 
-  const discount =
-    (discountedPrice - (payoutToken.price ?? 0) / (payoutToken.price ?? 0)) *
-    100;
+  //TODO: improve
+  const discount = trimAsNumber(-_discount, 2);
 
-  const maxAccepted = formatUnits(
-    BigInt(Number(maxAmountAccepted) - Number(maxAmountAccepted) * 0.005),
-    quoteToken.decimals
-  );
+  // Reduce maxAmountAccepted by 0.5% to prevent issues due to fee being slightly underestimated in the contract
+  // function. See comment on https://github.com/Bond-Protocol/bonds/blob/master/src/bases/BondBaseSDA.sol line 718.
+  const maxAccepted =
+    (Number(_maxAmountAccepted) - Number(_maxAmountAccepted) * 0.005) /
+    Math.pow(10, quoteToken.decimals);
 
   const [_maxPayout] = marketInfo.slice(-1);
 
   const maxPayout = formatUnits(BigInt(_maxPayout), payoutToken.decimals);
 
-  const maxPayoutUsd =
-    payoutToken.price! > 0 ? Number(maxPayout) * market.payoutToken.price! : 0;
+  const maxPayoutUsd = Number(maxPayout) * payoutToken.price;
 
   const ownerBalance = formatUnits(ownerPayoutBalance, payoutToken.decimals);
 
-  const ownerAllowance =
-    ownerPayoutAllowance / 10n ** BigInt(payoutToken.decimals);
+  const ownerAllowance = formatUnits(
+    ownerPayoutAllowance,
+    payoutToken.decimals
+  );
 
   const isCapacityInQuote = markets[4];
 
@@ -100,11 +113,12 @@ export async function calculateMarket(
 
   const capacityToken = isCapacityInQuote ? quoteToken : payoutToken;
 
-  const fullPrice = payoutToken.price ?? 0;
+  const fullPrice = payoutToken.price;
 
   return {
     ...market,
     isLive,
+    fullPrice,
     quoteTokensPerPayoutToken: Number(quoteTokensPerPayoutToken.toString()),
     discountedPrice,
     maxAmountAccepted: maxAccepted.toString(),
@@ -115,33 +129,26 @@ export async function calculateMarket(
     isCapacityInQuote,
     currentCapacity: Number(currentCapacity),
     capacityToken,
-    fullPrice,
     discount,
     formatted: {
-      fullPrice: usdFullFormatter.format(fullPrice),
-      discountedPrice: usdFullFormatter.format(discountedPrice),
+      ...formatVestingLabels(market),
+      fullPrice: "$" + trimToken(fullPrice),
+      discountedPrice: "$" + trimToken(discountedPrice),
       maxPayoutUsd: usdFullFormatter.format(maxPayoutUsd),
-      tbvUsd: usdFullFormatter.format(
+      tbvUsd: usdLongFormatter.format(
         market.totalBondedAmount * quoteToken.price
       ),
-      shortVesting: market.isInstantSwap
-        ? "Immediate"
-        : formatDate.short(new Date(market.vesting * 1000)),
-      longVesting: market.isInstantSwap
-        ? "Immediate Payout"
-        : formatDate.long(new Date(market.vesting * 1000)),
     },
   };
 }
+
 function createBaseMarket(market: PrecalculatedMarket): CalculatedMarket {
   return {
     ...market,
-    capacityToken: market.payoutToken,
-    marketId: BigInt(market.id.slice(market.id.lastIndexOf("_") + 1)),
+    marketId: Number(market.id.slice(market.id.lastIndexOf("_") + 1)),
     discount: 0,
     discountedPrice: 0,
     quoteTokensPerPayoutToken: 0,
-
     fullPrice: 0,
     maxAmountAccepted: "",
     maxPayout: "",
@@ -153,6 +160,8 @@ function createBaseMarket(market: PrecalculatedMarket): CalculatedMarket {
     tbvUsd: 0,
     creationDate: "",
     isCapacityInQuote: false,
+    capacityToken: market.payoutToken,
+    blockExplorer: addBlockExplorer(market),
     formatted: {
       fullPrice: "Unknown",
       discountedPrice: "Unknown",
@@ -161,5 +170,47 @@ function createBaseMarket(market: PrecalculatedMarket): CalculatedMarket {
       shortVesting: "Unknown",
       longVesting: "Unknown",
     },
+  };
+}
+
+/** Formats a bond market vesting date/duration according to vesting type */
+function formatVestingLabels(market: CalculatedMarket) {
+  if (market.isInstantSwap) {
+    return {
+      shortVesting: "Instant Swap",
+      longVesting: "Immediate Payout",
+    };
+  }
+
+  if (market.vestingType.includes("term")) {
+    const now = new Date();
+    const vestingDateFromNow = new Date(now.getTime() + market.vesting * 1000);
+    const interval = intervalToDuration({
+      start: now,
+      end: vestingDateFromNow,
+    });
+
+    return {
+      longVesting: formatDate.short(new Date()),
+      shortVesting: interval.days + " Days",
+    };
+  }
+
+  const date = new Date(market.vesting * 1000);
+  return {
+    longVesting: formatDate.long(date),
+    shortVesting: formatDate.short(date),
+  };
+}
+
+function addBlockExplorer(market: PrecalculatedMarket) {
+  const chain = Object.values(chains).find(
+    (c) => c.id === Number(market.chainId)
+  );
+  return {
+    //@ts-ignore
+    name: chain.blockExplorers?.default.name,
+    //@ts-ignore
+    url: chain.blockExplorers?.default.url,
   };
 }

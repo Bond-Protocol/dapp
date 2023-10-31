@@ -10,9 +10,16 @@ import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { MarketStatusChip } from "components/common/MarketStatusChip";
 
-export const Market = ({ market }: { market: CalculatedMarket }) => {
+export const Market = () => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
+  const { id, chainId } = useParams();
+
+  const { allMarkets: markets } = useMarkets();
+  const market: CalculatedMarket = markets.find(
+    ({ marketId, chainId: marketChainId }) =>
+      marketId === Number(id) && marketChainId === chainId
+  )!;
 
   const {
     maxPayoutLabel,

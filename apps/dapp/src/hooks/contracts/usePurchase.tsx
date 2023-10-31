@@ -6,6 +6,7 @@ import {
 } from "@bond-protocol/contract-library";
 import { parseUnits } from "viem";
 import { CalculatedMarket } from "types";
+import { clients } from "context/blockchain-provider";
 
 type PurchaseArgs = {
   referrer?: Address;
@@ -18,13 +19,14 @@ const NULL_ADDRESS: Address = `0x${"0".repeat(40)}`;
 
 export const usePurchase = (market: CalculatedMarket) => {
   const { abi } = getBaseTeller(market.teller as Address);
-  const publicClient = usePublicClient();
+  const publicClient = clients[Number(market.chainId)];
   const { address } = useAccount();
 
   const contract = useContractWrite({
     abi,
     address: market.teller as Address,
     functionName: "purchase",
+    chainId: Number(market.chainId),
   });
 
   const write = async ({ slippage = 0, ...args }: PurchaseArgs) => {
@@ -44,7 +46,7 @@ export const usePurchase = (market: CalculatedMarket) => {
 
     const referrer = args.referrer ?? NULL_ADDRESS;
 
-    return contract.write({
+    return contract.writeAsync({
       args: [address, referrer, BigInt(market.marketId), amountIn, amountOut],
     });
   };

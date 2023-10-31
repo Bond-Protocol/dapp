@@ -26,7 +26,7 @@ import { environment } from "src/environment";
 import { CHAINS } from "@bond-protocol/contract-library";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { createPublicClient, http } from "viem";
+import { createPublicClient, http, PublicClient } from "viem";
 
 const getIconsForChains = (c: any) => {
   const logoUrl = Array.from(CHAINS.values()).find(
@@ -72,7 +72,8 @@ const connectors = connectorsForWallets([
 
 const config = createConfig({ publicClient, connectors });
 
-export const clients = {
+///<reference types="viem/node_modules/abitype" />
+export const clients: Record<number, PublicClient> = {
   1: createPublicClient({
     chain: mainnet,
     transport: http(),
@@ -80,6 +81,16 @@ export const clients = {
 
   42161: createPublicClient({
     chain: arbitrum,
+    transport: http(),
+  }),
+
+  5: createPublicClient({
+    chain: goerli,
+    transport: http(),
+  }),
+
+  421613: createPublicClient({
+    chain: arbitrumGoerli,
     transport: http(),
   }),
 };

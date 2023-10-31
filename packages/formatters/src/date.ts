@@ -3,7 +3,10 @@ import format from "date-fns/format";
 import fnsAddMonths from "date-fns/addMonths";
 import fnsIsBefore from "date-fns/isBefore";
 import fnsAddDays from "date-fns/addDays";
+import intervalToDuration from "date-fns/intervalToDuration";
 import { wrapWithErrorHandler } from "./error-wrapper";
+
+export { intervalToDuration };
 
 // Format
 export const shorter = (date: Date) => format(date, "yy.MM.dd");

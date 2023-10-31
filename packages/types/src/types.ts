@@ -67,7 +67,7 @@ export interface PrecalculatedMarket {
 }
 
 export interface CalculatedMarket extends PrecalculatedMarket {
-  marketId: bigint;
+  marketId: number;
   discount: number;
   discountedPrice: number;
   quoteTokensPerPayoutToken: number;
@@ -92,6 +92,10 @@ export interface CalculatedMarket extends PrecalculatedMarket {
     shortVesting: string;
     longVesting: string;
     tbvUsd: string;
+  };
+  blockExplorer: {
+    name: string;
+    url: string;
   };
 }
 
