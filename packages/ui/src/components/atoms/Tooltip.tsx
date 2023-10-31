@@ -82,7 +82,7 @@ export const TooltipWrapper = (props: TooltipProps) => {
       </div>
       <PopperUnstyled open={open} anchorEl={anchorEl}>
         <div
-          className={`bg-light-tooltip font-jakarta max-w-[240px] rounded p-2 text-center text-xs transition-all ${props.className}`}
+          className={`bg-light-tooltip font-jakarta max-w-[280px] rounded p-2 text-center text-xs transition-all ${props.className}`}
         >
           {props.content}
         </div>

@@ -171,6 +171,17 @@ export async function getBalance1155(
 export async function getAllowance(
   tokenAddress: string,
   holderAddress: string,
+  targetAddress: string,
+  provider: Provider,
+): Promise<BigNumberish> {
+  const token = IERC20__factory.connect(tokenAddress, provider);
+
+  return token.allowance(holderAddress, targetAddress);
+}
+
+export async function getTellerAllowance(
+  tokenAddress: string,
+  holderAddress: string,
   auctioneerAddress: string,
   provider: Provider,
 ): Promise<BigNumberish> {
@@ -179,6 +190,7 @@ export async function getAllowance(
     auctioneerAddress,
     provider,
   );
+
   try {
     const tellerAddress = await auctioneerContract.getTeller();
     return token.allowance(holderAddress, tellerAddress);
@@ -191,15 +203,37 @@ export async function getAllowance(
 export async function changeApproval(
   tokenAddress: string,
   tokenDecimals: number,
-  auctioneerAddress: string,
+  targetAddress: string,
   value: string,
   signer: Signer,
 ): Promise<ContractTransaction> {
   const token = IERC20__factory.connect(tokenAddress, signer);
+
+  try {
+    return token.approve(
+      targetAddress,
+      ethers.utils.parseUnits(value, tokenDecimals).toString(),
+    );
+  } catch (e) {
+    console.log(e);
+    throw e;
+  }
+}
+
+export async function changeTellerAllowance(
+  tokenAddress: string,
+  tokenDecimals: number,
+  auctioneerAddress: string,
+  value: string,
+  signer: Signer,
+) {
+  const token = IERC20__factory.connect(tokenAddress, signer);
+
   const auctioneerContract = Auctioneer__factory.connect(
     auctioneerAddress,
     signer,
   );
+
   try {
     const tellerAddress = await auctioneerContract.getTeller();
     return token.approve(

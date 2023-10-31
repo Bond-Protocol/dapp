@@ -2,6 +2,8 @@ import { useCallback } from "react";
 import { BigNumber, BigNumberish, ContractTransaction, Signer } from "ethers";
 import {
   changeApproval,
+  changeTellerAllowance,
+  getTellerAllowance,
   estimatePurchaseGas,
   getAllowance,
   payoutFor,
@@ -9,6 +11,7 @@ import {
   CalculatedMarket,
 } from "@bond-protocol/contract-library";
 import { Provider } from "@ethersproject/providers";
+import { providers } from "services/owned-providers";
 
 export const usePurchaseBond = () => {
   const approveSpending = async (
@@ -16,29 +19,28 @@ export const usePurchaseBond = () => {
     tokenDecimals: number,
     auctioneer: string,
     signer: Signer,
-    capacity = "1000000000"
+    capacity = "1000000000",
+    isNotTeller = false
   ): Promise<ContractTransaction> => {
     if (!signer) throw Error("Not connected");
-    return changeApproval(
-      tokenAddress,
-      tokenDecimals,
-      auctioneer,
-      capacity,
-      signer
-    );
+    const handler = isNotTeller ? changeApproval : changeTellerAllowance;
+
+    return handler(tokenAddress, tokenDecimals, auctioneer, capacity, signer);
   };
 
   const getTokenAllowance = async (
     tokenAddress: string,
     address: string,
-    auctioneer: string,
+    targetAddress: string,
     decimals: number,
-    provider: Provider
+    provider: Provider,
+    isNotTeller = false
   ) => {
-    const allowance: BigNumberish = await getAllowance(
+    const handler = isNotTeller ? getAllowance : getTellerAllowance;
+    const allowance: BigNumberish = await handler(
       tokenAddress,
       address,
-      auctioneer,
+      targetAddress,
       provider
     );
     return Number(allowance) / Math.pow(10, decimals);
@@ -54,16 +56,12 @@ export const usePurchaseBond = () => {
       decimals: number,
       marketId: number,
       referralAddress: string,
-      provider: Provider
+      chainId: string
     ): Promise<BigNumberish> => {
+      const provider = providers[chainId];
+
       try {
-        return payoutFor(
-          marketId,
-          amount,
-          decimals,
-          referralAddress,
-          provider
-        );
+        return payoutFor(marketId, amount, decimals, referralAddress, provider);
       } catch (e) {
         console.log(e);
         return BigNumber.from(0);

@@ -34,7 +34,7 @@ export const useSymbolInput = (
   };
 
   return {
-    value: showTokenSymbol ? `${value}${symbol}` : value,
+    value: showTokenSymbol ? `${value} ${symbol}` : value,
     setValue,
     onChange,
     onFocus,

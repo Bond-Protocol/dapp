@@ -1,12 +1,12 @@
 import { InputUnstyled } from "@mui/base";
-import { Link, Tooltip } from "components";
+import { Icon, Link, Tooltip } from "components";
 import { Copy } from "components/atoms/Copy";
 import { ReactComponent as EditIcon } from "assets/icons/edit-icon.svg";
 import { useSymbolInput } from "src/hooks/use-symbol-input";
 import { useEffect, useState } from "react";
 
 export interface ActionInfoLabelProps {
-  value?: string;
+  value?: string | React.ReactNode;
   tooltip?: string;
   link?: string;
   copy?: string;
@@ -15,12 +15,13 @@ export interface ActionInfoLabelProps {
   symbol?: string;
   linkClassName?: string;
   tooltipClassName?: string;
+  logoURI?: string;
   onChange?: (value: string) => void;
 }
 
 export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
   const { value, onBlur, onChange, onFocus } = useSymbolInput(
-    props.value,
+    String(props.value),
     props.symbol,
     true
   );
@@ -28,19 +29,14 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
 
   const handleChange = (e: React.BaseSyntheticEvent) => {
     const value = onChange(e);
-    props.onChange && props.onChange(value);
+    //props.onChange && props.onChange(value);
   };
 
   const isEdited = value !== props.value + (props.symbol ?? "");
 
-  useEffect(() => {
-    return () => {
-      props.onChange && props.onChange("");
-    };
-  }, []);
-
   const handleBlur = (args: any) => {
     onBlur(args);
+    props.onChange?.(value);
     setEditing(false);
   };
 
@@ -50,10 +46,14 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
   };
 
   return (
-    <div className={`${props.className}`}>
+    <div className={`font-mono ${props.className}`}>
       <div className="flex justify-between">
         {!props.editable && !props.link && (
-          <div className={`my-auto ${isEdited ? "text-light-secondary" : ""}`}>
+          <div
+            className={`my-auto ${
+              props.editable && isEdited ? "text-light-secondary" : ""
+            }`}
+          >
             {props.value}
           </div>
         )}
@@ -63,6 +63,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
             href={props.link}
             className={props.linkClassName}
           >
+            {/*@ts-ignore*/}
             {props.value}
           </Link>
         )}
@@ -79,7 +80,13 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
             onBlur={handleBlur}
             onFocus={handleFocus}
             onChange={handleChange}
-            endAdornment={<EditIcon className="ml-1" />}
+            endAdornment={
+              <div className="font-fraktion ml-1 flex place-items-center items-center gap-x-1">
+                {props.logoURI && <Icon width={16} src={props.logoURI} />}
+                {props.symbol}
+                <EditIcon className="ml-1" />
+              </div>
+            }
             componentsProps={{
               root: { className: "flex items-center" },
               input: {
@@ -94,7 +101,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
           <Tooltip
             content={props.tooltip}
             iconWidth={13.3}
-            iconClassname={`pb-[1px] ml-0.5 fill-light-grey-400 ${props.tooltipClassName}`}
+            iconClassname={`pb-[1px] ml-1 fill-light-grey-400 ${props.tooltipClassName}`}
           />
         )}
         {props.copy && (

@@ -2,6 +2,7 @@
   "extends": "tsconfig/vite.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "experimentalDecorators": true,
     "paths": {
       "components/*": [
         "src/components/*"

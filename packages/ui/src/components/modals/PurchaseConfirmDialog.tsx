@@ -67,7 +67,7 @@ export const PurchaseConfirmDialog = ({
   return (
     <div className="mt-4 text-center text-[15px] font-light">
       <div>
-        <div className="grid grid-cols-[1fr_32px_1fr]">
+        <div className="grid grid-cols-[auto_32px_auto]">
           <SummaryLabel
             icon={props.quoteLogo}
             value={amount}
@@ -89,11 +89,11 @@ export const PurchaseConfirmDialog = ({
           leftLabel="Vested in"
           rightLabel={vestingTime}
         />
-        <h4 className="font-fraktion text-left mt-2">DETAILS</h4>
+        <h4 className="font-fraktion mt-2 text-left">DETAILS</h4>
         <SummaryList fields={fields} />
       </div>
       {hasWarning && (
-        <div className="m-4 font-mono text-left text-sm ">
+        <div className="m-4 text-left font-mono text-sm ">
           <div className="text-red-500">
             {discount < 0 && <p> {warning} </p>}
             {isNaN(discount) && <p>{unknownWarning}</p>}
@@ -106,7 +106,7 @@ export const PurchaseConfirmDialog = ({
         </div>
       )}
 
-      <p className="text-light-secondary-30 text-left mt-2">
+      <p className="text-light-secondary-30 mt-2 text-left">
         This transaction cannot be undone.
       </p>
       <ButtonGroup

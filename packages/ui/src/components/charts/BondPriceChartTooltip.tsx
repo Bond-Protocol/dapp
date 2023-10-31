@@ -6,6 +6,7 @@ export const getDiscountColor = (price: number, discount: number) => {
 };
 
 type ChartTooltipProps = {
+  id?: string;
   payoutTokenSymbol: string;
   quoteTokenSymbol?: string;
   useTokenRatio?: boolean;
@@ -34,8 +35,6 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
   const discount = data?.payload.discount || 0;
   const discountedPrice = data?.payload.discountedPrice;
   const date = data?.payload.timestamp || Date.now();
-  const minPrice = data?.payload?.minPrice;
-  const initialPrice = data?.payload?.initialPrice;
 
   const getValue = (price: string) => {
     price = props.useTokenRatio
@@ -74,22 +73,7 @@ export const BondPriceChartTooltip = (props: ChartTooltipProps) => {
           />
         </>
       )}
-      {initialPrice && (
-        <TooltipLabel
-          value={formatCurrency.dynamicFormatter(initialPrice)}
-          label="Initial Price: "
-          className="text-light-secondary"
-        />
-      )}
-      {minPrice && (
-        <TooltipLabel
-          value={formatCurrency.dynamicFormatter(minPrice)}
-          label="Min Price: "
-          className="text-red-500"
-        />
-      )}
-
-      <div className="text-light-primary-50 mt-2 text-[10px]">
+      <div className="text-light-primary-50 mt-2 text-right text-[10px]">
         {formatDate.long(date)}
       </div>
     </div>

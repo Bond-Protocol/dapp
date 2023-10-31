@@ -129,4 +129,6 @@ export interface CalculatedMarket {
   bondsIssued: number;
   start?: number;
   conclusion?: number;
+  blockExplorerName?: string;
+  blockExplorerUrl?: string;
 }

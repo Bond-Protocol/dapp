@@ -13,6 +13,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMediaQueries } from "hooks";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import axios from "axios";
+import { PastMarket } from "components/organisms/ClosedMarket";
 
 const blockExplorer: Column<any> = {
   accessor: "blockExplorerUrl",
@@ -149,7 +150,7 @@ const marketTxsHistory: Column<any>[] = [
 
 export interface TransactionHistoryProps {
   title?: string;
-  market?: CalculatedMarket;
+  market?: CalculatedMarket | PastMarket;
   data?: Array<BondPurchase & { chainId: number | string }>;
   className?: string;
 }
@@ -168,7 +169,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
       API_ENDPOINT + `markets/${props.market.id}/bondPurchases`
     );
     return response.data.bondPurchases;
-  }, []);
+  }, [props.market]);
 
   useEffect(() => {
     loadBondPurchases().then((response) => {
@@ -208,7 +209,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
   const cols = isTabletOrMobile ? baseTxsHistory : desktopColumns;
   const csvFilename =
     props.market &&
-    `${props.market?.quoteToken.symbol}-${props.market?.payoutToken.symbol}-${props.market?.id}`;
+    `${props.market?.quoteToken?.symbol}-${props.market?.payoutToken?.symbol}-${props.market?.id}`;
 
   return (
     <div className={props.className}>
@@ -224,9 +225,9 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         csvHeaders={
           props.market && [
             "TIME",
-            `BOND AMOUNT (${props.market?.quoteToken.symbol})`,
+            `BOND AMOUNT (${props.market?.quoteToken?.symbol})`,
             "BOND AMOUNT (USD)",
-            `PAYOUT AMOUNT (${props.market?.payoutToken.symbol})`,
+            `PAYOUT AMOUNT (${props.market?.payoutToken?.symbol})`,
             "PAYOUT AMOUNT (USD)",
             "DISCOUNT",
             "TX HASH",

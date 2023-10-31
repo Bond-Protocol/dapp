@@ -26,10 +26,13 @@ export const TableHeading = ({
       heading
       className={`${
         props.onClick && "cursor-pointer"
-      } w-2 select-none pb-2 pt-1.5 leading-none tracking-wide ${
+      } w-2 select-none bg-white/5 py-1 pb-1 leading-none tracking-wide ${
         props.className
       }`}
     >
+      {!props.alignEnd && props.tooltip && (
+        <Tooltip iconClassname="fill-white mr-0.5" content={props.tooltip} />
+      )}
       {isSorting && props.alignEnd && (
         <div
           className="my-auto mr-1 cursor-pointer "
@@ -57,7 +60,7 @@ export const TableHeading = ({
           />
         </div>
       )}
-      {props.tooltip && (
+      {props.alignEnd && props.tooltip && (
         <Tooltip iconClassname="fill-white" content={props.tooltip} />
       )}
     </TableCell>

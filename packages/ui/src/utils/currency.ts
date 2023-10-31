@@ -1,5 +1,11 @@
 import { calculateTrimDigits, trim } from "@bond-protocol/contract-library";
 
+export const twoDigitFormatter = (value: string | number) => {
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(Number(value));
+};
 export const usdFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "usd",
@@ -21,6 +27,7 @@ export const usdLongFormatter = new Intl.NumberFormat("en-US", {
 });
 
 export const longFormatter = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 1,
   maximumFractionDigits: 2,
 });
 
@@ -112,6 +119,9 @@ export const dynamicFormatter = (value: string | number, currency = true) => {
 export const trimToken = (value: any) =>
   trim(value, calculateTrimDigits(value));
 
+export const amount = (value: number | string) =>
+  value < 1000 ? trimToken(value) : longFormatter.format(Number(value));
+
 export const trimToLengthSymbol = (num: number) => {
   if (num < 1) return num;
   const symbols = ["", "k", "M", "B", "T", "Q", "GMI"]; // array of symbols to use for each magnitude of number
@@ -132,4 +142,6 @@ export const formatCurrency = {
   usdFullFormatter,
   trimToLengthSymbol,
   trimToken,
+  amount,
+  twoDigitFormatter,
 };

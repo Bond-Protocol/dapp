@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { Children, FC, useState } from "react";
 import TabsUnstyled from "@mui/base/TabsUnstyled";
 import TabsListUnstyled from "@mui/base/TabsListUnstyled";
@@ -7,9 +6,9 @@ import TabPanelUnstyled from "@mui/base/TabPanelUnstyled";
 
 type TabProps = {
   className?: string;
-  children?: React.ReactNode;
   value?: number;
   largeTab?: boolean;
+  onClick?: (value: any) => void;
   tabs: Array<{
     label: string;
     handleClick?: (i?: number) => void;
@@ -17,31 +16,38 @@ type TabProps = {
 };
 
 export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
-  const [selected, setSelected] = useState(value || 0);
+  const [current, setCurrent] = useState(value || 0);
+  const handleSelect = (value: number) => {
+    setCurrent(value);
+
+    props.onClick?.(value);
+  };
+
+  const selected = value ?? current;
 
   return (
     <TabsUnstyled
       value={selected}
-      className={`overflow-hidden rounded-t-lg border-transparent ${props.className}`}
+      className={`h-full overflow-hidden rounded-t-lg border-transparent ${props.className}`}
     >
       <TabsListUnstyled
         componentsProps={{
           root: {
-            className: "my-8 mt-2 flex justify-around",
+            className: "flex justify-around ",
           },
         }}
       >
-        {tabs.map(({ label, handleClick }, i) => (
+        {tabs.map((tab, i) => (
           <TabUnstyled
             key={i}
             onClick={() => {
-              setSelected(i);
-              handleClick && handleClick(i);
+              handleSelect(i);
+              tab.handleClick?.(i);
             }}
             componentsProps={{
               root: {
                 className: `
-                 border-b-2 w-full font-mono font-bold tracking-widest uppercase rounded-t-lg px-6 py-4 select-none 
+                 border-b-2 h-full w-full font-mono font-bold tracking-widest uppercase rounded-t-lg px-6 pb-2 select-none 
                  ${
                    selected === i
                      ? "border-white"
@@ -50,13 +56,14 @@ export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {
               },
             }}
           >
-            {label}
+            {tab.label}
           </TabUnstyled>
         ))}
       </TabsListUnstyled>
       {Children.map(children, (component, i) => {
         return (
-          <TabPanelUnstyled value={i} key={i}>
+          <TabPanelUnstyled className="h-full" value={i} key={i}>
+            {/*@ts-ignore*/}
             {component}
           </TabPanelUnstyled>
         );
