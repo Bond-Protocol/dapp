@@ -108,6 +108,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const { address, isConnected } = useAccount();
 
   const { data: gasData } = useFeeData();
+  console.log({ gasData });
 
   const bond = usePurchase(market);
 
@@ -149,21 +150,17 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   useEffect(() => {
     const setGasFee = async () => {
-      const gas = await bond.estimateBondGas(
-        Number(amount),
-        payout,
-        0.05,
-        `0x${"0".repeat(40)}`
-      );
+      if (!amount) return;
+      const gas = await bond.estimateBondGas();
       const price = Number(gasData?.formatted.gasPrice);
-      const usdCost = Number(gas) * nativeCurrencyPrice;
+      const nativeCost = Number(gas) * price;
 
-      setNetworkFee(formatCurrency.trimToken(gas));
-      setNetworkFeeUsd(formatCurrency.usdFormatter.format(usdCost));
+      setNetworkFee(formatCurrency.trimToken(nativeCost));
+      //setNetworkFeeUsd(formatCurrency.usdFormatter.format(usdCost));
     };
 
     setGasFee();
-  }, [payout]);
+  }, []);
 
   useEffect(() => {
     const updatePayout = async () => {

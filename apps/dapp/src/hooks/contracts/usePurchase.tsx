@@ -68,14 +68,16 @@ export const usePurchase = (market: CalculatedMarket) => {
   };
 
   const estimateBondGas = async (
-    amount: number,
-    payout: string,
-    slippage: number,
-    referrerAddress: string
+    amount = 1,
+    payout = "1",
+    slippage = 0.05,
+    referrerAddress = NULL_ADDRESS
   ) => {
     const minimumOut = Number(payout) - Number(payout) * (slippage / 100);
 
     return estimateBondPurchaseGas({
+      bondType: market.vestingType,
+      chainId: Number(market.id),
       publicClient,
       referrerAddress: referrerAddress as Address,
       recipientAddress: address as Address,

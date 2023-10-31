@@ -5,10 +5,10 @@ import {
   encodeFunctionData,
   Address,
   getContract,
-} from 'viem';
-import { abis } from 'abis';
-import { BondType, getAuctioneerForCreate } from 'core';
-import { CreateMarketParams } from 'types';
+} from "viem";
+import { abis } from "abis";
+import { BondType, getAuctioneerForCreate } from "core";
+import { CreateMarketParams } from "types";
 
 /**
  * Encodes arguments for an ERC20 approve function
@@ -22,7 +22,7 @@ export function encodeApproveSpending({
 }) {
   return encodeFunctionData({
     abi: abis.erc20,
-    functionName: 'approve',
+    functionName: "approve",
     args: [address, amount],
   });
 }
@@ -32,14 +32,14 @@ export function encodeApproveSpending({
  */
 export function encodeCreateMarket(
   config: CreateMarketParams,
-  bondType: BondType,
+  bondType: BondType
 ) {
   const abi = abis.baseAuctioneer;
   const bytes = encodeCreateMarketParams(config, bondType);
 
   return encodeFunctionData({
     abi,
-    functionName: 'createMarket',
+    functionName: "createMarket",
     args: [bytes],
   });
 }
@@ -51,18 +51,20 @@ export function estimateGasCreateMarket(
   config: CreateMarketParams,
   bondType: BondType,
   publicClient: PublicClient,
+  creatorAddress: Address
 ) {
   const { abi, address } = getAuctioneerForCreate(
     publicClient.chain?.id!,
-    bondType,
+    bondType
   );
   const bytes = encodeCreateMarketParams(config, bondType);
 
   return publicClient.estimateContractGas({
+    account: creatorAddress,
     address,
     //@ts-ignore
     abi,
-    functionName: 'createMarket',
+    functionName: "createMarket",
     args: [bytes],
   });
 }
@@ -104,9 +106,9 @@ export function getOraclePrice({
 
 function encodeCreateMarketParams(
   config: CreateMarketParams,
-  bondType: BondType,
+  bondType: BondType
 ) {
-  const parameters = parseAbiParameters('tuple(bytes)');
+  const parameters = parseAbiParameters("tuple(bytes)");
   switch (bondType) {
     case BondType.FIXED_EXPIRY_SDA:
     case BondType.FIXED_EXPIRY_DEPRECATED:

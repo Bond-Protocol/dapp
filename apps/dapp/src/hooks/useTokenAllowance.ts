@@ -11,44 +11,39 @@ export const useTokenAllowance = (
   amount: string,
   spender: Address
 ) => {
-  const { address } = useAccount();
+  const { isConnected, address } = useAccount();
 
   const { data: balance } = useBalance({
     address,
     token: tokenAddress,
     chainId: Number(networkId),
+    enabled: isConnected,
   });
 
   const allowance = useAllowance({
-    ownerAddress: address as Address,
     tokenAddress,
-    amount,
+    ownerAddress: address as Address,
     spenderAddress: spender,
+    amount,
     decimals: tokenDecimals,
     chainId: Number(networkId),
+    enabled: isConnected,
   });
-
-  const approve = async () => {
-    const res = await allowance.writeAsync();
-    const ress = await allowance.allowance.refetch();
-    console.log({ res, ress });
-  };
 
   const parsedAmount = parseUnits(amount, tokenDecimals);
 
   const hasSufficientAllowance = useMemo(
-    () => (allowance.currentAllowance ?? 0n) >= parsedAmount,
-    [allowance.allowance.data]
+    () => isConnected && (allowance.currentAllowance ?? 0n) >= parsedAmount,
+    [isConnected, amount, allowance.allowance.data]
   );
 
   const hasSufficientBalance = useMemo(
-    () => (balance?.value ?? 0n) >= parsedAmount,
-    [balance, amount]
+    () => isConnected && (balance?.value ?? 0n) >= parsedAmount,
+    [isConnected, balance, amount]
   );
-  console.log({ hasSufficientBalance, hasSufficientAllowance });
 
   return {
-    approve,
+    approve: allowance.writeAsync,
     allowance,
     balance: trimToken(balance?.formatted ?? 0),
     hasSufficientAllowance,

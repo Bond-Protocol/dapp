@@ -1,6 +1,7 @@
-import { Address, PublicClient, getContract } from 'viem';
-import { getAggregator } from 'core';
-import { abis } from 'abis';
+import { Address, PublicClient, getContract } from "viem";
+import { getAggregator, getTeller } from "core";
+import { abis } from "abis";
+import { BondType } from "types";
 
 export function estimateBondPayout({
   chainId,
@@ -31,6 +32,8 @@ export type BondPurchaseArgs = {
   marketId: number | bigint;
   amountIn: bigint;
   amountOut: bigint;
+  chainId: number;
+  bondType: BondType;
 };
 
 export function estimateBondPurchaseGas({
@@ -41,14 +44,18 @@ export function estimateBondPurchaseGas({
   marketId,
   amountIn,
   amountOut,
+  bondType,
+  chainId,
 }: BondPurchaseArgs) {
-  const abi = abis.baseTeller;
+  //const abi = abis.baseTeller;
+  const abi = getTeller(chainId, bondType);
 
-  //@ts-ignore
   return publicClient.estimateContractGas({
     address: tellerAddress,
+    account: recipientAddress,
+    //@ts-ignore
     abi,
-    functionName: 'purchase',
+    functionName: "purchase",
     args: [
       recipientAddress,
       referrerAddress,

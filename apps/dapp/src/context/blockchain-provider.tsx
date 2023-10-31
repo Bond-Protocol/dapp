@@ -26,15 +26,7 @@ import { environment } from "src/environment";
 import { CHAINS } from "@bond-protocol/contract-library";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
-import { createPublicClient, http, PublicClient } from "viem";
-
-const getIconsForChains = (c: any) => {
-  const logoUrl = Array.from(CHAINS.values()).find(
-    (chain) => Number(chain.chainId) === Number(c.id)
-  )?.image;
-
-  return { ...c, logoUrl };
-};
+import { Chain, createPublicClient, http, PublicClient } from "viem";
 
 export const testnets = [goerli, arbitrumGoerli, optimismGoerli].map(
   getIconsForChains
@@ -43,7 +35,9 @@ export const testnets = [goerli, arbitrumGoerli, optimismGoerli].map(
 export const mainnets = [mainnet, arbitrum, optimism];
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
-export const ACTIVE_CHAINS = environment.isTestnet ? testnets : mainnets;
+export const ACTIVE_CHAINS: Chain[] = environment.isTestnet
+  ? testnets
+  : mainnets;
 export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
 export const MAINNETS = mainnets;
 
@@ -70,7 +64,7 @@ const connectors = connectorsForWallets([
   },
 ]);
 
-const config = createConfig({ publicClient, connectors });
+const config = createConfig({ publicClient, connectors, autoConnect: true });
 
 ///<reference types="viem/node_modules/abitype" />
 export const clients: Record<number, PublicClient> = {
@@ -106,3 +100,20 @@ export const BlockchainProvider: FC<{ children?: ReactNode }> = ({
     </WagmiConfig>
   );
 };
+
+function getBlockExplorer(chainId: number) {
+  return (
+    ACTIVE_CHAINS.find((c) => c.id === chainId)?.blockExplorers?.default ?? {
+      name: "",
+      url: "",
+    }
+  );
+}
+
+function getIconsForChains(c: any) {
+  const logoUrl = Array.from(CHAINS.values()).find(
+    (chain) => Number(chain.chainId) === Number(c.id)
+  )?.image;
+
+  return { ...c, logoUrl };
+}

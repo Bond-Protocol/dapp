@@ -34,6 +34,7 @@ export const PurchaseConfirmDialog = ({
 }: PurchaseConfirmDialogProps) => {
   const [accepted, setAccepted] = useState(false);
 
+  console.log({ props });
   const fields = [
     {
       leftLabel: "Network fee",

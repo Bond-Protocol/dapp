@@ -14,6 +14,7 @@ export type UseAllowanceProps = {
   ownerAddress: Address;
   spenderAddress: Address;
   amount: string;
+  enabled?: boolean;
 };
 
 export const useAllowance = (args: UseAllowanceProps) => {
@@ -25,6 +26,7 @@ export const useAllowance = (args: UseAllowanceProps) => {
     address: args.tokenAddress,
     functionName: "approve",
     args: [args.spenderAddress, parsedAmount],
+    enabled: args.enabled,
   });
 
   const approve = useContractWrite(config);
@@ -40,8 +42,8 @@ export const useAllowance = (args: UseAllowanceProps) => {
 
   const writeAsync = async () => {
     try {
-      await approve?.writeAsync();
-      await allowance.refetch();
+      await approve.writeAsync?.();
+      return allowance.refetch();
     } catch (e) {
       console.error(e);
     }
