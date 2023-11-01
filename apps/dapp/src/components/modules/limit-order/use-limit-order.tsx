@@ -16,6 +16,7 @@ import { orderService } from "services/order-service";
 import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
+import { useOrderService } from "./use-global-order-services";
 
 export type ILimitOrderContext = {
   setMaxFee(value: number): any;
@@ -54,6 +55,10 @@ export const LimitOrderProvider = ({
   const [maxFee, setMaxFee] = useState<number>();
   const api = useOrderApi();
   const orders = useLimitOrderList(market);
+
+  const { isTokenSupported } = useOrderService();
+
+  const isSupported = isTokenSupported(market.quoteToken);
 
   const allowance = useLimitOrderAllowance(market, amount, orders.list);
 
@@ -118,8 +123,10 @@ export const LimitOrderProvider = ({
       );
       setMaxFee(fee);
     };
-    estimateFee();
-  }, []);
+    if (isSupported) {
+      estimateFee();
+    }
+  }, [isSupported]);
 
   const createOrder = async () => {
     const result = await api.createOrder(
