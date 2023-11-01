@@ -108,100 +108,106 @@ function encodeCreateMarketParams(
   config: CreateMarketParams,
   bondType: BondType
 ) {
-  const parameters = parseAbiParameters("tuple(bytes)");
+  let parameters;
   switch (bondType) {
     case BondType.FIXED_EXPIRY_SDA:
     case BondType.FIXED_EXPIRY_DEPRECATED:
     case BondType.FIXED_TERM_SDA:
     case BondType.FIXED_TERM_DEPRECATED:
+      parameters = parseAbiParameters(
+        "address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 conclusion, uint32 depositInterval, int8 scaleAdjustment"
+      );
       return encodeAbiParameters(parameters, [
-        [
-          config.payoutToken,
-          config.quoteToken,
-          config.callbackAddr,
-          config.capacityInQuote,
-          config.capacity,
-          config.formattedInitialPrice,
-          config.formattedMinimumPrice,
-          config.debtBuffer,
-          config.vesting,
-          config.conclusion,
-          config.depositInterval,
-          config.scaleAdjustment,
-        ],
+        config.payoutToken,
+        config.quoteToken,
+        config.callbackAddr,
+        config.capacityInQuote,
+        config.capacity,
+        config.formattedInitialPrice,
+        config.formattedMinimumPrice,
+        config.debtBuffer,
+        config.vesting,
+        config.conclusion,
+        config.depositInterval,
+        config.scaleAdjustment,
       ]);
     case BondType.FIXED_EXPIRY_SDA_V1_1:
     case BondType.FIXED_TERM_SDA_V1_1:
+      parameters = parseAbiParameters(
+        "address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 start, uint32 duration, uint32 depositInterval, int8 scaleAdjustment"
+      );
       return encodeAbiParameters(parameters, [
-        [
-          config.payoutToken,
-          config.quoteToken,
-          config.callbackAddr,
-          config.capacityInQuote,
-          config.capacity,
-          config.formattedInitialPrice,
-          config.formattedMinimumPrice,
-          config.debtBuffer,
-          config.vesting,
-          config.start,
-          config.duration,
-          config.depositInterval,
-          config.scaleAdjustment,
-        ],
+        config.payoutToken,
+        config.quoteToken,
+        config.callbackAddr,
+        config.capacityInQuote,
+        config.capacity,
+        config.formattedInitialPrice,
+        config.formattedMinimumPrice,
+        config.debtBuffer,
+        config.vesting,
+        config.start,
+        config.duration,
+        config.depositInterval,
+        config.scaleAdjustment,
       ]);
     case BondType.FIXED_EXPIRY_FPA:
     case BondType.FIXED_TERM_FPA:
+      parameters = parseAbiParameters(
+        "address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedPrice, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration, int8 scaleAdjustment"
+      );
+
       return encodeAbiParameters(parameters, [
-        [
-          config.payoutToken,
-          config.quoteToken,
-          config.callbackAddr,
-          config.capacityInQuote,
-          config.capacity,
-          config.formattedPrice,
-          config.depositInterval,
-          config.vesting,
-          config.start,
-          config.duration,
-          config.scaleAdjustment,
-        ],
+        config.payoutToken,
+        config.quoteToken,
+        config.callbackAddr,
+        config.capacityInQuote,
+        config.capacity,
+        config.formattedPrice,
+        config.depositInterval,
+        config.vesting,
+        config.start,
+        config.duration,
+        config.scaleAdjustment,
       ]);
     case BondType.FIXED_EXPIRY_OFDA:
     case BondType.FIXED_TERM_OFDA:
+      parameters = parseAbiParameters(
+        "address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 fixedDiscount, uint48 maxDiscountFromCurrent, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration"
+      );
       return encodeAbiParameters(parameters, [
-        [
-          config.payoutToken,
-          config.quoteToken,
-          config.callbackAddr,
-          config.oracle,
-          config.fixedDiscount,
-          config.maxDiscountFromCurrent,
-          config.capacityInQuote,
-          config.capacity,
-          config.depositInterval,
-          config.vesting,
-          config.start,
-          config.duration,
-        ],
+        config.payoutToken,
+        config.quoteToken,
+        config.callbackAddr,
+        config.oracle as Address,
+        config.fixedDiscount,
+        config.maxDiscountFromCurrent,
+        config.capacityInQuote,
+        config.capacity,
+        config.depositInterval,
+        config.vesting,
+        config.start,
+        config.duration,
       ]);
     case BondType.FIXED_EXPIRY_OSDA:
     case BondType.FIXED_TERM_OSDA:
+      parameters = parseAbiParameters(
+        "address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 baseDiscount, uint48 maxDiscountFromCurrent, uint48 targetIntervalDiscount, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration"
+      );
       return encodeAbiParameters(parameters, [
-        [
-          config.payoutToken,
-          config.quoteToken,
-          config.callbackAddr,
-          config.oracle,
-          config.baseDiscount,
-          config.maxDiscountFromCurrent,
-          config.targetIntervalDiscount,
-          config.capacityInQuote,
-          config.capacity,
-          config.depositInterval,
-          config.vesting,
-          config.start,
-          config.duration,
-        ],
+        config.payoutToken,
+        config.quoteToken,
+        config.callbackAddr,
+        config.oracle as Address,
+        config.baseDiscount,
+        config.maxDiscountFromCurrent,
+        config.targetIntervalDiscount,
+        config.capacityInQuote,
+        config.capacity,
+        config.depositInterval,
+        config.vesting,
+        config.start,
+        config.duration,
       ]);
   }
 }

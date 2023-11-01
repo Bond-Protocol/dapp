@@ -10,7 +10,11 @@ import {
   getOraclePrice,
   BondType,
 } from "@bond-protocol/contract-library";
-import { CreateMarketAction, CreateMarketState, useCreateMarket } from "ui";
+import {
+  CreateMarketAction,
+  CreateMarketState,
+  useCreateMarket,
+} from "./create-market-reducer";
 import { doPriceMath } from "./helpers";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { CreateMarketScreen } from "./CreateMarketScreen";
@@ -34,10 +38,15 @@ export const CreateMarketController = () => {
   const { tokens } = useTokenlistLoader();
   const [state, dispatch] = useCreateMarket();
 
+  const auctioneerAddress = getAuctioneer(state.chainId.toString(), state);
+
   const __allowance = useAllowance({
     tokenAddress: state.payoutToken.address as Address,
     decimals: state.payoutToken.decimals,
-    chainId: network.chain?.id,
+    amount: state.capacity.toString(),
+    chainId: network.chain?.id ?? 1,
+    spenderAddress: auctioneerAddress,
+    ownerAddress: address as Address,
   });
 
   const createMarket = useCreateMarketContract({
@@ -151,10 +160,7 @@ export const CreateMarketController = () => {
 
     const auctioneer = getAuctioneer(network.chain?.id.toString(), state);
 
-    __allowance.write(
-      auctioneer as Address,
-      state.recommendedAllowance.toString()
-    );
+    __allowance.write?.();
   };
 
   const configureMarket = (state: CreateMarketState) => {

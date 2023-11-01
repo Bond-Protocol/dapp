@@ -19,6 +19,11 @@ export type UseAllowanceProps = {
 
 export const useAllowance = (args: UseAllowanceProps) => {
   const parsedAmount = parseUnits(args.amount, args.decimals);
+  const enabled =
+    !!args.chainId &&
+    !!args.tokenAddress &&
+    !!args.spenderAddress &&
+    !!args.ownerAddress;
 
   const { config } = usePrepareContractWrite({
     abi: erc20ABI,
@@ -26,7 +31,7 @@ export const useAllowance = (args: UseAllowanceProps) => {
     address: args.tokenAddress,
     functionName: "approve",
     args: [args.spenderAddress, parsedAmount],
-    enabled: args.enabled,
+    enabled: enabled && !!args.amount,
   });
 
   const approve = useContractWrite(config);
@@ -37,7 +42,7 @@ export const useAllowance = (args: UseAllowanceProps) => {
     address: args.tokenAddress,
     functionName: "allowance",
     args: [args.ownerAddress as Address, args.spenderAddress as Address],
-    enabled: !!args.ownerAddress,
+    enabled,
   });
 
   const writeAsync = async () => {

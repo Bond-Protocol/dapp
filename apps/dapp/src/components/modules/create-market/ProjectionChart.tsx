@@ -1,4 +1,12 @@
-import { BondPriceChart, BondPriceChartProps, PlaceholderChart } from "./";
+import {
+  BondPriceChart,
+  BondPriceChartProps,
+  PlaceholderChart,
+  Input,
+  Switch,
+  TooltipWrapper,
+  useNumericInput,
+} from "ui";
 import {
   generateFPAChartData,
   generateOFDAChartData,
@@ -7,15 +15,8 @@ import {
   PriceData,
   ProjectionConfiguration,
 } from "./projection-algorithm";
-import {
-  CreateMarketState,
-  Input,
-  Switch,
-  TooltipWrapper,
-  useCreateMarket,
-} from "..";
-import { useNumericInput } from "hooks/use-numeric-input";
 import { useMemo, useState } from "react";
+import { CreateMarketState, useCreateMarket } from "./create-market-reducer";
 
 export type ProjectionChartProps = {
   data?: PriceData[];
@@ -76,20 +77,21 @@ export const ProjectionChart = (
         ),
       }),
     [
-        props.data.length,
-        useTokenPrices,
-        targetDiscount,
-        state.capacity,
-        state.priceModels[state.priceModel]?.initialPrice,
-        state.priceModels[state.priceModel]?.minPrice,
-        state.durationInDays,
-        state.depositInterval,
-        state.priceModels[state.priceModel]?.fixedDiscount,
-        state.priceModels[state.priceModel]?.baseDiscount,
-        state.priceModels[state.priceModel]?.targetIntervalDiscount,
-        state.priceModels[state.priceModel]?.fixedPrice,
-        state.priceModels[state.priceModel]?.maxDiscountFromCurrent
-    ]);
+      props.data.length,
+      useTokenPrices,
+      targetDiscount,
+      state.capacity,
+      state.priceModels[state.priceModel]?.initialPrice,
+      state.priceModels[state.priceModel]?.minPrice,
+      state.durationInDays,
+      state.depositInterval,
+      state.priceModels[state.priceModel]?.fixedDiscount,
+      state.priceModels[state.priceModel]?.baseDiscount,
+      state.priceModels[state.priceModel]?.targetIntervalDiscount,
+      state.priceModels[state.priceModel]?.fixedPrice,
+      state.priceModels[state.priceModel]?.maxDiscountFromCurrent,
+    ]
+  );
 
   if (!Boolean(props.data.length)) {
     return (
@@ -99,7 +101,7 @@ export const ProjectionChart = (
     );
   }
 
-  const shouldRender = prices.length > 0;
+  const shouldRender = Number(prices?.length) > 0;
 
   return (
     <div className="flex w-full flex-col">
@@ -115,7 +117,7 @@ export const ProjectionChart = (
               </div>
               {state.priceModel === "dynamic" && (
                 <div className="flex">
-                  <p className="text-light-grey-400 my-auto mr-1 text-sm">
+                  <p className="my-auto mr-1 text-sm text-light-grey-400">
                     Discount
                   </p>
                   <Input

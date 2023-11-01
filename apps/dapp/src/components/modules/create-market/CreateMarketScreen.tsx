@@ -3,8 +3,6 @@ import {
   Button,
   calculateDuration,
   ConfirmMarketCreationDialog,
-  CreateMarketAction,
-  CreateMarketState,
   FlatSelect,
   formatDate,
   InfoLabel,
@@ -29,6 +27,7 @@ import {
 import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
 import { SelectTokenController } from "components/organisms/SelectTokenController";
 import { calculateTrimDigits, trimAsNumber } from "formatters";
+import { CreateMarketAction, CreateMarketState } from "./create-market-reducer";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;

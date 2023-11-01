@@ -115,9 +115,9 @@ export enum BondType {
 }
 
 export type CreateMarketParams = {
-  payoutToken: string;
-  quoteToken: string;
-  callbackAddr: string;
+  payoutToken: Address;
+  quoteToken: Address;
+  callbackAddr: Address;
   capacityInQuote: boolean;
   capacity: any;
   debtBuffer: any;
@@ -130,7 +130,7 @@ export type CreateMarketParams = {
   formattedPrice?: any;
   formattedInitialPrice?: any;
   formattedMinimumPrice?: any;
-  oracle?: string;
+  oracle?: Address;
   fixedDiscount?: any;
   maxDiscountFromCurrent?: any;
   baseDiscount?: any;

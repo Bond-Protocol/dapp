@@ -14,7 +14,7 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
     ...t,
     chainId: Number(t.chainId),
     // @ts-ignore
-    price: prices.find((p: any) => p.address === t.address)?.price ?? 0,
+    price: prices?.find((p: any) => p.address === t.address)?.price ?? 0,
   }));
 };
 
