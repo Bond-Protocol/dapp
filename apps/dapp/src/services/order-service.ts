@@ -28,8 +28,8 @@ export const TokenStorage = {
 const defaultStatement = "Sign in with Ethereum to the Bond Protocol app.";
 
 const basicMessage = {
-  domain: "bondprotocol.finance",
-  uri: "https://app.bondprotocol.finance",
+  domain: window.location.host,
+  uri: window.location.origin,
   version: "1",
 };
 
