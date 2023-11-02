@@ -1,16 +1,16 @@
-import { Address, PublicClient, WalletClient } from 'viem';
+import { Address, PublicClient, WalletClient } from "viem";
 import {
   getAuctioneerByBondType,
-  getAddressesV2,
+  getAddresses,
   Auctioneer,
   BondType,
   auctioneersByType,
-} from 'core';
-import { abis, auctioneerAbis } from 'abis';
+} from "core";
+import { abis, auctioneerAbis } from "abis";
 
 export function getChainId(client: PublicClient | WalletClient) {
   const chainId = client.chain?.id;
-  if (!chainId) throw new Error('Unable to get Chain Id from client');
+  if (!chainId) throw new Error("Unable to get Chain Id from client");
   return chainId;
 }
 
@@ -19,13 +19,13 @@ export function getAuctioneerAbiForName(auctioneerName: Auctioneer) {
 }
 
 export function getAggregator(chainId: number) {
-  const address = getAddressesV2(chainId).aggregator;
+  const address = getAddresses(chainId).aggregator;
 
   return { address, abi: abis.aggregator };
 }
 
 export function getAuthorithy(chainId: number) {
-  const address = getAddressesV2(chainId).authority;
+  const address = getAddresses(chainId).authority;
 
   return { address, abi: abis.authority };
 }
@@ -37,7 +37,7 @@ export function getBaseTeller(address: Address) {
 export function getTeller(chainId: number, bondType: BondType) {
   const { teller } = getAddressesForType(chainId, bondType);
 
-  const abi = bondType.includes('term')
+  const abi = bondType.includes("term")
     ? abis.fixedTermTeller
     : abis.fixedExpiryTeller;
 
@@ -45,9 +45,9 @@ export function getTeller(chainId: number, bondType: BondType) {
 }
 
 export function getAddressesForType(chainId: number, bondType: BondType) {
-  const { fixedTermTeller, fixedExpiryTeller } = getAddressesV2(chainId);
+  const { fixedTermTeller, fixedExpiryTeller } = getAddresses(chainId);
 
-  const isFixedTerm = bondType.includes('term');
+  const isFixedTerm = bondType.includes("term");
 
   const teller = isFixedTerm ? fixedTermTeller : fixedExpiryTeller;
 

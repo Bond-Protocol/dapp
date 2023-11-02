@@ -208,7 +208,7 @@ export const useDashboardLoader = () => {
             let avgPrice = all.avgPrice + Number(p.purchasePrice);
 
             if (i === arr.length - 1) {
-              avgPrice = avgPrice / i;
+              avgPrice = avgPrice / (i + 1);
             }
 
             return {

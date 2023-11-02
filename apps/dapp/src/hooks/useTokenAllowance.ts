@@ -43,8 +43,10 @@ export const useTokenAllowance = (
   );
 
   return {
-    approve: allowance.writeAsync,
     allowance,
+    currentAllowance: allowance.currentAllowance,
+    execute: allowance.execute,
+    txStatus: allowance.approveTx,
     balance: trimToken(balance?.formatted ?? 0),
     hasSufficientAllowance,
     hasSufficientBalance,

@@ -8,7 +8,6 @@ import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useRedeemBond } from "hooks/contracts/useRedeem";
-import { TransactionVizard } from "components/modals/TransactionVizard";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -99,7 +98,7 @@ export const tableColumns: Array<Column<any>> = [
           >
             Claim
           </Button>
-          <TransactionVizard
+          <TransactionWizard
             chainId={chainId}
             open={open}
             //@ts-ignore

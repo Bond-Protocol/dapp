@@ -55,6 +55,7 @@ const receivedColumn = {
   label: "Received",
   accessor: "quote",
   formatter: (market: any) => {
+    console.log({ market });
     const quote = formatCurrency.longFormatter.format(market.total?.quote);
     const quoteUsd = formatCurrency.usdFormatter.format(market.total?.quoteUsd);
     const chain = CHAINS.get(market.chainId);
@@ -71,6 +72,7 @@ const paidColumn = {
   label: "Paid",
   accessor: "payout",
   formatter: (market: any) => {
+    console.log({ market });
     const payout = formatCurrency.longFormatter.format(market.total?.payout);
     const usdPayout = formatCurrency.usdFormatter.format(
       market.total?.payoutUsd
@@ -111,7 +113,7 @@ const avgRateColumn = {
 
     return {
       value: hasPurchases
-        ? formatCurrency.trimToken(market.total?.avgPrice)
+        ? formatCurrency.trimToken(market.total?.avgPrice ?? 0)
         : "-",
       subtext: hasPurchases
         ? market.quoteToken.symbol + " per " + market.payoutToken.symbol

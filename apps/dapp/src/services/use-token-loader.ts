@@ -30,7 +30,7 @@ export const fetchAndMatchPricesForTestnet = async () => {
       (pt) => t.symbol.toLowerCase() === pt?.symbol?.toLowerCase()
     )?.price;
 
-    return { ...t, price };
+    return { ...t, price, usedAsPayout: true, markets: [] };
   });
 };
 
@@ -43,6 +43,7 @@ export const useTokenLoader = () => {
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
   const { subgraphTokens, isLoading } = useSubgraph();
 
+  console.log({ payoutTokens });
   const getByAddress = (address: string) => {
     return tokens.find(
       (t) => t.address.toLowerCase() === address?.toLowerCase()

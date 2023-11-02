@@ -46,7 +46,7 @@ const TokenAmountLabel = ({
   );
 };
 
-const ApprovingLabel = () => {
+export const ApprovingLabel = () => {
   return (
     <div className="flex w-full justify-center">
       Pending

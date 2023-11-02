@@ -1,4 +1,4 @@
-import { ACTIVE_CHAIN_IDS } from "context/evm-provider";
+import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
 import { useMarkets } from "context/market-context";
 import { useQueries } from "react-query";
 import { useOrderApi } from "./use-order-api";
@@ -7,15 +7,15 @@ import {
   PaginatedTable,
   Column,
   Button,
-  getDiscountPercentage,
   getDiscountColor,
   formatCurrency,
   formatDate,
   Label,
 } from "ui";
-import { CalculatedMarket, CHAINS } from "@bond-protocol/contract-library";
+import { CalculatedMarket, CHAINS } from "types";
 import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
+import { getDiscountPercentage } from "../create-market";
 
 const Chip = ({
   children,

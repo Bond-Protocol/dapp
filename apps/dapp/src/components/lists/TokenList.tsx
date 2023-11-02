@@ -25,7 +25,7 @@ export const TokenList = () => {
   ) {
     const arr: Token[] = [];
     payoutTokens
-      .filter(
+      ?.filter(
         (value: Token) =>
           !environment.isProduction ||
           value.logoURI !== PLACEHOLDER_TOKEN_LOGO_URL

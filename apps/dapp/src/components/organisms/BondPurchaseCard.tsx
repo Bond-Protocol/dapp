@@ -18,7 +18,8 @@ import { useIsEmbed } from "hooks/useIsEmbed";
 import { usePurchase } from "hooks/contracts/usePurchase";
 import { CalculatedMarket } from "types";
 import { formatEther, formatUnits } from "viem";
-import { TransactionVizard } from "components/modals/TransactionVizard";
+import { TransactionWizard } from "components/modals/TransactionWizard";
+import { ApprovingLabel } from "components/modules/limit-order";
 
 export type BondPurchaseCard = {
   market: CalculatedMarket;
@@ -117,14 +118,19 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     slippage: DEFAULT_SLIPPAGE,
   });
 
-  const { approve, balance, hasSufficientAllowance, hasSufficientBalance } =
-    useTokenAllowance(
-      market.quoteToken.address as Address,
-      market.quoteToken.decimals,
-      market.chainId,
-      amount.toString(),
-      market.teller
-    );
+  const {
+    execute,
+    txStatus: approveTxStatus,
+    balance,
+    hasSufficientAllowance,
+    hasSufficientBalance,
+  } = useTokenAllowance(
+    market.quoteToken.address as Address,
+    market.quoteToken.decimals,
+    market.chainId,
+    amount.toString(),
+    market.teller
+  );
 
   const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
     market.chainId
@@ -172,7 +178,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   }, [amount]);
 
   const onClickBond = !hasSufficientAllowance
-    ? () => approve()
+    ? () => execute()
     : () => setShowModal(true);
 
   const summaryFields = [
@@ -245,18 +251,22 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           )}
         >
           <Button
-            disabled={!hasSufficientBalance}
+            disabled={!hasSufficientBalance || approveTxStatus.isLoading}
             className="mt-4 w-full"
             onClick={onClickBond}
           >
-            {!hasSufficientAllowance && hasSufficientBalance
-              ? "APPROVE"
-              : "BOND"}
+            {approveTxStatus.isLoading ? (
+              <ApprovingLabel />
+            ) : !hasSufficientAllowance && hasSufficientBalance ? (
+              "APPROVE"
+            ) : (
+              "BOND"
+            )}
           </Button>
         </BondButton>
       </div>
       {showModal && (
-        <TransactionVizard
+        <TransactionWizard
           open={showModal}
           //@ts-ignore
           txStatus={bond}

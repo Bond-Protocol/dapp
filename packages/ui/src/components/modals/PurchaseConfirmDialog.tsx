@@ -34,7 +34,6 @@ export const PurchaseConfirmDialog = ({
 }: PurchaseConfirmDialogProps) => {
   const [accepted, setAccepted] = useState(false);
 
-  console.log({ props });
   const fields = [
     {
       leftLabel: "Network fee",
@@ -78,7 +77,7 @@ export const PurchaseConfirmDialog = ({
             <Arrow className="rotate-90" />
           </div>
           <SummaryLabel
-            icon={market.quoteToken.logoURI}
+            icon={market.payoutToken.logoURI}
             value={formattedPayout}
             subtext="You Get"
             className="uppercase"

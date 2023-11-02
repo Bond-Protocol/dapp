@@ -4,7 +4,6 @@ import {
   formatCurrency,
   formatDate,
   getDiscountColor,
-  getDiscountPercentage,
   Icon,
   useSorting,
   Table,
@@ -16,10 +15,11 @@ import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
 import { useEffect, useState } from "react";
 import { Popper } from "components/common/Popper";
 import { useOrderApi } from "./use-order-api";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { OrderConfig } from "services/order-service";
 import { useLimitOrderForMarket } from "./use-limit-order";
 import { CancelOrderDialog } from "./CancelOrderDialog";
+import { getDiscountPercentage } from "../create-market";
 
 export type LimitOrderListProps = {
   market?: CalculatedMarket;
