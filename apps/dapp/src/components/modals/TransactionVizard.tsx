@@ -45,7 +45,8 @@ export type TransactionVizardProps = {
   signingTx?: Promise<ContractTransaction>;
   /** Optional titles for every stage */
   titles?: Partial<Record<TxStatus, string>>;
-  txStatus: ReturnType<typeof useContractWrite>;
+  hash?: Address;
+  txStatus?: ReturnType<typeof useContractWrite>;
 } & Partial<TransactionHashDialogProps>;
 
 export const TransactionVizard = ({
@@ -58,7 +59,7 @@ export const TransactionVizard = ({
   const [txError, setTxError] = useState<Error>();
   const [result, setResult] = useState<any>();
   const tx = useWaitForTransaction({
-    hash,
+    hash: props.hash ?? hash,
   });
 
   useEffect(() => {
@@ -70,16 +71,16 @@ export const TransactionVizard = ({
       setStatus(TX_STATUS.SUCCESS);
     }
 
-    if (txStatus.isError || tx.isError) {
+    if (txStatus?.isError || tx.isError) {
       setStatus(TX_STATUS.FAILED);
-      setTxError(txStatus.error!);
+      setTxError(txStatus?.error!);
     }
   }, [tx, txStatus]);
 
   //Assume transaction is pending signature if no initial dialog is provided
   useEffect(() => {
     if (!InitialDialog) {
-      TX_STATUS.SIGNING;
+      setStatus(TX_STATUS.SIGNING);
     }
   }, []);
 
@@ -91,25 +92,6 @@ export const TransactionVizard = ({
 
     setHash(data?.hash as Address);
   };
-
-  //Handles a tx started externally rather than via the first dialog
-  useEffect(() => {
-    async function handleExternallyStartedTx() {
-      if (props.signingTx) {
-        setStatus(TX_STATUS.SIGNING);
-        try {
-          const tx = await props.signingTx;
-          //@ts-ignore
-          handleTx(tx);
-        } catch (e) {
-          setTxError(e as Error);
-          setStatus(TX_STATUS.FAILED);
-        }
-      }
-    }
-
-    handleExternallyStartedTx();
-  }, [props.signingTx]);
 
   const closeModal = () => {
     props.onClose();
@@ -124,7 +106,7 @@ export const TransactionVizard = ({
 
   const restart = () => {
     clear();
-    setStatus(TX_STATUS.STANDBY);
+    setStatus(InitialDialog ? TX_STATUS.STANDBY : TX_STATUS.SIGNING);
   };
 
   const retry = () => {
@@ -183,7 +165,6 @@ export const TransactionVizard = ({
   };
 
   const current = handlers[status];
-  console.log({ current });
 
   return (
     <Modal title={current.title} open={props.open} onClickClose={closeModal}>

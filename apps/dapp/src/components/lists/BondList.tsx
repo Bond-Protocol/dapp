@@ -8,6 +8,7 @@ import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useRedeemBond } from "hooks/contracts/useRedeem";
+import { TransactionVizard } from "components/modals/TransactionVizard";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -66,30 +67,21 @@ export const tableColumns: Array<Column<any>> = [
       const [open, setOpen] = useState(false);
       const { chain } = useNetwork();
       const { switchNetwork } = useSwitchNetwork();
-      const [tx, setTx] = useState<any>();
 
-      const bond: OwnerBalance = props.data.bond;
-      console.log({ bond }, props);
-      const redeem = useRedeemBond({
-        bond,
-        bondType: "" as BondType,
-        marketId: 1,
-        tellerAddress: "0x123",
-      });
+      const bond: OwnerBalance = props?.data?.bond;
+      const redeem = useRedeemBond({ bond });
 
-      const chainId = props?.data?.bond?.bondToken.chainId;
+      const chainId = bond?.bondToken?.chainId;
 
-      const isCorrectNetwork =
-        Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
+      const isCorrectNetwork = Number(bond?.bondToken?.chainId) === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(Number(props?.data?.bond?.bondToken?.chainId));
+        switchNetwork?.(Number(bond?.bondToken?.chainId));
       };
 
       const claim = () => {
         setOpen(true);
-        const tx = redeem.write();
-        return "";
+        return redeem.execute();
       };
 
       const handleClaim = isCorrectNetwork
@@ -107,14 +99,16 @@ export const tableColumns: Array<Column<any>> = [
           >
             Claim
           </Button>
-          <TransactionWizard
+          <TransactionVizard
             chainId={chainId}
             open={open}
             //@ts-ignore
             onSubmit={() => claim()}
             onClose={() => setOpen(false)}
-            SuccessDialog={() => <div>Bond claimed!</div>}
-            signingTx={tx}
+            SuccessDialog={() => (
+              <div className="text-center">Bond claimed!</div>
+            )}
+            hash={redeem.hash}
           />
         </>
       );

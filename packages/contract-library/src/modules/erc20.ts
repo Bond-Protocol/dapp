@@ -12,5 +12,7 @@ export function getBalance(
     publicClient,
   });
 
+  console.log({ contract, tokenAddress, publicClient });
+
   return contract.read.balanceOf([holderAddress]);
 }

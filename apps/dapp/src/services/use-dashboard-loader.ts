@@ -89,18 +89,23 @@ export const useDashboardLoader = () => {
       const erc20OwnerBalances: any[] = await Promise.all(
         bondTokens.map(async (bondToken: any) => {
           const client = clients[bondToken.chainId];
-          const _balance = await getBalance(
-            bondToken.id,
-            address,
-            client
-          ).then();
-          const balance = Number(_balance);
+          try {
+            const _balance = await getBalance(bondToken.id, address, client);
+            const balance = Number(_balance);
 
-          return {
-            balance,
-            bondToken: bondToken,
-            owner: address,
-          };
+            return {
+              balance,
+              bondToken: bondToken,
+              owner: address,
+            };
+          } catch (e) {
+            console.error(e);
+            return {
+              balance: 0,
+              bondToken,
+              owner: address,
+            };
+          }
         })
       );
 
@@ -161,7 +166,7 @@ export const useDashboardLoader = () => {
 
       uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
 
-      fetchErc20OwnerBalances();
+      //fetchErc20OwnerBalances();
     }
     load();
   }, [tokens, isLoading, isTestnet]);
