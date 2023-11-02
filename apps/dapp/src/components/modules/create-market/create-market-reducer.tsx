@@ -1,6 +1,7 @@
 import { calculateTrimDigits, trimAsNumber, formatDate } from "formatters";
 import { createContext, Dispatch, useContext, useReducer } from "react";
 import { differenceInCalendarDays } from "date-fns";
+import { formatUnits, parseUnits } from "viem";
 
 const DEFAULT_DEPOSIT_INTERVAL = 86400;
 const DEFAULT_DEBT_BUFFER = 75;
@@ -169,7 +170,7 @@ function calculateAllowance(
   quoteToken: Token,
   capacity: string,
   capacityType: string,
-  allowance: string
+  allowance: bigint
 ) {
   if (
     !payoutToken ||
@@ -193,6 +194,11 @@ function calculateAllowance(
       ? Number(capacity) / (payoutToken.price / quoteToken.price)
       : capacity;
 
+  const form = parseUnits(
+    recommendedAllowance.toString(),
+    payoutToken.decimals
+  );
+
   const matcher = /\.|,/g;
   const rec = (
     Number(recommendedAllowance) * Math.pow(10, payoutToken.decimals)
@@ -207,12 +213,12 @@ function calculateAllowance(
   recommendedAllowanceDecimalAdjusted =
     recommendedAllowanceDecimalAdjusted.split(".")[0];
 
-  const isAllowanceSufficient =
-    Number(recommendedAllowance) <= Number(allowance);
+  const isAllowanceSufficient = Number(form) <= Number(allowance);
+  console.log({ recommendedAllowance, allowance, form });
 
   return {
     recommendedAllowance: recommendedAllowance.toString(),
-    recommendedAllowanceDecimalAdjusted,
+    recommendedAllowanceDecimalAdjusted: form,
     isAllowanceSufficient,
   };
 }
@@ -334,6 +340,10 @@ export const reducer = (
         state.capacityType,
         state.allowance
       );
+      console.log("in update", state, {
+        recommendedAllowance,
+        isAllowanceSufficient,
+      });
 
       const debtBuffer = tweakDebtBuffer({ ...state, capacity });
 
@@ -395,6 +405,7 @@ export const reducer = (
         calculateDurationAndMaxBondSize(state.endDate, value, state.capacity);
 
       const debtBuffer = tweakDebtBuffer({ ...state, startDate: value });
+      console.log({ value });
 
       return {
         ...state,

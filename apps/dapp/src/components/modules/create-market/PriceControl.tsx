@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, TooltipWrapper, TooltipIcon } from "components";
+import { Button, TooltipWrapper, TooltipIcon, useNumericInput } from "ui";
 import {
   calculateTrimDigits,
   getPriceScale,
@@ -8,7 +8,6 @@ import {
 } from "formatters";
 import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
 import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
-import { useNumericInput } from "hooks/use-numeric-input";
 import { Token } from "./create-market-reducer";
 
 export type PriceControlProps = {
@@ -167,13 +166,13 @@ export const PriceControl = (props: PriceControlProps) => {
 
   return (
     <div
-      className={`text-light-grey-400 max-h-[104px] bg-white/5 px-4 py-3 backdrop-blur-md ${props.className}`}
+      className={`max-h-[104px] bg-white/5 px-4 py-3 text-light-grey-400 backdrop-blur-md ${props.className}`}
     >
       <TooltipWrapper content={props.tooltip}>
-        <div className="font-fraktion flex justify-center font-bold uppercase">
+        <div className="flex justify-center font-fraktion font-bold uppercase">
           {props.topLabel}
           {props.tooltip && (
-            <TooltipIcon className="fill-light-grey-400 ml-1" />
+            <TooltipIcon className="ml-1 fill-light-grey-400" />
           )}
         </div>
       </TooltipWrapper>
@@ -184,11 +183,11 @@ export const PriceControl = (props: PriceControlProps) => {
         <div className="flex items-center justify-center">
           <Button icon variant="ghost" onClick={lowerRate}>
             <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
-              <MinusIcon className="group-hover/button:fill-light-secondary fill-white" />
+              <MinusIcon className="fill-white group-hover/button:fill-light-secondary" />
             </div>
           </Button>
         </div>
-        <div className="text-light-grey-400 flex w-fit flex-col items-center justify-center">
+        <div className="flex w-fit flex-col items-center justify-center text-light-grey-400">
           <div
             className={`font-fraktion text-white ${
               smallText ? "text-xs" : "text-[20px]"
@@ -205,13 +204,13 @@ export const PriceControl = (props: PriceControlProps) => {
         <div className="flex items-center justify-center ">
           <Button icon variant="ghost" onClick={raiseRate}>
             <div className="my-[2px] flex h-4 items-center justify-center transition-all duration-300">
-              <PlusIcon className="group-hover/button:fill-light-secondary fill-white" />
+              <PlusIcon className="fill-white group-hover/button:fill-light-secondary" />
             </div>
           </Button>
         </div>
       </div>
       <div
-        className={`text-light-grey-400 flex select-none justify-center text-[14px] ${
+        className={`flex select-none justify-center text-[14px] text-light-grey-400 ${
           props.display === "percentage" ? "" : "cursor-pointer"
         } ${smallText ? "text-xs" : "text-sm"}`}
         onClick={(e) => {

@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Address, isAddress, parseUnits } from "viem";
 import {
   erc20ABI,
   useContractRead,
   useContractWrite,
   usePrepareContractWrite,
+  useWaitForTransaction,
 } from "wagmi";
 
 export type UseAllowanceProps = {
@@ -18,6 +19,16 @@ export type UseAllowanceProps = {
 };
 
 export const useAllowance = (args: UseAllowanceProps) => {
+  const [hash, setHash] = useState<Address>();
+
+  const tx = useWaitForTransaction({
+    hash,
+  });
+
+  useEffect(() => {
+    allowance.refetch();
+  }, [tx.isSuccess]);
+
   const parsedAmount = parseUnits(args.amount, args.decimals);
   const enabled =
     !!args.chainId &&
@@ -47,8 +58,8 @@ export const useAllowance = (args: UseAllowanceProps) => {
 
   const writeAsync = async () => {
     try {
-      await approve.writeAsync?.();
-      return allowance.refetch();
+      const res = await approve.writeAsync?.();
+      setHash(res?.hash);
     } catch (e) {
       console.error(e);
     }

@@ -123,13 +123,13 @@ export type CreateMarketParams = {
   debtBuffer: any;
   vesting: any;
   start: any;
-  conclusion?: any;
+  conclusion: any;
   duration?: any;
   depositInterval: any;
-  scaleAdjustment?: any;
-  formattedPrice?: any;
-  formattedInitialPrice?: any;
-  formattedMinimumPrice?: any;
+  scaleAdjustment: any;
+  formattedPrice: any;
+  formattedInitialPrice: any;
+  formattedMinimumPrice: any;
   oracle?: Address;
   fixedDiscount?: any;
   maxDiscountFromCurrent?: any;

@@ -65,6 +65,13 @@ export const CreateMarketController = () => {
   );
 
   useEffect(() => {
+    dispatch({
+      type: CreateMarketAction.UPDATE_ALLOWANCE,
+      value: __allowance.currentAllowance,
+    });
+  }, [__allowance.currentAllowance]);
+
+  useEffect(() => {
     if (
       !state.oracle ||
       !state.payoutToken ||
@@ -151,16 +158,15 @@ export const CreateMarketController = () => {
     checkOracle();
   }, [isOraclePairValid]);
 
-  const fetchAllowance = () => {
-    return __allowance.currentAllowance;
+  const fetchAllowance = async () => {
+    const response = await __allowance.allowance.refetch();
+    return response?.data;
   };
 
   const approveCapacitySpending = async () => {
     if (!network.chain?.id) throw new Error("Unspecified chain");
 
-    const auctioneer = getAuctioneer(network.chain?.id.toString(), state);
-
-    __allowance.write?.();
+    __allowance.writeAsync?.();
   };
 
   const configureMarket = (state: CreateMarketState) => {
@@ -215,7 +221,10 @@ export const CreateMarketController = () => {
     }
 
     const config = {
-      summaryData: { ...state },
+      summaryData: {
+        ...state,
+        startDate: startDateUnavailable ? new Date() : state.startDate,
+      },
       marketParams: {
         quoteToken: state.quoteToken.address,
         payoutToken: state.payoutToken.address,
@@ -283,12 +292,10 @@ export const CreateMarketController = () => {
     const gasEstimate = await estimateGas(state);
 
     try {
-      const tx = await createMarket.writeAsync(
-        //@ts-ignore
-        config?.marketParams
-      );
-      setCreationHash(tx.hash);
-      setCreated(true);
+      const tx = createMarket.write(config?.marketParams);
+      console.log({ tx });
+      //setCreationHash(tx.hash);
+      //setCreated(true);
     } catch (e) {
       console.log(e);
     }
@@ -299,7 +306,7 @@ export const CreateMarketController = () => {
   const estimateGas = async (state: CreateMarketState) => {
     const config = configureMarket(state);
 
-    if (!config?.marketParams || !config.bondType) {
+    if (!config?.marketParams || !config.bondType || !address) {
       return;
     }
 
@@ -307,8 +314,10 @@ export const CreateMarketController = () => {
       let estimate = await contractLib.estimateGasCreateMarket(
         config.marketParams as CreateMarketParams,
         config.bondType as contractLib.BondType,
-        publicClient
+        publicClient,
+        address
       );
+      console.log("## GAS ESTIMATE ##", { estimate });
 
       return estimate.toString();
     } catch (e) {

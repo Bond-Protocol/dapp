@@ -1,6 +1,8 @@
-import { CreateMarketController } from "components/modules/create-market";
+import {
+  CreateMarketProvider,
+  CreateMarketController,
+} from "components/modules/create-market";
 import { socials, PageHeader, PageNavigation } from "components/common";
-import { CreateMarketProvider } from "ui";
 
 const docsSublink = "/bond-marketplace/deploy-a-bond-market";
 

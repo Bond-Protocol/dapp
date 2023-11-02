@@ -9,6 +9,7 @@ import {
 import { abis } from "abis";
 import { BondType, getAuctioneerForCreate } from "core";
 import { CreateMarketParams } from "types";
+import { ethers } from "ethers";
 
 /**
  * Encodes arguments for an ERC20 approve function
@@ -31,7 +32,7 @@ export function encodeApproveSpending({
  * Encodes arguments for the Auctioneer's createMarket function
  */
 export function encodeCreateMarket(
-  config: CreateMarketParams,
+  config: Required<CreateMarketParams>,
   bondType: BondType
 ) {
   const abi = abis.baseAuctioneer;
@@ -48,7 +49,7 @@ export function encodeCreateMarket(
  * Estimates the amount of gas required to create a market with a specific configuration
  */
 export function estimateGasCreateMarket(
-  config: CreateMarketParams,
+  config: Required<CreateMarketParams>,
   bondType: BondType,
   publicClient: PublicClient,
   creatorAddress: Address
@@ -104,112 +105,38 @@ export function getOraclePrice({
   return contract.read.currentPrice([quoteTokenAddress, payoutTokenAddress]);
 }
 
-function encodeCreateMarketParams(
-  config: CreateMarketParams,
+export function encodeCreateMarketParams(
+  config: Required<CreateMarketParams>,
   bondType: BondType
 ) {
-  let parameters;
+  let struct = //TERM AND EXP SDA/DEPRECATED/V1
+    "struct MarketParams { address payoutToken; address quoteToken; address callbackAddr; bool capacityInQuote; uint256 capacity; uint256 formattedInitialPrice; uint256 formattedMinimumPrice; uint32 debtBuffer; uint48 vesting; uint48 conclusion; uint32 depositInterval; int8 scaleAdjustment }";
   switch (bondType) {
-    case BondType.FIXED_EXPIRY_SDA:
-    case BondType.FIXED_EXPIRY_DEPRECATED:
-    case BondType.FIXED_TERM_SDA:
-    case BondType.FIXED_TERM_DEPRECATED:
-      parameters = parseAbiParameters(
-        "address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 conclusion, uint32 depositInterval, int8 scaleAdjustment"
-      );
-      return encodeAbiParameters(parameters, [
-        config.payoutToken,
-        config.quoteToken,
-        config.callbackAddr,
-        config.capacityInQuote,
-        config.capacity,
-        config.formattedInitialPrice,
-        config.formattedMinimumPrice,
-        config.debtBuffer,
-        config.vesting,
-        config.conclusion,
-        config.depositInterval,
-        config.scaleAdjustment,
-      ]);
     case BondType.FIXED_EXPIRY_SDA_V1_1:
     case BondType.FIXED_TERM_SDA_V1_1:
-      parameters = parseAbiParameters(
-        "address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedInitialPrice, uint256 formattedMinimumPrice, uint32 debtBuffer, uint48 vesting, uint48 start, uint32 duration, uint32 depositInterval, int8 scaleAdjustment"
-      );
-      return encodeAbiParameters(parameters, [
-        config.payoutToken,
-        config.quoteToken,
-        config.callbackAddr,
-        config.capacityInQuote,
-        config.capacity,
-        config.formattedInitialPrice,
-        config.formattedMinimumPrice,
-        config.debtBuffer,
-        config.vesting,
-        config.start,
-        config.duration,
-        config.depositInterval,
-        config.scaleAdjustment,
-      ]);
+      struct =
+        "struct MarketParams { address payoutToken; address quoteToken; address callbackAddr; bool capacityInQuote; uint256 capacity; uint256 formattedInitialPrice; uint256 formattedMinimumPrice; uint32 debtBuffer; uint48 vesting; uint48 start; uint32 duration; uint32 depositInterval; int8 scaleAdjustment }";
+      break;
     case BondType.FIXED_EXPIRY_FPA:
     case BondType.FIXED_TERM_FPA:
-      parameters = parseAbiParameters(
-        "address payoutToken, address quoteToken, address callbackAddr, bool capacityInQuote, uint256 capacity, uint256 formattedPrice, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration, int8 scaleAdjustment"
-      );
-
-      return encodeAbiParameters(parameters, [
-        config.payoutToken,
-        config.quoteToken,
-        config.callbackAddr,
-        config.capacityInQuote,
-        config.capacity,
-        config.formattedPrice,
-        config.depositInterval,
-        config.vesting,
-        config.start,
-        config.duration,
-        config.scaleAdjustment,
-      ]);
+      struct =
+        "struct MarketParams { address payoutToken; address quoteToken; address callbackAddr; bool capacityInQuote; uint256 capacity; uint256 formattedPrice; uint32 depositInterval; uint48 vesting; uint48 start; uint48 duration; int8 scaleAdjustment } ";
+      break;
     case BondType.FIXED_EXPIRY_OFDA:
     case BondType.FIXED_TERM_OFDA:
-      parameters = parseAbiParameters(
-        "address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 fixedDiscount, uint48 maxDiscountFromCurrent, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration"
-      );
-      return encodeAbiParameters(parameters, [
-        config.payoutToken,
-        config.quoteToken,
-        config.callbackAddr,
-        config.oracle as Address,
-        config.fixedDiscount,
-        config.maxDiscountFromCurrent,
-        config.capacityInQuote,
-        config.capacity,
-        config.depositInterval,
-        config.vesting,
-        config.start,
-        config.duration,
-      ]);
+      struct =
+        "struct MarketParams { address payoutToken; address quoteToken; address callbackAddr; address oracle; uint48 fixedDiscount; uint48 maxDiscountFromCurrent; bool capacityInQuote; uint256 capacity; uint32 depositInterval; uint48 vesting; uint48 start; uint48 duration }";
+      break;
     case BondType.FIXED_EXPIRY_OSDA:
     case BondType.FIXED_TERM_OSDA:
-      parameters = parseAbiParameters(
-        "address payoutToken, address quoteToken, address callbackAddr, address oracle, uint48 baseDiscount, uint48 maxDiscountFromCurrent, uint48 targetIntervalDiscount, bool capacityInQuote, uint256 capacity, uint32 depositInterval, uint48 vesting, uint48 start, uint48 duration"
-      );
-      return encodeAbiParameters(parameters, [
-        config.payoutToken,
-        config.quoteToken,
-        config.callbackAddr,
-        config.oracle as Address,
-        config.baseDiscount,
-        config.maxDiscountFromCurrent,
-        config.targetIntervalDiscount,
-        config.capacityInQuote,
-        config.capacity,
-        config.depositInterval,
-        config.vesting,
-        config.start,
-        config.duration,
-      ]);
+      struct =
+        "struct MarketParams { address payoutToken; address quoteToken; address callbackAddr; address oracle; uint48 baseDiscount; uint48 maxDiscountFromCurrent; uint48 targetIntervalDiscount; bool capacityInQuote; uint256 capacity; uint32 depositInterval; uint48 vesting; uint48 start; uint48 duration }";
+      break;
   }
+
+  const name = "MarketParams params_";
+  const parameters = parseAbiParameters([name, struct]);
+  return encodeAbiParameters(parameters, [config]);
 }
 
 type GetOracleContractArgs = {

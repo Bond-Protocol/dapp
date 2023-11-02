@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatSelect, Switch, TooltipWrapper } from "components";
+import { FlatSelect, Switch, TooltipWrapper } from "ui";
 import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
 import { ReactComponent as LineIcon } from "assets/icons/line.svg";
 import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
@@ -117,7 +117,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
   return (
     <div id={props.id} className="w-full">
       <div className="flex items-center justify-between">
-        <p className="text-light-grey-400 text-sm">Price Model</p>
+        <p className="text-sm text-light-grey-400">Price Model</p>
         {Number(props.chain) !== 1 ? (
           <Switch
             label="Oracle"
@@ -154,8 +154,8 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
           <div
             className={`flex max-h-[104px] w-full justify-center bg-white/5 p-4 backdrop-blur-md`}
           >
-            <div className="text-light-grey flex items-center justify-center py-4 text-sm">
-              <AngleIcon className="fill-light-grey text-light-grey h-12 w-12 pr-2" />
+            <div className="flex items-center justify-center py-4 text-sm text-light-grey">
+              <AngleIcon className="h-12 w-12 fill-light-grey pr-2 text-light-grey" />
               Select tokens to <br /> view price controls{" "}
             </div>
           </div>

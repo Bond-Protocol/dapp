@@ -120,6 +120,10 @@ const getPriceFields = (state: CreateMarketState) => {
 };
 
 const formatMarketState = (state: CreateMarketState) => {
+  const startDateUnavailable =
+    state.priceModel === "dynamic" &&
+    (state.chainId === 1 || state.chainId === 5);
+
   return {
     vesting: {
       icon: fastVesting,
@@ -136,7 +140,9 @@ const formatMarketState = (state: CreateMarketState) => {
           : state.quoteToken.symbol,
       value: dynamicFormatter(state.capacity, false),
     },
-    startDate: formatDate.short(state.startDate as Date),
+    startDate: startDateUnavailable
+      ? "Immediately"
+      : formatDate.short(state.startDate as Date),
     endDate: formatDate.short(state.endDate as Date),
     depositInterval: Math.round(state.depositInterval / 60 / 60) + " HOURS",
     debtBuffer: state.debtBuffer + "%",
