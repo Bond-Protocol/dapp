@@ -56,20 +56,16 @@ export const useAllowance = (args: UseAllowanceProps) => {
     enabled,
   });
 
-  const writeAsync = async () => {
-    try {
-      const res = await approve.writeAsync?.();
-      setHash(res?.hash);
-    } catch (e) {
-      console.error(e);
-    }
+  const execute = async () => {
+    const res = await approve.writeAsync?.();
+    setHash(res?.hash);
   };
 
   return {
     approve,
+    approveTx: tx,
+    execute,
     allowance,
-    write: approve.write,
-    writeAsync,
     currentAllowance: allowance.data,
   };
 };

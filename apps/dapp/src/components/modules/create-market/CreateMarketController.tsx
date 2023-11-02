@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { Address, useAccount, useNetwork, usePublicClient } from "wagmi";
+import {
+  Address,
+  useAccount,
+  useNetwork,
+  usePublicClient,
+  useWaitForTransaction,
+} from "wagmi";
 import * as contractLib from "@bond-protocol/contract-library";
 import { CHAIN_ID, CreateMarketParams } from "types";
 import {
@@ -25,11 +31,13 @@ import { useCreateMarket as useCreateMarketContract } from "hooks/contracts/useC
 
 export const CreateMarketController = () => {
   const [allowanceTx, setAllowanceTx] = useState(false);
-  const [creationHash, setCreationHash] = useState("");
+  const [creationHash, setCreationHash] = useState<Address>();
   const [created, setCreated] = useState(false);
   const [isOraclePairValid, setIsOraclePairValid] = useState(false);
   const [oraclePrice, setOraclePrice] = useState<number>();
   const [oracleMessage, setOracleMessage] = useState("");
+
+  const createTx = useWaitForTransaction({ hash: creationHash });
 
   const { address, isConnected } = useAccount();
   const network = useNetwork();
@@ -40,7 +48,7 @@ export const CreateMarketController = () => {
 
   const auctioneerAddress = getAuctioneer(state.chainId.toString(), state);
 
-  const __allowance = useAllowance({
+  const allowance = useAllowance({
     tokenAddress: state.payoutToken.address as Address,
     decimals: state.payoutToken.decimals,
     amount: state.capacity.toString(),
@@ -67,9 +75,9 @@ export const CreateMarketController = () => {
   useEffect(() => {
     dispatch({
       type: CreateMarketAction.UPDATE_ALLOWANCE,
-      value: __allowance.currentAllowance,
+      value: allowance.currentAllowance,
     });
-  }, [__allowance.currentAllowance]);
+  }, [allowance.currentAllowance]);
 
   useEffect(() => {
     if (
@@ -159,14 +167,14 @@ export const CreateMarketController = () => {
   }, [isOraclePairValid]);
 
   const fetchAllowance = async () => {
-    const response = await __allowance.allowance.refetch();
+    const response = await allowance.allowance.refetch();
     return response?.data;
   };
 
-  const approveCapacitySpending = async () => {
+  const approveCapacitySpending = () => {
     if (!network.chain?.id) throw new Error("Unspecified chain");
 
-    __allowance.writeAsync?.();
+    allowance.execute();
   };
 
   const configureMarket = (state: CreateMarketState) => {
@@ -272,7 +280,7 @@ export const CreateMarketController = () => {
     const config = configureMarket(state);
 
     return contractLib.encodeCreateMarket(
-      config?.marketParams as CreateMarketParams,
+      config?.marketParams as Required<CreateMarketParams>,
       config?.bondType as contractLib.BondType
     );
   };
@@ -289,16 +297,9 @@ export const CreateMarketController = () => {
 
   const onSubmit = async (state: CreateMarketState) => {
     const config = configureMarket(state);
-    const gasEstimate = await estimateGas(state);
 
-    try {
-      const tx = createMarket.write(config?.marketParams);
-      console.log({ tx });
-      //setCreationHash(tx.hash);
-      //setCreated(true);
-    } catch (e) {
-      console.log(e);
-    }
+    const tx = await createMarket.write(config?.marketParams);
+    setCreationHash(tx.hash);
 
     return config;
   };
@@ -312,12 +313,11 @@ export const CreateMarketController = () => {
 
     try {
       let estimate = await contractLib.estimateGasCreateMarket(
-        config.marketParams as CreateMarketParams,
+        config.marketParams as Required<CreateMarketParams>,
         config.bondType as contractLib.BondType,
         publicClient,
         address
       );
-      console.log("## GAS ESTIMATE ##", { estimate });
 
       return estimate.toString();
     } catch (e) {
@@ -334,7 +334,6 @@ export const CreateMarketController = () => {
         )}
         onSubmitAllowance={approveCapacitySpending}
         onSubmitCreation={onSubmit}
-        onSubmitMultisigCreation={setCreationHash}
         //@ts-ignore
         estimateGas={estimateGas}
         //@ts-ignore
@@ -345,13 +344,13 @@ export const CreateMarketController = () => {
         getApproveTxBytecode={getApproveTxBytecode}
         chain={String(network.chain?.id)}
         projectionData={projectionData.prices}
-        isAllowanceTxPending={allowanceTx}
+        isAllowanceTxPending={allowance.approveTx.isLoading}
         creationHash={creationHash}
         //@ts-ignore
         blockExplorerName={blockExplorer.blockExplorerName}
         //@ts-ignore
         blockExplorerUrl={blockExplorer.blockExplorerUrl}
-        created={created}
+        created={createTx.isSuccess}
         //@ts-ignore
         oraclePrice={oraclePrice}
         oracleMessage={oracleMessage}

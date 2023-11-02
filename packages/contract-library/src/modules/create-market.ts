@@ -9,7 +9,6 @@ import {
 import { abis } from "abis";
 import { BondType, getAuctioneerForCreate } from "core";
 import { CreateMarketParams } from "types";
-import { ethers } from "ethers";
 
 /**
  * Encodes arguments for an ERC20 approve function

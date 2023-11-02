@@ -17,7 +17,12 @@ interface ImportMetaEnv {
   readonly VITE_TESTNET: string;
 
   readonly VITE_ALCHEMY_MAINNET_KEY: string;
+  readonly VITE_ALCHEMY_ARBITRUM_MAINNET_KEY: string;
+  readonly VITE_ALCHEMY_OPTIMISM_MAINNET_KEY: string;
+
   readonly VITE_ALCHEMY_GOERLI_KEY: string;
+  readonly VITE_ALCHEMY_ARBITRUM_GOERLI_KEY: string;
+  readonly VITE_ALCHEMY_OPTIMISM_GOERLI_KEY: string;
 
   // PROTOCOL SPECIFIC VARS
   readonly VITE_MARKET_REFERRAL_ADDRESS: string;

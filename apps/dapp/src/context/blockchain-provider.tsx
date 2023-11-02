@@ -70,22 +70,38 @@ const config = createConfig({ publicClient, connectors, autoConnect: true });
 export const clients: Record<number, PublicClient> = {
   1: createPublicClient({
     chain: mainnet,
-    transport: http(),
+    transport: http(
+      `https://eth-mainnet.g.alchemy.com/v2/${
+        import.meta.env.VITE_ALCHEMY_MAINNET_KEY
+      }`
+    ),
   }),
 
   42161: createPublicClient({
     chain: arbitrum,
-    transport: http(),
+    transport: http(
+      `https://arb-mainnet.g.alchemy.com/v2/${
+        import.meta.env.VITE_ALCHEMY_ARBITRUM_MAINNET_KEY
+      }`
+    ),
   }),
 
   5: createPublicClient({
     chain: goerli,
-    transport: http(),
+    transport: http(
+      `https://eth-goerli.g.alchemy.com/v2/${
+        import.meta.env.VITE_ALCHEMY_GOERLI_KEY
+      }`
+    ),
   }),
 
   421613: createPublicClient({
     chain: arbitrumGoerli,
-    transport: http(),
+    transport: http(
+      `https://arb-goerli.g.alchemy.com/v2/${
+        import.meta.env.VITE_ALCHEMY_ARBITRUM_GOERLI_KEY
+      }`
+    ),
   }),
 };
 
@@ -100,15 +116,6 @@ export const BlockchainProvider: FC<{ children?: ReactNode }> = ({
     </WagmiConfig>
   );
 };
-
-function getBlockExplorer(chainId: number) {
-  return (
-    ACTIVE_CHAINS.find((c) => c.id === chainId)?.blockExplorers?.default ?? {
-      name: "",
-      url: "",
-    }
-  );
-}
 
 function getIconsForChains(c: any) {
   const logoUrl = Array.from(CHAINS.values()).find(

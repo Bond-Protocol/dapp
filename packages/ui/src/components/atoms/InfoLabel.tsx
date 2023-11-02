@@ -18,7 +18,7 @@ export const InfoLabel = (props: InfoLabelProps) => {
 
   const content = (
     <h4>
-      {props.value} <p className="inline text-xl">{props.symbol ?? ""}</p>
+      {props.value} <div className="inline text-xl">{props.symbol ?? ""}</div>
     </h4>
   );
 

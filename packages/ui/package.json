@@ -24,7 +24,7 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "dev": "vite build --watch --mode=development",
-    "build": "tsc -p tsconfig.build.json && vite build --mode=production",
+    "build": "tsc -p tsconfig.build.json && vite build --mode=development",
     "lint": "prettier --write ./**/*.{js,json,ts,tsx}",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",

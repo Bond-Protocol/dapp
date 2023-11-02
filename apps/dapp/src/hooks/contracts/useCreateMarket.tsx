@@ -25,10 +25,9 @@ export const useCreateMarket = ({ bondType }: UseCreateMarketArgs) => {
   });
 
   const write = (marketConfig: any) => {
-    const parsedConfig = encodeCreateMarketParams(marketConfig, bondType);
+    const config = encodeCreateMarketParams(marketConfig, bondType);
 
-    console.log({ parsedConfig });
-    contract.write({ args: [parsedConfig] });
+    return contract.writeAsync({ args: [config] });
   };
 
   return {

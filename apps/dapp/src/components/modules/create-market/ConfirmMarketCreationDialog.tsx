@@ -195,7 +195,6 @@ export const ConfirmMarketCreationDialog = (props: {
   isAllowanceTxPending?: boolean;
   submitApproveSpendingTransaction: React.MouseEventHandler<HTMLButtonElement>;
   submitCreateMarketTransaction: React.MouseEventHandler<HTMLButtonElement>;
-  submitMultisigCreation: (txHash: string) => void;
   getAuctioneer: (chain: string, state: CreateMarketState) => string;
   getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
@@ -366,7 +365,7 @@ export const ConfirmMarketCreationDialog = (props: {
                   </Tooltip>
                 ) : (
                   //TODO: Correct this
-                  <Tooltip content="Teller contract needs to be allowed spending token to the total amount of configured capacity for market" />
+                  <Tooltip content="The Teller contract needs to be allowed to spend the payout token to the total amount of configured capacity for market" />
                 )}
               </div>
             </Button>

@@ -11,7 +11,7 @@ export type TokenQuantityInputProps = InputProps & {
 };
 
 export const TokenQuantityInput = (props: TokenQuantityInputProps) => {
-  const [value, setValue] = useState(props.value as string);
+  const [value, setValue] = useState((props.value as string) ?? "");
   const [showTokenSymbol, setShowTokenSymbol] = useState(
     props.symbolStartsShowing
   );

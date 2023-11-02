@@ -63,7 +63,7 @@ export const FilterBox = (props: FilterBoxProps) => {
             <div className="mb-3 flex flex-col gap-y-2">
               {props.filters
                 .filter((f) => f.type !== "search")
-                .map((f) => {
+                .map((f, i) => {
                   const FilterComponent = components[f.type];
 
                   // if (f.type === "search") {
@@ -83,6 +83,7 @@ export const FilterBox = (props: FilterBoxProps) => {
                   return (
                     <FilterComponent
                       label={f.label}
+                      key={i}
                       defaultChecked={props.activeFilters.some(
                         (active) => active.id === f.id
                       )}
