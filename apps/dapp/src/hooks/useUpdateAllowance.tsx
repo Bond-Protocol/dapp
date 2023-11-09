@@ -14,9 +14,11 @@ export const useUpdateAllowance = () => {
     selectedToken = token,
     address: Address
   ) => {
-    if (!selectedToken || !newAllowance || !walletClient) {
-      throw new Error("Invalid input: " + JSON.stringify({ allowance, token }));
-    }
+    // if (!selectedToken || !newAllowance || !walletClient) {
+    //   throw new Error(
+    //     "Invalid input: " + JSON.stringify({ newAllowance, token })
+    //   );
+    // }
 
     const contract = getContract({
       address: selectedToken.address as Address,

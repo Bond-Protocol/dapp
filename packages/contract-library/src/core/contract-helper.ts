@@ -21,7 +21,7 @@ export function getAuctioneerAbiForName(auctioneerName: Auctioneer) {
 export function getAggregator(chainId: number) {
   const address = getAddresses(chainId).aggregator;
 
-  return { address, abi: abis.aggregator };
+  return { address: address as Address, abi: abis.aggregator };
 }
 
 export function getAuthorithy(chainId: number) {

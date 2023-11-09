@@ -29,7 +29,23 @@ export const UserMarkets = () => {
       token.auctioneer = calculatedMarket?.auctioneer;
       return token;
     })
-    .filter((t, i, arr) => arr.lastIndexOf(t) === i);
+    .filter((t, i, arr) => arr.lastIndexOf(t) === i)
+    .reduce((acc, ele) => {
+      const exists = acc.find(
+        (e) => e.id === ele.id && e.auctioneer === ele.auctioneer
+      );
+      console.log({ exists });
+      if (exists) {
+        const allowance =
+          parseFloat(ele.allowance) + parseFloat(exists.allowance);
+        exists.allowance = allowance.toString();
+        console.log({ allowance });
+        return acc;
+      }
+      return [...acc, ele];
+    }, []);
+
+  console.log({ tokens });
 
   return (
     <>

@@ -57,9 +57,7 @@ export const CreateMarketController = () => {
     ownerAddress: address as Address,
   });
 
-  const createMarket = useCreateMarketContract({
-    bondType: getBondType(state, network.chain?.id.toString() ?? "1"),
-  });
+  const createMarket = useCreateMarketContract();
 
   const projectionData = useProjectionChartData({
     quoteToken: state.quoteToken,
@@ -360,8 +358,9 @@ export const CreateMarketController = () => {
   );
 };
 
-function getBondType(state: CreateMarketState, chainId: string) {
-  chainId = chainId.toString();
+export function getBondType(state: CreateMarketState) {
+  const chainId = state.chainId?.toString() ?? "1";
+  console.log({ state, chainId });
   switch (state.priceModel) {
     case "dynamic":
       /*
@@ -395,11 +394,9 @@ function getBondType(state: CreateMarketState, chainId: string) {
 }
 
 function getAuctioneer(chainId: string, state: CreateMarketState) {
-  return getAddressesForType(Number(chainId), getBondType(state, chainId))
-    .auctioneer;
+  return getAddressesForType(Number(chainId), getBondType(state)).auctioneer;
 }
 
 function getTeller(chainId: string, state: CreateMarketState) {
-  return getAddressesForType(Number(chainId), getBondType(state, chainId))
-    .teller;
+  return getAddressesForType(Number(chainId), getBondType(state)).teller;
 }

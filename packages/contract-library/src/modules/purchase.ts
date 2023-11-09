@@ -1,7 +1,6 @@
 import { Address, PublicClient, getContract } from "viem";
-import { getAggregator, getTeller } from "core";
+import { getAggregator } from "core";
 import { abis } from "abis";
-import { BondType } from "types";
 
 export function estimateBondPayout({
   chainId,
@@ -18,6 +17,10 @@ export function estimateBondPayout({
 }) {
   const _marketId = BigInt(marketId);
   const aggregator = getAggregator(chainId);
+
+  if (!aggregator.address) {
+    throw new Error(`Unable to find Aggregator for ${marketId}`);
+  }
 
   const contract = getContract({ ...aggregator, publicClient });
 

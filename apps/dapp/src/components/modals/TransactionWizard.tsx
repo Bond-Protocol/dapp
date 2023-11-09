@@ -89,6 +89,7 @@ export const TransactionWizard = ({
   const handleSubmit = async () => {
     setStatus(TX_STATUS.SIGNING);
     const data = await props.onSubmit();
+    console.log({ data });
 
     setHash(data?.hash as Address);
   };

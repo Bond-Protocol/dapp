@@ -25,6 +25,7 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
       return props.onSubmit(token.chainId, newAllowance, token);
     }
   };
+  console.log({ tokens: props.tokens });
 
   return (
     <div className="text-center">

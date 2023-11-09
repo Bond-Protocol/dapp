@@ -12,7 +12,8 @@ export const CloseMarket = ({ market }: CloseMarketProps) => {
   const closeMarket = useCloseMarket(market);
 
   const handleClose = async () => {
-    return closeMarket.write();
+    console.log("we clooosing");
+    return closeMarket.execute();
   };
 
   return (
@@ -27,8 +28,8 @@ export const CloseMarket = ({ market }: CloseMarketProps) => {
       </Button>
 
       <TransactionWizard
-        open={closing}
         //@ts-ignore
+        open={closing}
         onSubmit={handleClose}
         onClose={() => setClosing(false)}
         titles={{ standby: "Close Bond Market" }}

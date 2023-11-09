@@ -1,19 +1,28 @@
 import {
+  CHAIN_ID,
   encodeCreateMarketParams,
   getAuctioneerForCreate,
 } from "@bond-protocol/contract-library";
 import { BondType } from "@bond-protocol/contract-library";
 import { useContractWrite, useWalletClient } from "wagmi";
+import {
+  getBondType,
+  useCreateMarket as useCreateMarketState,
+} from "components/modules";
 
 export type UseCreateMarketArgs = {
   bondType: BondType;
 };
 
-export const useCreateMarket = ({ bondType }: UseCreateMarketArgs) => {
+export const useCreateMarket = () => {
   const { data: walletClient } = useWalletClient();
+  const [state] = useCreateMarketState();
+  const bondType = getBondType(state);
+
+  console.log({ bondType });
 
   const { abi, address } = getAuctioneerForCreate(
-    walletClient?.chain.id ?? 1,
+    walletClient?.chain.id ?? 42161,
     bondType
   );
 
@@ -25,6 +34,7 @@ export const useCreateMarket = ({ bondType }: UseCreateMarketArgs) => {
   });
 
   const write = (marketConfig: any) => {
+    console.log("hello?");
     const config = encodeCreateMarketParams(marketConfig, bondType);
 
     return contract.writeAsync({ args: [config] });
