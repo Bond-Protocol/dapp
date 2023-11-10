@@ -20,33 +20,23 @@
   "dependencies": {
     "viem": "1.17.2",
     "formatters": "*",
-    "types": "*"
+    "encoding": "^0.1.13"
   },
   "devDependencies": {
+    "types": "*",
     "@wagmi/cli": "^1.5.2",
     "concurrently": "^7.6.0",
     "eslint": "^7.32.0",
     "eslint-config-custom": "*",
     "eslint-config-prettier": "8.5.0",
-    "ethers": "^5.6.8",
     "husky": "^7.0.2",
     "jest": "^27.2.4",
     "prettier": "2.7.1",
-    "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",
     "tsc-alias": "^1.5.0",
     "tsconfig": "*",
     "typedoc": "^0.22.5",
     "typescript": "^5.2.2"
-  },
-  "dependencies": {
-    "@ethersproject/providers": "^5.6.6",
-    "@ethersproject/transactions": "^5.6.0",
-    "@typechain/ethers-v5": "^10.0.0",
-    "date-fns": "^2.29.1",
-    "encoding": "^0.1.13",
-    "typechain": "^8.0.0",
-    "viem": "^1.16.3"
   },
   "description": "contract-library is a library for building applications that can interact with the Bond Protocol contracts from within JavaScript runtimes.",
   "homepage": "https://github.com/Bond-Protocol/contract-library#readme",

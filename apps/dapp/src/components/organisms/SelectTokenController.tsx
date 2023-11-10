@@ -1,6 +1,5 @@
 import { useChainId } from "wagmi";
 import { useEffect, useState } from "react";
-import { ethers } from "ethers";
 import { Token } from "types";
 import {
   ImportTokenDialog,

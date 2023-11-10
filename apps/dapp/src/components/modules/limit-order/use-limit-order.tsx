@@ -1,15 +1,12 @@
 import { useState, createContext, useContext, useEffect } from "react";
-import { useAccount, useSigner } from "wagmi";
+import { useAccount } from "wagmi";
 import { BigNumber, ethers } from "ethers";
 
 import { dateMath, useNumericInput } from "ui";
-import {
-  CalculatedMarket,
-  getAddresses,
-} from "@bond-protocol/contract-library";
+import { getAddresses } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 
 import { calcDiscountPercentage } from "src/utils/calculate-percentage";
-import { toHex } from "src/utils/bignumber";
 
 import { useOrderApi } from "./use-order-api";
 import { orderService } from "services/order-service";
@@ -17,6 +14,7 @@ import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
 import { useOrderService } from "./use-global-order-services";
+import { toHex } from "utils/bignumber";
 
 export type ILimitOrderContext = {
   setMaxFee(value: number): any;

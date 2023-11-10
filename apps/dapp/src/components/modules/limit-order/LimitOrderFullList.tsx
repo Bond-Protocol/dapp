@@ -13,9 +13,9 @@ import {
   Label,
 } from "ui";
 import { CalculatedMarket, CHAINS } from "types";
-import { ethers } from "ethers";
 import { useNavigate } from "react-router-dom";
 import { getDiscountPercentage } from "../create-market";
+import { formatUnits } from "viem";
 
 const Chip = ({
   children,
@@ -151,10 +151,7 @@ export const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     accessor: "filled",
     tooltip: "How much of the order has been filled",
     formatter: (order: any) => {
-      const value = ethers.utils.formatUnits(
-        order.filled,
-        order.market.quoteToken.decimals
-      );
+      const value = formatUnits(order.filled, order.market.quoteToken.decimals);
       return {
         value,
       };

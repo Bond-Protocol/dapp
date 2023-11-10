@@ -14,10 +14,10 @@ import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { CloseMarket } from "components";
 import { useNavigate } from "react-router-dom";
 import { useDashboard } from "context/dashboard-context";
-import { ethers } from "ethers";
 import { Market } from "src/generated/graphql";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useEffect, useState } from "react";
+import { formatUnits } from "viem";
 
 const hasMarketExpiredOrClosed = ({ conclusion, hasClosed }: Market) => {
   return (
@@ -130,10 +130,7 @@ export const closedMarketColumns = [
         ? market.quoteToken
         : market.payoutToken;
 
-      const capacity = ethers.utils.formatUnits(
-        market.capacity,
-        capacityToken.decimals
-      );
+      const capacity = formatUnits(market.capacity, capacityToken.decimals);
 
       return {
         value: `${formatCurrency.dynamicFormatter(

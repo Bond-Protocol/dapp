@@ -40,6 +40,31 @@ export const addTimeToDate = (date = new Date(), time = "00:00") => {
   // Create a new Date object with the current date and the specified time
   return new Date(year, month, day, Number(hours), Number(minutes));
 };
+const distanceFormat = {
+  years: "{{count}}Y",
+  days: "{{count}}D",
+  months: "{{count}}M",
+  weeks: "{{count}}W",
+  hours: "{{count}}H",
+  minutes: "{{count}}M",
+  seconds: "{{count}}S",
+};
+
+export const interval = (start: Date, end: Date) => {
+  const duration: Record<string, number> = intervalToDuration({ start, end });
+
+  //return formatDuration(duration, { format: ["Y", "M", "W", "D", "H", "M", "S"], locale: { code: "en_US" }, });
+  return Object.keys(duration)
+    .map((unit, i, arr) => {
+      if (duration[unit] === 0) {
+        if (i === 0 || duration[arr[i - 1]] === 0) return null;
+      }
+      //@ts-ignore
+      return distanceFormat[unit].replace("{{count}}", duration[unit]);
+    })
+    .filter(Boolean)
+    .join(" ");
+};
 /*
 export const getUtcDate = (date: Date) => {
   return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000); // create a new date instance in UTC timezone
@@ -52,6 +77,7 @@ export const formatDate = wrapWithErrorHandler({
   dateAndTime,
   dayMonthTime,
   distanceToNow,
+  interval,
 });
 
 export const dateMath = wrapWithErrorHandler({

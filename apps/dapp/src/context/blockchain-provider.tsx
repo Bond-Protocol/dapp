@@ -38,6 +38,7 @@ export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS: Chain[] = environment.isTestnet
   ? testnets
   : mainnets;
+
 export const ACTIVE_CHAIN_IDS = ACTIVE_CHAINS.map((c) => c.id);
 export const MAINNETS = mainnets;
 
@@ -66,44 +67,43 @@ const connectors = connectorsForWallets([
 
 const config = createConfig({ publicClient, connectors, autoConnect: true });
 
-///<reference types="viem/node_modules/abitype" />
-export const clients: Record<number, PublicClient> = {
-  1: createPublicClient({
+const setup = [
+  {
     chain: mainnet,
-    transport: http(
-      `https://eth-mainnet.g.alchemy.com/v2/${
-        import.meta.env.VITE_ALCHEMY_MAINNET_KEY
-      }`
-    ),
-  }),
-
-  42161: createPublicClient({
-    chain: arbitrum,
-    transport: http(
-      `https://arb-mainnet.g.alchemy.com/v2/${
-        import.meta.env.VITE_ALCHEMY_ARBITRUM_MAINNET_KEY
-      }`
-    ),
-  }),
-
-  5: createPublicClient({
+    endpoint: ` https://eth-mainnet.g.alchemy.com/v2/${
+      import.meta.env.VITE_ALCHEMY_MAINNET_KEY
+    }`,
+  },
+  {
     chain: goerli,
-    transport: http(
-      `https://eth-goerli.g.alchemy.com/v2/${
-        import.meta.env.VITE_ALCHEMY_GOERLI_KEY
-      }`
-    ),
-  }),
+    endpoint: `https://eth-goerli.g.alchemy.com/v2/${
+      import.meta.env.VITE_ALCHEMY_GOERLI_KEY
+    }`,
+  },
 
-  421613: createPublicClient({
+  {
     chain: arbitrumGoerli,
-    transport: http(
-      `https://arb-goerli.g.alchemy.com/v2/${
-        import.meta.env.VITE_ALCHEMY_ARBITRUM_GOERLI_KEY
-      }`
-    ),
-  }),
-};
+    endpoint: `https://arb-goerli.g.alchemy.com/v2/${
+      import.meta.env.VITE_ALCHEMY_ARBITRUM_GOERLI_KEY
+    }`,
+  },
+
+  {
+    chain: arbitrum,
+    endpoint: `https://eth-mainnet.g.alchemy.com/v2/${
+      import.meta.env.VITE_ALCHEMY_MAINNET_KEY
+    }`,
+  },
+];
+
+export const clients: Record<number, PublicClient> = setup.reduce(
+  (clients, { chain, endpoint }) => {
+    return {
+      ...clients,
+      [chain.id]: createPublicClient({ chain, transport: http(endpoint) }),
+    };
+  }
+);
 
 export const BlockchainProvider: FC<{ children?: ReactNode }> = ({
   children,

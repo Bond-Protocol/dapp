@@ -6,7 +6,6 @@ import {
   TransactionErrorDialog,
 } from "ui";
 
-import { ContractTransaction } from "ethers";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
 import { Address, useContractWrite, useWaitForTransaction } from "wagmi";
 
@@ -36,13 +35,13 @@ export type TransactionWizardProps = {
   /** Should call the transaction and return it */
   onSubmit: (args?: unknown) => Promise<{ hash: Address }>;
   /** The initial dialog of the wizard, usually the transaction summary/starter */
-  InitialDialog?: (props: any) => JSX.Element;
+  InitialDialog?: (props: unknown) => JSX.Element;
   /** The dialog show if the transaction succeeds */
-  SuccessDialog?: (props: any) => JSX.Element;
+  SuccessDialog?: (props: unknown) => JSX.Element;
   /** The chainId for the chain where the tx is happening*/
   chainId?: number | string;
   /** A transaction started externally and waiting to be signed */
-  signingTx?: Promise<ContractTransaction>;
+  signingTx?: Promise<unknown>;
   /** Optional titles for every stage */
   titles?: Partial<Record<TxStatus, string>>;
   hash?: Address;

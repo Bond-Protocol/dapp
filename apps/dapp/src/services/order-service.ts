@@ -1,5 +1,4 @@
 import { CalculatedMarket } from "types";
-import { BigNumber, ethers } from "ethers";
 import OpenAPIClient from "openapi-axios-client";
 import { SiweMessage } from "siwe";
 import definition from "src/openapi.json";
@@ -9,6 +8,7 @@ import { Order } from "src/types/openapi";
 import { orderApiServerMap } from "src/config";
 import { environment } from "src/environment";
 import { getAddresses } from "@bond-protocol/contract-library";
+import { formatUnits } from "viem";
 
 //SETUP API SERVER BASED ON ENVIRONMENT
 const server = orderApiServerMap[environment.current];
@@ -75,7 +75,7 @@ export class ApiClient {
       name: "Bond Protocol Limit Orders",
       version: "v1.0.0",
       chainId,
-      verifyingContract: getAddresses(chainId).settlement as `0x${string}`,
+      verifyingContract: getAddresses(chainId).settlement,
     } as const;
 
     const types = {
@@ -109,6 +109,7 @@ export class ApiClient {
       user: order.user,
     };
     return signTypedData({
+      //@ts-ignore
       domain,
       types,
       value,
@@ -146,20 +147,14 @@ export class ApiClient {
       }
 
       if (fields.includes(name)) {
-        updated = BigNumber.from(value).toString();
+        updated = BigInt(value).toString();
         //Tokens need to be decimal adjusted
         if (name === "amount") {
-          updated = ethers.utils.formatUnits(
-            updated,
-            market.quoteToken.decimals
-          );
+          updated = formatUnits(updated, market.quoteToken.decimals);
         }
 
         if (name === "min_amount_out") {
-          updated = ethers.utils.formatUnits(
-            updated,
-            market.payoutToken.decimals
-          );
+          updated = formatUnits(updated, market.payoutToken.decimals);
         }
       }
 
@@ -234,7 +229,7 @@ export class ApiClient {
 
   private makeHeaders({ token, chainId }: { chainId: number; token?: string }) {
     const chainAddresses = getAddresses(chainId);
-    const headers: Record<string, string | number> = {
+    const headers: Record<string, undefined | string | number | Address> = {
       "x-chain-id": chainId,
       "x-aggregator": chainAddresses.aggregator,
       "x-settlement": chainAddresses.settlement,
