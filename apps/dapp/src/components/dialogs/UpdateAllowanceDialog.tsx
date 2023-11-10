@@ -1,31 +1,33 @@
 import { useState } from "react";
-import { Token } from "types";
-import { Button, Input, Label } from "components";
-import { formatCurrency } from "src/utils";
+import { SUPPORTED_CHAINS } from "types";
+import { Button, Input, Label } from "ui";
+import { formatCurrency } from "formatters";
+import { UpdateAllowanceArgs } from "hooks/useUpdateAllowance";
+import { Address } from "viem";
 
-export type AllowanceToken = Token & {
-  capacity: number;
-  allowance: string;
-  auctioneer: string;
-};
+import { AllowanceToken } from "ui";
+
 export type UpdateAlowanceDialogProps = {
   tokens: AllowanceToken[];
-  handleUpdateAllowance: (allowance: string, token: AllowanceToken) => void;
-  onSubmit: (chainId: number, allowance: string, token: AllowanceToken) => void;
+  onSubmit: (args: UpdateAllowanceArgs) => { hash: Address };
   onClose: (e: React.BaseSyntheticEvent) => void;
 };
 
 export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
   const [updating, setUpdating] = useState(false);
   const [token, setToken] = useState<AllowanceToken>();
-  const [newAllowance, setNewAllowance] = useState<string>("");
+  const [amount, setAmount] = useState<string>("");
 
   const handleUpdate = () => {
     if (token) {
-      return props.onSubmit(token.chainId, newAllowance, token);
+      console.log("on dialog", token);
+      props.onSubmit({
+        token,
+        amount,
+        spender: token.auctioneer as Address,
+      });
     }
   };
-  console.log({ tokens: props.tokens });
 
   return (
     <div className="text-center">
@@ -37,8 +39,8 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
           <div className="mt-4 flex w-full gap-x-2">
             <Label value={token?.symbol} icon={token?.logoURI} />
             <Input
-              value={newAllowance}
-              onChange={(e) => setNewAllowance(e.target.value)}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
               defaultValue={token?.allowance}
             />
             <Button onClick={() => handleUpdate()}>Update</Button>
@@ -54,7 +56,15 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
       ) : (
         props.tokens.map((t) => (
           <div key={t.symbol} className="flex justify-between py-2 ">
-            <Label value="" icon={t.logoURI} />
+            <Label
+              value=""
+              icon={t.logoURI}
+              chainChip={
+                SUPPORTED_CHAINS.find(
+                  (c) => c.chainId === t.chainId?.toString()
+                )?.image
+              }
+            />
             <p className="my-auto w-full px-2 pr-12 text-right">
               {`${formatCurrency.longFormatter.format(Number(t.allowance))} ${
                 t.symbol
@@ -63,7 +73,7 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
             <Button
               onClick={() => {
                 setToken(t);
-                setNewAllowance(t?.allowance);
+                setAmount(t?.allowance);
                 setUpdating(true);
               }}
             >

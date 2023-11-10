@@ -79,10 +79,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   };
 
   useEffect(() => {
-    reset();
-  }, [props.chain]);
-
-  useEffect(() => {
     const fetchAllowance = async () => {
       const value = await props.fetchAllowance(state);
       dispatch({

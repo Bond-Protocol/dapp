@@ -17,6 +17,7 @@ import { useDashboard } from "context/dashboard-context";
 import { ethers } from "ethers";
 import { Market } from "src/generated/graphql";
 import { useMediaQueries } from "hooks/useMediaQueries";
+import { useEffect, useState } from "react";
 
 const hasMarketExpiredOrClosed = ({ conclusion, hasClosed }: Market) => {
   return (
@@ -55,7 +56,6 @@ const receivedColumn = {
   label: "Received",
   accessor: "quote",
   formatter: (market: any) => {
-    console.log({ market });
     const quote = formatCurrency.longFormatter.format(market.total?.quote);
     const quoteUsd = formatCurrency.usdFormatter.format(market.total?.quoteUsd);
     const chain = CHAINS.get(market.chainId);
@@ -108,7 +108,6 @@ const avgRateColumn = {
   accessor: "price",
   tooltip: "Average exchange rate at which bonds were purchased",
   formatter: (market: any) => {
-    //const avgUsd = market.total.avgPrice * market.payoutToken.price;
     const hasPurchases = !!market.bondPurchases?.length;
 
     return {
@@ -126,7 +125,6 @@ export const closedMarketColumns = [
   {
     label: "Capacity",
     accessor: "capacity",
-
     formatter: (market: any) => {
       const capacityToken = market.capacityInQuote
         ? market.quoteToken
@@ -137,16 +135,12 @@ export const closedMarketColumns = [
         capacityToken.decimals
       );
 
-      //const key = market.capacityInQuote ? "quote" : "payout";
-      //const percentage = (market.total[key] / Number(capacity)) * 100;
-
       return {
         value: `${formatCurrency.dynamicFormatter(
           capacity.toString(),
           false
         )} ${capacityToken.symbol}`,
         icon: capacityToken.logoURI,
-        //subtext: percentage.toFixed(2) + "%",
       };
     },
   },
@@ -216,6 +210,14 @@ export const UserMarketList = () => {
   const { isTabletOrMobile } = useMediaQueries();
   const navigate = useNavigate();
   const dashboard = useDashboard();
+  const [markets, setMarkets] = useState<Market[]>([]);
+  console.log({ dashboard: dashboard.allMarkets });
+
+  useEffect(() => {
+    if (dashboard.allMarkets) {
+      setMarkets(dashboard.allMarkets);
+    }
+  }, [dashboard.allMarkets]);
 
   const filters: Array<Filter> = [
     {
@@ -245,7 +247,7 @@ export const UserMarketList = () => {
           title="Markets"
           defaultSort="conclusion"
           columns={tableColumns}
-          data={dashboard.allMarkets}
+          data={markets}
           filters={filters}
           //@ts-ignore
           fallback={isTabletOrMobile ? { title: fallback.title } : fallback}

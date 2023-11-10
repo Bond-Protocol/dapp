@@ -12,7 +12,6 @@ export const CloseMarket = ({ market }: CloseMarketProps) => {
   const closeMarket = useCloseMarket(market);
 
   const handleClose = async () => {
-    console.log("we clooosing");
     return closeMarket.execute();
   };
 
@@ -31,6 +30,7 @@ export const CloseMarket = ({ market }: CloseMarketProps) => {
         //@ts-ignore
         open={closing}
         onSubmit={handleClose}
+        chainId={market.chainId}
         onClose={() => setClosing(false)}
         titles={{ standby: "Close Bond Market" }}
         InitialDialog={(args) => (

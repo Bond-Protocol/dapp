@@ -21,11 +21,13 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
           <SubgraphProvider>
             <TokenProvider>
               <MarketProvider>
-                <DashboardProvider>
-                  <TokenlistProvider>
-                    <Router>{children}</Router>
-                  </TokenlistProvider>
-                </DashboardProvider>
+                <OrderServiceProvider>
+                  <DashboardProvider>
+                    <TokenlistProvider>
+                      <Router>{children}</Router>
+                    </TokenlistProvider>
+                  </DashboardProvider>
+                </OrderServiceProvider>
               </MarketProvider>
             </TokenProvider>
           </SubgraphProvider>

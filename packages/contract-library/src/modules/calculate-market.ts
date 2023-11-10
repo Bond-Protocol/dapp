@@ -95,6 +95,8 @@ export async function calculateMarket(
 
   const maxPayout = formatUnits(BigInt(_maxPayout), payoutToken.decimals);
 
+  console.log({ ownerPayoutAllowance });
+
   const maxPayoutUsd = Number(maxPayout) * payoutToken.price;
 
   const ownerBalance = formatUnits(ownerPayoutBalance, payoutToken.decimals);

@@ -84,7 +84,7 @@ export const FilterBox = (props: FilterBoxProps) => {
                     <FilterComponent
                       label={f.label}
                       key={i}
-                      defaultChecked={props.activeFilters.some(
+                      checked={props.activeFilters.some(
                         (active) => active.id === f.id
                       )}
                       onClick={(args: any) =>

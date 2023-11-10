@@ -2,6 +2,7 @@ import { calculateTrimDigits, trimAsNumber, formatDate } from "formatters";
 import { createContext, Dispatch, useContext, useReducer } from "react";
 import { differenceInCalendarDays } from "date-fns";
 import { formatUnits, parseUnits } from "viem";
+import { switchNetwork } from "@wagmi/core";
 
 const DEFAULT_DEPOSIT_INTERVAL = 86400;
 const DEFAULT_DEBT_BUFFER = 75;
@@ -243,13 +244,15 @@ export const reducer = (
 
   switch (type) {
     case CreateMarketAction.UPDATE_CHAIN_ID: {
-      const chaindId = Number(value);
-      if (isNaN(chaindId)) return state;
-      if (chaindId === state.chainId) return state;
+      const chainId = Number(value);
+      if (isNaN(chainId)) return state;
+      if (chainId === state.chainId) return state;
+
+      switchNetwork({ chainId });
 
       return {
         ...state,
-        chainId: Number(value),
+        chainId,
         payoutToken: placeholderToken,
         quoteToken: placeholderToken,
       };

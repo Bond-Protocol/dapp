@@ -50,6 +50,12 @@ export const useTokenLoader = () => {
     );
   };
 
+  const getByAddressAndChain = (address: string, chainId: string | number) => {
+    return tokens.find(
+      (t) => t.address === address && t.chainId === Number(chainId)
+    );
+  };
+
   const getByChain = (chainId: number) =>
     tokens.filter((t) => t.chainId === chainId);
 
@@ -119,6 +125,7 @@ export const useTokenLoader = () => {
     payoutTokens,
     getByAddress,
     getByChain,
+    getByAddressAndChain,
     addToken,
     fetchedExtendedDetails,
   };

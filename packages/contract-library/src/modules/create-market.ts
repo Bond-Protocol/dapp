@@ -110,6 +110,7 @@ export function encodeCreateMarketParams(
 ) {
   let struct = //TERM AND EXP SDA/DEPRECATED/V1
     "struct MarketParams { address payoutToken; address quoteToken; address callbackAddr; bool capacityInQuote; uint256 capacity; uint256 formattedInitialPrice; uint256 formattedMinimumPrice; uint32 debtBuffer; uint48 vesting; uint48 conclusion; uint32 depositInterval; int8 scaleAdjustment }";
+  console.log({ bondType });
   switch (bondType) {
     case BondType.FIXED_EXPIRY_SDA_V1_1:
     case BondType.FIXED_TERM_SDA_V1_1:
@@ -119,7 +120,7 @@ export function encodeCreateMarketParams(
     case BondType.FIXED_EXPIRY_FPA:
     case BondType.FIXED_TERM_FPA:
       struct =
-        "struct MarketParams { address payoutToken; address quoteToken; address callbackAddr; bool capacityInQuote; uint256 capacity; uint256 formattedPrice; uint32 depositInterval; uint48 vesting; uint48 start; uint48 duration; int8 scaleAdjustment } ";
+        "struct MarketParams { address payoutToken; address quoteToken; address callbackAddr; bool capacityInQuote; uint256 capacity; uint256 formattedPrice; uint32 depositInterval; uint48 vesting; uint48 start; uint48 duration; int8 scaleAdjustment }";
       break;
     case BondType.FIXED_EXPIRY_OFDA:
     case BondType.FIXED_TERM_OFDA:

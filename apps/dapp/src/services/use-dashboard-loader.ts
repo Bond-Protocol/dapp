@@ -211,13 +211,14 @@ export const useDashboardLoader = () => {
               avgPrice = avgPrice / (i + 1);
             }
 
-            return {
+            const result = {
               quoteUsd: all.quoteUsd + totalQuoteUsd,
               payoutUsd: all.payoutUsd + totalPayoutUsd,
               quote: all.quote + Number(p.amount),
               payout: all.payout + Number(p.payout),
               avgPrice,
             };
+            return result;
           },
           { quoteUsd: 0, payoutUsd: 0, quote: 0, payout: 0, avgPrice: 0 }
         );
@@ -231,7 +232,7 @@ export const useDashboardLoader = () => {
       //@ts-ignore
       setAllMarkets(updated);
     }
-  }, [tokens, allMarkets.length]);
+  }, [getByAddress, tokens, allMarkets.length]);
 
   //Calculates claimable value for purchases
 

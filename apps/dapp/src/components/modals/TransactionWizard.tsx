@@ -34,7 +34,7 @@ export type TransactionWizardProps = {
   /** Handler to close the wizard from within it */
   onClose: () => void;
   /** Should call the transaction and return it */
-  onSubmit: () => Promise<any>;
+  onSubmit: (args?: unknown) => Promise<{ hash: Address }>;
   /** The initial dialog of the wizard, usually the transaction summary/starter */
   InitialDialog?: (props: any) => JSX.Element;
   /** The dialog show if the transaction succeeds */
@@ -58,6 +58,7 @@ export const TransactionWizard = ({
   const [hash, setHash] = useState<Address>();
   const [txError, setTxError] = useState<Error>();
   const [result, setResult] = useState<any>();
+  const [lastArgs, setLastArgs] = useState<unknown>();
   const tx = useWaitForTransaction({
     hash: props.hash ?? hash,
   });
@@ -86,10 +87,12 @@ export const TransactionWizard = ({
 
   const blockExplorer = getBlockExplorer(String(props?.chainId) ?? "1", "tx");
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (args: unknown) => {
     setStatus(TX_STATUS.SIGNING);
-    const data = await props.onSubmit();
-    console.log({ data });
+
+    if (args) setLastArgs(args);
+
+    const data = await props.onSubmit(args);
 
     setHash(data?.hash as Address);
   };
@@ -103,6 +106,7 @@ export const TransactionWizard = ({
     setTxError(null!);
     setResult(null!);
     setHash(null!);
+    setLastArgs(null);
   };
 
   const restart = () => {
@@ -112,7 +116,7 @@ export const TransactionWizard = ({
 
   const retry = () => {
     clear();
-    handleSubmit();
+    handleSubmit(lastArgs);
     setStatus(TX_STATUS.SIGNING);
   };
 

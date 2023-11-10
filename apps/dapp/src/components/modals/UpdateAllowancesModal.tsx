@@ -1,7 +1,9 @@
-import { AllowanceToken, UpdateAllowanceDialog } from "ui";
+import { AllowanceToken } from "ui";
+import { UpdateAllowanceDialog } from "../dialogs/UpdateAllowanceDialog";
 import { useUpdateAllowance } from "hooks/useUpdateAllowance";
 import { TransactionWizard } from "./TransactionWizard";
 import { useState } from "react";
+import { Token } from "graphql";
 
 export type UpdateAllowanceModalProps = {
   tokens: AllowanceToken[];
@@ -11,23 +13,20 @@ export type UpdateAllowanceModalProps = {
 
 export const UpdateAllowanceModal = (props: UpdateAllowanceModalProps) => {
   const allowanceControl = useUpdateAllowance();
-  const [chainId, setChainId] = useState<number>(0);
-
-  const handleSubmit = (chainId: string | number, ...args: any[]) => {
-    setChainId(Number(chainId));
-    //@ts-ignore
-    return allowanceControl.updateAllowance(...args);
-  };
 
   return (
     <TransactionWizard
+      titles={{ standby: "Current Allowances" }}
       open={props.open}
       onClose={props.onClose}
       //@ts-ignore
-      onSubmit={handleSubmit}
-      chainId={chainId}
+      onSubmit={allowanceControl.updateAllowance}
       InitialDialog={(args) => (
-        <UpdateAllowanceDialog {...args} tokens={props.tokens} />
+        <UpdateAllowanceDialog
+          {...args}
+          onSubmit={allowanceControl.updateAllowance}
+          tokens={props.tokens}
+        />
       )}
       SuccessDialog={() => <div className="text-center">Allowance updated</div>}
     />

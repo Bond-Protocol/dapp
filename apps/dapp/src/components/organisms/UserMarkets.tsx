@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { AllowanceToken } from "ui";
 import { Button, formatCurrency, InfoLabel } from "ui";
@@ -6,47 +6,55 @@ import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
 import { UserMarketList } from "components/lists/UserMarketList";
 import { useDashboard } from "context/dashboard-context";
 import { useMarkets } from "context/market-context";
+import { useTokens } from "context/token-context";
 
 export const UserMarkets = () => {
   const navigate = useNavigate();
   const dashboard = useDashboard();
   const markets = useMarkets();
+  const { getByAddressAndChain, tokens: allTokens } = useTokens();
 
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const tokens: AllowanceToken[] = dashboard.currentMarkets
-    ?.map((market) => {
-      //@ts-ignore TODO: IMPROVE
-      const token: AllowanceToken = market.payoutToken;
-      const calculatedMarket = markets.allMarkets.find(
-        //@ts-ignore
-        (m) => m?.id === market.id
-      );
+  const tokens: AllowanceToken[] = useMemo(
+    () =>
+      dashboard.currentMarkets
+        .map((market) => {
+          const token =
+            getByAddressAndChain(market.payoutToken.address, market.chainId) ??
+            market.payoutToken;
 
-      //@ts-ignore
-      token.allowance = calculatedMarket?.ownerAllowance;
-      //@ts-ignore
-      token.auctioneer = calculatedMarket?.auctioneer;
-      return token;
-    })
-    .filter((t, i, arr) => arr.lastIndexOf(t) === i)
-    .reduce((acc, ele) => {
-      const exists = acc.find(
-        (e) => e.id === ele.id && e.auctioneer === ele.auctioneer
-      );
-      console.log({ exists });
-      if (exists) {
-        const allowance =
-          parseFloat(ele.allowance) + parseFloat(exists.allowance);
-        exists.allowance = allowance.toString();
-        console.log({ allowance });
-        return acc;
-      }
-      return [...acc, ele];
-    }, []);
+          console.log({ market });
+          const calculatedMarket = markets.allMarkets.find(
+            (m) => m?.id === market.id
+          );
+
+          return {
+            ...token,
+            chainId: market.chainId,
+            auctioneer: market.auctioneer,
+            capacity: calculatedMarket?.currentCapacity,
+            allowance: calculatedMarket?.ownerAllowance,
+          };
+        })
+        .filter((t, i, arr) => arr.lastIndexOf(t) === i)
+        .reduce((acc, ele) => {
+          const exists = acc.find(
+            (e) =>
+              e.chainId === ele.chainId &&
+              e.address === ele.address &&
+              e.auctioneer === ele.auctioneer
+          );
+
+          if (exists) return acc;
+
+          return [...acc, ele];
+        }, [] as AllowanceToken[]),
+
+    [getByAddressAndChain, allTokens, markets, dashboard.currentMarkets]
+  );
 
   console.log({ tokens });
-
   return (
     <>
       <div>
