@@ -59,9 +59,9 @@ export type CreateMarketState = OverridableCreateMarketParams & {
   payoutToken: Token;
   capacityType: CapacityOption;
   capacity: string;
-  allowance: string;
+  allowance: bigint;
   recommendedAllowance: string;
-  recommendedAllowanceDecimalAdjusted: string;
+  recommendedAllowanceDecimalAdjusted: bigint;
   isAllowanceSufficient: boolean;
   vesting: string;
   vestingType: VestingType;
@@ -96,9 +96,9 @@ export const placeholderState: CreateMarketState = {
   chainId: 1,
   capacityType: "payout" as CapacityOption,
   capacity: "",
-  allowance: "",
+  allowance: 0n,
   recommendedAllowance: "",
-  recommendedAllowanceDecimalAdjusted: "",
+  recommendedAllowanceDecimalAdjusted: 0n,
   isAllowanceSufficient: false,
   vesting: "",
   vestingType: "term",
@@ -185,7 +185,7 @@ function calculateAllowance(
   ) {
     return {
       recommendedAllowance: "",
-      recommendedAllowanceDecimalAdjusted: "",
+      recommendedAllowanceDecimalAdjusted: 0n,
       isAllowanceSufficient: false,
     };
   }

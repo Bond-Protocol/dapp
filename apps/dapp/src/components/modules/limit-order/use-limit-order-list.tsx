@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { useState } from "react";
 import { Order } from "src/types/openapi";
 import { useQuery } from "wagmi";

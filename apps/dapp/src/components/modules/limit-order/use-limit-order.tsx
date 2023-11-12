@@ -1,9 +1,7 @@
 import { useState, createContext, useContext, useEffect } from "react";
 import { useAccount } from "wagmi";
-import { BigNumber, ethers } from "ethers";
 
 import { dateMath, useNumericInput } from "ui";
-import { getAddresses } from "@bond-protocol/contract-library";
 import { CalculatedMarket } from "types";
 
 import { calcDiscountPercentage } from "src/utils/calculate-percentage";
@@ -14,7 +12,8 @@ import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
 import { useOrderService } from "./use-global-order-services";
-import { toHex } from "utils/bignumber";
+import { toHex } from "src/utils/bignumber";
+import { formatUnits, parseUnits } from "viem";
 
 export type ILimitOrderContext = {
   setMaxFee(value: number): any;
@@ -75,17 +74,14 @@ export const LimitOrderProvider = ({
     if (!amount || !price || !expiry || !address)
       throw new Error("Missing properties for creating an order");
 
-    const adjustedAmount = ethers.utils.parseUnits(
+    const adjustedAmount = parseUnits(
       amount.toString(),
       market.quoteToken.decimals
     );
 
-    const minAmountOut = ethers.utils.parseUnits(
-      payout,
-      market.payoutToken.decimals
-    );
+    const minAmountOut = parseUnits(payout, market.payoutToken.decimals);
 
-    const adjustedMaxFee = ethers.utils.parseUnits(
+    const adjustedMaxFee = parseUnits(
       maxFee?.toString() ?? "0",
       market.quoteToken.decimals
     );
@@ -115,10 +111,8 @@ export const LimitOrderProvider = ({
         market.marketId
       );
 
-      let hexFee = BigNumber.from(response.data);
-      let fee = Number(
-        ethers.utils.formatUnits(hexFee, market.quoteToken.decimals)
-      );
+      let hexFee = BigInt(response.data);
+      let fee = Number(formatUnits(hexFee, market.quoteToken.decimals));
       setMaxFee(fee);
     };
     if (isSupported) {
@@ -127,7 +121,7 @@ export const LimitOrderProvider = ({
   }, [isSupported]);
 
   const createOrder = async () => {
-    const result = await api.createOrder(
+    const _result = await api.createOrder(
       generateOrder(),
       Number(market.chainId)
     );
@@ -144,21 +138,11 @@ export const LimitOrderProvider = ({
   };
 
   const approveRequiredAmount = () => {
-    return allowance.approve(
-      market.quoteToken.address,
-      market.quoteToken.decimals,
-      getAddresses(market.chainId).settlement,
-      allowance.requiredAllowance
-    );
+    return allowance.execute();
   };
 
   const approveRequiredForNextOrder = () => {
-    return allowance.approve(
-      market.quoteToken.address,
-      market.quoteToken.decimals,
-      getAddresses(market.chainId).settlement,
-      allowance.requiredAllowanceForNextOrder.toString()
-    );
+    return allowance.execute();
   };
 
   const order = {

@@ -1,4 +1,4 @@
-import { CreateMarketState } from "ui";
+import { CreateMarketState } from "./create-market-reducer";
 
 export const doPriceMath = (state: CreateMarketState) => {
   let rates = state.priceModels[state.priceModel];

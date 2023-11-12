@@ -7,6 +7,7 @@ import { useSubgraph } from "hooks/useSubgraph";
 import { clients } from "context/blockchain-provider";
 import { calculateMarket } from "@bond-protocol/contract-library";
 import { useQueries } from "react-query";
+import { Address } from "viem";
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
@@ -38,7 +39,7 @@ export function useCalculatedMarkets() {
         //@ts-ignore
         updatedMarket,
         publicClient,
-        FEE_ADDRESS
+        FEE_ADDRESS as Address
       );
 
       return { ...result, start: market.start, conclusion: market.conclusion };

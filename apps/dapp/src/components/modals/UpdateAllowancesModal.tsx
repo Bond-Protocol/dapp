@@ -1,9 +1,10 @@
-import { AllowanceToken } from "ui";
+import type { AllowanceToken } from "components";
 import { UpdateAllowanceDialog } from "../dialogs/UpdateAllowanceDialog";
-import { useUpdateAllowance } from "hooks/useUpdateAllowance";
+import {
+  UpdateAllowanceArgs,
+  useUpdateAllowance,
+} from "hooks/useUpdateAllowance";
 import { TransactionWizard } from "./TransactionWizard";
-import { useState } from "react";
-import { Token } from "graphql";
 
 export type UpdateAllowanceModalProps = {
   tokens: AllowanceToken[];
@@ -19,8 +20,9 @@ export const UpdateAllowanceModal = (props: UpdateAllowanceModalProps) => {
       titles={{ standby: "Current Allowances" }}
       open={props.open}
       onClose={props.onClose}
-      //@ts-ignore
-      onSubmit={allowanceControl.updateAllowance}
+      onSubmit={(args: UpdateAllowanceArgs) =>
+        allowanceControl.updateAllowance(args)
+      }
       InitialDialog={(args) => (
         <UpdateAllowanceDialog
           {...args}

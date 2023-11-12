@@ -1,7 +1,7 @@
 import { erc20ABI, useWalletClient } from "wagmi";
 import { Address, getContract, parseUnits } from "viem";
 import { Token } from "types";
-import { AllowanceToken } from "ui";
+import { AllowanceToken } from "components/dialogs";
 
 export type UpdateAllowanceArgs = {
   token: AllowanceToken;
@@ -12,7 +12,11 @@ export type UpdateAllowanceArgs = {
 export const useUpdateAllowance = () => {
   const { data: walletClient } = useWalletClient();
 
-  const updateAllowance = ({ token, spender, amount }: UpdateAllowanceArgs) => {
+  const updateAllowance = async ({
+    token,
+    spender,
+    amount,
+  }: UpdateAllowanceArgs): Promise<{ hash: Address }> => {
     if (!token || !amount || !walletClient) {
       throw new Error(
         "Invalid input: " + JSON.stringify({ amount, token, walletClient })
@@ -28,7 +32,9 @@ export const useUpdateAllowance = () => {
 
     const _amount = parseUnits(amount, token.decimals);
 
-    return contract?.write.approve([spender, _amount]);
+    const hash = await contract?.write.approve([spender, _amount]);
+
+    return { hash };
   };
 
   return {

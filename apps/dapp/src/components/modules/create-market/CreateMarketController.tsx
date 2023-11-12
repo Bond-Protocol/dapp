@@ -30,9 +30,7 @@ import { useAllowance } from "hooks/contracts/useAllowance";
 import { useCreateMarket as useCreateMarketContract } from "hooks/contracts/useCreateMarket";
 
 export const CreateMarketController = () => {
-  const [allowanceTx, setAllowanceTx] = useState(false);
   const [creationHash, setCreationHash] = useState<Address>();
-  const [created, setCreated] = useState(false);
   const [isOraclePairValid, setIsOraclePairValid] = useState(false);
   const [oraclePrice, setOraclePrice] = useState<number>();
   const [oracleMessage, setOracleMessage] = useState("");
@@ -203,7 +201,7 @@ export const CreateMarketController = () => {
     const { scaleAdjustment, formattedInitialPrice, formattedMinimumPrice } =
       doPriceMath(state);
 
-    let bondType: string = getBondType(state, String(chain.id));
+    let bondType: string = getBondType(state);
 
     let startDate;
 
@@ -302,11 +300,11 @@ export const CreateMarketController = () => {
     return config;
   };
 
-  const estimateGas = async (state: CreateMarketState) => {
+  const estimateGas = async (state: CreateMarketState): Promise<string> => {
     const config = configureMarket(state);
 
     if (!config?.marketParams || !config.bondType || !address) {
-      return;
+      return "";
     }
 
     try {
@@ -326,15 +324,12 @@ export const CreateMarketController = () => {
   return (
     <>
       <CreateMarketScreen
-        //@ts-ignore
         tokens={tokens.filter((t) =>
           isConnected ? t.chainId === network.chain?.id : t.chainId === 1
         )}
         onSubmitAllowance={approveCapacitySpending}
         onSubmitCreation={onSubmit}
-        //@ts-ignore
         estimateGas={estimateGas}
-        //@ts-ignore
         fetchAllowance={fetchAllowance}
         getAuctioneer={getAuctioneer}
         getTeller={getTeller}
@@ -394,9 +389,19 @@ export function getBondType(state: CreateMarketState) {
 }
 
 function getAuctioneer(chainId: string, state: CreateMarketState) {
-  return getAddressesForType(Number(chainId), getBondType(state)).auctioneer;
+  const auctioneer = getAddressesForType(
+    Number(chainId),
+    getBondType(state)
+  ).auctioneer;
+  if (!auctioneer) throw new Error("Can\t find auctioneer");
+  return auctioneer;
 }
 
 function getTeller(chainId: string, state: CreateMarketState) {
-  return getAddressesForType(Number(chainId), getBondType(state)).teller;
+  const teller = getAddressesForType(
+    Number(chainId),
+    getBondType(state)
+  ).teller;
+  if (!teller) throw new Error("Can\t find teller");
+  return teller;
 }

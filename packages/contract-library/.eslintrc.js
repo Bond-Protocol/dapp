@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     tsconfigRootDir: __dirname,

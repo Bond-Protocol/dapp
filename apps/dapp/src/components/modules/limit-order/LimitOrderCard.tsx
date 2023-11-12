@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  CalculatedMarket,
-  getBlockExplorer,
-} from "@bond-protocol/contract-library";
+import { getBlockExplorer } from "@bond-protocol/contract-library";
 import defillama from "services/defillama";
 import {
   InputCard,
@@ -20,6 +17,8 @@ import { QueryWizard } from "components/common/QueryWizard";
 import { BondButton } from "components/organisms/BondButton";
 import { useLimitOrderForMarket } from "./use-limit-order";
 import { LimitOrderConfirmationDialog } from "./LimitOrderConfirmationDialog";
+
+import { CalculatedMarket } from "types";
 
 const selectExpiryOptions = [
   { label: "1 day", id: 1 },

@@ -23,12 +23,12 @@ export type PriceModelPickerProps = {
 const options = [
   {
     label: "DYNAMIC",
-    Icon: SawLineIcon,
+    Icon: () => <SawLineIcon />,
     value: "dynamic",
   },
   {
     label: "STATIC",
-    Icon: LineIcon,
+    Icon: () => <LineIcon />,
     value: "static",
   },
 ];
@@ -129,7 +129,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
         ) : (
           <div>
             <TooltipWrapper content="Oracle markets are currently unavailable on Ethereum Mainnet">
-              <Switch disabled label="Oracle" onChange={(e) => {}} />
+              <Switch disabled label="Oracle" onChange={(_e) => {}} />
             </TooltipWrapper>
           </div>
         )}

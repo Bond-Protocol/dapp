@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { AllowanceToken } from "ui";
+import type { AllowanceToken } from "components";
 import { Button, formatCurrency, InfoLabel } from "ui";
 import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
 import { UserMarketList } from "components/lists/UserMarketList";
@@ -16,6 +16,7 @@ export const UserMarkets = () => {
 
   const [isUpdating, setIsUpdating] = useState(false);
 
+  //@ts-ignore
   const tokens: AllowanceToken[] = useMemo(
     () =>
       dashboard.currentMarkets
@@ -38,6 +39,7 @@ export const UserMarkets = () => {
           };
         })
         .filter((t, i, arr) => arr.lastIndexOf(t) === i)
+        //@ts-ignore
         .reduce((acc, ele) => {
           const exists = acc.find(
             (e) =>
@@ -54,7 +56,6 @@ export const UserMarkets = () => {
     [getByAddressAndChain, allTokens, markets, dashboard.currentMarkets]
   );
 
-  console.log({ tokens });
   return (
     <>
       <div>

@@ -199,7 +199,7 @@ export const ConfirmMarketCreationDialog = (props: {
   getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
   getApproveTxBytecode: (state: CreateMarketState) => string;
-  estimateGas: (state: CreateMarketState) => string;
+  estimateGas: (state: CreateMarketState) => Promise<string | undefined>;
 }) => {
   const [state, dispatch] = useCreateMarket();
   const auctioneer = props.getAuctioneer(props.chain, state);
@@ -233,7 +233,8 @@ export const ConfirmMarketCreationDialog = (props: {
   useEffect(() => {
     async function estimateGas() {
       const gasEstimate = await props.estimateGas(state);
-      setGasEstimate(gasEstimate);
+
+      setGasEstimate(gasEstimate ?? "");
     }
     estimateGas();
   }, []);

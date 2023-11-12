@@ -1,4 +1,5 @@
 export * from "./common";
+export * from "./dialogs";
 export * from "./lists";
 export * from "./fallback";
 export * from "./modals";

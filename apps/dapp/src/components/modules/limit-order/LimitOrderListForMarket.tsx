@@ -12,7 +12,7 @@ import {
 } from "ui";
 
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Popper } from "components/common/Popper";
 import { useOrderApi } from "./use-order-api";
 import { CalculatedMarket } from "types";
@@ -211,13 +211,14 @@ export const LimitOrderListForMarket = (props: LimitOrderListProps) => {
         </button>
       </div>
       <div className="h-full max-h-[300px] w-full overflow-y-auto">
-        {showReApprove && (
+        {showReApprove && props.market && (
           <div className="relative z-10">
             <ReApproveAllowanceCard
-              //@ts-ignore
               market={props.market}
               requiredAllowance={allowance.requiredAllowance}
-              currentAllowance={allowance.allowance}
+              currentAllowance={
+                allowance.allowance.currentAllowance?.toString() ?? ""
+              }
               onSubmit={allowance.approveRequiredAmount}
             />
           </div>

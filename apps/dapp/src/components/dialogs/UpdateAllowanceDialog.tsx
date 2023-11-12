@@ -1,15 +1,19 @@
 import { useState } from "react";
-import { SUPPORTED_CHAINS } from "types";
+import { SUPPORTED_CHAINS, Token } from "types";
 import { Button, Input, Label } from "ui";
 import { formatCurrency } from "formatters";
 import { UpdateAllowanceArgs } from "hooks/useUpdateAllowance";
 import { Address } from "viem";
 
-import { AllowanceToken } from "ui";
+export type AllowanceToken = Token & {
+  capacity: number;
+  allowance: string;
+  auctioneer: string;
+};
 
 export type UpdateAlowanceDialogProps = {
   tokens: AllowanceToken[];
-  onSubmit: (args: UpdateAllowanceArgs) => { hash: Address };
+  onSubmit: (args: UpdateAllowanceArgs) => Promise<{ hash: Address }>;
   onClose: (e: React.BaseSyntheticEvent) => void;
 };
 

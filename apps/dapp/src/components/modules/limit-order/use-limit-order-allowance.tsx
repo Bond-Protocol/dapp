@@ -4,7 +4,7 @@ import { useTokenAllowance } from "hooks/useTokenAllowance";
 import { Order } from "src/types/openapi";
 import { useMarkets } from "context/market-context";
 import { useMemo } from "react";
-import { parseUnits } from "viem";
+import { Address, parseUnits } from "viem";
 
 export const useLimitOrderAllowance = (
   market: CalculatedMarket,
@@ -47,7 +47,7 @@ export const useLimitOrderAllowance = (
     market.quoteToken.decimals,
     market.chainId,
     requiredAllowanceForNextOrder.toString(),
-    getAddresses(market.chainId).settlement
+    getAddresses(Number(market.chainId)).settlement as Address
   );
 
   const hasSuffiencentAllowanceForAllOrders =

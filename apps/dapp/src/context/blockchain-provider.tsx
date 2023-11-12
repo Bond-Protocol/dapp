@@ -34,8 +34,10 @@ export const testnets = [goerli, arbitrumGoerli, optimismGoerli].map(
 
 export const mainnets = [mainnet, arbitrum, optimism];
 
+type _Chain = Chain & { logoUrl?: string };
+
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
-export const ACTIVE_CHAINS: Chain[] = environment.isTestnet
+export const ACTIVE_CHAINS: _Chain[] = environment.isTestnet
   ? testnets
   : mainnets;
 

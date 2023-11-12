@@ -22,7 +22,7 @@ enum TX_STATUS {
 
 type TxStatus = `${TX_STATUS}`;
 
-type TxStepHandler = {
+export type TxStepHandler = {
   title?: string;
   element: React.ReactNode;
 };
@@ -33,11 +33,11 @@ export type TransactionWizardProps = {
   /** Handler to close the wizard from within it */
   onClose: () => void;
   /** Should call the transaction and return it */
-  onSubmit: (args?: unknown) => Promise<{ hash: Address }>;
+  onSubmit: (args?: any) => Promise<any>;
   /** The initial dialog of the wizard, usually the transaction summary/starter */
-  InitialDialog?: (props: unknown) => JSX.Element;
+  InitialDialog?: (props: any) => JSX.Element;
   /** The dialog show if the transaction succeeds */
-  SuccessDialog?: (props: unknown) => JSX.Element;
+  SuccessDialog?: (props: any) => JSX.Element;
   /** The chainId for the chain where the tx is happening*/
   chainId?: number | string;
   /** A transaction started externally and waiting to be signed */

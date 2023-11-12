@@ -22,7 +22,8 @@ export const getMarketLabels = (market: { auctioneer: string }) => {
 export const useMarketDetails = (market: CalculatedMarket) => {
   if (!market) return {};
 
-  const capacityInQuote = market.capacityToken === market.quoteToken.symbol;
+  const capacityInQuote =
+    market.capacityToken.symbol === market.quoteToken.symbol;
 
   const maxPayout =
     (!capacityInQuote

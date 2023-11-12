@@ -23,7 +23,6 @@ import { calculateTrimDigits, trimAsNumber } from "formatters";
 import {
   CreateMarketAction as Action,
   CreateMarketState,
-  Token,
   PriceData,
   useCreateMarket,
   ProjectionChart,
@@ -31,18 +30,19 @@ import {
   ConfirmMarketCreationDialog,
   PriceModelPicker,
 } from "./";
+import { Address } from "viem";
+import { Token } from "types";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
   fetchAllowance: (state: CreateMarketState) => Promise<any>;
   onSubmitAllowance: (state?: CreateMarketState) => void;
   onSubmitCreation: (state: CreateMarketState) => void;
-  onSubmitMultisigCreation: (txHash: string) => void;
-  getAuctioneer: (chain: string, state: CreateMarketState) => string;
-  getTeller: (chain: string, state: CreateMarketState) => string;
+  getAuctioneer: (chain: string, state: CreateMarketState) => Address;
+  getTeller: (chain: string, state: CreateMarketState) => Address;
   getTxBytecode: (state: CreateMarketState) => string;
   getApproveTxBytecode: (state: CreateMarketState) => string;
-  estimateGas: (state: CreateMarketState) => string;
+  estimateGas: (state: CreateMarketState) => Promise<string | undefined>;
   chain: string;
   tokens: Token[];
   isAllowanceTxPending?: boolean;
@@ -189,6 +189,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 value={state.payoutToken.symbol}
                 icon={state.payoutToken.logoURI}
                 ModalContent={(modalProps) => (
+                  //@ts-ignore
                   <SelectTokenController
                     {...modalProps}
                     onSwitchChain={(value: string) => {
@@ -197,7 +198,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                         value,
                       });
                     }}
-                    //@ts-ignore TODO: update types all round
                     tokens={props.tokens}
                     chainId={state.chainId}
                   />
@@ -230,9 +230,9 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 value={state.quoteToken.symbol}
                 icon={state.quoteToken.logoURI}
                 ModalContent={(modalProps) => (
+                  //@ts-ignore
                   <SelectTokenController
                     {...modalProps}
-                    // @ts-ignore
                     tokens={props.tokens}
                     onSwitchChain={(value: any) => {
                       dispatch({
@@ -510,7 +510,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               submitApproveSpendingTransaction={() =>
                 props.onSubmitAllowance(state)
               }
-              submitMultisigCreation={props.onSubmitMultisigCreation}
               getAuctioneer={props.getAuctioneer}
               getTeller={props.getTeller}
               getTxBytecode={props.getTxBytecode}

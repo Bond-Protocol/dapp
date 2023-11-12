@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { socials } from "components/common";
 import { formatDistanceToNowStrict } from "date-fns";
 import { useMemo } from "react";
@@ -93,8 +93,8 @@ export const LimitOrderConfirmationDialog = (
       },
       {
         leftLabel: "Limit Order contract",
-        rightLabel: `View on ${props.market.blockExplorerName}`,
-        link: `${props.market.blockExplorerUrl} ${props.orderContract}}`,
+        rightLabel: `View on ${props.market.blockExplorer.name}`,
+        link: `${props.market.blockExplorer.url} ${props.orderContract}}`,
       },
     ],
     [props.market, order.maxFee, order.payout, order.expiry]
@@ -104,7 +104,7 @@ export const LimitOrderConfirmationDialog = (
   const endDate = new Date(props.market.vesting * 1000);
   const formattedVesting = props.market.vestingType.includes("expiration")
     ? formatDistanceToNowStrict(endDate, { unit: "day" })
-    : props.market.formattedShortVesting;
+    : props.market.formatted.shortVesting;
 
   return (
     <div className="text-[15px] font-light">
@@ -183,7 +183,7 @@ export const LimitOrderConfirmationDialog = (
         rightLabel={
           !auth.isAuthenticated ? (
             "Sign In"
-          ) : order.allowance.isApproving ? (
+          ) : order.allowance.txStatus.isLoading ? (
             <ApprovingLabel />
           ) : needsApprove ? (
             "Approve"
@@ -191,7 +191,7 @@ export const LimitOrderConfirmationDialog = (
             "Place Order"
           )
         }
-        disabled={order.allowance.isApproving}
+        disabled={order.allowance.txStatus.isLoading}
         onClickLeft={props.onCancel}
         onClickRight={
           !auth.isAuthenticated
