@@ -48,7 +48,6 @@ export function useCalculatedMarkets() {
         `ProtocolError: Failed to calculate market ${market.id} \n`,
         e
       );
-      console.log(market);
       return market;
     }
   };

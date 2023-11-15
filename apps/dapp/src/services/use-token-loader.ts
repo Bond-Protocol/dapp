@@ -43,7 +43,6 @@ export const useTokenLoader = () => {
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
   const { subgraphTokens, isLoading } = useSubgraph();
 
-  console.log({ payoutTokens });
   const getByAddress = (address: string) => {
     return tokens.find(
       (t) => t.address.toLowerCase() === address?.toLowerCase()

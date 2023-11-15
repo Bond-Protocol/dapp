@@ -24,7 +24,6 @@ export const UpdateAllowanceDialog = (props: UpdateAlowanceDialogProps) => {
 
   const handleUpdate = () => {
     if (token) {
-      console.log("on dialog", token);
       props.onSubmit({
         token,
         amount,

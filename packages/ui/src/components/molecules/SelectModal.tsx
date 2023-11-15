@@ -56,7 +56,6 @@ export const SelectModal = ({
     label: string;
     image?: string;
   }) => {
-    console.log('Select modal - on submit', { value });
     props.onSubmit && props.onSubmit({ value });
     setValue("user");
     setLastCustomValue(value);

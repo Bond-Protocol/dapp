@@ -19,8 +19,6 @@ export const useCreateMarket = () => {
   const [state] = useCreateMarketState();
   const bondType = getBondType(state);
 
-  console.log({ bondType });
-
   const { abi, address } = getAuctioneerForCreate(
     walletClient?.chain.id ?? 42161,
     bondType
@@ -34,7 +32,6 @@ export const useCreateMarket = () => {
   });
 
   const write = (marketConfig: any) => {
-    console.log("hello?");
     const config = encodeCreateMarketParams(marketConfig, bondType);
 
     return contract.writeAsync({ args: [config] });

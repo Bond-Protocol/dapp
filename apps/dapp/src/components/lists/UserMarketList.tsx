@@ -72,7 +72,6 @@ const paidColumn = {
   label: "Paid",
   accessor: "payout",
   formatter: (market: any) => {
-    console.log({ market });
     const payout = formatCurrency.longFormatter.format(market.total?.payout);
     const usdPayout = formatCurrency.usdFormatter.format(
       market.total?.payoutUsd
@@ -208,7 +207,6 @@ export const UserMarketList = () => {
   const navigate = useNavigate();
   const dashboard = useDashboard();
   const [markets, setMarkets] = useState<Market[]>([]);
-  console.log({ dashboard: dashboard.allMarkets });
 
   useEffect(() => {
     if (dashboard.allMarkets) {

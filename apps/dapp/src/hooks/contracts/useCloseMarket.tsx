@@ -23,7 +23,6 @@ export const useCloseMarket = (market: CalculatedMarket) => {
 
   const execute = async () => {
     const data = await contract.writeAsync?.();
-    console.log({ data });
     setHash(data?.hash);
     return data;
   };

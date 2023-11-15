@@ -119,7 +119,6 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
               <Button
                 variant="ghost"
                 onClick={async () => {
-                  console.log({ props, market });
                   await api.cancelOrder(
                     props.data.digest,
                     Number(market.chainId)

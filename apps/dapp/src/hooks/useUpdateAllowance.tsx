@@ -22,7 +22,6 @@ export const useUpdateAllowance = () => {
         "Invalid input: " + JSON.stringify({ amount, token, walletClient })
       );
     }
-    console.log({ token, spender, amount });
 
     const contract = getContract({
       address: token.address,

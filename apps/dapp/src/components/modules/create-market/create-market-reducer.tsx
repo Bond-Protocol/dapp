@@ -215,7 +215,6 @@ function calculateAllowance(
     recommendedAllowanceDecimalAdjusted.split(".")[0];
 
   const isAllowanceSufficient = Number(form) <= Number(allowance);
-  console.log({ recommendedAllowance, allowance, form });
 
   return {
     recommendedAllowance: recommendedAllowance.toString(),
@@ -343,10 +342,6 @@ export const reducer = (
         state.capacityType,
         state.allowance
       );
-      console.log("in update", state, {
-        recommendedAllowance,
-        isAllowanceSufficient,
-      });
 
       const debtBuffer = tweakDebtBuffer({ ...state, capacity });
 
@@ -408,7 +403,6 @@ export const reducer = (
         calculateDurationAndMaxBondSize(state.endDate, value, state.capacity);
 
       const debtBuffer = tweakDebtBuffer({ ...state, startDate: value });
-      console.log({ value });
 
       return {
         ...state,

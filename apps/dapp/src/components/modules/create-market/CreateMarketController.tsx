@@ -355,7 +355,6 @@ export const CreateMarketController = () => {
 
 export function getBondType(state: CreateMarketState) {
   const chainId = state.chainId?.toString() ?? "1";
-  console.log({ state, chainId });
   switch (state.priceModel) {
     case "dynamic":
       /*

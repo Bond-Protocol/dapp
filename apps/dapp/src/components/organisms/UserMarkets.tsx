@@ -25,7 +25,6 @@ export const UserMarkets = () => {
             getByAddressAndChain(market.payoutToken.address, market.chainId) ??
             market.payoutToken;
 
-          console.log({ market });
           const calculatedMarket = markets.allMarkets.find(
             (m) => m?.id === market.id
           );
