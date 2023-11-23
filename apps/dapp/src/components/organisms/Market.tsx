@@ -9,10 +9,17 @@ import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { MarketStatusChip } from "components/common/MarketStatusChip";
+import { useTokenLiquidity } from "hooks/useTokenLiquidity";
+import { LiqudityWarning } from "components/modules/markets/LiquidityWarning";
+import { environment } from "src/environment";
 
 export const Market = ({ market }: { market: CalculatedMarket }) => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
+  const liquidity = useTokenLiquidity({
+    chainId: Number(market.chainId),
+    address: market.payoutToken.address,
+  });
 
   const {
     maxPayoutLabel,
@@ -24,6 +31,11 @@ export const Market = ({ market }: { market: CalculatedMarket }) => {
   } = useMarketDetails(market);
 
   if (!market) return <Loading content={meme()} />;
+
+  const lowLiquidity =
+    !environment.isTesting &&
+    liquidity.isSuccess &&
+    liquidity.data?.liquidityUSD < 200000;
 
   return (
     <div className="pb-4">
@@ -44,6 +56,12 @@ export const Market = ({ market }: { market: CalculatedMarket }) => {
           chip={<MarketStatusChip market={market} />}
         />
       </PageNavigation>
+      {lowLiquidity && (
+        <LiqudityWarning
+          liquidity={liquidity.data?.liquidityUSD}
+          market={market}
+        />
+      )}
       <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
         <InfoLabel
           label="Max Payout"
