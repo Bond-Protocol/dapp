@@ -33,7 +33,7 @@ export const LiqudityWarning = ({
 
       <div>
         Always do your own research before bonding <br />
-        to ensure the current market conditions match your expecations.
+        to ensure the current market conditions match your expectations.
       </div>
     </div>
   );
