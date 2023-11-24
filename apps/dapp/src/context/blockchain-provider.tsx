@@ -60,8 +60,8 @@ const connectors = connectorsForWallets([
     wallets: [
       metaMaskWallet({ chains, projectId }),
       rainbowWallet({ chains, projectId }),
-      coinbaseWallet({ appName: "BondProtocol", chains }),
       walletConnectWallet({ chains, projectId }),
+      coinbaseWallet({ chains, appName: "BondProtocol" }),
       injectedWallet({ chains, shimDisconnect: true }),
     ],
   },
@@ -94,6 +94,18 @@ const setup = [
     chain: arbitrum,
     endpoint: `https://eth-mainnet.g.alchemy.com/v2/${
       import.meta.env.VITE_ALCHEMY_MAINNET_KEY
+    }`,
+  },
+  {
+    chain: optimism,
+    endpoint: `https://opt-mainnet.g.alchemy.com/v2/${
+      import.meta.env.VITE_ALCHEMY_OPTIMISM_MAINNET_KEY
+    }`,
+  },
+  {
+    chain: optimismGoerli,
+    endpoint: `https://opt-goerli.g.alchemy.com/v2/${
+      import.meta.env.VITE_ALCHEMY_OPTIMISM_GOERLI_KEY
     }`,
   },
 ];

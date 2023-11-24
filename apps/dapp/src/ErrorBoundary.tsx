@@ -1,8 +1,7 @@
 import { AppBackdrop } from "components/common/AppBackdrop";
 import { Component, ErrorInfo, ReactNode } from "react";
 import { socials } from "./components";
-import { AppBackground, Link, ProtocolLogo } from "ui";
-import { useNavigate } from "react-router-dom";
+import { Link, ProtocolLogo } from "ui";
 import { environment } from "./environment";
 
 const fallbackEmoji = "https://cdn3.emoji.gg/emojis/PepeRain.gif";
