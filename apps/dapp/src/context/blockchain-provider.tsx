@@ -49,7 +49,7 @@ const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 const { chains, publicClient } = configureChains(
   environment.isTestnet ? testnets : mainnets,
   [
-    alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_MAINNET_KEY }),
+    //alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_MAINNET_KEY }),
     publicProvider(),
   ]
 );
