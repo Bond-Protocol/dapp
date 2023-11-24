@@ -78,7 +78,7 @@ export const tableColumns: Array<Column<any>> = [
         switchNetwork?.(Number(bond?.bondToken?.chainId));
       };
 
-      const claim = () => {
+      const claim = async () => {
         setOpen(true);
         return redeem.execute();
       };
@@ -91,12 +91,13 @@ export const tableColumns: Array<Column<any>> = [
         <>
           <Button
             thin
-            variant="primary"
+            long
+            variant={isCorrectNetwork ? "primary" : "secondary"}
             disabled={!props?.data?.canClaim}
-            className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
+            className={`w-60 ${!props.data?.canClaim && "opacity-60"}`}
             onClick={() => handleClaim()}
           >
-            Claim
+            {isCorrectNetwork ? "Claim" : "Switch Chain"}
           </Button>
           <TransactionWizard
             chainId={chainId}
