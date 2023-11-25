@@ -56,7 +56,7 @@ export const Market = ({ market }: { market: CalculatedMarket }) => {
           chip={<MarketStatusChip market={market} />}
         />
       </PageNavigation>
-      {lowLiquidity && (
+      {!isFutureMarket && lowLiquidity && (
         <LiqudityWarning
           liquidity={liquidity.data?.liquidityUSD}
           market={market}

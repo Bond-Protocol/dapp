@@ -71,7 +71,7 @@ export const ClosedMarket = ({ market }: { market: PastMarket }) => {
           {market.bondPurchases?.length}
         </InfoLabel>
         <InfoLabel label="Average Exchange Rate">
-          {formatCurrency.trimToken(market.total.avgPrice)}
+          {formatCurrency.trimToken(market.total?.avgPrice ?? 0)}
           <span className="ml-1 text-xl">
             {market.quoteToken.symbol} per {market.payoutToken.symbol}
           </span>

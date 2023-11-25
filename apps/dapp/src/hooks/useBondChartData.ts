@@ -153,7 +153,7 @@ export const useClosedMarketChart = (market: Market) => {
       )
       .slice(-1) ?? [];
 
-  const endDate = new Date(lastPurchase.timestamp * 1000);
+  const endDate = new Date(lastPurchase?.timestamp * 1000);
   const startDate = new Date(market.creationBlockTimestamp * 1000);
   const days = differenceInDays(endDate, startDate);
 
