@@ -70,23 +70,23 @@ export class ApiClient {
     }
   }
 
-  async signOrder(order: Order, chainId: number) {
+  async signOrder(order: Required<Order>, chainId: number) {
     const domain = {
       name: "Bond Protocol Limit Orders",
       version: "v1.0.0",
       chainId,
-      verifyingContract: getAddresses(chainId).settlement,
+      verifyingContract: getAddresses(chainId).settlement as Address,
     } as const;
 
     const types = {
       EIP712Domain: [
         { name: "name", type: "string" },
         { name: "version", type: "string" },
-        { name: "chainId", type: "uint256" },
+        { name: "chainId", type: "uint64" },
         { name: "verifyingContract", type: "address" },
       ],
       Order: [
-        { name: "marketId", type: "uint256" },
+        { name: "marketId", type: "uint64" },
         { name: "recipient", type: "address" },
         { name: "referrer", type: "address" },
         { name: "amount", type: "uint256" },
@@ -96,23 +96,25 @@ export class ApiClient {
         { name: "deadline", type: "uint256" },
         { name: "user", type: "address" },
       ],
-    };
-    const value = {
-      marketId: Number(order.market_id),
-      recipient: order.recipient,
-      referrer: order.referrer,
-      amount: order.amount,
-      minAmountOut: order.min_amount_out,
-      maxFee: order.max_fee,
-      submitted: order.submitted,
-      deadline: order.deadline,
-      user: order.user,
+    } as const;
+
+    const message = {
+      marketId: BigInt(order.market_id),
+      recipient: order.recipient as Address,
+      referrer: order.referrer as Address,
+      amount: BigInt("0x" + order.amount),
+      minAmountOut: BigInt("0x" + order.min_amount_out),
+      maxFee: BigInt("0x" + order.max_fee),
+      submitted: BigInt("0x" + order.submitted),
+      deadline: BigInt("0x" + order.deadline),
+      user: order.user as Address,
     };
     return signTypedData({
       //@ts-ignore
       domain,
       types,
-      value,
+      message,
+      primaryType: "Order",
     });
   }
 
@@ -125,7 +127,7 @@ export class ApiClient {
       const response = await this.api.createOrder(
         null,
         { ...order, signature },
-        { headers: this.makeHeaders({ chainId }) }
+        { headers: this.makeHeaders({ chainId }) },
       );
       return response;
     } catch (e: any) {
@@ -187,7 +189,7 @@ export class ApiClient {
       //@ts-ignore
       { address, market_id: Number(marketId) },
       null,
-      { headers: this.makeHeaders({ chainId, token }) }
+      { headers: this.makeHeaders({ chainId, token }) },
     );
     return response;
   }
@@ -213,7 +215,7 @@ export class ApiClient {
       //@ts-ignore
       { address, digest: BigNumber.from(digest).toHexString() },
       null,
-      { headers: this.makeHeaders({ chainId, token }) }
+      { headers: this.makeHeaders({ chainId, token }) },
     );
     return response;
   }
@@ -223,7 +225,7 @@ export class ApiClient {
       //@ts-ignore
       { market_id: marketId },
       null,
-      { headers: this.makeHeaders({ chainId }) }
+      { headers: this.makeHeaders({ chainId }) },
     );
   }
 
@@ -243,7 +245,7 @@ export class ApiClient {
   private async sign(
     chainId: number,
     address: string,
-    statement = defaultStatement
+    statement = defaultStatement,
   ) {
     const { data: nonce } = await this.api.getNonce();
 
