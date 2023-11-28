@@ -1,4 +1,4 @@
-import { CodegenConfig } from "graphql-codegen";
+import { CodegenConfig } from "@graphql-codegen/cli";
 import dotenv from 'dotenv';
 
 dotenv.config();
