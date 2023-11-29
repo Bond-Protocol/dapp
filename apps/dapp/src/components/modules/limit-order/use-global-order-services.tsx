@@ -1,7 +1,7 @@
 import { TokenBase } from "types";
 import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
 import { createContext, useContext } from "react";
-import { useQueries } from "react-query";
+import { useQueries } from "@tanstack/react-query";
 import { orderService } from "services/order-service";
 
 type OrderServiceContext = {

@@ -1,4 +1,5 @@
 import { CalculatedMarket } from "types";
+import { useQueries } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { Market } from "src/generated/graphql";
@@ -6,7 +7,6 @@ import { useTokens } from "hooks";
 import { useSubgraph } from "hooks/useSubgraph";
 import { clients } from "context/blockchain-provider";
 import { calculateMarket } from "@bond-protocol/contract-library";
-import { useQueries } from "react-query";
 import { Address } from "viem";
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 

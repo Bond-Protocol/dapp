@@ -1,4 +1,4 @@
-import { UseQueryResult } from "react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 
 export const concatSubgraphQueryResultArrays = (
   queries: UseQueryResult<any, any>[],

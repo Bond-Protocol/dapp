@@ -1,4 +1,4 @@
-import { UseQueryResult } from "react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 import { environment } from "src/environment";
 import { CHAIN_ID } from "types";
 

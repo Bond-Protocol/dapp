@@ -1,6 +1,6 @@
 import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
 import { useMarkets } from "context/market-context";
-import { useQueries } from "react-query";
+import { useQueries } from "@tanstack/react-query";
 import { useOrderApi } from "./use-order-api";
 import { OrderConfig, orderService } from "services/order-service";
 import {
