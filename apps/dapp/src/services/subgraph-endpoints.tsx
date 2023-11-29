@@ -1,4 +1,4 @@
-import { UseQueryResult } from "react-query";
+import { UseQueryResult } from "@tanstack/react-query";
 import { environment } from "src/environment";
 import { mainnetSubgraphs, testnetSubgraphs } from "src/config";
 import { CHAIN_ID } from "types";

@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
 import type { Token } from "types";
+import { useQuery } from "@tanstack/react-query";
 import { getTokenPriceHistory } from "services";
 
 export const useTokenPriceHistory = (token: Token, dayRange = 90) => {
