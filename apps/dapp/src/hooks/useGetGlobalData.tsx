@@ -1,4 +1,4 @@
-import { useQuery, useQueries, UseQueryResult } from "@tanstack/react-query";
+import { useQueries, UseQueryResult } from "@tanstack/react-query";
 import {
   testnetEndpoints,
   mainnetEndpoints,
@@ -10,7 +10,6 @@ import {
 } from "src/generated/graphql";
 import { DocumentNode } from "graphql";
 import { concatSubgraphQueryResultArrays } from "src/utils/concatSubgraphQueryResultArrays";
-import { CHAIN_ID } from "@bond-protocol/contract-library";
 import { queryAllEndpoints } from "src/utils/queryAllEndpoints";
 
 export type TypedDocumentNode<
