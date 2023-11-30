@@ -25,7 +25,7 @@ export function queryAllEndpoints<TQuery>({
     queryKey: [url, document],
     queryFn: async () => {
       const response = await request<TQuery>(url, document, vars);
-      return response || [];
+      return response;
     },
   }));
 

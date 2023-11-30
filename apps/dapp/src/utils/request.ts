@@ -22,9 +22,7 @@ export async function request<TDocument = any>(
     {
       "Content-Type": "application/json",
     }
-  ).catch((e) => {
-    return undefined;
-  });
+  );
 
   return response;
 }

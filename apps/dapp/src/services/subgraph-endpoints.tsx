@@ -116,6 +116,16 @@ export function useGetSubgraphQueries<TQuery>({
 }) {
   return useQueries({
     queries: queryAllEndpoints<TQuery>({ document, variables }),
+    combine: (responses) => {
+      const filteredResponses = responses.filter(
+        (response): response is UseQueryResult<TQuery> =>
+          response?.data !== undefined
+      );
+      return {
+        queries: filteredResponses,
+        isLoading: responses.some((r) => r.isLoading),
+      };
+    },
   });
 }
 
