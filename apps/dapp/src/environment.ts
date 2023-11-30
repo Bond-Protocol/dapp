@@ -16,6 +16,3 @@ export const environment = Object.freeze({
   isTestnet: testnet === "true",
   current: env as ENVIRONMENT,
 });
-
-
-console.log(env, "environment");
