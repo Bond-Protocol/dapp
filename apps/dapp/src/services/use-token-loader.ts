@@ -5,8 +5,8 @@ import * as defillama from "./defillama";
 import { usdFormatter } from "formatters";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { environment } from "src/environment";
-import { useSubgraph } from "hooks/useSubgraph";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
+import { useGetGlobalData } from "hooks/useGetGlobalData";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
@@ -41,7 +41,8 @@ export const useTokenLoader = () => {
   const [tbv, setTbv] = useState<number>(0);
   const { discoverFromApi } = useDiscoverToken();
   const [fetchedExtendedDetails, setFetchExtended] = useState(false);
-  const { subgraphTokens, isLoading } = useSubgraph();
+  const { data, isLoading } = useGetGlobalData();
+  const { subgraphTokens } = data;
 
   const getByAddress = (address: string) => {
     return tokens.find(
