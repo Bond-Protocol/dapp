@@ -55,14 +55,15 @@
     "use-deep-compare-effect": "^1.8.1",
     "viem": "1.17.2",
     "viteconfig": "*",
-    "wagmi": "1.4.5"
+    "wagmi": "1.4.5",
+    "@graphql-codegen/client-preset": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
-    "@graphql-codegen/cli": "3.0.0",
+    "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/typescript": "2.6.0",
     "@graphql-codegen/typescript-operations": "2.4.3",
-    "@graphql-codegen/typescript-react-query": "^3.5.15",
+    "@graphql-codegen/typescript-react-query": "^5.8.9",
     "@storybook/addon-essentials": "^7.0.26",
     "@storybook/addon-interactions": "^7.0.26",
     "@storybook/addon-links": "^7.0.26",

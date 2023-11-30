@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket, PrecalculatedMarket } from "types";
 import { useQueries } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
@@ -58,13 +58,13 @@ export function useCalculatedMarkets() {
     }
   };
 
-  const calculateAllMarkets = useQueries(
-    markets.map((market: Market) => ({
-      queryKey: market.id,
-      queryFn: () => calcMarket(market),
+  const calculateAllMarkets = useQueries({
+    queries: markets.map((market: PrecalculatedMarket) => ({
+      queryKey: [market.id],
+      queryFn: () => calculateMarket(market, clients[Number(market.chainId)]),
       enabled: fetchedExtendedDetails,
-    }))
-  );
+    })),
+  });
 
   const isCalculatingAll = calculateAllMarkets.some((m) => m.isLoading);
 

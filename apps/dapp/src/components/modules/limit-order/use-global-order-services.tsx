@@ -23,12 +23,12 @@ export const OrderServiceProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const queries = useQueries(
-    ACTIVE_CHAIN_IDS.map((chainId) => ({
+  const queries = useQueries({
+    queries: ACTIVE_CHAIN_IDS.map((chainId) => ({
       queryKey: ["orders/supported-tokens", chainId],
       queryFn: () => orderService.getSupportedTokensByChain(chainId),
-    }))
-  );
+    })),
+  });
 
   const supportedTokens = queries.flatMap((q) => q.data?.data ?? []);
 
