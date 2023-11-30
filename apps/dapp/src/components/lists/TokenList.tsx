@@ -9,12 +9,14 @@ import { numericSort } from "services";
 import { useSubgraph } from "hooks/useSubgraph";
 import { environment } from "src/environment";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
+import { useGetGlobalData } from "hooks/useGetGlobalData";
 
 export const TokenList = () => {
   const { isTabletOrMobile } = useMediaQueries();
   const { tbv, payoutTokens } = useTokens();
   const navigate = useNavigate();
-  const { totalPurchases, uniqueBonders } = useSubgraph();
+  const { data } = useGetGlobalData();
+  const { totalPurchases, uniqueBonders } = data;
 
   const scrollUp = () => window.scrollTo(0, 0);
 
