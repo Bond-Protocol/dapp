@@ -203,13 +203,9 @@ const filters = [
 
 export const LimitOrderFullList = () => {
   const orders = useOrderApi();
-  const { everyMarket, isSomeLoading, arePastMarketsLoading } = useMarkets();
-
-  const enabled =
-    !isSomeLoading && !arePastMarketsLoading && everyMarket.length > 0;
-
-  const queries = useQueries(
-    ACTIVE_CHAIN_IDS.map((chainId) => ({
+  const { everyMarket } = useMarkets();
+  const queries = useQueries({
+    queries: ACTIVE_CHAIN_IDS.map((chainId) => ({
       queryKey: ["orders/list-all", chainId],
       queryFn: async () => {
         const result = await orders.listRaw(chainId);
@@ -227,9 +223,9 @@ export const LimitOrderFullList = () => {
           };
         });
       },
-      enabled,
-    }))
-  );
+      enabled: everyMarket.length > 0,
+    })),
+  });
 
   const allOrders =
     queries

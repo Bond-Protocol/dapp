@@ -13,7 +13,7 @@ export const useChartDefillama = (
   const chainId = tokens[0].chainId; //Assume equal chainIds for now
 
   const { data: chart, ...chartQuery } = useQuery({
-    queryKey: `defillama-chart-${queryIds}-${days}d`,
+    queryKey: [`defillama-chart-${queryIds}-${days}d`],
     queryFn: () => defillama.fetchChart(queryIds, { chainId, days, start }),
     enabled,
   });

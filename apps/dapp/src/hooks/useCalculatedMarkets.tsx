@@ -58,13 +58,13 @@ export function useCalculatedMarkets() {
     }
   };
 
-  const calculateAllMarkets = useQueries(
-    markets.map((market: Market) => ({
-      queryKey: market.id,
-      queryFn: () => calcMarket(market),
+  const calculateAllMarkets = useQueries({
+    queries: markets.map((market: Market) => ({
+      queryKey: [market.id],
+      queryFn: () => calculateMarket(market, publicClient),
       enabled: tokens.length > 0,
-    }))
-  );
+    })),
+  });
 
   const isCalculatingAll = calculateAllMarkets.some((m) => m.isLoading);
 

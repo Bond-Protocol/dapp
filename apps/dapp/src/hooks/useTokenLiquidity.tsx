@@ -8,13 +8,11 @@ export const useTokenLiquidity = ({
   address: string;
   chainId: number;
 }) => {
-  const query = useQuery(
-    [chainId, address],
-    () => getLiquidity({ chainId, address }),
-    {
-      enabled: !!chainId && !!address,
-    }
-  );
+  const query = useQuery({
+    queryKey: [chainId, address],
+    queryFn: () => getLiquidity({ chainId, address }),
+    enabled: !!chainId && !!address,
+  });
 
   return query;
 };
