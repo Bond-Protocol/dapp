@@ -2,12 +2,12 @@ import { CalculatedMarket, PrecalculatedMarket } from "types";
 import { useQueries } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import { Market } from "src/generated/graphql";
+import { GetGlobalDataQuery } from "src/generated/graphql";
 import { useTokens } from "hooks";
-import { useSubgraph } from "hooks/useSubgraph";
 import { clients } from "context/blockchain-provider";
-import { calculateMarket } from "@bond-protocol/contract-library";
+import { calculateMarket as calculateBondMarket } from "@bond-protocol/contract-library";
 import { Address } from "viem";
+import { useGetGlobalData } from "./useGetGlobalData";
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
@@ -17,13 +17,16 @@ export function useCalculatedMarkets() {
     fetchedExtendedDetails,
     isLoading: areTokensLoading,
   } = useTokens();
-  const { markets, isLoading: isMarketLoading } = useSubgraph();
+  const { data, isLoading: isMarketLoading } = useGetGlobalData();
+  const { markets } = data;
   const [calculatedMarkets, setCalculatedMarkets] = useState<
     CalculatedMarket[]
   >([]);
   const [areMarketsLoaded, setAreMarketsLoaded] = useState(false);
 
-  const calcMarket = async (market: Market) => {
+  const calculateMarket = async (
+    market: NonNullable<GetGlobalDataQuery["tokens"][number]["markets"]>[number]
+  ) => {
     const obsoleteAuctioneers = [
       "0x007f7a58103a31109f848df1a14f7020e1f1b28a",
       "0x007f7a6012a5e03f6f388dd9f19fd1d754cfc128",
@@ -35,13 +38,12 @@ export function useCalculatedMarkets() {
     const quoteToken = getByAddress(market.quoteToken.address);
     const payoutToken = getByAddress(market.payoutToken.address);
 
-    let updatedMarket = { ...market, quoteToken, payoutToken };
+    const updatedMarket = { ...market, quoteToken, payoutToken };
 
-    //@ts-ignore
     const publicClient = clients[Number(market.chainId)];
 
     try {
-      const result = await calculateMarket(
+      const result = await calculateBondMarket(
         //@ts-ignore
         updatedMarket,
         publicClient,
@@ -59,11 +61,18 @@ export function useCalculatedMarkets() {
   };
 
   const calculateAllMarkets = useQueries({
-    queries: markets.map((market: PrecalculatedMarket) => ({
-      queryKey: [market.id],
-      queryFn: () => calculateMarket(market, clients[Number(market.chainId)]),
-      enabled: fetchedExtendedDetails,
-    })),
+    queries: markets.map(
+      (
+        market: NonNullable<
+          GetGlobalDataQuery["tokens"][number]["markets"]
+        >[number]
+      ) => ({
+        queryKey: [market.id],
+
+        queryFn: () => calculateMarket(market),
+        enabled: tokens.length > 0,
+      })
+    ),
   });
 
   const isCalculatingAll = calculateAllMarkets.some((m) => m.isLoading);

@@ -3,7 +3,6 @@ import { HashRouter as Router } from "react-router-dom";
 
 import { BlockchainProvider } from "./blockchain-provider";
 import { ReactQueryProvider } from "./react-query-provider";
-import { SubgraphProvider } from "./subgraph-context";
 import { MarketProvider } from "./market-context";
 import { TokenProvider } from "./token-context";
 import { TokenlistProvider } from "./tokenlist-context";
@@ -18,19 +17,17 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
     <ReactQueryProvider>
       <BlockchainProvider>
         <AuthProvider>
-          <SubgraphProvider>
-            <TokenProvider>
-              <MarketProvider>
-                <OrderServiceProvider>
-                  <DashboardProvider>
-                    <TokenlistProvider>
-                      <Router>{children}</Router>
-                    </TokenlistProvider>
-                  </DashboardProvider>
-                </OrderServiceProvider>
-              </MarketProvider>
-            </TokenProvider>
-          </SubgraphProvider>
+          <TokenProvider>
+            <MarketProvider>
+              <OrderServiceProvider>
+                <DashboardProvider>
+                  <TokenlistProvider>
+                    <Router>{children}</Router>
+                  </TokenlistProvider>
+                </DashboardProvider>
+              </OrderServiceProvider>
+            </MarketProvider>
+          </TokenProvider>
         </AuthProvider>
       </BlockchainProvider>
     </ReactQueryProvider>
