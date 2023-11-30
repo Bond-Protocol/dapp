@@ -34,7 +34,6 @@ export const useGetGlobalData = () => {
           response?.data !== undefined
       );
 
-      console.log(responses, "response");
       if (filteredResponses.length === 0)
         return {
           data: {

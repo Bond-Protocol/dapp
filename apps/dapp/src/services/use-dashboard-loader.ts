@@ -1,11 +1,11 @@
-import { getSubgraphQueries } from "services";
+import { useGetSubgraphQueries } from "services";
 import {
   BondPurchase,
+  GetDashboardDataDocument,
+  GetDashboardDataQuery,
   Market,
   OwnerBalance,
-  useGetDashboardDataQuery,
 } from "../generated/graphql";
-import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { useCallback, useEffect, useState } from "react";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import {
@@ -36,12 +36,15 @@ const API_ENDPOINT = import.meta.env.VITE_API_URL;
 export const useDashboardLoader = () => {
   const { address } = useAccount();
 
-  const dashboardData = getSubgraphQueries(useGetDashboardDataQuery, {
-    address: address || "NO_ADDRESS",
-    currentTime: currentTime,
-  });
+  const { queries: dashboardData, isLoading } =
+    useGetSubgraphQueries<GetDashboardDataQuery>({
+      document: GetDashboardDataDocument,
+      variables: {
+        address: address || "NO_ADDRESS",
+        currentTime: currentTime,
+      },
+    });
 
-  const { isLoading } = useSubgraphLoadingCheck(dashboardData);
   const { tokens, getByAddress } = useTokens();
 
   const [ownerBalances, setOwnerBalances] = useState<Partial<OwnerBalance>[]>(
@@ -161,6 +164,7 @@ export const useDashboardLoader = () => {
       setOwnerBalances(updatedBonds);
       setUserClaimable(userClaimable);
 
+      //@ts-ignore
       setAllMarkets(markets);
 
       uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);

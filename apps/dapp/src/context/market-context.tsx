@@ -32,8 +32,8 @@ export const useMarkets = () => {
 
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
   const calculatedMarkets = useCalculatedMarkets();
-  const { markets: closedMarkets, isLoading: arePastMarketsLoading } =
-    usePastMarkets();
+  const { data: markets, isLoading: arePastMarketsLoading } = usePastMarkets();
+  const { closedMarkets } = markets;
   const everyMarket = [...calculatedMarkets.allMarkets, ...closedMarkets];
 
   return (
