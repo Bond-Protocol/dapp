@@ -1,7 +1,9 @@
-import { UseQueryResult } from "@tanstack/react-query";
+import { UseQueryResult, useQueries } from "@tanstack/react-query";
 import { environment } from "src/environment";
 import { mainnetSubgraphs, testnetSubgraphs } from "src/config";
 import { CHAIN_ID } from "types";
+import { Variables } from "graphql-request";
+import { queryAllEndpoints } from "src/utils/queryAllEndpoints";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
@@ -105,31 +107,17 @@ export const getSubgraphQuery = (
 
 const isTestnet = environment.isTestnet;
 
-export const getSubgraphQueries = (
-  query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
-  variables?: {}
-): UseQueryResult<any, any>[] => {
-  const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;
-
-  const queries: UseQueryResult<any, any>[] = [];
-  endpoints.forEach((endpoint) => {
-    queries.push(
-      query(
-        {
-          endpoint: endpoint.url,
-          fetchParams: {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          },
-        },
-        { queryKey: endpoint.url + "--" + query.name.toString(), ...variables },
-        { enabled: isTestnet ? !!isTestnet : !isTestnet }
-      )
-    );
+export function useGetSubgraphQueries<TQuery>({
+  document,
+  variables,
+}: {
+  document: string;
+  variables?: Variables;
+}) {
+  return useQueries({
+    queries: queryAllEndpoints<TQuery>({ document, variables }),
   });
-  return queries;
-};
+}
 
 export const getSubgraphQueriesPerChainFn = (
   query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
