@@ -185,12 +185,8 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         .map((p) => {
           const chainId = isMarketHistory ? props?.market?.chainId : p.chainId;
 
-          const { blockExplorerUrl: blockExplorerTxUrl } = getBlockExplorer(
-            chainId,
-            "tx"
-          );
-          const { blockExplorerUrl: blockExplorerAddressUrl } =
-            getBlockExplorer(chainId, "address");
+          const { url: blockExplorerTxUrl } = getBlockExplorer(chainId, "tx");
+          const { url: blockExplorerAddressUrl } = getBlockExplorer(chainId);
 
           const txUrl = blockExplorerTxUrl + p.id;
           const addressUrl = blockExplorerAddressUrl + p.recipient;

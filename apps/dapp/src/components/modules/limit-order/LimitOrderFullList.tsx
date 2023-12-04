@@ -12,10 +12,11 @@ import {
   formatDate,
   Label,
 } from "ui";
-import { CalculatedMarket, CHAINS } from "types";
+import { CalculatedMarket } from "types";
 import { useNavigate } from "react-router-dom";
 import { getDiscountPercentage } from "../create-market";
 import { formatUnits } from "viem";
+import { getChain } from "@bond-protocol/contract-library";
 
 const Chip = ({
   children,
@@ -134,7 +135,6 @@ export const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     formatter: (order: any) => {
       const { quoteToken, payoutToken } = order.market;
 
-      const chain = CHAINS.get(order.chain_id?.toString());
       const value = `${payoutToken.symbol}-${quoteToken.symbol}`;
 
       return {

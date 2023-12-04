@@ -8,9 +8,8 @@ import {
   usdFullFormatter,
   usdLongFormatter,
 } from "formatters";
-import { Auctioneer, getAuctioneerAbiForName } from "core";
+import { Auctioneer, getAuctioneerAbiForName, getBlockExplorer } from "core";
 import { abis } from "abis";
-import * as chains from "viem/chains";
 
 export async function calculateMarket(
   subgraphMarket: PrecalculatedMarket,
@@ -161,7 +160,7 @@ function createBaseMarket(market: PrecalculatedMarket): CalculatedMarket {
     creationDate: "",
     isCapacityInQuote: false,
     capacityToken: market.payoutToken,
-    blockExplorer: addBlockExplorer(market),
+    blockExplorer: getBlockExplorer(market.chainId),
     formatted: {
       fullPrice: "Unknown",
       discountedPrice: "Unknown",
@@ -200,17 +199,5 @@ function formatVestingLabels(market: CalculatedMarket) {
   return {
     longVesting: formatDate.long(date),
     shortVesting: formatDate.short(date),
-  };
-}
-
-function addBlockExplorer(market: PrecalculatedMarket) {
-  const chain = Object.values(chains).find(
-    (c) => c.id === Number(market.chainId)
-  );
-  return {
-    //@ts-ignore
-    name: chain.blockExplorers?.default.name,
-    //@ts-ignore
-    url: chain.blockExplorers?.default.url,
   };
 }

@@ -1,11 +1,10 @@
+import { getChain } from "@bond-protocol/contract-library";
 import { useTokens } from "hooks";
-import { CHAINS, NativeCurrency } from "@bond-protocol/contract-library";
 
 export const useNativeCurrency = (chainId: string) => {
   const { tokens } = useTokens();
 
-  const nativeCurrency: NativeCurrency = CHAINS.get(chainId)
-    ?.nativeCurrency || {
+  const nativeCurrency = getChain(chainId)?.nativeCurrency || {
     decimals: 18,
     name: "Ethereum",
     symbol: "WETH",

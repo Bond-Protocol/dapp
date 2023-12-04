@@ -154,9 +154,8 @@ function generateSummaryFields(
   price: string,
   maxFee: number
 ) {
-  const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
-    market.chainId,
-    "address"
+  const { name: blockExplorerName, url: blockExplorerUrl } = getBlockExplorer(
+    market.chainId
   );
 
   const isValidPrice = !!Number(price) && isFinite(Number(price));

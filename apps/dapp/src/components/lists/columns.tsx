@@ -1,11 +1,12 @@
 import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
 import { add } from "date-fns";
-import { longFormatter, usdFormatter, usdLongFormatter } from "formatters";
+import { longFormatter, usdFormatter } from "formatters";
 import {
   calculateTrimDigits,
   getBlockExplorer,
+  getChain,
 } from "@bond-protocol/contract-library";
-import { CalculatedMarket, CHAINS } from "types";
+import { CalculatedMarket, chainLogos } from "types";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -15,11 +16,12 @@ export const bondColumn: Column<CalculatedMarket> = {
   width: "w-[13%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const chain = CHAINS.get(market.chainId);
+    const chain = getChain(market.chainId);
     return {
       value: market.quoteToken.symbol,
       icon: market.quoteToken.logoURI,
-      chainChip: chain?.image,
+      //@ts-ignore TODO: improve
+      chainChip: chainLogos[chain?.id],
     };
   },
 };
@@ -142,7 +144,7 @@ const issuer: Column<CalculatedMarket> = {
   width: "w-[16%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const { blockExplorerUrl } = getBlockExplorer(market.chainId, "address");
+    const { url: blockExplorerUrl } = getBlockExplorer(market.chainId);
     const address = blockExplorerUrl + market.owner;
     const start = market.owner.substring(0, 4);
     const end = market.owner.substring(market.owner.length - 4);

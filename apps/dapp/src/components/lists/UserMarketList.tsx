@@ -1,4 +1,4 @@
-import { CalculatedMarket, CHAINS } from "types";
+import { CalculatedMarket, chainLogos } from "types";
 import {
   Button,
   Column,
@@ -18,6 +18,7 @@ import { Market } from "src/generated/graphql";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useEffect, useState } from "react";
 import { formatUnits } from "viem";
+import { getChain } from "@bond-protocol/contract-library";
 
 const hasMarketExpiredOrClosed = ({ conclusion, hasClosed }: Market) => {
   return (
@@ -58,12 +59,13 @@ const receivedColumn = {
   formatter: (market: any) => {
     const quote = formatCurrency.longFormatter.format(market.total?.quote);
     const quoteUsd = formatCurrency.usdFormatter.format(market.total?.quoteUsd);
-    const chain = CHAINS.get(market.chainId);
+    const chain = getChain(market.chainId);
     return {
       value: quote + " " + market.quoteToken.symbol,
       subtext: quoteUsd,
       icon: market.quoteToken.logoURI,
-      chainChip: chain?.image,
+      //@ts-ignore
+      chainChip: chainLogos[chain?.id],
       sortValue: market.total?.quoteUsd,
     };
   },

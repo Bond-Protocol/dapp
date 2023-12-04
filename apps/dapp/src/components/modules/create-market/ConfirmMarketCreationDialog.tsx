@@ -19,7 +19,6 @@ import {
 } from "formatters";
 import fastVesting from "assets/icons/vesting/fast.svg";
 import { useEffect, useState } from "react";
-import { CHAINS } from "types";
 
 import {
   CreateMarketAction,
@@ -209,7 +208,7 @@ export const ConfirmMarketCreationDialog = (props: {
   const [accepted, setAccepted] = useState(false);
   const [gasEstimate, setGasEstimate] = useState("");
 
-  const { blockExplorerUrl } = getBlockExplorer(props.chain);
+  const { url: blockExplorerUrl } = getBlockExplorer(props.chain);
 
   const createMarketBytecode = props.getTxBytecode(state);
   const allowanceBytecode = props.getApproveTxBytecode(state);

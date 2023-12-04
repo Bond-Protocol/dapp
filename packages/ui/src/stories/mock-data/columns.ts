@@ -6,7 +6,7 @@ import {
   usdFormatter,
   usdLongFormatter,
 } from "src";
-import { CalculatedMarket, CHAINS } from "types";
+import { CalculatedMarket } from "types";
 
 export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",
@@ -14,11 +14,10 @@ export const bondColumn: Column<CalculatedMarket> = {
   width: "w-[13%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const chain = CHAINS.get(market.chainId);
     return {
       value: market.quoteToken.symbol,
       icon: market.quoteToken.logoURI,
-      chainChip: chain?.image,
+      //chainChip: chain?.image,
     };
   },
 };

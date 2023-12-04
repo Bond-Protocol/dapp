@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { SUPPORTED_CHAINS, Token } from "types";
+import { Token } from "types";
 import { Button, Input, Label } from "ui";
 import { formatCurrency } from "formatters";
 import { UpdateAllowanceArgs } from "hooks/useUpdateAllowance";
 import { Address } from "viem";
+import { SUPPORTED_CHAINS } from "context/blockchain-provider";
 
 export type AllowanceToken = Token & {
   capacity: number;

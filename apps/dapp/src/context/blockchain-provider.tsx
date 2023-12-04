@@ -23,18 +23,17 @@ import {
   optimismGoerli,
 } from "wagmi/chains";
 import { environment } from "src/environment";
-import { CHAINS } from "@bond-protocol/contract-library";
-import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { Chain, createPublicClient, http, PublicClient } from "viem";
+import { chainLogos } from "types";
+
+type _Chain = Chain & { logoUrl?: string };
 
 export const testnets = [goerli, arbitrumGoerli, optimismGoerli].map(
   getIconsForChains
 );
 
 export const mainnets = [mainnet, arbitrum, optimism];
-
-type _Chain = Chain & { logoUrl?: string };
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS: _Chain[] = environment.isTestnet
@@ -132,9 +131,8 @@ export const BlockchainProvider: FC<{ children?: ReactNode }> = ({
 };
 
 function getIconsForChains(c: any) {
-  const logoUrl = Array.from(CHAINS.values()).find(
-    (chain) => Number(chain.chainId) === Number(c.id)
-  )?.image;
-
+  const logoUrl = Object.entries(chainLogos).find(
+    ([chainId]) => Number(chainId) === c.id
+  );
   return { ...c, logoUrl };
 }
