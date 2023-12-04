@@ -26,15 +26,12 @@ import {
   CreateMarketState,
   useCreateMarket,
 } from "./create-market-reducer";
-export const getBlockExplorer = (chainId: string, subpath = "") => {
-  return {
-    blockExplorerUrl: CHAINS.get(chainId)?.blockExplorerUrls[0].replace(
-      "#",
-      subpath
-    ),
-    blockExplorerName: CHAINS.get(chainId)?.blockExplorerName,
-  };
-};
+import {
+  getAuctioneerForCreate,
+  getTeller,
+  getBlockExplorer,
+} from "@bond-protocol/contract-library";
+import { getBondType } from "..";
 const getDynamicPriceFields = (state: CreateMarketState) => {
   const tokenSymbols = `${state.quoteToken.symbol} PER ${state.payoutToken.symbol}`;
 
@@ -195,20 +192,24 @@ export const ConfirmMarketCreationDialog = (props: {
   isAllowanceTxPending?: boolean;
   submitApproveSpendingTransaction: React.MouseEventHandler<HTMLButtonElement>;
   submitCreateMarketTransaction: React.MouseEventHandler<HTMLButtonElement>;
-  getAuctioneer: (chain: string, state: CreateMarketState) => string;
-  getTeller: (chain: string, state: CreateMarketState) => string;
   getTxBytecode: (state: CreateMarketState) => string;
   getApproveTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => Promise<string | undefined>;
 }) => {
   const [state, dispatch] = useCreateMarket();
-  const auctioneer = props.getAuctioneer(props.chain, state);
-  const teller = props.getTeller(props.chain, state);
+  const { address: auctioneer } = getAuctioneerForCreate(
+    Number(props.chain),
+    getBondType(state)
+  );
+  const { address: teller } = getTeller(
+    Number(props.chain),
+    getBondType(state)
+  );
   const formattedState = formatMarketState(state);
   const [accepted, setAccepted] = useState(false);
   const [gasEstimate, setGasEstimate] = useState("");
 
-  const { blockExplorerUrl } = getBlockExplorer(props.chain, "address");
+  const { blockExplorerUrl } = getBlockExplorer(props.chain);
 
   const createMarketBytecode = props.getTxBytecode(state);
   const allowanceBytecode = props.getApproveTxBytecode(state);

@@ -1,4 +1,4 @@
-import { Address, PublicClient, WalletClient } from "viem";
+import { Address } from "viem";
 import {
   getAuctioneerByBondType,
   getAddresses,
@@ -8,12 +8,6 @@ import {
 } from "core";
 import { abis, auctioneerAbis } from "abis";
 
-export function getChainId(client: PublicClient | WalletClient) {
-  const chainId = client.chain?.id;
-  if (!chainId) throw new Error("Unable to get Chain Id from client");
-  return chainId;
-}
-
 export function getAuctioneerAbiForName(auctioneerName: Auctioneer) {
   return auctioneerAbis[auctioneerName];
 }
@@ -22,12 +16,6 @@ export function getAggregator(chainId: number) {
   const address = getAddresses(chainId).aggregator;
 
   return { address: address as Address, abi: abis.aggregator };
-}
-
-export function getAuthorithy(chainId: number) {
-  const address = getAddresses(chainId).authority;
-
-  return { address, abi: abis.authority };
 }
 
 export function getBaseTeller(address: Address) {

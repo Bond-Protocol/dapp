@@ -39,7 +39,6 @@ export type CreateMarketScreenProps = {
   onSubmitAllowance: (state?: CreateMarketState) => void;
   onSubmitCreation: (state: CreateMarketState) => void;
   getAuctioneer: (chain: string, state: CreateMarketState) => Address;
-  getTeller: (chain: string, state: CreateMarketState) => Address;
   getTxBytecode: (state: CreateMarketState) => string;
   getApproveTxBytecode: (state: CreateMarketState) => string;
   estimateGas: (state: CreateMarketState) => Promise<string | undefined>;
@@ -510,8 +509,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
               submitApproveSpendingTransaction={() =>
                 props.onSubmitAllowance(state)
               }
-              getAuctioneer={props.getAuctioneer}
-              getTeller={props.getTeller}
               getTxBytecode={props.getTxBytecode}
               getApproveTxBytecode={props.getApproveTxBytecode}
               estimateGas={props.estimateGas}

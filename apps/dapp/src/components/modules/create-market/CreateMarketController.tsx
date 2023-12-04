@@ -10,11 +10,12 @@ import * as contractLib from "@bond-protocol/contract-library";
 import { CHAIN_ID, CreateMarketParams } from "types";
 import {
   checkOraclePairValidity,
-  getAddressesForType,
   getBlockExplorer,
   getOracleDecimals,
   getOraclePrice,
   BondType,
+  getTeller,
+  getAuctioneerForCreate,
 } from "@bond-protocol/contract-library";
 import {
   CreateMarketAction,
@@ -44,7 +45,10 @@ export const CreateMarketController = () => {
   const { tokens } = useTokenlistLoader();
   const [state, dispatch] = useCreateMarket();
 
-  const auctioneerAddress = getAuctioneer(state.chainId.toString(), state);
+  const { address: auctioneerAddress } = getAuctioneerForCreate(
+    state.chainId,
+    getBondType(state)
+  );
 
   const allowance = useAllowance({
     tokenAddress: state.payoutToken.address as Address,
@@ -283,10 +287,12 @@ export const CreateMarketController = () => {
 
   const getApproveTxBytecode = (state: CreateMarketState) => {
     const config = configureMarket(state);
-    const tellerAddress = getTeller(String(config?.chain), state);
+    const { address } = getTeller(Number(config?.chain), getBondType(state));
+
+    if (!address) throw new Error("Can't find teller address");
 
     return contractLib.encodeApproveSpending({
-      address: tellerAddress as Address,
+      address,
       amount: BigInt(state.recommendedAllowanceDecimalAdjusted),
     });
   };
@@ -331,8 +337,6 @@ export const CreateMarketController = () => {
         onSubmitCreation={onSubmit}
         estimateGas={estimateGas}
         fetchAllowance={fetchAllowance}
-        getAuctioneer={getAuctioneer}
-        getTeller={getTeller}
         getTxBytecode={getTxBytecode}
         getApproveTxBytecode={getApproveTxBytecode}
         chain={String(network.chain?.id)}
@@ -385,22 +389,4 @@ export function getBondType(state: CreateMarketState) {
         ? BondType.FIXED_TERM_OFDA
         : BondType.FIXED_EXPIRY_OFDA;
   }
-}
-
-function getAuctioneer(chainId: string, state: CreateMarketState) {
-  const auctioneer = getAddressesForType(
-    Number(chainId),
-    getBondType(state)
-  ).auctioneer;
-  if (!auctioneer) throw new Error("Can\t find auctioneer");
-  return auctioneer;
-}
-
-function getTeller(chainId: string, state: CreateMarketState) {
-  const teller = getAddressesForType(
-    Number(chainId),
-    getBondType(state)
-  ).teller;
-  if (!teller) throw new Error("Can\t find teller");
-  return teller;
 }

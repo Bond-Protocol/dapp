@@ -8,14 +8,6 @@ import { wrapWithErrorHandler } from "./error-wrapper";
 
 export { intervalToDuration };
 
-// Format
-export const shorter = (date: Date) => format(date, "yy.MM.dd");
-export const short = (date: Date) => format(date, "yyyy.MM.dd");
-export const long = (date: Date) => format(date, "PP pp");
-export const dayMonthTime = (date: Date) => format(date, "MM/dd p");
-export const dateAndTime = (date: Date) => format(date, "yyyy.MM.dd - HH:mm z");
-export const distanceToNow = (date: Date) => formatDistanceToNow(date);
-
 // Math
 export const addDays = (date: Date, days: number) => fnsAddDays(date, days);
 export const addMonths = (date: Date, months: number) =>
@@ -40,6 +32,15 @@ export const addTimeToDate = (date = new Date(), time = "00:00") => {
   // Create a new Date object with the current date and the specified time
   return new Date(year, month, day, Number(hours), Number(minutes));
 };
+
+// Format
+export const shorter = (date: Date) => format(date, "yy.MM.dd");
+export const short = (date: Date) => format(date, "yyyy.MM.dd");
+export const long = (date: Date) => format(date, "PP pp");
+export const dayMonthTime = (date: Date) => format(date, "MM/dd p");
+export const dateAndTime = (date: Date) => format(date, "yyyy.MM.dd - HH:mm z");
+export const distanceToNow = (date: Date) => formatDistanceToNow(date);
+
 const distanceFormat = {
   years: "{{count}}Y",
   days: "{{count}}D",
@@ -65,11 +66,14 @@ export const interval = (start: Date, end: Date) => {
     .filter(Boolean)
     .join(" ");
 };
-/*
-export const getUtcDate = (date: Date) => {
-  return new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000); // create a new date instance in UTC timezone
-};
-*/
+
+export const dateMath = wrapWithErrorHandler({
+  isBefore,
+  addDays,
+  addMonths,
+  addTimeToDate,
+});
+
 export const formatDate = wrapWithErrorHandler({
   shorter,
   short,
@@ -78,11 +82,4 @@ export const formatDate = wrapWithErrorHandler({
   dayMonthTime,
   distanceToNow,
   interval,
-});
-
-export const dateMath = wrapWithErrorHandler({
-  isBefore,
-  addDays,
-  addMonths,
-  addTimeToDate,
 });

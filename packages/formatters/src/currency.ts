@@ -1,5 +1,6 @@
 import { calculateTrimDigits, trim } from "./trim";
 
+//Ex: 10,000.00, 11,124.12
 export const twoDigitFormatter = (value: string | number) => {
   return new Intl.NumberFormat("en-US", {
     minimumFractionDigits: 2,
@@ -7,6 +8,7 @@ export const twoDigitFormatter = (value: string | number) => {
   }).format(Number(value));
 };
 
+//Ex: 10,000, 10,414.32
 export const usdFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "usd",

@@ -109,9 +109,7 @@ export const useDashboardLoader = () => {
         })
       );
 
-      const balances = erc20OwnerBalances
-        .flatMap((q) => q)
-        .filter((q) => !!q.balance);
+      const balances = erc20OwnerBalances.flat().filter((q) => !!q.balance);
 
       let userClaimable = 0;
       const updatedBonds = [...ownerBalances, ...balances].map(
