@@ -6,7 +6,6 @@ import {
   useGetDashboardDataQuery,
 } from "../generated/graphql";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
-import { useTestnetMode } from "hooks/useTestnet";
 import { useCallback, useEffect, useState } from "react";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import {
@@ -19,6 +18,7 @@ import { useAccount } from "wagmi";
 import { dateMath } from "ui";
 import axios from "axios";
 import { Token } from "types";
+import { environment } from "src/environment";
 
 export type TweakedBondPurchase = BondPurchase & {
   txUrl: string;
@@ -28,6 +28,8 @@ export type TweakedBondPurchase = BondPurchase & {
 };
 
 const currentTime = Math.trunc(Date.now() / 1000);
+
+const isTestnet = environment.isTestnet;
 
 const API_ENDPOINT = import.meta.env.VITE_API_URL;
 
@@ -42,7 +44,6 @@ export const useDashboardLoader = () => {
   const { isLoading } = useSubgraphLoadingCheck(dashboardData);
   const { tokens, getByAddress } = useTokens();
 
-  const [isTestnet] = useTestnetMode();
   const [ownerBalances, setOwnerBalances] = useState<Partial<OwnerBalance>[]>(
     []
   );

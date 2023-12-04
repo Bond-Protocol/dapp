@@ -9,8 +9,9 @@ import { getSubgraphQueries } from "services";
 import { useEffect, useState } from "react";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
-import { useTestnetMode } from "hooks/useTestnet";
+import { environment } from "src/environment";
 
+const isTestnet = environment.isTestnet;
 const currentTime = Math.trunc(Date.now() / 1000);
 
 export const useSubgraphLoader = () => {
@@ -19,7 +20,6 @@ export const useSubgraphLoader = () => {
   });
   const { isLoading } = useSubgraphLoadingCheck(globalMetrics);
 
-  const [isTestnet] = useTestnetMode();
   const [totalPurchases, setTotalPurchases] = useState(0);
   const [uniqueBonders, setUniqueBonders] = useState(0);
   const [subgraphTokens, setSubgraphTokens] = useState<Token[]>([]);
