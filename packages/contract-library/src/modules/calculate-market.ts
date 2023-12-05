@@ -11,6 +11,9 @@ import {
 import { Auctioneer, getAuctioneerAbiForName, getBlockExplorer } from "core";
 import { abis } from "abis";
 
+/**
+ * Calculates bond market status and formats it from subgraph into a displayable format
+ */
 export async function calculateMarket(
   subgraphMarket: PrecalculatedMarket,
   publicClient: PublicClient,

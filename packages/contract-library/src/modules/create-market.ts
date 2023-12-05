@@ -12,6 +12,7 @@ import { CreateMarketParams } from "types";
 
 /**
  * Encodes arguments for an ERC20 approve function
+ * Used for multisigs
  */
 export function encodeApproveSpending({
   amount,
@@ -29,6 +30,7 @@ export function encodeApproveSpending({
 
 /**
  * Encodes arguments for the Auctioneer's createMarket function
+ * Used for multisigs
  */
 export function encodeCreateMarket(
   config: Required<CreateMarketParams>,
@@ -104,6 +106,9 @@ export function getOraclePrice({
   return contract.read.currentPrice([quoteTokenAddress, payoutTokenAddress]);
 }
 
+/**
+ * Encodes arguments required for bond market creation into bytes
+ */
 export function encodeCreateMarketParams(
   config: Required<CreateMarketParams>,
   bondType: BondType
