@@ -12,7 +12,7 @@ import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
 import { useOrderService } from "./use-global-order-services";
-import { toHex } from "src/utils/bignumber";
+import { toHex as toHex } from "src/utils/bignumber";
 import { formatUnits, parseUnits } from "viem";
 
 export type ILimitOrderContext = {

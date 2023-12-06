@@ -99,18 +99,18 @@ export class ApiClient {
     } as const;
 
     const message = {
-      marketId: BigInt(order.market_id ?? 0),
+      marketId: BigInt(order.market_id),
       recipient: order.recipient as Address,
       referrer: order.referrer as Address,
-      amount: BigInt("0x" + order.amount),
-      minAmountOut: BigInt("0x" + order.min_amount_out),
-      maxFee: BigInt("0x" + order.max_fee),
-      submitted: BigInt("0x" + order.submitted),
-      deadline: BigInt("0x" + order.deadline),
+      amount: BigInt(order.amount),
+      minAmountOut: BigInt(order.min_amount_out),
+      maxFee: BigInt(order.max_fee),
+      submitted: BigInt(order.submitted),
+      deadline: BigInt(order.deadline),
       user: order.user as Address,
     };
     return signTypedData({
-      //@ts-ignore
+      //@ts-ignore TODO: couldnt figure this one out
       domain,
       types,
       message,
