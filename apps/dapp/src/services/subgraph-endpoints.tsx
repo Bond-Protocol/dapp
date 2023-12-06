@@ -1,4 +1,3 @@
-import { useAtom } from "jotai";
 import { UseQueryResult } from "react-query";
 import { environment } from "src/environment";
 import { CHAIN_ID } from "types";
