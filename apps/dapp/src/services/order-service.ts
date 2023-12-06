@@ -99,14 +99,14 @@ export class ApiClient {
     } as const;
 
     const message = {
-      marketId: BigInt(order.market_id),
+      marketId: BigInt(order.market_id!),
       recipient: order.recipient as Address,
       referrer: order.referrer as Address,
-      amount: BigInt(order.amount),
-      minAmountOut: BigInt(order.min_amount_out),
-      maxFee: BigInt(order.max_fee),
-      submitted: BigInt(order.submitted),
-      deadline: BigInt(order.deadline),
+      amount: BigInt(order.amount!),
+      minAmountOut: BigInt(order.min_amount_out!),
+      maxFee: BigInt(order.max_fee!),
+      submitted: BigInt(order.submitted!),
+      deadline: BigInt(order.deadline!),
       user: order.user as Address,
     };
     return signTypedData({
