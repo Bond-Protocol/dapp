@@ -24,7 +24,7 @@ export enum CHAIN_ID {
   HARMONY_MAINNET = "1666600000",
 }
 
-export const chainLogos = {
+export const chainLogos: Record<number, string> = {
   1: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
   5: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
   10: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",
