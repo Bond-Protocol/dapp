@@ -99,7 +99,7 @@ const vesting: Column<CalculatedMarket> = {
       ? add(Date.now(), { seconds: market.vesting })
       : market.vesting * 1000;
 
-    const term = market.formattedShortVesting.includes("Immediate")
+    const term = market.formattedShortVesting?.includes("Immediate")
       ? " Instant Swap"
       : market.formattedShortVesting + " Term";
 
