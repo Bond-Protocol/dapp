@@ -12,8 +12,7 @@ import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
 import { useOrderService } from "./use-global-order-services";
-import { toHex as toHex } from "src/utils/bignumber";
-import { formatUnits, parseUnits } from "viem";
+import { formatUnits, parseUnits, toHex } from "viem";
 
 export type ILimitOrderContext = {
   setMaxFee(value: number): any;
@@ -94,9 +93,13 @@ export const LimitOrderProvider = ({
       max_fee: adjustedMaxFee,
     };
 
+    const hexValues = Object.fromEntries(
+      Object.entries(decimalValues).map(([key, value]) => [key, toHex(value)])
+    );
+
     //@ts-ignore TODO: update Order market_id to number openyaml
     return {
-      ...toHex(decimalValues),
+      ...hexValues,
       market_id: Number(market.marketId),
       recipient: address,
       user: address,

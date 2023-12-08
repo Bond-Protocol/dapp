@@ -79,12 +79,6 @@ export class ApiClient {
     } as const;
 
     const types = {
-      EIP712Domain: [
-        { name: "name", type: "string" },
-        { name: "version", type: "string" },
-        { name: "chainId", type: "uint64" },
-        { name: "verifyingContract", type: "address" },
-      ],
       Order: [
         { name: "marketId", type: "uint64" },
         { name: "recipient", type: "address" },
@@ -109,8 +103,8 @@ export class ApiClient {
       deadline: BigInt(order.deadline!),
       user: order.user as Address,
     };
+
     return signTypedData({
-      //@ts-ignore TODO: couldnt figure this one out
       domain,
       types,
       message,
