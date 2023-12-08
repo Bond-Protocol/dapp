@@ -156,6 +156,24 @@ const optimismGoerliAddresses: ContractAddresses = {
   settlement: '',
 };
 
+const polygonMumbaiAddresses: ContractAddresses = {
+  authority: '0x007A0F48A4e3d74Ab4234adf9eA9EB32f87b4b14',
+  aggregator: '0x007A66A2a13415DB3613C1a4dd1C942A285902d1',
+  fixedExpiryTeller: '0x007FE70dc9797C4198528aE43d8195ffF82Bdc95',
+  fixedExpirySDAAuctioneer: '0x007FEA32545a39Ff558a1367BBbC1A22bc7ABEfD',
+  fixedExpirySDAv1_1Auctioneer: '',
+  fixedExpiryFPAAuctioneer: '',
+  fixedExpiryOFDAAuctioneer: '',
+  fixedExpiryOSDAAuctioneer: '',
+  fixedTermTeller: '0x007F7735baF391e207E3aA380bb53c4Bd9a5Fed6',
+  fixedTermSDAAuctioneer: '0x007F7A1cb838A872515c8ebd16bE4b14Ef43a222',
+  fixedTermSDAv1_1Auctioneer: '',
+  fixedTermFPAAuctioneer: '',
+  fixedTermOFDAAuctioneer: '',
+  fixedTermOSDAAuctioneer: '',
+  settlement: '',
+};
+
 const addressesByChain: { [key: string]: ContractAddresses } = {
   '1': mainnetAddresses,
   'mainnet': mainnetAddresses,
@@ -172,6 +190,8 @@ const addressesByChain: { [key: string]: ContractAddresses } = {
   'optimism': optimismMainnetAddresses,
   '420': optimismGoerliAddresses,
   'optimism-goerli': optimismGoerliAddresses,
+  'polygon-mumbai': polygonMumbaiAddresses,
+  '80001': polygonMumbaiAddresses,
 };
 
 export const getAddresses = (chainId: string): ContractAddresses => {

@@ -21,6 +21,7 @@ import {
   mainnet,
   optimism,
   optimismGoerli,
+  polygonMumbai,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { environment } from "src/environment";
@@ -38,7 +39,7 @@ export const testnets = [
   goerli,
   arbitrumGoerli,
   optimismGoerli,
-  //polygonMumbai,
+  polygonMumbai,
   //avalancheFuji,
 ].map(getIconsForChains);
 
