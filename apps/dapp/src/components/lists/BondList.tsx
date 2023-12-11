@@ -87,17 +87,23 @@ export const tableColumns: Array<Column<any>> = [
         ? () => claim()
         : () => switchChain();
 
+      const isClaimable = props?.data?.canClaim;
+
       return (
         <>
           <Button
             thin
             long
-            variant={isCorrectNetwork ? "primary" : "secondary"}
-            disabled={!props?.data?.canClaim}
-            className={`w-60 ${!props.data?.canClaim && "opacity-60"}`}
+            variant={isCorrectNetwork || !isClaimable ? "primary" : "secondary"}
+            disabled={!isClaimable}
+            className={`w-60 ${!isClaimable && "opacity-60"}`}
             onClick={() => handleClaim()}
           >
-            {isCorrectNetwork ? "Claim" : "Switch Chain"}
+            {!isClaimable
+              ? "Vesting"
+              : isCorrectNetwork
+              ? "Claim"
+              : "Switch Chain"}
           </Button>
           <TransactionWizard
             chainId={chainId}
