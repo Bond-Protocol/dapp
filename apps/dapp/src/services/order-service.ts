@@ -1,6 +1,5 @@
 import { CalculatedMarket } from "types";
 import OpenAPIClient from "openapi-axios-client";
-import { SiweMessage } from "siwe";
 import definition from "src/openapi.json";
 import { Client as LimitOrderApiClient } from "src/types/openapi";
 import { Address, signMessage, signTypedData } from "@wagmi/core";
@@ -9,6 +8,7 @@ import { orderApiServerMap } from "src/config";
 import { environment } from "src/environment";
 import { getAddresses } from "@bond-protocol/contract-library";
 import { formatUnits, toHex } from "viem";
+import { createSignInMessage } from "./create-sign-in-message";
 
 //SETUP API SERVER BASED ON ENVIRONMENT
 const server = orderApiServerMap[environment.current];
@@ -243,13 +243,13 @@ export class ApiClient {
   ) {
     const { data: nonce } = await this.api.getNonce();
 
-    const message = new SiweMessage({
+    const message = createSignInMessage({
       ...basicMessage,
       statement,
       address,
       chainId,
       nonce,
-    }).prepareMessage();
+    });
 
     const signature = await signMessage({ message });
 
