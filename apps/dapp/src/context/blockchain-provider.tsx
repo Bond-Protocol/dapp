@@ -91,7 +91,7 @@ const setup = [
 
   {
     chain: arbitrum,
-    endpoint: `https://eth-mainnet.g.alchemy.com/v2/${
+    endpoint: `https://arb-mainnet.g.alchemy.com/v2/${
       import.meta.env.VITE_ALCHEMY_MAINNET_KEY
     }`,
   },
@@ -115,7 +115,8 @@ export const clients: Record<number, PublicClient> = setup.reduce(
       ...clients,
       [chain.id]: createPublicClient({ chain, transport: http(endpoint) }),
     };
-  }
+  },
+  {}
 );
 
 export const BlockchainProvider: FC<{ children?: ReactNode }> = ({
