@@ -8,7 +8,7 @@ import { Order } from "src/types/openapi";
 import { orderApiServerMap } from "src/config";
 import { environment } from "src/environment";
 import { getAddresses } from "@bond-protocol/contract-library";
-import { formatUnits } from "viem";
+import { formatUnits, toHex } from "viem";
 
 //SETUP API SERVER BASED ON ENVIRONMENT
 const server = orderApiServerMap[environment.current];
@@ -80,7 +80,7 @@ export class ApiClient {
 
     const types = {
       Order: [
-        { name: "marketId", type: "uint64" },
+        { name: "marketId", type: "uint256" },
         { name: "recipient", type: "address" },
         { name: "referrer", type: "address" },
         { name: "amount", type: "uint256" },
@@ -207,7 +207,7 @@ export class ApiClient {
   }) {
     const response = await this.api.cancelOrderByDigest(
       //@ts-ignore
-      { address, digest: BigNumber.from(digest).toHexString() },
+      { address, digest: toHex(BigInt(digest)) },
       null,
       { headers: this.makeHeaders({ chainId, token }) }
     );
