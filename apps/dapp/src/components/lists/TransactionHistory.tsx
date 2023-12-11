@@ -9,12 +9,11 @@ import {
 import { BondPurchase } from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFullFormatter } from "src/utils/format";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMediaQueries } from "hooks";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import axios from "axios";
 import { PastMarket } from "components/organisms/ClosedMarket";
-import { useQuery } from "wagmi";
+import { useQuery } from "react-query";
 
 const blockExplorer: Column<any> = {
   accessor: "blockExplorerUrl",
