@@ -5,7 +5,7 @@ import { environment } from "src/environment";
 import { CHAIN_ID } from "@bond-protocol/contract-library";
 
 /**List of available subgraph endpoint urls indexed by chain*/
-export const subgraphEndpoints = {
+export const subgraphEndpoints: Record<number, string> = {
   [CHAIN_ID.ETHEREUM_MAINNET]: `${
     import.meta.env.VITE_ETHEREUM_MAINNET_SUBGRAPH_ENDPOINT
   }`,
