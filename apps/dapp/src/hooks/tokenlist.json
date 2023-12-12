@@ -42,7 +42,8 @@
     "name": "Wrapped Matic",
     "symbol": "WMATIC",
     "logoURI": "https://assets.coingecko.com/coins/images/14073/standard/matic.png?1696513797",
-    "decimals": 18
+    "decimals": 18,
+    "display": true
   },
 
   {
@@ -163,7 +164,6 @@
     "decimals": 6,
     "display": true
   },
-
   {
     "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
     "chainId": 1,
@@ -192,7 +192,7 @@
     "display": true
   },
   {
-    "address": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+    "address": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
     "chainId": 137,
     "name": "Tether USD",
     "symbol": "USDT",
@@ -200,7 +200,6 @@
     "decimals": 6,
     "display": true
   },
-
   {
     "address": "0x865377367054516e17014CcdED1e7d814EDC9ce4",
     "chainId": 1,
