@@ -60,12 +60,12 @@ export const testnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
     chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
   },
-  /*
+
   {
     url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
     chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
   },
-  {
+  /*{
     url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],
     chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,
   },
