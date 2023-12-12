@@ -21,6 +21,7 @@ import {
   mainnet,
   optimism,
   optimismGoerli,
+  polygon,
   polygonMumbai,
 } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
@@ -43,7 +44,9 @@ export const testnets = [
   //avalancheFuji,
 ].map(getIconsForChains);
 
-export const mainnets = [mainnet, arbitrum, optimism].map(getIconsForChains);
+export const mainnets = [mainnet, arbitrum, optimism, polygon].map(
+  getIconsForChains
+);
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS = environment.isTestnet ? testnets : mainnets;
