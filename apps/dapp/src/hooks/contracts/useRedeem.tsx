@@ -1,4 +1,5 @@
-import { BondType, getTeller } from "@bond-protocol/contract-library";
+import { getTeller } from "@bond-protocol/contract-library";
+import { BondType } from "types";
 import { useState } from "react";
 import { OwnerBalance } from "src/generated/graphql";
 import {

@@ -7,8 +7,8 @@ import {
   getContract,
 } from "viem";
 import { abis } from "abis";
-import { BondType, getAuctioneerForCreate } from "core";
-import { CreateMarketParams } from "types";
+import { getAuctioneerForCreate } from "core";
+import { BondType, CreateMarketParams } from "types";
 
 /**
  * Encodes arguments for an ERC20 approve function

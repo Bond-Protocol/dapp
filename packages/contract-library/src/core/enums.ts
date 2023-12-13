@@ -1,5 +1,6 @@
 import { abis } from "abis";
 import { ContractAddresses } from "./address-provider";
+import { BondType } from "types";
 
 export enum Auctioneer {
   BondFixedExpCDA = "BondFixedExpCDA",
@@ -12,21 +13,6 @@ export enum Auctioneer {
   BondFixedTermFPA = "BondFixedTermFPA",
   BondFixedTermOFDA = "BondFixedTermOFDA",
   BondFixedTermOSDA = "BondFixedTermOSDA",
-}
-
-export enum BondType {
-  FIXED_EXPIRY_DEPRECATED = "fixed-expiration",
-  FIXED_EXPIRY_SDA = "fixed-expiry-sda",
-  FIXED_EXPIRY_SDA_V1_1 = "fixed-expiry-sda-v1_1",
-  FIXED_EXPIRY_FPA = "fixed-expiry-fpa",
-  FIXED_EXPIRY_OFDA = "fixed-expiry-ofda",
-  FIXED_EXPIRY_OSDA = "fixed-expiry-osda",
-  FIXED_TERM_DEPRECATED = "fixed-term",
-  FIXED_TERM_SDA = "fixed-term-sda",
-  FIXED_TERM_SDA_V1_1 = "fixed-term-sda-v1_1",
-  FIXED_TERM_FPA = "fixed-term-fpa",
-  FIXED_TERM_OFDA = "fixed-term-ofda",
-  FIXED_TERM_OSDA = "fixed-term-osda",
 }
 
 export const auctioneerAddressesByType: Record<

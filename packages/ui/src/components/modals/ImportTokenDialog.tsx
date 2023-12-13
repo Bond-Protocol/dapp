@@ -35,7 +35,7 @@ export const ImportTokenDialog = (props: ImportTokenDialogProps) => {
         textClassName="text-xl font-bold"
       />
       <div>
-        <p className="font-mono">Price: {props.token?.price}$</p>
+        <p className="font-mono">Price: {props.token?.price ?? "???"}$</p>
 
         <p className="text-light-grey-400 w-full text-center text-xs">
           Source: {props.priceSource}

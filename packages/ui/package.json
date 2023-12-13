@@ -60,7 +60,7 @@
     "eslint-config-custom": "*",
     "eslint-plugin-cypress": "^2.13.2",
     "eslint-plugin-storybook": "^0.6.11",
-    "postcss": "^8.4.22",
+    "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "rollup": "^3.3.0",

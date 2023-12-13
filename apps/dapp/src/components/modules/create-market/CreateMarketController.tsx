@@ -7,13 +7,12 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import * as contractLib from "@bond-protocol/contract-library";
-import { CHAIN_ID, CreateMarketParams } from "types";
+import { BondType, CHAIN_ID, CreateMarketParams } from "types";
 import {
   checkOraclePairValidity,
   getBlockExplorer,
   getOracleDecimals,
   getOraclePrice,
-  BondType,
   getTeller,
   getAuctioneerForCreate,
 } from "@bond-protocol/contract-library";
@@ -281,7 +280,7 @@ export const CreateMarketController = () => {
 
     return contractLib.encodeCreateMarket(
       config?.marketParams as Required<CreateMarketParams>,
-      config?.bondType as contractLib.BondType
+      config?.bondType as BondType
     );
   };
 
@@ -316,7 +315,7 @@ export const CreateMarketController = () => {
     try {
       let estimate = await contractLib.estimateGasCreateMarket(
         config.marketParams as Required<CreateMarketParams>,
-        config.bondType as contractLib.BondType,
+        config.bondType as BondType,
         publicClient,
         address
       );

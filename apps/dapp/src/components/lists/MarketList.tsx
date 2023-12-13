@@ -35,7 +35,7 @@ const defaultFilters: Filter[] = [
     id: "unknown",
     label: "Hide Unknown Discounts",
     type: "switch",
-    handler: (market: CalculatedMarket) => !isNaN(market.discount),
+    handler: (market: CalculatedMarket) => isFinite(market.discount),
   },
 ];
 

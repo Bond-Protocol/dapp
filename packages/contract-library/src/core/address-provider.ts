@@ -1,5 +1,6 @@
 import { Address } from "viem";
-import { BondType, auctioneerAddressesByType } from "./enums";
+import { auctioneerAddressesByType } from "./enums";
+import type { BondType } from "types";
 
 export type ContractAddresses = {
   authority: Address;

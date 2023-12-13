@@ -2,7 +2,6 @@ import { Button, Column, formatDate, PaginatedTable } from "ui";
 import { longFormatter, usdFormatter } from "formatters";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
-import { BondType } from "@bond-protocol/contract-library";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";

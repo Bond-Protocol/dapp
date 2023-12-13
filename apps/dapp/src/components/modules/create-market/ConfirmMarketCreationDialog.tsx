@@ -186,7 +186,6 @@ const Buttons = (props: {
 
 export const ConfirmMarketCreationDialog = (props: {
   showMultisig: boolean;
-  chain: string;
   hasAllowance?: boolean;
   isAllowanceTxPending?: boolean;
   submitApproveSpendingTransaction: React.MouseEventHandler<HTMLButtonElement>;
@@ -197,18 +196,18 @@ export const ConfirmMarketCreationDialog = (props: {
 }) => {
   const [state, dispatch] = useCreateMarket();
   const { address: auctioneer } = getAuctioneerForCreate(
-    Number(props.chain),
+    Number(state.chainId),
     getBondType(state)
   );
   const { address: teller } = getTeller(
-    Number(props.chain),
+    Number(state.chainId),
     getBondType(state)
   );
   const formattedState = formatMarketState(state);
   const [accepted, setAccepted] = useState(false);
   const [gasEstimate, setGasEstimate] = useState("");
 
-  const { url: blockExplorerUrl } = getBlockExplorer(props.chain);
+  const { url: blockExplorerUrl } = getBlockExplorer(state.chainId);
 
   const createMarketBytecode = props.getTxBytecode(state);
   const allowanceBytecode = props.getApproveTxBytecode(state);

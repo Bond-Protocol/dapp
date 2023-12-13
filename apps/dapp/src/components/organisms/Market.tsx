@@ -3,12 +3,15 @@ import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
 import { CalculatedMarket } from "types";
 import { PageHeader, PageNavigation } from "components/common";
-import { dateMath, InfoLabel, Loading } from "ui";
+import { InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { MarketStatusChip } from "components/common/MarketStatusChip";
+import { useTokenLiquidity } from "hooks/useTokenLiquidity";
+import { LiqudityWarning } from "components/modules/markets/LiquidityWarning";
+import { environment } from "src/environment";
 
 export const Market = () => {
   const navigate = useNavigate();
@@ -20,6 +23,10 @@ export const Market = () => {
     ({ marketId, chainId: marketChainId }) =>
       marketId === Number(id) && marketChainId === chainId
   )!;
+  const liquidity = useTokenLiquidity({
+    chainId: Number(market.chainId),
+    address: market.payoutToken.address,
+  });
 
   const {
     maxPayoutLabel,
@@ -31,6 +38,11 @@ export const Market = () => {
   } = useMarketDetails(market);
 
   if (!market) return <Loading content={meme()} />;
+
+  const lowLiquidity =
+    !environment.isTesting &&
+    liquidity.isSuccess &&
+    liquidity.data?.liquidityUSD < 200000;
 
   return (
     <div className="pb-4">
@@ -51,6 +63,12 @@ export const Market = () => {
           chip={<MarketStatusChip market={market} />}
         />
       </PageNavigation>
+      {!isFutureMarket && lowLiquidity && (
+        <LiqudityWarning
+          liquidity={liquidity.data?.liquidityUSD}
+          market={market}
+        />
+      )}
       <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
         <InfoLabel
           label="Max Payout"

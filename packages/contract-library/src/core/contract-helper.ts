@@ -3,9 +3,9 @@ import {
   getAuctioneerByBondType,
   getAddresses,
   Auctioneer,
-  BondType,
   auctioneersByType,
 } from "core";
+import type { BondType } from "types";
 import { abis, auctioneerAbis } from "abis";
 
 export function getAuctioneerAbiForName(auctioneerName: Auctioneer) {

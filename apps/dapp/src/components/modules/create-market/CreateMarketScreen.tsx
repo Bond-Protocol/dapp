@@ -503,7 +503,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           !props.created && (
             <ConfirmMarketCreationDialog
               showMultisig={showMultisig}
-              chain={chain}
               hasAllowance={state.isAllowanceSufficient}
               isAllowanceTxPending={props.isAllowanceTxPending}
               submitCreateMarketTransaction={() =>
