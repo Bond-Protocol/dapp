@@ -1,6 +1,6 @@
 import { useChainId } from "wagmi";
 import { useEffect, useState } from "react";
-import { Token } from "types";
+import { Token, chainLogos } from "types";
 import {
   ImportTokenDialog,
   SelectTokenDialog,
@@ -15,7 +15,7 @@ export interface SelectTokenControllerProps extends SelectTokenDialogProps {
   chainId: number;
 }
 
-const icons = ACTIVE_CHAINS.map((c) => ({ id: c.id, src: c.logoUrl }));
+const icons = ACTIVE_CHAINS.map((c) => ({ id: c.id, src: chainLogos[c.id] }));
 
 export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const [filter, setFilter] = useState("");
