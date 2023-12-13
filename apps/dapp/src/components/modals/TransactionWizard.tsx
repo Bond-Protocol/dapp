@@ -84,7 +84,8 @@ export const TransactionWizard = ({
     }
   }, []);
 
-  const blockExplorer = getBlockExplorer(String(props?.chainId) ?? "1", "tx");
+  const { name, url } = getBlockExplorer(String(props?.chainId) ?? "1", "tx");
+  const blockExplorer = { blockExplorerName: name, blockExplorerUrl: url };
 
   const handleSubmit = async (args: unknown) => {
     setStatus(TX_STATUS.SIGNING);
