@@ -3,11 +3,7 @@
   "version": "0.0.1",
   "description": "Reusable protocol-specific types",
   "license": "MIT",
-  "main": "./dist/src/index.js",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsc --build"
-  }
+  "type": "module",
+  "private": true,
+  "main": "./src/index.ts"
 }

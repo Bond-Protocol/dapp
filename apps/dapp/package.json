@@ -50,6 +50,7 @@
     "tailwindconfig": "*",
     "tailwindcss": "^3.3.2",
     "tsconfig": "*",
+    "types": "*",
     "ui": "*",
     "use-deep-compare-effect": "^1.8.1",
     "viem": "1.17.2",
