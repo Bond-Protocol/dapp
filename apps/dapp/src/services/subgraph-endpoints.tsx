@@ -18,6 +18,9 @@ export const subgraphEndpoints = {
   [CHAIN_ID.OPTIMISM_MAINNET]: `${
     import.meta.env.VITE_OPTIMISM_MAINNET_SUBGRAPH_ENDPOINT
   }`,
+  [CHAIN_ID.POLYGON_MAINNET]: `${
+    import.meta.env.VITE_POLYGON_MAINNET_SUBGRAPH_ENDPOINT
+  }`,
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: `${
     import.meta.env.VITE_ARBITRUM_TESTNET_SUBGRAPH_ENDPOINT
   }`,
@@ -45,6 +48,10 @@ export const mainnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.OPTIMISM_MAINNET],
     chain: CHAIN_ID.OPTIMISM_MAINNET,
   },
+  {
+    url: subgraphEndpoints[CHAIN_ID.POLYGON_MAINNET],
+    chain: CHAIN_ID.POLYGON_MAINNET,
+  },
 ];
 
 export const testnetEndpoints = [
@@ -60,12 +67,12 @@ export const testnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
     chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
   },
-  /*
+
   {
     url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
     chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
   },
-  {
+  /*{
     url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],
     chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,
   },

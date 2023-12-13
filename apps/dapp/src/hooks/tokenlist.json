@@ -27,6 +27,26 @@
     "display": true
   },
   {
+    "address": "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+    "chainId": 137,
+    "name": "DAI",
+    "symbol": "DAI",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/DAI.png",
+    "decimals": 18,
+    "display": true
+  },
+
+  {
+    "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+    "chainId": 137,
+    "name": "Wrapped Matic",
+    "symbol": "WMATIC",
+    "logoURI": "https://assets.coingecko.com/coins/images/14073/standard/matic.png?1696513797",
+    "decimals": 18,
+    "display": true
+  },
+
+  {
     "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     "chainId": 1,
     "name": "Wrapped Ethereum",
@@ -53,6 +73,16 @@
     "decimals": 18,
     "display": true
   },
+  {
+    "address": "0x7ceb23fd6bc0add59e62ac25578270cff1b9f619",
+    "chainId": 137,
+    "name": "Wrapped Ethereum",
+    "symbol": "WETH",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
+    "decimals": 18,
+    "display": true
+  },
+
   {
     "address": "0x853d955acef822db058eb8505911ed77f175b99e",
     "chainId": 1,
@@ -126,6 +156,15 @@
     "display": true
   },
   {
+    "address": "0x3c499c542cef5e3811e1192ce70d8cc03d5c3359",
+    "chainId": 137,
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDC.png",
+    "decimals": 6,
+    "display": true
+  },
+  {
     "address": "0xdac17f958d2ee523a2206206994597c13d831ec7",
     "chainId": 1,
     "name": "Tether USD",
@@ -146,6 +185,15 @@
   {
     "address": "0x94b008aA00579c1307B0EF2c499aD98a8ce58e58",
     "chainId": 10,
+    "name": "Tether USD",
+    "symbol": "USDT",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDT.png",
+    "decimals": 6,
+    "display": true
+  },
+  {
+    "address": "0xc2132d05d31c914a87c6611c10748aeb04b58e8f",
+    "chainId": 137,
     "name": "Tether USD",
     "symbol": "USDT",
     "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDT.png",
@@ -197,6 +245,16 @@
     "decimals": 8,
     "display": true
   },
+  {
+    "address": "0x1bfd67037b42cf73acf2047067bd4f2c47d9bfd6",
+    "chainId": 137,
+    "name": "Wrapped Bitcoin",
+    "symbol": "WBTC",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WBTC.png",
+    "decimals": 8,
+    "display": true
+  },
+
   {
     "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
     "chainId": 1,

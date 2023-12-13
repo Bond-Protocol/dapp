@@ -57,6 +57,19 @@ const mainnetProviders: ProviderOptions[] = [
       },
     ],
   },
+  {
+    name: "polygon",
+    chainId: "137",
+    rpcs: [
+      {
+        url: `https://polygon-mainnet.g.alchemy.com/v2/${
+          import.meta.env.VITE_ALCHEMY_POLYGON_MAINNET_KEY
+        }`,
+        weight: 1,
+        priority: 1,
+      },
+    ],
+  },
 ];
 
 const testnetProviders: ProviderOptions[] = [
@@ -105,7 +118,7 @@ const testnetProviders: ProviderOptions[] = [
     rpcs: [
       {
         url: `https://polygon-mumbai.g.alchemy.com/v2/${
-          import.meta.env.VITE_ALCHEMY_POLYGON_MUMBAI_KEY
+          import.meta.env.VITE_ALCHEMY_POLYGON_TESTNET_KEY
         }`,
         weight: 1,
         priority: 1,
