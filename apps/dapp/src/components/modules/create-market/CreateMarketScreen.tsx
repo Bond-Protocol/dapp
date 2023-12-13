@@ -32,6 +32,7 @@ import {
 } from "./";
 import { Address } from "viem";
 import { Token } from "types";
+import { getBlockExplorer } from "@bond-protocol/contract-library";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -166,6 +167,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
       </Button>
     </>
   );
+
+  const blockExplorer = getBlockExplorer(state.chainId);
 
   return (
     <div id="cm-root">
@@ -492,8 +495,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         {!props.created && props.creationHash ? (
           <TransactionHashDialog
             key={index}
-            blockExplorerUrl={props.blockExplorerUrl}
-            blockExplorerName={props.blockExplorerName}
+            blockExplorerUrl={blockExplorer.url}
+            blockExplorerName={blockExplorer.name}
             hash={props.creationHash}
           />
         ) : (
