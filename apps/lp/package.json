@@ -23,7 +23,7 @@
     "react-ga": "^3.3.1",
     "tailwindconfig": "*",
     "tailwindcss": "^3.2.4",
-    "tsconfig": "*",
+    "@bond-protocol/tsconfig": "*",
     "ui": "*",
     "yarn": "^1.22.19"
   },

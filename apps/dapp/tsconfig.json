@@ -1,55 +1,24 @@
 {
-  "extends": "tsconfig/vite.json",
+  "extends": "@bond-protocol/tsconfig/vite.json",
   "compilerOptions": {
     "baseUrl": ".",
     "experimentalDecorators": true,
     "paths": {
-      "components/*": [
-        "src/components/*"
-      ],
-      "components": [
-        "src/components/index"
-      ],
-      "context/*": [
-        "src/context/*"
-      ],
-      "context": [
-        "src/context/index"
-      ],
-      "pages/*": [
-        "src/pages/*"
-      ],
-      "pages": [
-        "src/pages/index"
-      ],
-      "services/*": [
-        "src/services/*"
-      ],
-      "services": [
-        "src/services/index"
-      ],
-      "hooks/*": [
-        "src/hooks/*"
-      ],
-      "hooks": [
-        "src/hooks/index"
-      ],
-      "utils/*": [
-        "src/hooks/*"
-      ],
-      "utils": [
-        "src/hooks/index"
-      ],
-      "assets/*": [
-        "src/assets/*"
-      ]
+      "components": ["src/components/index"],
+      "components/*": ["src/components/*"],
+      "context": ["src/context/index"],
+      "context/*": ["src/context/*"],
+      "pages": ["src/pages/index"],
+      "pages/*": ["src/pages/*"],
+      "services": ["src/services/index"],
+      "services/*": ["src/services/*"],
+      "hooks": ["src/hooks/index"],
+      "hooks/*": ["src/hooks/*"],
+      "utils": ["src/hooks/index"],
+      "utils/*": ["src/hooks/*"],
+      "assets/*": ["src/assets/*"],
     }
   },
-  "include": [
-    "src",
-    "src/**/*.json"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src", "src/**/*.json"],
+  "exclude": ["node_modules"]
 }

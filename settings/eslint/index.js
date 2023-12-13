@@ -1,3 +1,7 @@
+const { resolve } = require("node:path");
+
+const project = resolve(process.cwd(), "tsconfig.json");
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
   env: {
     browser: true,
@@ -20,8 +24,7 @@ module.exports = {
     },
     ecmaVersion: "latest",
     sourceType: "module",
-    tsconfigRootDir: ".",
-    project: "./tsconfig.json",
+    project: ["./tsconfig.json"],
   },
   plugins: ["react", "@typescript-eslint"],
   overrides: [

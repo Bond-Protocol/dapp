@@ -1,5 +1,5 @@
 {
-  "name": "eslint-custom-config",
+  "name": "@bond-protocol/eslint-config-custom",
   "version": "0.1.0",
   "main": "index.js",
   "license": "MIT",

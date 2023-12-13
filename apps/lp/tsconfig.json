@@ -1,13 +1,7 @@
 {
-  "extends": "tsconfig/vite.json",
-  "include": [
-    "public",
-    "src",
-    "src/data/*.json"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+  "extends": "@bond-protocol/tsconfig/vite.json",
+  "include": ["public", "src", "src/data/*.json"],
+  "exclude": ["node_modules"],
   "compilerOptions": {
     "incremental": true,
     "jsx": "preserve"

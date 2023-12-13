@@ -26,10 +26,11 @@
   },
   "devDependencies": {
     "eslint": "^8.17.0",
-    "eslint-config-custom": "*",
+    "@bond-protocol/eslint-config-custom": "*",
     "prettier": "^2.7.0",
     "prettier-plugin-tailwindcss": "^0.1.11",
-    "turbo": "^1.6.3"
+    "turbo": "^1.6.3",
+    "@bond-protocol/tsconfig": "*"
   },
   "dependencies": {
     "date-fns": "2.30"
