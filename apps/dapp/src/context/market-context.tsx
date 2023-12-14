@@ -12,11 +12,13 @@ const initialState = {
     ({} as CalculatedMarket),
   isMarketOwner: false,
   isSomeLoading: false,
+  arePastMarketsLoading: false,
   updatedMarketTokens: false,
   isLoading: {
     market: false,
     tokens: false,
     priceCalcs: false,
+    pastMarkets: false,
   },
   refetchAllMarkets: () => {},
   refetchOne: (id: string) => {},
@@ -30,13 +32,20 @@ export const useMarkets = () => {
 
 export const MarketProvider = ({ children }: { children: React.ReactNode }) => {
   const calculatedMarkets = useCalculatedMarkets();
-  const { markets: closedMarkets } = usePastMarkets();
+  const { markets: closedMarkets, isLoading: arePastMarketsLoading } =
+    usePastMarkets();
   const everyMarket = [...calculatedMarkets.allMarkets, ...closedMarkets];
 
   return (
     <MarketContext.Provider
-      // @ts-ignore
-      value={{ ...calculatedMarkets, everyMarket, closedMarkets }}
+      value={{
+        ...calculatedMarkets,
+        arePastMarketsLoading,
+        // @ts-ignore
+        everyMarket,
+        // @ts-ignore
+        closedMarkets,
+      }}
     >
       {children}
     </MarketContext.Provider>

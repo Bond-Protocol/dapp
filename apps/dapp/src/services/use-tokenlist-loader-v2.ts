@@ -87,5 +87,6 @@ export const useTokenlistLoader = () => {
     getByChain,
     addToken,
     fetchedExtendedDetails,
+    isLoading: !fetchedExtendedDetails,
   };
 };

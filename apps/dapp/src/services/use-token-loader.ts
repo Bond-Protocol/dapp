@@ -127,5 +127,6 @@ export const useTokenLoader = () => {
     getByAddressAndChain,
     addToken,
     fetchedExtendedDetails,
+    isLoading,
   };
 };

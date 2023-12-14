@@ -11,11 +11,17 @@ import { Address } from "viem";
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
-  const { tokens, getByAddress, fetchedExtendedDetails } = useTokens();
+  const {
+    tokens,
+    getByAddress,
+    fetchedExtendedDetails,
+    isLoading: areTokensLoading,
+  } = useTokens();
   const { markets, isLoading: isMarketLoading } = useSubgraph();
   const [calculatedMarkets, setCalculatedMarkets] = useState<
     CalculatedMarket[]
   >([]);
+  const [areMarketsLoaded, setAreMarketsLoaded] = useState(false);
 
   const calcMarket = async (market: Market) => {
     const obsoleteAuctioneers = [
@@ -90,6 +96,7 @@ export function useCalculatedMarkets() {
           };
         });
 
+      setAreMarketsLoaded(true);
       setCalculatedMarkets(markets);
     }
   }, [calculateAllMarkets, tokens]);
@@ -126,9 +133,11 @@ export function useCalculatedMarkets() {
   const isLoading = {
     market: isMarketLoading,
     priceCalcs: isCalculatingAll,
+    isMatchingTokens: !areMarketsLoaded,
+    tokens: areTokensLoading,
   };
 
-  const isSomeLoading = () => Object.values(isLoading).some((x) => x);
+  const isSomeLoading = Object.values(isLoading).some((x) => x);
   return {
     allMarkets: calculatedMarkets,
     getMarketsForOwner: (address: string) =>
@@ -144,9 +153,6 @@ export function useCalculatedMarkets() {
     refetchAllMarkets,
     refetchOne,
     isSomeLoading,
-    isLoading: {
-      market: isMarketLoading,
-      priceCalcs: isCalculatingAll,
-    },
+    isLoading,
   };
 }
