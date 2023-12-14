@@ -1,5 +1,5 @@
 import { BigNumberish } from 'ethers';
-import { CalculatedMarket } from 'src/types';
+import { CalculatedMarket } from '../types';
 
 export const formatLongNumber = (
   num: string | number | BigNumberish,

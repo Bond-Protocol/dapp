@@ -1,11 +1,11 @@
 import { DayPicker, DayPickerProps } from "react-day-picker";
-import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-slim.svg";
 import { useEffect, useState } from "react";
-import { ReactComponent as ClockIcon } from "assets/icons/clock.svg";
+import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-slim.svg";
+import { ReactComponent as ClockIcon } from "../../assets/icons/clock.svg";
 
 import { Input } from "..";
-import { useTimeInput } from "hooks/use-time-input";
-import { dateMath } from "utils";
+import { useTimeInput } from "../../hooks/use-time-input";
+import { dateMath } from "../../utils";
 
 const styleOverride = {
   root: "rdp m-0",

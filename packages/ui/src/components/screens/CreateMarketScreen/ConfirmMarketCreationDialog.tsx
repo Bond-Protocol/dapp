@@ -9,18 +9,18 @@ import {
   SummaryRow,
   Tooltip,
   useCreateMarket,
-} from "components";
-import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
-import { ReactComponent as Timer } from "assets/icons/timer.svg";
-import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
+} from "../..";
+import { ReactComponent as Arrow } from "../../../assets/icons/arrow-icon.svg";
+import { ReactComponent as Timer } from "../../../assets/icons/timer.svg";
+import { ReactComponent as Clipboard } from "../../../assets/icons/copy-icon.svg";
 import {
   calculateTrimDigits,
   dynamicFormatter,
   formatCurrency,
   formatDate,
   trim,
-} from "utils";
-import fastVesting from "assets/icons/vesting/fast.svg";
+} from "../../../";
+import fastVesting from "../../../assets/icons/vesting/fast.svg";
 import { useEffect, useState } from "react";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
 

@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
-import { Tooltip, Button, TooltipWrapper, TooltipIcon } from "components";
-import { calculateTrimDigits, getPriceScale, getRateMod, trim } from "utils";
-import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
-import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
-import { useNumericInput } from "hooks/use-numeric-input";
+import { Button, TooltipWrapper, TooltipIcon } from "../..";
+import {
+  calculateTrimDigits,
+  getPriceScale,
+  getRateMod,
+  trim,
+} from "../../../utils";
+import { ReactComponent as PlusIcon } from "../../../assets/icons/plus.svg";
+import { ReactComponent as MinusIcon } from "../../../assets/icons/minus.svg";
+import { useNumericInput } from "../../../hooks/use-numeric-input";
 import { Token } from "./create-market-reducer";
 
 export type PriceControlProps = {

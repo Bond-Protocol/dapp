@@ -34,7 +34,7 @@ import {
   FixedExpirationTeller__factory,
   FixedTermTeller,
   FixedTermTeller__factory,
-} from 'types';
+} from '../types';
 
 export enum BOND_TYPE {
   FIXED_EXPIRY_DEPRECATED = 'fixed-expiration',
@@ -51,8 +51,10 @@ export enum BOND_TYPE {
   FIXED_TERM_OSDA = 'fixed-term-osda',
 }
 
-export const getChainId = async (providerOrSigner: Provider | Signer): Promise<string> => {
-  if (!providerOrSigner) return "";
+export const getChainId = async (
+  providerOrSigner: Provider | Signer,
+): Promise<string> => {
+  if (!providerOrSigner) return '';
   let chainId;
   if (providerOrSigner instanceof Provider) {
     const network = await providerOrSigner.getNetwork();
@@ -62,9 +64,11 @@ export const getChainId = async (providerOrSigner: Provider | Signer): Promise<s
   }
 
   return chainId.toString();
-}
+};
 
-export async function getAggregator(providerOrSigner: Provider | Signer): Promise<Aggregator> {
+export async function getAggregator(
+  providerOrSigner: Provider | Signer,
+): Promise<Aggregator> {
   const chainId = await getChainId(providerOrSigner);
   return Aggregator__factory.connect(
     getAddresses(chainId).aggregator,
@@ -72,7 +76,9 @@ export async function getAggregator(providerOrSigner: Provider | Signer): Promis
   );
 }
 
-export async function getAuthority(providerOrSigner: Provider | Signer): Promise<Authority> {
+export async function getAuthority(
+  providerOrSigner: Provider | Signer,
+): Promise<Authority> {
   const chainId = await getChainId(providerOrSigner);
   return Authority__factory.connect(
     getAddresses(chainId).authority,
@@ -89,7 +95,7 @@ export function getBaseBondTeller(
 
 export async function getTellerContract(
   providerOrSigner: Provider | Signer,
-  bondType: BOND_TYPE
+  bondType: BOND_TYPE,
 ): Promise<FixedExpirationTeller | FixedTermTeller> {
   const chainId = await getChainId(providerOrSigner);
   switch (bondType) {
@@ -118,19 +124,19 @@ export async function getTellerContract(
 
 export async function getAuctioneerForCreate(
   providerOrSigner: Provider | Signer,
-  bondType: BOND_TYPE
+  bondType: BOND_TYPE,
 ): Promise<
-    | BondFixedExpCDA
-    | BondFixedExpSDAv1_1
-    | BondFixedExpFPA
-    | BondFixedExpOFDA
-    | BondFixedExpOSDA
-    | BondFixedTermCDA
-    | BondFixedTermSDAv1_1
-    | BondFixedTermFPA
-    | BondFixedTermOFDA
-    | BondFixedTermOSDA
-  > {
+  | BondFixedExpCDA
+  | BondFixedExpSDAv1_1
+  | BondFixedExpFPA
+  | BondFixedExpOFDA
+  | BondFixedExpOSDA
+  | BondFixedTermCDA
+  | BondFixedTermSDAv1_1
+  | BondFixedTermFPA
+  | BondFixedTermOFDA
+  | BondFixedTermOSDA
+> {
   const chainId = await getChainId(providerOrSigner);
 
   const factory = getAuctioneerFactoryForType(bondType);
@@ -216,9 +222,9 @@ export function getAuctioneerFactoryForName(
     default:
       throw Error(
         'Auctioneer Factory Not Found for ' +
-        auctioneerName +
-        ' ' +
-        auctioneerAddress,
+          auctioneerName +
+          ' ' +
+          auctioneerAddress,
       );
   }
 

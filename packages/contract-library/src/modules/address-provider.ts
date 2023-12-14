@@ -1,4 +1,4 @@
-import { BOND_TYPE } from 'src/modules/contract-helper';
+import { BOND_TYPE } from '../modules/contract-helper';
 
 export type ContractAddresses = {
   authority: string;

@@ -1,11 +1,11 @@
 import { CSVLink } from "react-csv";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Cell, Column, Table, TableProps } from "./Table";
-import { useSorting } from "hooks/use-sorting";
-import { Button, Filter, FilterBox, Loading, Tooltip } from "components";
+import { useSorting } from "../../hooks/use-sorting";
+import { Button, Filter, FilterBox, Loading, Tooltip } from "..";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
-import { usePagination } from "src/hooks/use-pagination";
+import { usePagination } from "../../hooks/use-pagination";
 import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg";
 
 export const toValue = (value: any) => ({ value });

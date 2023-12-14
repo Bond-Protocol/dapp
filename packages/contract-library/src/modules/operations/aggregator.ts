@@ -1,4 +1,4 @@
-import { getAggregator } from 'src/modules';
+import { getAggregator } from '../../modules';
 import { Provider } from '@ethersproject/providers';
 import { BigNumberish, ethers } from 'ethers';
 
@@ -6,7 +6,7 @@ import { BigNumberish, ethers } from 'ethers';
 // @param marketId     The ID of the market
 export async function getAuctioneer(
   marketId: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<string> {
   const aggregator = await getAggregator(provider);
 
@@ -22,7 +22,7 @@ export async function getAuctioneer(
 // @param marketId     The ID of the market
 export async function getTeller(
   marketId: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<string> {
   const aggregator = await getAggregator(provider);
 
@@ -38,7 +38,7 @@ export async function getTeller(
 // @param marketId     The ID of the market
 export async function currentCapacity(
   marketId: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish> {
   const aggregator = await getAggregator(provider);
 
@@ -56,7 +56,7 @@ export async function currentCapacity(
 // Returns price for market (see the specific auctioneer for units)
 export async function marketPrice(
   marketId: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish> {
   const aggregator = await getAggregator(provider);
 
@@ -73,7 +73,7 @@ export async function marketPrice(
 // Returns scaling factor for market in configured decimals
 export async function marketScale(
   marketId: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish> {
   const aggregator = await getAggregator(provider);
 
@@ -85,9 +85,7 @@ export async function marketScale(
   }
 }
 
-export async function marketCounter(
-  provider: Provider
-): Promise<BigNumberish> {
+export async function marketCounter(provider: Provider): Promise<BigNumberish> {
   const aggregator = await getAggregator(provider);
 
   try {
@@ -109,7 +107,7 @@ export async function payoutFor(
   amount: string,
   tokenDecimals: number,
   referrer: string,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish> {
   const aggregator = await getAggregator(provider);
   const amt = ethers.utils.parseUnits(amount, tokenDecimals);
@@ -130,7 +128,7 @@ export async function payoutFor(
 export async function maxAmountAccepted(
   marketId: BigNumberish,
   referrer: string,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish> {
   const aggregator = await getAggregator(provider);
 
@@ -146,7 +144,7 @@ export async function maxAmountAccepted(
 // @param marketId     The ID of the market
 export async function isInstantSwap(
   marketId: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<boolean> {
   const aggregator = await getAggregator(provider);
 
@@ -162,7 +160,7 @@ export async function isInstantSwap(
 // @param marketId     The ID of the market
 export async function isLive(
   marketId: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<boolean> {
   const aggregator = await getAggregator(provider);
 
@@ -179,7 +177,7 @@ export async function isLive(
 export async function liveMarketsBetween(
   firstIndex: BigNumberish,
   lastIndex: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish[]> {
   const aggregator = await getAggregator(provider);
 
@@ -197,7 +195,7 @@ export async function liveMarketsBetween(
 export async function liveMarketsFor(
   tokenAddress: string,
   isPayout: boolean,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish[]> {
   const aggregator = await getAggregator(provider);
 
@@ -215,7 +213,7 @@ export async function liveMarketsBy(
   ownerAddress: string,
   firstIndex: BigNumberish,
   lastIndex: BigNumberish,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish[]> {
   const aggregator = await getAggregator(provider);
 
@@ -231,7 +229,7 @@ export async function liveMarketsBy(
 export async function marketsFor(
   payoutTokenAddress: string,
   quoteTokenAddress: string,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish[]> {
   const aggregator = await getAggregator(provider);
 
@@ -250,7 +248,7 @@ export async function findMarketFor(
   amountIn: string,
   minAmountOut: string,
   maxExpiry: string,
-  provider: Provider
+  provider: Provider,
 ): Promise<BigNumberish> {
   const aggregator = await getAggregator(provider);
 

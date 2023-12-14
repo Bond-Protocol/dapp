@@ -3,14 +3,14 @@ import { Overrides } from '@ethersproject/contracts';
 import { Signer } from 'ethers';
 import { getAuctioneerFromAggregator, getChainId } from '../contract-helper';
 import { Provider } from '@ethersproject/providers';
-import { IERC20__factory, PrecalculatedMarket } from 'src/types';
+import { IERC20__factory, PrecalculatedMarket } from '../../types';
 import {
   getAddresses,
   getAuctioneer,
   getMarketInfoForPurchase,
   getTeller,
   isInstantSwap,
-} from 'src/modules';
+} from '../../modules';
 
 export async function setIntervals(
   id: BigNumberish,

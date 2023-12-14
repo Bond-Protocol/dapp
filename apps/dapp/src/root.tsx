@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 
 //Style Entry Point
 import "./styles/index.css";
-import "ui/style.css";
+import "ui/src/style.css";
 
 //App Entry Point
 import { App } from "./App";

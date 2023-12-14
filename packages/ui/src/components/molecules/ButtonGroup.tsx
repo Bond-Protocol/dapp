@@ -1,5 +1,4 @@
-import { Button } from "components/atoms/Button";
-import { TooltipWrapper } from "../atoms";
+import { Button, TooltipWrapper } from "../../";
 
 export interface ButtonGroupProps {
   className?: string;

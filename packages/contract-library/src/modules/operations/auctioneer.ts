@@ -1,14 +1,14 @@
 import { BigNumberish } from '@ethersproject/bignumber';
 import { BigNumber, ContractTransaction, ethers, Signer } from 'ethers';
 import { Overrides } from '@ethersproject/contracts';
-import { CreateMarketParams } from 'src/types';
+import { CreateMarketParams } from '../../types';
 import { Provider } from '@ethersproject/providers';
 import {
   BOND_TYPE,
   getAuctioneerForCreate,
   getAuctioneerFromAggregator,
-} from 'modules/contract-helper';
-import auctioneerAbi from 'src/abis/protocol/auctioneer.json';
+} from '../../modules/contract-helper';
+import auctioneerAbi from '../../abis/protocol/auctioneer.json';
 
 export async function closeMarket(
   id: BigNumberish,

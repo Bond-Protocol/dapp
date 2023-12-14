@@ -3,7 +3,7 @@ import ButtonUnstyled, {
   ButtonUnstyledOwnerState,
   ButtonUnstyledProps,
 } from "@mui/base/ButtonUnstyled";
-import { ReactComponent as LinkIcon } from "assets/icons/external-link.svg";
+import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg";
 
 const styles = {
   base: "text-white fill-white",

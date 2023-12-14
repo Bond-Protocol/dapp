@@ -1,9 +1,8 @@
 import { InputUnstyled } from "@mui/base";
-import { Icon, Link, Tooltip } from "components";
-import { Copy } from "components/atoms/Copy";
-import { ReactComponent as EditIcon } from "assets/icons/edit-icon.svg";
-import { useSymbolInput } from "src/hooks/use-symbol-input";
-import { useEffect, useState } from "react";
+import { Icon, Link, Tooltip, Copy } from "..";
+import { ReactComponent as EditIcon } from "../../assets/icons/edit-icon.svg";
+import { useSymbolInput } from "../../hooks/use-symbol-input";
+import { useState } from "react";
 
 export interface ActionInfoLabelProps {
   value?: string | React.ReactNode;

@@ -1,6 +1,6 @@
-import { ButtonGroup } from "components/molecules/ButtonGroup";
-import { Checkbox, Link, SummaryLabel } from "components/atoms";
-import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
+import { ButtonGroup } from "../../components/molecules/ButtonGroup";
+import { Checkbox, Link, SummaryLabel } from "../../components/atoms";
+import { ReactComponent as Arrow } from "../../assets/icons/arrow-icon.svg";
 import { SummaryList, SummaryRow } from "../molecules";
 import { useState } from "react";
 

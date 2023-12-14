@@ -1,4 +1,4 @@
-import { Button, Link } from "components/atoms";
+import { Button, Link } from "../../components/atoms";
 import { useState } from "react";
 import { TransactionHashDialogProps } from "./TransactionHashDialog";
 

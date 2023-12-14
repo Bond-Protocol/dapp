@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { TableCell } from "..";
-import { ReactComponent as ArrowIcon } from "assets/icons/arrow-icon.svg";
+import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
 
 export const ExpandableRow: FC<{
   children: React.ReactNode;

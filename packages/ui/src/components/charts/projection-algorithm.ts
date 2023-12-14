@@ -1,4 +1,4 @@
-import { trimAsNumber } from "utils";
+import { trimAsNumber } from "../../utils";
 
 export interface PriceData {
   timestamp: number;

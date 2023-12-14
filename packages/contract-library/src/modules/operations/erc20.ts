@@ -1,4 +1,4 @@
-import { IERC20__factory } from 'src/types';
+import { IERC20__factory } from '../../types';
 
 const erc20 = IERC20__factory.createInterface();
 

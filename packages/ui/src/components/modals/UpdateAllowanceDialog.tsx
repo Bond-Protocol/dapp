@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Token } from "@bond-protocol/contract-library";
-import { Button, Input, Label } from "components";
-import { formatCurrency } from "src/utils";
+import { Button, Input, Label } from "..";
+import { formatCurrency } from "../../utils";
 
 export type AllowanceToken = Token & {
   capacity: number;

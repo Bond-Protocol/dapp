@@ -22,13 +22,13 @@ import {
   FixedTermTeller__factory,
   IERC20__factory,
   PrecalculatedMarket,
-} from 'types';
+} from '../../types';
 import {
   calculateTrimDigits,
   longVestingPeriod,
   trim,
   trimAsNumber,
-} from 'core/utils';
+} from '../../core/utils';
 import { format } from 'date-fns';
 
 export async function purchase(

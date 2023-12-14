@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { dateMath } from "utils";
-import { Button, DatePicker, FlatSelect, ManualDayInput } from "components";
+import { Button, DatePicker, FlatSelect } from "../../../components";
 
 const options = [
   { label: "IMMEDIATE", value: "immediate" },
@@ -49,18 +48,21 @@ export const SelectStartDateDialog = (props: {
         onChange={handleTypeChange}
       />
       {startType === "date" ? (
-        <DatePicker
-          showTime
-          onChange={onDateChange}
-        />
+        <DatePicker showTime onChange={onDateChange} />
       ) : (
         <div className="w-[400px] p-2">
           <div className="text-light-grey-400">
             <span className="mr-0.5 font-bold text-white">IMMEDIATE</span>
-            <p className="pt-2">If you would like your market to open as soon as possible, we recommend choosing the Immediate option.</p>
-            <p className="pt-1">If you would like to open your market at a specific date and time, please ensure that you leave enough time
-            to execute the create market transaction, as it will fail if the date you specify is in the past at the time
-              of execution.</p>
+            <p className="pt-2">
+              If you would like your market to open as soon as possible, we
+              recommend choosing the Immediate option.
+            </p>
+            <p className="pt-1">
+              If you would like to open your market at a specific date and time,
+              please ensure that you leave enough time to execute the create
+              market transaction, as it will fail if the date you specify is in
+              the past at the time of execution.
+            </p>
           </div>
         </div>
       )}

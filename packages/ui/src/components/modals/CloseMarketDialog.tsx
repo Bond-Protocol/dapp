@@ -1,5 +1,5 @@
 import { CalculatedMarket } from "@bond-protocol/contract-library";
-import { Button } from "components";
+import { Button } from "..";
 
 export type CloseMarketDialogProps = {
   market: CalculatedMarket;

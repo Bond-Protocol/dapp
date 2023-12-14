@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import { Icon, Input, InputProps } from "..";
-import { calculateTrimDigits, longFormatter, trim, trimAsNumber } from "utils";
+import {
+  calculateTrimDigits,
+  longFormatter,
+  trim,
+  trimAsNumber,
+} from "../../utils";
 
 export type TokenInputProps = InputProps & {
   symbol?: string;

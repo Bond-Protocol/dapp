@@ -1,8 +1,8 @@
-import { ReactComponent as DynamicPriceImage } from "assets/images/dynamic-price.svg";
-import { ReactComponent as StaticPriceImage } from "assets/images/static-price.svg";
-import { ReactComponent as DynamicOraclePriceImage } from "assets/images/dynamic-oracle-price.svg";
-import { ReactComponent as StaticOraclePriceImage } from "assets/images/static-oracle-price.svg";
-import { Input } from "components";
+import { ReactComponent as DynamicPriceImage } from "../../../assets/images/dynamic-price.svg";
+import { ReactComponent as StaticPriceImage } from "../../../assets/images/static-price.svg";
+import { ReactComponent as DynamicOraclePriceImage } from "../../../assets/images/dynamic-oracle-price.svg";
+import { ReactComponent as StaticOraclePriceImage } from "../../../assets/images/static-oracle-price.svg";
+import { Input } from "../..";
 import { PriceType, PriceModel } from "./create-market-reducer";
 
 export type PriceModelDetailsProps = {
@@ -57,7 +57,7 @@ export const PriceModelDetails = ({
 
   return (
     <div
-      className={`flex h-[168px] items-center justify-center bg-white/5 py-4 px-3 ${props.className}`}
+      className={`flex h-[168px] items-center justify-center bg-white/5 px-3 py-4 ${props.className}`}
     >
       <div className="w-min px-3 pr-2">
         <option.Image className="stroke-white" />
@@ -73,7 +73,9 @@ export const PriceModelDetails = ({
             label="Oracle Address"
             className="mt-2"
             subText={props.oracleMessage}
-            subTextClassName={`${props.isOracleValid ? "text-green-500" : "text-red-500"}`}
+            subTextClassName={`${
+              props.isOracleValid ? "text-green-500" : "text-red-500"
+            }`}
             onChange={(e) => props.onOracleChange(e.target.value)}
           />
         )}

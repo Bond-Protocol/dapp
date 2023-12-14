@@ -1,4 +1,4 @@
-import { CHAINS } from 'core/chains';
+import { CHAINS } from './chains';
 
 export const trim = (num: number | string, precision: number): string => {
   if (num == undefined) {
@@ -65,11 +65,11 @@ export function longVestingPeriod(seconds: number): string {
   return result;
 }
 
-export const getBlockExplorer = (chainId: string, subpath = "") => {
+export const getBlockExplorer = (chainId: string, subpath = '') => {
   return {
     blockExplorerUrl: CHAINS.get(chainId)?.blockExplorerUrls[0].replace(
-      "#",
-      subpath
+      '#',
+      subpath,
     ),
     blockExplorerName: CHAINS.get(chainId)?.blockExplorerName,
   };

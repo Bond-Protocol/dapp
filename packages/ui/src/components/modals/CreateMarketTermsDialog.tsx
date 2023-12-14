@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ButtonGroup, Checkbox } from "components";
+import { ButtonGroup, Checkbox } from "..";
 
 export const CreateMarketTermsDialog = (props: {
   onAccept: () => void;

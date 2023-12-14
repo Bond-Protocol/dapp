@@ -1,5 +1,4 @@
-import { calculateTrimDigits, trimAsNumber } from "utils/trim";
-import { formatDate } from "utils";
+import { calculateTrimDigits, trimAsNumber, formatDate } from "../../../";
 import { createContext, Dispatch, useContext, useReducer } from "react";
 import { differenceInCalendarDays } from "date-fns";
 
