@@ -229,7 +229,7 @@ export const LimitOrderFullList = () => {
 
   const allOrders =
     queries
-      .flat()
+      .flatMap((q) => q.data)
       .filter((q) => !!q)
       .map((d) => {
         //@ts-ignore
