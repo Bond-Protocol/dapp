@@ -55,7 +55,7 @@
     "ui": "*",
     "use-deep-compare-effect": "^1.8.1",
     "viteconfig": "*",
-    "wagmi": "0.12.17"
+    "wagmi": "0.12.18"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
