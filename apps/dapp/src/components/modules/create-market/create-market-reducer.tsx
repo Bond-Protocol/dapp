@@ -178,7 +178,7 @@ function calculateAllowance(
     (!payoutToken.price && capacityType === "quote") ||
     !payoutToken.decimals ||
     !quoteToken ||
-    !quoteToken.price ||
+    (!quoteToken.price && capacityType === "quote") ||
     !quoteToken.decimals ||
     !capacity ||
     !capacityType
