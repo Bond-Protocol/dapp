@@ -1,9 +1,8 @@
 import { Button, Tooltip } from "ui";
 import { ConnectButton } from "components/common";
 import { ReactComponent as LinkIcon } from "ui/assets/icons/external-link.svg";
-import { useEffect, useState } from "react";
 import { useNetwork, useSwitchNetwork } from "wagmi";
-import { CHAINS } from "@bond-protocol/contract-library";
+import { getChain } from "@bond-protocol/contract-library";
 
 export type BondButtonProps = {
   showConnect: boolean;
@@ -33,24 +32,15 @@ const tooltipContent = (
 );
 
 export const BondButton = (props: BondButtonProps) => {
-  const [networkDisplayName, setNetworkDisplayName] = useState(
-    CHAINS.get(props.chainId)?.displayName || props.chainId
-  );
-
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
 
+  const correctNetworkName = getChain(props.chainId)?.name;
   const isCorrectNetwork = Number(props.chainId) === chain?.id;
 
   const switchChain = () => {
     switchNetwork?.(Number(props.chainId));
   };
-
-  useEffect(() => {
-    setNetworkDisplayName(
-      CHAINS.get(props.chainId)?.displayName || props.chainId
-    );
-  }, [chain, props.chainId]);
 
   if (props.showConnect)
     return (
@@ -63,7 +53,7 @@ export const BondButton = (props: BondButtonProps) => {
     return (
       <Tooltip content="You need to switch to the correct network in order to bond">
         <Button className="mt-4 w-full" onClick={switchChain}>
-          Switch to {networkDisplayName}
+          Switch to {correctNetworkName}
         </Button>
       </Tooltip>
     );

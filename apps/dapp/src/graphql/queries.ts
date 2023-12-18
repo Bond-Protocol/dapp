@@ -178,6 +178,7 @@ export const getDashboardData = gql`
       id
       network
       marketId
+      auctioneer
       owner
       capacity
       capacityInQuote

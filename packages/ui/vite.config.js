@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     outDir: "dist",
     emptyOutDir: mode !== "development",
+    minify: mode !== "development",
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
       formats: ["es", "cjs"],

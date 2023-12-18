@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { Filter, PaginatedTable } from "ui";
 import { useMarkets, useMediaQueries } from "hooks";
 import {

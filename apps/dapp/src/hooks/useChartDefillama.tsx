@@ -1,5 +1,4 @@
 import { useQuery } from "react-query";
-import type { Token } from "@bond-protocol/contract-library";
 import defillama from "services/defillama";
 
 export const useChartDefillama = (

@@ -8,7 +8,7 @@ import {
   YAxis,
 } from "recharts";
 import { BondPriceChartTooltip } from "./BondPriceChartTooltip";
-import { calculateTrimDigits, formatDate, trim } from "utils";
+import { calculateTrimDigits, formatDate, trim } from "formatters";
 
 export type BondPriceDatapoint = {
   price?: number;

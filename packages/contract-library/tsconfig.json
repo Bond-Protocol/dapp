@@ -3,8 +3,13 @@
   "compilerOptions": {
     "outDir": "dist/src",
     "rootDir": "src",
+    "strict": true,
+    "types": [
+      "viem"
+    ],
     "lib": [
-      "ESNext"
+      "ESNext",
+      "DOM"
     ],
     "baseUrl": "./src",
     "paths": {
@@ -17,13 +22,13 @@
       "modules/*": [
         "modules/*"
       ],
-      "types/*": [
-        "types/*"
-      ]
     }
   },
   "include": [
     "src",
     "src/**/*.json"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

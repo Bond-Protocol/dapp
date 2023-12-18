@@ -25,21 +25,21 @@ export const Label = (props: LabelProps) => {
         />
       )}
       <div className="flex w-full flex-col gap-0.5">
-        <p
+        <div
           className={`text-[15px] ${props.subtext && "leading-none"} ${
             props.textClassName
           }`}
         >
           {props.value ? props.value : <Skeleton className="max-w-[60px]" />}
-        </p>
+        </div>
         {props.subtext && (
-          <p
+          <div
             className={`text-light-primary-100 text-sm leading-none ${
               props.subtextClassName ?? "font-mono"
             }`}
           >
             {props.subtext}
-          </p>
+          </div>
         )}
       </div>
       {props.children && <div>{props.children}</div>}

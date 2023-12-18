@@ -19,7 +19,7 @@
       "outputs": ["dist/**", "build/**"]
     },
     "build": {
-      "dependsOn": ["^build", "codegen", "typechain", "generate"],
+      "dependsOn": ["^build", "codegen", "generate"],
       "outputs": ["dist/**", "build/**"]
     },
     "lp": {

@@ -44,6 +44,7 @@ export default defineConfig({
   },
   build: {
     outDir: "../dist",
+    target: ["es2020"],
     rollupOptions: {
       plugins: [nodePolyfills()],
     },
@@ -71,6 +72,7 @@ export default defineConfig({
           return globalVariable;
         })(),
       },
+      target: "es2020",
       // Enable esbuild polyfill plugins
       plugins: [
         NodeGlobalsPolyfillPlugin({

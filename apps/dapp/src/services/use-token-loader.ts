@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import { testnetTokenlist, tokenlist } from "hooks";
 import * as defillama from "./defillama";
-import { usdFormatter } from "../utils/format";
+import { usdFormatter } from "formatters";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { environment } from "src/environment";
 import { useSubgraph } from "hooks/useSubgraph";
@@ -22,6 +22,7 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
 };
 
 export const fetchAndMatchPricesForTestnet = async () => {
+  //@ts-ignore fix: how to type a prop coming out of a json
   const pricedTokens = await fetchPrices(tokenlist);
 
   return testnetTokenlist.map((t) => {
@@ -29,7 +30,7 @@ export const fetchAndMatchPricesForTestnet = async () => {
       (pt) => t.symbol.toLowerCase() === pt?.symbol?.toLowerCase()
     )?.price;
 
-    return { ...t, price };
+    return { ...t, price, usedAsPayout: true, markets: [] };
   });
 };
 
@@ -45,6 +46,12 @@ export const useTokenLoader = () => {
   const getByAddress = (address: string) => {
     return tokens.find(
       (t) => t.address.toLowerCase() === address?.toLowerCase()
+    );
+  };
+
+  const getByAddressAndChain = (address: string, chainId: string | number) => {
+    return tokens.find(
+      (t) => t.address === address && t.chainId === Number(chainId)
     );
   };
 
@@ -117,7 +124,9 @@ export const useTokenLoader = () => {
     payoutTokens,
     getByAddress,
     getByChain,
+    getByAddressAndChain,
     addToken,
     fetchedExtendedDetails,
+    isLoading,
   };
 };
