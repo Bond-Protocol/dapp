@@ -1,28 +1,9 @@
 import { TokenBase } from "types";
 import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
-import { createContext, useContext } from "react";
 import { useQueries } from "@tanstack/react-query";
 import { orderService } from "services/order-service";
 
-type OrderServiceContext = {
-  supportedTokens: any[];
-  isTokenSupported: (t: TokenBase) => boolean;
-};
-
-const OrderServiceContext = createContext<OrderServiceContext>({
-  supportedTokens: [],
-  isTokenSupported: () => false,
-});
-
 export const useOrderService = () => {
-  return useContext(OrderServiceContext);
-};
-
-export const OrderServiceProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
   const queries = useQueries({
     queries: ACTIVE_CHAIN_IDS.map((chainId) => ({
       queryKey: ["orders/supported-tokens", chainId],
@@ -42,9 +23,5 @@ export const OrderServiceProvider = ({
     );
   };
 
-  return (
-    <OrderServiceContext.Provider value={{ supportedTokens, isTokenSupported }}>
-      {children}
-    </OrderServiceContext.Provider>
-  );
+  return { supportedTokens, isTokenSupported };
 };

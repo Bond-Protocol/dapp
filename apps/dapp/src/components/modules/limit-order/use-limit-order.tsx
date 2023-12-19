@@ -117,6 +117,7 @@ export const LimitOrderProvider = ({
       let hexFee = BigInt(response.data);
       let fee = Number(formatUnits(hexFee, market.quoteToken.decimals));
       setMaxFee(fee);
+      return fee;
     };
     if (isSupported) {
       estimateFee();
