@@ -21,9 +21,6 @@ export type TypedDocumentNode<
  * Fetches global data from all subgraphs
  */
 export const useGetGlobalData = () => {
-  const isTestnet = environment.isTestnet;
-  const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;
-
   return useQueries({
     queries: queryAllEndpoints<GetGlobalDataQuery>({
       document: GetGlobalDataDocument,
@@ -49,6 +46,7 @@ export const useGetGlobalData = () => {
         filteredResponses,
         "purchaseCounts"
       ).reduce((total, pc) => total + Number(pc.count), 0);
+
       const uniqueBonders = concatSubgraphQueryResultArrays(
         filteredResponses,
         "uniqueTokenBonderCounts"
@@ -72,7 +70,7 @@ export const useGetGlobalData = () => {
           uniqueBonders,
           subgraphTokens,
         },
-        isLoading: filteredResponses.some((response) => response.isLoading),
+        isLoading: responses.some((response) => response.isLoading),
       };
     },
   });
