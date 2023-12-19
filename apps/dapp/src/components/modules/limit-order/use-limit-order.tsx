@@ -11,14 +11,14 @@ import { orderService } from "services/order-service";
 import { Order } from "src/types/openapi";
 import { useLimitOrderList } from "./use-limit-order-list";
 import { useLimitOrderAllowance } from "./use-limit-order-allowance";
-import { useOrderService } from "./use-global-order-services";
+import { useOrderService } from "./use-order-service";
 import { formatUnits, parseUnits, toHex } from "viem";
+import { useQuery } from "@tanstack/react-query";
 
 export type ILimitOrderContext = {
   setMaxFee(value: number): any;
   allowance: ReturnType<typeof useLimitOrderAllowance> & {
     approveRequiredAmount: () => void;
-    approveRequiredForNextOrder: () => void;
   };
   orders: ReturnType<typeof useLimitOrderList>;
   market: CalculatedMarket;
@@ -48,13 +48,28 @@ export const LimitOrderProvider = ({
   const { value: price, onChange: setPrice } = useNumericInput();
   const { value: amount, onChange: setAmount } = useNumericInput();
   const [expiry, setExpiry] = useState<Date>(dateMath.addDays(new Date(), 1));
-  const [maxFee, setMaxFee] = useState<number>();
+  const [overriddenFee, setMaxFee] = useState<number>();
   const api = useOrderApi();
   const orders = useLimitOrderList(market);
 
   const { isTokenSupported } = useOrderService();
 
   const isSupported = isTokenSupported(market.quoteToken);
+
+  const { data: maxFee } = useQuery({
+    enabled: isSupported,
+    queryKey: ["order-max-fee", market.marketId],
+    queryFn: async () => {
+      const response = await orderService.estimateFee(
+        Number(market.chainId),
+        market.marketId
+      );
+
+      let hexFee = BigInt(response.data);
+      let fee = Number(formatUnits(hexFee, market.quoteToken.decimals));
+      return fee;
+    },
+  });
 
   const allowance = useLimitOrderAllowance(market, amount, orders.list);
 
@@ -81,7 +96,7 @@ export const LimitOrderProvider = ({
     const minAmountOut = parseUnits(payout, market.payoutToken.decimals);
 
     const adjustedMaxFee = parseUnits(
-      maxFee?.toString() ?? "0",
+      overriddenFee?.toString() ?? "0",
       market.quoteToken.decimals
     );
 
@@ -107,28 +122,10 @@ export const LimitOrderProvider = ({
     } as Order;
   };
 
-  useEffect(() => {
-    const estimateFee = async () => {
-      const response = await orderService.estimateFee(
-        Number(market.chainId),
-        market.marketId
-      );
-
-      let hexFee = BigInt(response.data);
-      let fee = Number(formatUnits(hexFee, market.quoteToken.decimals));
-      setMaxFee(fee);
-      return fee;
-    };
-    if (isSupported) {
-      estimateFee();
-    }
-  }, [isSupported]);
-
   const createOrder = async () => {
-    const _result = await api.createOrder(
-      generateOrder(),
-      Number(market.chainId)
-    );
+    await api.createOrder(generateOrder(), Number(market.chainId));
+
+    //Reload orders to show newly created one
     await orders.query.refetch();
   };
 
@@ -145,22 +142,17 @@ export const LimitOrderProvider = ({
     return allowance.execute();
   };
 
-  const approveRequiredForNextOrder = () => {
-    return allowance.execute();
-  };
-
   const order = {
     allowance: {
       ...allowance,
       approveRequiredAmount,
-      approveRequiredForNextOrder,
     },
     discount,
     price,
     expiry,
     amount,
     payout,
-    maxFee,
+    maxFee: overriddenFee || maxFee,
     setMaxFee,
     setPrice,
     setExpiry: updateExpiry,
