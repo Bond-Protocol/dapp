@@ -7,7 +7,6 @@ import { MarketProvider } from "./market-context";
 import { TokenProvider } from "./token-context";
 import { TokenlistProvider } from "./tokenlist-context";
 import { DashboardProvider } from "context/dashboard-context";
-import { OrderServiceProvider } from "components/modules/limit-order";
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -15,13 +14,11 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
       <BlockchainProvider>
         <TokenProvider>
           <MarketProvider>
-            <OrderServiceProvider>
-              <DashboardProvider>
-                <TokenlistProvider>
-                  <Router>{children}</Router>
-                </TokenlistProvider>
-              </DashboardProvider>
-            </OrderServiceProvider>
+            <DashboardProvider>
+              <TokenlistProvider>
+                <Router>{children}</Router>
+              </TokenlistProvider>
+            </DashboardProvider>
           </MarketProvider>
         </TokenProvider>
       </BlockchainProvider>
