@@ -197,7 +197,7 @@ export const LimitOrderConfirmationDialog = (
           !auth.isAuthenticated
             ? auth.signIn
             : needsApprove
-            ? order.allowance.approveRequiredForNextOrder
+            ? order.allowance.approveRequiredAmount
             : props.onSubmit
         }
       />
