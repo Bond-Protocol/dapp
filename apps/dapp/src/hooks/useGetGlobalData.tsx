@@ -1,10 +1,5 @@
 import { useQueries, UseQueryResult } from "@tanstack/react-query";
 import {
-  testnetEndpoints,
-  mainnetEndpoints,
-} from "services/subgraph-endpoints";
-import { environment } from "src/environment";
-import {
   GetGlobalDataDocument,
   GetGlobalDataQuery,
 } from "src/generated/graphql";

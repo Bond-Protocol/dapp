@@ -16,7 +16,6 @@ import { CalculatedMarket } from "types";
 import { useNavigate } from "react-router-dom";
 import { getDiscountPercentage } from "../create-market";
 import { formatUnits } from "viem";
-import { getChain } from "@bond-protocol/contract-library";
 
 const Chip = ({
   children,
@@ -246,7 +245,8 @@ export const LimitOrderFullList = () => {
       //@ts-ignore
       filters={filters}
       loading={
-        queries.every((q) => q.isIdle) || queries.every((q) => q.isLoading)
+        queries.every((q) => q.fetchStatus === "idle") ||
+        queries.every((q) => q.isLoading)
       }
       title="Orders"
       emptyRows={0}
