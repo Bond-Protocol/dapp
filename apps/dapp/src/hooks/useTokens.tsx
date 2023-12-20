@@ -119,7 +119,10 @@ export const useTokens = () => {
   };
 
   const getByChain = (chainId: number) =>
-    tokens?.filter((t) => t.chainId === chainId);
+    tokens?.filter((t) => t.chainId === chainId) ?? [];
+
+  const getTokenlistBychain = (chainId: number) =>
+    tokenlistTokens?.filter((t) => t.chainId === chainId) ?? [];
 
   const addToken = (token: Token) => {
     setUserTokens((prev) => [...prev, token]);
@@ -137,6 +140,7 @@ export const useTokens = () => {
     getByAddress,
     getByChain,
     getByAddressAndChain,
+    getTokenlistBychain,
     addToken,
     fetchedExtendedDetails: detailedTokensQuery.isSuccess,
     isLoading: query.isLoading,
