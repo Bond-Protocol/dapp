@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { Token } from "types";
-import { testnetTokenlist, tokenlist } from "hooks";
+import { testnetTokenlist, tokenlist } from "../content";
 import * as defillama from "services/defillama";
 import { usdFormatter } from "formatters";
 import { useDiscoverFromApi } from "hooks/useDiscoverToken";
