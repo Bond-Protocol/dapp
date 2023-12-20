@@ -6,7 +6,7 @@ import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
 import { UserMarketList } from "components/lists/UserMarketList";
 import { useDashboard } from "context/dashboard-context";
 import { useMarkets } from "context/market-context";
-import { useTokens } from "context/token-context";
+import { useTokens } from "hooks";
 
 export const UserMarkets = () => {
   const navigate = useNavigate();

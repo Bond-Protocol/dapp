@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { InfoLabel, Link, SocialRow, SocialRowProps } from "ui";
 import { MarketList } from "components/lists";
 import { PageHeader, PageNavigation } from "components/common";
-import { useTokens } from "context/token-context";
+import { useTokens } from "hooks";
 import { useMediaQueries } from "hooks/useMediaQueries";
 
 const TokenDescription = (props: {

@@ -4,8 +4,6 @@ import { HashRouter as Router } from "react-router-dom";
 import { BlockchainProvider } from "./blockchain-provider";
 import { ReactQueryProvider } from "./react-query-provider";
 import { MarketProvider } from "./market-context";
-import { TokenProvider } from "./token-context";
-import { TokenlistProvider } from "./tokenlist-context";
 import { DashboardProvider } from "context/dashboard-context";
 import {
   AuthProvider,
@@ -17,17 +15,13 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
     <ReactQueryProvider>
       <BlockchainProvider>
         <AuthProvider>
-          <TokenProvider>
-            <MarketProvider>
-              <OrderServiceProvider>
-                <DashboardProvider>
-                  <TokenlistProvider>
-                    <Router>{children}</Router>
-                  </TokenlistProvider>
-                </DashboardProvider>
-              </OrderServiceProvider>
-            </MarketProvider>
-          </TokenProvider>
+          <MarketProvider>
+            <OrderServiceProvider>
+              <DashboardProvider>
+                <Router>{children}</Router>
+              </DashboardProvider>
+            </OrderServiceProvider>
+          </MarketProvider>
         </AuthProvider>
       </BlockchainProvider>
     </ReactQueryProvider>

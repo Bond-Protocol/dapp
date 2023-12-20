@@ -8,7 +8,7 @@ import {
 } from "ui";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/blockchain-provider";
-import { useTokenlists } from "context/tokenlist-context";
+import { useTokens } from "hooks";
 import { isAddress } from "viem";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
@@ -25,7 +25,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const { discover, discoverLogo } = useDiscoverToken();
 
   const connectedChainId = useChainId();
-  const tokenUtils = useTokenlists();
+  const tokenUtils = useTokens();
 
   const chainId = props.chainId || connectedChainId || 1;
 
@@ -72,7 +72,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
     <div>
       <SelectTokenDialog
         {...props}
-        tokens={tokens}
+        tokens={tokens ?? []}
         selected={String(chainId)}
         //@ts-ignore
         icons={icons}
