@@ -5,7 +5,7 @@ import { Button, formatCurrency, InfoLabel } from "ui";
 import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
 import { UserMarketList } from "components/lists/UserMarketList";
 import { useDashboard } from "context/dashboard-context";
-import { useMarkets } from "context/market-context";
+import { useMarkets } from "hooks";
 import { useTokens } from "hooks";
 
 export const UserMarkets = () => {
