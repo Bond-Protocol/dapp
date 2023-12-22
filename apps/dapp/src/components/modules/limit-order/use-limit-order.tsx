@@ -1,4 +1,4 @@
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, createContext, useContext } from "react";
 import { useAccount } from "wagmi";
 
 import { dateMath, useNumericInput } from "ui";
@@ -65,9 +65,8 @@ export const LimitOrderProvider = ({
         market.marketId
       );
 
-      let hexFee = BigInt(response.data);
-      let fee = Number(formatUnits(hexFee, market.quoteToken.decimals));
-      return fee;
+      const hexFee = BigInt(response.data);
+      return Number(formatUnits(hexFee, market.quoteToken.decimals));
     },
   });
 
@@ -95,8 +94,10 @@ export const LimitOrderProvider = ({
 
     const minAmountOut = parseUnits(payout, market.payoutToken.decimals);
 
+    const fee = overriddenFee ?? maxFee ?? 0;
+
     const adjustedMaxFee = parseUnits(
-      overriddenFee?.toString() ?? "0",
+      fee.toString(),
       market.quoteToken.decimals
     );
 
