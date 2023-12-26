@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import { testnetTokenlist, tokenlist } from "hooks";
 import * as defillama from "./defillama";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
@@ -14,11 +14,12 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
     ...t,
     chainId: Number(t.chainId),
     // @ts-ignore
-    price: prices.find((p: any) => p.address === t.address)?.price ?? 0,
+    price: prices?.find((p: any) => p.address === t.address)?.price ?? 0,
   }));
 };
 
 export const fetchAndMatchPricesForTestnet = async () => {
+  //@ts-ignore
   const pricedTokens = await fetchPrices(tokenlist);
 
   return testnetTokenlist.map((t) => {
@@ -58,7 +59,8 @@ export const useTokenlistLoader = () => {
 
       const pricedTokens = environment.isTestnet
         ? await fetchAndMatchPricesForTestnet()
-        : await fetchPrices(tokens);
+        : //@ts-ignore
+          await fetchPrices(tokens);
 
       setTokens(pricedTokens);
       setFetchExtended(false);
@@ -85,5 +87,6 @@ export const useTokenlistLoader = () => {
     getByChain,
     addToken,
     fetchedExtendedDetails,
+    isLoading: !fetchedExtendedDetails,
   };
 };

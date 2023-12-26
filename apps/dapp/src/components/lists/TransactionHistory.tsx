@@ -1,14 +1,14 @@
 import { format } from "date-fns";
 import {
-  CalculatedMarket,
   calculateTrimDigits,
   getBlockExplorer,
   trim,
   trimAsNumber,
 } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { BondPurchase } from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
-import { longFormatter, usdFullFormatter } from "src/utils/format";
+import { longFormatter, usdFullFormatter } from "formatters";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMediaQueries } from "hooks";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
@@ -185,12 +185,8 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
         .map((p) => {
           const chainId = isMarketHistory ? props?.market?.chainId : p.chainId;
 
-          const { blockExplorerUrl: blockExplorerTxUrl } = getBlockExplorer(
-            chainId,
-            "tx"
-          );
-          const { blockExplorerUrl: blockExplorerAddressUrl } =
-            getBlockExplorer(chainId, "address");
+          const { url: blockExplorerTxUrl } = getBlockExplorer(chainId, "tx");
+          const { url: blockExplorerAddressUrl } = getBlockExplorer(chainId);
 
           const txUrl = blockExplorerTxUrl + p.id;
           const addressUrl = blockExplorerAddressUrl + p.recipient;

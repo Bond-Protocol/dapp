@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Icon, Input, InputProps } from "..";
-import { longerFormatter } from "../../utils";
+import { longerFormatter } from "formatters";
 
 export type TokenQuantityInputProps = InputProps & {
   symbol?: string;
@@ -11,7 +11,7 @@ export type TokenQuantityInputProps = InputProps & {
 };
 
 export const TokenQuantityInput = (props: TokenQuantityInputProps) => {
-  const [value, setValue] = useState(props.value as string);
+  const [value, setValue] = useState((props.value as string) ?? "");
   const [showTokenSymbol, setShowTokenSymbol] = useState(
     props.symbolStartsShowing
   );

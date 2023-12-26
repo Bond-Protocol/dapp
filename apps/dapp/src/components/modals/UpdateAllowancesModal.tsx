@@ -1,7 +1,10 @@
-import { AllowanceToken, UpdateAllowanceDialog } from "ui";
-import { useUpdateAllowance } from "hooks/useUpdateAllowance";
+import type { AllowanceToken } from "components";
+import { UpdateAllowanceDialog } from "../dialogs/UpdateAllowanceDialog";
+import {
+  UpdateAllowanceArgs,
+  useUpdateAllowance,
+} from "hooks/useUpdateAllowance";
 import { TransactionWizard } from "./TransactionWizard";
-import { useState } from "react";
 
 export type UpdateAllowanceModalProps = {
   tokens: AllowanceToken[];
@@ -11,21 +14,21 @@ export type UpdateAllowanceModalProps = {
 
 export const UpdateAllowanceModal = (props: UpdateAllowanceModalProps) => {
   const allowanceControl = useUpdateAllowance();
-  const [chainId, setChainId] = useState<number>(0);
-
-  const handleSubmit = (chainId: string | number, ...args: any[]) => {
-    setChainId(Number(chainId));
-    return allowanceControl.updateAllowance(...args);
-  };
 
   return (
     <TransactionWizard
+      titles={{ standby: "Current Allowances" }}
       open={props.open}
       onClose={props.onClose}
-      onSubmit={handleSubmit}
-      chainId={chainId}
+      onSubmit={(args: UpdateAllowanceArgs) =>
+        allowanceControl.updateAllowance(args)
+      }
       InitialDialog={(args) => (
-        <UpdateAllowanceDialog {...args} tokens={props.tokens} />
+        <UpdateAllowanceDialog
+          {...args}
+          onSubmit={allowanceControl.updateAllowance}
+          tokens={props.tokens}
+        />
       )}
       SuccessDialog={() => <div className="text-center">Allowance updated</div>}
     />

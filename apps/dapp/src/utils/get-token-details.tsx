@@ -1,17 +1,23 @@
-import * as contractLibrary from "@bond-protocol/contract-library";
-import { providers } from "services";
+import { abis } from "@bond-protocol/contract-library";
 import { environment } from "src/environment";
+import { Address, getContract } from "viem";
+import { PublicClient } from "wagmi";
 
-export async function getTokenDetailsFromChain(address: string, chain: string) {
-  const contract = contractLibrary.IERC20__factory.connect(
+export async function getTokenDetailsFromChain(
+  address: Address,
+  publicClient: PublicClient
+) {
+  const contract = getContract({
+    abi: abis.erc20,
     address,
-    providers[chain]
-  );
+    publicClient,
+  });
+
   try {
     const [name, symbol, decimals] = await Promise.all([
-      contract.name(),
-      contract.symbol(),
-      contract.decimals(),
+      contract.read.name(),
+      contract.read.symbol(),
+      contract.read.decimals(),
     ]);
 
     return { name, symbol, decimals };
@@ -23,21 +29,21 @@ export async function getTokenDetailsFromChain(address: string, chain: string) {
 }
 
 export async function getTokenDecimalsFromChain(
-  address: string,
-  chain: string
+  address: Address,
+  publicClient: PublicClient
 ) {
-  const contract = contractLibrary.IERC20__factory.connect(
-    address,
-    providers[chain]
-  );
   try {
-    const [decimals] = await Promise.all([contract.decimals()]);
+    const contract = getContract({
+      abi: abis.erc20,
+      address,
+      publicClient,
+    });
 
-    return decimals;
+    return contract.read.decimals;
   } catch (e: any) {
     const error =
       "Not an ERC-20 token, please double check the address and chain.";
-    console.log("getTokenDecimalsFromChain", error, { address, chain });
+    console.error("getTokenDecimalsFromChain", error, { address });
     if (!environment.isProduction) {
       return 0;
     }

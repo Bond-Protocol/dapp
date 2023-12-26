@@ -9,4 +9,3 @@ export * from "./PurchaseSuccessDialog";
 export * from "./SelectTokenDialog";
 export * from "./TransactionErrorDialog";
 export * from "./TransactionHashDialog";
-export * from "./UpdateAllowanceDialog";

@@ -4,7 +4,6 @@ import {
   formatCurrency,
   formatDate,
   getDiscountColor,
-  getDiscountPercentage,
   Icon,
   useSorting,
   Table,
@@ -13,13 +12,14 @@ import {
 } from "ui";
 
 import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Popper } from "components/common/Popper";
 import { useOrderApi } from "./use-order-api";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { OrderConfig } from "services/order-service";
 import { useLimitOrderForMarket } from "./use-limit-order";
 import { CancelOrderDialog } from "./CancelOrderDialog";
+import { getDiscountPercentage } from "../create-market";
 
 export type LimitOrderListProps = {
   market?: CalculatedMarket;
@@ -119,7 +119,6 @@ const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
               <Button
                 variant="ghost"
                 onClick={async () => {
-                  console.log({ props, market });
                   await api.cancelOrder(
                     props.data.digest,
                     Number(market.chainId)
@@ -211,13 +210,14 @@ export const LimitOrderListForMarket = (props: LimitOrderListProps) => {
         </button>
       </div>
       <div className="h-full max-h-[300px] w-full overflow-y-auto">
-        {showReApprove && (
+        {showReApprove && props.market && (
           <div className="relative z-10">
             <ReApproveAllowanceCard
-              //@ts-ignore
               market={props.market}
               requiredAllowance={allowance.requiredAllowance}
-              currentAllowance={allowance.allowance}
+              currentAllowance={
+                allowance.allowance.currentAllowance?.toString() ?? ""
+              }
               onSubmit={allowance.approveRequiredAmount}
             />
           </div>

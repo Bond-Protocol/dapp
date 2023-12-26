@@ -3,7 +3,7 @@ import {
   formatCurrency,
   formatDate,
   trim,
-} from "../../utils";
+} from "formatters";
 
 export const getDiscountColor = (price: number, discount: number) => {
   if (price === discount) return "text-white";

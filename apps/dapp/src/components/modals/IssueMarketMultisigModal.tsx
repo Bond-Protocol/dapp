@@ -9,7 +9,7 @@ import {
 import { useState } from "react";
 import copyIcon from "assets/icons/copy-icon.svg";
 import { useForm } from "react-hook-form";
-import { CHAINS } from "@bond-protocol/contract-library";
+import { getChain } from "@bond-protocol/contract-library";
 
 export type IssueMarketMultisigModalProps = Partial<ModalProps> & {
   txnBytecode: string;
@@ -46,7 +46,7 @@ export const IssueMarketMultisigModal = (
 
           <div className="mt-5 px-6 text-sm font-extralight">
             <ModalTitle>Chain</ModalTitle>
-            <p>{CHAINS.get(props.chain)?.displayName}</p>
+            <p>{getChain(props.chain)?.name}</p>
           </div>
 
           <div className="mt-5 px-6 text-sm font-extralight">

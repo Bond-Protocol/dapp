@@ -1,0 +1,1152 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "contract ERC20",
+          "name": "underlying_",
+          "type": "address"
+        },
+        {
+          "internalType": "uint48",
+          "name": "expiry_",
+          "type": "uint48"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount_",
+          "type": "uint256"
+        }
+      ],
+      "name": "create",
+      "outputs": [
+        {
+          "internalType": "contract ERC20BondToken",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract ERC20",
+          "name": "underlying_",
+          "type": "address"
+        },
+        {
+          "internalType": "uint48",
+          "name": "expiry_",
+          "type": "uint48"
+        }
+      ],
+      "name": "deploy",
+      "outputs": [
+        {
+          "internalType": "contract ERC20BondToken",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract ERC20",
+          "name": "underlying_",
+          "type": "address"
+        },
+        {
+          "internalType": "uint48",
+          "name": "expiry_",
+          "type": "uint48"
+        }
+      ],
+      "name": "getBondToken",
+      "outputs": [
+        {
+          "internalType": "contract ERC20BondToken",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id_",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBondTokenForMarket",
+      "outputs": [
+        {
+          "internalType": "contract ERC20BondToken",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "contract ERC20BondToken",
+          "name": "token_",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount_",
+          "type": "uint256"
+        }
+      ],
+      "name": "redeem",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "create(address,uint48,uint256)": "b7314ef9",
+    "deploy(address,uint48)": "c6e38a4b",
+    "getBondToken(address,uint48)": "fa922c26",
+    "getBondTokenForMarket(uint256)": "fcdc3126",
+    "redeem(address,uint256)": "1e9a6950"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"contract ERC20\",\"name\":\"underlying_\",\"type\":\"address\"},{\"internalType\":\"uint48\",\"name\":\"expiry_\",\"type\":\"uint48\"},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\"}],\"name\":\"create\",\"outputs\":[{\"internalType\":\"contract ERC20BondToken\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contract ERC20\",\"name\":\"underlying_\",\"type\":\"address\"},{\"internalType\":\"uint48\",\"name\":\"expiry_\",\"type\":\"uint48\"}],\"name\":\"deploy\",\"outputs\":[{\"internalType\":\"contract ERC20BondToken\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contract ERC20\",\"name\":\"underlying_\",\"type\":\"address\"},{\"internalType\":\"uint48\",\"name\":\"expiry_\",\"type\":\"uint48\"}],\"name\":\"getBondToken\",\"outputs\":[{\"internalType\":\"contract ERC20BondToken\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"id_\",\"type\":\"uint256\"}],\"name\":\"getBondTokenForMarket\",\"outputs\":[{\"internalType\":\"contract ERC20BondToken\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"contract ERC20BondToken\",\"name\":\"token_\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\"}],\"name\":\"redeem\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"create(address,uint48,uint256)\":{\"params\":{\"amount_\":\"Amount of underlying tokens to deposit\",\"expiry_\":\"Timestamp at which the bond token can be redeemed for the underlying token\",\"underlying_\":\"ERC20 token redeemable when the bond token vests\"},\"returns\":{\"_0\":\"Address of the ERC20 bond token received\",\"_1\":\"Amount of the ERC20 bond token received\"}},\"deploy(address,uint48)\":{\"details\":\"ERC20 used for fixed-expiryIf a bond token exists for the (underlying, expiry) pair, it returns that address\",\"params\":{\"expiry_\":\"Timestamp at which the bond token can be redeemed for the underlying token\",\"underlying_\":\"ERC20 token redeemable when the bond token vests\"},\"returns\":{\"_0\":\"Address of the ERC20 bond token being created\"}},\"getBondToken(address,uint48)\":{\"params\":{\"expiry_\":\"Timestamp at which the bond token can be redeemed for the underlying token (this is rounded to the nearest day)\",\"underlying_\":\"ERC20 token redeemable when the bond token vests\"},\"returns\":{\"_0\":\"ERC20BondToken contract address\"}},\"getBondTokenForMarket(uint256)\":{\"params\":{\"id_\":\"ID of the market\"},\"returns\":{\"_0\":\"ERC20BondToken contract address\"}},\"redeem(address,uint256)\":{\"params\":{\"amount_\":\"Amount to redeem\",\"token_\":\"Token to redeem\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"create(address,uint48,uint256)\":{\"notice\":\"Deposit an ERC20 token and mint a future-dated ERC20 bond token\"},\"deploy(address,uint48)\":{\"notice\":\"Deploy a new ERC20 bond token for an (underlying, expiry) pair and return its address\"},\"getBondToken(address,uint48)\":{\"notice\":\"Get the ERC20BondToken contract corresponding to an (underlying, expiry) pair, reverts if no token exists\"},\"getBondTokenForMarket(uint256)\":{\"notice\":\"Get the ERC20BondToken contract corresponding to a market\"},\"redeem(address,uint256)\":{\"notice\":\"Redeem a fixed-expiry bond token for the underlying token (bond token must have matured)\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/interfaces/IBondFixedExpiryTeller.sol\":\"IBondFixedExpiryTeller\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":100000},\"remappings\":[\":clones-with-immutable-args/=lib/clones-with-immutable-args/src/\",\":clones/=lib/clones-with-immutable-args/src/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":openzeppelin/=lib/openzeppelin-contracts/contracts/\",\":solidity-code-metrics/=node_modules/solidity-code-metrics/\",\":solmate/=lib/solmate/src/\",\":weird-erc20/=lib/solmate/lib/weird-erc20/src/\"]},\"sources\":{\"lib/clones-with-immutable-args/src/Clone.sol\":{\"keccak256\":\"0x8f569b077d99ec821c2750c52094b59b3505fb6ca3e6eac9009092bf86c5452d\",\"license\":\"BSD\",\"urls\":[\"bzz-raw://d0f3966d1f97959f6512ee5bc4b73487bf5ce593880e3c1dbf97ed50d49402a0\",\"dweb:/ipfs/QmSAtFtA28Mja6f6FfET26B38XEgrLgqRezNLo3AsXyjVB\"]},\"lib/solmate/src/tokens/ERC20.sol\":{\"keccak256\":\"0x698cdbf614109fafc2bf00057b60715fa3aba9dad447c42f4f8b749ae16ce84f\",\"license\":\"AGPL-3.0-only\",\"urls\":[\"bzz-raw://49a39e71d6bde571d04722c90fd42591af806d29d8cbd4cd96f35e443702d899\",\"dweb:/ipfs/QmefLxMt6w2it9daQQFdBTtPeCWDhSqhNWuxQy8e7WrNVr\"]},\"src/ERC20BondToken.sol\":{\"keccak256\":\"0x14b11e975c3fb2f8aee2962e46aa1ab7c3ba145351f1c8f26e7f234fba9f4410\",\"license\":\"AGPL-3.0-or-later\",\"urls\":[\"bzz-raw://b766eb91df473cd1be260b7ab4198eaef69e6f71f01572e113efb67043d11279\",\"dweb:/ipfs/QmSkaFo1ciHD7Dbdt5u8uinQdtmNg9GWCwFpcsuwb4R5HF\"]},\"src/interfaces/IBondFixedExpiryTeller.sol\":{\"keccak256\":\"0x4530df5a76e94da12895a0d1912388700b17bee34c6c71c3762c5ae8dd5bbfe1\",\"license\":\"AGPL-3.0\",\"urls\":[\"bzz-raw://c32dfd7b2803ec73451bba008ed427ce888215b0039e7a871247ed591d4ed373\",\"dweb:/ipfs/QmenLrALRdCMu8ttfyVwiSubM6vzCmAn1cL7vJgAcM76ag\"]},\"src/lib/CloneERC20.sol\":{\"keccak256\":\"0x44cf60ce8aab43c31e8b6641c417e6a26c3242847c267435906ddb46b37b82c4\",\"license\":\"AGPL-3.0-only\",\"urls\":[\"bzz-raw://f8867033f95983416889a931bfe0396c29be883d62a8330668fadeb06b937fdf\",\"dweb:/ipfs/QmUUKxS87nt3mxZuwCMZrMgLBco3ZRcz4p69hVPuZ7RJ3h\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.15+commit.e14f2714"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "contract ERC20",
+              "name": "underlying_",
+              "type": "address"
+            },
+            {
+              "internalType": "uint48",
+              "name": "expiry_",
+              "type": "uint48"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount_",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "create",
+          "outputs": [
+            {
+              "internalType": "contract ERC20BondToken",
+              "name": "",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "contract ERC20",
+              "name": "underlying_",
+              "type": "address"
+            },
+            {
+              "internalType": "uint48",
+              "name": "expiry_",
+              "type": "uint48"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "deploy",
+          "outputs": [
+            {
+              "internalType": "contract ERC20BondToken",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "contract ERC20",
+              "name": "underlying_",
+              "type": "address"
+            },
+            {
+              "internalType": "uint48",
+              "name": "expiry_",
+              "type": "uint48"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getBondToken",
+          "outputs": [
+            {
+              "internalType": "contract ERC20BondToken",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getBondTokenForMarket",
+          "outputs": [
+            {
+              "internalType": "contract ERC20BondToken",
+              "name": "",
+              "type": "address"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "contract ERC20BondToken",
+              "name": "token_",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount_",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "redeem"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {
+          "create(address,uint48,uint256)": {
+            "params": {
+              "amount_": "Amount of underlying tokens to deposit",
+              "expiry_": "Timestamp at which the bond token can be redeemed for the underlying token",
+              "underlying_": "ERC20 token redeemable when the bond token vests"
+            },
+            "returns": {
+              "_0": "Address of the ERC20 bond token received",
+              "_1": "Amount of the ERC20 bond token received"
+            }
+          },
+          "deploy(address,uint48)": {
+            "details": "ERC20 used for fixed-expiryIf a bond token exists for the (underlying, expiry) pair, it returns that address",
+            "params": {
+              "expiry_": "Timestamp at which the bond token can be redeemed for the underlying token",
+              "underlying_": "ERC20 token redeemable when the bond token vests"
+            },
+            "returns": {
+              "_0": "Address of the ERC20 bond token being created"
+            }
+          },
+          "getBondToken(address,uint48)": {
+            "params": {
+              "expiry_": "Timestamp at which the bond token can be redeemed for the underlying token (this is rounded to the nearest day)",
+              "underlying_": "ERC20 token redeemable when the bond token vests"
+            },
+            "returns": {
+              "_0": "ERC20BondToken contract address"
+            }
+          },
+          "getBondTokenForMarket(uint256)": {
+            "params": {
+              "id_": "ID of the market"
+            },
+            "returns": {
+              "_0": "ERC20BondToken contract address"
+            }
+          },
+          "redeem(address,uint256)": {
+            "params": {
+              "amount_": "Amount to redeem",
+              "token_": "Token to redeem"
+            }
+          }
+        },
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {
+          "create(address,uint48,uint256)": {
+            "notice": "Deposit an ERC20 token and mint a future-dated ERC20 bond token"
+          },
+          "deploy(address,uint48)": {
+            "notice": "Deploy a new ERC20 bond token for an (underlying, expiry) pair and return its address"
+          },
+          "getBondToken(address,uint48)": {
+            "notice": "Get the ERC20BondToken contract corresponding to an (underlying, expiry) pair, reverts if no token exists"
+          },
+          "getBondTokenForMarket(uint256)": {
+            "notice": "Get the ERC20BondToken contract corresponding to a market"
+          },
+          "redeem(address,uint256)": {
+            "notice": "Redeem a fixed-expiry bond token for the underlying token (bond token must have matured)"
+          }
+        },
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "clones-with-immutable-args/=lib/clones-with-immutable-args/src/",
+        "clones/=lib/clones-with-immutable-args/src/",
+        "ds-test/=lib/ds-test/src/",
+        "forge-std/=lib/forge-std/src/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "openzeppelin/=lib/openzeppelin-contracts/contracts/",
+        "solidity-code-metrics/=node_modules/solidity-code-metrics/",
+        "solmate/=lib/solmate/src/",
+        "weird-erc20/=lib/solmate/lib/weird-erc20/src/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 100000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/interfaces/IBondFixedExpiryTeller.sol": "IBondFixedExpiryTeller"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "lib/clones-with-immutable-args/src/Clone.sol": {
+        "keccak256": "0x8f569b077d99ec821c2750c52094b59b3505fb6ca3e6eac9009092bf86c5452d",
+        "urls": [
+          "bzz-raw://d0f3966d1f97959f6512ee5bc4b73487bf5ce593880e3c1dbf97ed50d49402a0",
+          "dweb:/ipfs/QmSAtFtA28Mja6f6FfET26B38XEgrLgqRezNLo3AsXyjVB"
+        ],
+        "license": "BSD"
+      },
+      "lib/solmate/src/tokens/ERC20.sol": {
+        "keccak256": "0x698cdbf614109fafc2bf00057b60715fa3aba9dad447c42f4f8b749ae16ce84f",
+        "urls": [
+          "bzz-raw://49a39e71d6bde571d04722c90fd42591af806d29d8cbd4cd96f35e443702d899",
+          "dweb:/ipfs/QmefLxMt6w2it9daQQFdBTtPeCWDhSqhNWuxQy8e7WrNVr"
+        ],
+        "license": "AGPL-3.0-only"
+      },
+      "src/ERC20BondToken.sol": {
+        "keccak256": "0x14b11e975c3fb2f8aee2962e46aa1ab7c3ba145351f1c8f26e7f234fba9f4410",
+        "urls": [
+          "bzz-raw://b766eb91df473cd1be260b7ab4198eaef69e6f71f01572e113efb67043d11279",
+          "dweb:/ipfs/QmSkaFo1ciHD7Dbdt5u8uinQdtmNg9GWCwFpcsuwb4R5HF"
+        ],
+        "license": "AGPL-3.0-or-later"
+      },
+      "src/interfaces/IBondFixedExpiryTeller.sol": {
+        "keccak256": "0x4530df5a76e94da12895a0d1912388700b17bee34c6c71c3762c5ae8dd5bbfe1",
+        "urls": [
+          "bzz-raw://c32dfd7b2803ec73451bba008ed427ce888215b0039e7a871247ed591d4ed373",
+          "dweb:/ipfs/QmenLrALRdCMu8ttfyVwiSubM6vzCmAn1cL7vJgAcM76ag"
+        ],
+        "license": "AGPL-3.0"
+      },
+      "src/lib/CloneERC20.sol": {
+        "keccak256": "0x44cf60ce8aab43c31e8b6641c417e6a26c3242847c267435906ddb46b37b82c4",
+        "urls": [
+          "bzz-raw://f8867033f95983416889a931bfe0396c29be883d62a8330668fadeb06b937fdf",
+          "dweb:/ipfs/QmUUKxS87nt3mxZuwCMZrMgLBco3ZRcz4p69hVPuZ7RJ3h"
+        ],
+        "license": "AGPL-3.0-only"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/interfaces/IBondFixedExpiryTeller.sol",
+    "id": 43614,
+    "exportedSymbols": {
+      "ERC20": [
+        30350
+      ],
+      "ERC20BondToken": [
+        35309
+      ],
+      "IBondFixedExpiryTeller": [
+        43613
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "37:2468:52",
+    "nodes": [
+      {
+        "id": 43550,
+        "nodeType": "PragmaDirective",
+        "src": "37:24:52",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          ">=",
+          "0.8",
+          ".0"
+        ]
+      },
+      {
+        "id": 43552,
+        "nodeType": "ImportDirective",
+        "src": "63:53:52",
+        "nodes": [],
+        "absolutePath": "src/ERC20BondToken.sol",
+        "file": "../ERC20BondToken.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 43614,
+        "sourceUnit": 35310,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 43551,
+              "name": "ERC20BondToken",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 35309,
+              "src": "71:14:52",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 43554,
+        "nodeType": "ImportDirective",
+        "src": "117:47:52",
+        "nodes": [],
+        "absolutePath": "lib/solmate/src/tokens/ERC20.sol",
+        "file": "solmate/tokens/ERC20.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 43614,
+        "sourceUnit": 30351,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 43553,
+              "name": "ERC20",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 30350,
+              "src": "125:5:52",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 43613,
+        "nodeType": "ContractDefinition",
+        "src": "166:2338:52",
+        "nodes": [
+          {
+            "id": 43563,
+            "nodeType": "FunctionDefinition",
+            "src": "402:65:52",
+            "nodes": [],
+            "documentation": {
+              "id": 43555,
+              "nodeType": "StructuredDocumentation",
+              "src": "205:192:52",
+              "text": "@notice          Redeem a fixed-expiry bond token for the underlying token (bond token must have matured)\n @param token_    Token to redeem\n @param amount_   Amount to redeem"
+            },
+            "functionSelector": "1e9a6950",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "redeem",
+            "nameLocation": "411:6:52",
+            "parameters": {
+              "id": 43561,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43558,
+                  "mutability": "mutable",
+                  "name": "token_",
+                  "nameLocation": "433:6:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43563,
+                  "src": "418:21:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                    "typeString": "contract ERC20BondToken"
+                  },
+                  "typeName": {
+                    "id": 43557,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43556,
+                      "name": "ERC20BondToken",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 35309,
+                      "src": "418:14:52"
+                    },
+                    "referencedDeclaration": 35309,
+                    "src": "418:14:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                      "typeString": "contract ERC20BondToken"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43560,
+                  "mutability": "mutable",
+                  "name": "amount_",
+                  "nameLocation": "449:7:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43563,
+                  "src": "441:15:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43559,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "441:7:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "417:40:52"
+            },
+            "returnParameters": {
+              "id": 43562,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "466:0:52"
+            },
+            "scope": 43613,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 43579,
+            "nodeType": "FunctionDefinition",
+            "src": "955:141:52",
+            "nodes": [],
+            "documentation": {
+              "id": 43564,
+              "nodeType": "StructuredDocumentation",
+              "src": "473:477:52",
+              "text": "@notice              Deposit an ERC20 token and mint a future-dated ERC20 bond token\n @param underlying_   ERC20 token redeemable when the bond token vests\n @param expiry_       Timestamp at which the bond token can be redeemed for the underlying token\n @param amount_       Amount of underlying tokens to deposit\n @return              Address of the ERC20 bond token received\n @return              Amount of the ERC20 bond token received"
+            },
+            "functionSelector": "b7314ef9",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "create",
+            "nameLocation": "964:6:52",
+            "parameters": {
+              "id": 43572,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43567,
+                  "mutability": "mutable",
+                  "name": "underlying_",
+                  "nameLocation": "986:11:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43579,
+                  "src": "980:17:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43566,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43565,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "980:5:52"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "980:5:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43569,
+                  "mutability": "mutable",
+                  "name": "expiry_",
+                  "nameLocation": "1014:7:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43579,
+                  "src": "1007:14:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint48",
+                    "typeString": "uint48"
+                  },
+                  "typeName": {
+                    "id": 43568,
+                    "name": "uint48",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1007:6:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint48",
+                      "typeString": "uint48"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43571,
+                  "mutability": "mutable",
+                  "name": "amount_",
+                  "nameLocation": "1039:7:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43579,
+                  "src": "1031:15:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43570,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1031:7:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "970:82:52"
+            },
+            "returnParameters": {
+              "id": 43578,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43575,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43579,
+                  "src": "1071:14:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                    "typeString": "contract ERC20BondToken"
+                  },
+                  "typeName": {
+                    "id": 43574,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43573,
+                      "name": "ERC20BondToken",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 35309,
+                      "src": "1071:14:52"
+                    },
+                    "referencedDeclaration": 35309,
+                    "src": "1071:14:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                      "typeString": "contract ERC20BondToken"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43577,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43579,
+                  "src": "1087:7:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43576,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1087:7:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1070:25:52"
+            },
+            "scope": 43613,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 43591,
+            "nodeType": "FunctionDefinition",
+            "src": "1636:85:52",
+            "nodes": [],
+            "documentation": {
+              "id": 43580,
+              "nodeType": "StructuredDocumentation",
+              "src": "1102:529:52",
+              "text": "@notice             Deploy a new ERC20 bond token for an (underlying, expiry) pair and return its address\n @dev                ERC20 used for fixed-expiry\n @dev                If a bond token exists for the (underlying, expiry) pair, it returns that address\n @param underlying_  ERC20 token redeemable when the bond token vests\n @param expiry_      Timestamp at which the bond token can be redeemed for the underlying token\n @return             Address of the ERC20 bond token being created"
+            },
+            "functionSelector": "c6e38a4b",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "deploy",
+            "nameLocation": "1645:6:52",
+            "parameters": {
+              "id": 43586,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43583,
+                  "mutability": "mutable",
+                  "name": "underlying_",
+                  "nameLocation": "1658:11:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43591,
+                  "src": "1652:17:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43582,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43581,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "1652:5:52"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "1652:5:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43585,
+                  "mutability": "mutable",
+                  "name": "expiry_",
+                  "nameLocation": "1678:7:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43591,
+                  "src": "1671:14:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint48",
+                    "typeString": "uint48"
+                  },
+                  "typeName": {
+                    "id": 43584,
+                    "name": "uint48",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1671:6:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint48",
+                      "typeString": "uint48"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1651:35:52"
+            },
+            "returnParameters": {
+              "id": 43590,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43589,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43591,
+                  "src": "1705:14:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                    "typeString": "contract ERC20BondToken"
+                  },
+                  "typeName": {
+                    "id": 43588,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43587,
+                      "name": "ERC20BondToken",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 35309,
+                      "src": "1705:14:52"
+                    },
+                    "referencedDeclaration": 35309,
+                    "src": "1705:14:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                      "typeString": "contract ERC20BondToken"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1704:16:52"
+            },
+            "scope": 43613,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 43600,
+            "nodeType": "FunctionDefinition",
+            "src": "1906:83:52",
+            "nodes": [],
+            "documentation": {
+              "id": 43592,
+              "nodeType": "StructuredDocumentation",
+              "src": "1727:174:52",
+              "text": "@notice         Get the ERC20BondToken contract corresponding to a market\n @param id_      ID of the market\n @return         ERC20BondToken contract address"
+            },
+            "functionSelector": "fcdc3126",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getBondTokenForMarket",
+            "nameLocation": "1915:21:52",
+            "parameters": {
+              "id": 43595,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43594,
+                  "mutability": "mutable",
+                  "name": "id_",
+                  "nameLocation": "1945:3:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43600,
+                  "src": "1937:11:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 43593,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1937:7:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1936:13:52"
+            },
+            "returnParameters": {
+              "id": 43599,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43598,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43600,
+                  "src": "1973:14:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                    "typeString": "contract ERC20BondToken"
+                  },
+                  "typeName": {
+                    "id": 43597,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43596,
+                      "name": "ERC20BondToken",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 35309,
+                      "src": "1973:14:52"
+                    },
+                    "referencedDeclaration": 35309,
+                    "src": "1973:14:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                      "typeString": "contract ERC20BondToken"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1972:16:52"
+            },
+            "scope": 43613,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 43612,
+            "nodeType": "FunctionDefinition",
+            "src": "2406:96:52",
+            "nodes": [],
+            "documentation": {
+              "id": 43601,
+              "nodeType": "StructuredDocumentation",
+              "src": "1995:406:52",
+              "text": "@notice             Get the ERC20BondToken contract corresponding to an (underlying, expiry) pair, reverts if no token exists\n @param underlying_  ERC20 token redeemable when the bond token vests\n @param expiry_      Timestamp at which the bond token can be redeemed for the underlying token (this is rounded to the nearest day)\n @return             ERC20BondToken contract address"
+            },
+            "functionSelector": "fa922c26",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getBondToken",
+            "nameLocation": "2415:12:52",
+            "parameters": {
+              "id": 43607,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43604,
+                  "mutability": "mutable",
+                  "name": "underlying_",
+                  "nameLocation": "2434:11:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43612,
+                  "src": "2428:17:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20_$30350",
+                    "typeString": "contract ERC20"
+                  },
+                  "typeName": {
+                    "id": 43603,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43602,
+                      "name": "ERC20",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 30350,
+                      "src": "2428:5:52"
+                    },
+                    "referencedDeclaration": 30350,
+                    "src": "2428:5:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20_$30350",
+                      "typeString": "contract ERC20"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 43606,
+                  "mutability": "mutable",
+                  "name": "expiry_",
+                  "nameLocation": "2454:7:52",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43612,
+                  "src": "2447:14:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint48",
+                    "typeString": "uint48"
+                  },
+                  "typeName": {
+                    "id": 43605,
+                    "name": "uint48",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2447:6:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint48",
+                      "typeString": "uint48"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2427:35:52"
+            },
+            "returnParameters": {
+              "id": 43611,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 43610,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 43612,
+                  "src": "2486:14:52",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                    "typeString": "contract ERC20BondToken"
+                  },
+                  "typeName": {
+                    "id": 43609,
+                    "nodeType": "UserDefinedTypeName",
+                    "pathNode": {
+                      "id": 43608,
+                      "name": "ERC20BondToken",
+                      "nodeType": "IdentifierPath",
+                      "referencedDeclaration": 35309,
+                      "src": "2486:14:52"
+                    },
+                    "referencedDeclaration": 35309,
+                    "src": "2486:14:52",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_contract$_ERC20BondToken_$35309",
+                      "typeString": "contract ERC20BondToken"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2485:16:52"
+            },
+            "scope": 43613,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IBondFixedExpiryTeller",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          43613
+        ],
+        "name": "IBondFixedExpiryTeller",
+        "nameLocation": "176:22:52",
+        "scope": 43614,
+        "usedErrors": []
+      }
+    ],
+    "license": "AGPL-3.0"
+  },
+  "id": 52
+}

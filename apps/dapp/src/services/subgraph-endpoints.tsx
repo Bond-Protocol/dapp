@@ -1,8 +1,6 @@
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 import { UseQueryResult } from "react-query";
 import { environment } from "src/environment";
-import { CHAIN_ID } from "@bond-protocol/contract-library";
+import { CHAIN_ID } from "types";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
@@ -109,12 +107,13 @@ export const getSubgraphQuery = (
   );
 };
 
+const isTestnet = environment.isTestnet;
+
 export const getSubgraphQueries = (
   query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
   variables?: {}
 ): UseQueryResult<any, any>[] => {
-  const [testnet, setTestnet] = useAtom(testnetMode);
-  const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;
+  const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;
 
   const queries: UseQueryResult<any, any>[] = [];
   endpoints.forEach((endpoint) => {
@@ -129,7 +128,7 @@ export const getSubgraphQueries = (
           },
         },
         { queryKey: endpoint.url + "--" + query.name.toString(), ...variables },
-        { enabled: testnet ? !!testnet : !testnet }
+        { enabled: isTestnet ? !!isTestnet : !isTestnet }
       )
     );
   });
@@ -141,8 +140,7 @@ export const getSubgraphQueriesPerChainFn = (
   func: (chain: CHAIN_ID) => any,
   fieldName: string
 ): UseQueryResult<any, any>[] => {
-  const [testnet, setTestnet] = useAtom(testnetMode);
-  const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;
+  const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;
 
   const queries: UseQueryResult<any, any>[] = [];
   endpoints.forEach((endpoint) => {
@@ -163,7 +161,7 @@ export const getSubgraphQueriesPerChainFn = (
           },
         },
         variables,
-        { enabled: testnet ? !!testnet : !testnet }
+        { enabled: isTestnet ? !!isTestnet : !isTestnet }
       )
     );
   });

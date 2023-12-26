@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { useAuth } from "./use-auth";
 import { useAccount } from "wagmi";
 import { orderService } from "services/order-service";

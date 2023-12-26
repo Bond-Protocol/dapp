@@ -22,9 +22,9 @@ export const useNumericInput = (initialValue = "", isPercentual?: boolean) => {
     return nextValue;
   };
 
-  const getAValidPercentage = (v: string) => {
-    let num = parseFloat(v);
-    let updated = isNaN(num) ? 0 : v;
+  const getAValidPercentage = (percentage: string) => {
+    let num = parseFloat(percentage);
+    let updated = isNaN(num) ? 0 : num;
     let result = (updated > 100 ? 100 : updated < 0 ? 0 : updated).toString();
     return result;
   };

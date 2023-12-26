@@ -1,12 +1,12 @@
 import { Button, Column, formatDate, PaginatedTable } from "ui";
-import { longFormatter, usdFormatter } from "src/utils/format";
-import { useNetwork, useSigner, useSwitchNetwork } from "wagmi";
+import { longFormatter, usdFormatter } from "formatters";
+import { useNetwork, useSwitchNetwork } from "wagmi";
 import { OwnerBalance } from "../../generated/graphql";
-import { BOND_TYPE, redeem } from "@bond-protocol/contract-library";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useMediaQueries } from "hooks/useMediaQueries";
+import { useRedeemBond } from "hooks/contracts/useRedeem";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -65,58 +65,55 @@ export const tableColumns: Array<Column<any>> = [
       const [open, setOpen] = useState(false);
       const { chain } = useNetwork();
       const { switchNetwork } = useSwitchNetwork();
-      const { data: signer } = useSigner();
-      const [tx, setTx] = useState<any>();
 
-      const chainId = props?.data?.bond?.bondToken.chainId;
+      const bond: OwnerBalance = props?.data?.bond;
+      const redeem = useRedeemBond({ bond });
 
-      const isCorrectNetwork =
-        Number(props?.data?.bond?.bondToken?.chainId) === chain?.id;
+      const chainId = bond?.bondToken?.chainId;
+
+      const isCorrectNetwork = Number(bond?.bondToken?.chainId) === chain?.id;
 
       const switchChain = () => {
-        switchNetwork?.(Number(props?.data?.bond?.bondToken?.chainId));
+        switchNetwork?.(Number(bond?.bondToken?.chainId));
       };
 
-      async function redeemBond(bond: Partial<OwnerBalance>) {
-        if (!bond.bondToken || !signer) return;
-        return redeem(
-          bond.bondToken.id,
-          bond.bondToken.type as BOND_TYPE,
-          bond.balance.toString(),
-          signer,
-          bond.bondToken.teller,
-          {}
-        );
-      }
-
-      const claim = () => {
+      const claim = async () => {
         setOpen(true);
-        const tx = redeemBond(props?.data?.bond);
-        setTx(tx);
+        return redeem.execute();
       };
 
       const handleClaim = isCorrectNetwork
         ? () => claim()
         : () => switchChain();
 
+      const isClaimable = props?.data?.canClaim;
+
       return (
         <>
           <Button
             thin
-            variant="primary"
-            disabled={!props?.data?.canClaim}
-            className={`mr-4 w-24 ${!props.data?.canClaim && "opacity-60"}`}
+            long
+            variant={isCorrectNetwork || !isClaimable ? "primary" : "secondary"}
+            disabled={!isClaimable}
+            className={`w-60 ${!isClaimable && "opacity-60"}`}
             onClick={() => handleClaim()}
           >
-            Claim
+            {!isClaimable
+              ? "Vesting"
+              : isCorrectNetwork
+              ? "Claim"
+              : "Switch Chain"}
           </Button>
           <TransactionWizard
             chainId={chainId}
             open={open}
-            onSubmit={() => redeemBond(props?.data?.bond)}
+            //@ts-ignore
+            onSubmit={() => claim()}
             onClose={() => setOpen(false)}
-            SuccessDialog={() => <div>Bond claimed!</div>}
-            signingTx={tx}
+            SuccessDialog={() => (
+              <div className="text-center">Bond claimed!</div>
+            )}
+            hash={redeem.hash}
           />
         </>
       );

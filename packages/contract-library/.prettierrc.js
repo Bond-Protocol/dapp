@@ -1,3 +1,5 @@
 module.exports = {
-  ...require('@ssen/prettier-config'),
+  tabWidth: 2,
+  semi: true,
+  singleQuote: false,
 };

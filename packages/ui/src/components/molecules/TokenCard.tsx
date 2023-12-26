@@ -1,13 +1,17 @@
 import { FC } from "react";
 import { TooltipWrapper } from "../..";
-import { CHAINS } from "@bond-protocol/contract-library";
 
 export type TokenCardProps = {
   token: any;
+  chainLogoURI?: string;
   navigate?: (to: string) => void;
 };
 
-export const TokenCard: FC<TokenCardProps> = ({ token, navigate }) => {
+export const TokenCard: FC<TokenCardProps> = ({
+  token,
+  chainLogoURI,
+  navigate,
+}) => {
   const handleClick = () =>
     navigate && navigate("/tokens/" + token.chainId + "/" + token.address);
 
@@ -25,8 +29,6 @@ export const TokenCard: FC<TokenCardProps> = ({ token, navigate }) => {
     ? `${marketCount} Market`
     : `${marketCount} Markets`;
 
-  const chainChip = CHAINS.get(token.chainId.toString())?.image;
-
   return (
     <div
       onClick={() => handleClick()}
@@ -34,7 +36,7 @@ export const TokenCard: FC<TokenCardProps> = ({ token, navigate }) => {
     >
       <div>
         <div className="absolute right-[6px] top-[6px]">
-          <img className="h-[16px] w-[16px]" src={chainChip} />
+          <img className="h-[16px] w-[16px]" src={chainLogoURI} />
         </div>
 
         <div className="overflow-hidden rounded-full border border-transparent">

@@ -1,20 +1,11 @@
-import { BigNumberish } from 'ethers';
-import { CalculatedMarket } from '../types';
-
-export const formatLongNumber = (
-  num: string | number | BigNumberish,
-  currentDecimals: number,
-) => {
-  return Number(num) / Math.pow(10, currentDecimals);
-};
+import { CalculatedMarket } from 'types';
 
 export const formatVestingTerm = (market: CalculatedMarket) => {
   return market.vestingType === 'fixed-term'
-    ? market.formattedLongVesting
-    : market.formattedShortVesting;
+    ? market.formatted.longVesting
+    : market.formatted.shortVesting;
 };
 
 export default {
-  formatLongNumber,
   formatVestingTerm,
 };

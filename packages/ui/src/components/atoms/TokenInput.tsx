@@ -5,7 +5,7 @@ import {
   longFormatter,
   trim,
   trimAsNumber,
-} from "../../utils";
+} from "formatters";
 
 export type TokenInputProps = InputProps & {
   symbol?: string;

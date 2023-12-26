@@ -1,4 +1,4 @@
-import { Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import axios from "axios";
 
 const API_ENDPOINT = import.meta.env.VITE_API_URL;
