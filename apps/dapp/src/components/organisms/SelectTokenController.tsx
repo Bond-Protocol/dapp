@@ -1,6 +1,6 @@
 import { useChainId } from "wagmi";
 import { useEffect, useState } from "react";
-import { Token, chainLogos } from "types";
+import { Token, chainLogos } from "@bond-protocol/types";
 import {
   ImportTokenDialog,
   SelectTokenDialog,

@@ -1,18 +1,10 @@
 {
   "extends": "@bond-protocol/tsconfig/react-library.json",
   "compilerOptions": {
-    "outDir": "dist/src",
-    "rootDir": "src",
     "strict": true,
     "types": ["viem"],
     "lib": ["ESNext", "DOM"],
-    "baseUrl": "./src",
-    "paths": {
-      "src/*": ["./*"],
-      "core/*": ["core/*"],
-      "modules/*": ["modules/*"],
-      "types/*": ["types/*"]
-    }
+    "baseUrl": "."
   },
   "include": ["src", "src/**/*.json"],
   "exclude": ["node_modules"]

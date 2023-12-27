@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import type { Token } from "types";
+import type { Token } from "@bond-protocol/types";
 import { getTokenPriceHistory } from "services";
 
 export const useTokenPriceHistory = (token: Token, dayRange = 90) => {

@@ -2,7 +2,7 @@ import { useState, createContext, useContext, useEffect } from "react";
 import { useAccount } from "wagmi";
 
 import { dateMath, useNumericInput } from "ui";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 
 import { calcDiscountPercentage } from "src/utils/calculate-percentage";
 

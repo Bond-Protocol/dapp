@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { socials } from "components/common";
 import { formatDistanceToNowStrict } from "date-fns";
 import { useMemo } from "react";

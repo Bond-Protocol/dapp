@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import OpenAPIClient from "openapi-axios-client";
 import definition from "src/openapi.json";
 import { Client as LimitOrderApiClient } from "src/types/openapi";

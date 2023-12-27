@@ -25,7 +25,7 @@ import {
 import { environment } from "src/environment";
 import { publicProvider } from "wagmi/providers/public";
 import { Chain, createPublicClient, http, PublicClient } from "viem";
-import { chainLogos } from "types";
+import { chainLogos } from "@bond-protocol/types";
 
 type _Chain = Chain & { logoUrl?: string };
 

@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { Market } from "src/generated/graphql";

@@ -4,13 +4,9 @@
   "engines": {
     "node": ">=14.15"
   },
-  "packageManager": "yarn@1.22.19",
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "settings/*"
-  ],
+  "packageManager": "pnpm@8.12.1",
   "scripts": {
+    "preinstall": "npx only-allow pnpm", 
     "sync": "turbo run sync",
     "clean": "turbo run clean",
     "build": "turbo run build",
@@ -26,11 +22,11 @@
   },
   "devDependencies": {
     "eslint": "^8.17.0",
-    "@bond-protocol/eslint-config-custom": "*",
+    "@bond-protocol/eslint-config-custom": "workspace:*",
     "prettier": "^2.7.0",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "turbo": "^1.6.3",
-    "@bond-protocol/tsconfig": "*"
+    "@bond-protocol/tsconfig": "workspace:*"
   },
   "dependencies": {
     "date-fns": "2.30"

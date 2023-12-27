@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useMarkets } from "context/market-context";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { Loading } from "ui";
 import { ClosedMarket, PastMarket } from "components/organisms/ClosedMarket";
 import { Market } from "components/organisms/Market";

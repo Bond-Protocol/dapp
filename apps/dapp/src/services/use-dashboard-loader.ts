@@ -17,7 +17,7 @@ import { clients, useTokens } from "context";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
 import axios from "axios";
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 import { environment } from "src/environment";
 
 export type TweakedBondPurchase = BondPurchase & {

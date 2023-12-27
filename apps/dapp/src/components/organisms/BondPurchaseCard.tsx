@@ -16,7 +16,7 @@ import defillama from "services/defillama";
 import { useNavigate } from "react-router-dom";
 import { useIsEmbed } from "hooks/useIsEmbed";
 import { usePurchase } from "hooks/contracts/usePurchase";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { formatEther, formatUnits } from "viem";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { ApprovingLabel } from "components/modules/limit-order";

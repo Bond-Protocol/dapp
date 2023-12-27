@@ -1,12 +1,9 @@
 {
-  "name": "types",
+  "name": "@bond-protocol/types",
   "version": "0.0.1",
   "description": "Reusable protocol-specific types",
   "license": "MIT",
-  "main": "./dist/src/index.js",
-  "files": [
-    "dist"
-  ],
+  "main": "./src/index.ts",
   "scripts": {
     "build": "tsc --build"
   }

@@ -1,4 +1,4 @@
-import { CalculatedMarket } from 'types';
+import { CalculatedMarket } from '@bond-protocol/types';
 
 export const formatVestingTerm = (market: CalculatedMarket) => {
   return market.vestingType === 'fixed-term'

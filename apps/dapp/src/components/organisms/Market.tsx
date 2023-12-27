@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { PageHeader, PageNavigation } from "components/common";
 import { InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";

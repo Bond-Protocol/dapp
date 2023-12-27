@@ -1,6 +1,6 @@
 import { UseQueryResult } from "react-query";
 import { environment } from "src/environment";
-import { CHAIN_ID } from "types";
+import { CHAIN_ID } from "@bond-protocol/types";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 import { Button, Input, Label } from "ui";
 import { formatCurrency } from "formatters";
 import { UpdateAllowanceArgs } from "hooks/useUpdateAllowance";

@@ -6,17 +6,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["cypress"],
-    "paths": {
-      "src/*": ["./src/*"],
-      "components": ["./src/components/index"],
-      "components/*": ["./src/components/*"],
-      "hooks/*": ["./src/hooks/*"],
-      "assets": ["./src/assets/index"],
-      "assets/*": ["./src/assets/*"],
-      "utils": ["./src/utils/index"],
-      "utils/*": ["./src/utils/*"]
-    }
+    "types": ["cypress"]
   },
   "include": ["src", "src/main.d.ts", "src/cypress.d.ts", ".storybook"],
   "exclude": ["dist", "build", "node_modules", "src/**/*.cy.*"]

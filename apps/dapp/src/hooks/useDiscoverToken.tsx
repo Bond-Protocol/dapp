@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 import defillama from "services/defillama";
 import coingecko from "services/coingecko";
 import axios from "axios";

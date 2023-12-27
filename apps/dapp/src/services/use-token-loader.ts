@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 import { testnetTokenlist, tokenlist } from "hooks";
 import * as defillama from "./defillama";
 import { usdFormatter } from "formatters";

@@ -15,7 +15,7 @@ import dotsVerticalIcon from "assets/icons/dots-vertical.svg";
 import { useState } from "react";
 import { Popper } from "components/common/Popper";
 import { useOrderApi } from "./use-order-api";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { OrderConfig } from "services/order-service";
 import { useLimitOrderForMarket } from "./use-limit-order";
 import { CancelOrderDialog } from "./CancelOrderDialog";

@@ -14,13 +14,10 @@
     "test": "cypress run --component",
     "index": "node src/sync-indexes.js"
   },
-  "peerDependencies": {
-    "react": "^18.2.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.20.2",
-    "@bond-protocol/eslint-config-custom": "*",
-    "@bond-protocol/tsconfig": "*",
+    "@bond-protocol/eslint-config-custom": "workspace:*",
+    "@bond-protocol/tsconfig": "workspace:*",
     "@rollup/plugin-commonjs": "^23.0.2",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^9.0.2",
@@ -35,14 +32,15 @@
     "@storybook/testing-library": "^0.1.0",
     "@svgr/rollup": "^6.5.1",
     "@types/cypress": "^1.1.3",
-    "@types/react": "^17.0.37",
-    "@types/react-dom": "^17.0.11",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.14",
     "babel-loader": "^8.3.0",
     "cypress": "^12.9.0",
     "eslint": "^7.32.0",
     "eslint-plugin-cypress": "^2.13.2",
     "eslint-plugin-storybook": "^0.6.11",
+    "formatters": "workspace:*",
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -53,18 +51,20 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-terser": "^7.0.2",
     "storybook": "^7.0.6",
-    "tailwind-config": "*",
-    "tailwindconfig": "*",
+    "tailwindconfig": "workspace:*",
     "tailwindcss": "^3.3.1",
+    "@bond-protocol/types": "workspace:*",
     "typescript": "^5.2.2",
     "vite-plugin-dts": "^1.7.1",
-    "viteconfig": "*",
-    "types": "*",
-    "formatters": "*"
+    "vite-tsconfig-paths": "^4.2.2",
+    "viteconfig": "workspace:*",
+    "@types/react-csv": "^1.1.3"
   },
   "dependencies": {
-    "@mui/base": "^5.0.0-alpha.88",
+    "@mui/base": "5.0.0-alpha.88",
     "date-fns": "^2.29.2",
-    "react-day-picker": "^8.6.0"
+    "react-day-picker": "^8.6.0",
+    "recharts": "^2.1.15",
+    "react-csv": "^2.2.2"
   }
 }

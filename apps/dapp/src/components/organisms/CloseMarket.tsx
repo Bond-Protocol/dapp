@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useCloseMarket } from "hooks/contracts/useCloseMarket";
 import { useState } from "react";

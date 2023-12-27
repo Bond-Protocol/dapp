@@ -31,7 +31,7 @@ import {
   PriceModelPicker,
 } from "./";
 import { Address } from "viem";
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
 
 export type CreateMarketScreenProps = {

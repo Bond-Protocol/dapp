@@ -1,6 +1,6 @@
 import { Address, PublicClient, getContract } from "viem";
-import { getAggregator } from "core";
-import { abis } from "abis";
+import { getAggregator } from "../core";
+import { abis } from "../abis";
 
 /**
  * Estimtes a bond payout for a specific amount

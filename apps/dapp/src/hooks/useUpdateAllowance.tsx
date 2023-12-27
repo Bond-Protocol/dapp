@@ -1,6 +1,6 @@
 import { erc20ABI, useWalletClient } from "wagmi";
 import { Address, getContract, parseUnits } from "viem";
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 import { AllowanceToken } from "components/dialogs";
 
 export type UpdateAllowanceArgs = {

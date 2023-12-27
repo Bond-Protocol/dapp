@@ -1,4 +1,4 @@
-import { TokenBase } from "types";
+import { TokenBase } from "@bond-protocol/types";
 import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
 import { createContext, useContext } from "react";
 import { useQueries } from "react-query";

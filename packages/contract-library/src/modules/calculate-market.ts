@@ -1,4 +1,4 @@
-import { CalculatedMarket, PrecalculatedMarket } from "types";
+import { CalculatedMarket, PrecalculatedMarket } from "@bond-protocol/types";
 import { Address, PublicClient, formatUnits, getContract } from "viem";
 import {
   formatDate,
@@ -8,8 +8,12 @@ import {
   usdFullFormatter,
   usdLongFormatter,
 } from "formatters";
-import { Auctioneer, getAuctioneerAbiForName, getBlockExplorer } from "core";
-import { abis } from "abis";
+import {
+  Auctioneer,
+  getAuctioneerAbiForName,
+  getBlockExplorer,
+} from "../core";
+import { abis } from "../abis";
 
 /**
  * Calculates bond market status and formats it from subgraph into a displayable format

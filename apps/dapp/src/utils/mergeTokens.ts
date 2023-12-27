@@ -1,4 +1,4 @@
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 
 export const mergeToken = (
   token: Partial<Token>,
