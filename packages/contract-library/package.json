@@ -9,7 +9,6 @@
   "main": "./src/index.ts",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "build": "tsc --build && tsc-alias -v",
     "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "make:abis": "wagmi generate"
   },
