@@ -1,5 +1,5 @@
 import ButtonUnstyled, { ButtonUnstyledProps } from "@mui/base/ButtonUnstyled";
-import { ReactComponent as CheckmarkIcon } from "../../assets/icons/checkmark.svg";
+import CheckmarkIcon from "../../assets/icons/checkmark.svg";
 
 export type ChipProps = ButtonUnstyledProps & {
   selected?: boolean;
@@ -17,7 +17,7 @@ export const Chip = ({ selected, children, ...props }: ChipProps) => {
       {...props}
     >
       {selected && (
-        <CheckmarkIcon className="h-[12px] w-[12px] fill-white text-white" />
+        <img src={CheckmarkIcon} className="h-[12px] w-[12px] fill-white text-white" />
       )}
       {children}
     </ButtonUnstyled>

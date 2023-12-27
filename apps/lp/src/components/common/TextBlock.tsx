@@ -5,15 +5,15 @@ type TextBlockProps = {
   content?: string | React.ReactNode;
 };
 
-export const TextBlock = (props: TextBlockProps) => {
+export const TextBlock = ({ className, titleClassName, title, content, ...divProps }: TextBlockProps) => {
   return (
-    <div {...props} className={`min-w-[160px] ${props.className}`}>
+    <div {...divProps} className={`min-w-[160px] ${className}`}>
       <div
-        className={`font-fraktion font-bold uppercase lg:text-[25px] ${props.titleClassName}`}
+        className={`font-fraktion font-bold uppercase lg:text-[25px] ${titleClassName}`}
       >
-        {props.title}
+        {title}
       </div>
-      <div className="text-light-grey-400">{props.content}</div>
+      <div className="text-light-grey-400">{content}</div>
     </div>
   );
 };

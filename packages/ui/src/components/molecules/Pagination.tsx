@@ -1,4 +1,4 @@
-import { ReactComponent as CaretDown } from "../../assets/icons/select-arrow-down.svg";
+import CaretDown from "../../assets/icons/select-arrow-down.svg";
 import { Icon } from "..";
 
 export const PaginationSelector = (props: {
@@ -80,7 +80,12 @@ export const Pagination = ({
       })();
 
       if (showAsSeparator && totalPages > 7) {
-        return <div className={"mx-2.5 w-3 border-b border-dashed "} />;
+        return (
+          <div
+            key={thisPage}
+            className={"mx-2.5 w-3 border-b border-dashed "}
+          />
+        );
       }
 
       return (
@@ -109,7 +114,7 @@ export const Pagination = ({
             }`}
             onClick={() => !isFirstPage && handleChangePage(selectedPage - 1)}
           >
-            {<CaretDown className="rotate-90" />}
+            {<img src={CaretDown} className="rotate-90" />}
           </Icon>
           {elements}
           <Icon
@@ -120,7 +125,7 @@ export const Pagination = ({
             }`}
             onClick={() => !isLastPage && handleChangePage(selectedPage + 1)}
           >
-            <CaretDown className="-rotate-90" />
+            <img src={CaretDown} className="-rotate-90" />
           </Icon>
         </div>
       )}

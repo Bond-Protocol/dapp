@@ -1,6 +1,6 @@
 import { InputUnstyled } from "@mui/base";
 import { Icon, Link, Tooltip, Copy } from "..";
-import { ReactComponent as EditIcon } from "../../assets/icons/edit-icon.svg";
+import EditIcon from "../../assets/icons/edit-icon.svg";
 import { useSymbolInput } from "../../hooks/use-symbol-input";
 import { useState } from "react";
 
@@ -83,7 +83,7 @@ export const ActionInfoLabel = (props: ActionInfoLabelProps) => {
               <div className="font-fraktion ml-1 flex place-items-center items-center gap-x-1">
                 {props.logoURI && <Icon width={16} src={props.logoURI} />}
                 {props.symbol}
-                <EditIcon className="ml-1" />
+                <img src={EditIcon} className="ml-1" />
               </div>
             }
             componentsProps={{

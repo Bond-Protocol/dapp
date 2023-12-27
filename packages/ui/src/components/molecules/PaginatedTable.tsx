@@ -6,7 +6,7 @@ import { Button, Filter, FilterBox, Loading, Tooltip } from "..";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
 import { usePagination } from "../../hooks/use-pagination";
-import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg";
+import DownloadIcon from "../../assets/icons/download.svg";
 
 export const toValue = (value: any) => ({ value });
 export const toTableData = (
@@ -219,7 +219,7 @@ export const PaginatedTable = ({
           {props.csvHeaders && (
             <Tooltip content="Download Transaction History as CSV">
               <CSVLink data={csvData()} filename={props.csvFilename}>
-                <DownloadIcon height={32} width={32} />
+                <img src={DownloadIcon} height={32} width={32} />
               </CSVLink>
             </Tooltip>
           )}

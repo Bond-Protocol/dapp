@@ -1,4 +1,4 @@
-import { ReactComponent as CheckmarkIcon } from "../../assets/icons/checkmark.svg";
+import CheckmarkIcon  from "../../assets/icons/checkmark.svg";
 import { useState } from "react";
 
 export type CheckboxProps = {
@@ -45,7 +45,7 @@ export const Checkbox = ({
             checked ? "opacity-100" : "opacity-0"
           } `}
         >
-          <CheckmarkIcon className="fill-white" />
+          <img src={CheckmarkIcon} className="fill-white" />
         </div>
       </div>
       {label && (

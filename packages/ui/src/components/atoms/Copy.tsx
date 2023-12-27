@@ -1,4 +1,4 @@
-import { ReactComponent as CopyIcon } from "assets/icons/copy-icon.svg";
+import CopyIcon from "../../assets/icons/copy-icon.svg";
 import { useState } from "react";
 
 export type CopyProps = {
@@ -18,7 +18,7 @@ export const Copy = ({ iconWidth = 16, ...props }: CopyProps) => {
   return (
     <>
       <div onClick={handleClick} className="my-auto cursor-help">
-        <CopyIcon
+        <img src={CopyIcon}
           className={`hover:fill-light-secondary my-auto transition-all ${props.iconClassname}`}
           width={iconWidth}
         />
