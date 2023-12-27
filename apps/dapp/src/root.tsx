@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
+import './polyfills';
 //Style Entry Point
 import "./styles/index.css";
 import "ui/src/style.css";
