@@ -19,9 +19,11 @@ export const Select = (props: SelectProps) => {
   const [selected, setSelected] = useState<string>(props.defaultValue || "");
   const [open, setOpen] = useState(false);
 
-  const onChange = (e: any, value: any) => {
-    setSelected(value);
-    props.onChange && props.onChange(e, value);
+  const onChange = (value: string | null) => {
+    if (value) {
+      setSelected(value);
+      props.onChange && props.onChange(value);
+    }
   };
 
   useEffect(() => {
@@ -33,7 +35,7 @@ export const Select = (props: SelectProps) => {
       <SelectUnstyled
         {...props}
         value={props.value || selected}
-        onClick={() => setOpen(() => !open)}
+        onListboxOpenChange={() => setOpen(() => !open)}
         onChange={onChange}
         componentsProps={{
           root: {

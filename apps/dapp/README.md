@@ -3,15 +3,15 @@
 ### Dev setup (for now)
 
 ```bash
-yarn install
+pnpm install
 
 #Running
-yarn dev
+pnpm dev
 
 #Other Commands
 
 #Building for prod
-yarn build
+pnpm build
 #Serve prod/compiled code locally
-yarn preview
+pnpm preview
 ```

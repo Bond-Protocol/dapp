@@ -19,7 +19,7 @@
     "build-storybook": "storybook build",
     "openapi:codegen": "npx openapi-client-axios-typegen ./src/openapi.json > src/types/openapi.d.ts && echo 'export type Order = Components.Schemas.Order;' >> src/types/openapi.d.ts",
     "openapi:make-file": "node ./scripts/make-openapi-config.js",
-    "openapi": "yarn openapi:make-file && yarn openapi:codegen"
+    "openapi": "pnpm openapi:make-file && pnpm openapi:codegen"
   },
   "dependencies": {
     "@bond-protocol/contract-library": "workspace:*",
