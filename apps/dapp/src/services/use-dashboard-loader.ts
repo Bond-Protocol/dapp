@@ -19,6 +19,7 @@ import { dateMath } from "ui";
 import axios from "axios";
 import { Token } from "types";
 import { environment } from "src/environment";
+import { useQuery } from "@tanstack/react-query";
 
 export type TweakedBondPurchase = BondPurchase & {
   txUrl: string;
@@ -58,18 +59,16 @@ export const useDashboardLoader = () => {
   const [userTbv, setUserTbv] = useState(0);
   const [userClaimable, setUserClaimable] = useState(0);
 
-  const loadBondPurchases = useCallback(async () => {
-    if (!address) return;
-    const response = await axios.get(
-      API_ENDPOINT + `users/${address}/bondPurchases`
-    );
-    return response.data;
-  }, []);
+  const _bondPurchases = useQuery({
+    enabled: !!address,
+    queryKey: ["dashboard/bond-purchases", address],
+    queryFn: () => axios.get(API_ENDPOINT + `users/${address}/bondPurchases`),
+  });
 
-  useEffect(() => {
-    async function load() {
-      if (isLoading || !address) return;
-
+  const load = useQuery({
+    enabled: !isLoading && _bondPurchases.isSuccess,
+    queryKey: ["dashboard", address],
+    queryFn: () => {
       const ownerBalances = concatSubgraphQueryResultArrays(
         dashboardData,
         "ownerBalances"
@@ -170,7 +169,11 @@ export const useDashboardLoader = () => {
       uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
 
       //fetchErc20OwnerBalances();
-    }
+    },
+  });
+
+  useEffect(() => {
+    async function load() {}
     load();
   }, [tokens, isLoading, isTestnet]);
 
