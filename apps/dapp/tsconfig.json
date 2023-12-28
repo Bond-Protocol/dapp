@@ -16,7 +16,7 @@
       "hooks/*": ["src/hooks/*"],
       "utils": ["src/hooks/index"],
       "utils/*": ["src/hooks/*"],
-      "assets/*": ["src/assets/*"],
+      "assets/*": ["src/assets/*"]
     }
   },
   "include": ["src", "src/**/*.json"],

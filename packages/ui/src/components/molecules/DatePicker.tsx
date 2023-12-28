@@ -1,7 +1,7 @@
 import { DayPicker, DayPickerProps } from "react-day-picker";
 import { useEffect, useState } from "react";
-import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-slim.svg";
-import { ReactComponent as ClockIcon } from "../../assets/icons/clock.svg";
+import ArrowDownIcon from "../../assets/icons/arrow-slim.svg?react";
+import ClockIcon from "../../assets/icons/clock.svg?react";
 
 import { Input } from "..";
 import { useTimeInput } from "../../hooks/use-time-input";

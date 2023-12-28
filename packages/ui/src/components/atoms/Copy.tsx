@@ -1,4 +1,4 @@
-import { ReactComponent as CopyIcon } from "assets/icons/copy-icon.svg";
+import CopyIcon from "../../assets/icons/copy-icon.svg?react";
 import { useState } from "react";
 
 export type CopyProps = {

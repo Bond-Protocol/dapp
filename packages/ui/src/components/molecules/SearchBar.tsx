@@ -1,6 +1,6 @@
 import { Input, InputProps } from "..";
-import { ReactComponent as SearchIcon } from "../../assets/icons/magnifying-glass.svg";
-import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
+import SearchIcon from "../../assets/icons/magnifying-glass.svg?react";
+import CloseIcon from "../../assets/icons/close-icon.svg?react";
 import { useState } from "react";
 
 export type SearchBarProps = Omit<InputProps, "onChange"> & {

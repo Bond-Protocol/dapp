@@ -1,4 +1,4 @@
-import { ReactComponent as CaretDown } from "../../assets/icons/select-arrow-down.svg";
+import  CaretDown from "../../assets/icons/select-arrow-down.svg?react";
 import { Icon } from "..";
 
 export const PaginationSelector = (props: {

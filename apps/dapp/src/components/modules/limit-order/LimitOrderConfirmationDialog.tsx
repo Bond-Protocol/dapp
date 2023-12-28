@@ -13,7 +13,7 @@ import {
 } from "ui";
 import { useAuth } from "./use-auth";
 import { useLimitOrderForMarket } from "./use-limit-order";
-import { ReactComponent as Timer } from "assets/icons/timer.svg";
+import Timer from "assets/icons/timer.svg?react";
 
 export type LimitOrderConfirmationDialogProps = {
   market: CalculatedMarket;

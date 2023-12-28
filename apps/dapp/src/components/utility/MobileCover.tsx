@@ -1,5 +1,5 @@
 import { AppBackground } from "ui";
-import { ReactComponent as ProtocolLogo } from "../../assets/logo.svg";
+import ProtocolLogo from "../../assets/logo.svg?react";
 
 export const MobileCover = () => {
   return (

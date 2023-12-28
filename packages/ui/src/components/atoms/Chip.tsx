@@ -1,5 +1,5 @@
 import ButtonUnstyled, { ButtonUnstyledProps } from "@mui/base/ButtonUnstyled";
-import { ReactComponent as CheckmarkIcon } from "../../assets/icons/checkmark.svg";
+import CheckmarkIcon from "../../assets/icons/checkmark.svg?react";
 
 export type ChipProps = ButtonUnstyledProps & {
   selected?: boolean;

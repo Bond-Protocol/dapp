@@ -6,7 +6,7 @@ import { Button, Filter, FilterBox, Loading, Tooltip } from "..";
 import { SearchBar } from "./SearchBar";
 import { Pagination } from "./Pagination";
 import { usePagination } from "../../hooks/use-pagination";
-import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg";
+import DownloadIcon from "../../assets/icons/download.svg?react";
 
 export const toValue = (value: any) => ({ value });
 export const toTableData = (
