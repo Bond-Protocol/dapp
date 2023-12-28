@@ -63,7 +63,7 @@ export const TheProblem = ({ className }: { className: string }) => {
               }
             />
             <div className="self-center justify-self-center">
-              <ArrowRight className="rotate-180" />
+              <ArrowRight class="rotate-180" />
             </div>
             <TextBlock
               title="Impermanent Loss"

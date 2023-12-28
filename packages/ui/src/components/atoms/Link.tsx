@@ -3,7 +3,7 @@ import ButtonUnstyled, {
   ButtonUnstyledOwnerState,
   ButtonUnstyledProps,
 } from "@mui/base/ButtonUnstyled";
-import LinkIcon from "../../assets/icons/external-link.svg";
+import { ReactComponent as LinkIcon } from "../../assets/icons/external-link.svg";
 
 const styles = {
   base: "text-white fill-white",
@@ -43,7 +43,7 @@ export const Link = forwardRef(function Button(
         </p>
       )}
       {!props.disableIcon && (
-        <img src={LinkIcon} className={`color-inherit my-auto ${iconClassName}`} />
+        <LinkIcon className={`color-inherit my-auto ${iconClassName}`} />
       )}
     </ButtonUnstyled>
   );

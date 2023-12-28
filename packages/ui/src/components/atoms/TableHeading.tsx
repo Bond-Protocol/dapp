@@ -1,5 +1,5 @@
 import { TableCell, TableCellProps } from "./TableCell";
-import ArrowDownIcon from "../../assets/icons/arrow-down-icon.svg";
+import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-down-icon.svg";
 
 import { Tooltip } from "./Tooltip";
 
@@ -38,7 +38,7 @@ export const TableHeading = ({
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}
         >
-          <img src={ArrowDownIcon}
+          <ArrowDownIcon
             width="16"
             className={`${ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"
@@ -52,7 +52,7 @@ export const TableHeading = ({
           className="my-auto mr-1 cursor-pointer "
           onClick={props.onClickIcon}
         >
-          <img src={ArrowDownIcon}
+          <ArrowDownIcon
             width="16"
             className={`${ascending ? "rotate-180" : ""} ${
               isSorting ? "opacity-100" : "opacity-0"

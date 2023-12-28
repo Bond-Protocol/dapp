@@ -1,12 +1,12 @@
 {
-  "extends": "@bond-protocol/tsconfig/vite.json",
+  "extends": "@bond-protocol/tsconfig/react-library.json",
   "compilerOptions": {
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["cypress", "vite/client"]
+    "types": ["cypress"]
   },
   "include": ["src", "src/main.d.ts", "src/cypress.d.ts", ".storybook"],
   "exclude": ["dist", "build", "node_modules", "src/**/*.cy.*"]

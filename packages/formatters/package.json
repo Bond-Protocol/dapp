@@ -4,6 +4,9 @@
   "description": "Functions that format dates and currency",
   "license": "MIT",
   "main": "./src/index.ts",
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "date-fns": "^2.29.2"
   }

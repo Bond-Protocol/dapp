@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ClickAwayListener, PopperUnstyled } from "@mui/base";
 import { Input, SearchBar, Switch } from "..";
-import FilterIcon  from "../../assets/icons/sliders.svg";
+import { ReactComponent as FilterIcon } from "../../assets/icons/sliders.svg";
 
 type FilterTypes = "switch" | "search" | "global";
 
@@ -52,7 +52,7 @@ export const FilterBox = (props: FilterBoxProps) => {
           hasActiveFilters ? "border-light-secondary" : "border-white"
         } ${props.className}`}
       >
-        <img src={FilterIcon}
+        <FilterIcon
           className={hasActiveFilters ? "fill-light-secondary" : "fill-white"}
         />
       </div>

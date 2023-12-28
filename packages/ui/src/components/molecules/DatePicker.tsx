@@ -1,7 +1,7 @@
 import { DayPicker, DayPickerProps } from "react-day-picker";
 import { useEffect, useState } from "react";
-import ArrowDownIcon from "../../assets/icons/arrow-slim.svg";
-import ClockIcon from "../../assets/icons/clock.svg";
+import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-slim.svg";
+import { ReactComponent as ClockIcon } from "../../assets/icons/clock.svg";
 
 import { Input } from "..";
 import { useTimeInput } from "../../hooks/use-time-input";
@@ -83,8 +83,8 @@ export const DatePicker = (
           formatWeekdayName: (date) => getDayFirstLetter(date),
         }}
         components={{
-          IconLeft: () => <img src={ArrowDownIcon} />,
-          IconRight: () => <img src={ArrowDownIcon} className="rotate-180" />,
+          IconLeft: () => <ArrowDownIcon />,
+          IconRight: () => <ArrowDownIcon className="rotate-180" />,
         }}
       />
       {props.showTime && (
@@ -94,7 +94,7 @@ export const DatePicker = (
           errorMessage={isInThePast ? "That date is in the past 👀 " : ""}
           value={time}
           onChange={(e) => setTime(e)}
-          startAdornment={<img src={ClockIcon} className="ml-2" />}
+          startAdornment={<ClockIcon className="ml-2" />}
         />
       )}
     </div>

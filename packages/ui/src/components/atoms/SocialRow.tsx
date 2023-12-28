@@ -1,10 +1,10 @@
-import CoingeckoIcon from "../../assets/icons/socials/coingecko.svg";
-import GitbookIcon from "../../assets/icons/socials/gitbook.svg";
-import MediumIcon from "../../assets/icons/socials/medium.svg";
-import TwitterIcon from "../../assets/icons/socials/twitter.svg";
-import DiscordIcon from "../../assets/icons/socials/discord.svg";
-import TelegramIcon from "../../assets/icons/socials/telegram.svg";
-import IqIcon from "../../assets/icons/socials/iq.svg";
+import { ReactComponent as CoingeckoIcon } from "../../assets/icons/socials/coingecko.svg";
+import { ReactComponent as GitbookIcon } from "../../assets/icons/socials/gitbook.svg";
+import { ReactComponent as MediumIcon } from "../../assets/icons/socials/medium.svg";
+import { ReactComponent as TwitterIcon } from "../../assets/icons/socials/twitter.svg";
+import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discord.svg";
+import { ReactComponent as TelegramIcon } from "../../assets/icons/socials/telegram.svg";
+import { ReactComponent as IqIcon } from "../../assets/icons/socials/iq.svg";
 import { LinkIcon } from "../../components/atoms/LinkIcon";
 
 export type SocialRowProps = {
@@ -32,41 +32,41 @@ export const SocialRow = (props: SocialRowProps) => {
     >
       {props.coingecko && (
         <LinkIcon href={props.coingecko}>
-          <img src={CoingeckoIcon} width={props.width} />
+          <CoingeckoIcon width={props.width} />
         </LinkIcon>
       )}
       {props.gitbook && (
         <LinkIcon href={props.gitbook}>
-          <img src={GitbookIcon} width={props.width} />
+          <GitbookIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.medium && (
         <LinkIcon href={props.medium}>
-          <img src={MediumIcon} width={props.width} />
+          <MediumIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.twitter && (
         <LinkIcon href={props.twitter} className="hover:text-[#1DA1F2]">
-          <img src={TwitterIcon} width={props.width} />
+          <TwitterIcon width={props.width} />
         </LinkIcon>
       )}
 
       {props.discord && (
         <LinkIcon href={props.discord}>
-          <img src={DiscordIcon} className="hover:text-[#7289da]" width={props.width} />
+          <DiscordIcon className="hover:text-[#7289da]" width={props.width} />
         </LinkIcon>
       )}
 
       {props.telegram && (
         <LinkIcon href={props.telegram}>
-          <img src={TelegramIcon} width={props.width} />
+          <TelegramIcon width={props.width} />
         </LinkIcon>
       )}
       {props.everipedia && (
         <LinkIcon href={props.everipedia}>
-          <img src={IqIcon} width={props.width} />
+          <IqIcon width={props.width} />
         </LinkIcon>
       )}
     </div>

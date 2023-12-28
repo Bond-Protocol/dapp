@@ -1,4 +1,4 @@
-import TooltipIconLocal from "../../assets/icons/tooltip-icon.svg";
+import { ReactComponent as TooltipIconLocal } from "../../assets/icons/tooltip-icon.svg";
 import { useState } from "react";
 import { PopperUnstyled } from "@mui/base";
 
@@ -32,7 +32,7 @@ export const Tooltip = ({ iconWidth = 16, ...props }: TooltipProps) => {
         className="my-auto cursor-help"
       >
         {props.children || (
-          <img
+          <TooltipIconLocal
             className={`hover:fill-light-secondary my-auto transition-all ${props.iconClassname}`}
             width={iconWidth}
           />
@@ -93,7 +93,7 @@ export const TooltipWrapper = (props: TooltipProps) => {
 
 export const TooltipIcon = ({ className }: { className?: string }) => {
   return (
-    <img
+    <TooltipIconLocal
       className={`hover:fill-light-secondary my-auto transition-all ${className}`}
     />
   );

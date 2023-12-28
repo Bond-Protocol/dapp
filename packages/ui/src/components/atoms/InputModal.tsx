@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Icon, Input, InputProps, Modal, ModalProps } from "..";
-import ArrowDownIcon from "../../assets/icons/arrow-icon.svg";
+import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-icon.svg";
 
 type InputModalProps = React.PropsWithChildren<{
   className?: string;
@@ -47,7 +47,7 @@ export const InputModal = ({ ModalContent, ...props }: InputModalProps) => {
         }
         endAdornment={
           props.endAdornment ?? (
-            <img src={ArrowDownIcon} className="mr-3 rotate-180 fill-white text-white" />
+            <ArrowDownIcon className="mr-3 rotate-180 fill-white text-white" />
           )
         }
         onClick={(e) => {

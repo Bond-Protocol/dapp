@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SelectUnstyled, { SelectUnstyledProps } from "@mui/base/SelectUnstyled";
 import OptionUnstyled from "@mui/base/OptionUnstyled";
-import SelectArrowDown from "../../assets/icons/select-arrow-down.svg";
+import { ReactComponent as SelectArrowDown } from "../../assets/icons/select-arrow-down.svg";
 import { TokenLabelProps } from "./TokenLabel";
 import { Logo } from "./TokenLogo";
 
@@ -75,7 +75,7 @@ export const Select = (props: SelectProps) => {
           open ? "rotate-180" : "rotate-0"
         }`}
       >
-        <img src={SelectArrowDown} />
+        <SelectArrowDown />
       </div>
     </div>
   );

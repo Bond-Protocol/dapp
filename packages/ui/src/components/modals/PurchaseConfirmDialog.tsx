@@ -1,6 +1,6 @@
 import { ButtonGroup } from "../../components/molecules/ButtonGroup";
 import { Checkbox, Link, SummaryLabel } from "../../components/atoms";
-import  Arrow from "../../assets/icons/arrow-icon.svg";
+import { ReactComponent as Arrow } from "../../assets/icons/arrow-icon.svg";
 import { SummaryList, SummaryRow } from "../molecules";
 import { useState } from "react";
 import { CalculatedMarket } from "@bond-protocol/types";
@@ -74,7 +74,7 @@ export const PurchaseConfirmDialog = ({
             className="uppercase"
           />
           <div className="flex items-center justify-center">
-            <img src={Arrow} className="rotate-90" />
+            <Arrow className="rotate-90" />
           </div>
           <SummaryLabel
             icon={market.payoutToken.logoURI}
