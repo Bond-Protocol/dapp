@@ -1,10 +1,10 @@
-import { ReactComponent as CoingeckoIcon } from "../../assets/icons/socials/coingecko.svg";
-import { ReactComponent as GitbookIcon } from "../../assets/icons/socials/gitbook.svg";
-import { ReactComponent as MediumIcon } from "../../assets/icons/socials/medium.svg";
-import { ReactComponent as TwitterIcon } from "../../assets/icons/socials/twitter.svg";
-import { ReactComponent as DiscordIcon } from "../../assets/icons/socials/discord.svg";
-import { ReactComponent as TelegramIcon } from "../../assets/icons/socials/telegram.svg";
-import { ReactComponent as IqIcon } from "../../assets/icons/socials/iq.svg";
+import CoingeckoIcon from "../../assets/icons/socials/coingecko.svg?react";
+import GitbookIcon from "../../assets/icons/socials/gitbook.svg?react";
+import MediumIcon  from "../../assets/icons/socials/medium.svg?react";
+import TwitterIcon  from "../../assets/icons/socials/twitter.svg?react";
+import DiscordIcon from "../../assets/icons/socials/discord.svg?react";
+import TelegramIcon from "../../assets/icons/socials/telegram.svg?react";
+import  IqIcon  from "../../assets/icons/socials/iq.svg?react";
 import { LinkIcon } from "../../components/atoms/LinkIcon";
 
 export type SocialRowProps = {

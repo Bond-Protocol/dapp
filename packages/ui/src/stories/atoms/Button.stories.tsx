@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from "@storybook/react";
-import { Button } from "components/atoms/Button";
+import { Button } from "../../components/atoms/Button";
 import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
 import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
 

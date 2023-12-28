@@ -1,4 +1,4 @@
-import { ReactComponent as CheckmarkIcon } from "../../assets/icons/checkmark.svg";
+import CheckmarkIcon from "../../assets/icons/checkmark.svg?react";
 import { useState } from "react";
 
 export type CheckboxProps = {

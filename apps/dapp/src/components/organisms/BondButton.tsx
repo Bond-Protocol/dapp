@@ -1,6 +1,6 @@
 import { Button, Tooltip } from "ui";
 import { ConnectButton } from "components/common";
-import { ReactComponent as LinkIcon } from "ui/src/assets/icons/external-link.svg";
+import LinkIcon from "ui/src/assets/icons/external-link.svg?react";
 import { useNetwork, useSwitchNetwork } from "wagmi";
 import { getChain } from "@bond-protocol/contract-library";
 

@@ -1,7 +1,7 @@
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useNavigate } from "react-router-dom";
 import { Link } from "ui";
-import { ReactComponent as ArrowLeft } from "../../assets/icons/arrow-left.svg";
+import ArrowLeft from "../../assets/icons/arrow-left.svg?react";
 
 export interface PageNavigationProps {
   children?: React.ReactNode;

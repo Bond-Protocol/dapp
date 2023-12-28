@@ -87,6 +87,6 @@
     "storybook": "^7.2.1",
     "typescript": "^5.2.2",
     "vite": "^3.2.7",
-    "vite-plugin-svgr": "^2.2.1"
+    "vite-plugin-svgr": "^4.2.0"
   }
 }

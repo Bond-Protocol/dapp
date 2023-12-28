@@ -1,6 +1,6 @@
 import { ButtonGroup } from "../../components/molecules/ButtonGroup";
 import { Checkbox, Link, SummaryLabel } from "../../components/atoms";
-import { ReactComponent as Arrow } from "../../assets/icons/arrow-icon.svg";
+import Arrow from "../../assets/icons/arrow-icon.svg?react";
 import { SummaryList, SummaryRow } from "../molecules";
 import { useState } from "react";
 import { CalculatedMarket } from "@bond-protocol/types";

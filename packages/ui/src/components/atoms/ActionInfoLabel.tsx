@@ -1,6 +1,6 @@
 import { InputUnstyled } from "@mui/base";
 import { Icon, Link, Tooltip, Copy } from "..";
-import { ReactComponent as EditIcon } from "../../assets/icons/edit-icon.svg";
+import EditIcon from "../../assets/icons/edit-icon.svg?react";
 import { useSymbolInput } from "../../hooks/use-symbol-input";
 import { useState } from "react";
 

@@ -13,15 +13,16 @@ const nextConfig = {
     //   },
     // ],
   },
-  // webpack(config) {
-  //   config.module.rules.push({
-  //     test: /\.svg$/i,
-  //     issuer: /\.[jt]sx?$/,
-  //     use: ["@svgr/webpack"],
-  //   });
+  webpack(config, options) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: /\.[jt]sx?$/,
+      use: ["@svgr/webpack"],
+    });
 
-  //   return config;
-  // },
+    return config;
+  },
+  transpilePackages: ["ui"],
 };
 
 module.exports = nextConfig;

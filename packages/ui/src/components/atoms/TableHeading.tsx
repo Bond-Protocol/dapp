@@ -1,5 +1,5 @@
 import { TableCell, TableCellProps } from "./TableCell";
-import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-down-icon.svg";
+import ArrowDownIcon from "../../assets/icons/arrow-down-icon.svg?react";
 
 import { Tooltip } from "./Tooltip";
 

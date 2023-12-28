@@ -17,7 +17,7 @@ import {
   TransactionHashDialog,
   vestingOptions,
 } from "ui";
-import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import CalendarIcon from "assets/icons/calendar-big.svg?react";
 import { SelectTokenController } from "components/organisms/SelectTokenController";
 import { calculateTrimDigits, trimAsNumber } from "formatters";
 import {

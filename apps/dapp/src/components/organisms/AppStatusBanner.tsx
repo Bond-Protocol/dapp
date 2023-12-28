@@ -1,6 +1,6 @@
 import { environment } from "../../environment";
-import { ReactComponent as AlertIcon } from "../../assets/icons/alert.svg";
-import { ReactComponent as InfoIcon } from "../../assets/icons/info.svg";
+import AlertIcon from "../../assets/icons/alert.svg?react";
+import InfoIcon from "../../assets/icons/info.svg?react";
 
 const dAppLink = "https://app.bondprotocol.finance";
 

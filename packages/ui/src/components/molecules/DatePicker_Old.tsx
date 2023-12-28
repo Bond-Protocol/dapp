@@ -3,7 +3,7 @@ import "react-day-picker/dist/style.css";
 import { DayPicker } from "react-day-picker";
 import { useEffect, useState } from "react";
 import { ClickAwayListener } from "@mui/base";
-import { ReactComponent as CalendarIcon } from "../../assets/icons/calendar.svg";
+import CalendarIcon from "../../assets/icons/calendar.svg?react";
 
 export type DatePickerV1Props = {
   onChange?: (date?: number) => void;
