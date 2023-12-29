@@ -6,7 +6,6 @@ import { ReactQueryProvider } from "./react-query-provider";
 import { MarketProvider } from "./market-context";
 import { TokenProvider } from "./token-context";
 import { TokenlistProvider } from "./tokenlist-context";
-import { DashboardProvider } from "context/dashboard-context";
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
@@ -14,11 +13,9 @@ export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
       <BlockchainProvider>
         <TokenProvider>
           <MarketProvider>
-            <DashboardProvider>
-              <TokenlistProvider>
-                <Router>{children}</Router>
-              </TokenlistProvider>
-            </DashboardProvider>
+            <TokenlistProvider>
+              <Router>{children}</Router>
+            </TokenlistProvider>
           </MarketProvider>
         </TokenProvider>
       </BlockchainProvider>

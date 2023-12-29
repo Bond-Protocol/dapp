@@ -4,7 +4,7 @@ import type { AllowanceToken } from "components";
 import { Button, formatCurrency, InfoLabel } from "ui";
 import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
 import { UserMarketList } from "components/lists/UserMarketList";
-import { useDashboard } from "context/dashboard-context";
+import { useDashboard } from "hooks";
 import { useMarkets } from "context/market-context";
 import { useTokens } from "context/token-context";
 

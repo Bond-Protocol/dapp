@@ -1,7 +1,6 @@
-import { useDashboard } from "context/dashboard-context";
-import { useMediaQueries } from "hooks/useMediaQueries";
+import { useDashboard, useMediaQueries } from "hooks";
 import { formatCurrency, InfoLabel } from "ui";
-import { BondList, TransactionHistory } from "..";
+import { BondList, TransactionHistory, TransactionHistoryData } from "..";
 
 export const UserBonds = () => {
   const { isLoading, ownerBalances, bondPurchases, userTbv, userClaimable } =
@@ -35,7 +34,7 @@ export const UserBonds = () => {
       <TransactionHistory
         title="Bond History"
         className="mb-30"
-        data={bondPurchases}
+        data={bondPurchases as TransactionHistoryData}
       />
     </div>
   );
