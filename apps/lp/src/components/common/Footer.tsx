@@ -8,7 +8,7 @@ const terms = [
 ];
 
 export const socials = [
-  { label: "Discord", url: "https://discord.gg/bondprotocol" },
+  { label: "Discord", url: "https://discord.gg/EjAm9m6jFy" },
   { label: "Medium", url: "https://medium.com/@Bond_Protocol" },
   { label: "Twitter", url: "https://twitter.com/bond_protocol" },
 ];
