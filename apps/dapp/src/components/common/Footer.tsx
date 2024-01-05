@@ -4,7 +4,7 @@ import { useMediaQueries } from "hooks/useMediaQueries";
 
 export const socials = {
   medium: "https://medium.com/@Bond_Protocol",
-  discord: "https://discord.gg/bondprotocol",
+  discord: "https://discord.gg/EjAm9m6jFy",
   twitter: "https://twitter.com/bond_protocol",
   gitbook: "https://docs.bondprotocol.finance",
 };
