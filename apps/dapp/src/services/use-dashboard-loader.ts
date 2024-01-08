@@ -13,13 +13,14 @@ import {
   getBalance,
   trim,
 } from "@bond-protocol/contract-library";
-import { clients, useTokens } from "context";
+import { clients } from "context";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
 import axios from "axios";
 import { Token } from "types";
 import { environment } from "src/environment";
 import filterArrayByUniqueKey from "src/utils/filter-unique";
+import { useTokens } from "hooks/useTokens";
 
 export type TweakedBondPurchase = BondPurchase & {
   txUrl: string;
