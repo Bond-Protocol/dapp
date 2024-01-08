@@ -22,8 +22,9 @@ export default function Page(props: any) {
             <Navbar />
             <div className="child:px-4 isolate mx-auto w-full max-w-[600px] pt-4 font-sans antialiased md:max-w-[1440px] md:pt-12 lg:max-w-[1600px] lg:pt-20">
               {props.children}
+
+              <Footer />
             </div>
-            <Footer />
           </Background>
         </div>
       </main>
