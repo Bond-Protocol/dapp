@@ -1,6 +1,6 @@
 import { useChainId } from "wagmi";
-import { useEffect, useState } from "react";
-import { Token, chainLogos } from "types";
+import { useState } from "react";
+import { chainLogos } from "types";
 import {
   ImportTokenDialog,
   SelectTokenDialog,
@@ -8,8 +8,8 @@ import {
 } from "ui";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/blockchain-provider";
-import { useTokenlists } from "context/tokenlist-context";
-import { isAddress } from "viem";
+import { useTokens } from "hooks";
+import { Address } from "viem";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
   chainId: number;
@@ -19,79 +19,43 @@ const icons = ACTIVE_CHAINS.map((c) => ({ id: c.id, src: chainLogos[c.id] }));
 
 export const SelectTokenController = (props: SelectTokenControllerProps) => {
   const [filter, setFilter] = useState("");
-  const [importedToken, setImportedToken] = useState<Token>();
-  const [source, setSource] = useState("defillama");
-  const [isLoading, setLoading] = useState(false);
-  const { discover, discoverLogo } = useDiscoverToken();
 
   const connectedChainId = useChainId();
-  const tokenUtils = useTokenlists();
+  const tokenUtils = useTokens();
 
   const chainId = props.chainId || connectedChainId || 1;
 
-  const tokens = tokenUtils.getByChain(chainId);
+  const { token, source, isLoading } = useDiscoverToken({
+    chainId,
+    address: filter.trim() as Address,
+  });
 
-  useEffect(() => {
-    async function fetchUnknownToken() {
-      const address = filter.trim();
-      if (isAddress(address)) {
-        try {
-          setLoading(true);
-          const { token, source } = await discover(address, chainId);
-          setImportedToken(token);
-          setSource(source);
-        } catch (e) {
-          setLoading(false);
-          console.error(`Failed to discover ${address} on chain ${chainId}`, e);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setImportedToken(undefined);
-      }
-    }
-    fetchUnknownToken();
-  }, [filter]);
-
-  useEffect(() => {
-    async function fetchTokenLogo() {
-      if (
-        source !== "on-chain" &&
-        importedToken?.address &&
-        !importedToken.logoURI
-      ) {
-        const updated = await discoverLogo(importedToken);
-        setImportedToken(updated);
-      }
-    }
-
-    fetchTokenLogo();
-  }, [importedToken]);
+  const tokens = tokenUtils.getTokenlistBychain(chainId);
 
   return (
     <div>
       <SelectTokenDialog
         {...props}
-        tokens={tokens}
+        tokens={tokens ?? []}
         selected={String(chainId)}
         //@ts-ignore
         icons={icons}
         filter={filter}
         setFilter={setFilter}
         onChange={() => {
-          props.onChange(importedToken);
+          props.onChange(token);
         }}
       />
-      {(isLoading || importedToken) && (
+      {(isLoading || token) && (
         <ImportTokenDialog
-          token={importedToken}
-          priceSource={source}
+          token={token}
+          priceSource={source!}
           isLoading={isLoading}
           onConfirm={(e) => {
-            if (importedToken) {
-              tokenUtils.addToken(importedToken);
+            if (token) {
+              tokenUtils.addToken(token);
             }
-            props.onSubmit({ value: importedToken });
+            props.onSubmit({ value: token });
             props.onClose(e);
           }}
         />

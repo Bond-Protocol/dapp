@@ -1,8 +1,3 @@
-import tokenlist from "./tokenlist.json";
-import testnetTokenlist from "./testnet-tokenlist.json";
-
-export { tokenlist, testnetTokenlist };
-
 export * from "./useBrowserStorage";
 export * from "./useDashboard";
 export * from "./useTokenPricesHistory";

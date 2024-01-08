@@ -1,7 +1,7 @@
 import { CalculatedMarket } from "types";
 import { BondPriceLabel } from "components/common/BondPriceLabel";
 import { BondPurchaseCard } from "components/organisms";
-import { useMarkets } from "context/market-context";
+import { useMarkets } from "hooks";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { useParams } from "react-router-dom";
 import { SummaryLabel, getDiscountColor } from "ui";
@@ -9,7 +9,7 @@ import { SummaryLabel, getDiscountColor } from "ui";
 export const EmbeddedPurchaseCard = (props: { market?: CalculatedMarket }) => {
   const { id, chainId } = useParams();
   const { getByChainAndId } = useMarkets();
-  const market = props.market ?? getByChainAndId(chainId!, id!);
+  const market = props.market ?? getByChainAndId(chainId!, id!)!;
   const details = useMarketDetails(market);
 
   return (
