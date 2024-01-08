@@ -166,11 +166,14 @@ const marketTxsHistory: Column<any>[] = [
     },
   },
 ];
+export type TransactionHistoryData = Array<
+  BondPurchase & { chainId: number | string }
+>;
 
 export interface TransactionHistoryProps {
   title?: string;
   market?: CalculatedMarket | PastMarket;
-  data?: Array<BondPurchase & { chainId: number | string }>;
+  data?: TransactionHistoryData;
   className?: string;
 }
 

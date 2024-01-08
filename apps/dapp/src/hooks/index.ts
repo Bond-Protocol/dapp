@@ -1,4 +1,5 @@
 export * from "./useBrowserStorage";
+export * from "./useDashboard";
 export * from "./useTokenPricesHistory";
 export * from "./useCalculatedMarkets";
 export * from "./useMarkets";
