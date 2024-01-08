@@ -5,24 +5,16 @@ import { BlockchainProvider } from "./blockchain-provider";
 import { ReactQueryProvider } from "./react-query-provider";
 import { MarketProvider } from "./market-context";
 import { DashboardProvider } from "context/dashboard-context";
-import {
-  AuthProvider,
-  OrderServiceProvider,
-} from "components/modules/limit-order";
 
 export const Providers: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <ReactQueryProvider>
       <BlockchainProvider>
-        <AuthProvider>
-          <MarketProvider>
-            <OrderServiceProvider>
-              <DashboardProvider>
-                <Router>{children}</Router>
-              </DashboardProvider>
-            </OrderServiceProvider>
-          </MarketProvider>
-        </AuthProvider>
+        <MarketProvider>
+          <DashboardProvider>
+            <Router>{children}</Router>
+          </DashboardProvider>
+        </MarketProvider>
       </BlockchainProvider>
     </ReactQueryProvider>
   );
