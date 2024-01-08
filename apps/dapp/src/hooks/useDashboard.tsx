@@ -9,13 +9,14 @@ import axios from "axios";
 import { Token } from "types";
 import { useQuery } from "@tanstack/react-query";
 import { useGetSubgraphQueries } from "services";
-import { clients, useTokens } from "context";
+import { clients } from "context";
 import {
   BondPurchase,
   GetDashboardDataDocument,
   GetDashboardDataQuery,
 } from "../generated/graphql";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
+import { useTokens } from "hooks";
 
 export type DetailedBondPurchase = BondPurchase & {
   txUrl: string;
