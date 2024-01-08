@@ -1,5 +1,5 @@
 import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
-import { useMarkets } from "context/market-context";
+import { useMarkets } from "hooks";
 import { useQueries } from "@tanstack/react-query";
 import { useOrderApi } from "./use-order-api";
 import { OrderConfig, orderService } from "services/order-service";
@@ -217,6 +217,7 @@ export const LimitOrderFullList = () => {
           }
 
           return {
+            //@ts-ignore TODO: refactor market types
             ...orderService.parseOrder(order, market),
             market,
           };
