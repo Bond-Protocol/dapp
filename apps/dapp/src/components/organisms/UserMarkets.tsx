@@ -5,8 +5,7 @@ import { Button, formatCurrency, InfoLabel } from "ui";
 import { UpdateAllowanceModal } from "components/modals/UpdateAllowancesModal";
 import { UserMarketList } from "components/lists/UserMarketList";
 import { useDashboard } from "context/dashboard-context";
-import { useMarkets } from "context/market-context";
-import { useTokens } from "hooks";
+import { useMarkets, useTokens } from "hooks";
 
 export const UserMarkets = () => {
   const navigate = useNavigate();
@@ -26,7 +25,7 @@ export const UserMarkets = () => {
             market.payoutToken;
 
           const calculatedMarket = markets.allMarkets.find(
-            (m) => m?.id === market.id
+            (m: any) => m?.id === market.id
           );
 
           return {
