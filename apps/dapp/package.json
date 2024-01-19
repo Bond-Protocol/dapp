@@ -92,7 +92,7 @@
     "prop-types": "^15.8.1",
     "storybook": "^7.2.1",
     "typescript": "^5.2.2",
-    "vite": "^3.2.7",
+    "vite": "^3.2.8",
     "vite-plugin-svgr": "^2.2.1"
   }
 }
