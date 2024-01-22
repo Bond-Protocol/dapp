@@ -27,6 +27,9 @@ interface ImportMetaEnv {
   readonly VITE_ALCHEMY_POLYGON_MAINNET_KEY: string;
   readonly VITE_ALCHEMY_POLYGON_TESTNET_KEY: string;
 
+  readonly VITE_ALCHEMY_BASE_MAINNET_KEY: string;
+  readonly VITE_ALCHEMY_BASE_TESTNET_KEY: string;
+
   // PROTOCOL SPECIFIC VARS
   readonly VITE_MARKET_REFERRAL_ADDRESS: string;
   readonly VITE_NO_FRONTEND_FEE_OWNERS: string;

@@ -23,6 +23,8 @@ import {
   optimismGoerli,
   polygon,
   polygonMumbai,
+  base,
+  baseGoerli,
 } from "wagmi/chains";
 import { environment } from "src/environment";
 import { publicProvider } from "wagmi/providers/public";
@@ -36,9 +38,10 @@ export const testnets = [
   arbitrumGoerli,
   optimismGoerli,
   polygonMumbai,
+  baseGoerli,
 ].map(getIconsForChains);
 
-export const mainnets = [mainnet, arbitrum, optimism, polygon];
+export const mainnets = [mainnet, arbitrum, optimism, polygon, base];
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS: _Chain[] = environment.isTestnet
@@ -122,6 +125,18 @@ const setup = [
     chain: polygonMumbai,
     endpoint: `https://polygon-mumbai.g.alchemy.com/v2/${
       import.meta.env.VITE_ALCHEMY_POLYGON_TESTNET_KEY
+    }`,
+  },
+  {
+    chain: base,
+    endpoint: `https://base-mainnet.g.alchemy.com/v2/${
+      import.meta.env.VITE_ALCHEMY_BASE_MAINNET_KEY
+    }`,
+  },
+  {
+    chain: baseGoerli,
+    endpoint: `https://base-goerli.g.alchemy.com/v2/${
+      import.meta.env.VITE_ALCHEMY_BASE_MAINNET_KEY
     }`,
   },
 ];
