@@ -35,7 +35,6 @@
     "decimals": 18,
     "display": true
   },
-
   {
     "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
     "chainId": 137,
@@ -45,7 +44,6 @@
     "decimals": 18,
     "display": true
   },
-
   {
     "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     "chainId": 1,
@@ -82,7 +80,6 @@
     "decimals": 18,
     "display": true
   },
-
   {
     "address": "0x853d955acef822db058eb8505911ed77f175b99e",
     "chainId": 1,
@@ -254,7 +251,6 @@
     "decimals": 8,
     "display": true
   },
-
   {
     "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
     "chainId": 1,
@@ -264,7 +260,6 @@
     "decimals": 18,
     "display": false
   },
-
   {
     "address": "0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B",
     "chainId": 1,
@@ -274,7 +269,6 @@
     "decimals": 18,
     "display": true
   },
-
   {
     "address": "0xc0c293ce456ff0ed870add98a0828dd4d2903dbf",
     "chainId": 1,
@@ -284,7 +278,6 @@
     "decimals": 18,
     "display": true
   },
-
   {
     "address": "0x64aa3364f17a4d01c6f1751fd97c2bd3d7e7f1d5",
     "chainId": 1,
