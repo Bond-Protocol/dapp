@@ -6,6 +6,8 @@ const platforms: Record<number, string> = {
   1: "ethereum",
   42161: "arbitrum-one",
   10: "optimistic-ethereum",
+  8453: "base",
+  137: "polygon-pos",
 };
 
 export const generateCoingeckoFetch = (url: string) => {
