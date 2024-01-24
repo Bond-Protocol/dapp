@@ -136,7 +136,7 @@ const setup = [
   {
     chain: baseSepolia,
     endpoint: `https://base-sepolia.g.alchemy.com/v2/${
-      import.meta.env.VITE_ALCHEMY_BASE_MAINNET_KEY
+      import.meta.env.VITE_ALCHEMY_BASE_SEPOLIA_KEY
     }`,
   },
 ];

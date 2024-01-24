@@ -22,6 +22,8 @@ export enum CHAIN_ID {
   AURORA_TESTNET = "1313161555",
   BOBA_MAINNET = "288",
   HARMONY_MAINNET = "1666600000",
+  BASE_MAINNET = "8453",
+  BASE_SEPOLIA = "84532",
 }
 
 export const chainLogos: Record<number, string> = {
