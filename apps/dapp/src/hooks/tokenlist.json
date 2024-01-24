@@ -35,6 +35,16 @@
     "decimals": 18,
     "display": true
   },
+
+  {
+    "address": "0x50c5725949a6f0c72e6c4a641f24049a917db0cb",
+    "chainId": 8453,
+    "name": "DAI",
+    "symbol": "DAI",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/DAI.png",
+    "decimals": 18,
+    "display": true
+  },
   {
     "address": "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
     "chainId": 137,

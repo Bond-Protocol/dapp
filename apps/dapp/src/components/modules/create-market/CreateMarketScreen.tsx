@@ -282,7 +282,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
           {/* @ts-ignore */}
           <PriceModelPicker
             id="cm-price-model-picker"
-            chain={chain}
+            chain={state.chainId}
             payoutToken={state.payoutToken}
             quoteToken={state.quoteToken}
             oraclePrice={props.oraclePrice}
