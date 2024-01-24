@@ -24,7 +24,7 @@ import {
   polygon,
   polygonMumbai,
   base,
-  baseGoerli,
+  baseSepolia,
 } from "wagmi/chains";
 import { environment } from "src/environment";
 import { publicProvider } from "wagmi/providers/public";
@@ -38,7 +38,7 @@ export const testnets = [
   arbitrumGoerli,
   optimismGoerli,
   polygonMumbai,
-  baseGoerli,
+  baseSepolia,
 ].map(getIconsForChains);
 
 export const mainnets = [mainnet, arbitrum, optimism, polygon, base];
@@ -134,8 +134,8 @@ const setup = [
     }`,
   },
   {
-    chain: baseGoerli,
-    endpoint: `https://base-goerli.g.alchemy.com/v2/${
+    chain: baseSepolia,
+    endpoint: `https://base-sepolia.g.alchemy.com/v2/${
       import.meta.env.VITE_ALCHEMY_BASE_MAINNET_KEY
     }`,
   },
