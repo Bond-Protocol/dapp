@@ -15,6 +15,7 @@ import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import axios from "axios";
 import { PastMarket } from "components/organisms/ClosedMarket";
 import TrimmedTextContent from "components/common/TrimmedTextContent";
+import filterArrayByUniqueKey from "src/utils/filter-unique";
 
 const blockExplorer: Column<any> = {
   accessor: "blockExplorerUrl",
@@ -186,7 +187,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
 
   useEffect(() => {
     loadBondPurchases().then((response) => {
-      setBondPurchases(response);
+      setBondPurchases(filterArrayByUniqueKey(response, "timestamp"));
     });
   }, []);
 

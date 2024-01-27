@@ -102,7 +102,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const isEmbed = useIsEmbed();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<string>("");
   const [payout, setPayout] = useState<number>(0);
   const [networkFee, setNetworkFee] = useState("0");
   const [networkFeeUsd, setNetworkFeeUsd] = useState("0");
@@ -110,9 +110,12 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const { isConnected } = useAccount();
 
   const { data: gasData } = useFeeData({ chainId: Number(market.chainId) });
+  const parsedAmount = Number(amount.replaceAll(",", ""));
+  const amountIn =
+    !isNaN(parsedAmount) && !isFinite(parsedAmount) ? 0 : parsedAmount;
 
   const bond = usePurchase(market, {
-    amountIn: amount,
+    amountIn,
     amountOut: payout,
     referrer: referralAddress,
     slippage: DEFAULT_SLIPPAGE,
@@ -128,7 +131,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     market.quoteToken.address as Address,
     market.quoteToken.decimals,
     market.chainId,
-    amount.toString(),
+    parsedAmount.toString(),
     market.teller
   );
 
@@ -168,7 +171,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
 
   useEffect(() => {
     const updatePayout = async () => {
-      let payout = await bond.getPayoutFor({ amount: amount.toString() });
+      let payout = await bond.getPayoutFor({ amount: parsedAmount.toString() });
       let formattedPayout = formatUnits(payout, market.payoutToken.decimals);
 
       setPayout(Number(formatCurrency.trimToken(formattedPayout)));
@@ -228,7 +231,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     <div className="p-4">
       <div className="flex h-full flex-col justify-between">
         <InputCard
-          onChange={(amount) => setAmount(Number(amount))}
+          onChange={(amount) => setAmount(amount)}
           value={amount.toString()}
           balance={balance}
           market={market}
