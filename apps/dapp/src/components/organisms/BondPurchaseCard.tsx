@@ -227,11 +227,19 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     navigate((isEmbed ? "/embed" : "") + "/dashboard");
   };
 
+  const isExceedingAmount = parsedAmount > Number(market.maxAmountAccepted);
+
   return (
     <div className="p-4">
       <div className="flex h-full flex-col justify-between">
         <InputCard
-          onChange={(amount) => setAmount(amount)}
+          onChange={(amount) =>
+            setAmount((prev) =>
+              !isNaN(Number(amount)) && isFinite(Number(amount))
+                ? amount.toString()
+                : prev
+            )
+          }
           value={amount.toString()}
           balance={balance}
           market={market}
@@ -245,7 +253,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
         <ActionInfoList fields={summaryFields} />
         <BondButton
           showConnect={!isConnected}
-          showPurchaseLink={!hasSufficientBalance}
+          showPurchaseLink={!hasSufficientBalance && !isExceedingAmount}
           chainId={market.chainId}
           quoteTokenSymbol={market.quoteToken.symbol}
           purchaseLink={defillama.getSwapURL(
@@ -254,11 +262,17 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           )}
         >
           <Button
-            disabled={!hasSufficientBalance || approveTxStatus.isLoading}
+            disabled={
+              !hasSufficientBalance ||
+              approveTxStatus.isLoading ||
+              isExceedingAmount
+            }
             className="mt-4 w-full"
             onClick={onClickBond}
           >
-            {approveTxStatus.isLoading ? (
+            {isExceedingAmount ? (
+              "Amount exceeds max accepted per bond"
+            ) : approveTxStatus.isLoading ? (
               <ApprovingLabel />
             ) : !hasSufficientAllowance && hasSufficientBalance ? (
               "APPROVE"
