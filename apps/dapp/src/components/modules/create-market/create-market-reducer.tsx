@@ -3,6 +3,7 @@ import { createContext, Dispatch, useContext, useReducer } from "react";
 import { differenceInCalendarDays } from "date-fns";
 import { formatUnits, parseUnits } from "viem";
 import { switchNetwork } from "@wagmi/core";
+import { unavailableOracleChains } from "./config";
 
 const DEFAULT_DEPOSIT_INTERVAL = 86400;
 const DEFAULT_DEBT_BUFFER = 75;
@@ -249,11 +250,15 @@ export const reducer = (
 
       switchNetwork({ chainId });
 
+      const oracleUnavailable = unavailableOracleChains.includes(chainId);
+
       return {
         ...state,
         chainId,
         payoutToken: placeholderToken,
         quoteToken: placeholderToken,
+        oracle: !oracleUnavailable && state.oracle,
+        priceModel: oracleUnavailable ? "dynamic" : state.priceModel,
       };
     }
 

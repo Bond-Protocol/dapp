@@ -172,7 +172,7 @@ const polygonMumbaiAddresses: ContractAddresses = {
   fixedTermFPAAuctioneer: "0xF7F9A834CBD3075D4810A9b818f594312C0de168",
   fixedTermOFDAAuctioneer: "0xF70FDA7c9C397CE958320Db5C481939F0a8bb08D",
   fixedTermOSDAAuctioneer: "0xF705DA88cd0AAeed5EA612502Fb9E5E7f1A5c2bD",
-  settlement: "" as Address,
+  settlement: "0x007102170E678984738f687E5b70F89Ad7ACa85e",
 };
 
 const polygonMainnetAddresses: ContractAddresses = {
@@ -190,8 +190,45 @@ const polygonMainnetAddresses: ContractAddresses = {
   fixedTermFPAAuctioneer: "0xF7F9A834CBD3075D4810A9b818f594312C0de168",
   fixedTermOFDAAuctioneer: "0xF70FDA7c9C397CE958320Db5C481939F0a8bb08D",
   fixedTermOSDAAuctioneer: "0xF705DA88cd0AAeed5EA612502Fb9E5E7f1A5c2bD",
-  settlement: "" as Address,
+  settlement: "0x007102170E678984738f687E5b70F89Ad7ACa85e",
 };
+
+const baseSepoliaAddresses: ContractAddresses = {
+  authority: "0x007A2F0A16bd0874CA2e1FFfAfc2d6B0b876aA8E",
+  aggregator: "0x007A6621A9997A633Cb1B757f2f7ffb51310704A",
+  fixedExpiryTeller: "0x007FE7c977a584CC54269730d210D889a86Ff9Cf",
+  fixedExpirySDAAuctioneer: "" as Address,
+  fixedExpirySDAv1_1Auctioneer: "0xFE5DA8cF974EaC29606EDce195BF7fAbfC570f1C",
+  fixedExpiryFPAAuctioneer: "0xFEF9A1BB7c9AFd5F31c58Cf87Cefc639bDfA04Dd",
+  fixedExpiryOFDAAuctioneer: "" as Address,
+  fixedExpiryOSDAAuctioneer: "" as Address,
+  fixedTermTeller: "0x007F774351e541b8bc720018De0796c4BF5afE3D",
+  fixedTermSDAAuctioneer: "" as Address,
+  fixedTermSDAv1_1Auctioneer: "0xF75DA1E6eA0521da0cb938D2F96bfe1Da5929557",
+  fixedTermFPAAuctioneer: "0xF7F9A834CBD3075D4810A9b818f594312C0de168",
+  fixedTermOFDAAuctioneer: "" as Address,
+  fixedTermOSDAAuctioneer: "" as Address,
+  settlement: "0x007102170E678984738f687E5b70F89Ad7ACa85e",
+};
+
+const baseMainnetAddresses: ContractAddresses = {
+  authority: "0x007A2F0A16bd0874CA2e1FFfAfc2d6B0b876aA8E",
+  aggregator: "0x007A6621A9997A633Cb1B757f2f7ffb51310704A",
+  fixedExpiryTeller: "0x007FE7c977a584CC54269730d210D889a86Ff9Cf",
+  fixedExpirySDAAuctioneer: "" as Address,
+  fixedExpirySDAv1_1Auctioneer: "0xFE5DA8cF974EaC29606EDce195BF7fAbfC570f1C",
+  fixedExpiryFPAAuctioneer: "0xFEF9A1BB7c9AFd5F31c58Cf87Cefc639bDfA04Dd",
+  fixedExpiryOFDAAuctioneer: "" as Address,
+  fixedExpiryOSDAAuctioneer: "" as Address,
+  fixedTermTeller: "0x007F774351e541b8bc720018De0796c4BF5afE3D",
+  fixedTermSDAAuctioneer: "" as Address,
+  fixedTermSDAv1_1Auctioneer: "0xF75DA1E6eA0521da0cb938D2F96bfe1Da5929557",
+  fixedTermFPAAuctioneer: "0xF7F9A834CBD3075D4810A9b818f594312C0de168",
+  fixedTermOFDAAuctioneer: "" as Address,
+  fixedTermOSDAAuctioneer: "" as Address,
+  settlement: "0x007102170E678984738f687E5b70F89Ad7ACa85e",
+};
+
 const addressesByChainId: Record<number, Partial<ContractAddresses>> = {
   1: mainnetAddresses as ContractAddresses,
   5: goerliAddresses,
@@ -201,6 +238,8 @@ const addressesByChainId: Record<number, Partial<ContractAddresses>> = {
   420: optimismGoerliAddresses,
   137: polygonMainnetAddresses,
   80001: polygonMumbaiAddresses,
+  8453: baseMainnetAddresses,
+  84532: baseSepoliaAddresses,
 };
 
 export const getAddresses = (chainId: number) => {

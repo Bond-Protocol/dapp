@@ -6,6 +6,8 @@ import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
 import { PriceModelDetails } from "./PriceModelDetails";
 import { PriceModel, PriceType } from "./create-market-reducer";
 import { PriceControl, PriceControlProps } from "./PriceControl";
+import { useNetwork } from "wagmi";
+import { unavailableOracleChains } from "./config";
 
 export type PriceModelPickerProps = {
   onChange: (args: {
@@ -14,7 +16,7 @@ export type PriceModelPickerProps = {
     oracleAddress: string;
   }) => any;
   id?: string;
-  chain: string;
+  chain: number;
   oraclePrice?: number;
   oracleMessage?: string;
   isOracleValid?: boolean;
@@ -103,6 +105,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
   const [type, setType] = useState<PriceType>("dynamic");
   const [oracle, setOracle] = useState(false);
   const [oracleAddress, setOracleAddress] = useState("");
+  const { chain } = useNetwork();
 
   const priceModel: PriceModel = oracle ? `oracle-${type}` : type;
 
@@ -118,7 +121,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
     <div id={props.id} className="w-full">
       <div className="flex items-center justify-between">
         <p className="text-sm text-light-grey-400">Price Model</p>
-        {Number(props.chain) !== 1 ? (
+        {props.chain && !unavailableOracleChains.includes(props.chain) ? (
           <Switch
             label="Oracle"
             onChange={(e) => {
@@ -128,7 +131,12 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
           />
         ) : (
           <div>
-            <TooltipWrapper content="Oracle markets are currently unavailable on Ethereum Mainnet">
+            <TooltipWrapper
+              content={
+                "Oracle markets are currently unavailable on " +
+                (chain?.name ?? "this chain")
+              }
+            >
               <Switch disabled label="Oracle" onChange={(_e) => {}} />
             </TooltipWrapper>
           </div>
