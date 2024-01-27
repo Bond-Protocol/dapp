@@ -19,6 +19,7 @@ import { dateMath } from "ui";
 import axios from "axios";
 import { Token } from "types";
 import { environment } from "src/environment";
+import filterArrayByUniqueKey from "src/utils/filter-unique";
 
 export type TweakedBondPurchase = BondPurchase & {
   txUrl: string;
@@ -77,7 +78,9 @@ export const useDashboardLoader = () => {
       );
 
       loadBondPurchases().then((response) => {
-        setBondPurchases(response.bondPurchases);
+        setBondPurchases(
+          filterArrayByUniqueKey(response.bondPurchases, "timestamp")
+        );
         setUserTbv(response.tbvUsd);
       });
 
