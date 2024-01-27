@@ -22,7 +22,10 @@ export async function calculateMarket(
   const market = createBaseMarket(subgraphMarket);
   const { quoteToken, payoutToken } = market;
 
-  if (!quoteToken.price || !payoutToken.price) return market;
+  //TODO: delete
+  //const printCondition = quoteToken.address === testAdd;
+
+  //if (!quoteToken.price || !payoutToken.price) return market;
 
   const auctioneerContract = getContract({
     abi: getAuctioneerAbiForName(market.name as Auctioneer),
@@ -78,9 +81,13 @@ export async function calculateMarket(
   //   quoteToken.decimals
   // );
 
-  const discountedPrice = Number(quoteTokensPerPayoutToken) * quoteToken.price;
+  const quotePrice = quoteToken.price ?? 0;
+  const payoutPrice = payoutToken.price ?? 0;
+
+  const discountedPrice = Number(quoteTokensPerPayoutToken) * quotePrice;
+
   const _discount = (
-    ((discountedPrice - payoutToken.price) / payoutToken.price) *
+    ((discountedPrice - payoutPrice) / payoutPrice) *
     100
   ).toFixed(2);
 
@@ -97,7 +104,7 @@ export async function calculateMarket(
 
   const maxPayout = formatUnits(BigInt(_maxPayout), payoutToken.decimals);
 
-  const maxPayoutUsd = Number(maxPayout) * payoutToken.price;
+  const maxPayoutUsd = Number(maxPayout) * payoutPrice;
 
   const ownerBalance = formatUnits(ownerPayoutBalance, payoutToken.decimals);
 
@@ -115,12 +122,10 @@ export async function calculateMarket(
 
   const capacityToken = isCapacityInQuote ? quoteToken : payoutToken;
 
-  const fullPrice = payoutToken.price;
-
   return {
     ...market,
     isLive,
-    fullPrice,
+    fullPrice: payoutPrice,
     quoteTokensPerPayoutToken: Number(quoteTokensPerPayoutToken.toString()),
     discountedPrice,
     maxAmountAccepted: maxAccepted.toString(),
@@ -134,11 +139,12 @@ export async function calculateMarket(
     discount,
     formatted: {
       ...formatVestingLabels(market),
-      fullPrice: "$" + trimToken(fullPrice),
+      fullPrice: "$" + trimToken(payoutPrice),
       discountedPrice: "$" + trimToken(discountedPrice),
       maxPayoutUsd: usdFullFormatter.format(maxPayoutUsd),
-      tbvUsd: usdLongFormatter.format(
-        market.totalBondedAmount * quoteToken.price
+      tbvUsd: usdLongFormatter.format(market.totalBondedAmount * quotePrice),
+      quoteTokensPerPayoutToken: trimToken(
+        quoteTokensPerPayoutToken.toString()
       ),
     },
   };
@@ -171,6 +177,7 @@ function createBaseMarket(market: PrecalculatedMarket): CalculatedMarket {
       maxPayoutUsd: "Unknown",
       shortVesting: "Unknown",
       longVesting: "Unknown",
+      quoteTokensPerPayoutToken: "Unknown",
     },
   };
 }

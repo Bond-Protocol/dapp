@@ -84,7 +84,11 @@ export const Market = () => {
         >
           <p
             className={
-              market?.discount > 0 ? "text-light-success" : "text-red-300"
+              market.discount >= 100
+                ? ""
+                : market?.discount > 0
+                ? "text-light-success"
+                : "text-red-300"
             }
           >
             {discountLabel}

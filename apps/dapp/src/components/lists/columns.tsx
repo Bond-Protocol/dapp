@@ -32,10 +32,21 @@ const bondPrice: Column<CalculatedMarket> = {
   accessor: "bondPrice",
   width: "w-[18%]",
   formatter: (market) => {
+    const discountedPrice = market.discountedPrice
+      ? market.formatted.discountedPrice
+      : market.formatted.quoteTokensPerPayoutToken;
+
     return {
       icon: market.payoutToken.logoURI,
-      value: market.formatted?.discountedPrice,
-      subtext: market.formatted?.fullPrice
+      value: (
+        <>
+          {discountedPrice}{" "}
+          {!market.discountedPrice && (
+            <TrimmedTextContent text={market.quoteToken.symbol} />
+          )}{" "}
+        </>
+      ),
+      subtext: market.fullPrice
         ? market.formatted?.fullPrice + " Market"
         : "Unknown",
     };
@@ -52,18 +63,13 @@ export const discountColumn: Column<CalculatedMarket> = {
   formatter: (market) => {
     const value =
       !isNaN(market.discount) &&
-      market.discount !== Infinity &&
-      market.discount !== -Infinity
+      isFinite(market.discount) &&
+      market.discount < 100
         ? market.discount + "%"
         : "Unknown";
 
     return {
-      value:
-        !isNaN(market.discount) &&
-        market.discount !== Infinity &&
-        market.discount !== -Infinity
-          ? market.discount + "%"
-          : "Unknown",
+      value,
       sortValue: value?.includes("Unknown") ? 100 : market.discount + 100,
     };
   },
@@ -80,13 +86,14 @@ const maxPayout: Column<CalculatedMarket> = {
     return {
       value: (
         <>
-          {longFormatter.format(parseFloat(market.maxPayout))}
+          {longFormatter.format(parseFloat(market.maxPayout))}{" "}
           <TrimmedTextContent text={symbol} />
         </>
       ),
-      subtext: !isNaN(market.maxPayoutUsd)
-        ? usdFormatter.format(market.maxPayoutUsd)
-        : "Unknown",
+      subtext:
+        !isNaN(market.maxPayoutUsd) && market.maxPayoutUsd
+          ? usdFormatter.format(market.maxPayoutUsd)
+          : "Unknown",
       sortValue: market.maxPayoutUsd,
     };
   },

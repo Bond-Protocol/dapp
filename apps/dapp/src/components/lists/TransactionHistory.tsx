@@ -65,6 +65,7 @@ const baseTxsHistory: Column<any>[] = [
         purchase.amount > 1
           ? longFormatter.format(purchase.amount)
           : trim(purchase.amount, calculateTrimDigits(purchase.amount));
+
       return {
         value: (
           <>
@@ -72,7 +73,7 @@ const baseTxsHistory: Column<any>[] = [
             <TrimmedTextContent text={purchase.quoteToken?.symbol ?? "???"} />{" "}
           </>
         ),
-        subtext: purchase.quoteToken?.price
+        subtext: purchase.amountUsd
           ? usdFullFormatter.format(purchase.amountUsd)
           : "Unknown",
         sortValue: purchase.amount,
@@ -123,7 +124,7 @@ const userTxsHistory: Column<any>[] = [
 
       return {
         value:
-          !isNaN(discount) && discount !== Infinity && discount !== -Infinity
+          !isNaN(discount) && isFinite(discount) && discount < 100
             ? discount + "%"
             : "Unknown",
         sortValue: discount,
