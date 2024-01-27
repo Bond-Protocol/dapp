@@ -169,6 +169,7 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
   );
 
   const blockExplorer = getBlockExplorer(state.chainId);
+  const txBlockExplorer = getBlockExplorer(state.chainId, "tx");
 
   return (
     <div id="cm-root">
@@ -495,8 +496,8 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
         {!props.created && props.creationHash ? (
           <TransactionHashDialog
             key={index}
-            blockExplorerUrl={blockExplorer.url}
-            blockExplorerName={blockExplorer.name}
+            blockExplorerUrl={txBlockExplorer.url}
+            blockExplorerName={txBlockExplorer.name}
             hash={props.creationHash}
           />
         ) : (

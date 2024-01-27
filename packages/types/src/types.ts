@@ -92,6 +92,7 @@ export interface CalculatedMarket extends PrecalculatedMarket {
     shortVesting: string;
     longVesting: string;
     tbvUsd: string;
+    quoteTokensPerPayoutToken: string;
   };
   blockExplorer: {
     name: string;

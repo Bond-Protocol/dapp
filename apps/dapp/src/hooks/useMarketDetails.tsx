@@ -47,8 +47,8 @@ export const useMarketDetails = (market: CalculatedMarket) => {
 
   const discountLabel =
     !isNaN(market.discount) &&
-    market.discount !== Infinity &&
-    market.discount !== -Infinity
+    isFinite(market.discount) &&
+    market.discount < 100
       ? formatCurrency.trimToken(market.discount).concat("%")
       : "Unknown";
 
