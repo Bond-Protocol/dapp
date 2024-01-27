@@ -172,7 +172,7 @@ export interface TransactionHistoryProps {
 const API_ENDPOINT = import.meta.env.VITE_API_URL;
 
 export const TransactionHistory = (props: TransactionHistoryProps) => {
-  const { isMobile, isTabletOrMobile } = useMediaQueries();
+  const { isTabletOrMobile } = useMediaQueries();
   const isMarketHistory = !!props.market;
 
   const [bondPurchases, setBondPurchases] = useState();
@@ -187,6 +187,7 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
 
   useEffect(() => {
     loadBondPurchases().then((response) => {
+      //@ts-ignore
       setBondPurchases(filterArrayByUniqueKey(response, "timestamp"));
     });
   }, []);
