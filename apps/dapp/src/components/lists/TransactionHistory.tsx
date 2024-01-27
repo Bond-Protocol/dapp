@@ -14,6 +14,7 @@ import { useMediaQueries } from "hooks";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import axios from "axios";
 import { PastMarket } from "components/organisms/ClosedMarket";
+import TrimmedTextContent from "components/common/TrimmedTextContent";
 
 const blockExplorer: Column<any> = {
   accessor: "blockExplorerUrl",
@@ -65,7 +66,12 @@ const baseTxsHistory: Column<any>[] = [
           ? longFormatter.format(purchase.amount)
           : trim(purchase.amount, calculateTrimDigits(purchase.amount));
       return {
-        value: `${value} ${purchase.quoteToken?.symbol ?? "???"}`,
+        value: (
+          <>
+            {value}{" "}
+            <TrimmedTextContent text={purchase.quoteToken?.symbol ?? "???"} />{" "}
+          </>
+        ),
         subtext: purchase.quoteToken?.price
           ? usdFullFormatter.format(purchase.amountUsd)
           : "Unknown",
@@ -83,8 +89,14 @@ const baseTxsHistory: Column<any>[] = [
         purchase.payout > 1
           ? longFormatter.format(purchase.payout)
           : trim(purchase.payout, calculateTrimDigits(purchase.payout));
+
       return {
-        value: `${value} ${purchase.payoutToken?.symbol ?? "???"}`,
+        value: (
+          <>
+            {value}{" "}
+            <TrimmedTextContent text={purchase.payoutToken?.symbol ?? "???"} />{" "}
+          </>
+        ),
         subtext: purchase.payoutUsd
           ? usdFullFormatter.format(purchase.payoutUsd)
           : "Unknown",

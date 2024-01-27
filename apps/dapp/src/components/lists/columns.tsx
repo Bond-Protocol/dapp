@@ -9,6 +9,7 @@ import {
 import { CalculatedMarket, chainLogos } from "types";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { useNavigate } from "react-router-dom";
+import TrimmedTextContent from "components/common/TrimmedTextContent";
 
 export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",
@@ -17,10 +18,10 @@ export const bondColumn: Column<CalculatedMarket> = {
   defaultSortOrder: "asc",
   formatter: (market) => {
     const chain = getChain(market.chainId);
+
     return {
-      value: market.quoteToken.symbol,
+      value: <TrimmedTextContent text={market.quoteToken.symbol} />,
       icon: market.quoteToken.logoURI,
-      //@ts-ignore TODO: improve
       chainChip: chainLogos[chain?.id],
     };
   },
@@ -74,11 +75,15 @@ const maxPayout: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[14%]",
   formatter: (market) => {
+    const symbol = market.payoutToken.symbol;
+
     return {
-      value:
-        longFormatter.format(parseFloat(market.maxPayout)) +
-        " " +
-        market.payoutToken.symbol,
+      value: (
+        <>
+          {longFormatter.format(parseFloat(market.maxPayout))}
+          <TrimmedTextContent text={symbol} />
+        </>
+      ),
       subtext: !isNaN(market.maxPayoutUsd)
         ? usdFormatter.format(market.maxPayoutUsd)
         : "Unknown",
