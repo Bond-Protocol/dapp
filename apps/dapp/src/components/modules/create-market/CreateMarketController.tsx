@@ -44,7 +44,6 @@ export const CreateMarketController = () => {
   const { tokens } = useTokenlistLoader();
   const [state, dispatch] = useCreateMarket();
 
-  console.log({ state });
   const { address: auctioneerAddress } = getAuctioneerForCreate(
     state.chainId,
     getBondType(state)

@@ -242,7 +242,6 @@ export const reducer = (
 ): CreateMarketState => {
   const { type, value } = action;
 
-  console.log(type);
   switch (type) {
     case CreateMarketAction.UPDATE_CHAIN_ID: {
       const chainId = Number(value);
