@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { BondPriceLabel } from "components/common/BondPriceLabel";
 import { BondPurchaseCard } from "components/organisms";
 import { useMarkets } from "context/market-context";
@@ -16,9 +16,9 @@ export const EmbeddedPurchaseCard = (props: { market?: CalculatedMarket }) => {
     <div className="w-full">
       <div className="flex h-full gap-x-1 pb-2">
         <BondPriceLabel
-          bondPrice={market.formattedDiscountedPrice}
-          price={market.payoutToken.price ?? 0}
           {...market.payoutToken}
+          bondPrice={market.formatted.discountedPrice}
+          price={market.payoutToken.price ?? 0}
         />
         <SummaryLabel
           tooltip="The current discount available from this market. Green = discount, buy. Red = premium, do not buy."

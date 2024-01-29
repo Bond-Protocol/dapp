@@ -1,27 +1,29 @@
-import { useQueries } from "react-query";
+import { CalculatedMarket } from "types";
 import { useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import * as contractLibrary from "@bond-protocol/contract-library";
-import {
-  CalculatedMarket,
-  getBlockExplorer,
-} from "@bond-protocol/contract-library";
-import { providers } from "services/owned-providers";
 import { Market } from "src/generated/graphql";
 import { useTokens } from "hooks";
 import { useSubgraph } from "hooks/useSubgraph";
-
+import { clients } from "context/blockchain-provider";
+import { calculateMarket } from "@bond-protocol/contract-library";
+import { useQueries } from "react-query";
+import { Address } from "viem";
 const FEE_ADDRESS = import.meta.env.VITE_MARKET_REFERRAL_ADDRESS;
 
 export function useCalculatedMarkets() {
-  const { tokens, getByAddress, fetchedExtendedDetails } = useTokens();
+  const {
+    tokens,
+    getByAddress,
+    fetchedExtendedDetails,
+    isLoading: areTokensLoading,
+  } = useTokens();
   const { markets, isLoading: isMarketLoading } = useSubgraph();
   const [calculatedMarkets, setCalculatedMarkets] = useState<
     CalculatedMarket[]
   >([]);
+  const [areMarketsLoaded, setAreMarketsLoaded] = useState(false);
 
-  const calculateMarket = async (market: Market) => {
-    const requestProvider = providers[market.chainId];
+  const calcMarket = async (market: Market) => {
     const obsoleteAuctioneers = [
       "0x007f7a58103a31109f848df1a14f7020e1f1b28a",
       "0x007f7a6012a5e03f6f388dd9f19fd1d754cfc128",
@@ -35,23 +37,18 @@ export function useCalculatedMarkets() {
 
     let updatedMarket = { ...market, quoteToken, payoutToken };
 
+    //@ts-ignore
+    const publicClient = clients[Number(market.chainId)];
+
     try {
-      const result = await contractLibrary.calcMarket(
-        requestProvider,
-        FEE_ADDRESS,
-        // @ts-ignore
-        updatedMarket
+      const result = await calculateMarket(
+        //@ts-ignore
+        updatedMarket,
+        publicClient,
+        FEE_ADDRESS as Address
       );
 
-      const blockExplorer = getBlockExplorer(result.chainId, "address");
-
-      return {
-        ...result,
-        start: market.start,
-        conclusion: market.conclusion,
-        blockExplorerUrl: blockExplorer.blockExplorerUrl,
-        blockExplorerName: blockExplorer.blockExplorerName,
-      };
+      return { ...result, start: market.start, conclusion: market.conclusion };
     } catch (e) {
       console.log(
         `ProtocolError: Failed to calculate market ${market.id} \n`,
@@ -64,7 +61,7 @@ export function useCalculatedMarkets() {
   const calculateAllMarkets = useQueries(
     markets.map((market: Market) => ({
       queryKey: market.id,
-      queryFn: () => calculateMarket(market),
+      queryFn: () => calcMarket(market),
       enabled: tokens.length > 0,
     }))
   );
@@ -99,6 +96,7 @@ export function useCalculatedMarkets() {
           };
         });
 
+      setAreMarketsLoaded(true);
       setCalculatedMarkets(markets);
     }
   }, [calculateAllMarkets, tokens]);
@@ -135,9 +133,11 @@ export function useCalculatedMarkets() {
   const isLoading = {
     market: isMarketLoading,
     priceCalcs: isCalculatingAll,
+    isMatchingTokens: !areMarketsLoaded,
+    tokens: areTokensLoading,
   };
 
-  const isSomeLoading = () => Object.values(isLoading).some((x) => x);
+  const isSomeLoading = Object.values(isLoading).some((x) => x);
   return {
     allMarkets: calculatedMarkets,
     getMarketsForOwner: (address: string) =>
@@ -148,14 +148,11 @@ export function useCalculatedMarkets() {
     getByChainAndId: (chainId: number | string, id: number | string) =>
       calculatedMarkets.find(
         ({ marketId, chainId: marketChainId }) =>
-          marketId === Number(id) && marketChainId === chainId
+          marketId.toString() === id && marketChainId === chainId
       ),
     refetchAllMarkets,
     refetchOne,
     isSomeLoading,
-    isLoading: {
-      market: isMarketLoading,
-      priceCalcs: isCalculatingAll,
-    },
+    isLoading,
   };
 }

@@ -8,7 +8,7 @@ export const orderApiServerMap = {
   },
 
   [ENVIRONMENT.TESTING]: {
-    url: " https://public-api-server-testnet.up.railway.app/",
+    url: "https://public-api-server-testnet.up.railway.app/",
     description: "Testing Server",
   },
 

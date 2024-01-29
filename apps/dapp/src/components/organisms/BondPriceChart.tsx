@@ -6,7 +6,7 @@ import {
   PlaceholderChart,
 } from "ui";
 import { useBondChartData } from "hooks/useBondChartData";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { useState } from "react";
 
 export type BondDiscountChartProps = {
@@ -21,7 +21,13 @@ export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
     return <PlaceholderChart message={"Loading performance data"} />;
   }
 
-  if (!dataset || purchases?.length! < 2 || market?.quoteToken?.lpPair) {
+  //@ts-ignore
+  if (
+    !dataset ||
+    purchases?.length! < 2 ||
+    market?.quoteToken?.lpPair ||
+    !market.quoteToken.price
+  ) {
     return (
       <PlaceholderChart
         message={

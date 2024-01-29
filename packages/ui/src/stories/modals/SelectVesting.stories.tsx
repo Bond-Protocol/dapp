@@ -11,8 +11,6 @@ export default {
 
 export const Primary = {
   args: {
-    onSubmit: (onSubmitArgs: any) => {
-      console.log({ onSubmitArgs });
-    },
+    onSubmit: (onSubmitArgs: any) => {},
   },
 };

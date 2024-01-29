@@ -17,6 +17,7 @@ export const Input = ({
   rootClassName = "",
   inputClassName = "",
   subTextClassName = "",
+  value = "",
   ...props
 }: InputProps) => {
   return (
@@ -24,6 +25,7 @@ export const Input = ({
       {label && <p className="mb-1 text-sm font-light">{label}</p>}
       <InputUnstyled
         {...props}
+        value={value ?? ""}
         autoComplete="disabled"
         spellCheck="false"
         componentsProps={{

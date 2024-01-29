@@ -1,0 +1,1071 @@
+{
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "contract ERC20[]",
+          "name": "tokens_",
+          "type": "address[]"
+        },
+        {
+          "internalType": "address",
+          "name": "to_",
+          "type": "address"
+        }
+      ],
+      "name": "claimFees",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "referrer_",
+          "type": "address"
+        }
+      ],
+      "name": "getFee",
+      "outputs": [
+        {
+          "internalType": "uint48",
+          "name": "",
+          "type": "uint48"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "recipient_",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "referrer_",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "id_",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount_",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "minAmountOut_",
+          "type": "uint256"
+        }
+      ],
+      "name": "purchase",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint48",
+          "name": "",
+          "type": "uint48"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint48",
+          "name": "discount_",
+          "type": "uint48"
+        }
+      ],
+      "name": "setCreateFeeDiscount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint48",
+          "name": "fee_",
+          "type": "uint48"
+        }
+      ],
+      "name": "setProtocolFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint48",
+          "name": "fee_",
+          "type": "uint48"
+        }
+      ],
+      "name": "setReferrerFee",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {
+    "claimFees(address[],address)": "2f6fa94e",
+    "getFee(address)": "b88c9148",
+    "purchase(address,address,uint256,uint256,uint256)": "6de5b4cd",
+    "setCreateFeeDiscount(uint48)": "81690927",
+    "setProtocolFee(uint48)": "b1e55529",
+    "setReferrerFee(uint48)": "0d4dfc21"
+  },
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.15+commit.e14f2714\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"contract ERC20[]\",\"name\":\"tokens_\",\"type\":\"address[]\"},{\"internalType\":\"address\",\"name\":\"to_\",\"type\":\"address\"}],\"name\":\"claimFees\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"referrer_\",\"type\":\"address\"}],\"name\":\"getFee\",\"outputs\":[{\"internalType\":\"uint48\",\"name\":\"\",\"type\":\"uint48\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"recipient_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"referrer_\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"id_\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amount_\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"minAmountOut_\",\"type\":\"uint256\"}],\"name\":\"purchase\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"uint48\",\"name\":\"\",\"type\":\"uint48\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint48\",\"name\":\"discount_\",\"type\":\"uint48\"}],\"name\":\"setCreateFeeDiscount\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint48\",\"name\":\"fee_\",\"type\":\"uint48\"}],\"name\":\"setProtocolFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint48\",\"name\":\"fee_\",\"type\":\"uint48\"}],\"name\":\"setReferrerFee\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"claimFees(address[],address)\":{\"params\":{\"to_\":\"Address to send fees to\",\"tokens_\":\"Array of tokens to claim fees for\"}},\"getFee(address)\":{\"params\":{\"referrer_\":\"Address of the referrer\"},\"returns\":{\"_0\":\"Fee in basis points (3 decimal places)\"}},\"purchase(address,address,uint256,uint256,uint256)\":{\"params\":{\"amount_\":\"Amount to deposit in exchange for bond\",\"id_\":\"ID of the Market the bond is being purchased from\",\"minAmountOut_\":\"Minimum acceptable amount of bond to receive. Prevents frontrunning\",\"recipient_\":\"Address of recipient of bond. Allows deposits for other addresses\",\"referrer_\":\"Address of referrer who will receive referral fee. For frontends to fill.                         Direct calls can use the zero address for no referrer fee.\"},\"returns\":{\"_0\":\"Amount of payout token to be received from the bond\",\"_1\":\"Timestamp at which the bond token can be redeemed for the underlying token\"}},\"setCreateFeeDiscount(uint48)\":{\"details\":\"The discount is subtracted from the protocol fee to determine the fee                  when using create() to mint bond tokens without using an Auctioneer\",\"params\":{\"discount_\":\"Create Fee Discount in basis points (3 decimal places)\"}},\"setProtocolFee(uint48)\":{\"params\":{\"fee_\":\"Protocol fee in basis points (3 decimal places)\"}},\"setReferrerFee(uint48)\":{\"params\":{\"fee_\":\"Referrer fee in basis points (3 decimal places)\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"claimFees(address[],address)\":{\"notice\":\"Claim fees accrued by sender in the input tokens and sends them to the provided address\"},\"getFee(address)\":{\"notice\":\"Get current fee charged by the teller based on the combined protocol and referrer fee\"},\"purchase(address,address,uint256,uint256,uint256)\":{\"notice\":\"Exchange quote tokens for a bond in a specified market\"},\"setCreateFeeDiscount(uint48)\":{\"notice\":\"Set the discount for creating bond tokens from the base protocol fee\"},\"setProtocolFee(uint48)\":{\"notice\":\"Set protocol feeMust be guardian\"},\"setReferrerFee(uint48)\":{\"notice\":\"Set your fee as a referrer to the protocolFee is set for sending address\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/interfaces/IBondTeller.sol\":\"IBondTeller\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":100000},\"remappings\":[\":clones-with-immutable-args/=lib/clones-with-immutable-args/src/\",\":clones/=lib/clones-with-immutable-args/src/\",\":ds-test/=lib/ds-test/src/\",\":forge-std/=lib/forge-std/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\",\":openzeppelin/=lib/openzeppelin-contracts/contracts/\",\":solidity-code-metrics/=node_modules/solidity-code-metrics/\",\":solmate/=lib/solmate/src/\",\":weird-erc20/=lib/solmate/lib/weird-erc20/src/\"]},\"sources\":{\"lib/solmate/src/tokens/ERC20.sol\":{\"keccak256\":\"0x698cdbf614109fafc2bf00057b60715fa3aba9dad447c42f4f8b749ae16ce84f\",\"license\":\"AGPL-3.0-only\",\"urls\":[\"bzz-raw://49a39e71d6bde571d04722c90fd42591af806d29d8cbd4cd96f35e443702d899\",\"dweb:/ipfs/QmefLxMt6w2it9daQQFdBTtPeCWDhSqhNWuxQy8e7WrNVr\"]},\"src/interfaces/IBondTeller.sol\":{\"keccak256\":\"0xb14fc9301858ec61abc52462699ced9f32478f1944b64c9398d811794d8769a1\",\"license\":\"AGPL-3.0\",\"urls\":[\"bzz-raw://9a6fb18f623109e285ce99f8be07969d3e50a235543ceb28b5dc620d606ea150\",\"dweb:/ipfs/QmXAz2yXoZQ6XzkS9mwPc7Dkj7kD3RyhW9rix7daVvxkMf\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.15+commit.e14f2714"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "contract ERC20[]",
+              "name": "tokens_",
+              "type": "address[]"
+            },
+            {
+              "internalType": "address",
+              "name": "to_",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "claimFees"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "referrer_",
+              "type": "address"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function",
+          "name": "getFee",
+          "outputs": [
+            {
+              "internalType": "uint48",
+              "name": "",
+              "type": "uint48"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "recipient_",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "referrer_",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "id_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "amount_",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "minAmountOut_",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "purchase",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint48",
+              "name": "",
+              "type": "uint48"
+            }
+          ]
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint48",
+              "name": "discount_",
+              "type": "uint48"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "setCreateFeeDiscount"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint48",
+              "name": "fee_",
+              "type": "uint48"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "setProtocolFee"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint48",
+              "name": "fee_",
+              "type": "uint48"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function",
+          "name": "setReferrerFee"
+        }
+      ],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {
+          "claimFees(address[],address)": {
+            "params": {
+              "to_": "Address to send fees to",
+              "tokens_": "Array of tokens to claim fees for"
+            }
+          },
+          "getFee(address)": {
+            "params": {
+              "referrer_": "Address of the referrer"
+            },
+            "returns": {
+              "_0": "Fee in basis points (3 decimal places)"
+            }
+          },
+          "purchase(address,address,uint256,uint256,uint256)": {
+            "params": {
+              "amount_": "Amount to deposit in exchange for bond",
+              "id_": "ID of the Market the bond is being purchased from",
+              "minAmountOut_": "Minimum acceptable amount of bond to receive. Prevents frontrunning",
+              "recipient_": "Address of recipient of bond. Allows deposits for other addresses",
+              "referrer_": "Address of referrer who will receive referral fee. For frontends to fill.                         Direct calls can use the zero address for no referrer fee."
+            },
+            "returns": {
+              "_0": "Amount of payout token to be received from the bond",
+              "_1": "Timestamp at which the bond token can be redeemed for the underlying token"
+            }
+          },
+          "setCreateFeeDiscount(uint48)": {
+            "details": "The discount is subtracted from the protocol fee to determine the fee                  when using create() to mint bond tokens without using an Auctioneer",
+            "params": {
+              "discount_": "Create Fee Discount in basis points (3 decimal places)"
+            }
+          },
+          "setProtocolFee(uint48)": {
+            "params": {
+              "fee_": "Protocol fee in basis points (3 decimal places)"
+            }
+          },
+          "setReferrerFee(uint48)": {
+            "params": {
+              "fee_": "Referrer fee in basis points (3 decimal places)"
+            }
+          }
+        },
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {
+          "claimFees(address[],address)": {
+            "notice": "Claim fees accrued by sender in the input tokens and sends them to the provided address"
+          },
+          "getFee(address)": {
+            "notice": "Get current fee charged by the teller based on the combined protocol and referrer fee"
+          },
+          "purchase(address,address,uint256,uint256,uint256)": {
+            "notice": "Exchange quote tokens for a bond in a specified market"
+          },
+          "setCreateFeeDiscount(uint48)": {
+            "notice": "Set the discount for creating bond tokens from the base protocol fee"
+          },
+          "setProtocolFee(uint48)": {
+            "notice": "Set protocol feeMust be guardian"
+          },
+          "setReferrerFee(uint48)": {
+            "notice": "Set your fee as a referrer to the protocolFee is set for sending address"
+          }
+        },
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "clones-with-immutable-args/=lib/clones-with-immutable-args/src/",
+        "clones/=lib/clones-with-immutable-args/src/",
+        "ds-test/=lib/ds-test/src/",
+        "forge-std/=lib/forge-std/src/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+        "openzeppelin/=lib/openzeppelin-contracts/contracts/",
+        "solidity-code-metrics/=node_modules/solidity-code-metrics/",
+        "solmate/=lib/solmate/src/",
+        "weird-erc20/=lib/solmate/lib/weird-erc20/src/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 100000
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/interfaces/IBondTeller.sol": "IBondTeller"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "lib/solmate/src/tokens/ERC20.sol": {
+        "keccak256": "0x698cdbf614109fafc2bf00057b60715fa3aba9dad447c42f4f8b749ae16ce84f",
+        "urls": [
+          "bzz-raw://49a39e71d6bde571d04722c90fd42591af806d29d8cbd4cd96f35e443702d899",
+          "dweb:/ipfs/QmefLxMt6w2it9daQQFdBTtPeCWDhSqhNWuxQy8e7WrNVr"
+        ],
+        "license": "AGPL-3.0-only"
+      },
+      "src/interfaces/IBondTeller.sol": {
+        "keccak256": "0xb14fc9301858ec61abc52462699ced9f32478f1944b64c9398d811794d8769a1",
+        "urls": [
+          "bzz-raw://9a6fb18f623109e285ce99f8be07969d3e50a235543ceb28b5dc620d606ea150",
+          "dweb:/ipfs/QmXAz2yXoZQ6XzkS9mwPc7Dkj7kD3RyhW9rix7daVvxkMf"
+        ],
+        "license": "AGPL-3.0"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/interfaces/IBondTeller.sol",
+    "id": 44167,
+    "exportedSymbols": {
+      "ERC20": [
+        30350
+      ],
+      "IBondTeller": [
+        44166
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "37:2585:58",
+    "nodes": [
+      {
+        "id": 44109,
+        "nodeType": "PragmaDirective",
+        "src": "37:24:58",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          ">=",
+          "0.8",
+          ".0"
+        ]
+      },
+      {
+        "id": 44111,
+        "nodeType": "ImportDirective",
+        "src": "63:47:58",
+        "nodes": [],
+        "absolutePath": "lib/solmate/src/tokens/ERC20.sol",
+        "file": "solmate/tokens/ERC20.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 44167,
+        "sourceUnit": 30351,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 44110,
+              "name": "ERC20",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 30350,
+              "src": "71:5:58",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 44166,
+        "nodeType": "ContractDefinition",
+        "src": "112:2509:58",
+        "nodes": [
+          {
+            "id": 44129,
+            "nodeType": "FunctionDefinition",
+            "src": "966:191:58",
+            "nodes": [],
+            "documentation": {
+              "id": 44112,
+              "nodeType": "StructuredDocumentation",
+              "src": "140:821:58",
+              "text": "@notice                 Exchange quote tokens for a bond in a specified market\n @param recipient_       Address of recipient of bond. Allows deposits for other addresses\n @param referrer_        Address of referrer who will receive referral fee. For frontends to fill.\n                         Direct calls can use the zero address for no referrer fee.\n @param id_              ID of the Market the bond is being purchased from\n @param amount_          Amount to deposit in exchange for bond\n @param minAmountOut_    Minimum acceptable amount of bond to receive. Prevents frontrunning\n @return                 Amount of payout token to be received from the bond\n @return                 Timestamp at which the bond token can be redeemed for the underlying token"
+            },
+            "functionSelector": "6de5b4cd",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "purchase",
+            "nameLocation": "975:8:58",
+            "parameters": {
+              "id": 44123,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 44114,
+                  "mutability": "mutable",
+                  "name": "recipient_",
+                  "nameLocation": "1001:10:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44129,
+                  "src": "993:18:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 44113,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "993:7:58",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 44116,
+                  "mutability": "mutable",
+                  "name": "referrer_",
+                  "nameLocation": "1029:9:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44129,
+                  "src": "1021:17:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 44115,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1021:7:58",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 44118,
+                  "mutability": "mutable",
+                  "name": "id_",
+                  "nameLocation": "1056:3:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44129,
+                  "src": "1048:11:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 44117,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1048:7:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 44120,
+                  "mutability": "mutable",
+                  "name": "amount_",
+                  "nameLocation": "1077:7:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44129,
+                  "src": "1069:15:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 44119,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1069:7:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 44122,
+                  "mutability": "mutable",
+                  "name": "minAmountOut_",
+                  "nameLocation": "1102:13:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44129,
+                  "src": "1094:21:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 44121,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1094:7:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "983:138:58"
+            },
+            "returnParameters": {
+              "id": 44128,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 44125,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44129,
+                  "src": "1140:7:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 44124,
+                    "name": "uint256",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1140:7:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 44127,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44129,
+                  "src": "1149:6:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint48",
+                    "typeString": "uint48"
+                  },
+                  "typeName": {
+                    "id": 44126,
+                    "name": "uint48",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1149:6:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint48",
+                      "typeString": "uint48"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1139:17:58"
+            },
+            "scope": 44166,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 44137,
+            "nodeType": "FunctionDefinition",
+            "src": "1387:66:58",
+            "nodes": [],
+            "documentation": {
+              "id": 44130,
+              "nodeType": "StructuredDocumentation",
+              "src": "1163:219:58",
+              "text": "@notice          Get current fee charged by the teller based on the combined protocol and referrer fee\n @param referrer_ Address of the referrer\n @return          Fee in basis points (3 decimal places)"
+            },
+            "functionSelector": "b88c9148",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "getFee",
+            "nameLocation": "1396:6:58",
+            "parameters": {
+              "id": 44133,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 44132,
+                  "mutability": "mutable",
+                  "name": "referrer_",
+                  "nameLocation": "1411:9:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44137,
+                  "src": "1403:17:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 44131,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1403:7:58",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1402:19:58"
+            },
+            "returnParameters": {
+              "id": 44136,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 44135,
+                  "mutability": "mutable",
+                  "name": "",
+                  "nameLocation": "-1:-1:-1",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44137,
+                  "src": "1445:6:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint48",
+                    "typeString": "uint48"
+                  },
+                  "typeName": {
+                    "id": 44134,
+                    "name": "uint48",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1445:6:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint48",
+                      "typeString": "uint48"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1444:8:58"
+            },
+            "scope": 44166,
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 44143,
+            "nodeType": "FunctionDefinition",
+            "src": "1613:46:58",
+            "nodes": [],
+            "documentation": {
+              "id": 44138,
+              "nodeType": "StructuredDocumentation",
+              "src": "1459:149:58",
+              "text": "@notice         Set protocol fee\n @notice         Must be guardian\n @param fee_     Protocol fee in basis points (3 decimal places)"
+            },
+            "functionSelector": "b1e55529",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setProtocolFee",
+            "nameLocation": "1622:14:58",
+            "parameters": {
+              "id": 44141,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 44140,
+                  "mutability": "mutable",
+                  "name": "fee_",
+                  "nameLocation": "1644:4:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44143,
+                  "src": "1637:11:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint48",
+                    "typeString": "uint48"
+                  },
+                  "typeName": {
+                    "id": 44139,
+                    "name": "uint48",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1637:6:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint48",
+                      "typeString": "uint48"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "1636:13:58"
+            },
+            "returnParameters": {
+              "id": 44142,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "1658:0:58"
+            },
+            "scope": 44166,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 44149,
+            "nodeType": "FunctionDefinition",
+            "src": "2027:57:58",
+            "nodes": [],
+            "documentation": {
+              "id": 44144,
+              "nodeType": "StructuredDocumentation",
+              "src": "1665:357:58",
+              "text": "@notice          Set the discount for creating bond tokens from the base protocol fee\n @dev             The discount is subtracted from the protocol fee to determine the fee\n                  when using create() to mint bond tokens without using an Auctioneer\n @param discount_ Create Fee Discount in basis points (3 decimal places)"
+            },
+            "functionSelector": "81690927",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setCreateFeeDiscount",
+            "nameLocation": "2036:20:58",
+            "parameters": {
+              "id": 44147,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 44146,
+                  "mutability": "mutable",
+                  "name": "discount_",
+                  "nameLocation": "2064:9:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44149,
+                  "src": "2057:16:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint48",
+                    "typeString": "uint48"
+                  },
+                  "typeName": {
+                    "id": 44145,
+                    "name": "uint48",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2057:6:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint48",
+                      "typeString": "uint48"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2056:18:58"
+            },
+            "returnParameters": {
+              "id": 44148,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2083:0:58"
+            },
+            "scope": 44166,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 44155,
+            "nodeType": "FunctionDefinition",
+            "src": "2284:46:58",
+            "nodes": [],
+            "documentation": {
+              "id": 44150,
+              "nodeType": "StructuredDocumentation",
+              "src": "2090:189:58",
+              "text": "@notice         Set your fee as a referrer to the protocol\n @notice         Fee is set for sending address\n @param fee_     Referrer fee in basis points (3 decimal places)"
+            },
+            "functionSelector": "0d4dfc21",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "setReferrerFee",
+            "nameLocation": "2293:14:58",
+            "parameters": {
+              "id": 44153,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 44152,
+                  "mutability": "mutable",
+                  "name": "fee_",
+                  "nameLocation": "2315:4:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44155,
+                  "src": "2308:11:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint48",
+                    "typeString": "uint48"
+                  },
+                  "typeName": {
+                    "id": 44151,
+                    "name": "uint48",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2308:6:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint48",
+                      "typeString": "uint48"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2307:13:58"
+            },
+            "returnParameters": {
+              "id": 44154,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2329:0:58"
+            },
+            "scope": 44166,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          },
+          {
+            "id": 44165,
+            "nodeType": "FunctionDefinition",
+            "src": "2554:65:58",
+            "nodes": [],
+            "documentation": {
+              "id": 44156,
+              "nodeType": "StructuredDocumentation",
+              "src": "2336:213:58",
+              "text": "@notice         Claim fees accrued by sender in the input tokens and sends them to the provided address\n @param tokens_  Array of tokens to claim fees for\n @param to_      Address to send fees to"
+            },
+            "functionSelector": "2f6fa94e",
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "claimFees",
+            "nameLocation": "2563:9:58",
+            "parameters": {
+              "id": 44163,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 44160,
+                  "mutability": "mutable",
+                  "name": "tokens_",
+                  "nameLocation": "2588:7:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44165,
+                  "src": "2573:22:58",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_contract$_ERC20_$30350_$dyn_memory_ptr",
+                    "typeString": "contract ERC20[]"
+                  },
+                  "typeName": {
+                    "baseType": {
+                      "id": 44158,
+                      "nodeType": "UserDefinedTypeName",
+                      "pathNode": {
+                        "id": 44157,
+                        "name": "ERC20",
+                        "nodeType": "IdentifierPath",
+                        "referencedDeclaration": 30350,
+                        "src": "2573:5:58"
+                      },
+                      "referencedDeclaration": 30350,
+                      "src": "2573:5:58",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_contract$_ERC20_$30350",
+                        "typeString": "contract ERC20"
+                      }
+                    },
+                    "id": 44159,
+                    "nodeType": "ArrayTypeName",
+                    "src": "2573:7:58",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_array$_t_contract$_ERC20_$30350_$dyn_storage_ptr",
+                      "typeString": "contract ERC20[]"
+                    }
+                  },
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 44162,
+                  "mutability": "mutable",
+                  "name": "to_",
+                  "nameLocation": "2605:3:58",
+                  "nodeType": "VariableDeclaration",
+                  "scope": 44165,
+                  "src": "2597:11:58",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 44161,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "2597:7:58",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "visibility": "internal"
+                }
+              ],
+              "src": "2572:37:58"
+            },
+            "returnParameters": {
+              "id": 44164,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "2618:0:58"
+            },
+            "scope": 44166,
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "IBondTeller",
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          44166
+        ],
+        "name": "IBondTeller",
+        "nameLocation": "122:11:58",
+        "scope": 44167,
+        "usedErrors": []
+      }
+    ],
+    "license": "AGPL-3.0"
+  },
+  "id": 58
+}

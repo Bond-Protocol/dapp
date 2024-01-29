@@ -1,18 +1,15 @@
 import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
 import { add } from "date-fns";
+import { longFormatter, usdFormatter } from "formatters";
 import {
-  longFormatter,
-  usdFormatter,
-  usdLongFormatter,
-} from "src/utils/format";
-import {
-  CalculatedMarket,
   calculateTrimDigits,
-  CHAINS,
   getBlockExplorer,
+  getChain,
 } from "@bond-protocol/contract-library";
+import { CalculatedMarket, chainLogos } from "types";
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { useNavigate } from "react-router-dom";
+import TrimmedTextContent from "components/common/TrimmedTextContent";
 
 export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",
@@ -20,11 +17,12 @@ export const bondColumn: Column<CalculatedMarket> = {
   width: "w-[13%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const chain = CHAINS.get(market.chainId);
+    const chain = getChain(market.chainId);
+
     return {
-      value: market.quoteToken.symbol,
+      value: <TrimmedTextContent text={market.quoteToken.symbol} />,
       icon: market.quoteToken.logoURI,
-      chainChip: chain?.image,
+      chainChip: chainLogos[chain?.id],
     };
   },
 };
@@ -34,11 +32,22 @@ const bondPrice: Column<CalculatedMarket> = {
   accessor: "bondPrice",
   width: "w-[18%]",
   formatter: (market) => {
+    const discountedPrice = market.discountedPrice
+      ? market.formatted.discountedPrice
+      : market.formatted.quoteTokensPerPayoutToken;
+
     return {
       icon: market.payoutToken.logoURI,
-      value: market.formattedDiscountedPrice,
-      subtext: market.formattedFullPrice
-        ? market.formattedFullPrice + " Market"
+      value: (
+        <>
+          {discountedPrice}{" "}
+          {!market.discountedPrice && (
+            <TrimmedTextContent text={market.quoteToken.symbol} />
+          )}{" "}
+        </>
+      ),
+      subtext: market.fullPrice
+        ? market.formatted?.fullPrice + " Market"
         : "Unknown",
     };
   },
@@ -54,19 +63,14 @@ export const discountColumn: Column<CalculatedMarket> = {
   formatter: (market) => {
     const value =
       !isNaN(market.discount) &&
-      market.discount !== Infinity &&
-      market.discount !== -Infinity
+      isFinite(market.discount) &&
+      market.discount < 100
         ? market.discount + "%"
         : "Unknown";
 
     return {
-      value:
-        !isNaN(market.discount) &&
-        market.discount !== Infinity &&
-        market.discount !== -Infinity
-          ? market.discount + "%"
-          : "Unknown",
-      sortValue: value.includes("Unknown") ? 100 : market.discount + 100,
+      value,
+      sortValue: value?.includes("Unknown") ? 100 : market.discount + 100,
     };
   },
 };
@@ -77,14 +81,19 @@ const maxPayout: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[14%]",
   formatter: (market) => {
+    const symbol = market.payoutToken.symbol;
+
     return {
-      value:
-        longFormatter.format(parseFloat(market.maxPayout)) +
-        " " +
-        market.payoutToken.symbol,
-      subtext: !isNaN(market.maxPayoutUsd)
-        ? usdFormatter.format(market.maxPayoutUsd)
-        : "Unknown",
+      value: (
+        <>
+          {longFormatter.format(parseFloat(market.maxPayout))}{" "}
+          <TrimmedTextContent text={symbol} />
+        </>
+      ),
+      subtext:
+        !isNaN(market.maxPayoutUsd) && market.maxPayoutUsd
+          ? usdFormatter.format(market.maxPayoutUsd)
+          : "Unknown",
       sortValue: market.maxPayoutUsd,
     };
   },
@@ -99,9 +108,9 @@ const vesting: Column<CalculatedMarket> = {
       ? add(Date.now(), { seconds: market.vesting })
       : market.vesting * 1000;
 
-    const term = market.formattedShortVesting.includes("Immediate")
+    const term = market.formatted?.shortVesting?.includes("Instant")
       ? " Instant Swap"
-      : market.formattedShortVesting + " Term";
+      : market.formatted?.shortVesting + " Term";
 
     return {
       value: formatDate.short(new Date(sort)),
@@ -135,9 +144,7 @@ const tbv: Column<CalculatedMarket> = {
       .concat(" " + market.quoteToken.symbol);
 
     return {
-      value: !isNaN(market.tbvUsd)
-        ? usdLongFormatter.format(market.tbvUsd)
-        : totalBondedAmount,
+      value: market.formatted?.tbvUsd,
       sortValue: market.tbvUsd,
     };
   },
@@ -149,7 +156,7 @@ const issuer: Column<CalculatedMarket> = {
   width: "w-[16%]",
   defaultSortOrder: "asc",
   formatter: (market) => {
-    const { blockExplorerUrl } = getBlockExplorer(market.chainId, "address");
+    const { url: blockExplorerUrl } = getBlockExplorer(market.chainId);
     const address = blockExplorerUrl + market.owner;
     const start = market.owner.substring(0, 4);
     const end = market.owner.substring(market.owner.length - 4);
@@ -181,7 +188,10 @@ export const viewColumn: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[10%]",
   unsortable: true,
-  formatter: (market) => ({ value: market.marketId, subtext: market.chainId }),
+  formatter: (market) => ({
+    value: Number(market.marketId),
+    subtext: market.chainId,
+  }),
   Component: (props: any) => {
     const navigate = useNavigate();
 

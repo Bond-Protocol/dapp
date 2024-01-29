@@ -1,22 +1,27 @@
 import { useState } from "react";
-import { IERC20__factory, Token } from "@bond-protocol/contract-library";
+import { Token } from "types";
 import defillama from "services/defillama";
-import { providers } from "services/owned-providers";
 import coingecko from "services/coingecko";
 import axios from "axios";
+import { Address, getContract } from "viem";
+import { PublicClient, erc20ABI, usePublicClient } from "wagmi";
 
 const fetchOnChain = async (
-  address: string,
-  chainId: number
-): Promise<Omit<Token, "price">> => {
-  const provider = providers[chainId];
-
+  address: Address,
+  chainId: number,
+  publicClient: PublicClient
+): Promise<Omit<Token, "price" | "address"> & { address: Address }> => {
   try {
-    const contract = IERC20__factory.connect(address, provider);
+    const contract = getContract({
+      address,
+      abi: erc20ABI,
+      publicClient,
+    });
+
     const [name, symbol, decimals] = await Promise.all([
-      contract.name(),
-      contract.symbol(),
-      contract.decimals(),
+      contract.read.name(),
+      contract.read.symbol(),
+      contract.read.decimals(),
     ]);
 
     return {
@@ -40,9 +45,10 @@ const fetchOnChain = async (
 
 export const useDiscoverToken = () => {
   const [isLoading, setLoading] = useState(false);
+  const publicClient = usePublicClient();
 
   const discover = async (
-    address: string,
+    address: Address,
     chainId: number
   ): Promise<{ token: Token; source: string }> => {
     setLoading(true);
@@ -51,12 +57,14 @@ export const useDiscoverToken = () => {
       const [token] = await defillama.fetchPrice(address, chainId);
       //@ts-ignore
       if (token?.price) {
+        //@ts-ignore
         return { token, source: "defillama" };
       }
 
-      const onChainToken = await fetchOnChain(address, chainId);
+      const onChainToken = await fetchOnChain(address, chainId, publicClient);
 
       if (onChainToken.decimals) {
+        //@ts-ignore
         return { token: onChainToken, source: "on-chain" };
       }
     } catch (e) {

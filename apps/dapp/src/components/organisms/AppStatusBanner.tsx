@@ -1,4 +1,3 @@
-import { useTestnetMode } from "hooks/useTestnet";
 import { environment } from "../../environment";
 import { ReactComponent as AlertIcon } from "../../assets/icons/alert.svg";
 import { ReactComponent as InfoIcon } from "../../assets/icons/info.svg";
@@ -32,8 +31,8 @@ const WarningMessage = ({ toggleTestnet }: { toggleTestnet: () => void }) => (
   </div>
 );
 
+const isTestnet = environment.isTestnet;
 export const AppStatusBanner = () => {
-  const [isTestnet, setTestnet] = useTestnetMode();
   const showInfo = isTestnet;
   const showWarning = !isTestnet && environment.isStaging;
 
@@ -44,7 +43,7 @@ export const AppStatusBanner = () => {
       } inset-0 text-center text-xs`}
     >
       {showWarning ? (
-        <WarningMessage toggleTestnet={() => setTestnet(true)} />
+        <WarningMessage toggleTestnet={() => {}} />
       ) : (
         <TestnetMessage />
       )}

@@ -1,16 +1,14 @@
-import {
-  CalculatedMarket,
-  getAddresses,
-} from "@bond-protocol/contract-library";
-import { BigNumber, ethers } from "ethers";
+import { CalculatedMarket } from "types";
 import OpenAPIClient from "openapi-axios-client";
-import { SiweMessage } from "siwe";
 import definition from "src/openapi.json";
 import { Client as LimitOrderApiClient } from "src/types/openapi";
 import { Address, signMessage, signTypedData } from "@wagmi/core";
 import { Order } from "src/types/openapi";
 import { orderApiServerMap } from "src/config";
 import { environment } from "src/environment";
+import { getAddresses } from "@bond-protocol/contract-library";
+import { formatUnits, toHex } from "viem";
+import { createSignInMessage } from "./create-sign-in-message";
 
 //SETUP API SERVER BASED ON ENVIRONMENT
 const server = orderApiServerMap[environment.current];
@@ -77,17 +75,10 @@ export class ApiClient {
       name: "Bond Protocol Limit Orders",
       version: "v1.0.0",
       chainId,
-      verifyingContract: getAddresses(chainId.toString())
-        .settlement as `0x${string}`,
+      verifyingContract: getAddresses(chainId).settlement as Address,
     } as const;
 
     const types = {
-      EIP712Domain: [
-        { name: "name", type: "string" },
-        { name: "version", type: "string" },
-        { name: "chainId", type: "uint256" },
-        { name: "verifyingContract", type: "address" },
-      ],
       Order: [
         { name: "marketId", type: "uint256" },
         { name: "recipient", type: "address" },
@@ -99,22 +90,25 @@ export class ApiClient {
         { name: "deadline", type: "uint256" },
         { name: "user", type: "address" },
       ],
+    } as const;
+
+    const message = {
+      marketId: BigInt(order.market_id!),
+      recipient: order.recipient as Address,
+      referrer: order.referrer as Address,
+      amount: BigInt(order.amount!),
+      minAmountOut: BigInt(order.min_amount_out!),
+      maxFee: BigInt(order.max_fee!),
+      submitted: BigInt(order.submitted!),
+      deadline: BigInt(order.deadline!),
+      user: order.user as Address,
     };
-    const value = {
-      marketId: Number(order.market_id),
-      recipient: order.recipient,
-      referrer: order.referrer,
-      amount: order.amount,
-      minAmountOut: order.min_amount_out,
-      maxFee: order.max_fee,
-      submitted: order.submitted,
-      deadline: order.deadline,
-      user: order.user,
-    };
+
     return signTypedData({
       domain,
       types,
-      value,
+      message,
+      primaryType: "Order",
     });
   }
 
@@ -149,20 +143,14 @@ export class ApiClient {
       }
 
       if (fields.includes(name)) {
-        updated = BigNumber.from(value).toString();
+        updated = BigInt(value).toString();
         //Tokens need to be decimal adjusted
         if (name === "amount") {
-          updated = ethers.utils.formatUnits(
-            updated,
-            market.quoteToken.decimals
-          );
+          updated = formatUnits(updated, market.quoteToken.decimals);
         }
 
         if (name === "min_amount_out") {
-          updated = ethers.utils.formatUnits(
-            updated,
-            market.payoutToken.decimals
-          );
+          updated = formatUnits(updated, market.payoutToken.decimals);
         }
       }
 
@@ -219,7 +207,7 @@ export class ApiClient {
   }) {
     const response = await this.api.cancelOrderByDigest(
       //@ts-ignore
-      { address, digest: BigNumber.from(digest).toHexString() },
+      { address, digest: toHex(BigInt(digest)) },
       null,
       { headers: this.makeHeaders({ chainId, token }) }
     );
@@ -236,8 +224,8 @@ export class ApiClient {
   }
 
   private makeHeaders({ token, chainId }: { chainId: number; token?: string }) {
-    const chainAddresses = getAddresses(chainId.toString());
-    const headers: Record<string, string | number> = {
+    const chainAddresses = getAddresses(chainId);
+    const headers: Record<string, undefined | string | number | Address> = {
       "x-chain-id": chainId,
       "x-aggregator": chainAddresses.aggregator,
       "x-settlement": chainAddresses.settlement,
@@ -255,13 +243,13 @@ export class ApiClient {
   ) {
     const { data: nonce } = await this.api.getNonce();
 
-    const message = new SiweMessage({
+    const message = createSignInMessage({
       ...basicMessage,
       statement,
       address,
       chainId,
       nonce,
-    }).prepareMessage();
+    });
 
     const signature = await signMessage({ message });
 

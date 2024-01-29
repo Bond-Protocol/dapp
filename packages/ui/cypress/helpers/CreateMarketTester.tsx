@@ -12,7 +12,6 @@ export const defaultProps: CreateMarketScreenProps = {
   //@ts-ignore
   tokens: list,
   onSubmitCreation: (state) => {
-    console.log({ state });
     return "";
   },
   estimateGas: () => "",

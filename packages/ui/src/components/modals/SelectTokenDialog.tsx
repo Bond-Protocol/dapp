@@ -1,6 +1,6 @@
 import { SearchBar } from "components/molecules/SearchBar";
 import { IconCarousel, IconCarouselProps, Label } from "..";
-import type { Token } from "@bond-protocol/contract-library";
+import type { Token } from "types";
 
 export type SelectTokenDialogProps = {
   onSubmit: Function;
@@ -20,7 +20,7 @@ const fields = ["address", "name", "symbol"];
 
 const includesAddress = (token: any, target: string) => {
   return Object.values(token?.addresses)
-    .flatMap((a) => a) // Testnet chains can have multiple addresses for the same token
+    .flat() // Testnet chains can have multiple addresses for the same token
     .some((address: any) => address.toLowerCase() === target.toLowerCase());
 };
 

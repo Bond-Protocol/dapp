@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 
 export const LiqudityWarning = ({
   liquidity,

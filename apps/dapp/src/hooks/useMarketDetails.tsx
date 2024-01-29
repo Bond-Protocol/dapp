@@ -1,9 +1,9 @@
 import {
-  CalculatedMarket,
   getMarketTypeByAuctioneer,
   MarketPricing,
 } from "@bond-protocol/contract-library";
-import { PastMarket } from "components/organisms/ClosedMarket";
+import { CalculatedMarket } from "types";
+
 import { dateMath, formatCurrency, formatDate } from "ui";
 
 const pricingLabels: Record<MarketPricing, string> = {
@@ -21,7 +21,8 @@ export const getMarketLabels = (market: { auctioneer: string }) => {
 export const useMarketDetails = (market: CalculatedMarket) => {
   if (!market) return {};
 
-  const capacityInQuote = market.capacityToken === market.quoteToken.symbol;
+  const capacityInQuote =
+    market.capacityToken.symbol === market.quoteToken.symbol;
 
   const maxPayout =
     (!capacityInQuote
@@ -34,7 +35,7 @@ export const useMarketDetails = (market: CalculatedMarket) => {
 
   const vestingLabel =
     market.vestingType === "fixed-term"
-      ? market.formattedLongVesting
+      ? market.formatted.longVesting
       : vestingDate;
 
   const startDate = market.start && new Date(market.start * 1000);
@@ -46,8 +47,8 @@ export const useMarketDetails = (market: CalculatedMarket) => {
 
   const discountLabel =
     !isNaN(market.discount) &&
-    market.discount !== Infinity &&
-    market.discount !== -Infinity
+    isFinite(market.discount) &&
+    market.discount < 100
       ? formatCurrency.trimToken(market.discount).concat("%")
       : "Unknown";
 

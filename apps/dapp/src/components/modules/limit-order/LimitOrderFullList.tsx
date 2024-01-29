@@ -1,4 +1,4 @@
-import { ACTIVE_CHAIN_IDS } from "context/evm-provider";
+import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
 import { useMarkets } from "context/market-context";
 import { useQueries } from "react-query";
 import { useOrderApi } from "./use-order-api";
@@ -7,15 +7,16 @@ import {
   PaginatedTable,
   Column,
   Button,
-  getDiscountPercentage,
   getDiscountColor,
   formatCurrency,
   formatDate,
   Label,
 } from "ui";
-import { CalculatedMarket, CHAINS } from "@bond-protocol/contract-library";
-import { ethers } from "ethers";
+import { CalculatedMarket } from "types";
 import { useNavigate } from "react-router-dom";
+import { getDiscountPercentage } from "../create-market";
+import { formatUnits } from "viem";
+import { getChain } from "@bond-protocol/contract-library";
 
 const Chip = ({
   children,
@@ -134,7 +135,6 @@ export const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     formatter: (order: any) => {
       const { quoteToken, payoutToken } = order.market;
 
-      const chain = CHAINS.get(order.chain_id?.toString());
       const value = `${payoutToken.symbol}-${quoteToken.symbol}`;
 
       return {
@@ -151,10 +151,7 @@ export const columns: Column<OrderConfig & { market: CalculatedMarket }>[] = [
     accessor: "filled",
     tooltip: "How much of the order has been filled",
     formatter: (order: any) => {
-      const value = ethers.utils.formatUnits(
-        order.filled,
-        order.market.quoteToken.decimals
-      );
+      const value = formatUnits(order.filled, order.market.quoteToken.decimals);
       return {
         value,
       };
@@ -206,34 +203,39 @@ const filters = [
 
 export const LimitOrderFullList = () => {
   const orders = useOrderApi();
-  const { everyMarket } = useMarkets();
+  const { everyMarket, isSomeLoading, arePastMarketsLoading } = useMarkets();
+
+  const enabled =
+    !isSomeLoading && !arePastMarketsLoading && everyMarket.length > 0;
+
   const queries = useQueries(
     ACTIVE_CHAIN_IDS.map((chainId) => ({
       queryKey: ["orders/list-all", chainId],
-      queryFn: () =>
-        orders.listRaw(chainId).then((result) => {
-          return result.map((order) => {
-            const market = everyMarket.find(
-              (mkt) => Number(mkt.marketId) === Number(order.market_id)
-            );
-            if (!market) {
-              return order;
-            }
+      queryFn: async () => {
+        const result = await orders.listRaw(chainId);
+        return result.map((order) => {
+          const market = everyMarket.find(
+            (mkt) => Number(mkt.marketId) === Number(order.market_id)
+          );
+          if (!market) {
+            return order;
+          }
 
-            return {
-              ...orderService.parseOrder(order, market),
-              market,
-            };
-          });
-        }),
-      enabled: everyMarket.length > 0,
+          return {
+            ...orderService.parseOrder(order, market),
+            market,
+          };
+        });
+      },
+      enabled,
     }))
   );
 
   const allOrders =
     queries
       .flatMap((q) => q.data)
-      .filter((q) => !!q)
+      //@ts-ignore
+      .filter((q) => !!q && q.market)
       .map((d) => {
         //@ts-ignore
         d.refetch = () => queries.forEach((q) => q.refetch());
@@ -247,7 +249,9 @@ export const LimitOrderFullList = () => {
     <PaginatedTable
       //@ts-ignore
       filters={filters}
-      loading={queries.every((q) => q.isLoading)}
+      loading={
+        queries.every((q) => q.isIdle) || queries.every((q) => q.isLoading)
+      }
       title="Orders"
       emptyRows={0}
       data={allOrders}

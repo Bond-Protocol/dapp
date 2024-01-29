@@ -1,8 +1,6 @@
-import { useAtom } from "jotai";
-import testnetMode from "../atoms/testnetMode.atom";
 import { UseQueryResult } from "react-query";
 import { environment } from "src/environment";
-import { CHAIN_ID } from "@bond-protocol/contract-library";
+import { CHAIN_ID } from "types";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
@@ -18,6 +16,13 @@ export const subgraphEndpoints = {
   [CHAIN_ID.OPTIMISM_MAINNET]: `${
     import.meta.env.VITE_OPTIMISM_MAINNET_SUBGRAPH_ENDPOINT
   }`,
+  [CHAIN_ID.POLYGON_MAINNET]: `${
+    import.meta.env.VITE_POLYGON_MAINNET_SUBGRAPH_ENDPOINT
+  }`,
+  [CHAIN_ID.BASE_MAINNET]: `${
+    import.meta.env.VITE_BASE_MAINNET_SUBGRAPH_ENDPOINT
+  }`,
+
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: `${
     import.meta.env.VITE_ARBITRUM_TESTNET_SUBGRAPH_ENDPOINT
   }`,
@@ -29,6 +34,10 @@ export const subgraphEndpoints = {
   }`,
   [CHAIN_ID.AVALANCHE_FUJI_TESTNET]: `${
     import.meta.env.VITE_AVALANCHE_TESTNET_SUBGRAPH_ENDPOINT
+  }`,
+
+  [CHAIN_ID.BASE_SEPOLIA]: `${
+    import.meta.env.VITE_BASE_SEPOLIA_SUBGRAPH_ENDPOINT
   }`,
 };
 
@@ -45,6 +54,14 @@ export const mainnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.OPTIMISM_MAINNET],
     chain: CHAIN_ID.OPTIMISM_MAINNET,
   },
+  {
+    url: subgraphEndpoints[CHAIN_ID.POLYGON_MAINNET],
+    chain: CHAIN_ID.POLYGON_MAINNET,
+  },
+  {
+    url: subgraphEndpoints[CHAIN_ID.BASE_MAINNET],
+    chain: CHAIN_ID.BASE_MAINNET,
+  },
 ];
 
 export const testnetEndpoints = [
@@ -60,12 +77,16 @@ export const testnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
     chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
   },
-  /*
+
   {
     url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
     chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
   },
   {
+    url: subgraphEndpoints[CHAIN_ID.BASE_SEPOLIA],
+    chain: CHAIN_ID.BASE_SEPOLIA,
+  },
+  /*{
     url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],
     chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,
   },
@@ -102,12 +123,13 @@ export const getSubgraphQuery = (
   );
 };
 
+const isTestnet = environment.isTestnet;
+
 export const getSubgraphQueries = (
   query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
   variables?: {}
 ): UseQueryResult<any, any>[] => {
-  const [testnet, setTestnet] = useAtom(testnetMode);
-  const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;
+  const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;
 
   const queries: UseQueryResult<any, any>[] = [];
   endpoints.forEach((endpoint) => {
@@ -122,7 +144,7 @@ export const getSubgraphQueries = (
           },
         },
         { queryKey: endpoint.url + "--" + query.name.toString(), ...variables },
-        { enabled: testnet ? !!testnet : !testnet }
+        { enabled: isTestnet ? !!isTestnet : !isTestnet }
       )
     );
   });
@@ -134,8 +156,7 @@ export const getSubgraphQueriesPerChainFn = (
   func: (chain: CHAIN_ID) => any,
   fieldName: string
 ): UseQueryResult<any, any>[] => {
-  const [testnet, setTestnet] = useAtom(testnetMode);
-  const endpoints = testnet ? testnetEndpoints : mainnetEndpoints;
+  const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;
 
   const queries: UseQueryResult<any, any>[] = [];
   endpoints.forEach((endpoint) => {
@@ -156,7 +177,7 @@ export const getSubgraphQueriesPerChainFn = (
           },
         },
         variables,
-        { enabled: testnet ? !!testnet : !testnet }
+        { enabled: isTestnet ? !!isTestnet : !isTestnet }
       )
     );
   });

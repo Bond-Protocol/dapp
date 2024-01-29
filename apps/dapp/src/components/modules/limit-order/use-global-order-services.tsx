@@ -1,5 +1,5 @@
-import { TokenBase } from "@bond-protocol/contract-library";
-import { ACTIVE_CHAIN_IDS } from "context/evm-provider";
+import { TokenBase } from "types";
+import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
 import { createContext, useContext } from "react";
 import { useQueries } from "react-query";
 import { orderService } from "services/order-service";

@@ -1,16 +1,7 @@
 import { createContext, useContext } from "react";
-import { Token } from "@bond-protocol/contract-library";
 import { useTokenLoader } from "services/use-token-loader";
 
-export type ITokenContext = {
-  tbv: string;
-  tokens: Token[];
-  payoutTokens: Token[];
-  addToken: (token: Token) => void;
-  getByAddress: (address: string) => Token | undefined;
-  getByChain: (chainId: number) => Token[] | undefined;
-  fetchedExtendedDetails?: boolean;
-};
+export type ITokenContext = ReturnType<typeof useTokenLoader>;
 
 const TokenContext = createContext<ITokenContext>({} as ITokenContext);
 

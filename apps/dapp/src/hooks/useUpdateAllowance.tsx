@@ -1,44 +1,42 @@
-import { useSigner } from "wagmi";
-import { useState } from "react";
-import { changeApproval } from "@bond-protocol/contract-library";
-import { AllowanceToken } from "ui";
+import { erc20ABI, useWalletClient } from "wagmi";
+import { Address, getContract, parseUnits } from "viem";
+import { Token } from "types";
+import { AllowanceToken } from "components/dialogs";
+
+export type UpdateAllowanceArgs = {
+  token: AllowanceToken;
+  spender: Address;
+  amount: string;
+};
 
 export const useUpdateAllowance = () => {
-  const [updating, setUpdating] = useState(false);
-  const [token, setToken] = useState<AllowanceToken>();
-  const [allowance, setAllowance] = useState<string>("");
+  const { data: walletClient } = useWalletClient();
 
-  const { data: signer } = useSigner();
-
-  const updateAllowance = (
-    newAllowance = allowance,
-    selectedToken = token,
-    address?: string
-  ) => {
-    if (!signer) {
-      throw new Error("No signer connected");
+  const updateAllowance = async ({
+    token,
+    spender,
+    amount,
+  }: UpdateAllowanceArgs): Promise<{ hash: Address }> => {
+    if (!token || !amount || !walletClient) {
+      throw new Error(
+        "Invalid input: " + JSON.stringify({ amount, token, walletClient })
+      );
     }
 
-    if (!selectedToken || !newAllowance) {
-      throw new Error("Invalid input: " + JSON.stringify({ allowance, token }));
-    }
+    const contract = getContract({
+      address: token.address,
+      abi: erc20ABI,
+      walletClient,
+    });
 
-    return changeApproval(
-      selectedToken.address,
-      selectedToken.decimals,
-      address ?? selectedToken.auctioneer,
-      newAllowance,
-      signer
-    );
+    const _amount = parseUnits(amount, token.decimals);
+
+    const hash = await contract?.write.approve([spender, _amount]);
+
+    return { hash };
   };
 
   return {
     updateAllowance,
-    updating,
-    token,
-    allowance,
-    setUpdating,
-    setToken,
-    setAllowance,
   };
 };

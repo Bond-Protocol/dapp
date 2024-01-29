@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  CalculatedMarket,
-  getBlockExplorer,
-} from "@bond-protocol/contract-library";
+import { getBlockExplorer } from "@bond-protocol/contract-library";
 import defillama from "services/defillama";
 import {
   InputCard,
@@ -20,6 +17,8 @@ import { QueryWizard } from "components/common/QueryWizard";
 import { BondButton } from "components/organisms/BondButton";
 import { useLimitOrderForMarket } from "./use-limit-order";
 import { LimitOrderConfirmationDialog } from "./LimitOrderConfirmationDialog";
+
+import { CalculatedMarket } from "types";
 
 const selectExpiryOptions = [
   { label: "1 day", id: 1 },
@@ -155,9 +154,8 @@ function generateSummaryFields(
   price: string,
   maxFee: number
 ) {
-  const { blockExplorerName, blockExplorerUrl } = getBlockExplorer(
-    market.chainId,
-    "address"
+  const { name: blockExplorerName, url: blockExplorerUrl } = getBlockExplorer(
+    market.chainId
   );
 
   const isValidPrice = !!Number(price) && isFinite(Number(price));

@@ -40,14 +40,6 @@
     "decimals": 18
   },
   {
-    "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
-    "chainId": 421613,
-    "name": "Wrapped Ethereum",
-    "symbol": "WETH",
-    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/WETH.png",
-    "decimals": 18
-  },
-  {
     "address": "0xd518614C390e02741F3B0EE24486b09Ce53E6d39",
     "chainId": 421613,
     "name": "Chainlink",

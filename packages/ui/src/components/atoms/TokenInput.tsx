@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Icon, Input, InputProps } from "..";
-import { calculateTrimDigits, longFormatter, trim, trimAsNumber } from "utils";
 
 export type TokenInputProps = InputProps & {
   symbol?: string;
@@ -11,56 +10,38 @@ export type TokenInputProps = InputProps & {
 };
 
 export const TokenInput = (props: TokenInputProps) => {
-  const [value, setValue] = useState(
-    trimAsNumber(
-      props.value as number,
-      calculateTrimDigits(props.value as number)
-    ).toString()
-  );
+  const [value, setValue] = useState(props.value);
   const [showTokenSymbol, setShowTokenSymbol] = useState(
     props.symbolStartsShowing
   );
 
   useEffect(() => {
-    setValue(
-      trimAsNumber(
-        props.value as number,
-        calculateTrimDigits(props.value as number)
-      ).toString()
-    );
+    setValue(value);
   }, [props.value]);
-
-  useEffect(() => {
-    setValue(trim(value, calculateTrimDigits(Number(value))).toString());
-  }, [value]);
 
   const onBlur = (_e: React.BaseSyntheticEvent) => {
     let updated = value === "" ? "0" : value;
-    updated = longFormatter.format(Number(updated));
+    //updated = longFormatter.format(Number(updated));
     setValue(updated);
     setShowTokenSymbol(true);
   };
 
   const onFocus = (_e: React.BaseSyntheticEvent) => {
     setShowTokenSymbol(false);
-    let updated = Number(value.replace(/[^0-9.-]+/g, ""));
+    let updated = Number(String(value).replace(/[^0-9.-]+/g, ""));
     let checked = isNaN(updated) || updated === 0 ? "" : updated.toString();
     setValue(checked);
   };
 
   const onChange = (e: React.BaseSyntheticEvent) => {
     e.preventDefault();
+    const nextValue = e.target.value;
 
-    const updated = trimAsNumber(
-      e.target.value,
-      calculateTrimDigits(e.target.value)
-    );
-
-    if (!isNaN(updated)) {
+    if (!isNaN(Number(nextValue))) {
       // @ts-ignore
-      props.onChange && props.onChange(updated);
+      props.onChange && props.onChange(nextValue);
       // @ts-ignore
-      setValue(updated);
+      setValue(nextValue);
     }
   };
   const displayValue = showTokenSymbol

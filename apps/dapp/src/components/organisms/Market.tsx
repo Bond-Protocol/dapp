@@ -1,9 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
 import { useMarkets } from "context/market-context";
-import { CalculatedMarket } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "types";
 import { PageHeader, PageNavigation } from "components/common";
-import { dateMath, InfoLabel, Loading } from "ui";
+import { InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
 import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
@@ -13,9 +13,16 @@ import { useTokenLiquidity } from "hooks/useTokenLiquidity";
 import { LiqudityWarning } from "components/modules/markets/LiquidityWarning";
 import { environment } from "src/environment";
 
-export const Market = ({ market }: { market: CalculatedMarket }) => {
+export const Market = () => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
+  const { id, chainId } = useParams();
+
+  const { allMarkets: markets } = useMarkets();
+  const market: CalculatedMarket = markets.find(
+    ({ marketId, chainId: marketChainId }) =>
+      marketId === Number(id) && marketChainId === chainId
+  )!;
   const liquidity = useTokenLiquidity({
     chainId: Number(market.chainId),
     address: market.payoutToken.address,
@@ -77,7 +84,11 @@ export const Market = ({ market }: { market: CalculatedMarket }) => {
         >
           <p
             className={
-              market?.discount > 0 ? "text-light-success" : "text-red-300"
+              market.discount >= 100
+                ? ""
+                : market?.discount > 0
+                ? "text-light-success"
+                : "text-red-300"
             }
           >
             {discountLabel}
@@ -105,7 +116,7 @@ export const Market = ({ market }: { market: CalculatedMarket }) => {
           tooltip="The remaining amount of tokens to be bonded in this market"
         >
           {capacity}
-          <span className="ml-1 text-xl">{market.capacityToken}</span>
+          <span className="ml-1 text-xl">{market.capacityToken.symbol}</span>
         </InfoLabel>
       </div>
 

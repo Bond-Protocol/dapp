@@ -1,0 +1,16 @@
+{
+  "name": "formatters",
+  "version": "0.0.1",
+  "description": "Functions that format dates and currency",
+  "license": "MIT",
+  "main": "./dist/src/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "dependencies": {
+    "date-fns": "^2.29.2"
+  }
+}

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Providers } from "context/app-providers";
 import { PageContainer } from "ui";
-import { EmbedRoutes, PolicyRoutes, RouteMap } from "./RouteMap";
+import { EmbedRoutes, RouteMap } from "./RouteMap";
 import {
   AppStatusBanner,
   EmbedContainer,
@@ -36,7 +36,6 @@ export const App: FC = () => {
                 <div className="flex h-full min-h-[100vh] flex-col justify-between">
                   <div>
                     <Navbar />
-                    <PolicyRoutes />
                     <div className="mx-auto max-w-[1136px]">
                       <PageContainer>
                         <RouteMap />

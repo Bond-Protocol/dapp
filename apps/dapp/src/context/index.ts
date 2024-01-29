@@ -1,5 +1,5 @@
 export * from "./app-providers";
-export * from "./evm-provider";
+export * from "./blockchain-provider";
 export * from "./market-context";
 export * from "./subgraph-context";
 export * from "./token-context";

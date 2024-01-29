@@ -1,26 +1,25 @@
-import { getSubgraphQueries, providers } from "services";
+import { getSubgraphQueries } from "services";
 import {
   BondPurchase,
-  BondToken,
   Market,
   OwnerBalance,
   useGetDashboardDataQuery,
 } from "../generated/graphql";
 import { useSubgraphLoadingCheck } from "hooks/useSubgraphLoadingCheck";
-import { useTestnetMode } from "hooks/useTestnet";
 import { useCallback, useEffect, useState } from "react";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import {
   calculateTrimDigits,
   getBalance,
-  Token,
   trim,
 } from "@bond-protocol/contract-library";
-import { BigNumberish } from "ethers";
-import { useTokens } from "context";
+import { clients, useTokens } from "context";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
 import axios from "axios";
+import { Token } from "types";
+import { environment } from "src/environment";
+import filterArrayByUniqueKey from "src/utils/filter-unique";
 
 export type TweakedBondPurchase = BondPurchase & {
   txUrl: string;
@@ -30,6 +29,8 @@ export type TweakedBondPurchase = BondPurchase & {
 };
 
 const currentTime = Math.trunc(Date.now() / 1000);
+
+const isTestnet = environment.isTestnet;
 
 const API_ENDPOINT = import.meta.env.VITE_API_URL;
 
@@ -44,7 +45,6 @@ export const useDashboardLoader = () => {
   const { isLoading } = useSubgraphLoadingCheck(dashboardData);
   const { tokens, getByAddress } = useTokens();
 
-  const [isTestnet] = useTestnetMode();
   const [ownerBalances, setOwnerBalances] = useState<Partial<OwnerBalance>[]>(
     []
   );
@@ -65,51 +65,58 @@ export const useDashboardLoader = () => {
   }, []);
 
   useEffect(() => {
-    if (isLoading || !address) return;
+    async function load() {
+      if (isLoading || !address) return;
 
-    const ownerBalances = concatSubgraphQueryResultArrays(
-      dashboardData,
-      "ownerBalances"
-    );
-    const bondTokens = concatSubgraphQueryResultArrays(
-      dashboardData,
-      "bondTokens"
-    );
-
-    loadBondPurchases().then((response) => {
-      setBondPurchases(response.bondPurchases);
-      setUserTbv(response.tbvUsd);
-    });
-
-    const markets = concatSubgraphQueryResultArrays(dashboardData, "markets");
-    const uniqueBonderCounts = concatSubgraphQueryResultArrays(
-      dashboardData,
-      "uniqueBonderCounts"
-    );
-
-    const erc20OwnerBalances: Partial<OwnerBalance>[] = [];
-    const promises: Promise<any>[] = [];
-    bondTokens.forEach((bondToken: BondToken) => {
-      promises.push(
-        getBalance(bondToken.id, address, providers[bondToken.chainId]).then(
-          (result: BigNumberish) => {
-            const toNumber = Number(result);
-            toNumber > 0 &&
-              erc20OwnerBalances.push({
-                balance: result,
-                bondToken: bondToken,
-                owner: address,
-              });
-          }
-        )
+      const ownerBalances = concatSubgraphQueryResultArrays(
+        dashboardData,
+        "ownerBalances"
       );
-    });
+      const bondTokens = concatSubgraphQueryResultArrays(
+        dashboardData,
+        "bondTokens"
+      );
 
-    const fetchErc20OwnerBalances = async () => {
-      await Promise.allSettled(promises);
+      loadBondPurchases().then((response) => {
+        setBondPurchases(
+          filterArrayByUniqueKey(response.bondPurchases, "timestamp")
+        );
+        setUserTbv(response.tbvUsd);
+      });
+
+      const markets = concatSubgraphQueryResultArrays(dashboardData, "markets");
+      const uniqueBonderCounts = concatSubgraphQueryResultArrays(
+        dashboardData,
+        "uniqueBonderCounts"
+      );
+
+      const erc20OwnerBalances: any[] = await Promise.all(
+        bondTokens.map(async (bondToken: any) => {
+          const client = clients[bondToken.chainId];
+          try {
+            const _balance = await getBalance(bondToken.id, address, client);
+            const balance = Number(_balance);
+
+            return {
+              balance,
+              bondToken: bondToken,
+              owner: address,
+            };
+          } catch (e) {
+            console.error(e);
+            return {
+              balance: 0,
+              bondToken,
+              owner: address,
+            };
+          }
+        })
+      );
+
+      const balances = erc20OwnerBalances.flat().filter((q) => !!q.balance);
 
       let userClaimable = 0;
-      const updatedBonds = [...ownerBalances, ...erc20OwnerBalances].map(
+      const updatedBonds = [...ownerBalances, ...balances].map(
         (bond: Partial<OwnerBalance>) => {
           if (!bond.bondToken || !bond.bondToken.underlying) return;
           const date = new Date(bond.bondToken.expiry * 1000);
@@ -156,13 +163,14 @@ export const useDashboardLoader = () => {
       //@ts-ignore
       setOwnerBalances(updatedBonds);
       setUserClaimable(userClaimable);
-    };
 
-    setAllMarkets(markets);
+      setAllMarkets(markets);
 
-    uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
+      uniqueBonderCounts[0] && setUniqueBonders(uniqueBonderCounts[0].count);
 
-    fetchErc20OwnerBalances();
+      //fetchErc20OwnerBalances();
+    }
+    load();
   }, [tokens, isLoading, isTestnet]);
 
   //Calculate user markets TBV and total bonds
@@ -202,16 +210,17 @@ export const useDashboardLoader = () => {
             let avgPrice = all.avgPrice + Number(p.purchasePrice);
 
             if (i === arr.length - 1) {
-              avgPrice = avgPrice / i;
+              avgPrice = avgPrice / (i + 1);
             }
 
-            return {
+            const result = {
               quoteUsd: all.quoteUsd + totalQuoteUsd,
               payoutUsd: all.payoutUsd + totalPayoutUsd,
               quote: all.quote + Number(p.amount),
               payout: all.payout + Number(p.payout),
               avgPrice,
             };
+            return result;
           },
           { quoteUsd: 0, payoutUsd: 0, quote: 0, payout: 0, avgPrice: 0 }
         );
@@ -225,7 +234,7 @@ export const useDashboardLoader = () => {
       //@ts-ignore
       setAllMarkets(updated);
     }
-  }, [tokens, allMarkets.length]);
+  }, [getByAddress, tokens, allMarkets.length]);
 
   //Calculates claimable value for purchases
 

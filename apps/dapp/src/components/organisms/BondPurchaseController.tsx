@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { CalculatedMarket } from "@bond-protocol/contract-library";
+import type { CalculatedMarket } from "types";
 import { Tabs } from "ui";
 
 import {

@@ -1,0 +1,17 @@
+{
+  "name": "order-service-proxy",
+  "version": "1.0.0",
+  "description": "Proxy server for Order Service",
+  "main": "index.js",
+  "author": "@bondlabs",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "node src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2"
+  }
+}
