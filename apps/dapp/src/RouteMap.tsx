@@ -35,16 +35,6 @@ export const RouteMap: FC = () => {
   );
 };
 
-export const PolicyRoutes = () => {
-  return (
-    <Switch>
-      <Route path="/terms" element={<PolicyPage {...terms} />} />
-      <Route path="/privacy" element={<PolicyPage {...privacyPolicy} />} />
-      <Route path="/cookies" element={<PolicyPage {...cookiePolicy} />} />
-    </Switch>
-  );
-};
-
 export const EmbedRoutes = () => {
   return (
     <Switch>
