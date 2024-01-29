@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Providers } from "context/app-providers";
 import { PageContainer } from "ui";
-import { EmbedRoutes, PolicyRoutes, RouteMap } from "./RouteMap";
+import { EmbedRoutes, RouteMap } from "./RouteMap";
 import {
   AppStatusBanner,
   EmbedContainer,
