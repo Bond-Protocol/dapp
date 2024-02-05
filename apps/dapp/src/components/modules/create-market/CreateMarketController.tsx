@@ -44,7 +44,7 @@ export const CreateMarketController = () => {
   const { tokens } = useTokenlistLoader();
   const [state, dispatch] = useCreateMarket();
 
-  const { address: auctioneerAddress } = getAuctioneerForCreate(
+  const { address: tellerAddress } = getTeller(
     state.chainId,
     getBondType(state)
   );
@@ -54,7 +54,7 @@ export const CreateMarketController = () => {
     decimals: state.payoutToken.decimals,
     amount: state.capacity.toString(),
     chainId: network.chain?.id ?? 1,
-    spenderAddress: auctioneerAddress,
+    spenderAddress: tellerAddress as Address,
     ownerAddress: address as Address,
   });
 
