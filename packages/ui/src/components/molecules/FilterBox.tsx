@@ -48,13 +48,9 @@ export const FilterBox = (props: FilterBoxProps) => {
       <div
         id={id}
         onClick={handleClick}
-        className={`h-10 w-min cursor-pointer rounded-lg border ${
-          hasActiveFilters ? "border-light-secondary" : "border-white"
-        } ${props.className}`}
+        className={`h-10 w-min cursor-pointer rounded-lg border border-white ${props.className}`}
       >
-        <FilterIcon
-          className={hasActiveFilters ? "fill-light-secondary" : "fill-white"}
-        />
+        <FilterIcon className={"fill-white"} />
       </div>
       <PopperUnstyled open={open} anchorEl={anchorEl}>
         <ClickAwayListener onClickAway={onClose}>
