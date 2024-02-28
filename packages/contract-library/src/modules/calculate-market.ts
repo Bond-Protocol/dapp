@@ -22,11 +22,6 @@ export async function calculateMarket(
   const market = createBaseMarket(subgraphMarket);
   const { quoteToken, payoutToken } = market;
 
-  //TODO: delete
-  //const printCondition = quoteToken.address === testAdd;
-
-  //if (!quoteToken.price || !payoutToken.price) return market;
-
   const auctioneerContract = getContract({
     abi: getAuctioneerAbiForName(market.name as Auctioneer),
     address: market.auctioneer,
