@@ -2,6 +2,7 @@ import {
   getMarketTypeByAuctioneer,
   MarketPricing,
 } from "@bond-protocol/contract-library";
+import { add } from "date-fns";
 import { CalculatedMarket } from "types";
 
 import { dateMath, formatCurrency, formatDate } from "ui";
@@ -35,7 +36,7 @@ export const useMarketDetails = (market: CalculatedMarket) => {
 
   const vestingLabel =
     market.vestingType === "fixed-term"
-      ? market.formatted.longVesting
+      ? formatDate.short(add(Date.now(), { seconds: market.vesting }))
       : vestingDate;
 
   const startDate = market.start && new Date(market.start * 1000);
