@@ -44,7 +44,9 @@ export const useTokenLoader = () => {
   const { subgraphTokens, isLoading } = useSubgraph();
 
   const getByAddress = (address: string) => {
-    return tokens.find(
+    //TODO: hotfix to display testnet markets, improve
+    const _tokens = environment.isProduction ? tokens : subgraphTokens;
+    return _tokens.find(
       (t) => t.address.toLowerCase() === address?.toLowerCase()
     );
   };
