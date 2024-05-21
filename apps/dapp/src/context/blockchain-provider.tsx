@@ -25,6 +25,7 @@ import {
   polygonMumbai,
   base,
   baseSepolia,
+  bsc,
 } from "wagmi/chains";
 import { environment } from "src/environment";
 import { publicProvider } from "wagmi/providers/public";
@@ -41,7 +42,7 @@ export const testnets = [
   baseSepolia,
 ].map(getIconsForChains);
 
-export const mainnets = [mainnet, arbitrum, optimism, polygon, base];
+export const mainnets = [mainnet, arbitrum, optimism, polygon, base, bsc];
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS: _Chain[] = environment.isTestnet
@@ -102,6 +103,10 @@ const setup = [
     endpoint: `https://arb-mainnet.g.alchemy.com/v2/${
       import.meta.env.VITE_ALCHEMY_MAINNET_KEY
     }`,
+  },
+  {
+    chain: bsc,
+    endpoint: bsc.rpcUrls.default.http[0],
   },
   {
     chain: optimism,
