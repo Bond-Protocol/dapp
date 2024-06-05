@@ -1,4 +1,12 @@
-import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
+import {
+  Button,
+  Column,
+  DiscountLabel,
+  formatDate,
+  Icon,
+  Link,
+  Tooltip,
+} from "ui";
 import { add } from "date-fns";
 import { longFormatter, usdFormatter } from "formatters";
 import {
@@ -59,7 +67,25 @@ export const discountColumn: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[7%]",
   defaultSortOrder: "desc",
-  Component: DiscountLabel,
+  Component: (props) => {
+    const isArbitrum = Number(props.data.chainId) === 42161;
+
+    //Show LTIPP incentives
+    if (isArbitrum) {
+      return (
+        <div className="flex items-center">
+          <DiscountLabel {...props} />
+          <Tooltip content="Up to 10% in ARB incentives distributed weekly">
+            <div className="flex items-center">
+              {" "}
+              + <Icon className="w-8" src={chainLogos[42161]} />
+            </div>
+          </Tooltip>
+        </div>
+      );
+    }
+    return <DiscountLabel {...props} />;
+  },
   formatter: (market) => {
     const value =
       !isNaN(market.discount) &&
