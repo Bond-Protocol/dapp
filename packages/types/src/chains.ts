@@ -24,6 +24,7 @@ export enum CHAIN_ID {
   HARMONY_MAINNET = "1666600000",
   BASE_MAINNET = "8453",
   BASE_SEPOLIA = "84532",
+  MODE_MAINNET = "34443",
 }
 
 const baseNetworkLogo =
@@ -49,4 +50,6 @@ export const chainLogos: Record<number, string> = {
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
   8453: baseNetworkLogo,
   84532: baseNetworkLogo,
+  34443:
+    "https://raw.githubusercontent.com/mode-network/brandkit/main/Assets/Logo/Token.svg",
 };

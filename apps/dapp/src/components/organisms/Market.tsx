@@ -24,7 +24,7 @@ export const Market = () => {
       marketId === Number(id) && marketChainId === chainId
   )!;
   const liquidity = useTokenLiquidity({
-    chainId: Number(market.chainId),
+    chainId: Number(market?.chainId),
     address: market.payoutToken.address,
   });
 

@@ -8910,6 +8910,11 @@
     "@babel/plugin-transform-react-jsx-source" "^7.22.5"
     react-refresh "^0.14.0"
 
+"@wagmi/chains@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@wagmi/chains/-/chains-1.8.0.tgz#70e5fd0d50c8f9b8e63585eaf8544481e71707d3"
+  integrity sha512-UXo0GF0Cl0+neKC2KAmVAahv8L/5rACbFRRqkDvHMefzY6Fh7yzJd8F4GaGNNG3w4hj8eUB/E3+dEpaTYDN62w==
+
 "@wagmi/cli@^1.5.2":
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@wagmi/cli/-/cli-1.5.2.tgz#11e767b8c5d1cfb5045b6ec63df6fa5001189bc4"
