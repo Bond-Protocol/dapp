@@ -62,7 +62,7 @@ export function useCalculatedMarkets() {
     markets.map((market: Market) => ({
       queryKey: market.id,
       queryFn: () => calcMarket(market),
-      enabled: tokens.length > 0,
+      enabled: fetchedExtendedDetails,
     }))
   );
 

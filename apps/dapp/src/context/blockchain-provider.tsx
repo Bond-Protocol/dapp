@@ -14,6 +14,8 @@ import {
 
 import type { FC, ReactNode } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { baseSepolia } from "viem/chains";
+import { mode } from "./chain-definitions";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -24,9 +26,8 @@ import {
   polygon,
   polygonMumbai,
   base,
-  baseSepolia,
   bsc,
-} from "wagmi/chains";
+} from "@wagmi/chains";
 import { environment } from "src/environment";
 import { publicProvider } from "wagmi/providers/public";
 import { Chain, createPublicClient, http, PublicClient } from "viem";
@@ -42,7 +43,7 @@ export const testnets = [
   baseSepolia,
 ].map(getIconsForChains);
 
-export const mainnets = [mainnet, arbitrum, optimism, polygon, base, bsc];
+export const mainnets = [mainnet, arbitrum, optimism, polygon, base, bsc, mode];
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS: _Chain[] = environment.isTestnet
@@ -143,6 +144,10 @@ const setup = [
     endpoint: `https://base-sepolia.g.alchemy.com/v2/${
       import.meta.env.VITE_ALCHEMY_BASE_SEPOLIA_KEY
     }`,
+  },
+  {
+    chain: mode,
+    endpoint: mode.rpcUrls.default.http[0],
   },
 ];
 
