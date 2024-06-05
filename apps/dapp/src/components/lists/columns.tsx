@@ -34,7 +34,7 @@ const bondPrice: Column<CalculatedMarket> = {
   formatter: (market) => {
     const discountedPrice = market.discountedPrice
       ? market.formatted.discountedPrice
-      : market.formatted.quoteTokensPerPayoutToken;
+      : market.formatted?.quoteTokensPerPayoutToken;
 
     return {
       icon: market.payoutToken.logoURI,

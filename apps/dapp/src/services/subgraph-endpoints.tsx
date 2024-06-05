@@ -23,6 +23,10 @@ export const subgraphEndpoints = {
     import.meta.env.VITE_BASE_MAINNET_SUBGRAPH_ENDPOINT
   }`,
 
+  [CHAIN_ID.BSC_MAINNET]: `${
+    import.meta.env.VITE_BSC_MAINNET_SUBGRAPH_ENDPOINT
+  }`,
+
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: `${
     import.meta.env.VITE_ARBITRUM_TESTNET_SUBGRAPH_ENDPOINT
   }`,
@@ -61,6 +65,10 @@ export const mainnetEndpoints = [
   {
     url: subgraphEndpoints[CHAIN_ID.BASE_MAINNET],
     chain: CHAIN_ID.BASE_MAINNET,
+  },
+  {
+    url: subgraphEndpoints[CHAIN_ID.BSC_MAINNET],
+    chain: CHAIN_ID.BSC_MAINNET,
   },
 ];
 
