@@ -1,33 +1,13 @@
 import { UseQueryResult } from "react-query";
 import { environment } from "src/environment";
+import { mainnetSubgraphs } from "src/config";
 import { CHAIN_ID } from "types";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {
-  [CHAIN_ID.ETHEREUM_MAINNET]: `${
-    import.meta.env.VITE_ETHEREUM_MAINNET_SUBGRAPH_ENDPOINT
-  }`,
+  ...mainnetSubgraphs,
   [CHAIN_ID.GOERLI_TESTNET]: `${
     import.meta.env.VITE_ETHEREUM_TESTNET_SUBGRAPH_ENDPOINT
-  }`,
-  [CHAIN_ID.ARBITRUM_MAINNET]: `${
-    import.meta.env.VITE_ARBITRUM_MAINNET_SUBGRAPH_ENDPOINT
-  }`,
-  [CHAIN_ID.OPTIMISM_MAINNET]: `${
-    import.meta.env.VITE_OPTIMISM_MAINNET_SUBGRAPH_ENDPOINT
-  }`,
-  [CHAIN_ID.POLYGON_MAINNET]: `${
-    import.meta.env.VITE_POLYGON_MAINNET_SUBGRAPH_ENDPOINT
-  }`,
-  [CHAIN_ID.BASE_MAINNET]: `${
-    import.meta.env.VITE_BASE_MAINNET_SUBGRAPH_ENDPOINT
-  }`,
-
-  [CHAIN_ID.BSC_MAINNET]: `${
-    import.meta.env.VITE_BSC_MAINNET_SUBGRAPH_ENDPOINT
-  }`,
-  [CHAIN_ID.MODE_MAINNET]: `${
-    import.meta.env.VITE_BSC_MAINNET_SUBGRAPH_ENDPOINT
   }`,
 
   [CHAIN_ID.ARBITRUM_GOERLI_TESTNET]: `${
