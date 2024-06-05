@@ -36,10 +36,7 @@ const defaultFilters: Filter[] = [
     label: "Hide Unknown Markets",
     type: "switch",
     startActive: true,
-    handler: (market: CalculatedMarket) =>
-      isFinite(market.discount) &&
-      market.quoteToken.symbol.length < 10 &&
-      market.payoutToken.symbol.length < 10,
+    handler: (market: CalculatedMarket) => isFinite(market.discount),
   },
 ];
 
