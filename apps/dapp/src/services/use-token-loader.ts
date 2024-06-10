@@ -17,7 +17,7 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
     ...t,
     chainId: Number(t.chainId),
     // @ts-ignore
-    price: prices.find((p: any) => p.address === t.address)?.price ?? 0,
+    price: prices?.find((p: any) => p.address === t.address)?.price ?? 0,
   }));
 };
 
@@ -44,7 +44,8 @@ export const useTokenLoader = () => {
   const { subgraphTokens, isLoading } = useSubgraph();
 
   const getByAddress = (address: string) => {
-    return tokens.find(
+    const _tokens = tokens; //environment.isProduction ? tokens : subgraphTokens;
+    return _tokens.find(
       (t) => t.address.toLowerCase() === address?.toLowerCase()
     );
   };

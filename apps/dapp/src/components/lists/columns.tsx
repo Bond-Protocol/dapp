@@ -1,4 +1,12 @@
-import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
+import {
+  Button,
+  Column,
+  DiscountLabel,
+  formatDate,
+  Icon,
+  Link,
+  Tooltip,
+} from "ui";
 import { add } from "date-fns";
 import { longFormatter, usdFormatter } from "formatters";
 import {
@@ -34,7 +42,7 @@ const bondPrice: Column<CalculatedMarket> = {
   formatter: (market) => {
     const discountedPrice = market.discountedPrice
       ? market.formatted.discountedPrice
-      : market.formatted.quoteTokensPerPayoutToken;
+      : market.formatted?.quoteTokensPerPayoutToken;
 
     return {
       icon: market.payoutToken.logoURI,
@@ -59,7 +67,27 @@ export const discountColumn: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[7%]",
   defaultSortOrder: "desc",
-  Component: DiscountLabel,
+  Component: (props) => {
+    //Must have a valid payout and quote token
+    const isArbitrum =
+      Number(props.data.chainId) === 42161 && isFinite(props.data.discount);
+
+    //Show LTIPP incentives
+    if (isArbitrum) {
+      return (
+        <div className="relative flex flex-col items-center">
+          <DiscountLabel {...props} />
+          <Tooltip content="Up to 10% in ARB incentives distributed weekly">
+            <div className="flex items-center rounded  border bg-white px-2 text-xs font-semibold text-black">
+              {" +ARB"}
+              <Icon className="w-4" src={chainLogos[42161]} />
+            </div>
+          </Tooltip>
+        </div>
+      );
+    }
+    return <DiscountLabel {...props} />;
+  },
   formatter: (market) => {
     const value =
       !isNaN(market.discount) &&

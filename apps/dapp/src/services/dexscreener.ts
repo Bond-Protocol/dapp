@@ -9,6 +9,7 @@ const chains: Record<number, string> = {
   5: "ethereum",
   421613: "arbitrum",
   420: "optimism",
+  56: "bsc",
 };
 
 export const getLiquidity = async ({

@@ -35,7 +35,7 @@ export interface DefillamaChart extends Omit<DefillamaCurrentPrice, "price"> {
 export const fetchPrice = async (
   address: string | string[],
   chainId?: number
-): Promise<Array<DefillamaChart>> => {
+): Promise<Array<DefillamaCurrentPrice>> => {
   const ids = Array.isArray(address)
     ? address.join(",")
     : `${getNameFromChainId(Number(chainId))}:${address}`;
