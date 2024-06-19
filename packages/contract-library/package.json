@@ -18,7 +18,7 @@
     "make:abis": "wagmi generate"
   },
   "dependencies": {
-    "viem": "1.17.2",
+    "viem": "2.15.1",
     "formatters": "*",
     "encoding": "^0.1.13"
   },
