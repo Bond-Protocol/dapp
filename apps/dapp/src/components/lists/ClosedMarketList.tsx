@@ -31,7 +31,7 @@ export const ClosedMarketList = () => {
 
   return (
     <PaginatedTable
-      filters={filters}
+      hideSearchbar
       title="Past Markets"
       defaultSort="conclusion"
       columns={tableColumns}
