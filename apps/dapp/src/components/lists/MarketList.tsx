@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { CalculatedMarket } from "types";
-import { Chip, Filter, PaginatedTable, Switch } from "ui";
+import { Filter, PaginatedTable } from "ui";
 import { useMarkets, useMediaQueries } from "hooks";
 import {
   embedColumns,
@@ -21,7 +21,7 @@ type MarketListProps = {
   hideSearchbar?: boolean;
   title?: string;
   filters?: Filter[];
-  showUnknownMarkets?: boolean;
+  hideUnknownMarkets?: boolean;
 };
 
 function onlyKnownDiscount(market: CalculatedMarket) {
@@ -32,7 +32,7 @@ export const MarketList: FC<MarketListProps> = ({
   allowManagement,
   token,
   filters = [],
-  showUnknownMarkets,
+  hideUnknownMarkets,
   ...props
 }) => {
   const { isTabletOrMobile } = useMediaQueries();
@@ -43,7 +43,7 @@ export const MarketList: FC<MarketListProps> = ({
 
   const filteredMarkets = markets
     .filter((m: CalculatedMarket) => !token || m.payoutToken.address === token)
-    .filter((m) => showUnknownMarkets || onlyKnownDiscount(m));
+    .filter((m) => !hideUnknownMarkets || onlyKnownDiscount(m));
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
