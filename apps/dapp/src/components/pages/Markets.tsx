@@ -12,7 +12,7 @@ export const Markets = () => {
   const { isTabletOrMobile } = useMediaQueries();
   const { isLoading, arePastMarketsLoading } = useMarkets();
   const scrollUp = () => window.scrollTo(0, 0);
-  const [showUnknownMarkets, setShowUnknownMarkets] = useState(true);
+  const [hideUnknownMarkets, setHideUnknownMarkets] = useState(true);
 
   const showPastMarkets =
     !arePastMarketsLoading && !Object.values(isLoading).some(Boolean);
@@ -28,12 +28,12 @@ export const Markets = () => {
       <div className="mt-6 flex flex-col">
         <div className="flex self-end text-sm">
           <Switch
-            checked={showUnknownMarkets}
-            onChange={() => setShowUnknownMarkets((prev) => !prev)}
+            checked={hideUnknownMarkets}
+            onChange={() => setHideUnknownMarkets((prev) => !prev)}
           />{" "}
-          Show Unknown Markets
+          Hide Unknown Markets
         </div>
-        <MarketList showUnknownMarkets={showUnknownMarkets} />
+        <MarketList hideUnknownMarkets={hideUnknownMarkets} />
       </div>
       {showPastMarkets && (
         <div>
