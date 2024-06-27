@@ -21,29 +21,18 @@ type MarketListProps = {
   hideSearchbar?: boolean;
   title?: string;
   filters?: Filter[];
+  showUnknownMarkets?: boolean;
 };
 
-const defaultFilters: Filter[] = [
-  {
-    id: "discount",
-    label: "Hide Negative Discounts",
-    type: "switch",
-    handler: (market: CalculatedMarket) =>
-      Number(market.discount) >= 0 || isNaN(market.discount),
-  },
-  {
-    id: "unknown",
-    label: "Hide Unknown Markets",
-    type: "switch",
-    startActive: true,
-    handler: (market: CalculatedMarket) => isFinite(market.discount),
-  },
-];
+function onlyKnownDiscount(market: CalculatedMarket) {
+  return isFinite(market.discount);
+}
 
 export const MarketList: FC<MarketListProps> = ({
   allowManagement,
   token,
   filters = [],
+  showUnknownMarkets,
   ...props
 }) => {
   const { isTabletOrMobile } = useMediaQueries();
@@ -52,9 +41,9 @@ export const MarketList: FC<MarketListProps> = ({
   const isEmbed = useIsEmbed();
   const markets = props.owner ? getMarketsForOwner(props.owner) : allMarkets;
 
-  const filteredMarkets = markets.filter(
-    (m: CalculatedMarket) => !token || m.payoutToken.address === token
-  );
+  const filteredMarkets = markets
+    .filter((m: CalculatedMarket) => !token || m.payoutToken.address === token)
+    .filter((m) => showUnknownMarkets || onlyKnownDiscount(m));
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
