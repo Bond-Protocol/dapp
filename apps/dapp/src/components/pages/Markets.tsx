@@ -10,12 +10,14 @@ import { useMarkets } from "context/market-context";
 export const Markets = () => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
-  const { isLoading } = useMarkets();
+  const { isLoading, arePastMarketsLoading } = useMarkets();
   const scrollUp = () => window.scrollTo(0, 0);
   const [showClosedMarkets, setShowClosedMarkets] = useState(true);
 
   const showPastMarkets =
-    showClosedMarkets && !isLoading.pastMarkets && !isLoading.priceCalcs;
+    showClosedMarkets &&
+    !arePastMarketsLoading &&
+    !Object.values(isLoading).some(Boolean);
 
   return (
     <>
