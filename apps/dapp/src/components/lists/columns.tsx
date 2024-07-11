@@ -69,23 +69,23 @@ export const discountColumn: Column<CalculatedMarket> = {
   defaultSortOrder: "desc",
   Component: (props) => {
     //Must have a valid payout and quote token
-    const isArbitrum =
-      Number(props.data.chainId) === 42161 && isFinite(props.data.discount);
+    // const isArbitrum =
+    //   Number(props.data.chainId) === 42161 && isFinite(props.data.discount);
 
-    //Show LTIPP incentives
-    if (isArbitrum) {
-      return (
-        <div className="relative flex flex-col items-center">
-          <DiscountLabel {...props} />
-          <Tooltip content="Up to 10% in ARB incentives distributed weekly">
-            <div className="flex items-center rounded  border bg-white px-2 text-xs font-semibold text-black">
-              {" +ARB"}
-              <Icon className="w-4" src={chainLogos[42161]} />
-            </div>
-          </Tooltip>
-        </div>
-      );
-    }
+    // //Show LTIPP incentives
+    // if (isArbitrum) {
+    //   return (
+    //     <div className="relative flex flex-col items-center">
+    //       <DiscountLabel {...props} />
+    //       <Tooltip content="Up to 10% in ARB incentives distributed weekly">
+    //         <div className="flex items-center rounded  border bg-white px-2 text-xs font-semibold text-black">
+    //           {" +ARB"}
+    //           <Icon className="w-4" src={chainLogos[42161]} />
+    //         </div>
+    //       </Tooltip>
+    //     </div>
+    //   );
+    // }
     return <DiscountLabel {...props} />;
   },
   formatter: (market) => {
