@@ -63,12 +63,12 @@ export const Market = () => {
           chip={<MarketStatusChip market={market} />}
         />
       </PageNavigation>
-      {!isFutureMarket && lowLiquidity && (
-        <LiqudityWarning
-          liquidity={liquidity.data?.liquidityUSD}
-          market={market}
-        />
-      )}
+      {/* {!isFutureMarket && lowLiquidity && ( */}
+      {/*   <LiqudityWarning */}
+      {/*     liquidity={liquidity.data?.liquidityUSD} */}
+      {/*     market={market} */}
+      {/*   /> */}
+      {/* )} */}
       <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
         <InfoLabel
           label="Max Payout"
