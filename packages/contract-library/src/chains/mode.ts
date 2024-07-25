@@ -16,7 +16,7 @@ export default defineChain({
   blockExplorers: {
     default: {
       name: "Modescan",
-      url: "https://modescan.io",
+      url: "https://explorer.mode.network",
     },
   },
 });
