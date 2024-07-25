@@ -1,8 +1,10 @@
 import { Chain } from "viem/chains";
-import * as chains from "viem/chains";
+import * as viemChains from "viem/chains";
+import mode from "../chains/mode";
+const chains = [...Object.values(viemChains), mode];
 
 function getChain(chainId: number | string): Chain {
-  return Object.values(chains).find((c) => c.id === Number(chainId)) as Chain;
+  return chains.find((c) => c.id === Number(chainId)) as Chain;
 }
 
 const getBlockExplorer = (
