@@ -25,9 +25,14 @@ const blockExplorer: Column<any> = {
     const txHash = purchase.id;
     const start = txHash.substring(0, 4);
     const end = txHash.substring(txHash.length - 4);
+    const chainId = Number(purchase.payoutToken.chainId);
+    const { url } = getBlockExplorer(chainId, "tx");
+
+    const txUrl = url + txHash;
+
     return {
       value: `${start}...${end}`,
-      subtext: purchase.txUrl,
+      subtext: txUrl,
       searchValue: txHash,
       csvValues: [txHash],
     };
