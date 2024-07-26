@@ -15,7 +15,7 @@ import {
 import type { FC, ReactNode } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { baseSepolia } from "viem/chains";
-import { mode } from "./chain-definitions";
+import { mode, berachainBartio } from "./chain-definitions";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -36,11 +36,12 @@ import { chainLogos } from "types";
 type _Chain = Chain & { logoUrl?: string };
 
 export const testnets = [
-  goerli,
-  arbitrumGoerli,
-  optimismGoerli,
-  polygonMumbai,
+  // goerli,
+  // arbitrumGoerli,
+  // optimismGoerli,
+  // polygonMumbai,
   baseSepolia,
+  berachainBartio,
 ].map(getIconsForChains);
 
 export const mainnets = [mainnet, arbitrum, optimism, polygon, base, bsc, mode];
@@ -173,9 +174,11 @@ export const BlockchainProvider: FC<{ children?: ReactNode }> = ({
   );
 };
 
-function getIconsForChains(c: any) {
-  const logoUrl = Object.entries(chainLogos).find(
+export function getIconsForChains(c: any) {
+  //@ts-ignore
+  const [, logoUrl] = Object.entries(chainLogos).find(
     ([chainId]) => Number(chainId) === c.id
   );
-  return { ...c, logoUrl };
+
+  return { ...c, iconUrl: logoUrl, logoUrl };
 }

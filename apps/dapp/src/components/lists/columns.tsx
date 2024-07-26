@@ -44,11 +44,15 @@ const bondPrice: Column<CalculatedMarket> = {
       ? market.formatted.discountedPrice
       : market.formatted?.quoteTokensPerPayoutToken;
 
+    const price = isFinite(Number(market.discountedPrice))
+      ? discountedPrice
+      : "???";
+
     return {
       icon: market.payoutToken.logoURI,
       value: (
         <>
-          {discountedPrice}{" "}
+          {price}{" "}
           {!market.discountedPrice && (
             <TrimmedTextContent text={market.quoteToken.symbol} />
           )}{" "}

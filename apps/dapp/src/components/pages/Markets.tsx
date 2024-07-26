@@ -6,13 +6,16 @@ import { useMediaQueries } from "hooks/useMediaQueries";
 import { ClosedMarketList } from "components/lists/ClosedMarketList";
 import { useState } from "react";
 import { useMarkets } from "context/market-context";
+import { environment } from "src/environment";
 
 export const Markets = () => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
   const { isLoading, arePastMarketsLoading } = useMarkets();
   const scrollUp = () => window.scrollTo(0, 0);
-  const [hideUnknownMarkets, setHideUnknownMarkets] = useState(true);
+  const [hideUnknownMarkets, setHideUnknownMarkets] = useState(
+    environment.isProduction
+  );
 
   const showPastMarkets =
     !arePastMarketsLoading && !Object.values(isLoading).some(Boolean);
