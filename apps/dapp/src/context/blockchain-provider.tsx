@@ -150,6 +150,10 @@ const setup = [
     chain: mode,
     endpoint: mode.rpcUrls.default.http[0],
   },
+  {
+    chain: berachainBartio,
+    endpoint: berachainBartio.rpcUrls.default.http[0],
+  },
 ];
 
 export const clients: Record<number, PublicClient> = setup.reduce(
