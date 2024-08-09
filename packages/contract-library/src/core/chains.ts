@@ -1,7 +1,8 @@
 import { Chain } from "viem/chains";
 import * as viemChains from "viem/chains";
-import mode from "../chains/mode";
-const chains = [...Object.values(viemChains), mode];
+import customChains from "../chains";
+
+const chains = [...Object.values(viemChains), ...customChains];
 
 function getChain(chainId: number | string): Chain {
   return chains.find((c) => c.id === Number(chainId)) as Chain;

@@ -25,6 +25,7 @@ export enum CHAIN_ID {
   BASE_MAINNET = "8453",
   BASE_SEPOLIA = "84532",
   MODE_MAINNET = "34443",
+  BERA_BARTIO = "80084",
 }
 
 const baseNetworkLogo =
@@ -52,4 +53,6 @@ export const chainLogos: Record<number, string> = {
   84532: baseNetworkLogo,
   34443:
     "https://raw.githubusercontent.com/mode-network/brandkit/main/Assets/Logo/Token.svg",
+  80084:
+    "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/berachain-logo.png",
 };

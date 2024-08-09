@@ -41,26 +41,30 @@ export const mainnetEndpoints = [
 ];
 
 export const testnetEndpoints = [
-  {
-    url: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET],
-    chain: CHAIN_ID.GOERLI_TESTNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET],
-    chain: CHAIN_ID.ARBITRUM_GOERLI_TESTNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
-    chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
-  },
+  // {
+  //   url: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET],
+  //   chain: CHAIN_ID.GOERLI_TESTNET,
+  // },
+  // {
+  //   url: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET],
+  //   chain: CHAIN_ID.ARBITRUM_GOERLI_TESTNET,
+  // },
+  // {
+  //   url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
+  //   chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
+  // },
 
-  {
-    url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
-    chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
-  },
+  // {
+  //   url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
+  //   chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
+  // },
   {
     url: subgraphEndpoints[CHAIN_ID.BASE_SEPOLIA],
     chain: CHAIN_ID.BASE_SEPOLIA,
+  },
+  {
+    url: subgraphEndpoints[CHAIN_ID.BERA_BARTIO],
+    chain: CHAIN_ID.BERA_BARTIO,
   },
   /*{
     url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],

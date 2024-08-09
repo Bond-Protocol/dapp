@@ -33,6 +33,7 @@ import {
 import { Address } from "viem";
 import { Token } from "types";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
+import { unavailableFixedExpiry } from "./config";
 
 export type CreateMarketScreenProps = {
   projectionData: Array<PriceData>;
@@ -218,7 +219,14 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
                 label="Vesting"
                 title="Custom Vesting"
                 options={vestingOptions}
-                ModalContent={SelectVestingDialog}
+                ModalContent={(props) => (
+                  <SelectVestingDialog
+                    {...props}
+                    disableFixedExpiry={unavailableFixedExpiry.includes(
+                      state.chainId
+                    )}
+                  />
+                )}
                 onSubmit={({ value }) =>
                   dispatch({ type: Action.UPDATE_VESTING, value })
                 }
