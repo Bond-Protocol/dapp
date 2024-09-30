@@ -44,6 +44,6 @@ export const testnetSubgraphs =
         "84532":
           "https://subgraph.satsuma-prod.com/35414fbc50a7/spaces-team/bond-protocol-base-sepolia/api",
         "80084":
-          "https://api.goldsky.com/api/public/project_clu16lu24lqh201x9f0qh135t/subgraphs/bond-protocol-bera-bartio/0.0.1/gn",
+          "https://api.goldsky.com/api/public/project_clu16lu24lqh201x9f0qh135t/subgraphs/bond-protocol-bera-bartio/0.0.2/gn",
       }
     : {};
