@@ -33,7 +33,7 @@ const NO_REFERRAL_ADDRESS: Address =
 const NO_FRONTEND_FEE_OWNERS =
   import.meta.env.VITE_NO_FRONTEND_FEE_OWNERS ?? "";
 
-const DEFAULT_SLIPPAGE = 0.05;
+export const DEFAULT_SLIPPAGE = 0.01;
 
 const ShowWarning = ({
   market,

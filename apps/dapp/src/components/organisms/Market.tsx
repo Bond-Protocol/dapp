@@ -23,10 +23,10 @@ export const Market = () => {
     ({ marketId, chainId: marketChainId }) =>
       marketId === Number(id) && marketChainId === chainId
   )!;
-  const liquidity = useTokenLiquidity({
-    chainId: Number(market?.chainId),
-    address: market.payoutToken.address,
-  });
+  // const liquidity = useTokenLiquidity({
+  //   chainId: Number(market?.chainId),
+  //   address: market?.payoutToken?.address,
+  // });
 
   const {
     maxPayoutLabel,
@@ -39,10 +39,10 @@ export const Market = () => {
 
   if (!market) return <Loading content={meme()} />;
 
-  const lowLiquidity =
-    !environment.isTesting &&
-    liquidity.isSuccess &&
-    liquidity.data?.liquidityUSD < 200000;
+  // const lowLiquidity =
+  //   !environment.isTesting &&
+  //   liquidity.isSuccess &&
+  //   liquidity.data?.liquidityUSD < 200000;
 
   return (
     <div className="pb-4">

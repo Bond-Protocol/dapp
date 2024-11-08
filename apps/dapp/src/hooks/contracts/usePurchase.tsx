@@ -104,7 +104,7 @@ function formatPurchaseArgs({
   );
 
   const minAmountOut =
-    args.amountOut - args.amountOut * (args.slippage ?? 0.05 / 100);
+    args.amountOut - args.amountOut * (args.slippage ?? 0.01 / 100);
 
   const amountOut = parseUnits(
     minAmountOut.toFixed(market.payoutToken.decimals),

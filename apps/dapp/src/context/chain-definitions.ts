@@ -39,8 +39,16 @@ export const berachainBartio: Chain = {
     },
   },
   rpcUrls: {
-    default: { http: ["https://bartio.rpc.berachain.com"] },
-    public: { http: ["https://bartio.rpc.berachain.com"] },
+    default: {
+      http: [
+        "https://berachain-bartio.g.alchemy.com/v2/HHcBoOtwJ9vBECT1Y3x2qqH-dHc53yyz",
+      ],
+    },
+    public: {
+      http: [
+        "https://berachain-bartio.g.alchemy.com/v2/HHcBoOtwJ9vBECT1Y3x2qqH-dHc53yyz",
+      ],
+    },
   },
   blockExplorers: {
     default: {
