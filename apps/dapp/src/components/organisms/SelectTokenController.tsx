@@ -10,6 +10,8 @@ import { useDiscoverToken } from "hooks/useDiscoverToken";
 import { ACTIVE_CHAINS } from "context/blockchain-provider";
 import { useTokenlists } from "context/tokenlist-context";
 import { isAddress } from "viem";
+import { environment } from "src/environment";
+import { useTokenLoader } from "services/use-token-loader";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
   chainId: number;
@@ -26,6 +28,7 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
 
   const connectedChainId = useChainId();
   const tokenUtils = useTokenlists();
+  const { tokens: pricedTokens } = useTokenLoader();
 
   const chainId = props.chainId || connectedChainId || 1;
 
@@ -38,6 +41,13 @@ export const SelectTokenController = (props: SelectTokenControllerProps) => {
         try {
           setLoading(true);
           const { token, source } = await discover(address, chainId);
+          //Get prices for testnet for known tokens in order to use capacity as quote
+          if (!environment.isProduction) {
+            const matchingToken = pricedTokens.find(
+              (t) => t.symbol.toLowerCase() === token.symbol.toLowerCase()
+            );
+            token.price = matchingToken?.price;
+          }
           setImportedToken(token);
           setSource(source);
         } catch (e) {
