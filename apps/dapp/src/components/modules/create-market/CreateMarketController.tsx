@@ -52,7 +52,7 @@ export const CreateMarketController = () => {
   const allowance = useAllowance({
     tokenAddress: state.payoutToken.address as Address,
     decimals: state.payoutToken.decimals,
-    amount: state.capacity.toString(),
+    amount: state.recommendedAllowance,
     chainId: network.chain?.id ?? 1,
     spenderAddress: tellerAddress as Address,
     ownerAddress: address as Address,
