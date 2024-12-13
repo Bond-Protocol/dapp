@@ -172,17 +172,21 @@ function calculateAllowance(
   quoteToken: Token,
   capacity: string,
   capacityType: string,
-  allowance: bigint
+  allowance: bigint,
+  state: CreateMarketState
 ) {
   if (
     !payoutToken ||
-    (!payoutToken.price && capacityType === "quote") ||
+    //(!payoutToken.price && capacityType === "quote") ||
     !payoutToken.decimals ||
     !quoteToken ||
-    (!quoteToken.price && capacityType === "quote") ||
+    //(!quoteToken.price && capacityType === "quote") ||
     !quoteToken.decimals ||
     !capacity ||
-    !capacityType
+    !capacityType ||
+    (capacityType === "quote" &&
+      !payoutToken.price &&
+      state.priceModel !== "static")
   ) {
     return {
       recommendedAllowance: "",
@@ -191,9 +195,27 @@ function calculateAllowance(
     };
   }
 
+  let payoutTokenPrice = payoutToken.price;
+
+  if (state.priceModel === "static") {
+    if (
+      state.priceModels?.static?.fixedPrice &&
+      !payoutToken.price &&
+      capacityType === "quote"
+    ) {
+      payoutTokenPrice = state.priceModels?.static?.fixedPrice;
+    } else if (!payoutToken.price) {
+      return {
+        recommendedAllowance: "",
+        recommendedAllowanceDecimalAdjusted: 0n,
+        isAllowanceSufficient: false,
+      };
+    }
+  }
+
   const recommendedAllowance =
     capacityType === "quote"
-      ? Number(capacity) / (payoutToken.price / quoteToken.price)
+      ? Number(capacity) / (payoutTokenPrice / quoteToken.price)
       : capacity;
 
   const form = parseUnits(
@@ -272,7 +294,8 @@ export const reducer = (
         value,
         state.capacity,
         state.capacityType,
-        state.allowance
+        state.allowance,
+        state
       );
 
       return {
@@ -294,7 +317,8 @@ export const reducer = (
         state.quoteToken,
         state.capacity,
         state.capacityType,
-        state.allowance
+        state.allowance,
+        state
       );
 
       return {
@@ -316,7 +340,8 @@ export const reducer = (
         state.quoteToken,
         state.capacity,
         state.capacityType,
-        value
+        value,
+        state
       );
 
       return {
@@ -345,7 +370,8 @@ export const reducer = (
         state.quoteToken,
         capacity,
         state.capacityType,
-        state.allowance
+        state.allowance,
+        state
       );
 
       const debtBuffer = tweakDebtBuffer({ ...state, capacity });
@@ -371,7 +397,8 @@ export const reducer = (
         state.quoteToken,
         state.capacity,
         value,
-        state.allowance
+        state.allowance,
+        state
       );
 
       return {
@@ -448,9 +475,25 @@ export const reducer = (
 
     case CreateMarketAction.UPDATE_PRICE_RATES: {
       const { priceModel, ...rates } = value;
+      const {
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient,
+      } = calculateAllowance(
+        state.payoutToken,
+        state.quoteToken,
+        state.capacity,
+        state.capacityType,
+        state.allowance,
+        state
+      );
 
       return {
         ...state,
+
+        recommendedAllowance,
+        recommendedAllowanceDecimalAdjusted,
+        isAllowanceSufficient,
         priceModels: {
           ...state.priceModels,
           [priceModel]: {

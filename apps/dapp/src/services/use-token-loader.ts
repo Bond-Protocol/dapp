@@ -8,6 +8,8 @@ import { environment } from "src/environment";
 import { useSubgraph } from "hooks/useSubgraph";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 
+const extraTokens = ["USDC"];
+
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
 
@@ -25,13 +27,23 @@ export const fetchAndMatchPricesForTestnet = async () => {
   //@ts-ignore fix: how to type a prop coming out of a json
   const pricedTokens = await fetchPrices(tokenlist);
 
-  return testnetTokenlist.map((t) => {
-    const price = pricedTokens.find(
-      (pt) => t.symbol.toLowerCase() === pt?.symbol?.toLowerCase()
-    )?.price;
+  const mapped = testnetTokenlist
+    .map((t) => {
+      const price = pricedTokens.find(
+        (pt) => t.symbol.toLowerCase() === pt?.symbol?.toLowerCase()
+      )?.price;
 
-    return { ...t, price, usedAsPayout: true, markets: [] };
-  });
+      return { ...t, price, usedAsPayout: true, markets: [] };
+    })
+    .concat(
+      extraTokens.map((symbol) =>
+        pricedTokens.find(
+          (pt) => symbol.toLowerCase() === pt?.symbol?.toLowerCase()
+        )
+      )
+    );
+
+  return mapped;
 };
 
 export const useTokenLoader = () => {
