@@ -30,6 +30,7 @@ import {
 } from "@wagmi/chains";
 import { environment } from "src/environment";
 import { publicProvider } from "wagmi/providers/public";
+import { alchemyProvider } from "@wagmi/core/providers/alchemy";
 import { Chain, createPublicClient, http, PublicClient } from "viem";
 import { chainLogos } from "types";
 
@@ -59,7 +60,7 @@ const projectId = import.meta.env.VITE_WALLET_CONNECT_PROJECT_ID;
 const { chains, publicClient } = configureChains(
   environment.isTestnet ? testnets : mainnets,
   [
-    //alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_MAINNET_KEY }),
+    alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_MAINNET_KEY }),
     publicProvider(),
   ]
 );
