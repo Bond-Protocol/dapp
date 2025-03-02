@@ -1,7 +1,6 @@
 import { trimToken } from "formatters";
-import { Address, useAccount } from "wagmi";
+import { Address, useAccount, useBalance } from "wagmi";
 import { useAllowance } from "./contracts/useAllowance";
-import { useBalance } from "./contracts/useBalance";
 import { parseUnits } from "viem";
 import { useMemo } from "react";
 
@@ -14,11 +13,11 @@ export const useTokenAllowance = (
 ) => {
   const { isConnected, address } = useAccount();
 
-  const balance = useBalance({
+  const { data: balance } = useBalance({
     address,
     token: tokenAddress,
     chainId: Number(networkId),
-    tokenDecimals,
+    enabled: isConnected,
   });
 
   const allowance = useAllowance({
