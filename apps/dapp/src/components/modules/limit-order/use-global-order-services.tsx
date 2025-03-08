@@ -3,6 +3,7 @@ import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
 import { createContext, useContext } from "react";
 import { useQueries } from "react-query";
 import { orderService } from "services/order-service";
+import { AuthProvider } from "./use-auth";
 
 type OrderServiceContext = {
   supportedTokens: any[];
@@ -43,8 +44,12 @@ export const OrderServiceProvider = ({
   };
 
   return (
-    <OrderServiceContext.Provider value={{ supportedTokens, isTokenSupported }}>
-      {children}
-    </OrderServiceContext.Provider>
+    <AuthProvider>
+      <OrderServiceContext.Provider
+        value={{ supportedTokens, isTokenSupported }}
+      >
+        {children}
+      </OrderServiceContext.Provider>
+    </AuthProvider>
   );
 };
