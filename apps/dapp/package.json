@@ -19,7 +19,8 @@
     "build-storybook": "storybook build",
     "openapi:codegen": "npx openapi-client-axios-typegen ./src/openapi.json > src/types/openapi.d.ts && echo 'export type Order = Components.Schemas.Order;' >> src/types/openapi.d.ts",
     "openapi:make-file": "node ./scripts/make-openapi-config.js",
-    "openapi": "yarn openapi:make-file && yarn openapi:codegen"
+    "openapi": "yarn openapi:make-file && yarn openapi:codegen",
+    "test:open": "cypress open"
   },
   "dependencies": {
     "@axis-finance/auto-signer-provider": "^0.0.1",
@@ -31,6 +32,7 @@
     "@wagmi/chains": "^1.8.0",
     "axios": "^1.6.0",
     "buffer": "^6.0.3",
+    "cypress": "^14.1.0",
     "date-fns": "2.30",
     "dotenv": "^16.0.3",
     "formatters": "*",

@@ -14,7 +14,7 @@ const tabs = [
 
 export const Dashboard = () => {
   return (
-    <div className="h-full min-h-[90vh]">
+    <div id="__DASHBOARD_PAGE__" className="h-full min-h-[90vh]">
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
         <Tabs tabs={tabs} className="mt-10 pb-20">

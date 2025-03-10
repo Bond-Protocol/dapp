@@ -22,7 +22,10 @@ export const Markets = () => {
 
   return (
     <>
-      <div className="flex items-end justify-between py-2 md:-mb-[54px]">
+      <div
+        id="__MARKETS_PAGE__"
+        className="flex items-end justify-between py-2 md:-mb-[54px]"
+      >
         <PageHeader
           title={"LIVE MARKETS"}
           subtitle={"Instantly acquire tokens at a discount"}
