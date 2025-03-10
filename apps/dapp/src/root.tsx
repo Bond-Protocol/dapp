@@ -13,7 +13,7 @@ import { environment } from "./environment";
 const enableMockAPI = async () => {
   if (!environment.enableMockAPI) return;
 
-  const { worker } = await import("./mock/setup");
+  const { worker } = await import("./mocks/browser");
   return worker.start();
 };
 
