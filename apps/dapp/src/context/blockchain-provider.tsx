@@ -15,7 +15,7 @@ import {
 import type { FC, ReactNode } from "react";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { baseSepolia } from "viem/chains";
-import { mode, berachainBartio } from "./chain-definitions";
+import { mode } from "./chain-definitions";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -42,10 +42,9 @@ export const testnets = [
   // optimismGoerli,
   // polygonMumbai,
   baseSepolia,
-  berachainBartio,
 ].map(getIconsForChains);
 
-export const mainnets = [mainnet, arbitrum, optimism, polygon, base, bsc, mode];
+export const mainnets = [mainnet, arbitrum, optimism, polygon, base];
 
 export const SUPPORTED_CHAINS = [...testnets, ...mainnets];
 export const ACTIVE_CHAINS: _Chain[] = environment.isTestnet
@@ -108,10 +107,6 @@ const setup = [
     }`,
   },
   {
-    chain: bsc,
-    endpoint: bsc.rpcUrls.default.http[0],
-  },
-  {
     chain: optimism,
     endpoint: `https://opt-mainnet.g.alchemy.com/v2/${
       import.meta.env.VITE_ALCHEMY_OPTIMISM_MAINNET_KEY
@@ -146,14 +141,6 @@ const setup = [
     endpoint: `https://base-sepolia.g.alchemy.com/v2/${
       import.meta.env.VITE_ALCHEMY_BASE_SEPOLIA_KEY
     }`,
-  },
-  {
-    chain: mode,
-    endpoint: mode.rpcUrls.default.http[0],
-  },
-  {
-    chain: berachainBartio,
-    endpoint: berachainBartio.rpcUrls.default.http[0],
   },
 ];
 
