@@ -183,19 +183,20 @@ export const TransactionHistory = (props: TransactionHistoryProps) => {
   const { isTabletOrMobile } = useMediaQueries();
   const isMarketHistory = !!props.market;
 
-  const [bondPurchases, setBondPurchases] = useState();
+  const [bondPurchases, setBondPurchases] = useState(props.data);
 
   const loadBondPurchases = useCallback(async () => {
-    if (!props.market) return;
+    if (!props.market || props.data) return;
     const response = await axios.get(
       API_ENDPOINT + `markets/${props.market.id}/bondPurchases`
     );
     return response.data.bondPurchases;
   }, [props.market]);
 
+  console.log({ data: props.data });
   useEffect(() => {
+    if (props.data) return;
     loadBondPurchases().then((response) => {
-      //@ts-ignore
       setBondPurchases(filterArrayByUniqueKey(response, "timestamp"));
     });
   }, []);

@@ -9,7 +9,7 @@ import { queryAllEndpoints } from "src/utils/queryAllEndpoints";
 export const subgraphEndpoints = {
   ...mainnetSubgraphs,
   ...testnetSubgraphs,
-};
+} as Record<number, string>;
 
 export const mainnetEndpoints = [
   {
@@ -31,14 +31,6 @@ export const mainnetEndpoints = [
   {
     url: subgraphEndpoints[CHAIN_ID.BASE_MAINNET],
     chain: CHAIN_ID.BASE_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.BSC_MAINNET],
-    chain: CHAIN_ID.BSC_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.MODE_MAINNET],
-    chain: CHAIN_ID.MODE_MAINNET,
   },
 ];
 
@@ -64,10 +56,7 @@ export const testnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.BASE_SEPOLIA],
     chain: CHAIN_ID.BASE_SEPOLIA,
   },
-  {
-    url: subgraphEndpoints[CHAIN_ID.BERA_BARTIO],
-    chain: CHAIN_ID.BERA_BARTIO,
-  },
+
   /*{
     url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],
     chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,

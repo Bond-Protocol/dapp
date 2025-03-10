@@ -3,16 +3,17 @@ import { formatCurrency, InfoLabel } from "ui";
 import { BondList, TransactionHistory, TransactionHistoryData } from "..";
 
 export const UserBonds = () => {
-  const { isLoading, ownerBalances, bondPurchases, userTbv, userClaimable } =
+  const { isLoading, ownerBalances, bondPurchases, tbv, userClaimable } =
     useDashboard();
   const { isTabletOrMobile } = useMediaQueries();
 
+  console.log({ tbv });
   const tbvElement = (
     <InfoLabel
       reverse
       label="My TBV"
       tooltip="Total value acquired through bonds in USD"
-      value={formatCurrency.usdFormatter.format(userTbv)}
+      value={formatCurrency.usdFormatter.format(tbv)}
     />
   );
 

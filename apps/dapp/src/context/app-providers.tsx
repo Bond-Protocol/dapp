@@ -1,6 +1,5 @@
 import type { FC, ReactNode } from "react";
 import { HashRouter as Router } from "react-router-dom";
-
 import { BlockchainProvider } from "./blockchain-provider";
 import { ReactQueryProvider } from "./react-query-provider";
 
