@@ -1,4 +1,4 @@
-import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
+import { ACTIVE_CHAIN_IDS } from "src/config/chains";
 import { useMarkets } from "context/market-context";
 import { useQueries } from "react-query";
 import { useOrderApi } from "./use-order-api";
@@ -16,7 +16,6 @@ import { CalculatedMarket } from "types";
 import { useNavigate } from "react-router-dom";
 import { getDiscountPercentage } from "../create-market";
 import { formatUnits } from "viem";
-import { getChain } from "@bond-protocol/contract-library";
 
 const Chip = ({
   children,

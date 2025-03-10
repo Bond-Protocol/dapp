@@ -22,6 +22,7 @@
     "openapi": "yarn openapi:make-file && yarn openapi:codegen"
   },
   "dependencies": {
+    "@axis-finance/auto-signer-provider": "^0.0.1",
     "@bond-protocol/contract-library": "*",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@mui/base": "^5.0.0-alpha.88",
@@ -96,9 +97,6 @@
     "typescript": "^5.2.2",
     "vite": "^3.2.7",
     "vite-plugin-svgr": "^2.2.1"
-  },
-  "resolutions": {
-    "graphql": "16.8.1"
   },
   "msw": {
     "workerDirectory": [

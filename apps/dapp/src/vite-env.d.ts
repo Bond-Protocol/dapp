@@ -10,6 +10,7 @@ declare enum ENVIRONMENT {
 }
 
 interface ImportMetaEnv {
+  readonly VITE_ALCHEMY_RPC_KEY: string;
   readonly VITE_ALCHEMY_MAINNET_KEY: string;
   readonly VITE_ALCHEMY_GOERLI_KEY: string;
   readonly VITE_ENVIROMENT: ENVIRONMENT;

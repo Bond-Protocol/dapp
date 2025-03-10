@@ -1,6 +1,6 @@
 const env = import.meta.env.VITE_ENVIRONMENT;
 const testnet = import.meta.env.VITE_TESTNET;
-const mockBackend = import.meta.env.VITE_MOCK_API_REQUESTS;
+const mockAPI = import.meta.env.VITE_MOCK_API_REQUESTS;
 
 export enum ENVIRONMENT {
   PRODUCTION = "production",
@@ -16,5 +16,5 @@ export const environment = Object.freeze({
   isDevelopment: env === ENVIRONMENT.DEVELOPMENT,
   isTestnet: testnet === "true",
   current: env as ENVIRONMENT,
-  enableMockAPI: mockBackend === "true",
+  enableMockAPI: mockAPI === "true",
 });

@@ -1,5 +1,5 @@
 import { generateFetcher } from "./custom-queries";
-import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
+import { ACTIVE_CHAIN_IDS } from "src/config/chains";
 
 const DEFAULT_TOKEN_LIST_URL =
   "https://raw.githubusercontent.com/compound-finance/token-list/master/compound.tokenlist.json";

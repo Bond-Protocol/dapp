@@ -7,11 +7,11 @@ import {
   SelectTokenDialogProps,
 } from "ui";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
-import { ACTIVE_CHAINS } from "context/blockchain-provider";
 import { useTokenlists } from "context/tokenlist-context";
 import { isAddress } from "viem";
 import { environment } from "src/environment";
 import { useTokenLoader } from "services/use-token-loader";
+import { ACTIVE_CHAINS } from "src/config/chains";
 
 export interface SelectTokenControllerProps extends SelectTokenDialogProps {
   chainId: number;
