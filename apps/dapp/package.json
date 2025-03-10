@@ -33,8 +33,9 @@
     "date-fns": "2.30",
     "dotenv": "^16.0.3",
     "formatters": "*",
-    "graphql": "^16.8.1",
+    "graphql": "16.8.1",
     "graphql-request": "^4.3.0",
+    "msw": "^2.7.3",
     "openapi-axios-client": "^5.2.4",
     "openapi-client-axios": "^7.3.3",
     "react": "^18.0.0",
@@ -95,5 +96,13 @@
     "typescript": "^5.2.2",
     "vite": "^3.2.7",
     "vite-plugin-svgr": "^2.2.1"
+  },
+  "resolutions": {
+    "graphql": "16.8.1"
+  },
+  "msw": {
+    "workerDirectory": [
+      "src/public"
+    ]
   }
 }

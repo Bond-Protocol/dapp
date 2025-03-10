@@ -35,6 +35,8 @@ interface ImportMetaEnv {
   readonly VITE_NO_FRONTEND_FEE_OWNERS: string;
   // more env variables...
   readonly VITE_COMMIT_HASH: string;
+
+  readonly VITE_MOCK_API_REQUESTS: string;
 }
 
 declare const __COMMIT_HASH__: string;
