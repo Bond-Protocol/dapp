@@ -4,27 +4,31 @@ import { LimitOrderFullList } from "components/modules/limit-order/LimitOrderFul
 import { UserBonds } from "components/organisms/UserBonds";
 import { UserMarkets } from "components/organisms/UserMarkets";
 import { RequiresWallet } from "components/utility/RequiresWallet";
+import { featureToggles } from "src/feature-toggles";
 import { Tabs } from "ui";
 
-const tabs = [
-  { label: "My bonds" },
-  { label: "My Orders" },
-  { label: "My Markets" },
-];
+const tabs = [{ label: "My bonds" }, { label: "My Markets" }];
+const orderTabs = [...tabs, { label: "My Orders" }];
 
 export const Dashboard = () => {
   return (
     <div className="h-full min-h-[90vh]">
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
-        <Tabs tabs={tabs} className="mt-10 pb-20">
+        <Tabs
+          tabs={featureToggles.LIMIT_ORDERS ? orderTabs : tabs}
+          className="mt-10 pb-20"
+        >
           <UserBonds />
-          <div className="mt-10">
-            <RequiresAuth title="Sign in to see your orders">
-              <LimitOrderFullList />
-            </RequiresAuth>
-          </div>
           <UserMarkets />
+
+          {featureToggles.LIMIT_ORDERS && (
+            <div className="mt-10">
+              <RequiresAuth title="Sign in to see your orders">
+                <LimitOrderFullList />
+              </RequiresAuth>
+            </div>
+          )}
         </Tabs>
       </RequiresWallet>
     </div>
