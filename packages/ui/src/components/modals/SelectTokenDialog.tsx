@@ -31,6 +31,7 @@ export const SelectTokenDialog = (props: SelectTokenDialogProps) => {
   return (
     <div className="w-[448px]" tabIndex={-1}>
       <SearchBar
+        data-testid="token-import-address"
         autoFocus
         value={props.filter}
         onChange={props.setFilter}

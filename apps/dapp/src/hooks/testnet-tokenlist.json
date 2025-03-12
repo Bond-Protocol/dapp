@@ -54,5 +54,14 @@
     "symbol": "OHM",
     "logoURI": "https://assets.coingecko.com/coins/images/14483/large/token_OHM_%281%29.png",
     "decimals": 9
+  },
+  {
+    "address": "0x4c9d75fbdF764D05dF654340A48f85Bc0216F8AB",
+    "chainId": 84532,
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "logoURI": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/USDC.png",
+    "decimals": 6,
+    "display": true
   }
 ]
