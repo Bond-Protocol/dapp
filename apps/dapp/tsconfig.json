@@ -3,6 +3,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "experimentalDecorators": true,
+    "types": [
+      "cypress"
+    ],
     "paths": {
       "components/*": [
         "src/components/*"
@@ -47,7 +50,8 @@
   },
   "include": [
     "src",
-    "src/**/*.json"
+    "src/**/*.json",
+    "./cypress"
   ],
   "exclude": [
     "node_modules"
