@@ -19,7 +19,7 @@ type _Chain = Chain & { logoUrl?: string };
 
 const anvilProvider = jsonRpcProvider({ rpc: () => ({ http: ANVIL_RPC_URL }) });
 
-export const providers = environment.enableMockAPI
+export const providers = environment.enableAutoSigner
   ? [anvilProvider]
   : [
       alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_MAINNET_KEY }),
@@ -27,7 +27,7 @@ export const providers = environment.enableMockAPI
     ];
 
 export const getWallets = (chains: _Chain[]) => {
-  return environment.enableMockAPI
+  return environment.enableAutoSigner
     ? [autoSignerWallet]
     : [
         metaMaskWallet({ chains, projectId }),

@@ -37,7 +37,8 @@ interface ImportMetaEnv {
   // more env variables...
   readonly VITE_COMMIT_HASH: string;
 
-  readonly VITE_MOCK_API_REQUESTS: string;
+  readonly VITE_ENABLE_MOCK_API: string;
+  readonly VITE_ENABLE_AUTO_SIGNER: string;
 }
 
 declare const __COMMIT_HASH__: string;

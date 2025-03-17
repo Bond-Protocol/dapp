@@ -50,7 +50,9 @@ const testRpcConfigs = [
   },
 ];
 
-export const config = environment.enableMockAPI ? testRpcConfigs : rpcConfigs;
+export const config = environment.enableAutoSigner
+  ? testRpcConfigs
+  : rpcConfigs;
 
 export const clients: Record<number, PublicClient> = config.reduce(
   (clients, { chain, endpoint }) => {
