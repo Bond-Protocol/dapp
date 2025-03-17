@@ -20,7 +20,8 @@
     "openapi:codegen": "npx openapi-client-axios-typegen ./src/openapi.json > src/types/openapi.d.ts && echo 'export type Order = Components.Schemas.Order;' >> src/types/openapi.d.ts",
     "openapi:make-file": "node ./scripts/make-openapi-config.js",
     "openapi": "yarn openapi:make-file && yarn openapi:codegen",
-    "test:open": "cypress open"
+    "test:open": "cypress open",
+    "test:scaffold": "tsx ./cypress/support/scaffold-tests.ts"
   },
   "dependencies": {
     "@axis-finance/auto-signer-provider": "^0.0.1",
@@ -96,6 +97,7 @@
     "prettier-plugin-tailwindcss": "^0.1.13",
     "prop-types": "^15.8.1",
     "storybook": "^7.2.1",
+    "tsx": "^4.19.3",
     "typescript": "^5.2.2",
     "vite": "^3.2.7",
     "vite-plugin-svgr": "^2.2.1"
