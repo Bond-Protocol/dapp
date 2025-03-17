@@ -8,3 +8,8 @@ Cypress.Commands.add("shouldNotRenderErrorPage", () => {
 Cypress.Commands.add("shouldRenderPageWithId", (id) => {
   cy.get(`#${id}`, { timeout: 10000 }).should("exist");
 });
+
+Cypress.Commands.add("connectWallet", () => {
+  cy.contains("button", "Connect Wallet").click();
+  cy.contains("button", "Auto-Signer").click();
+});
