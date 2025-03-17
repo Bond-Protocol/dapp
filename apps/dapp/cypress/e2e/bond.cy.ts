@@ -2,6 +2,7 @@ import { COMPONENTS, URLS } from "cypress/constants";
 import globalDataStub from "src/mocks/stubs/global-data-stub";
 
 const mockMarket = globalDataStub.data.tokens[0].markets[0];
+const MARKET_LIVE_TIMESTAMP = 1741899464000;
 
 describe("Bonding", () => {
   beforeEach(() => {
@@ -11,11 +12,15 @@ describe("Bonding", () => {
     });
   });
 
-  it("Should be able to bond", () => {
+  it("Should be able to bond", async () => {
+    const clock = cy.clock(MARKET_LIVE_TIMESTAMP);
     cy.visit(URLS.MARKET(+mockMarket.chainId, +mockMarket.marketId));
-    cy.get(COMPONENTS.BOND_INPUT).type("1000");
+    cy.connectWallet();
+    cy.get(COMPONENTS.BOND_INPUT).type("1002");
+    cy.wait(100);
     cy.get(COMPONENTS.BOND_BUTTON).click();
 
+    clock.then(async (c) => await c.restore());
     cy.get(COMPONENTS.BOND_BUTTON, { timeout: 10000 })
       .should("have.text", "BOND")
       .click();
