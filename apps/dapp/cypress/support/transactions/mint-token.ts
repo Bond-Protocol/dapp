@@ -5,7 +5,7 @@ import { erc20ABI } from "@bond-protocol/contract-library";
 type MintTokenArgs = {
   userAddress: Address;
   tokenAddress: Address;
-  /**In decimal readable format*/
+  /**In decimal format*/
   amount: string;
   decimals?: number;
 };

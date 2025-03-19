@@ -1,11 +1,18 @@
 import { URLS, COMPONENTS, TOKEN_ADDRESSES, TIME } from "cypress/constants";
 
-describe("Create Bond", () => {
+describe("Create Bond Market", () => {
+  let snapshotId: string;
+
   beforeEach(() => {
-    //TODO: fix uncaught exceptions and remove this
-    Cypress.on("uncaught:exception", () => {
-      return false;
+    return cy.task("takeSnapshot").then((id) => {
+      snapshotId = id as string;
     });
+  });
+
+  afterEach(() => {
+    if (snapshotId) {
+      return cy.task("revertSnapshot", snapshotId);
+    }
   });
 
   it("Should be able to create a bond market", () => {

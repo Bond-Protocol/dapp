@@ -1,13 +1,6 @@
 import { IDS, URLS } from "../constants";
 
 describe("Smoke Tests", () => {
-  beforeEach(() => {
-    //TODO: fix uncaught exceptions and remove this
-    Cypress.on("uncaught:exception", () => {
-      return false;
-    });
-  });
-
   it("Should render home page", () => {
     cy.visit(URLS.BASE_URL);
     cy.shouldRenderPageWithId(IDS.APP_ROOT);
