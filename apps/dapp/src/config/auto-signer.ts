@@ -1,12 +1,9 @@
 import { WalletClient } from "wagmi";
-import { baseSepolia } from "viem/chains";
+import { baseSepolia, foundry } from "viem/chains";
 import { custom, createWalletClient, Account, Address } from "viem";
 import { Connector } from "wagmi";
 import { injectAutoSignerProvider } from "@axis-finance/auto-signer-provider";
-
-const account = {
-  address: "0xFCAd0B19bB29D4674531d6f115237E16AfCE377c",
-};
+import { privateKeyToAccount } from "viem/accounts";
 
 export const ANVIL_RPC_URL = "http://127.0.0.1:8545";
 const PRIVATE_KEY =
@@ -30,11 +27,9 @@ export class AutoSignerConnector extends Connector {
       privateKey: PRIVATE_KEY,
     });
 
-    //@ts-expect-error only adding needed properties for now
     this.walletClient = createWalletClient({
-      //@ts-expect-error only adding needed properties for now
-      account,
-      chain: baseSepolia,
+      account: privateKeyToAccount(PRIVATE_KEY),
+      chain: { ...foundry, chainId: baseSepolia.id },
       transport: custom(window.ethereum!),
     });
 
@@ -100,13 +95,10 @@ export class AutoSignerConnector extends Connector {
   }
 }
 
-const autoSigner = new AutoSignerConnector();
-
 export const autoSignerWallet = {
   id: "AutoSigner",
   name: "AutoSigner",
   iconUrl: "",
   iconBackground: "",
-  connector: autoSigner,
-  createConnector: () => autoSigner,
+  createConnector: () => new AutoSignerConnector(),
 };

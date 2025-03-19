@@ -21,6 +21,7 @@ export const ModalBackdrop = forwardRef(function ModalContainer(
 ) {
   return (
     <div
+      tabIndex={-1}
       ref={ref}
       className="fixed inset-0 flex items-center justify-center outline-0 backdrop-blur-lg"
     >

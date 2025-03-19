@@ -1,9 +1,14 @@
 import { defineConfig } from "cypress";
+import { setupBlockchainTasks } from "./cypress/plugins";
 
 export default defineConfig({
   e2e: {
+    experimentalWebKitSupport: true,
+    chromeWebSecurity: false,
     setupNodeEvents(on, config) {
-      // implement node event listeners here
+      setupBlockchainTasks(on);
+
+      return config;
     },
   },
 });

@@ -21,6 +21,7 @@
     "openapi:make-file": "node ./scripts/make-openapi-config.js",
     "openapi": "yarn openapi:make-file && yarn openapi:codegen",
     "test:open": "cypress open",
+    "test": "cypress run --browser chrome",
     "test:scaffold": "tsx ./cypress/support/scaffold-tests.ts"
   },
   "dependencies": {
