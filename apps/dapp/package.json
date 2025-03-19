@@ -22,7 +22,10 @@
     "openapi": "yarn openapi:make-file && yarn openapi:codegen",
     "test:open": "cypress open",
     "test": "cypress run --browser chrome",
-    "test:scaffold": "tsx ./cypress/support/scaffold-tests.ts"
+    "test:scaffold": "tsx ./cypress/support/scaffold-tests.ts",
+    "postinstall": "node scripts/postinstall.js",
+    "local-rpc": "./scripts/local-rpc.sh",
+    "test:run": "concurrently --names 'rpc,dev-server,test-suite' --prefix-colors 'cyan,green,magenta' --kill-others --kill-others-on-fail --success first 'yarn local-rpc -s' 'yarn dev' \"sleep 3 && yarn test\""
   },
   "dependencies": {
     "@axis-finance/auto-signer-provider": "^0.0.1",
