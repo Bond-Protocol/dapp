@@ -48,9 +48,8 @@ describe("Create Bond Market", () => {
       timeout: TIME.TRANSACTION_TIMEOUT,
     }).click();
 
-    cy.get(COMPONENTS.MODAL_TITLE, { timeout: 10000 }).should(
-      "have.text",
-      "Success!"
-    );
+    cy.get(COMPONENTS.MODAL_TITLE, {
+      timeout: TIME.TRANSACTION_TIMEOUT,
+    }).should("have.text", "Success!");
   });
 });

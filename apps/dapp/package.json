@@ -20,12 +20,13 @@
     "openapi:codegen": "npx openapi-client-axios-typegen ./src/openapi.json > src/types/openapi.d.ts && echo 'export type Order = Components.Schemas.Order;' >> src/types/openapi.d.ts",
     "openapi:make-file": "node ./scripts/make-openapi-config.js",
     "openapi": "yarn openapi:make-file && yarn openapi:codegen",
-    "test:open": "cypress open",
-    "test": "cypress run --browser chrome",
-    "test:scaffold": "tsx ./cypress/support/scaffold-tests.ts",
     "postinstall": "node scripts/postinstall.js",
     "local-rpc": "./scripts/local-rpc.sh",
-    "test:run": "concurrently --names 'rpc,dev-server,test-suite' --prefix-colors 'cyan,green,magenta' --kill-others --kill-others-on-fail --success first 'yarn local-rpc -s' 'yarn dev' \"sleep 3 && yarn test\""
+    "env:testing": "dotenvx run -f .env.testing",
+    "test:scaffold": "tsx ./cypress/support/scaffold-tests.ts",
+    "test:open": "yarn env:testing -- -- cypress open",
+    "test:run": "yarn env:testing -- -- cypress run --browser chrome",
+    "test": "concurrently --names 'local-rpc,app-server,test-suite' --prefix-colors 'cyan,green,magenta' --kill-others --kill-others-on-fail --success first 'yarn local-rpc -s' 'yarn dev --logLevel error' \"sleep 8 && yarn test:run\""
   },
   "dependencies": {
     "@axis-finance/auto-signer-provider": "^0.0.1",
@@ -68,6 +69,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
+    "@dotenvx/dotenvx": "^1.39.0",
     "@graphql-codegen/cli": "3.0.0",
     "@graphql-codegen/typescript": "2.6.0",
     "@graphql-codegen/typescript-operations": "2.4.3",

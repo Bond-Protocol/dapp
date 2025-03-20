@@ -1,8 +1,8 @@
-import { COMPONENTS, URLS } from "cypress/constants";
+import { COMPONENTS, TIME, URLS } from "cypress/constants";
 import globalDataStub from "src/mocks/stubs/global-data-stub";
 
-const mockMarket = globalDataStub.data.tokens[0].markets[0];
-const MARKET_LIVE_TIMESTAMP = 1741899464000;
+const MOCK_MARKET = globalDataStub.data.tokens[0].markets[0];
+const MARKET_LIVE_TIMESTAMP = Math.ceil(+MOCK_MARKET.start * 1000);
 
 describe("Purchase Bond", () => {
   let snapshotId: string;
@@ -20,7 +20,7 @@ describe("Purchase Bond", () => {
 
   it("Should be able to bond", () => {
     cy.clock(MARKET_LIVE_TIMESTAMP);
-    cy.visit(URLS.MARKET(+mockMarket.chainId, +mockMarket.marketId));
+    cy.visit(URLS.MARKET(+MOCK_MARKET.chainId, +MOCK_MARKET.marketId));
 
     cy.wait(1000); // Wait for page to load with mocked clock
 
@@ -31,15 +31,14 @@ describe("Purchase Bond", () => {
     cy.wait(100);
     cy.get(COMPONENTS.BOND_BUTTON).click();
 
-    cy.get(COMPONENTS.BOND_BUTTON, { timeout: 10000 })
+    cy.get(COMPONENTS.BOND_BUTTON, { timeout: TIME.TRANSACTION_TIMEOUT })
       .should("have.text", "BOND")
       .click();
 
     cy.get(COMPONENTS.BOND_WARNING_CHECKMARK).click();
     cy.get(COMPONENTS.BOND_CONFIRM_BUTTON).click();
-    cy.get(COMPONENTS.MODAL_TITLE, { timeout: 10000 }).should(
-      "have.text",
-      "Transaction Successful!"
-    );
+    cy.get(COMPONENTS.MODAL_TITLE, {
+      timeout: TIME.TRANSACTION_TIMEOUT,
+    }).should("have.text", "Transaction Successful!");
   });
 });

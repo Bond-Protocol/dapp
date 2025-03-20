@@ -7,10 +7,12 @@ const TIMESTAMP = Math.ceil(VESTING_DATE / 1000).toString();
 
 describe("Claim Bond", () => {
   let snapshotId: string;
+
   beforeEach(() => {
     return cy.task("takeSnapshot").then((id) => {
       snapshotId = id as string;
-      return cy.task("setNextBlockTimestamp", TIMESTAMP);
+      cy.task("setNextBlockTimestamp", TIMESTAMP);
+      return null;
     });
   });
 

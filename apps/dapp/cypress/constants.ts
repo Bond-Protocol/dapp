@@ -6,12 +6,12 @@ const CREATE_PAGE = "__CREATE_BOND_PAGE__";
 const DASHBOARD_PAGE = "__DASHBOARD_PAGE__";
 
 //urls
-const BASE_URL = "http://localhost:5173/#";
-const MARKETS = BASE_URL + "/markets";
-const CREATE = BASE_URL + "/create";
-const DASHBOARD = BASE_URL + "/dashboard";
+const BASE_URL = "/";
+const MARKETS = "/markets";
+const CREATE = "/create";
+const DASHBOARD = "/dashboard";
 const MARKET = (chainId: number, marketId: number) =>
-  `${BASE_URL}/market/${chainId}/${marketId}`;
+  `/market/${chainId}/${marketId}`;
 
 //components
 const testId = (id: string) => `[data-testid='${id}']`;
@@ -80,5 +80,5 @@ export const TOKEN_ADDRESSES = {
 };
 
 export const TIME = {
-  TRANSACTION_TIMEOUT: 10 * 1000,
+  TRANSACTION_TIMEOUT: 12 * 1000,
 };

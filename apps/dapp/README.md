@@ -1,20 +1,45 @@
 # Bond Protocol dApp
 
-### Dev setup (for now)
+## Dev setup (for now)
 
 ```bash
-yarn install
+yarn install && yarn build --filter=dapp
 
 #Running
 yarn dev
 
 #Other Commands
-
 #Building for prod
-yarn build
+yarn build --filter=dapp
 #Serve prod/compiled code locally
 yarn preview
 ```
+
+> [!WARNING]
+> App still need the [caching API](https://github.com/Bond-Protocol/api) to be running in order to work, this should be deprecated in a near future
+
+## Testing
+
+E2E tests are setup using cypress and require a running foundry/anvil node.
+
+- Existing setup forks base-sepolia from a specified block which contains a test-auction in desired state.
+- `.env.testing` is used to setup environment variables used in testing.
+- `src/mocks` uses `msw` to mock subgraph requests.
+- `cypress/chain-state.json` contains the desired chain state for the tests to execute succesfully.
+- `cypress/support/scaffold-tests.js` can be used to generate new chain state if needed (anvil needs to be run with --dump-state flag instead).
+
+### Test Commands
+
+```sh
+yarn test # Starts app server, local node and runs the full test suite in headless mode
+
+yarn local-rpc # Starts local node with existing chain state
+yarn test:run # Headless mode
+yarn test:open # Open browser mode -- useful for development
+```
+
+> [!WARNING]
+> Tests still need the [caching API](https://github.com/Bond-Protocol/api) to be running in order to work, this should be deprecated in a near future
 
 ### New Chain Deployment Setup
 
