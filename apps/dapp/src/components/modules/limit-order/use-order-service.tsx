@@ -1,5 +1,5 @@
 import { TokenBase } from "types";
-import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
+import { ACTIVE_CHAIN_IDS } from "src/config/chains";
 import { useQueries } from "@tanstack/react-query";
 import { orderService } from "services/order-service";
 import { Address } from "viem";
