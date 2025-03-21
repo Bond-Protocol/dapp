@@ -13,10 +13,9 @@ import {
 import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
 import { CloseMarket } from "components";
 import { useNavigate } from "react-router-dom";
-import { useDashboard } from "context/dashboard-context";
+import { useDashboard } from "hooks";
 import { Market } from "src/generated/graphql";
 import { useMediaQueries } from "hooks/useMediaQueries";
-import { useEffect, useState } from "react";
 import { formatUnits } from "viem";
 import { getChain } from "@bond-protocol/contract-library";
 
@@ -207,14 +206,10 @@ const tableColumns = [
 export const UserMarketList = () => {
   const { isTabletOrMobile } = useMediaQueries();
   const navigate = useNavigate();
-  const dashboard = useDashboard();
-  const [markets, setMarkets] = useState<Market[]>([]);
 
-  useEffect(() => {
-    if (dashboard.allMarkets) {
-      setMarkets(dashboard.allMarkets);
-    }
-  }, [dashboard.allMarkets]);
+  const dashboard = useDashboard();
+
+  const markets = dashboard.allMarkets ?? [];
 
   const filters: Array<Filter> = [
     {

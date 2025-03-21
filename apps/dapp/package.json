@@ -1,7 +1,7 @@
 {
   "name": "dapp",
   "private": true,
-  "version": "0.1.2",
+  "version": "0.1.3",
   "engines": {
     "node": ">=14.19.1",
     "npm": ">=6.4.0"
@@ -33,7 +33,7 @@
     "date-fns": "2.30",
     "dotenv": "^16.0.3",
     "formatters": "*",
-    "graphql": "^16.8.1",
+    "graphql": "16.5.0",
     "graphql-request": "^4.3.0",
     "openapi-axios-client": "^5.2.4",
     "openapi-client-axios": "^7.3.3",
@@ -43,7 +43,7 @@
     "react-day-picker": "^8.1.4",
     "react-dom": "^18.0.0",
     "react-hook-form": "^7.33.1",
-    "react-query": "^3.39.1",
+    "@tanstack/react-query": "^5.8.9",
     "react-responsive": "^9.0.2",
     "react-router-dom": "^6.3.0",
     "recharts": "^2.1.15",
@@ -55,14 +55,15 @@
     "use-deep-compare-effect": "^1.8.1",
     "viem": "1.17.2",
     "viteconfig": "*",
-    "wagmi": "1.4.5"
+    "wagmi": "1.4.5",
+    "@graphql-codegen/client-preset": "^4.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
-    "@graphql-codegen/cli": "3.0.0",
+    "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/typescript": "2.6.0",
     "@graphql-codegen/typescript-operations": "2.4.3",
-    "@graphql-codegen/typescript-react-query": "^3.5.15",
+    "@graphql-codegen/typescript-react-query": "^6.0.0",
     "@storybook/addon-essentials": "^7.0.26",
     "@storybook/addon-interactions": "^7.0.26",
     "@storybook/addon-links": "^7.0.26",
