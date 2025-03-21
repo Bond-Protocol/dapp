@@ -56,7 +56,6 @@ export const testnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.BASE_SEPOLIA],
     chain: CHAIN_ID.BASE_SEPOLIA,
   },
-
   /*{
     url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],
     chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,
