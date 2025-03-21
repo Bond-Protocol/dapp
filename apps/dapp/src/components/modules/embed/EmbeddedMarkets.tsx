@@ -1,5 +1,5 @@
 import { MarketList } from "components/lists";
-import { useMarkets } from "context/market-context";
+import { useMarkets } from "hooks";
 import { useSearchParams } from "react-router-dom";
 import { useEmbedContext } from "./embed-context";
 import { EmbeddedPurchaseCard } from "./EmbeddedPurchaseCard";

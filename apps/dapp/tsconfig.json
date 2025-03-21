@@ -3,57 +3,23 @@
   "compilerOptions": {
     "baseUrl": ".",
     "experimentalDecorators": true,
-    "types": [
-      "cypress"
-    ],
+    "types": ["cypress"],
     "paths": {
-      "components/*": [
-        "src/components/*"
-      ],
-      "components": [
-        "src/components/index"
-      ],
-      "context/*": [
-        "src/context/*"
-      ],
-      "context": [
-        "src/context/index"
-      ],
-      "pages/*": [
-        "src/pages/*"
-      ],
-      "pages": [
-        "src/pages/index"
-      ],
-      "services/*": [
-        "src/services/*"
-      ],
-      "services": [
-        "src/services/index"
-      ],
-      "hooks/*": [
-        "src/hooks/*"
-      ],
-      "hooks": [
-        "src/hooks/index"
-      ],
-      "utils/*": [
-        "src/hooks/*"
-      ],
-      "utils": [
-        "src/hooks/index"
-      ],
-      "assets/*": [
-        "src/assets/*"
-      ]
+      "components/*": ["src/components/*"],
+      "components": ["src/components/index"],
+      "context/*": ["src/context/*"],
+      "context": ["src/context/index"],
+      "pages/*": ["src/pages/*"],
+      "pages": ["src/pages/index"],
+      "services/*": ["src/services/*"],
+      "services": ["src/services/index"],
+      "hooks/*": ["src/hooks/*"],
+      "hooks": ["src/hooks/index"],
+      "utils/*": ["src/hooks/*"],
+      "utils": ["src/hooks/index"],
+      "assets/*": ["src/assets/*"]
     }
   },
-  "include": [
-    "src",
-    "src/**/*.json",
-    "./cypress"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src", "src/**/*.json", ".eslintrc.js", "./codegen.ts"],
+  "exclude": ["node_modules"]
 }
