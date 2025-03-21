@@ -26,7 +26,8 @@
     "test:scaffold": "tsx ./cypress/support/scaffold-tests.ts",
     "test:open": "yarn env:testing -- -- cypress open",
     "test:run": "yarn env:testing -- -- cypress run --browser chrome",
-    "test": "concurrently --names 'local-rpc,app-server,test-suite' --prefix-colors 'cyan,green,magenta' --kill-others --kill-others-on-fail --success first 'yarn local-rpc -s' 'yarn dev --logLevel error' \"sleep 8 && yarn test:run\""
+    "test:run:envless": "cypress run --browser chrome",
+    "test": "yarn env:testing -- -- concurrently --names 'local-rpc,app-server,test-suite' --prefix-colors 'cyan,green,magenta' --kill-others --kill-others-on-fail --success first 'yarn local-rpc -s' 'yarn dev --logLevel error' \"sleep 8 && yarn test:run:envless\""
   },
   "dependencies": {
     "@axis-finance/auto-signer-provider": "^0.0.1",

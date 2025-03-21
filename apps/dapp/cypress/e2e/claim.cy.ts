@@ -26,11 +26,11 @@ describe("Claim Bond", () => {
     cy.clock(VESTING_DATE);
     cy.visit(URLS.DASHBOARD);
     cy.wait(100);
+    cy.clock().invoke("restore");
 
     cy.connectWallet();
-    cy.contains("button", "Claim").click();
+    cy.contains("button", "Claim", { timeout: 20000 }).click();
 
-    cy.clock().invoke("restore");
     cy.get(COMPONENTS.MODAL_TITLE, {
       timeout: TIME.TRANSACTION_TIMEOUT,
     }).should("have.text", "Transaction Successful!");

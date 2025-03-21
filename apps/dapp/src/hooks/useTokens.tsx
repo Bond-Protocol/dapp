@@ -22,17 +22,24 @@ export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   }));
 };
 
-export const fetchAndMatchPricesForTestnet = async () => {
+export const fetchAndMatchPricesForTestnet = async (tokens: Token[] = []) => {
   //@ts-ignore fix: how to type a prop coming out of a json
   const pricedTokens = await fetchPrices(tokenlist);
+  const subgraphTokens = tokens.map((t) => ({
+    ...t,
+    price: undefined,
+    usedAsPayout: true,
+  }));
 
-  return testnetTokenlist.map((t) => {
+  const tokenlistTokens = testnetTokenlist.map((t) => {
     const price = pricedTokens.find(
       (pt) => t.symbol.toLowerCase() === pt?.symbol?.toLowerCase()
     )?.price;
 
     return { ...t, price, usedAsPayout: true, markets: [] };
   });
+
+  return [...tokenlistTokens, ...subgraphTokens];
 };
 
 export const useTokens = () => {
@@ -71,7 +78,7 @@ export const useTokens = () => {
         .concat(userTokens);
 
       const pricedTokens = environment.isTestnet
-        ? await fetchAndMatchPricesForTestnet()
+        ? await fetchAndMatchPricesForTestnet(tokens)
         : await fetchPrices(tokens);
 
       return pricedTokens as Token[];

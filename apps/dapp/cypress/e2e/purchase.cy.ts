@@ -1,5 +1,5 @@
 import { COMPONENTS, TIME, URLS } from "cypress/constants";
-import globalDataStub from "src/mocks/stubs/global-data-stub";
+import globalDataStub from "../../src/mocks/stubs/global-data-stub";
 
 const MOCK_MARKET = globalDataStub.data.tokens[0].markets[0];
 const MARKET_LIVE_TIMESTAMP = Math.ceil(+MOCK_MARKET.start * 1000);
@@ -21,8 +21,6 @@ describe("Purchase Bond", () => {
   it("Should be able to bond", () => {
     cy.clock(MARKET_LIVE_TIMESTAMP);
     cy.visit(URLS.MARKET(+MOCK_MARKET.chainId, +MOCK_MARKET.marketId));
-
-    cy.wait(1000); // Wait for page to load with mocked clock
 
     cy.clock().invoke("restore");
 
