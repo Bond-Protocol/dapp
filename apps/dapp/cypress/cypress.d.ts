@@ -2,8 +2,14 @@
 
 declare namespace Cypress {
   interface Chainable {
-    shouldNotRenderErrorPage(): Chainable<void>;
-    shouldRenderPageWithId(id: string): Chainable<void>;
-    connectWallet(): Chainable<void>;
+    shouldNotRenderErrorPage(): void;
+    shouldRenderPageWithId(id: string): void;
+    connectWallet(): void;
+    mockDate(date: string | number): Chainable<AUTWindow>;
+    restoreDate(): Chainable<AUTWindow>;
+  }
+
+  interface ApplicationWindow {
+    OriginalDate?: DateConstructor;
   }
 }

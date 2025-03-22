@@ -1,5 +1,6 @@
 import { COMPONENTS, TIME, URLS } from "cypress/constants";
 import globalDataStub from "../../src/mocks/stubs/global-data-stub";
+import { mockDateConstructor } from "cypress/support/date";
 
 const MOCK_MARKET = globalDataStub.data.tokens[0].markets[0];
 const MARKET_LIVE_TIMESTAMP = Math.ceil(+MOCK_MARKET.start * 1000);
@@ -19,14 +20,11 @@ describe("Purchase Bond", () => {
   });
 
   it("Should be able to bond", () => {
-    cy.clock(MARKET_LIVE_TIMESTAMP);
-    cy.visit(URLS.MARKET(+MOCK_MARKET.chainId, +MOCK_MARKET.marketId));
+    cy.visit(URLS.MARKET(+MOCK_MARKET.chainId, +MOCK_MARKET.marketId), {
+      onBeforeLoad: (win) => mockDateConstructor(win, MARKET_LIVE_TIMESTAMP),
+    });
 
-    cy.clock().invoke("restore");
-
-    cy.connectWallet();
     cy.get(COMPONENTS.BOND_INPUT).type("1000");
-    cy.wait(100);
     cy.get(COMPONENTS.BOND_BUTTON).click();
 
     cy.get(COMPONENTS.BOND_BUTTON, { timeout: TIME.TRANSACTION_TIMEOUT })
@@ -39,4 +37,6 @@ describe("Purchase Bond", () => {
       timeout: TIME.TRANSACTION_TIMEOUT,
     }).should("have.text", "Transaction Successful!");
   });
+
+  after(() => cy.restoreDate());
 });
