@@ -38,9 +38,6 @@ yarn test:run # Headless mode
 yarn test:open # Open browser mode -- useful for development
 ```
 
-> [!WARNING]
-> Tests still need the [caching API](https://github.com/Bond-Protocol/api) to be running in order to work, this should be deprecated in a near future
-
 ### New Chain Deployment Setup
 
 - Add addresses to `packages/contract-library/.../address-provider.tsx`
