@@ -11,7 +11,7 @@ import { App } from "./App";
 import { environment } from "./environment";
 
 const enableMockAPI = async () => {
-  if (!environment.enableMockAPI) return;
+  if (!environment.enableMockAPI || environment.isProduction) return;
 
   const { worker } = await import("./mocks/browser");
   return worker.start();

@@ -1,15 +1,10 @@
+import { getUnixTime } from "date-fns";
+import { dateMath } from "formatters";
+
 export default {
   data: {
-    purchaseCounts: [
-      {
-        count: "5",
-      },
-    ],
-    uniqueTokenBonderCounts: [
-      {
-        count: "1",
-      },
-    ],
+    purchaseCounts: [{ count: "5" }],
+    uniqueTokenBonderCounts: [{ count: "1" }],
     tokens: [
       {
         address: "0x0c5cd8f8e7d6995a67568f87969332f5c902e520",
@@ -36,8 +31,8 @@ export default {
             chainId: "84532",
             minPrice: "999999999999999900000000000000000000",
             scale: "1000000000000000000000000000000000000",
-            start: "1741612540",
-            conclusion: "1742044535",
+            start: getUnixTime(new Date()).toString(),
+            conclusion: getUnixTime(dateMath.addDays(new Date(), 7)),
             payoutToken: {
               id: "84532_0x0c5cd8f8e7d6995a67568f87969332f5c902e520",
               address: "0x0c5cd8f8e7d6995a67568f87969332f5c902e520",
@@ -64,28 +59,6 @@ export default {
             bondsIssued: "0",
           },
         ],
-      },
-      {
-        address: "0x2323d7b2d00ecbd4109da1fb0faafbd30da61413",
-        chainId: "84532",
-        name: "Sleep",
-        decimals: "18",
-        symbol: "SLEEP",
-        usedAsPayout: true,
-        purchaseCount: "5",
-        uniqueBonders: {
-          count: "1",
-        },
-        payoutTokenTbvs: [
-          {
-            tbv: "245",
-            quoteToken: {
-              id: "84532_0x4c9d75fbdf764d05df654340a48f85bc0216f8ab",
-              address: "0x4c9d75fbdf764d05df654340a48f85bc0216f8ab",
-            },
-          },
-        ],
-        markets: [],
       },
       {
         address: "0x4c9d75fbdf764d05df654340a48f85bc0216f8ab",

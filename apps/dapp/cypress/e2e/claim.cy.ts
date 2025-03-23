@@ -23,12 +23,8 @@ describe("Claim Bond", () => {
   });
 
   it("Should be able to redeem a bond", () => {
-    cy.clock(VESTING_DATE);
     cy.visit(URLS.DASHBOARD);
-    cy.wait(100);
-    cy.clock().invoke("restore");
 
-    cy.connectWallet();
     cy.contains("button", "Claim", { timeout: 20000 }).click();
 
     cy.get(COMPONENTS.MODAL_TITLE, {
