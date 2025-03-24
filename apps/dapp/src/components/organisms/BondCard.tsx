@@ -23,9 +23,9 @@ export const BondCard: FC<BondCardProps> = ({ market, ...props }) => {
         </div>
       )}
       <div
-        className={`flex min-h-[430px] flex-col ${
+        className={`flex flex-col ${
           props.isFutureMarket ? "w-full" : "md:w-1/2"
-        }`}
+        } ${featureToggles.LIMIT_ORDERS && "min-h-[430px]"}`}
       >
         {props.isFutureMarket && market.start && (
           <div className="mb-2 flex flex-col gap-x-1 md:flex-row">
