@@ -40,6 +40,7 @@ export const ManualDayInput = ({
   return (
     <div className={"bp-manual-day-input w-full" + " " + className}>
       <Input
+        data-testid="market-duration-in-days"
         autoFocus
         errorMessage={error ? errorMessage : ""}
         label="Market Length"

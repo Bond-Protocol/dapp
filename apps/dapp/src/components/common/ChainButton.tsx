@@ -1,7 +1,7 @@
 import { Icon } from "ui";
 import arbitrum from "assets/icons/arbitrum.svg";
 import repeatIcon from "assets/icons/loop.svg";
-import { getIconsForChains } from "context/blockchain-provider";
+import { getIconsForChains } from "src/utils/get-icons-for-chains";
 
 type ChainButtonProps = {
   onClick: () => void;

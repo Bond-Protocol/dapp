@@ -12,7 +12,7 @@ const orderTabs = [...tabs, { label: "My Orders" }];
 
 export const Dashboard = () => {
   return (
-    <div className="h-full min-h-[90vh]">
+    <div id="__DASHBOARD_PAGE__" className="h-full min-h-[90vh]">
       <PageHeader title={"DASHBOARD"} />
       <RequiresWallet>
         <Tabs

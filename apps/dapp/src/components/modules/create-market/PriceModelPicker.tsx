@@ -38,7 +38,9 @@ const options = [
 
 const priceControlConfig: Record<
   PriceModel,
-  Array<Partial<PriceControlProps> & { property: string }>
+  Array<
+    Partial<PriceControlProps> & { property: string; "data-testid"?: string }
+  >
 > = {
   dynamic: [
     {
@@ -46,12 +48,14 @@ const priceControlConfig: Record<
       topLabel: "Initial Price",
       display: "exchange_rate",
       returnValue: "exchange_rate",
+      "data-testid": "price-model-initial-price",
     },
     {
       property: "minPrice",
       topLabel: "Min Price",
       display: "exchange_rate",
       returnValue: "exchange_rate",
+      "data-testid": "price-model-min-price",
     },
   ],
   static: [
@@ -60,6 +64,7 @@ const priceControlConfig: Record<
       topLabel: "Fixed Price",
       display: "exchange_rate",
       returnValue: "exchange_rate",
+      "data-testid": "price-model-fixed-price",
     },
   ],
   ["oracle-dynamic"]: [

@@ -23,6 +23,7 @@ export type PriceControlProps = {
   returnValue: "percentage" | "exchange_rate";
   initialValue?: string;
   className?: string;
+  "data-testid"?: string;
 };
 
 export const PriceControl = (props: PriceControlProps) => {
@@ -194,6 +195,7 @@ export const PriceControl = (props: PriceControlProps) => {
             }`}
           >
             <input
+              data-testid={props["data-testid"]}
               {...numericInput}
               value={value}
               onChange={onChange}

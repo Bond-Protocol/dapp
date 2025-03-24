@@ -9,13 +9,12 @@ import { CalculatedMarket } from "types";
 import { BondPurchase } from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFullFormatter } from "formatters";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useMediaQueries } from "hooks";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import axios from "axios";
 import { PastMarket } from "components/organisms/ClosedMarket";
+import { useQuery } from "@tanstack/react-query";
 import TrimmedTextContent from "components/common/TrimmedTextContent";
-import filterArrayByUniqueKey from "src/utils/filter-unique";
 
 const blockExplorer: Column<any> = {
   accessor: "blockExplorerUrl",
@@ -166,61 +165,61 @@ const marketTxsHistory: Column<any>[] = [
     },
   },
 ];
+export type TransactionHistoryData = Array<
+  BondPurchase & { chainId: number | string }
+>;
 
+type TxHistoryEntries = Array<BondPurchase & { chainId: number | string }>;
 export interface TransactionHistoryProps {
   title?: string;
   market?: CalculatedMarket | PastMarket;
-  data?: Array<BondPurchase & { chainId: number | string }>;
+  data?: TransactionHistoryData;
   className?: string;
 }
 
 const API_ENDPOINT = import.meta.env.VITE_API_URL;
 
+const loadBondPurchases = async (marketId?: string) => {
+  const response = await axios.get(
+    API_ENDPOINT + `markets/${marketId}/bondPurchases`
+  );
+  return response.data.bondPurchases;
+};
+
 export const TransactionHistory = (props: TransactionHistoryProps) => {
   const { isTabletOrMobile } = useMediaQueries();
   const isMarketHistory = !!props.market;
 
-  const [bondPurchases, setBondPurchases] = useState();
+  const { data: bondPurchases } = useQuery({
+    queryKey: [`tx-history-${props.market?.chainId}-${props.market?.id}`],
+    queryFn: () => loadBondPurchases(props.market?.id),
+    enabled: !props.data && !!props.market,
+  });
 
-  const loadBondPurchases = useCallback(async () => {
-    if (!props.market) return;
-    const response = await axios.get(
-      API_ENDPOINT + `markets/${props.market.id}/bondPurchases`
-    );
-    return response.data.bondPurchases;
-  }, [props.market]);
+  const details: TxHistoryEntries =
+    (isMarketHistory ? bondPurchases : props.data) ?? [];
 
-  useEffect(() => {
-    loadBondPurchases().then((response) => {
-      //@ts-ignore
-      setBondPurchases(filterArrayByUniqueKey(response, "timestamp"));
-    });
-  }, []);
+  const tableData = details
+    .map((p) => {
+      const chainId = isMarketHistory ? props?.market?.chainId : p.chainId;
 
-  const details = (isMarketHistory ? bondPurchases : props.data) ?? [];
+      const { url: blockExplorerTxUrl } = getBlockExplorer(chainId, "tx");
+      const { url: blockExplorerAddressUrl } = getBlockExplorer(
+        chainId,
+        "address"
+      );
 
-  const tableData = useMemo(
-    () =>
-      details
-        .map((p) => {
-          const chainId = isMarketHistory ? props?.market?.chainId : p.chainId;
+      const txUrl = blockExplorerTxUrl + p.id;
+      const addressUrl = blockExplorerAddressUrl + p.recipient;
 
-          const { url: blockExplorerTxUrl } = getBlockExplorer(chainId, "tx");
-          const { url: blockExplorerAddressUrl } = getBlockExplorer(chainId);
+      return { ...p, txUrl, addressUrl, market: props.market };
+    })
+    .filter(
+      (p) =>
+        !isMarketHistory || p.timestamp > props.market?.creationBlockTimestamp!
+    ) // Avoids fetching markets with the same id from old contracts
+    .sort((a, b) => b.timestamp - a.timestamp);
 
-          const txUrl = blockExplorerTxUrl + p.id;
-          const addressUrl = blockExplorerAddressUrl + p.recipient;
-
-          return { ...p, txUrl, addressUrl, market: props.market };
-        })
-        .filter(
-          (p) =>
-            !isMarketHistory ||
-            p.timestamp > props.market?.creationBlockTimestamp!
-        ) // Avoids fetching markets with the same id from old contracts
-        .sort((a, b) => b.timestamp - a.timestamp),
-    [bondPurchases, props.data]
-  );
   const desktopColumns = isMarketHistory ? marketTxsHistory : userTxsHistory;
   const cols = isTabletOrMobile ? baseTxsHistory : desktopColumns;
   const csvFilename =

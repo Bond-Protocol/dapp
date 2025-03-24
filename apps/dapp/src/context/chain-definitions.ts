@@ -22,39 +22,3 @@ export const mode: Chain = {
     },
   },
 };
-
-export const berachainBartio: Chain = {
-  id: 80084,
-  network: "berachain-bartio",
-  name: "Berachain bArtio",
-  nativeCurrency: {
-    decimals: 18,
-    name: "BERA Token",
-    symbol: "BERA",
-  },
-  contracts: {
-    multicall3: {
-      address: "0xcA11bde05977b3631167028862bE2a173976CA11",
-      blockCreated: 109269,
-    },
-  },
-  rpcUrls: {
-    default: {
-      http: [
-        "https://berachain-bartio.g.alchemy.com/v2/HHcBoOtwJ9vBECT1Y3x2qqH-dHc53yyz",
-      ],
-    },
-    public: {
-      http: [
-        "https://berachain-bartio.g.alchemy.com/v2/HHcBoOtwJ9vBECT1Y3x2qqH-dHc53yyz",
-      ],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: "Berachain bArtio Beratrail",
-      url: "https://bartio.beratrail.io",
-    },
-  },
-  testnet: true,
-};

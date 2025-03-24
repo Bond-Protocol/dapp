@@ -11,7 +11,7 @@ export const CreateMarket = () => {
   const subtitle = "Setup your market and launch it on Bond Protocol";
 
   return (
-    <div>
+    <div id="__CREATE_BOND_PAGE__">
       <PageNavigation
         link={socials.gitbook + docsSublink}
         rightText="READ DOCS"
