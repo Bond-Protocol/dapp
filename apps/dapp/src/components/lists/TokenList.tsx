@@ -66,7 +66,7 @@ export const TokenList = () => {
   const bonderTitle = isTabletOrMobile ? "BONDERS" : "UNIQUE BONDERS";
 
   return (
-    <div className="pb-4">
+    <div id="__ROOT_PAGE__" className="pb-4">
       <PageHeader title={title} />
       <div className="grid grid-cols-2 grid-rows-2 gap-4 pb-10 pt-4 md:flex">
         <InfoLabel

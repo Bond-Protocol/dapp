@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "experimentalDecorators": true,
+    "types": ["cypress"],
     "paths": {
       "components/*": ["src/components/*"],
       "components": ["src/components/index"],
@@ -19,6 +20,12 @@
       "assets/*": ["src/assets/*"]
     }
   },
-  "include": ["src", "src/**/*.json", ".eslintrc.js", "./codegen.ts"],
+  "include": [
+    "src",
+    "src/**/*.json",
+    ".eslintrc.js",
+    "./codegen.ts",
+    "cypress"
+  ],
   "exclude": ["node_modules"]
 }

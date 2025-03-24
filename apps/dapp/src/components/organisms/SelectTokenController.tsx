@@ -7,7 +7,7 @@ import {
   SelectTokenDialogProps,
 } from "ui";
 import { useDiscoverToken } from "hooks/useDiscoverToken";
-import { ACTIVE_CHAINS } from "context/blockchain-provider";
+import { ACTIVE_CHAINS } from "src/config/chains";
 import { useTokens } from "hooks";
 import { Address } from "viem";
 

@@ -41,7 +41,11 @@ export const ImportTokenDialog = (props: ImportTokenDialogProps) => {
           Source: {props.priceSource}
         </p>
       </div>
-      <Button className="mt-3" onClick={props.onConfirm}>
+      <Button
+        data-testid="token-import-button"
+        className="mt-3"
+        onClick={props.onConfirm}
+      >
         Import Token
       </Button>
     </div>

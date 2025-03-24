@@ -13,7 +13,6 @@ export const MarketDetails = () => {
 
   const market = allMarkets.find(
     ({ marketId, chainId: marketChainId }) =>
-      //@ts-ignore
       marketId == id && marketChainId === chainId
   )!;
 

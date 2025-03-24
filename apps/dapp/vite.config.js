@@ -39,6 +39,7 @@ export default defineConfig({
   },
   optimizeDeps: {
     esbuildOptions: {
+      // Node.js global to browser globalThis
       target: "es2020",
       // Enable esbuild polyfill plugins
       plugins: [

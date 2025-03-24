@@ -114,13 +114,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const amountIn =
     !isNaN(parsedAmount) && !isFinite(parsedAmount) ? 0 : parsedAmount;
 
-  const bond = usePurchase(market, {
-    amountIn,
-    amountOut: payout,
-    referrer: referralAddress,
-    slippage: DEFAULT_SLIPPAGE,
-  });
-
   const {
     execute,
     txStatus: approveTxStatus,
@@ -134,6 +127,14 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     parsedAmount.toString(),
     market.teller
   );
+
+  const bond = usePurchase(market, {
+    amountIn,
+    amountOut: payout,
+    referrer: referralAddress,
+    slippage: DEFAULT_SLIPPAGE,
+    enabled: hasSufficientBalance && hasSufficientAllowance,
+  });
 
   const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
     market.chainId
@@ -233,6 +234,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     <div className="p-4">
       <div className="flex h-full flex-col justify-between">
         <InputCard
+          data-testid="bond-input"
           onChange={(amount) =>
             setAmount((prev) =>
               !isNaN(Number(amount)) && isFinite(Number(amount))
@@ -262,6 +264,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           )}
         >
           <Button
+            data-testid="bond-button"
             disabled={
               !hasSufficientBalance ||
               approveTxStatus.isLoading ||

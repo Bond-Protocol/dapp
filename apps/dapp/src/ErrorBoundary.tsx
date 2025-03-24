@@ -70,7 +70,7 @@ class ErrorBoundary extends Component<Props, State> {
   public render() {
     if (this.state.hasError) {
       return (
-        <div className="h-[100vh] w-full">
+        <div id="__BOND_ERROR_PAGE" className="h-[100vh] w-full">
           <AppBackdrop />
           <div className="h-[100vh] w-full flex-col items-center p-8 text-center">
             {environment.isProduction ? (

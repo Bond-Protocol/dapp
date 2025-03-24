@@ -4,7 +4,7 @@ import { Button, Input, Label } from "ui";
 import { formatCurrency } from "formatters";
 import { UpdateAllowanceArgs } from "hooks/useUpdateAllowance";
 import { Address } from "viem";
-import { SUPPORTED_CHAINS } from "context/blockchain-provider";
+import { SUPPORTED_CHAINS } from "src/config/chains";
 
 export type AllowanceToken = Token & {
   capacity: number;
