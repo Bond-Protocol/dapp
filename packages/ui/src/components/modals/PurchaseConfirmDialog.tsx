@@ -98,6 +98,7 @@ export const PurchaseConfirmDialog = ({
             {isNaN(market.discount) && <p>{unknownWarning}</p>}
           </div>
           <Checkbox
+            data-testid="bond-warning-checkbox"
             onChange={(value) => setAccepted(value)}
             className="mt-1"
             label="I understand"
@@ -115,6 +116,7 @@ export const PurchaseConfirmDialog = ({
         onClickLeft={onCancel}
         onClickRight={onSubmit}
         disabled={cantSubmit}
+        data-testid="bond-confirm-button"
       />
     </div>
   );

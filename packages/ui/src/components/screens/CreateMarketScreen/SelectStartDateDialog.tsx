@@ -68,7 +68,7 @@ export const SelectStartDateDialog = (props: {
       )}
       <div className="flex w-full gap-x-2 pt-4">
         <Button
-          id="start-date-cancel-button"
+          data-testid="date-cancel-button"
           variant="ghost"
           size="lg"
           className="w-full"
@@ -77,7 +77,7 @@ export const SelectStartDateDialog = (props: {
           Cancel
         </Button>
         <Button
-          id="start-date-select-button"
+          data-testid="date-select-button"
           onClick={handleSubmit}
           size="lg"
           className="w-full"

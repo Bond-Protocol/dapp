@@ -18,6 +18,7 @@ type PurchaseArgs = {
   amountIn: number;
   amountOut: number;
   slippage?: number;
+  enabled?: boolean;
 };
 
 const NULL_ADDRESS: Address = `0x${"0".repeat(40)}`;
@@ -35,7 +36,7 @@ export const usePurchase = (market: CalculatedMarket, args: PurchaseArgs) => {
     functionName: "purchase",
     chainId: Number(market.chainId),
     args: purchaseArgs,
-    enabled: isConnected,
+    enabled: isConnected && args.enabled,
   });
 
   const contract = useContractWrite(config);
@@ -104,7 +105,7 @@ function formatPurchaseArgs({
   );
 
   const minAmountOut =
-    args.amountOut - args.amountOut * (args.slippage ?? 0.05 / 100);
+    args.amountOut - args.amountOut * (args.slippage ?? 0.01 / 100);
 
   const amountOut = parseUnits(
     minAmountOut.toFixed(market.payoutToken.decimals),

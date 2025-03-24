@@ -2,25 +2,32 @@ import { useState } from "react";
 import { formatDate } from "../../../utils";
 import { Button, DatePicker, FlatSelect, Link } from "../../../components";
 import { ManualVestingTermInput } from "./";
-
-const options = [
-  { label: "LENGTH", value: "term" },
-  { label: "DATE", value: "date" },
-];
+import React from "react";
 
 type TermType = "term" | "date";
 
 const defaultType = "term";
+
 export const SelectVestingDialog = (props: {
   onSubmit: Function;
   onClose: Function;
+  disableFixedExpiry: boolean;
 }) => {
   const [type, setType] = useState<TermType>(defaultType);
   const [date, setDate] = useState<Date>();
   const [days, setDays] = useState<string>("");
   const [state, setState] = useState({ canSubmit: true });
-
   const canSubmit = type === "date" ? !!date : state.canSubmit;
+
+  const options = React.useMemo(() => {
+    const options = [
+      { label: "LENGTH", value: "term" },
+      { label: "DATE", value: "date" },
+    ];
+
+    if (props.disableFixedExpiry) options.pop();
+    return options;
+  }, [props.disableFixedExpiry]);
 
   const onChange = ({ date }: { date: Date }) => {
     setDate(date);

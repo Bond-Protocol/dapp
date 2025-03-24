@@ -1,36 +1,47 @@
 import { MarketList } from "..";
 import { PageHeader } from "components/common";
-import { ActionCard, Filter } from "ui";
+import { ActionCard, Switch } from "ui";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { ClosedMarketList } from "components/lists/ClosedMarketList";
 import { useState } from "react";
+import { useMarkets } from "hooks";
+import { environment } from "src/environment";
 
 export const Markets = () => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
+  const { isLoading, arePastMarketsLoading } = useMarkets();
   const scrollUp = () => window.scrollTo(0, 0);
-  const [showClosedMarkets, setShowClosedMarkets] = useState(false);
+  const [hideUnknownMarkets, setHideUnknownMarkets] = useState(
+    environment.isProduction
+  );
 
-  const closedMarketFilter: Filter = {
-    id: "past-markets",
-    label: "Show past markets",
-    type: "global",
-    handler: () => setShowClosedMarkets((prev) => !prev),
-  };
+  const showPastMarkets =
+    !arePastMarketsLoading && !Object.values(isLoading).some(Boolean);
 
   return (
     <>
-      <div className="flex items-end justify-between py-2 md:-mb-[54px]">
+      <div
+        id="__MARKETS_PAGE__"
+        className="flex items-end justify-between py-2 md:-mb-[54px]"
+      >
         <PageHeader
           title={"LIVE MARKETS"}
           subtitle={"Instantly acquire tokens at a discount"}
         />
       </div>
-      <div className="-mt-14">
-        <MarketList filters={[closedMarketFilter]} />
+      <div className="mt-6 flex flex-col">
+        <div className="flex self-end text-sm">
+          <Switch
+            checked={hideUnknownMarkets}
+            onChange={() => setHideUnknownMarkets((prev) => !prev)}
+          />{" "}
+          Hide Unknown Markets
+        </div>
+        <MarketList hideUnknownMarkets={hideUnknownMarkets} />
       </div>
-      {showClosedMarkets && (
+      {showPastMarkets && (
         <div>
           <ClosedMarketList />
         </div>

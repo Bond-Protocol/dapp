@@ -1,4 +1,4 @@
-import { ENVIRONMENT } from "./environment";
+import { ENVIRONMENT, environment } from "./environment";
 
 /**Maps Order Services Servers according to environment*/
 export const orderApiServerMap = {
@@ -22,3 +22,23 @@ export const orderApiServerMap = {
     description: "Production Server",
   },
 };
+
+export const mainnetSubgraphs = {
+  "1": "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-ethereum/api", //mainnet
+  "42161":
+    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-arbitrum/api", //arb
+  "10": "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-optimism/api", //op
+  "8453":
+    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-base/api", //base
+  "137":
+    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-polygon/api", //polygon
+};
+
+//Added to prevent leaking to prod and triggering unnecessary queries
+export const testnetSubgraphs =
+  !environment.isProduction && environment.isTestnet
+    ? {
+        "84532":
+          "https://subgraph.satsuma-prod.com/35414fbc50a7/spaces-team/bond-protocol-base-sepolia/api",
+      }
+    : {};

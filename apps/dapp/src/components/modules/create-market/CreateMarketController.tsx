@@ -24,7 +24,7 @@ import {
 import { doPriceMath } from "./helpers";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { CreateMarketScreen } from "./CreateMarketScreen";
-import { useTokenlistLoader } from "services/use-tokenlist-loader-v2";
+import { useTokens } from "hooks";
 import { parseUnits, formatUnits } from "viem";
 import { useAllowance } from "hooks/contracts/useAllowance";
 import { useCreateMarket as useCreateMarketContract } from "hooks/contracts/useCreateMarket";
@@ -41,10 +41,10 @@ export const CreateMarketController = () => {
   const network = useNetwork();
   const publicClient = usePublicClient();
 
-  const { tokens } = useTokenlistLoader();
+  const { tokens } = useTokens();
   const [state, dispatch] = useCreateMarket();
 
-  const { address: auctioneerAddress } = getAuctioneerForCreate(
+  const { address: tellerAddress } = getTeller(
     state.chainId,
     getBondType(state)
   );
@@ -52,9 +52,9 @@ export const CreateMarketController = () => {
   const allowance = useAllowance({
     tokenAddress: state.payoutToken.address as Address,
     decimals: state.payoutToken.decimals,
-    amount: state.capacity.toString(),
+    amount: state.recommendedAllowance,
     chainId: network.chain?.id ?? 1,
-    spenderAddress: auctioneerAddress,
+    spenderAddress: tellerAddress as Address,
     ownerAddress: address as Address,
   });
 

@@ -11,25 +11,35 @@ export interface ButtonGroupProps {
   tooltip?: string;
 }
 
-export const ButtonGroup = (props: ButtonGroupProps) => {
+export const ButtonGroup = ({
+  className,
+  onClickRight,
+  onClickLeft,
+  leftLabel,
+  rightLabel,
+  disabled,
+  tooltip,
+  ...props
+}: ButtonGroupProps) => {
   return (
-    <div className={`w-full ${props.className}`}>
+    <div className={`w-full ${className}`}>
       <div className="flex h-[40px] justify-between gap-2">
         <Button
           variant="secondary"
           className="w-1/2 px-0"
-          onClick={props.onClickLeft}
+          onClick={onClickLeft}
         >
-          {props.leftLabel}
+          {leftLabel}
         </Button>
-        <TooltipWrapper content={props.tooltip}>
+        <TooltipWrapper content={tooltip}>
           <Button
             thin
-            disabled={props.disabled}
+            disabled={disabled}
             className="w-1/2"
-            onClick={props.onClickRight}
+            onClick={onClickRight}
+            {...props}
           >
-            <>{props.rightLabel}</>
+            <>{rightLabel}</>
           </Button>
         </TooltipWrapper>
       </div>

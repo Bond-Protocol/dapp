@@ -1,4 +1,4 @@
-type Address = `0x${string}}`;
+type Address = `0x${string}`;
 
 export interface TokenBase {
   chainId: number;
@@ -92,6 +92,7 @@ export interface CalculatedMarket extends PrecalculatedMarket {
     shortVesting: string;
     longVesting: string;
     tbvUsd: string;
+    quoteTokensPerPayoutToken: string;
   };
   blockExplorer: {
     name: string;

@@ -3,7 +3,8 @@ import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { execSync } from "child_process";
-
+import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
+import nodePolyfills from "rollup-plugin-polyfill-node";
 /***
  * DO NOT REMOVE THE POLYFILLS WITHOUT TESTING RAINBOWKIT THOROUGHLY, ESPECIALLY THE RAINBOW/WALLETCONNECT/COINBASE QR CODES
  * (ALTHOUGH I THINK REMOVING IT MIGHT HAVE BROKEN METAMASK IN THE PAST TOO)
@@ -25,15 +26,27 @@ export default defineConfig({
   define: {
     __COMMIT_HASH__: JSON.stringify(commitHash),
   },
+
   build: {
     outDir: "../dist",
     target: ["es2020"],
+    rollupOptions: {
+      plugins: [nodePolyfills()],
+    },
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
   },
   optimizeDeps: {
     esbuildOptions: {
       // Node.js global to browser globalThis
       target: "es2020",
       // Enable esbuild polyfill plugins
+      plugins: [
+        NodeGlobalsPolyfillPlugin({
+          buffer: true,
+        }),
+      ],
     },
   },
   resolve: {

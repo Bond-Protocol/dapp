@@ -10,6 +10,7 @@ declare enum ENVIRONMENT {
 }
 
 interface ImportMetaEnv {
+  readonly VITE_ALCHEMY_RPC_KEY: string;
   readonly VITE_ALCHEMY_MAINNET_KEY: string;
   readonly VITE_ALCHEMY_GOERLI_KEY: string;
   readonly VITE_ENVIROMENT: ENVIRONMENT;
@@ -27,11 +28,17 @@ interface ImportMetaEnv {
   readonly VITE_ALCHEMY_POLYGON_MAINNET_KEY: string;
   readonly VITE_ALCHEMY_POLYGON_TESTNET_KEY: string;
 
+  readonly VITE_ALCHEMY_BASE_MAINNET_KEY: string;
+  readonly VITE_ALCHEMY_BASE_SEPOLIA_KEY: string;
+
   // PROTOCOL SPECIFIC VARS
   readonly VITE_MARKET_REFERRAL_ADDRESS: string;
   readonly VITE_NO_FRONTEND_FEE_OWNERS: string;
   // more env variables...
   readonly VITE_COMMIT_HASH: string;
+
+  readonly VITE_ENABLE_MOCK_API: string;
+  readonly VITE_ENABLE_AUTO_SIGNER: string;
 }
 
 declare const __COMMIT_HASH__: string;

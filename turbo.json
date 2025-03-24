@@ -7,8 +7,12 @@
     "clean": {
       "cache": false
     },
-    "test": { "cache": false },
-    "test:open": { "cache": false },
+    "test": {
+      "cache": false
+    },
+    "test:open": {
+      "cache": false
+    },
     "dev": {
       "dependsOn": ["^dev", "codegen", "typechain"],
       "cache": false,
@@ -31,6 +35,7 @@
       "outputs": ["src/**/contracts", "src/"]
     },
     "codegen": {
+      "inputs": ["package.json", "codegen.ts", "src/graphql/"],
       "outputs": ["src/generated/graphql.ts"]
     },
     "generate": {

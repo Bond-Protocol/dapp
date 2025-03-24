@@ -3,22 +3,29 @@
   "compilerOptions": {
     "baseUrl": ".",
     "experimentalDecorators": true,
+    "types": ["cypress"],
     "paths": {
-      "components": ["src/components/index"],
       "components/*": ["src/components/*"],
-      "context": ["src/context/index"],
+      "components": ["src/components/index"],
       "context/*": ["src/context/*"],
-      "pages": ["src/pages/index"],
+      "context": ["src/context/index"],
       "pages/*": ["src/pages/*"],
-      "services": ["src/services/index"],
+      "pages": ["src/pages/index"],
       "services/*": ["src/services/*"],
-      "hooks": ["src/hooks/index"],
+      "services": ["src/services/index"],
       "hooks/*": ["src/hooks/*"],
-      "utils": ["src/hooks/index"],
+      "hooks": ["src/hooks/index"],
       "utils/*": ["src/hooks/*"],
+      "utils": ["src/hooks/index"],
       "assets/*": ["src/assets/*"]
     }
   },
-  "include": ["src", "src/**/*.json"],
+  "include": [
+    "src",
+    "src/**/*.json",
+    ".eslintrc.json",
+    "./codegen.ts",
+    "cypress"
+  ],
   "exclude": ["node_modules"]
 }

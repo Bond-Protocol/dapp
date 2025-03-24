@@ -21,6 +21,7 @@ export const ModalBackdrop = forwardRef(function ModalContainer(
 ) {
   return (
     <div
+      tabIndex={-1}
       ref={ref}
       className="fixed inset-0 flex items-center justify-center outline-0 backdrop-blur-lg"
     >
@@ -32,7 +33,10 @@ export const ModalBackdrop = forwardRef(function ModalContainer(
 export const ModalHeader = (props: ModalHeaderProps) => {
   return (
     <div className="text-light-secondary fill-light-secondary flex select-none items-center justify-between p-2 pt-1">
-      <p className="font-fraktion my-auto p-2 font-bold uppercase tracking-wide">
+      <p
+        data-testid="modal-title"
+        className="font-fraktion my-auto p-2 font-bold uppercase tracking-wide"
+      >
         {props?.topLeftContent}
       </p>
       {props.onClickClose && (

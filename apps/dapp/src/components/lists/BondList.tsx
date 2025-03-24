@@ -7,6 +7,7 @@ import { useState } from "react";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useRedeemBond } from "hooks/contracts/useRedeem";
+import TrimmedTextContent from "components/common/TrimmedTextContent";
 
 export const tableColumns: Array<Column<any>> = [
   {
@@ -16,7 +17,14 @@ export const tableColumns: Array<Column<any>> = [
     formatter: (ownerBalance) => {
       const balance = longFormatter.format(ownerBalance?.balance);
       return {
-        value: `${balance} ${ownerBalance?.underlying?.symbol ?? "???"}`,
+        value: (
+          <>
+            {balance}{" "}
+            <TrimmedTextContent
+              text={ownerBalance?.underlying?.symbol ?? "???"}
+            />
+          </>
+        ),
         icon: ownerBalance?.underlying?.logoURI,
       };
     },
@@ -107,7 +115,6 @@ export const tableColumns: Array<Column<any>> = [
           <TransactionWizard
             chainId={chainId}
             open={open}
-            //@ts-ignore
             onSubmit={() => claim()}
             onClose={() => setOpen(false)}
             SuccessDialog={() => (

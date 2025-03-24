@@ -19,7 +19,7 @@ export const useLimitOrderList = (market: CalculatedMarket) => {
       .map((d) => ({ ...d, market }));
   }
 
-  const query = useQuery(["list-orders", market.id, market.chainId], {
+  const query = useQuery(["list-orders", market.id], {
     queryFn: loadList,
     enabled: !!market && auth.isAuthenticated,
   });

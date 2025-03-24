@@ -22,7 +22,12 @@ export const BondPriceChart = ({ market }: BondDiscountChartProps) => {
   }
 
   //@ts-ignore
-  if (!dataset || purchases?.length! < 2 || market?.quoteToken?.lpPair) {
+  if (
+    !dataset ||
+    purchases?.length! < 2 ||
+    market?.quoteToken?.lpPair ||
+    !market.quoteToken.price
+  ) {
     return (
       <PlaceholderChart
         message={

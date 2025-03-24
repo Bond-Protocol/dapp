@@ -10,7 +10,14 @@ export type SearchBarProps = Omit<InputProps, "onChange"> & {
   placeholder?: string;
 };
 
-export const SearchBar = (props: SearchBarProps) => {
+export const SearchBar = ({
+  autoFocus,
+  placeholder,
+  value,
+  onChange,
+  inputClassName,
+  ...props
+}: SearchBarProps) => {
   const [focused, setFocused] = useState(false);
   const onFocus = () => setFocused(true);
   const onBlur = () => setFocused(false);
@@ -18,15 +25,16 @@ export const SearchBar = (props: SearchBarProps) => {
   return (
     <div className={props.className}>
       <Input
+        {...props}
         onFocus={onFocus}
         onBlur={onBlur}
-        autoFocus={props.autoFocus}
-        placeholder={props.placeholder ?? "Search"}
-        value={props.value}
-        onChange={(e) => props.onChange(e.target.value)}
-        inputClassName={props.inputClassName ?? "text-[20px] font-bold"}
+        autoFocus={autoFocus}
+        placeholder={placeholder ?? "Search"}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        inputClassName={inputClassName ?? "text-[20px] font-bold"}
         rootClassName={`${
-          !!props.value?.length ? "border-light-secondary" : "border-white"
+          !!value?.length ? "border-light-secondary" : "border-white"
         } transition-all ${focused ? "" : "w-[80px] md:w-full"}`}
         startAdornment={
           <div className="ml-2 inline-flex">
@@ -36,11 +44,12 @@ export const SearchBar = (props: SearchBarProps) => {
         endAdornment={
           <div
             className={"mr-2 w-8 cursor-pointer p-4"}
-            onClick={() => props.onChange("")}
+            onClick={() => onChange("")}
           >
-            {props.value ? <CloseIcon className="fill-white" /> : <div />}
+            {value ? <CloseIcon className="fill-white" /> : <div />}
           </div>
         }
+        {...props}
       />
     </div>
   );

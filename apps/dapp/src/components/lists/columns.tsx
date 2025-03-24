@@ -1,4 +1,12 @@
-import { Button, Column, DiscountLabel, formatDate, Link } from "ui";
+import {
+  Button,
+  Column,
+  DiscountLabel,
+  formatDate,
+  Icon,
+  Link,
+  Tooltip,
+} from "ui";
 import { add } from "date-fns";
 import { longFormatter, usdFormatter } from "formatters";
 import {
@@ -9,6 +17,7 @@ import {
 import { CalculatedMarket, chainLogos } from "@bond-protocol/types";
 import ArrowIcon from "../../assets/icons/arrow-left.svg?react";
 import { useNavigate } from "react-router-dom";
+import TrimmedTextContent from "components/common/TrimmedTextContent";
 
 export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",
@@ -17,10 +26,10 @@ export const bondColumn: Column<CalculatedMarket> = {
   defaultSortOrder: "asc",
   formatter: (market) => {
     const chain = getChain(market.chainId);
+
     return {
-      value: market.quoteToken.symbol,
+      value: <TrimmedTextContent text={market.quoteToken.symbol} />,
       icon: market.quoteToken.logoURI,
-      //@ts-ignore TODO: improve
       chainChip: chainLogos[chain?.id],
     };
   },
@@ -31,10 +40,25 @@ const bondPrice: Column<CalculatedMarket> = {
   accessor: "bondPrice",
   width: "w-[18%]",
   formatter: (market) => {
+    const discountedPrice = market.discountedPrice
+      ? market.formatted.discountedPrice
+      : market.formatted?.quoteTokensPerPayoutToken;
+
+    const price = isFinite(Number(market.discountedPrice))
+      ? discountedPrice
+      : "???";
+
     return {
       icon: market.payoutToken.logoURI,
-      value: market.formatted?.discountedPrice,
-      subtext: market.formatted?.fullPrice
+      value: (
+        <>
+          {price}{" "}
+          {!market.discountedPrice && (
+            <TrimmedTextContent text={market.quoteToken.symbol} />
+          )}{" "}
+        </>
+      ),
+      subtext: market.fullPrice
         ? market.formatted?.fullPrice + " Market"
         : "Unknown",
     };
@@ -47,22 +71,37 @@ export const discountColumn: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[7%]",
   defaultSortOrder: "desc",
-  Component: DiscountLabel,
+  Component: (props) => {
+    //Must have a valid payout and quote token
+    // const isArbitrum =
+    //   Number(props.data.chainId) === 42161 && isFinite(props.data.discount);
+
+    // //Show LTIPP incentives
+    // if (isArbitrum) {
+    //   return (
+    //     <div className="relative flex flex-col items-center">
+    //       <DiscountLabel {...props} />
+    //       <Tooltip content="Up to 10% in ARB incentives distributed weekly">
+    //         <div className="flex items-center rounded  border bg-white px-2 text-xs font-semibold text-black">
+    //           {" +ARB"}
+    //           <Icon className="w-4" src={chainLogos[42161]} />
+    //         </div>
+    //       </Tooltip>
+    //     </div>
+    //   );
+    // }
+    return <DiscountLabel {...props} />;
+  },
   formatter: (market) => {
     const value =
       !isNaN(market.discount) &&
-      market.discount !== Infinity &&
-      market.discount !== -Infinity
+      isFinite(market.discount) &&
+      market.discount < 100
         ? market.discount + "%"
         : "Unknown";
 
     return {
-      value:
-        !isNaN(market.discount) &&
-        market.discount !== Infinity &&
-        market.discount !== -Infinity
-          ? market.discount + "%"
-          : "Unknown",
+      value,
       sortValue: value?.includes("Unknown") ? 100 : market.discount + 100,
     };
   },
@@ -74,14 +113,19 @@ const maxPayout: Column<CalculatedMarket> = {
   alignEnd: true,
   width: "w-[14%]",
   formatter: (market) => {
+    const symbol = market.payoutToken.symbol;
+
     return {
-      value:
-        longFormatter.format(parseFloat(market.maxPayout)) +
-        " " +
-        market.payoutToken.symbol,
-      subtext: !isNaN(market.maxPayoutUsd)
-        ? usdFormatter.format(market.maxPayoutUsd)
-        : "Unknown",
+      value: (
+        <>
+          {longFormatter.format(parseFloat(market.maxPayout))}{" "}
+          <TrimmedTextContent text={symbol} />
+        </>
+      ),
+      subtext:
+        !isNaN(market.maxPayoutUsd) && market.maxPayoutUsd
+          ? usdFormatter.format(market.maxPayoutUsd)
+          : "Unknown",
       sortValue: market.maxPayoutUsd,
     };
   },

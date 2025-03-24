@@ -1,6 +1,7 @@
 import { Icon } from "ui";
 import arbitrum from "assets/icons/arbitrum.svg";
 import repeatIcon from "assets/icons/loop.svg";
+import { getIconsForChains } from "src/utils/get-icons-for-chains";
 
 type ChainButtonProps = {
   onClick: () => void;
@@ -12,6 +13,8 @@ type ChainButtonProps = {
   };
 };
 export const ChainButton = ({ iconWidth = 32, ...props }: ChainButtonProps) => {
+  const { logoUrl } = getIconsForChains(props.chain);
+
   return (
     <div onClick={props.onClick}>
       <Icon
@@ -22,7 +25,7 @@ export const ChainButton = ({ iconWidth = 32, ...props }: ChainButtonProps) => {
         src={
           props.chain.id === 421613 //TODO: remove goerli arb icon hack
             ? arbitrum
-            : props.chain.iconUrl ?? repeatIcon
+            : props.chain.iconUrl ?? logoUrl ?? repeatIcon
         }
       />
     </div>

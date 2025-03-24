@@ -1,4 +1,4 @@
-import { useMarkets } from "context/market-context";
+import { useMarkets } from "hooks";
 import { Filter, PaginatedTable } from "ui";
 import { viewColumn } from "./columns";
 import { closedMarketColumns } from "./UserMarketList";
@@ -31,7 +31,7 @@ export const ClosedMarketList = () => {
 
   return (
     <PaginatedTable
-      filters={filters}
+      hideSearchbar
       title="Past Markets"
       defaultSort="conclusion"
       columns={tableColumns}

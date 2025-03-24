@@ -3,6 +3,7 @@ import {
   MarketPricing,
 } from "@bond-protocol/contract-library";
 import { CalculatedMarket } from "@bond-protocol/types";
+import { add } from "date-fns";
 
 import { dateMath, formatCurrency, formatDate } from "ui";
 
@@ -35,7 +36,7 @@ export const useMarketDetails = (market: CalculatedMarket) => {
 
   const vestingLabel =
     market.vestingType === "fixed-term"
-      ? market.formatted.longVesting
+      ? formatDate.short(add(Date.now(), { seconds: market.vesting }))
       : vestingDate;
 
   const startDate = market.start && new Date(market.start * 1000);
@@ -47,8 +48,8 @@ export const useMarketDetails = (market: CalculatedMarket) => {
 
   const discountLabel =
     !isNaN(market.discount) &&
-    market.discount !== Infinity &&
-    market.discount !== -Infinity
+    isFinite(market.discount) &&
+    market.discount < 100
       ? formatCurrency.trimToken(market.discount).concat("%")
       : "Unknown";
 

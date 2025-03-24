@@ -21,28 +21,18 @@ type MarketListProps = {
   hideSearchbar?: boolean;
   title?: string;
   filters?: Filter[];
+  hideUnknownMarkets?: boolean;
 };
 
-const defaultFilters: Filter[] = [
-  {
-    id: "discount",
-    label: "Hide Negative Discounts",
-    type: "switch",
-    handler: (market: CalculatedMarket) =>
-      Number(market.discount) >= 0 || isNaN(market.discount),
-  },
-  {
-    id: "unknown",
-    label: "Hide Unknown Discounts",
-    type: "switch",
-    handler: (market: CalculatedMarket) => isFinite(market.discount),
-  },
-];
+function onlyKnownDiscount(market: CalculatedMarket) {
+  return isFinite(market.discount);
+}
 
 export const MarketList: FC<MarketListProps> = ({
   allowManagement,
   token,
   filters = [],
+  hideUnknownMarkets,
   ...props
 }) => {
   const { isTabletOrMobile } = useMediaQueries();
@@ -51,9 +41,9 @@ export const MarketList: FC<MarketListProps> = ({
   const isEmbed = useIsEmbed();
   const markets = props.owner ? getMarketsForOwner(props.owner) : allMarkets;
 
-  const filteredMarkets = markets.filter(
-    (m: CalculatedMarket) => !token || m.payoutToken.address === token
-  );
+  const filteredMarkets = markets
+    .filter((m: CalculatedMarket) => !token || m.payoutToken.address === token)
+    .filter((m) => !hideUnknownMarkets || onlyKnownDiscount(m));
 
   const isSomeLoading = Object.values(isLoading).some((loading) => loading);
 
@@ -63,34 +53,32 @@ export const MarketList: FC<MarketListProps> = ({
     onClick: () => navigate("/create"),
   };
 
-  const allFilters = [...defaultFilters, ...filters];
-
   let columns = token ? tokenColumns : tableColumns;
   columns = isEmbed ? embedColumns : columns;
   columns = isTabletOrMobile ? mobileColumns : columns;
 
   return (
-    <PaginatedTable
-      title={props.title}
-      loading={isSomeLoading}
-      hideSearchbar={props.hideSearchbar || isTabletOrMobile || isEmbed}
-      disableSearch={isEmbed}
-      filterText={props.filterText}
-      defaultSort="discount"
-      columns={columns}
-      filters={isEmbed ? [] : allFilters}
-      data={filteredMarkets}
-      onClickRow={(market: CalculatedMarket) => {
-        window.scrollTo(0, 0);
-        navigate(
-          `${isEmbed ? "/embed" : ""}/market/${market.chainId}/${
-            market.marketId
-          }`
-        );
-      }}
-      fallback={
-        isTabletOrMobile || isEmbed ? { title: fallback.title } : fallback
-      }
-    />
+    <div className="flex flex-col">
+      <PaginatedTable
+        title={props.title}
+        loading={isSomeLoading}
+        hideSearchbar
+        disableSearch
+        defaultSort="discount"
+        columns={columns}
+        data={filteredMarkets}
+        onClickRow={(market: CalculatedMarket) => {
+          window.scrollTo(0, 0);
+          navigate(
+            `${isEmbed ? "/embed" : ""}/market/${market.chainId}/${
+              market.marketId
+            }`
+          );
+        }}
+        fallback={
+          isTabletOrMobile || isEmbed ? { title: fallback.title } : fallback
+        }
+      />
+    </div>
   );
 };

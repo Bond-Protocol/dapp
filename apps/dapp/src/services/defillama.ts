@@ -1,6 +1,6 @@
 import { sub, getUnixTime } from "date-fns";
 import { generateFetcher } from "./custom-queries";
-import { MAINNETS } from "context/blockchain-provider";
+import { MAINNETS } from "src/config/chains";
 import { Address } from "viem";
 
 export const DEFILLAMA_ENDPOINT = "https://coins.llama.fi";
@@ -35,7 +35,7 @@ export interface DefillamaChart extends Omit<DefillamaCurrentPrice, "price"> {
 export const fetchPrice = async (
   address: string | string[],
   chainId?: number
-): Promise<Array<DefillamaChart>> => {
+): Promise<Array<DefillamaCurrentPrice>> => {
   const ids = Array.isArray(address)
     ? address.join(",")
     : `${getNameFromChainId(Number(chainId))}:${address}`;

@@ -5,16 +5,16 @@ import { PageHeader } from "components/common";
 import { useEffect, useState } from "react";
 import { meme } from "src/utils/words";
 import { Token, chainLogos } from "@bond-protocol/types";
-import { numericSort } from "services";
-import { useSubgraph } from "hooks/useSubgraph";
 import { environment } from "src/environment";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
+import { useGetGlobalData } from "hooks/useGetGlobalData";
 
 export const TokenList = () => {
   const { isTabletOrMobile } = useMediaQueries();
   const { tbv, payoutTokens } = useTokens();
   const navigate = useNavigate();
-  const { totalPurchases, uniqueBonders } = useSubgraph();
+  const { data } = useGetGlobalData();
+  const { totalPurchases, uniqueBonders } = data;
 
   const scrollUp = () => window.scrollTo(0, 0);
 
@@ -38,11 +38,9 @@ export const TokenList = () => {
     setTokens(
       sortTokens((t1: Token, t2: Token) => {
         if (t1.markets?.length === t2.markets?.length) {
-          // @ts-ignore
-          return numericSort(t1.tbv, t2.tbv, false);
+          return Number(t2.tbv) - Number(t2.tbv);
         }
-        // @ts-ignore
-        return numericSort(t1.markets?.length, t2.markets?.length, false);
+        return Number(t2.markets?.length) - Number(t1.markets?.length);
       })
     );
   }, [payoutTokens]);
@@ -68,7 +66,7 @@ export const TokenList = () => {
   const bonderTitle = isTabletOrMobile ? "BONDERS" : "UNIQUE BONDERS";
 
   return (
-    <div className="pb-4">
+    <div id="__ROOT_PAGE__" className="pb-4">
       <PageHeader title={title} />
       <div className="grid grid-cols-2 grid-rows-2 gap-4 pb-10 pt-4 md:flex">
         <InfoLabel

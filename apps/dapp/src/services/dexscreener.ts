@@ -9,6 +9,7 @@ const chains: Record<number, string> = {
   5: "ethereum",
   421613: "arbitrum",
   420: "optimism",
+  56: "bsc",
 };
 
 export const getLiquidity = async ({
@@ -22,11 +23,7 @@ export const getLiquidity = async ({
 
   if (response?.pairs?.length) {
     return response.pairs
-      .filter((p: any) => {
-        const chain = chains[chainId];
-
-        return p.chainId === chain;
-      })
+      .filter((p: any) => p.chainId === chains[chainId])
       .reduce(
         (total: any, p: any) => {
           total.liquidityUSD += p.liquidity?.usd ?? 0;
