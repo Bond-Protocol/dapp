@@ -169,7 +169,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     </>
   );
 
-  const blockExplorer = getBlockExplorer(state.chainId);
   const txBlockExplorer = getBlockExplorer(state.chainId, "tx");
 
   return (
