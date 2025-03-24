@@ -1,5 +1,11 @@
 # dapp
 
+## 0.2.0
+
+### Minor Changes
+
+- add feature toggles for limit orders and oracle bonds
+
 ## 0.1.4
 
 ### Patch Changes
