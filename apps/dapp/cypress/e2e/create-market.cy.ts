@@ -17,15 +17,17 @@ describe("Create Bond Market", () => {
 
   it("Should be able to create a bond market", () => {
     cy.visit(URLS.CREATE);
+
+    cy.wait(1000);
+    cy.get(COMPONENTS.CREATE_MARKET.VESTING).click();
+    cy.contains("7 days").trigger("click");
+
     cy.get(COMPONENTS.CREATE_MARKET.PAYOUT_TOKEN).click();
 
     const payoutInput = cy.get(COMPONENTS.CREATE_MARKET.TOKEN_ADDRESS);
     cy.wait(1000); //TODO: immediately typing results in rerendering
     payoutInput.type(TOKEN_ADDRESSES.PAYOUT);
     cy.get(COMPONENTS.CREATE_MARKET.TOKEN_IMPORT_BUTTON).click();
-
-    cy.get(COMPONENTS.CREATE_MARKET.VESTING).click();
-    cy.contains("7 days").click();
 
     cy.get(COMPONENTS.CREATE_MARKET.QUOTE_TOKEN).click();
     cy.contains("USDC").click();
