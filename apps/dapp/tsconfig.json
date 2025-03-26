@@ -1,5 +1,5 @@
 {
-  "extends": "tsconfig/vite.json",
+  "extends": "@bond-protocol/tsconfig/vite.json",
   "compilerOptions": {
     "baseUrl": ".",
     "experimentalDecorators": true,
@@ -23,7 +23,7 @@
   "include": [
     "src",
     "src/**/*.json",
-    ".eslintrc.js",
+    ".eslintrc.json",
     "./codegen.ts",
     "cypress"
   ],

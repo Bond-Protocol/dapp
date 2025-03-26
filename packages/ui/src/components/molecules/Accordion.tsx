@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-icon.svg";
+import ArrowIcon from "../../assets/icons/arrow-icon.svg?react";
 
 export const Accordion: FC<{
   children: React.ReactNode;

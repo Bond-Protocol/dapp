@@ -1,4 +1,4 @@
-import { ReactComponent as CheckmarkIcon } from "assets/icons/checkmark.svg";
+import CheckmarkIcon from "../../assets/icons/checkmark.svg?react";
 import { useState } from "react";
 
 export type CheckboxProps = {
@@ -51,7 +51,7 @@ export const Checkbox = ({
         </div>
       </div>
       {label && (
-        <p className={"pl-2 text-sm mt-1" + " " + labelClassname}>{label}</p>
+        <p className={"mt-1 pl-2 text-sm" + " " + labelClassname}>{label}</p>
       )}
     </div>
   );

@@ -1,4 +1,4 @@
-import type { Token } from "types";
+import type { Token } from "@bond-protocol/types";
 import { useQuery } from "@tanstack/react-query";
 import { getTokenPriceHistory } from "services";
 

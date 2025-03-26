@@ -1,6 +1,6 @@
-import { abis } from "abis";
+import { abis } from "../abis";
 import { ContractAddresses } from "./address-provider";
-import { BondType } from "types";
+import { BondType } from "@bond-protocol/types";
 
 export enum Auctioneer {
   BondFixedExpCDA = "BondFixedExpCDA",

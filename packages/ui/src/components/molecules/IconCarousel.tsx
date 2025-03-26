@@ -1,4 +1,4 @@
-import { Icon, IconProps } from "components/atoms";
+import { Icon, IconProps } from "../../components/atoms";
 
 export type IconCarouselProps = {
   icons: IconProps & { id: string }[];

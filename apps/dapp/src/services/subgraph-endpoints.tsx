@@ -1,9 +1,9 @@
 import { UseQueryResult, useQueries } from "@tanstack/react-query";
 import { environment } from "src/environment";
 import { mainnetSubgraphs, testnetSubgraphs } from "src/config";
-import { CHAIN_ID } from "types";
 import { Variables } from "graphql-request";
 import { queryAllEndpoints } from "src/utils/queryAllEndpoints";
+import { CHAIN_ID } from "@bond-protocol/types";
 
 /**List of available subgraph endpoint urls indexed by chain*/
 export const subgraphEndpoints = {

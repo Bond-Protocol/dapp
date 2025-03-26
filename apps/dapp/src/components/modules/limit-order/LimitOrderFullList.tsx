@@ -12,7 +12,7 @@ import {
   formatDate,
   Label,
 } from "ui";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { useNavigate } from "react-router-dom";
 import { getDiscountPercentage } from "../create-market";
 import { formatUnits } from "viem";

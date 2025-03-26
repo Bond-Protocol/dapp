@@ -1,5 +1,5 @@
-import { Token } from "types";
-import { Button, Label } from "components/atoms";
+import { Token } from "@bond-protocol/types";
+import { Button, Label } from "../atoms";
 
 export interface ImportTokenDialogProps {
   token?: Token;

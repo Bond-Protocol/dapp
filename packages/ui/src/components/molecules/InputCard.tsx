@@ -1,6 +1,6 @@
 import { Input } from "../atoms/Input";
 import { TokenLogo } from "..";
-import { formatCurrency } from "src/utils";
+import { formatCurrency } from "../../utils";
 import { InputUnstyledProps } from "@mui/base";
 
 export type InputCardProps = {

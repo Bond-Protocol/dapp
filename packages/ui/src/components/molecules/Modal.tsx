@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import ModalUnstyled from "@mui/base/ModalUnstyled";
-import { ReactComponent as CloseIcon } from "../../assets/icons/close-icon.svg";
+import CloseIcon from "../../assets/icons/close-icon.svg?react";
 import { ClickAwayListener } from "@mui/base";
 
 type ModalHeaderProps = {

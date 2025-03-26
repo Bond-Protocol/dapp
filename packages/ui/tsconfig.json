@@ -1,51 +1,13 @@
 {
-  "extends": "tsconfig/react-library.json",
+  "extends": "@bond-protocol/tsconfig/react-library.json",
   "compilerOptions": {
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "cypress"
-    ],
-    "paths": {
-      "src/*": [
-        "./src/*"
-      ],
-      "components/*": [
-        "./src/components/*"
-      ],
-      "components": [
-        "./src/components/index"
-      ],
-      "hooks/*": [
-        "./src/hooks/*"
-      ],
-      "assets/*": [
-        "./src/assets/*"
-      ],
-      "assets": [
-        "./src/assets/index"
-      ],
-      "utils": [
-        "./src/utils/index"
-      ],
-      "utils/*": [
-        "./src/utils/*"
-      ]
-    }
+    "types": ["cypress"]
   },
-  "include": [
-    "src",
-    "src/main.d.ts",
-    "src/cypress.d.ts",
-    ".storybook"
-  ],
-  "exclude": [
-    "dist",
-    "build",
-    "node_modules",
-    "src/**/*.cy.*",
-  ]
+  "include": ["src", "src/main.d.ts", "src/cypress.d.ts", ".storybook"],
+  "exclude": ["dist", "build", "node_modules", "src/**/*.cy.*"]
 }

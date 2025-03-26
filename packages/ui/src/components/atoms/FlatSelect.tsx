@@ -33,7 +33,7 @@ export const FlatSelect = (props: FlatSelectProps) => {
         {props.options.map((option, i) => (
           <ButtonUnstyled
             key={i}
-            onClick={(e) => {
+            onClick={(e: any) => {
               e.preventDefault();
               e.stopPropagation();
               handleChange(option.value);

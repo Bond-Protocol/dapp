@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { BondPriceLabel } from "components/common/BondPriceLabel";
 import { BondPurchaseCard } from "components/organisms";
 import { useMarkets } from "hooks";

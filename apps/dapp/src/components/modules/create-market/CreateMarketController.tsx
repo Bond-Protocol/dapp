@@ -7,7 +7,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import * as contractLib from "@bond-protocol/contract-library";
-import { BondType, CHAIN_ID, CreateMarketParams } from "types";
+import { BondType, CHAIN_ID, CreateMarketParams } from "@bond-protocol/types";
 import {
   checkOraclePairValidity,
   getBlockExplorer,

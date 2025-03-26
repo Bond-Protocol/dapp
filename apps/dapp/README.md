@@ -3,16 +3,16 @@
 ## Dev setup (for now)
 
 ```bash
-yarn install && yarn build --filter=dapp
+pnpm install
 
 #Running
-yarn dev
+pnpm dev
 
 #Other Commands
 #Building for prod
-yarn build --filter=dapp
+pnpm build
 #Serve prod/compiled code locally
-yarn preview
+pnpm preview
 ```
 
 > [!WARNING]
@@ -31,11 +31,11 @@ E2E tests are setup using cypress and require a running foundry/anvil node.
 ### Test Commands
 
 ```sh
-yarn test # Starts app server, local node and runs the full test suite in headless mode
+pnpm test # Starts app server, local node and runs the full test suite in headless mode
 
-yarn local-rpc # Starts local node with existing chain state
-yarn test:run # Headless mode
-yarn test:open # Open browser mode -- useful for development
+pnpm local-rpc # Starts local node with existing chain state
+pnpm test:run # Headless mode
+pnpm test:open # Open browser mode -- useful for development
 ```
 
 ### New Chain Deployment Setup

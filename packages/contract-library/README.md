@@ -5,11 +5,11 @@ contract-library is a library for building applications that can interact with t
 ## Setup for Local Development
 
 ```sh
-    yarn;
-    yarn dev;
+    pnpm;
+    pnpm dev;
 
     ## Or at monorepo root
-    yarn dev --filter=@bond-protocol/contract-library
+    pnpm dev --filter=@bond-protocol/contract-library
 ```
 
 #### Adding more abis
@@ -18,7 +18,7 @@ Add the abi json to `src/abis/sources` and name it in `src/abis/abi-map`
 then run `make:abis`
 
 ```sh
-    yarn && yarn dev
+    pnpm && pnpm dev
 ```
 
 ## License

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { PageHeader } from "components/common";
 import { useEffect, useState } from "react";
 import { meme } from "src/utils/words";
-import { Token, chainLogos } from "types";
+import { Token, chainLogos } from "@bond-protocol/types";
 import { environment } from "src/environment";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import { useGetGlobalData } from "hooks/useGetGlobalData";

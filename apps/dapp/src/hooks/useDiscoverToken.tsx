@@ -1,4 +1,4 @@
-import { Token, TokenBase } from "types";
+import { Token, TokenBase } from "@bond-protocol/types";
 import defillama from "services/defillama";
 import coingecko from "services/coingecko";
 import axios from "axios";

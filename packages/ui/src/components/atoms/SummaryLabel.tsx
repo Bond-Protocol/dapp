@@ -1,4 +1,4 @@
-import { Link, TokenLogo, TooltipIcon, TooltipWrapper } from "components/atoms";
+import { Link, TokenLogo, TooltipIcon, TooltipWrapper } from "../../";
 
 export const SummaryLabel = (props: {
   center?: boolean;

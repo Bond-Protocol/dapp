@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { BondPriceChart } from "components/organisms/BondPriceChart";
 import { formatDate, SummaryLabel } from "ui";
 import { BondPurchaseController } from "./BondPurchaseController";

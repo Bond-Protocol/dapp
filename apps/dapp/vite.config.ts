@@ -2,9 +2,9 @@ import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { execSync } from "child_process";
 import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import nodePolyfills from "rollup-plugin-polyfill-node";
-
 /***
  * DO NOT REMOVE THE POLYFILLS WITHOUT TESTING RAINBOWKIT THOROUGHLY, ESPECIALLY THE RAINBOW/WALLETCONNECT/COINBASE QR CODES
  * (ALTHOUGH I THINK REMOVING IT MIGHT HAVE BROKEN METAMASK IN THE PAST TOO)
@@ -15,8 +15,7 @@ import nodePolyfills from "rollup-plugin-polyfill-node";
  * BUT UNTIL THEN PLEASE DO NOT REMOVE THEM
  ***/
 
-const commitHash = require("child_process")
-  .execSync("git rev-parse --short HEAD")
+const commitHash = execSync("git rev-parse --short HEAD")
   .toString()
   .slice(0, 7);
 
@@ -27,6 +26,7 @@ export default defineConfig({
   define: {
     __COMMIT_HASH__: JSON.stringify(commitHash),
   },
+
   build: {
     outDir: "../dist",
     target: ["es2020"],

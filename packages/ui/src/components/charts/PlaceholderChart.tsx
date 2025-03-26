@@ -1,5 +1,5 @@
 import { BondPriceChart } from "./BondPriceChart";
-import { ReactComponent as ChartIcon } from "assets/icons/chart-large.svg";
+import ChartIcon from "../../assets/icons/chart-large.svg?react";
 import mockData from "./mock-chart-data";
 
 export const PlaceholderChart = ({

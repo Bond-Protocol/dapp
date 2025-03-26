@@ -5,7 +5,7 @@ import {
   trim,
   trimAsNumber,
 } from "@bond-protocol/contract-library";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { BondPurchase } from "src/generated/graphql";
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFullFormatter } from "formatters";

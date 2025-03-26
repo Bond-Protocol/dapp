@@ -1,4 +1,4 @@
-import { CalculatedMarket, chainLogos } from "types";
+import { CalculatedMarket, chainLogos } from "@bond-protocol/types";
 import {
   Button,
   Column,
@@ -10,7 +10,7 @@ import {
   PaginatedTable,
   StatusChip,
 } from "ui";
-import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
+import ArrowIcon from "../../assets/icons/arrow-left.svg?react";
 import { CloseMarket } from "components";
 import { useNavigate } from "react-router-dom";
 import { useDashboard } from "hooks";

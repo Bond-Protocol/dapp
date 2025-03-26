@@ -1,11 +1,9 @@
+import { CalculatedMarket } from "@bond-protocol/types";
 import { useQueries } from "@tanstack/react-query";
 import { GetGlobalDataQuery } from "src/generated/graphql";
 import { useTokens } from "hooks";
 import { clients } from "context/blockchain-provider";
-import {
-  CalculatedMarket,
-  calculateMarket as calculateBondMarket,
-} from "@bond-protocol/contract-library";
+import { calculateMarket as calculateBondMarket } from "@bond-protocol/contract-library";
 import { Address } from "viem";
 import { useGetGlobalData } from "./useGetGlobalData";
 

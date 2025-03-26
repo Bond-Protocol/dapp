@@ -7,9 +7,9 @@ import {
   SummaryRow,
   Tooltip,
 } from "ui";
-import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
-import { ReactComponent as Timer } from "assets/icons/timer.svg";
-import { ReactComponent as Clipboard } from "assets/icons/copy-icon.svg";
+import Arrow from "assets/icons/arrow-icon.svg?react";
+import Timer from "assets/icons/timer.svg?react";
+import Clipboard from "assets/icons/copy-icon.svg?react";
 import {
   calculateTrimDigits,
   dynamicFormatter,

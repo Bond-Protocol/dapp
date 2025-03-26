@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { Order } from "src/types/openapi";
 import { useQuery } from "wagmi";
 import { useAuth } from "./use-auth";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Checkbox, Input } from "components";
-import { useNumericInput } from "hooks/use-numeric-input";
+import { Checkbox, Input } from "../..";
+import { useNumericInput } from "../../..";
 
 const VestingWarning = ({ value }: { value: string }) => (
   <div>

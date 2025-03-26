@@ -1,4 +1,4 @@
-import { Link } from "components/atoms";
+import { Link } from "../../components/atoms";
 
 export type TransactionHashDialogProps = {
   content?: string | React.ReactNode;

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { FlatSelect, Switch, TooltipWrapper } from "ui";
-import { ReactComponent as SawLineIcon } from "assets/icons/saw-line.svg";
-import { ReactComponent as LineIcon } from "assets/icons/line.svg";
-import { ReactComponent as AngleIcon } from "assets/icons/angle.svg";
+import SawLineIcon from "assets/icons/saw-line.svg?react";
+import LineIcon from "assets/icons/line.svg?react";
+import AngleIcon from "assets/icons/angle.svg?react";
 import { PriceModelDetails } from "./PriceModelDetails";
 import { PriceModel, PriceType } from "./create-market-reducer";
 import { PriceControl, PriceControlProps } from "./PriceControl";
@@ -153,6 +153,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
 
       <FlatSelect
         className="mt-2"
+        //@ts-ignore
         options={options}
         onChange={(e: PriceType) => setType(e)}
       />

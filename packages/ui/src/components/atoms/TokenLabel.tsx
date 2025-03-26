@@ -1,4 +1,4 @@
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 
 export type TokenLabelProps = {
   label: string;

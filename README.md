@@ -7,7 +7,7 @@ Clone repo and:
 ### Setup
 
 ```bash
-yarn && yarn build
+pnpm && pnpm build
 ```
 
 ### Dev Mode
@@ -15,7 +15,7 @@ yarn && yarn build
 You should use the flag `--filter=<package_name>` to run commands only on a specific package like:
 
 ```bash
-yarn dev --filter=dapp
+pnpm dev --filter=dapp
 ```
 
 This would only run the `dapp` package on dev mode while using the built code from other dependencies like the ui or contract-library, making reloading faster
@@ -23,7 +23,7 @@ This would only run the `dapp` package on dev mode while using the built code fr
 This command can also be chained like:
 
 ```bash
-yarn dev --filter=dapp --filter=ui
+pnpm dev --filter=dapp --filter=ui
 ```
 
 ### Test Mode
@@ -31,14 +31,14 @@ yarn dev --filter=dapp --filter=ui
 To simply run tests use
 
 ```bash
-yarn test
+pnpm test
 ```
 
 For developing tests or debugging its useful to have the cypress dashboard, open it with:
 
 ```bash
 cd apps/dapp
-yarn test:open
+pnpm test:open
 ```
 
 ## Useful Links

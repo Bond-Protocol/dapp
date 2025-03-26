@@ -18,7 +18,7 @@ import { BondButton } from "components/organisms/BondButton";
 import { useLimitOrderForMarket } from "./use-limit-order";
 import { LimitOrderConfirmationDialog } from "./LimitOrderConfirmationDialog";
 
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 
 const selectExpiryOptions = [
   { label: "1 day", id: 1 },

@@ -2,7 +2,7 @@ import {
   encodeCreateMarketParams,
   getAuctioneerForCreate,
 } from "@bond-protocol/contract-library";
-import { BondType } from "types";
+import { BondType } from "@bond-protocol/types";
 import { useContractWrite } from "wagmi";
 import {
   getBondType,

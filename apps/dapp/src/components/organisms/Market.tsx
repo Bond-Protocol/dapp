@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { useMarkets } from "hooks";
-import { CalculatedMarket } from "types";
 import { PageHeader, PageNavigation } from "components/common";
 import { InfoLabel, Loading } from "ui";
 import { TransactionHistory } from "components/lists";
@@ -9,9 +9,6 @@ import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { MarketStatusChip } from "components/common/MarketStatusChip";
-import { useTokenLiquidity } from "hooks/useTokenLiquidity";
-import { LiqudityWarning } from "components/modules/markets/LiquidityWarning";
-import { environment } from "src/environment";
 
 export const Market = () => {
   const navigate = useNavigate();

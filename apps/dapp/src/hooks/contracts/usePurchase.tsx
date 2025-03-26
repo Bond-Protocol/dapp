@@ -10,7 +10,7 @@ import {
   getBaseTeller,
 } from "@bond-protocol/contract-library";
 import { parseUnits } from "viem";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { clients } from "context/blockchain-provider";
 
 type PurchaseArgs = {

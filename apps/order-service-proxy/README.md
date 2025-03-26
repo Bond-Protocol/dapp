@@ -1,3 +1,3 @@
 ## Order Service Proxy
 
-Run `yarn dev` to run the server
+Run `pnpm dev` to run the server

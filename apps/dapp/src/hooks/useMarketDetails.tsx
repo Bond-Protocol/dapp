@@ -2,8 +2,8 @@ import {
   getMarketTypeByAuctioneer,
   MarketPricing,
 } from "@bond-protocol/contract-library";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { add } from "date-fns";
-import { CalculatedMarket } from "types";
 
 import { dateMath, formatCurrency, formatDate } from "ui";
 

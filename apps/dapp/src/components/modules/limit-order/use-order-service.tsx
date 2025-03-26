@@ -1,4 +1,4 @@
-import { TokenBase } from "types";
+import { TokenBase } from "@bond-protocol/types";
 import { ACTIVE_CHAIN_IDS } from "src/config/chains";
 import { useQueries } from "@tanstack/react-query";
 import { orderService } from "services/order-service";

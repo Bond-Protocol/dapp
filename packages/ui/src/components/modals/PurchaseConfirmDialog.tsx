@@ -1,9 +1,9 @@
-import { ButtonGroup } from "components/molecules/ButtonGroup";
-import { Checkbox, Link, SummaryLabel } from "components/atoms";
-import { ReactComponent as Arrow } from "assets/icons/arrow-icon.svg";
+import { ButtonGroup } from "../../components/molecules/ButtonGroup";
+import { Checkbox, Link, SummaryLabel } from "../../components/atoms";
+import Arrow from "../../assets/icons/arrow-icon.svg?react";
 import { SummaryList, SummaryRow } from "../molecules";
 import { useState } from "react";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { formatCurrency } from "formatters";
 
 export type PurchaseConfirmDialogProps = {

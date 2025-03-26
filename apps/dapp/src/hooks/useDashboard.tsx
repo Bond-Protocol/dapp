@@ -5,7 +5,7 @@ import {
 } from "@bond-protocol/contract-library";
 import { useAccount } from "wagmi";
 import { dateMath } from "ui";
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 import { useQuery } from "@tanstack/react-query";
 import { useGetSubgraphQueries } from "services";
 import { clients } from "context";

@@ -1,4 +1,4 @@
-import { ButtonGroup } from "components/molecules/ButtonGroup";
+import { ButtonGroup } from "../../components/molecules/ButtonGroup";
 
 export type PurchaseSuccessDialogProps = {
   issuer?: string;

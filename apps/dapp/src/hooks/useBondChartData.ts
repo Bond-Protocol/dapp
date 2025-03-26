@@ -4,7 +4,7 @@ import {
   Market,
   useListBondPurchasesPerMarketQuery,
 } from "../generated/graphql";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { getClosest } from "../utils";
 import type { BondPriceDatapoint } from "ui";
 import { calcDiscountPercentage } from "../utils/calculate-percentage";
