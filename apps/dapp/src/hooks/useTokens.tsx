@@ -203,9 +203,9 @@ export const useTokens = () => {
 
 /** * Adds tokenlists' tokens information to tokens from others sources */
 function matchTokens(
-  tokens: TokenBase[] = [],
+  tokens: Token[] = [],
   tokenlist: TokenlistToken[] = []
-) {
+): Token[] {
   if (tokens.length === 0 || tokenlist.length === 0) return tokens;
   return tokens.map((baseToken) => {
     const tokenlistToken = tokenlist.find(

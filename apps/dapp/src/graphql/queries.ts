@@ -231,6 +231,7 @@ export const listBondPurchasesPerMarket = gql`
       timestamp
       purchasePrice
       postPurchasePrice
+      chainId
       quoteToken {
         id
         name

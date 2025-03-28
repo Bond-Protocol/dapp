@@ -4,11 +4,11 @@ import { CalculatedMarket } from "@bond-protocol/types";
 import { useMarkets } from "hooks";
 import { PageHeader, PageNavigation } from "components/common";
 import { InfoLabel, Loading } from "ui";
-import { TransactionHistory } from "components/lists";
 import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { MarketStatusChip } from "components/common/MarketStatusChip";
+import { MarketTransactionHistory } from "components/lists/transactions/MarketTransactionHistory";
 
 export const Market = () => {
   const navigate = useNavigate();
@@ -119,7 +119,7 @@ export const Market = () => {
 
       <BondCard market={market} isFutureMarket={isFutureMarket} />
       {!isFutureMarket && (
-        <TransactionHistory className="mt-20" market={market} />
+        <MarketTransactionHistory className="mt-20" market={market} />
       )}
     </div>
   );
