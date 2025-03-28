@@ -3,7 +3,6 @@ import {
   getBalance,
   trim,
 } from "@bond-protocol/contract-library";
-import { useAccount } from "wagmi";
 import { dateMath } from "ui";
 import { Token } from "@bond-protocol/types";
 import { useQuery } from "@tanstack/react-query";
@@ -16,7 +15,8 @@ import {
 } from "../generated/graphql";
 import { concatSubgraphQueryResultArrays } from "../utils/concatSubgraphQueryResultArrays";
 import { useTokens } from "hooks";
-import axios from "axios";
+import { useBondPurchasesByAddress } from "src/data/useBondPurchasesByAddress";
+import { useAccount } from "wagmi";
 
 export type DetailedBondPurchase = BondPurchase & {
   txUrl: string;
@@ -26,16 +26,9 @@ export type DetailedBondPurchase = BondPurchase & {
 };
 
 const currentTime = Math.trunc(Date.now() / 1000);
-
-const API_ENDPOINT = import.meta.env.VITE_API_URL;
-
-type BondPurchaseQuery = {
-  bondPurchases: DetailedBondPurchase;
-  tbvUsd: number;
-};
-
 export const useDashboard = () => {
   const { address } = useAccount();
+
   const tokens = useTokens();
 
   const { queries: dashboardData, ...dashboardQuery } =
@@ -83,14 +76,7 @@ export const useDashboard = () => {
     },
   });
 
-  const bondPurchasesQuery = useQuery({
-    enabled: !!address,
-    queryKey: ["dashboard/bond-purchases", address],
-    queryFn: () =>
-      axios
-        .get<BondPurchaseQuery>(API_ENDPOINT + `users/${address}/bondPurchases`)
-        .then((r) => r.data),
-  });
+  const bondPurchaseQuery = useBondPurchasesByAddress();
 
   const dashboardProcessingQuery = useQuery({
     enabled: bondBalanceQuery.isSuccess && !tokens.isLoading,
@@ -106,11 +92,6 @@ export const useDashboard = () => {
       const uniqueBonderCounts = concatSubgraphQueryResultArrays(
         dashboardData,
         "uniqueBonderCounts"
-      );
-
-      const bondPurchases = concatSubgraphQueryResultArrays(
-        dashboardData,
-        "bondPurchases"
       );
 
       const erc20OwnerBalances = bondBalanceQuery.data;
@@ -166,7 +147,6 @@ export const useDashboard = () => {
       );
 
       return {
-        bondPurchases,
         ownerBalances: updatedBonds,
         userClaimable,
         allMarkets: markets,
@@ -218,29 +198,29 @@ export const useDashboard = () => {
     },
   });
 
-  // const { data: tbv = 0 } = useQuery({
-  //   queryKey: ["dashboard/tbv", address],
-  //   enabled: dashboardProcessingQuery.isSuccess && !tokens.isLoading,
-  //   queryFn: () => {
-  //     return dashboardProcessingQuery.data?.bondPurchases.reduce((total, p) => {
-  //       const token = tokens.getByAddress(p.quoteToken.address.toLowerCase());
+  const { data: tbv = 0 } = useQuery({
+    queryKey: ["dashboard/tbv", address],
+    enabled: !bondPurchaseQuery.isLoading && tokens.fetchedExtendedDetails,
+    queryFn: () => {
+      return bondPurchaseQuery.data?.bondPurchases?.reduce((total, p) => {
+        const token = tokens.getByAddress(p.quoteToken.address.toLowerCase());
 
-  //       if (!token || !token.price) return total;
+        if (!token || !token.price) return total;
 
-  //       return (total += token.price * p.amount);
-  //     }, 0);
-  //   },
-  // });
+        return (total += token.price * p.amount);
+      }, 0);
+    },
+  });
 
   return {
     allMarkets,
     isLoading:
       !dashboardProcessingQuery.isFetched || dashboardProcessingQuery.isLoading,
     ownerBalances: dashboardProcessingQuery.data?.ownerBalances,
-    bondPurchases: bondPurchasesQuery.data?.bondPurchases ?? [],
+    bondPurchases: bondPurchaseQuery.data?.bondPurchases ?? [],
     bondsIssued: dashboardProcessingQuery.data?.bondsIssued,
     uniqueBonders: dashboardProcessingQuery.data?.uniqueBonders.count,
-    tbv: bondPurchasesQuery?.data?.tbvUsd ?? 0,
+    tbv: tbv, //bondPurchasesQuery?.data?.tbvUsd ?? 0,
     userClaimable: dashboardProcessingQuery.data?.userClaimable ?? 0,
     currentMarkets: allMarkets.filter(
       (m) =>

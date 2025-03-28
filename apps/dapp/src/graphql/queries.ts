@@ -237,12 +237,56 @@ export const listBondPurchasesPerMarket = gql`
         name
         symbol
         address
+        decimals
+        chainId
       }
       payoutToken {
         id
         name
         symbol
         address
+        decimals
+        chainId
+      }
+    }
+  }
+`;
+
+export const listBondPurchasesByRecipient = gql`
+  query ListBondPurchasesForRecipient($address: String) {
+    bondPurchases(
+      first: 1000
+      where: { recipient_contains_nocase: $address }
+      orderBy: timestamp
+    ) {
+      id
+      recipient
+      payout
+      amount
+      timestamp
+      purchasePrice
+      postPurchasePrice
+      chainId
+      quoteToken {
+        id
+        chainId
+        address
+        name
+        symbol
+        address
+        decimals
+      }
+      payoutToken {
+        id
+        chainId
+        address
+        name
+        symbol
+        address
+        decimals
+      }
+      market {
+        id
       }
     }
   }

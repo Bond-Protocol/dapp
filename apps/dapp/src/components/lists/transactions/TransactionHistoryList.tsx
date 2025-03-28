@@ -167,13 +167,17 @@ const marketTxsHistory: Column<any>[] = [
   },
 ];
 
-import { ListBondPurchasesPerMarketQuery } from "src/generated/graphql";
+import {
+  ListBondPurchasesForRecipientQuery,
+  ListBondPurchasesPerMarketQuery,
+} from "src/generated/graphql";
 export type TransactionHistoryData =
-  ListBondPurchasesPerMarketQuery["bondPurchases"];
+  | ListBondPurchasesPerMarketQuery["bondPurchases"]
+  | ListBondPurchasesForRecipientQuery["bondPurchases"];
 
 export interface TransactionHistoryProps {
   title?: string;
-  market: CalculatedMarket | PastMarket;
+  market?: CalculatedMarket | PastMarket;
   data?: TransactionHistoryData;
   className?: string;
   type: "market" | "user";
@@ -181,14 +185,15 @@ export interface TransactionHistoryProps {
 
 export const TransactionHistory = ({
   data = [],
+  type = "market",
   ...props
 }: TransactionHistoryProps) => {
   const { isTabletOrMobile } = useMediaQueries();
-  const isMarketHistory = props.type === "market";
+  const isMarketHistory = type === "market";
 
   const tableData = data
     .map((p) => {
-      const chainId = isMarketHistory ? props.market.chainId : p.chainId;
+      const chainId = isMarketHistory ? props.market?.chainId : p.chainId;
 
       const { url: blockExplorerTxUrl } = getBlockExplorer(chainId, "tx");
       const { url: blockExplorerAddressUrl } = getBlockExplorer(

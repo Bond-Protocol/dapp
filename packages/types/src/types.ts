@@ -69,6 +69,11 @@ export interface PrecalculatedMarket {
   bondsIssued: number;
 }
 
+export type MarketTokenPair = {
+  quoteToken: Token;
+  payoutToken: Token;
+};
+
 export interface CalculatedMarket extends PrecalculatedMarket {
   marketId: number;
   discount: number;

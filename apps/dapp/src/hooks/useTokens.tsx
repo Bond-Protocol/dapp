@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import {
   CalculatedMarket,
+  MarketTokenPair,
   Token,
   TokenBase,
   TokenlistToken,
@@ -164,12 +165,12 @@ export const useTokens = () => {
     [quoteTokens]
   );
 
-  const matchMarketTokens = useCallback(
-    (market: CalculatedMarket) => {
-      const quoteToken = getTokenByAddressAndChain(market.quoteToken);
-      const payoutToken = getTokenByAddressAndChain(market.payoutToken);
+  const matchTokenPair = useCallback(
+    <T extends MarketTokenPair>(item: T): T => {
+      const quoteToken = getTokenByAddressAndChain(item.quoteToken);
+      const payoutToken = getTokenByAddressAndChain(item.payoutToken);
       return {
-        ...market,
+        ...item,
         quoteToken,
         payoutToken,
       };
@@ -195,7 +196,7 @@ export const useTokens = () => {
     getByAddressAndChain,
     getTokenlistBychain,
     addToken,
-    matchMarketTokens,
+    matchTokenPair,
     fetchedExtendedDetails: detailedTokensQuery.isSuccess,
     isLoading: query.isLoading,
   };
