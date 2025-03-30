@@ -27,3 +27,8 @@ export const loadBondPurchasesByAddress = async (
 
   return { bondPurchases: data?.bondPurchases };
 };
+
+export const loadTokens = async (tokenIds: string) => {
+  const response = await fetch(API_ENDPOINT + "tokens?tokens" + tokenIds);
+  return response.json();
+};
