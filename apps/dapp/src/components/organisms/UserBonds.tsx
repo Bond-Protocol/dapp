@@ -1,7 +1,7 @@
 import { useDashboard, useMediaQueries } from "hooks";
 import { formatCurrency, InfoLabel } from "ui";
 import { BondList, TransactionHistoryData } from "..";
-import { TransactionHistory } from "components/lists/transactions/TransactionHistoryList";
+import { TransactionHistory } from "components/lists/TransactionHistory";
 
 export const UserBonds = () => {
   const { isLoading, ownerBalances, bondPurchases, tbv, userClaimable } =

@@ -8,7 +8,7 @@ import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { MarketStatusChip } from "components/common/MarketStatusChip";
-import { MarketTransactionHistory } from "components/lists/transactions/MarketTransactionHistory";
+import { MarketTransactionHistory } from "components/lists/MarketTransactionHistory";
 
 export const Market = () => {
   const navigate = useNavigate();

@@ -9,7 +9,7 @@ import { PageHeader, PageNavigation } from "components/common";
 import { getMarketLabels } from "hooks/useMarketDetails";
 import { Market } from "src/generated/graphql";
 import { useClosedMarketChart } from "hooks/useBondChartData";
-import { MarketTransactionHistory } from "components/lists/transactions/MarketTransactionHistory";
+import { MarketTransactionHistory } from "components/lists/MarketTransactionHistory";
 
 type MarketTotals = {
   quoteToken: Pick<Market, "quoteToken"> & { logoUrl: string };

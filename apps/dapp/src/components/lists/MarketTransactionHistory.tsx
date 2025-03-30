@@ -1,6 +1,8 @@
 import { useBondPurchasesByMarket } from "src/data/useBondPurchasesByMarket";
-import { TransactionHistory } from "./TransactionHistoryList";
-import { TransactionHistoryProps } from "./TransactionHistoryList";
+import {
+  TransactionHistory,
+  TransactionHistoryProps,
+} from "./TransactionHistory";
 
 export function MarketTransactionHistory({
   market,
@@ -13,7 +15,6 @@ export function MarketTransactionHistory({
       {...props}
       type="market"
       market={market}
-      //@ts-expect-error TODO: fix this typing, tokens are incompatible
       data={data?.bondPurchases}
     />
   );

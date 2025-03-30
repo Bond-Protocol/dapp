@@ -6,15 +6,14 @@ import {
   trimAsNumber,
 } from "@bond-protocol/contract-library";
 import { CalculatedMarket } from "@bond-protocol/types";
-import { BondPurchase } from "src/generated/graphql";
+
 import { Column, Link, PaginatedTable } from "ui";
 import { longFormatter, usdFullFormatter } from "formatters";
 import { useMediaQueries } from "hooks";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
-import axios from "axios";
 import { PastMarket } from "components/organisms/ClosedMarket";
-import { useQuery } from "@tanstack/react-query";
 import TrimmedTextContent from "components/common/TrimmedTextContent";
+import { featureToggles } from "src/feature-toggles";
 
 const blockExplorer: Column<any> = {
   accessor: "blockExplorerUrl",
@@ -80,7 +79,7 @@ const baseTxsHistory: Column<any>[] = [
         ),
         subtext: purchase.amountUsd
           ? usdFullFormatter.format(purchase.amountUsd)
-          : "Unknown",
+          : "",
         sortValue: purchase.amount,
         csvValues: [purchase.amount, purchase.amountUsd],
         icon: purchase.quoteToken?.logoURI ?? PLACEHOLDER_TOKEN_LOGO_URL,
@@ -105,7 +104,7 @@ const baseTxsHistory: Column<any>[] = [
         ),
         subtext: purchase.payoutUsd
           ? usdFullFormatter.format(purchase.payoutUsd)
-          : "Unknown",
+          : "",
         icon: purchase.payoutToken?.logoURI ?? PLACEHOLDER_TOKEN_LOGO_URL,
         sortValue: purchase.payout,
         csvValues: [purchase.payout, purchase.payoutUsd],
@@ -114,31 +113,33 @@ const baseTxsHistory: Column<any>[] = [
   },
 ];
 
-const userTxsHistory: Column<any>[] = [
-  ...baseTxsHistory,
-  {
-    accessor: "discount",
-    label: "Discount",
-    alignEnd: true,
-    formatter: (purchase) => {
-      let discount =
-        (purchase.purchasePriceUsd - purchase.payoutToken?.price!) /
-        purchase.payoutToken?.price!;
-      discount *= 100;
-      discount = trimAsNumber(-discount, 2);
+const userTxsHistory: Column<any>[] = featureToggles.CACHING_API
+  ? [
+      ...baseTxsHistory,
+      {
+        accessor: "discount",
+        label: "Discount",
+        alignEnd: true,
+        formatter: (purchase) => {
+          let discount =
+            (purchase.purchasePriceUsd - purchase.payoutToken?.price!) /
+            purchase.payoutToken?.price!;
+          discount *= 100;
+          discount = trimAsNumber(-discount, 2);
 
-      return {
-        value:
-          !isNaN(discount) && isFinite(discount) && discount < 100
-            ? discount + "%"
-            : "Unknown",
-        sortValue: discount,
-        csvValues: [discount],
-      };
-    },
-  },
-  blockExplorer,
-];
+          return {
+            value:
+              !isNaN(discount) && isFinite(discount) && discount < 100
+                ? discount + "%"
+                : "Unknown",
+            sortValue: discount,
+            csvValues: [discount],
+          };
+        },
+      },
+      blockExplorer,
+    ]
+  : [...baseTxsHistory, blockExplorer];
 
 const marketTxsHistory: Column<any>[] = [
   ...userTxsHistory,
@@ -165,43 +166,34 @@ const marketTxsHistory: Column<any>[] = [
     },
   },
 ];
-export type TransactionHistoryData = Array<
-  BondPurchase & { chainId: number | string }
->;
 
-type TxHistoryEntries = Array<BondPurchase & { chainId: number | string }>;
+import {
+  ListBondPurchasesForRecipientQuery,
+  ListBondPurchasesPerMarketQuery,
+} from "src/generated/graphql";
+export type TransactionHistoryData =
+  | ListBondPurchasesPerMarketQuery["bondPurchases"]
+  | ListBondPurchasesForRecipientQuery["bondPurchases"];
+
 export interface TransactionHistoryProps {
   title?: string;
   market?: CalculatedMarket | PastMarket;
   data?: TransactionHistoryData;
   className?: string;
+  type: "market" | "user";
 }
 
-const API_ENDPOINT = import.meta.env.VITE_API_URL;
-
-const loadBondPurchases = async (marketId?: string) => {
-  const response = await axios.get(
-    API_ENDPOINT + `markets/${marketId}/bondPurchases`
-  );
-  return response.data.bondPurchases;
-};
-
-export const TransactionHistory = (props: TransactionHistoryProps) => {
+export const TransactionHistory = ({
+  data = [],
+  type = "market",
+  ...props
+}: TransactionHistoryProps) => {
   const { isTabletOrMobile } = useMediaQueries();
-  const isMarketHistory = !!props.market;
+  const isMarketHistory = type === "market";
 
-  const { data: bondPurchases } = useQuery({
-    queryKey: [`tx-history-${props.market?.chainId}-${props.market?.id}`],
-    queryFn: () => loadBondPurchases(props.market?.id),
-    enabled: !props.data && !!props.market,
-  });
-
-  const details: TxHistoryEntries =
-    (isMarketHistory ? bondPurchases : props.data) ?? [];
-
-  const tableData = details
+  const tableData = data
     .map((p) => {
-      const chainId = isMarketHistory ? props?.market?.chainId : p.chainId;
+      const chainId = isMarketHistory ? props.market?.chainId : p.chainId;
 
       const { url: blockExplorerTxUrl } = getBlockExplorer(chainId, "tx");
       const { url: blockExplorerAddressUrl } = getBlockExplorer(
