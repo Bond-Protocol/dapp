@@ -29,9 +29,9 @@ export const usePastMarkets = () => {
         "markets"
       );
 
-      const closedMarkets = markets.map((market) =>
-        updateClosedMarkets(getByAddress, market)
-      );
+      const closedMarkets = markets
+        .map((market) => updateClosedMarkets(getByAddress, market))
+        .filter((m) => (m.total?.payoutUsd ?? 0) > 100);
 
       return {
         data: { closedMarkets },
