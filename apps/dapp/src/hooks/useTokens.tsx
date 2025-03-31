@@ -43,7 +43,7 @@ export const fetchAndMatchPricesForTestnet = async (tokens: Token[] = []) => {
 };
 
 export const useTokens = () => {
-  const [userTokens, setUserTokens] = useState<Token[]>([]);
+  const [userTokens, setUserTokens] = useState<Omit<Token, "name">[]>([]);
   const { data, isLoading } = useGetGlobalData();
   const { subgraphTokens } = data;
   const { data: tokenlistTokens, isSuccess: tokenlistQuerySuccess } =
@@ -173,7 +173,7 @@ export const useTokens = () => {
     [getTokenByAddressAndChain]
   );
 
-  const addToken = (token: Token) => {
+  const addToken = (token: Omit<Token, "name">) => {
     setUserTokens((prev) => [...prev, token]);
   };
 

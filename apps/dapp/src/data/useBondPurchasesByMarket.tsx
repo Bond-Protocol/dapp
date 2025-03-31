@@ -12,7 +12,7 @@ import { useTokens } from "hooks/useTokens";
 import { useMemo } from "react";
 
 type UseBondPurchaseParameters = {
-  market: CalculatedMarket | PastMarket;
+  market?: CalculatedMarket | PastMarket;
 };
 
 export function useBondPurchasesByMarket({
@@ -21,17 +21,20 @@ export function useBondPurchasesByMarket({
   const isAPIEnabled = featureToggles.CACHING_API;
   const tokens = useTokens();
 
+  const chainId = market?.chainId ?? 0;
+  const id = market?.id ?? "";
+
   const apiQuery = useQuery({
-    queryKey: ["api", "bond-purchases", market.chainId, market.id],
-    queryFn: () => loadBondPurchasesByMarket(market.id),
+    queryKey: ["api", "bond-purchases", chainId, id],
+    queryFn: () => loadBondPurchasesByMarket(id),
     enabled: isAPIEnabled && !!market,
   });
 
   const subgraphQuery = useListBondPurchasesPerMarketQuery(
-    { endpoint: subgraphEndpoints[+market.chainId] },
-    { marketId: market.id },
+    { endpoint: subgraphEndpoints[+chainId] },
+    { marketId: id },
     {
-      queryKey: ["bond-purchases", market.chainId, market.id],
+      queryKey: ["bond-purchases", chainId, id],
       enabled: !isAPIEnabled && !!market,
     }
   );
