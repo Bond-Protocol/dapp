@@ -1,5 +1,11 @@
 # dapp
 
+## 0.2.2
+
+### Patch Changes
+
+- caching api is now a toggleable feature
+
 ## 0.2.1
 
 ### Patch Changes

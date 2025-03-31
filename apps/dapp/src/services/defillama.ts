@@ -2,13 +2,14 @@ import { sub, getUnixTime } from "date-fns";
 import { generateFetcher } from "./custom-queries";
 import { MAINNETS } from "src/config/chains";
 import { Address } from "viem";
+import { formatPriceResponse } from "src/utils/format-defillama-price-response";
 
 export const DEFILLAMA_ENDPOINT = "https://coins.llama.fi";
 
 export interface DefillamaCurrentPrice {
   decimals: number;
   symbol: string;
-  name: string;
+  name?: string;
   price: number;
   timestamp: number;
   confidence: number;
@@ -41,8 +42,9 @@ export const fetchPrice = async (
     : `${getNameFromChainId(Number(chainId))}:${address}`;
 
   if (!ids) return new Promise(() => {});
-  const endpoint = `${import.meta.env.VITE_API_URL}prices?ids=${ids}`;
-  return await generateFetcher(endpoint)();
+  const endpoint = `${DEFILLAMA_ENDPOINT}/prices/current/${ids}`;
+  const response = await generateFetcher(endpoint)();
+  return formatPriceResponse(response);
 };
 
 type ChartOptionsDefillama = {

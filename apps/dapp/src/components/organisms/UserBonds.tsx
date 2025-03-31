@@ -1,13 +1,13 @@
 import { useDashboard, useMediaQueries } from "hooks";
 import { formatCurrency, InfoLabel } from "ui";
-import { BondList, TransactionHistory, TransactionHistoryData } from "..";
+import { BondList, TransactionHistoryData } from "..";
+import { TransactionHistory } from "components/lists/TransactionHistory";
 
 export const UserBonds = () => {
   const { isLoading, ownerBalances, bondPurchases, tbv, userClaimable } =
     useDashboard();
   const { isTabletOrMobile } = useMediaQueries();
 
-  console.log({ tbv });
   const tbvElement = (
     <InfoLabel
       reverse
@@ -33,6 +33,7 @@ export const UserBonds = () => {
       />
       {isTabletOrMobile && <div className="mb-10">{tbvElement}</div>}
       <TransactionHistory
+        type="user"
         title="Bond History"
         className="mb-30"
         data={bondPurchases as TransactionHistoryData}

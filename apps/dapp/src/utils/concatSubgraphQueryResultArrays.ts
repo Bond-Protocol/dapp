@@ -3,10 +3,17 @@ import {
   GetClosedMarketsQuery,
   GetDashboardDataQuery,
   GetGlobalDataQuery,
+  ListBondPurchasesForRecipientQuery,
 } from "src/generated/graphql";
 
+type SupportedQueries =
+  | GetGlobalDataQuery
+  | GetClosedMarketsQuery
+  | GetDashboardDataQuery
+  | ListBondPurchasesForRecipientQuery;
+
 export const concatSubgraphQueryResultArrays = <
-  T extends GetGlobalDataQuery | GetClosedMarketsQuery | GetDashboardDataQuery,
+  T extends SupportedQueries,
   K extends keyof Omit<T, "__typename">
 >(
   queries: UseQueryResult<T, any>[],

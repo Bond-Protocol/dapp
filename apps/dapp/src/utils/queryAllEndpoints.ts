@@ -9,9 +9,11 @@ import { Variables } from "graphql-request";
 export function queryAllEndpoints<TQuery>({
   document,
   variables,
+  enabled = true,
 }: {
   document: string;
   variables?: Variables;
+  enabled?: boolean;
 }) {
   const isTestnet = environment.isTestnet;
   const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;
@@ -27,6 +29,7 @@ export function queryAllEndpoints<TQuery>({
       const response = await request<TQuery>(url, document, vars);
       return response;
     },
+    enabled,
   }));
 
   return queries;

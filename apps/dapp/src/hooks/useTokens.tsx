@@ -1,13 +1,13 @@
-import { useMemo, useState } from "react";
-import { Token } from "@bond-protocol/types";
+import { useCallback, useMemo, useState } from "react";
+import { MarketTokenPair, Token, TokenlistToken } from "@bond-protocol/types";
 import { testnetTokenlist, tokenlist } from "../content";
 import * as defillama from "services/defillama";
 import { usdFormatter } from "formatters";
-import { useDiscoverFromApi } from "hooks/useDiscoverToken";
 import { environment } from "src/environment";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
 import { useGetGlobalData } from "hooks/useGetGlobalData";
 import { useQuery } from "@tanstack/react-query";
+import { useTokenlists } from "src/data/useTokenlists";
 
 export const fetchPrices = async (tokens: Array<Omit<Token, "price">>) => {
   const addresses = tokens.map(defillama.utils.toDefillamaQueryId);
@@ -43,11 +43,13 @@ export const fetchAndMatchPricesForTestnet = async (tokens: Token[] = []) => {
 };
 
 export const useTokens = () => {
-  const [userTokens, setUserTokens] = useState<Token[]>([]);
+  const [userTokens, setUserTokens] = useState<Omit<Token, "name">[]>([]);
   const { data, isLoading } = useGetGlobalData();
   const { subgraphTokens } = data;
+  const { data: tokenlistTokens, isSuccess: tokenlistQuerySuccess } =
+    useTokenlists();
 
-  const { data: tokenlistTokens, ...tokenlistQuery } = useQuery({
+  const { data: quoteTokens, ...quoteTokensQuery } = useQuery({
     queryKey: ["tokenlist/prices", tokenlist.length],
     queryFn: async () => {
       const tokens = tokenlist.filter((t) => t.display === true);
@@ -61,7 +63,7 @@ export const useTokens = () => {
     },
   });
 
-  const { data: tokens, ...query } = useQuery({
+  const { data: marketTokens, ...query } = useQuery({
     enabled: !isLoading,
     queryKey: ["prices", subgraphTokens.length],
     placeholderData: [],
@@ -85,22 +87,29 @@ export const useTokens = () => {
     },
   });
 
-  const { data: detailedTokens, ...detailedTokensQuery } = useDiscoverFromApi(
-    tokens ?? []
-  );
+  const { data: detailedTokens, ...detailedTokensQuery } = useQuery({
+    queryKey: ["match-tokens", "markets", marketTokens?.length],
+    queryFn: () => matchTokens(marketTokens, tokenlistTokens),
+    enabled: query.isSuccess && tokenlistQuerySuccess,
+    placeholderData: [],
+  });
 
-  const { data: detailedTokenlist, ...detailedTokenlistQuery } =
-    useDiscoverFromApi(tokenlistTokens ?? []);
+  const { data: detailedQuoteTokens, ...detailedTokenlistQuery } = useQuery({
+    queryKey: ["match-tokens", "quote", quoteTokens?.length],
+    queryFn: () => matchTokens(quoteTokens, tokenlistTokens),
+    enabled: quoteTokensQuery.isSuccess && tokenlistQuerySuccess,
+    placeholderData: [],
+  });
 
   const getByAddress = (address: string) => {
-    return tokens?.find(
+    return detailedTokens?.find(
       (t) => t.address.toLowerCase() === address?.toLowerCase()
     );
   };
 
   const payoutTokens = useMemo(
     () =>
-      tokens
+      detailedTokens
         ?.filter((token) => token.usedAsPayout)
         .map((token) => {
           const tbv = token.payoutTokenTbvs?.reduce(
@@ -111,7 +120,8 @@ export const useTokens = () => {
           );
           return { ...token, tbv };
         }) ?? [],
-    [tokens?.length]
+    //TODO: improve
+    [detailedTokens?.length ?? 0 > 0]
   );
 
   const tbv = useMemo(
@@ -119,19 +129,51 @@ export const useTokens = () => {
     [payoutTokens.length]
   );
 
-  const getByAddressAndChain = (address: string, chainId: string | number) => {
-    return tokens?.find(
-      (t) => t.address === address && t.chainId === Number(chainId)
-    );
-  };
+  const getByAddressAndChain = useCallback(
+    (address: string, chainId: string | number) => {
+      return detailedTokens?.find(
+        (t) =>
+          t.address.toLowerCase() === address.toLowerCase() &&
+          t.chainId === Number(chainId)
+      );
+    },
+    [detailedTokens]
+  );
 
-  const getByChain = (chainId: number) =>
-    tokens?.filter((t) => t.chainId === chainId) ?? [];
+  const getTokenByAddressAndChain = useCallback(
+    (token: Token) => {
+      const detailedToken = getByAddressAndChain(token.address, token.chainId);
+      return detailedToken ?? token;
+    },
+    [getByAddressAndChain]
+  );
 
-  const getTokenlistBychain = (chainId: number) =>
-    tokenlistTokens?.filter((t) => t.chainId === chainId) ?? [];
+  const getByChain = useCallback(
+    (chainId: number) =>
+      detailedTokens?.filter((t) => t.chainId === chainId) ?? [],
+    [detailedTokens]
+  );
 
-  const addToken = (token: Token) => {
+  const getTokenlistBychain = useCallback(
+    (chainId: number) =>
+      detailedQuoteTokens?.filter((t) => t.chainId === chainId) ?? [],
+    [quoteTokens]
+  );
+
+  const matchTokenPair = useCallback(
+    <T extends MarketTokenPair>(item: T): T => {
+      const quoteToken = getTokenByAddressAndChain(item.quoteToken);
+      const payoutToken = getTokenByAddressAndChain(item.payoutToken);
+      return {
+        ...item,
+        quoteToken,
+        payoutToken,
+      };
+    },
+    [getTokenByAddressAndChain]
+  );
+
+  const addToken = (token: Omit<Token, "name">) => {
     setUserTokens((prev) => [...prev, token]);
   };
 
@@ -139,9 +181,9 @@ export const useTokens = () => {
     tbv: usdFormatter.format(Math.trunc(tbv)),
     tokens: (detailedTokensQuery.isSuccess
       ? detailedTokens
-      : tokens ?? []) as Token[],
+      : marketTokens ?? []) as Token[],
     tokenlist: (detailedTokenlistQuery.isSuccess
-      ? detailedTokenlist
+      ? detailedQuoteTokens
       : detailedTokens ?? []) as Token[],
     payoutTokens,
     getByAddress,
@@ -149,7 +191,27 @@ export const useTokens = () => {
     getByAddressAndChain,
     getTokenlistBychain,
     addToken,
+    matchTokenPair,
     fetchedExtendedDetails: detailedTokensQuery.isSuccess,
     isLoading: query.isLoading,
   };
 };
+
+/** * Adds tokenlists' tokens information to tokens from others sources */
+function matchTokens(
+  tokens: Token[] = [],
+  tokenlist: TokenlistToken[] = []
+): Token[] {
+  if (tokens.length === 0 || tokenlist.length === 0) return tokens;
+  return tokens.map((baseToken) => {
+    const tokenlistToken = tokenlist.find(
+      (targetToken) =>
+        baseToken.address.toLowerCase() === targetToken.address.toLowerCase() &&
+        baseToken.chainId === targetToken.chainId
+    );
+
+    if (!tokenlistToken) return baseToken;
+
+    return { ...baseToken, ...tokenlistToken };
+  });
+}

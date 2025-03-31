@@ -2,7 +2,7 @@ import { Token } from "@bond-protocol/types";
 import { Button, Label } from "../atoms";
 
 export interface ImportTokenDialogProps {
-  token?: Token;
+  token?: Omit<Token, "name">;
   priceSource: string;
   onConfirm: (e: React.BaseSyntheticEvent) => void;
   isLoading?: boolean;

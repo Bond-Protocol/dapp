@@ -1,7 +1,6 @@
 import { Token, TokenBase } from "@bond-protocol/types";
 import defillama from "services/defillama";
 import coingecko from "services/coingecko";
-import axios from "axios";
 import { Address, getContract, isAddress } from "viem";
 import { PublicClient, erc20ABI, usePublicClient } from "wagmi";
 import { useQuery } from "@tanstack/react-query";
@@ -83,32 +82,4 @@ export const useDiscoverToken = ({ address, chainId }: TokenBase) => {
     source: query.data?.source,
     isLoading: detailsQuery.isLoading ?? query.isLoading,
   };
-};
-
-export const useDiscoverFromApi = (tokens: Token[]) => {
-  const toQuery = tokens.map((t) => `${t.chainId}:${t.address}`);
-  const queryString = toQuery.join(",");
-
-  return useQuery({
-    enabled: tokens.length > 0,
-    placeholderData: [],
-    queryKey: ["api/tokens", queryString],
-    queryFn: async () => {
-      const detailedTokens = await axios.get(
-        import.meta.env.VITE_API_URL + "tokens?tokens=" + queryString
-      );
-
-      return detailedTokens.data.map((t: any) => {
-        const original = tokens
-          .filter((token) => {
-            return (
-              Number(token.chainId) === Number(t.chainId) &&
-              token.address.toLowerCase() === t.address.toLowerCase()
-            );
-          })
-          .at(0);
-        return { ...original, ...t };
-      });
-    },
-  });
 };
