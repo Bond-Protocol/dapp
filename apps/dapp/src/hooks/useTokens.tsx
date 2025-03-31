@@ -1,11 +1,5 @@
 import { useCallback, useMemo, useState } from "react";
-import {
-  CalculatedMarket,
-  MarketTokenPair,
-  Token,
-  TokenBase,
-  TokenlistToken,
-} from "@bond-protocol/types";
+import { MarketTokenPair, Token, TokenlistToken } from "@bond-protocol/types";
 import { testnetTokenlist, tokenlist } from "../content";
 import * as defillama from "services/defillama";
 import { usdFormatter } from "formatters";
@@ -115,7 +109,7 @@ export const useTokens = () => {
 
   const payoutTokens = useMemo(
     () =>
-      marketTokens
+      detailedTokens
         ?.filter((token) => token.usedAsPayout)
         .map((token) => {
           const tbv = token.payoutTokenTbvs?.reduce(
@@ -126,7 +120,8 @@ export const useTokens = () => {
           );
           return { ...token, tbv };
         }) ?? [],
-    [marketTokens?.length]
+    //TODO: improve
+    [detailedTokens?.length ?? 0 > 0]
   );
 
   const tbv = useMemo(

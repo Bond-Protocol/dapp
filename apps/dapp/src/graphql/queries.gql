@@ -45,6 +45,7 @@ query GetGlobalData($currentTime: BigInt!, $queryKey: String! = "") {
         symbol
         decimals
         name
+        usedAsPayout
       }
       quoteToken {
         id
