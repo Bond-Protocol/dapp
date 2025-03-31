@@ -1,15 +1,4 @@
-import {
-  arbitrum,
-  arbitrumGoerli,
-  goerli,
-  mainnet,
-  optimism,
-  optimismGoerli,
-  polygon,
-  polygonMumbai,
-  base,
-  bsc,
-} from "@wagmi/chains";
+import { arbitrum, mainnet, optimism, polygon, base } from "@wagmi/chains";
 import { environment } from "src/environment";
 import { getIconsForChains } from "src/utils/get-icons-for-chains";
 import { Chain, baseSepolia } from "viem/chains";

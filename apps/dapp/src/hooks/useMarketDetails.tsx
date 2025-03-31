@@ -58,6 +58,11 @@ export const useMarketDetails = (market: CalculatedMarket) => {
       ? formatCurrency.trimToLengthSymbol(Number(maxPayout))
       : formatCurrency.trimToken(maxPayout);
 
+  const bondPriceLabel =
+    Number(market.discountedPrice) > 1
+      ? formatCurrency.trimToLengthSymbol(Number(market.discountedPrice))
+      : formatCurrency.trimToken(market.discountedPrice);
+
   const capacity =
     Number(market.currentCapacity) > 1
       ? formatCurrency.trimToLengthSymbol(Number(market.currentCapacity))
@@ -70,6 +75,7 @@ export const useMarketDetails = (market: CalculatedMarket) => {
     discountLabel,
     maxPayoutLabel,
     capacity,
+    bondPriceLabel,
     vestingLabel: vestingLabel?.includes("Immediate")
       ? "Immediate"
       : vestingLabel,

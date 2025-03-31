@@ -28,29 +28,22 @@ export enum CHAIN_ID {
   BERA_BARTIO = "80084",
 }
 
-const baseNetworkLogo =
-  "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOCIgaGVpZ2h0PSIyOCI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBmaWxsPSIjMDA1MkZGIiBmaWxsLXJ1bGU9Im5vbnplcm8iIGQ9Ik0xNCAyOGExNCAxNCAwIDEgMCAwLTI4IDE0IDE0IDAgMCAwIDAgMjhaIi8+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTEzLjk2NyAyMy44NmM1LjQ0NSAwIDkuODYtNC40MTUgOS44Ni05Ljg2IDAtNS40NDUtNC40MTUtOS44Ni05Ljg2LTkuODYtNS4xNjYgMC05LjQwMyAzLjk3NC05LjgyNSA5LjAzaDE0LjYzdjEuNjQySDQuMTQyYy40MTMgNS4wNjUgNC42NTQgOS4wNDcgOS44MjYgOS4wNDdaIi8+PC9nPjwvc3ZnPg==";
-
 export const chainLogos: Record<number, string> = {
-  1: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
-  5: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ETHEREUM.png",
-  10: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",
+  1: "/chains/ethereum.png",
+  10: "/chains/optimism.png",
   56: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/BSC.png",
-  137: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/POLYGON.png",
+  137: "/chains/polygon.png",
   250: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/FANTOM.png",
-  420: "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/OPTIMISM.png",
-  42161:
-    "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
+  420: "/chains/optimism.png",
+  42161: "/chains/arbitrum.png",
   43113:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/AVALANCHE.png",
   43114:
     "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/AVALANCHE.png",
-  80001:
-    "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/POLYGON.png",
-  421613:
-    "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/chains/ARBITRUM.png",
-  8453: baseNetworkLogo,
-  84532: baseNetworkLogo,
+  80001: "/chains/polygon.png",
+  421613: "/chains/arbitrum.png",
+  8453: "/chains/base.png",
+  84532: "/chains/base.png",
   34443:
     "https://raw.githubusercontent.com/mode-network/brandkit/main/Assets/Logo/Token.svg",
   80084:

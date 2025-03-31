@@ -32,9 +32,12 @@ export const Market = () => {
     isFutureMarket,
     marketTypeLabel,
     capacity,
+    bondPriceLabel,
   } = useMarketDetails(market);
 
   if (!market) return <Loading content={meme()} />;
+
+  const isUnknown = discountLabel === "Unknown";
 
   // const lowLiquidity =
   //   !environment.isTesting &&
@@ -67,12 +70,12 @@ export const Market = () => {
       {/*   /> */}
       {/* )} */}
       <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
-        <InfoLabel
-          label="Max Payout"
-          tooltip="The maximum payout currently available from this market."
-        >
-          {maxPayoutLabel}
-          <span className="ml-1 text-xl">{market.payoutToken.symbol}</span>
+        <InfoLabel label="Bond Price" tooltip="The current price for this bond">
+          {!isUnknown && "$"}
+          {bondPriceLabel}
+          {isUnknown && (
+            <span className="ml-1 text-xl">{market.quoteToken.symbol}</span>
+          )}
         </InfoLabel>
 
         <InfoLabel
