@@ -204,6 +204,14 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
       tooltip: `The maximum amount of ${market.quoteToken.symbol} accepted in a single transaction.`,
     },
     {
+      leftLabel: "Max Payout",
+      rightLabel: `${formatCurrency.dynamicFormatter(
+        market.maxPayout,
+        false
+      )} ${market.payoutToken.symbol}`,
+      tooltip: `The maximum payout currently available from this market.`,
+    },
+    {
       leftLabel: "Estimated Gas Fee",
       rightLabel: `${networkFee} ${nativeCurrency.symbol} (~${
         networkFeeUsd ?? "?"
