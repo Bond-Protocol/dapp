@@ -352,7 +352,10 @@ query GetMarketsById($marketIds: [BigInt!]!, $queryKey: String! = "") {
 }
 
 query GetClosedMarkets($currentTime: BigInt!) {
-  markets(where: { conclusion_lt: $currentTime }) {
+  markets(
+    where: { or: [{ conclusion_lt: $currentTime }, { hasClosed: true }] }
+    first: 1000
+  ) {
     id
     auctioneer
     conclusion
