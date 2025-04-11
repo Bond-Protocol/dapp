@@ -1,8 +1,8 @@
-import { Token } from "types";
-import { Button, Label } from "components/atoms";
+import { Token } from "@bond-protocol/types";
+import { Button, Label } from "../atoms";
 
 export interface ImportTokenDialogProps {
-  token?: Token;
+  token?: Omit<Token, "name">;
   priceSource: string;
   onConfirm: (e: React.BaseSyntheticEvent) => void;
   isLoading?: boolean;
@@ -41,7 +41,11 @@ export const ImportTokenDialog = (props: ImportTokenDialogProps) => {
           Source: {props.priceSource}
         </p>
       </div>
-      <Button className="mt-3" onClick={props.onConfirm}>
+      <Button
+        data-testid="token-import-button"
+        className="mt-3"
+        onClick={props.onConfirm}
+      >
         Import Token
       </Button>
     </div>

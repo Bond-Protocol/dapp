@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Icon, Input, InputProps, Modal, ModalProps } from "..";
-import { ReactComponent as ArrowDownIcon } from "../../assets/icons/arrow-icon.svg";
+import ArrowDownIcon from "../../assets/icons/arrow-icon.svg?react";
 
 type InputModalProps = React.PropsWithChildren<{
   className?: string;

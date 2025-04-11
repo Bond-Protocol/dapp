@@ -1,5 +1,6 @@
-export default {
-  parser: "@typescript-eslint/parser",
+/** @type {import("eslint").Linter.Config} */
+module.exports = {
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     tsconfigRootDir: __dirname,
     project: ["./tsconfig.json"],

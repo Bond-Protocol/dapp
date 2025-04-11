@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { ClosedMarketList } from "components/lists/ClosedMarketList";
 import { useState } from "react";
-import { useMarkets } from "context/market-context";
+import { useMarkets } from "hooks";
 import { environment } from "src/environment";
 
 export const Markets = () => {
@@ -22,7 +22,10 @@ export const Markets = () => {
 
   return (
     <>
-      <div className="flex items-end justify-between py-2 md:-mb-[54px]">
+      <div
+        id="__MARKETS_PAGE__"
+        className="flex items-end justify-between py-2 md:-mb-[54px]"
+      >
         <PageHeader
           title={"LIVE MARKETS"}
           subtitle={"Instantly acquire tokens at a discount"}

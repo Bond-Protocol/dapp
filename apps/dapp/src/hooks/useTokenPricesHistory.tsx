@@ -1,19 +1,17 @@
-import { useQuery } from "react-query";
-import type { Token } from "types";
+import type { Token } from "@bond-protocol/types";
+import { useQuery } from "@tanstack/react-query";
 import { getTokenPriceHistory } from "services";
 
 export const useTokenPriceHistory = (token: Token, dayRange = 90) => {
-  if (!token) return;
-
-  const { data: tokenPriceHistory, ...tokenPriceHistoryQuery } = useQuery(
-    `token-price-history-${token.symbol}-${dayRange}d`,
-    getTokenPriceHistory(
+  const { data: tokenPriceHistory, ...tokenPriceHistoryQuery } = useQuery({
+    queryKey: [`token-price-history-${token.symbol}-${dayRange}d`],
+    queryFn: getTokenPriceHistory(
       token.address,
       token.chainId,
       { days: dayRange },
       Date.now()
-    )
-  );
+    ),
+  });
 
   return {
     prices: tokenPriceHistory?.prices?.map((element: Array<number>) => ({

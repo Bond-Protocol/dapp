@@ -7,7 +7,7 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import * as contractLib from "@bond-protocol/contract-library";
-import { BondType, CHAIN_ID, CreateMarketParams } from "types";
+import { BondType, CHAIN_ID, CreateMarketParams } from "@bond-protocol/types";
 import {
   checkOraclePairValidity,
   getBlockExplorer,
@@ -24,7 +24,7 @@ import {
 import { doPriceMath } from "./helpers";
 import { useProjectionChartData } from "hooks/useProjectionChart";
 import { CreateMarketScreen } from "./CreateMarketScreen";
-import { useTokenlistLoader } from "services/use-tokenlist-loader-v2";
+import { useTokens } from "hooks";
 import { parseUnits, formatUnits } from "viem";
 import { useAllowance } from "hooks/contracts/useAllowance";
 import { useCreateMarket as useCreateMarketContract } from "hooks/contracts/useCreateMarket";
@@ -41,7 +41,7 @@ export const CreateMarketController = () => {
   const network = useNetwork();
   const publicClient = usePublicClient();
 
-  const { tokens } = useTokenlistLoader();
+  const { tokens } = useTokens();
   const [state, dispatch] = useCreateMarket();
 
   const { address: tellerAddress } = getTeller(

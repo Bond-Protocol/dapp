@@ -1,21 +1,25 @@
-import { CodegenConfig } from "graphql-codegen";
-import dotenv from 'dotenv';
+import { CodegenConfig } from "@graphql-codegen/cli";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const config: CodegenConfig = {
   overwrite: true,
   schema: process.env.VITE_SUBGRAPH_CODEGEN_SCHEMA_ENDPOINT,
-  documents: "src/graphql/queries.ts",
+  documents: "src/graphql/queries.gql",
+  config: {
+    legacyMode: false,
+    reactQueryVersion: 5,
+  },
   generates: {
     "src/generated/graphql.ts": {
       plugins: [
         "typescript",
         "typescript-operations",
-        "typescript-react-query"
-      ]
-    }
-  }
+        "typescript-react-query",
+      ],
+    },
+  },
 };
 
 export default config;

@@ -1,5 +1,5 @@
 import { BondList } from "components/lists";
-import { useDashboard } from "context/dashboard-context";
+import { useDashboard } from "hooks";
 
 export const EmbeddedDashboard = () => {
   const dashboard = useDashboard();

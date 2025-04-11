@@ -14,7 +14,7 @@ import fixedTermOSDAAuctioneer from "./BondFixedTermOSDA.json";
 import fixedTermSDAv1_1Auctioneer from "./BondFixedTermSDAv1_1.json";
 import fixedExpiryTeller from "./IBondFixedExpiryTeller.json";
 import fixedTermTeller from "./IBondFixedTermTeller.json";
-import erc20 from "./IERC20.json";
+import erc20 from "./MintableERC20.json";
 import chainlinkOracle from "./BondChainlinkOracle.json";
 
 export const abiMap = {

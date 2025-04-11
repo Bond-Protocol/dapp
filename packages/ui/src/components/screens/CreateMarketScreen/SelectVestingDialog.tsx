@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { formatDate } from "utils";
-import { Button, DatePicker, FlatSelect, Link } from "components";
+import { formatDate } from "../../../utils";
+import { Button, DatePicker, FlatSelect, Link } from "../../../components";
 import { ManualVestingTermInput } from "./";
 import React from "react";
 

@@ -1,44 +1,86 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "tasks": {
     "sync": {
       "cache": false
     },
     "clean": {
       "cache": false
     },
-    "test": { "cache": false },
-    "test:open": { "cache": false },
+    "test": {
+      "cache": false
+    },
+    "test:open": {
+      "cache": false
+    },
     "dev": {
-      "dependsOn": ["^dev", "codegen", "typechain"],
+      "dependsOn": [
+        "^dev",
+        "codegen",
+        "typechain"
+      ],
       "cache": false,
       "outputs": []
     },
     "preview": {
-      "dependsOn": ["build"],
-      "outputs": ["dist/**", "build/**"]
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [
+        "dist/**",
+        "build/**"
+      ]
     },
     "build": {
-      "dependsOn": ["^build", "codegen", "generate"],
-      "outputs": ["dist/**", "build/**"]
+      "dependsOn": [
+        "^build",
+        "codegen",
+        "generate"
+      ],
+      "outputs": [
+        "dist/**",
+        "build/**"
+      ]
     },
     "lp": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", "build/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**",
+        "build/**"
+      ]
     },
     "typechain": {
-      "inputs": ["src/core/abis/**/*.json"],
-      "outputs": ["src/**/contracts", "src/"]
+      "inputs": [
+        "src/core/abis/**/*.json"
+      ],
+      "outputs": [
+        "src/**/contracts",
+        "src/"
+      ]
     },
     "codegen": {
-      "outputs": ["src/generated/graphql.ts"]
+      "inputs": [
+        "package.json",
+        "codegen.ts",
+        "src/graphql/"
+      ],
+      "outputs": [
+        "src/generated/graphql.ts"
+      ]
     },
     "generate": {
-      "inputs": ["src/protocols", "src/tokens"]
+      "inputs": [
+        "src/protocols",
+        "src/tokens"
+      ]
     },
     "storybook": {
       "dependsOn": [],
-      "inputs": ["src"]
+      "inputs": [
+        "src"
+      ]
     },
     "build:storybook": {
       "dependsOn": []

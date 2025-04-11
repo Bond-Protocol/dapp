@@ -1,6 +1,6 @@
-import { Address } from "viem";
+import { Address, zeroAddress } from "viem";
 import { auctioneerAddressesByType } from "./enums";
-import type { BondType } from "types";
+import type { BondType } from "@bond-protocol/types";
 
 export type ContractAddresses = {
   authority: Address;
@@ -316,10 +316,11 @@ export function getAuctioneerByBondType(
 
   const address = addresses[name];
 
-  if (!address)
-    throw new Error(
-      `Unable to find Auctioneer address for bondtype: ${type} on chain ${chainId}`
+  if (!address) {
+    console.error(
+      `Unable to find auctioneer for bond type ${type} -- Chain is unsupported or not configured`
     );
+  }
 
-  return address;
+  return address ?? zeroAddress;
 }

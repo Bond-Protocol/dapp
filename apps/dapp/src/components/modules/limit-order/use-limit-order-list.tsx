@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { Order } from "src/types/openapi";
 import { useQuery } from "wagmi";
 import { useAuth } from "./use-auth";
@@ -19,7 +19,7 @@ export const useLimitOrderList = (market: CalculatedMarket) => {
       .map((d) => ({ ...d, market }));
   }
 
-  const query = useQuery(["list-orders", market.id, market.chainId], {
+  const query = useQuery(["list-orders", market.id], {
     queryFn: loadList,
     enabled: !!market && auth.isAuthenticated,
   });

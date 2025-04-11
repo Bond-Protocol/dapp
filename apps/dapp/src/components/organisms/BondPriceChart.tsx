@@ -6,7 +6,7 @@ import {
   PlaceholderChart,
 } from "ui";
 import { useBondChartData } from "hooks/useBondChartData";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { useState } from "react";
 
 export type BondDiscountChartProps = {

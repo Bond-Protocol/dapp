@@ -1,6 +1,6 @@
-import { SearchBar } from "components/molecules/SearchBar";
+import { SearchBar } from "../molecules/SearchBar";
 import { IconCarousel, IconCarouselProps, Label } from "..";
-import type { Token } from "types";
+import type { Token } from "@bond-protocol/types";
 
 export type SelectTokenDialogProps = {
   onSubmit: Function;
@@ -31,6 +31,7 @@ export const SelectTokenDialog = (props: SelectTokenDialogProps) => {
   return (
     <div className="w-[448px]" tabIndex={-1}>
       <SearchBar
+        data-testid="token-import-address"
         autoFocus
         value={props.filter}
         onChange={props.setFilter}

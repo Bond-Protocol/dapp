@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { socials } from "components/common";
 import { formatDistanceToNowStrict } from "date-fns";
 import { useMemo } from "react";
@@ -13,7 +13,7 @@ import {
 } from "ui";
 import { useAuth } from "./use-auth";
 import { useLimitOrderForMarket } from "./use-limit-order";
-import { ReactComponent as Timer } from "assets/icons/timer.svg";
+import Timer from "assets/icons/timer.svg?react";
 
 export type LimitOrderConfirmationDialogProps = {
   market: CalculatedMarket;
@@ -87,7 +87,7 @@ export const LimitOrderConfirmationDialog = (
         onChange: (value: string) => order.setMaxFee(Number(value)),
         symbol: props.market.quoteToken.symbol,
         logoURI: props.market.quoteToken.logoURI,
-        rightLabel: order.maxFee,
+        rightLabel: trimToken(order.maxFee),
         tooltip:
           "This is the maximum amount of fees you will pay for this order. The executor will try to reduce this amount as much as possible.",
       },
@@ -197,7 +197,7 @@ export const LimitOrderConfirmationDialog = (
           !auth.isAuthenticated
             ? auth.signIn
             : needsApprove
-            ? order.allowance.approveRequiredForNextOrder
+            ? order.allowance.approveRequiredAmount
             : props.onSubmit
         }
       />

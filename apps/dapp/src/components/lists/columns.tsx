@@ -14,8 +14,8 @@ import {
   getBlockExplorer,
   getChain,
 } from "@bond-protocol/contract-library";
-import { CalculatedMarket, chainLogos } from "types";
-import { ReactComponent as ArrowIcon } from "../../assets/icons/arrow-left.svg";
+import { CalculatedMarket, chainLogos } from "@bond-protocol/types";
+import ArrowIcon from "../../assets/icons/arrow-left.svg?react";
 import { useNavigate } from "react-router-dom";
 import TrimmedTextContent from "components/common/TrimmedTextContent";
 

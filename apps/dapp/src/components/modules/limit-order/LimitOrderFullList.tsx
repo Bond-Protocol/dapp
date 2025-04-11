@@ -1,6 +1,6 @@
-import { ACTIVE_CHAIN_IDS } from "context/blockchain-provider";
-import { useMarkets } from "context/market-context";
-import { useQueries } from "react-query";
+import { ACTIVE_CHAIN_IDS } from "src/config/chains";
+import { useMarkets } from "hooks";
+import { useQueries } from "@tanstack/react-query";
 import { useOrderApi } from "./use-order-api";
 import { OrderConfig, orderService } from "services/order-service";
 import {
@@ -12,11 +12,10 @@ import {
   formatDate,
   Label,
 } from "ui";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { useNavigate } from "react-router-dom";
 import { getDiscountPercentage } from "../create-market";
 import { formatUnits } from "viem";
-import { getChain } from "@bond-protocol/contract-library";
 
 const Chip = ({
   children,
@@ -203,13 +202,9 @@ const filters = [
 
 export const LimitOrderFullList = () => {
   const orders = useOrderApi();
-  const { everyMarket, isSomeLoading, arePastMarketsLoading } = useMarkets();
-
-  const enabled =
-    !isSomeLoading && !arePastMarketsLoading && everyMarket.length > 0;
-
-  const queries = useQueries(
-    ACTIVE_CHAIN_IDS.map((chainId) => ({
+  const { everyMarket } = useMarkets();
+  const queries = useQueries({
+    queries: ACTIVE_CHAIN_IDS.map((chainId) => ({
       queryKey: ["orders/list-all", chainId],
       queryFn: async () => {
         const result = await orders.listRaw(chainId);
@@ -222,14 +217,15 @@ export const LimitOrderFullList = () => {
           }
 
           return {
+            //@ts-ignore TODO: refactor market types
             ...orderService.parseOrder(order, market),
             market,
           };
         });
       },
-      enabled,
-    }))
-  );
+      enabled: everyMarket.length > 0,
+    })),
+  });
 
   const allOrders =
     queries
@@ -250,7 +246,8 @@ export const LimitOrderFullList = () => {
       //@ts-ignore
       filters={filters}
       loading={
-        queries.every((q) => q.isIdle) || queries.every((q) => q.isLoading)
+        queries.every((q) => q.fetchStatus === "idle") ||
+        queries.every((q) => q.isLoading)
       }
       title="Orders"
       emptyRows={0}

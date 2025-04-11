@@ -1,4 +1,4 @@
-import { ButtonGroup } from "components";
+import { ButtonGroup } from "../../components";
 
 const tcLink = (
   <a href="/tc" target="_blank" className="text-blue-500">

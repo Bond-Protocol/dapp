@@ -1,14 +1,18 @@
-type Address = `0x${string}}`;
+type Address = `0x${string}`;
 
 export interface TokenBase {
   chainId: number;
   address: Address;
 }
 
-export interface Token extends TokenBase {
+export interface TokenlistToken extends TokenBase {
   name: string;
   symbol: string;
   decimals: number;
+  logoURI?: string;
+}
+
+export interface Token extends TokenlistToken {
   tbv?: number;
   purchaseCount?: number;
   uniqueBonders?: {
@@ -20,7 +24,6 @@ export interface Token extends TokenBase {
   id?: string;
   purchaseLink?: string;
   logoUrl?: string;
-  logoURI?: string;
   details?: {
     description?: string;
     links: {
@@ -65,6 +68,11 @@ export interface PrecalculatedMarket {
   callbackAddress: Address;
   bondsIssued: number;
 }
+
+export type MarketTokenPair = {
+  quoteToken: Token;
+  payoutToken: Token;
+};
 
 export interface CalculatedMarket extends PrecalculatedMarket {
   marketId: number;

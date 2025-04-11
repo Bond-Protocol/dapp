@@ -4,16 +4,16 @@ type ValuesProps = {
   className?: string;
 };
 
-const tbv = "$60M";
-const markets = "200";
-const bonds = "3K";
+const tbv = "$75M";
+const markets = "500";
+const bonds = "7.5K";
 
 export const Values = (props: ValuesProps) => {
   return (
     <div className={`${props.className}`}>
       <div className="flex flex-wrap justify-center gap-4 py-4 lg:flex-nowrap">
         <div className="w-full grow lg:w-1/3 lg:grow-0">
-          <InfoLabel label="Total Value Bonded">
+          <InfoLabel label="Total Bonded Value">
             {tbv}
             <span className="text-[32px]">+</span>
           </InfoLabel>

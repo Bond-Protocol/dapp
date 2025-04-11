@@ -1,0 +1,3 @@
+{
+  "extends": "@bond-protocol/tsconfig/base"
+}

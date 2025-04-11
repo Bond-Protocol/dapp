@@ -1,77 +1,77 @@
 [
   {
     "name": "OlympusDAO",
-    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/OLYMPUSDAO.png",
+    "logoUrl": "https://assets.coingecko.com/coins/images/14483/standard/token_OHM_%281%29.png?1628311611",
     "homepage": "https://olympusdao.finance/"
   },
   {
+    "name": "IQ.wiki",
+    "logoUrl": "https://assets.coingecko.com/coins/images/5010/standard/YAIS3fUh.png?1696505542",
+    "homepage": "https://iq.wiki/"
+  },
+  {
     "name": "GMX",
-    "logoUrl": "https://assets.coingecko.com/coins/images/18323/large/arbit.png?1631532468",
-    "homepage": "https://gmx.io/#/"
+    "logoUrl": "https://assets.coingecko.com/coins/images/18323/standard/arbit.png?1631532468",
+    "homepage": "https://gmx.io/"
   },
   {
-    "name": "Redacted",
-    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/BTRFLY.png",
-    "homepage": "https://redacted.finance/"
+    "name": "Pendle",
+    "logoUrl": "https://assets.coingecko.com/coins/images/15069/standard/Pendle_Logo_Normal-03.png?1696514728",
+    "homepage": "https://pendle.finance/"
   },
   {
-    "name": "Y2K",
-    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/Y2K.jpg",
-    "homepage": "https://www.y2k.finance/"
+    "name": "Threshold",
+    "logoUrl": "https://assets.coingecko.com/coins/images/22228/standard/nFPNiSbL_400x400.jpg?1696521570",
+    "homepage": "https://threshold.network/"
   },
   {
-    "name": "ShapeShiftDAO",
-    "logoUrl": "https://ipfs.io/ipfs/bafkreibggpxpfxxnxkudvlj5bherkjpjjetzzxbmfaquigbvhqg5xkx4li?filename=fox-token.png",
-    "homepage": "https://shapeshift.com/"
-  },
-  {
-    "name": "JPEG'd DAO",
-    "logoUrl": "https://cdn.jpegd.io/static/logos/JPEGD_LOGO.svg",
-    "homepage": "https://jpegd.io/"
-  },
-  {
-    "name": "Camelot DEX",
-    "logoUrl": "https://app.camelot.exchange/images/logo-sm.svg",
-    "homepage": "https://app.camelot.exchange"
+    "name": "Camelot",
+    "logoUrl": "https://assets.coingecko.com/coins/images/28416/standard/vj5DIMhP_400x400.jpeg?1696527414",
+    "homepage": "https://camelot.exchange/"
   },
   {
     "name": "InverseFinance",
     "logoUrl": "https://assets.coingecko.com/coins/images/14205/large/inverse_finance.jpg?1614921871",
-    "homepage": "https://www.inverse.finance"
+    "homepage": "https://www.inverse.finance/"
   },
   {
-    "name": "IQ.wiki",
-    "logoUrl": "https://iq.wiki/branding/downloadassets/logooriginalbrain.png",
-    "homepage": "https://iq.wiki/"
+    "name": "JPEG'd",
+    "logoUrl": "https://assets.coingecko.com/coins/images/35303/standard/jpgd.jpeg?1708095973",
+    "homepage": "https://jpegd.io/"
   },
   {
-    "name": "Buffer Finance",
-    "logoUrl": "https://github.com/Buffer-Finance/Buffer-Media/blob/main/new_logo_50_50.png?raw=true",
-    "homepage": "https://buffer.finance"
+    "name": "Redacted",
+    "logoUrl": "https://assets.coingecko.com/coins/images/26745/standard/redacted_v2.jpg?1696525813",
+    "homepage": "https://redacted.finance/"
   },
   {
-    "name": "Pendle",
-    "logoUrl": "https://docs.pendle.finance/img/logo.svg",
-    "homepage": "https://pendle.finance/"
+    "name": "ShapeShift",
+    "logoUrl": "https://assets.coingecko.com/coins/images/9988/standard/fox_token.png?1728373561",
+    "homepage": "https://shapeshift.com/"
   },
   {
-    "name": "GMD",
-    "logoUrl": "https://assets.coingecko.com/coins/images/28088/large/gmd.png?1676044809",
-    "homepage": "https://gmdprotocol.com"
+    "name": "Elastic Finance",
+    "logoUrl": "https://assets.coingecko.com/coins/images/37075/standard/EEFI.jpg?1713247518",
+    "homepage": "https://eefi.finance/"
+  },
+  {
+    "name": "Ionic",
+    "logoUrl": "https://assets.coingecko.com/coins/images/36713/standard/Ionic-icon-green.png?1712127547",
+    "homepage": "https://www.ionic.money/"
   },
   {
     "name": "NewOrder",
-    "logoUrl": "https://storage.bondprotocol.finance/6e41a561-e275-4698-bc36-548d30a80e96-bucket/NEWORDER.png",
+    "logoUrl": "https://assets.coingecko.com/coins/images/21440/standard/new-order-icon-256px.png?1696520803",
     "homepage": "https://neworder.network/"
   },
   {
-    "name": "Neutra Finance",
-    "logoUrl": "https://assets.coingecko.com/coins/images/28813/small/NEU_Token_logo.png?1674455093",
-    "homepage": "https://neutra.finance"
+    "name": "Metavault DAO",
+    "logoUrl": "https://assets.coingecko.com/coins/images/23899/standard/MVD_Coin-simple.png?1696523099",
+    "homepage": "https://metavault.trade/"
   },
   {
-    "name": "Lodestar",
-    "logoUrl": "https://assets.coingecko.com/coins/images/28218/large/lode.png?1668429341",
-    "homepage": "https://lodestarfinance.io"
+    "name": "Y2K",
+    "logoUrl": "https://assets.coingecko.com/coins/images/28542/standard/l7jRo-5-_400x400.jpg?1696527534",
+    "homepage": "https://www.y2k.finance/"
   }
 ]

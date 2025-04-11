@@ -6,10 +6,10 @@ import {
   PlaceholderChart,
 } from "ui";
 import { PageHeader, PageNavigation } from "components/common";
-import { TransactionHistory } from "components/lists";
 import { getMarketLabels } from "hooks/useMarketDetails";
 import { Market } from "src/generated/graphql";
 import { useClosedMarketChart } from "hooks/useBondChartData";
+import { MarketTransactionHistory } from "components/lists/MarketTransactionHistory";
 
 type MarketTotals = {
   quoteToken: Pick<Market, "quoteToken"> & { logoUrl: string };
@@ -94,7 +94,7 @@ export const ClosedMarket = ({ market }: { market: PastMarket }) => {
         />
       )}
 
-      <TransactionHistory className="mt-20" market={market} />
+      <MarketTransactionHistory className="mt-20" market={market} />
     </div>
   );
 };

@@ -13,6 +13,7 @@ type TabProps = {
     label: string;
     handleClick?: (i?: number) => void;
   }>;
+  children: React.ReactNode;
 };
 
 export const Tabs: FC<TabProps> = ({ tabs, value, children, ...props }) => {

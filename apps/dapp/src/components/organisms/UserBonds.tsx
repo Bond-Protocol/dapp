@@ -1,10 +1,10 @@
-import { useDashboard } from "context/dashboard-context";
-import { useMediaQueries } from "hooks/useMediaQueries";
+import { useDashboard, useMediaQueries } from "hooks";
 import { formatCurrency, InfoLabel } from "ui";
-import { BondList, TransactionHistory } from "..";
+import { BondList, TransactionHistoryData } from "..";
+import { TransactionHistory } from "components/lists/TransactionHistory";
 
 export const UserBonds = () => {
-  const { isLoading, ownerBalances, bondPurchases, userTbv, userClaimable } =
+  const { isLoading, ownerBalances, bondPurchases, tbv, userClaimable } =
     useDashboard();
   const { isTabletOrMobile } = useMediaQueries();
 
@@ -13,7 +13,7 @@ export const UserBonds = () => {
       reverse
       label="My TBV"
       tooltip="Total value acquired through bonds in USD"
-      value={formatCurrency.usdFormatter.format(userTbv)}
+      value={formatCurrency.usdFormatter.format(tbv)}
     />
   );
 
@@ -33,9 +33,10 @@ export const UserBonds = () => {
       />
       {isTabletOrMobile && <div className="mb-10">{tbvElement}</div>}
       <TransactionHistory
+        type="user"
         title="Bond History"
         className="mb-30"
-        data={bondPurchases}
+        data={bondPurchases as TransactionHistoryData}
       />
     </div>
   );

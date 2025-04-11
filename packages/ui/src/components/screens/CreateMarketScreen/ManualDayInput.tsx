@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useNumericInput } from "hooks/use-numeric-input";
-import { dateMath, formatDate } from "utils";
-import { Input } from "components";
+import { useNumericInput } from "../../../hooks";
+import { dateMath, formatDate } from "../../../utils";
+import { Input } from "../..";
 
 const errorMessage = "Markets can't be longer than 270 days";
 
@@ -40,6 +40,7 @@ export const ManualDayInput = ({
   return (
     <div className={"bp-manual-day-input w-full" + " " + className}>
       <Input
+        data-testid="market-duration-in-days"
         autoFocus
         errorMessage={error ? errorMessage : ""}
         label="Market Length"

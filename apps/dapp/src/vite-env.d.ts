@@ -9,32 +9,30 @@ declare enum ENVIRONMENT {
   DEVELOPMENT = "development",
 }
 
+type BooleanString = "true" | "false";
+
 interface ImportMetaEnv {
-  readonly VITE_ALCHEMY_MAINNET_KEY: string;
-  readonly VITE_ALCHEMY_GOERLI_KEY: string;
+  readonly VITE_ALCHEMY_RPC_KEY: string;
+
   readonly VITE_ENVIROMENT: ENVIRONMENT;
   readonly VITE_MAINTENANCE: string;
-  readonly VITE_TESTNET: string;
 
   readonly VITE_ALCHEMY_MAINNET_KEY: string;
-  readonly VITE_ALCHEMY_ARBITRUM_MAINNET_KEY: string;
-  readonly VITE_ALCHEMY_OPTIMISM_MAINNET_KEY: string;
-
-  readonly VITE_ALCHEMY_GOERLI_KEY: string;
-  readonly VITE_ALCHEMY_ARBITRUM_GOERLI_KEY: string;
-  readonly VITE_ALCHEMY_OPTIMISM_GOERLI_KEY: string;
-
-  readonly VITE_ALCHEMY_POLYGON_MAINNET_KEY: string;
-  readonly VITE_ALCHEMY_POLYGON_TESTNET_KEY: string;
-
-  readonly VITE_ALCHEMY_BASE_MAINNET_KEY: string;
-  readonly VITE_ALCHEMY_BASE_SEPOLIA_KEY: string;
 
   // PROTOCOL SPECIFIC VARS
   readonly VITE_MARKET_REFERRAL_ADDRESS: string;
   readonly VITE_NO_FRONTEND_FEE_OWNERS: string;
-  // more env variables...
   readonly VITE_COMMIT_HASH: string;
+
+  //Testing
+  readonly VITE_TESTNET: BooleanString;
+  readonly VITE_ENABLE_MOCK_API: BooleanString;
+  readonly VITE_ENABLE_AUTO_SIGNER: BooleanString;
+
+  // Features
+  readonly VITE_FEATURE_LIMIT_ORDERS: BooleanString;
+  readonly VITE_FEATURE_ORACLE_BONDS: BooleanString;
+  readonly VITE_FEATURE_CACHING_API: BooleanString;
 }
 
 declare const __COMMIT_HASH__: string;

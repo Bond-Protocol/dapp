@@ -1,0 +1,12 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": ["./tsconfig.json"]
+  },
+  "extends": [
+    "@bond-protocol/eslint-config-custom",
+    "plugin:storybook/recommended",
+    "plugin:cypress/recommended"
+  ]
+}

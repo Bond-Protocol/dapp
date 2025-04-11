@@ -1,17 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { BondCard } from "..";
-import { useMarkets } from "context/market-context";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
+import { useMarkets } from "hooks";
 import { PageHeader, PageNavigation } from "components/common";
 import { InfoLabel, Loading } from "ui";
-import { TransactionHistory } from "components/lists";
 import { meme } from "src/utils/words";
 import { useMediaQueries } from "hooks/useMediaQueries";
 import { useMarketDetails } from "hooks/useMarketDetails";
 import { MarketStatusChip } from "components/common/MarketStatusChip";
-import { useTokenLiquidity } from "hooks/useTokenLiquidity";
-import { LiqudityWarning } from "components/modules/markets/LiquidityWarning";
-import { environment } from "src/environment";
+import { MarketTransactionHistory } from "components/lists/MarketTransactionHistory";
 
 export const Market = () => {
   const navigate = useNavigate();
@@ -35,9 +32,12 @@ export const Market = () => {
     isFutureMarket,
     marketTypeLabel,
     capacity,
+    bondPriceLabel,
   } = useMarketDetails(market);
 
   if (!market) return <Loading content={meme()} />;
+
+  const isUnknown = discountLabel === "Unknown";
 
   // const lowLiquidity =
   //   !environment.isTesting &&
@@ -70,12 +70,12 @@ export const Market = () => {
       {/*   /> */}
       {/* )} */}
       <div className="mb-16 mt-4 grid grid-cols-2 justify-between gap-4 child:w-full md:flex">
-        <InfoLabel
-          label="Max Payout"
-          tooltip="The maximum payout currently available from this market."
-        >
-          {maxPayoutLabel}
-          <span className="ml-1 text-xl">{market.payoutToken.symbol}</span>
+        <InfoLabel label="Bond Price" tooltip="The current price for this bond">
+          {!isUnknown && "$"}
+          {bondPriceLabel}
+          {isUnknown && (
+            <span className="ml-1 text-xl">{market.quoteToken.symbol}</span>
+          )}
         </InfoLabel>
 
         <InfoLabel
@@ -122,7 +122,7 @@ export const Market = () => {
 
       <BondCard market={market} isFutureMarket={isFutureMarket} />
       {!isFutureMarket && (
-        <TransactionHistory className="mt-20" market={market} />
+        <MarketTransactionHistory className="mt-20" market={market} />
       )}
     </div>
   );

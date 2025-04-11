@@ -1,4 +1,4 @@
-import { ActionInfoProps, ActionInfoLabel } from "components";
+import { ActionInfoProps, ActionInfoLabel } from "../../components";
 
 export const SummaryRow = (props: ActionInfoProps) => {
   return (

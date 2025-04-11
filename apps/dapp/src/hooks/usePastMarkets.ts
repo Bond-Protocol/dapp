@@ -1,32 +1,50 @@
-import { useMemo } from "react";
-import { getSubgraphQueries } from "services/subgraph-endpoints";
-import { Market, useGetClosedMarketsQuery } from "src/generated/graphql";
+import { useQueries, UseQueryResult } from "@tanstack/react-query";
+
+import { Token } from "@bond-protocol/contract-library";
+import {
+  GetClosedMarketsDocument,
+  GetClosedMarketsQuery,
+} from "src/generated/graphql";
 import { concatSubgraphQueryResultArrays } from "src/utils/concatSubgraphQueryResultArrays";
-import { useSubgraphLoadingCheck } from "./useSubgraphLoadingCheck";
 import { useTokens } from "./useTokens";
+import { queryAllEndpoints } from "src/utils/queryAllEndpoints";
 
+/**
+ * Fetches global data from all subgraphs
+ */
 export const usePastMarkets = () => {
-  const currentTime = useMemo(() => Math.trunc(Date.now() / 1000), []);
-  const queries = getSubgraphQueries(useGetClosedMarketsQuery, { currentTime });
-  const { isLoading } = useSubgraphLoadingCheck(queries);
-  const { getByAddress, tokens } = useTokens();
+  const { getByAddress } = useTokens();
 
-  const markets = useMemo(() => {
-    const response: Market[] = !isLoading
-      ? concatSubgraphQueryResultArrays(queries, "markets")
-      : [];
+  return useQueries({
+    queries: queryAllEndpoints<GetClosedMarketsQuery>({
+      document: GetClosedMarketsDocument,
+    }),
+    combine: (responses) => {
+      const filteredResponses = responses.filter(
+        (response): response is UseQueryResult<GetClosedMarketsQuery> =>
+          response?.data !== undefined
+      );
+      const markets = concatSubgraphQueryResultArrays(
+        filteredResponses,
+        "markets"
+      );
 
-    return response?.length
-      ? response.map((market: Market) =>
-          updateClosedMarkets(getByAddress, market)
-        )
-      : response;
-  }, [isLoading, tokens, getByAddress]);
+      const closedMarkets = markets
+        .map((market) => updateClosedMarkets(getByAddress, market))
+        .filter((m) => (m.total?.payoutUsd ?? 0) > 100);
 
-  return { markets, isLoading };
+      return {
+        data: { closedMarkets },
+        isLoading: responses.some((r) => r.isLoading),
+      };
+    },
+  });
 };
 
-const updateClosedMarkets = (getByAddress: Function, market: Market) => {
+function updateClosedMarkets(
+  getByAddress: (address: string) => Token | undefined,
+  market: GetClosedMarketsQuery["markets"][number]
+) {
   const quoteToken = getByAddress(market.quoteToken.address);
   const payoutToken = getByAddress(market.payoutToken.address);
   const total = market.bondPurchases?.reduce(
@@ -59,4 +77,4 @@ const updateClosedMarkets = (getByAddress: Function, market: Market) => {
     quoteToken: quoteToken ?? market.quoteToken,
     payoutToken: payoutToken ?? market.payoutToken,
   };
-};
+}

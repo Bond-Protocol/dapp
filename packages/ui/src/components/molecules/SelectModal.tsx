@@ -77,10 +77,11 @@ export const SelectModal = ({
           </div>
         )}
         <Select
+          // @ts-ignore
           id={props.id}
           options={customOptions}
           value={value}
-          onChange={(_e, value) => {
+          onChange={(value) => {
             if (value === "custom") {
               setOpen(true);
               return;

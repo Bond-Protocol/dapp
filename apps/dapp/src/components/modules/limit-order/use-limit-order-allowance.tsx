@@ -1,8 +1,8 @@
 import { getAddresses } from "@bond-protocol/contract-library";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { useTokenAllowance } from "hooks/useTokenAllowance";
 import { Order } from "src/types/openapi";
-import { useMarkets } from "context/market-context";
+import { useMarkets } from "hooks";
 import { useMemo } from "react";
 import { Address, formatUnits, parseUnits } from "viem";
 

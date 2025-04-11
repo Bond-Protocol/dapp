@@ -16,7 +16,7 @@ import defillama from "services/defillama";
 import { useNavigate } from "react-router-dom";
 import { useIsEmbed } from "hooks/useIsEmbed";
 import { usePurchase } from "hooks/contracts/usePurchase";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { formatEther, formatUnits } from "viem";
 import { TransactionWizard } from "components/modals/TransactionWizard";
 import { ApprovingLabel } from "components/modules/limit-order";
@@ -114,13 +114,6 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
   const amountIn =
     !isNaN(parsedAmount) && !isFinite(parsedAmount) ? 0 : parsedAmount;
 
-  const bond = usePurchase(market, {
-    amountIn,
-    amountOut: payout,
-    referrer: referralAddress,
-    slippage: DEFAULT_SLIPPAGE,
-  });
-
   const {
     execute,
     txStatus: approveTxStatus,
@@ -134,6 +127,14 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     parsedAmount.toString(),
     market.teller
   );
+
+  const bond = usePurchase(market, {
+    amountIn,
+    amountOut: payout,
+    referrer: referralAddress,
+    slippage: DEFAULT_SLIPPAGE,
+    enabled: hasSufficientBalance && hasSufficientAllowance,
+  });
 
   const { nativeCurrency, nativeCurrencyPrice } = useNativeCurrency(
     market.chainId
@@ -203,6 +204,14 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
       tooltip: `The maximum amount of ${market.quoteToken.symbol} accepted in a single transaction.`,
     },
     {
+      leftLabel: "Max Payout",
+      rightLabel: `${formatCurrency.dynamicFormatter(
+        market.maxPayout,
+        false
+      )} ${market.payoutToken.symbol}`,
+      tooltip: `The maximum payout currently available from this market.`,
+    },
+    {
       leftLabel: "Estimated Gas Fee",
       rightLabel: `${networkFee} ${nativeCurrency.symbol} (~${
         networkFeeUsd ?? "?"
@@ -233,6 +242,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
     <div className="p-4">
       <div className="flex h-full flex-col justify-between">
         <InputCard
+          data-testid="bond-input"
           onChange={(amount) =>
             setAmount((prev) =>
               !isNaN(Number(amount)) && isFinite(Number(amount))
@@ -262,6 +272,7 @@ export const BondPurchaseCard: FC<BondPurchaseCard> = ({ market }) => {
           )}
         >
           <Button
+            data-testid="bond-button"
             disabled={
               !hasSufficientBalance ||
               approveTxStatus.isLoading ||

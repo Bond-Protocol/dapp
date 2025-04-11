@@ -115,7 +115,6 @@ export const tableColumns: Array<Column<any>> = [
           <TransactionWizard
             chainId={chainId}
             open={open}
-            //@ts-ignore
             onSubmit={() => claim()}
             onClose={() => setOpen(false)}
             SuccessDialog={() => (

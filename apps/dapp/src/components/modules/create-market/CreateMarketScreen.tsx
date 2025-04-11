@@ -17,7 +17,7 @@ import {
   TransactionHashDialog,
   vestingOptions,
 } from "ui";
-import { ReactComponent as CalendarIcon } from "assets/icons/calendar-big.svg";
+import CalendarIcon from "assets/icons/calendar-big.svg?react";
 import { SelectTokenController } from "components/organisms/SelectTokenController";
 import { calculateTrimDigits, trimAsNumber } from "formatters";
 import {
@@ -31,7 +31,7 @@ import {
   PriceModelPicker,
 } from "./";
 import { Address } from "viem";
-import { Token } from "types";
+import { Token } from "@bond-protocol/types";
 import { getBlockExplorer } from "@bond-protocol/contract-library";
 import { unavailableFixedExpiry } from "./config";
 
@@ -169,7 +169,6 @@ export const CreateMarketScreen = (props: CreateMarketScreenProps) => {
     </>
   );
 
-  const blockExplorer = getBlockExplorer(state.chainId);
   const txBlockExplorer = getBlockExplorer(state.chainId, "tx");
 
   return (

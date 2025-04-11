@@ -1,4 +1,4 @@
-import { ReactComponent as CheckmarkIcon } from "assets/icons/checkmark.svg";
+import CheckmarkIcon from "../../assets/icons/checkmark.svg?react";
 import { useState } from "react";
 
 export type CheckboxProps = {
@@ -18,6 +18,7 @@ export const Checkbox = ({
   className,
   labelClassname,
   label,
+  ...props
 }: CheckboxProps) => {
   const [checked, setChecked] = useState(startChecked);
 
@@ -39,6 +40,7 @@ export const Checkbox = ({
         className={`border-light-neutral flex h-5 w-5 items-center border ${
           disabled ? "opacity-80" : "hover:cursor-pointer"
         } ${className}`}
+        {...props}
       >
         <div
           className={`flex w-full items-center justify-center transition-all ${
@@ -49,7 +51,7 @@ export const Checkbox = ({
         </div>
       </div>
       {label && (
-        <p className={"pl-2 text-sm mt-1" + " " + labelClassname}>{label}</p>
+        <p className={"mt-1 pl-2 text-sm" + " " + labelClassname}>{label}</p>
       )}
     </div>
   );

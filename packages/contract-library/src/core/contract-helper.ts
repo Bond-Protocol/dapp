@@ -4,9 +4,9 @@ import {
   getAddresses,
   Auctioneer,
   auctioneersByType,
-} from "core";
-import type { BondType } from "types";
-import { abis, auctioneerAbis } from "abis";
+} from "../core";
+import type { BondType } from "@bond-protocol/types";
+import { abis, auctioneerAbis } from "../abis";
 
 export function getAuctioneerAbiForName(auctioneerName: Auctioneer) {
   return auctioneerAbis[auctioneerName];

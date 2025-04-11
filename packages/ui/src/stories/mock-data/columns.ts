@@ -6,7 +6,7 @@ import {
   usdFormatter,
   usdLongFormatter,
 } from "src";
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 
 export const bondColumn: Column<CalculatedMarket> = {
   label: "Bond",

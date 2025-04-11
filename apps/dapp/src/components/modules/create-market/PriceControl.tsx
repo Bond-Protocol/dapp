@@ -6,8 +6,8 @@ import {
   getRateMod,
   trim,
 } from "formatters";
-import { ReactComponent as PlusIcon } from "assets/icons/plus.svg";
-import { ReactComponent as MinusIcon } from "assets/icons/minus.svg";
+import PlusIcon from "assets/icons/plus.svg?react";
+import MinusIcon from "assets/icons/minus.svg?react";
 import { Token } from "./create-market-reducer";
 
 export type PriceControlProps = {
@@ -23,6 +23,7 @@ export type PriceControlProps = {
   returnValue: "percentage" | "exchange_rate";
   initialValue?: string;
   className?: string;
+  "data-testid"?: string;
 };
 
 export const PriceControl = (props: PriceControlProps) => {
@@ -194,6 +195,7 @@ export const PriceControl = (props: PriceControlProps) => {
             }`}
           >
             <input
+              data-testid={props["data-testid"]}
               {...numericInput}
               value={value}
               onChange={onChange}

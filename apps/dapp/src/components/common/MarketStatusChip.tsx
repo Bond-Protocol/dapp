@@ -1,4 +1,4 @@
-import { CalculatedMarket } from "types";
+import { CalculatedMarket } from "@bond-protocol/types";
 import { dateMath, formatDate, TooltipWrapper } from "ui";
 
 export type MarketStatusChipProps = {
