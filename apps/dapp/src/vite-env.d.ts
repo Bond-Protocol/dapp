@@ -17,8 +17,6 @@ interface ImportMetaEnv {
   readonly VITE_ENVIROMENT: ENVIRONMENT;
   readonly VITE_MAINTENANCE: string;
 
-  readonly VITE_ALCHEMY_MAINNET_KEY: string;
-
   // PROTOCOL SPECIFIC VARS
   readonly VITE_MARKET_REFERRAL_ADDRESS: string;
   readonly VITE_NO_FRONTEND_FEE_OWNERS: string;
