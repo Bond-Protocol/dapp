@@ -3,22 +3,16 @@ import { PageHeader } from "components/common";
 import { ActionCard, Switch } from "ui";
 import { useNavigate } from "react-router-dom";
 import { useMediaQueries } from "hooks/useMediaQueries";
-import { ClosedMarketList } from "components/lists/ClosedMarketList";
 import { useState } from "react";
-import { useMarkets } from "hooks";
 import { environment } from "src/environment";
 
 export const Markets = () => {
   const navigate = useNavigate();
   const { isTabletOrMobile } = useMediaQueries();
-  const { isLoading, arePastMarketsLoading } = useMarkets();
   const scrollUp = () => window.scrollTo(0, 0);
   const [hideUnknownMarkets, setHideUnknownMarkets] = useState(
     environment.isProduction
   );
-
-  const showPastMarkets =
-    !arePastMarketsLoading && !Object.values(isLoading).some(Boolean);
 
   return (
     <>
@@ -41,11 +35,7 @@ export const Markets = () => {
         </div>
         <MarketList hideUnknownMarkets={hideUnknownMarkets} />
       </div>
-      {showPastMarkets && (
-        <div>
-          <ClosedMarketList />
-        </div>
-      )}
+
       {!isTabletOrMobile && (
         <ActionCard
           className="mb-6 mt-8"
