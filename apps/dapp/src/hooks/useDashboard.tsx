@@ -214,6 +214,7 @@ export const useDashboard = () => {
 
   return {
     allMarkets,
+    isMarketOwner: allMarkets.length > 0,
     isLoading:
       !dashboardProcessingQuery.isFetched || dashboardProcessingQuery.isLoading,
     ownerBalances: dashboardProcessingQuery.data?.ownerBalances,
