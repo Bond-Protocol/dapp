@@ -11,6 +11,7 @@ export interface NavbarTabsProps {
 const defaultTabs = [
   { label: "Markets", path: "/markets", group: "market" },
   { label: "Tokens", path: "/tokens", group: "token" },
+  { label: "Analytics", path: "/analytics", group: "analytics" },
   { label: "Dashboard", path: "/dashboard", group: "dashboard" },
 ];
 
@@ -26,7 +27,7 @@ export const NavbarTabs = (props: NavbarTabsProps) => {
   const tabs = props.tabs ?? defaultTabs;
 
   const isSelected = (path: string, group: string) => {
-    if (path === "/tokens" && location.pathname === "/") return true;
+    if (path === "/markets" && location.pathname === "/") return true;
     return (
       path.substring(1) === location.pathname.split("/")[1] ||
       location.pathname.includes(group)

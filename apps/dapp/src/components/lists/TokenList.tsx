@@ -7,14 +7,11 @@ import { meme } from "src/utils/words";
 import { Token, chainLogos } from "@bond-protocol/types";
 import { environment } from "src/environment";
 import { PLACEHOLDER_TOKEN_LOGO_URL } from "src/utils";
-import { useGetGlobalData } from "hooks/useGetGlobalData";
 
 export const TokenList = () => {
   const { isTabletOrMobile } = useMediaQueries();
-  const { tbv, payoutTokens } = useTokens();
+  const { payoutTokens } = useTokens();
   const navigate = useNavigate();
-  const { data } = useGetGlobalData();
-  const { totalPurchases, uniqueBonders } = data;
 
   const scrollUp = () => window.scrollTo(0, 0);
 
@@ -63,35 +60,11 @@ export const TokenList = () => {
       : tokens;
 
   const title = isTabletOrMobile ? "TOKENS" : "BOND TOKENS";
-  const bonderTitle = isTabletOrMobile ? "BONDERS" : "UNIQUE BONDERS";
 
   return (
-    <div id="__ROOT_PAGE__" className="pb-4">
-      <PageHeader title={title} />
-      <div className="grid grid-cols-2 grid-rows-2 gap-4 pb-10 pt-4 md:flex">
-        <InfoLabel
-          reverse
-          label="Total Bonded Value"
-          tooltip="Total value, in USD, of assets acquired by tokens through bonds"
-          className="col-span-2"
-        >
-          {tbv}
-        </InfoLabel>
-        <InfoLabel
-          reverse
-          label="Total Bonds"
-          tooltip="Total count of bonds acquired through the protocol's smart contracts"
-        >
-          {totalPurchases}
-        </InfoLabel>
-        <InfoLabel
-          reverse
-          label={bonderTitle}
-          tooltip="Total count of unique addresses that acquired bonds"
-        >
-          {uniqueBonders}
-        </InfoLabel>
-      </div>
+    <div id="__TOKENS_PAGE__" className="pb-4">
+      <PageHeader title={title} className="mb-3" />
+
       {tokens && tokens.length ? (
         <div className="mx-auto flex flex-wrap justify-center gap-x-4 gap-y-4">
           {cards.map((token) => {
