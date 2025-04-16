@@ -3,7 +3,7 @@ import { IDS, URLS } from "../constants";
 describe("Smoke Tests", () => {
   it("Should render home page", () => {
     cy.visit(URLS.BASE_URL);
-    cy.shouldRenderPageWithId(IDS.APP_ROOT);
+    cy.shouldRenderPageWithId(IDS.MARKET_LIST_PAGE);
   });
 
   it("Should render market list", () => {
@@ -14,6 +14,11 @@ describe("Smoke Tests", () => {
   it("Should render dashboard", () => {
     cy.visit(URLS.DASHBOARD);
     cy.shouldRenderPageWithId(IDS.DASHBOARD_PAGE);
+  });
+
+  it("Should render analytics", () => {
+    cy.visit(URLS.ANALYTICS);
+    cy.shouldRenderPageWithId(IDS.ANALYTICS_PAGE);
   });
 
   it("Should render create page", () => {

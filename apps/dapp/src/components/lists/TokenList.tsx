@@ -62,7 +62,7 @@ export const TokenList = () => {
   const title = isTabletOrMobile ? "TOKENS" : "BOND TOKENS";
 
   return (
-    <div id="__ROOT_PAGE__" className="pb-4">
+    <div id="__TOKENS_PAGE__" className="pb-4">
       <PageHeader title={title} className="mb-3" />
 
       {tokens && tokens.length ? (

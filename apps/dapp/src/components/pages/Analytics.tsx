@@ -4,7 +4,7 @@ import { ProtocolMetrics } from "components/organisms/ProtocolMetrics";
 
 export const Analytics = () => {
   return (
-    <div className="h-full">
+    <div id="__ANALYTICS_PAGE_" className="h-full">
       <PageHeader title="ANALYTICS" />
       <ProtocolMetrics />
       <ClosedMarketList />
