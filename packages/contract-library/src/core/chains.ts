@@ -16,7 +16,7 @@ const getBlockExplorer = (
   const blockExplorer = chain?.blockExplorers?.default;
 
   return {
-    url: `${blockExplorer?.url}/${subpath}/` ?? "",
+    url: `${blockExplorer?.url}/${subpath}/`,
     name: blockExplorer?.name ?? "",
   };
 };

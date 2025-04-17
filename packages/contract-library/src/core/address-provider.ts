@@ -49,6 +49,7 @@ export const getMarketTypeByAuctioneer = (address: string): MarketPricing => {
       return "dynamic";
   }
 };
+
 const mainnetAddresses: ContractAddresses = {
   authority: "0x007A0F48A4e3d74Ab4234adf9eA9EB32f87b4b14",
   aggregator: "0x007A66A2a13415DB3613C1a4dd1C942A285902d1",
@@ -287,6 +288,25 @@ const berachainBartio: ContractAddresses = {
   settlement: "0x007102170E678984738f687E5b70F89Ad7ACa85e",
 };
 
+const sonicAddresses: ContractAddresses = {
+  authority: "0x007A0F3b90c97ab8c5eE7f3b142204Ad819edB3A",
+  aggregator: "0x007A66b5358D0e2a07C0eE078908517d186c1108",
+  fixedExpiryTeller: "" as Address,
+  fixedExpirySDAAuctioneer: "" as Address,
+  fixedExpirySDAv1_1Auctioneer: "" as Address,
+  fixedExpiryFPAAuctioneer: "" as Address,
+  fixedExpiryOFDAAuctioneer: "" as Address,
+  fixedExpiryOSDAAuctioneer: "" as Address,
+  fixedTermTeller: "0x007F774351e541b8bc720018De0796c4BF5afE3D",
+  fixedTermSDAAuctioneer:
+    "0xF75DA1E6eA0521da0cb938D2F96bfe1Da5929557" as Address,
+  fixedTermSDAv1_1Auctioneer: "0xF75DA1E6eA0521da0cb938D2F96bfe1Da5929557",
+  fixedTermFPAAuctioneer: "0xF7F9A834CBD3075D4810A9b818f594312C0de168",
+  fixedTermOFDAAuctioneer: "" as Address,
+  fixedTermOSDAAuctioneer: "" as Address,
+  settlement: "0x007102170E678984738f687E5b70F89Ad7ACa85e",
+};
+
 const addressesByChainId: Record<number, Partial<ContractAddresses>> = {
   1: mainnetAddresses as ContractAddresses,
   5: goerliAddresses,
@@ -301,6 +321,7 @@ const addressesByChainId: Record<number, Partial<ContractAddresses>> = {
   8453: baseMainnetAddresses,
   84532: baseSepoliaAddresses,
   80084: berachainBartio,
+  146: sonicAddresses,
 };
 
 export const getAddresses = (chainId: number) => {
