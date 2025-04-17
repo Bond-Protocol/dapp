@@ -1,6 +1,7 @@
 import mode from "./mode";
 import berachainBartio from "./berachain-bartio";
+import { sonic } from "./sonic";
 
-export { mode, berachainBartio };
+export { mode, berachainBartio, sonic };
 
-export default [mode, berachainBartio];
+export default [mode, berachainBartio, sonic];

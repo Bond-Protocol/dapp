@@ -22,7 +22,7 @@ const anvilProvider = jsonRpcProvider({ rpc: () => ({ http: ANVIL_RPC_URL }) });
 export const providers = environment.enableAutoSigner
   ? [anvilProvider]
   : [
-      alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_MAINNET_KEY }),
+      alchemyProvider({ apiKey: import.meta.env.VITE_ALCHEMY_RPC_KEY }),
       publicProvider(),
     ];
 

@@ -15,12 +15,14 @@ import {
   EmbeddedPurchaseCard,
   EmbeddedDashboard,
 } from "components/modules/embed";
+import { Analytics } from "components/pages/Analytics";
 
 export const RouteMap: FC = () => {
   return (
     <>
       <Switch>
-        <Route path="/" element={<TokenList />} />
+        <Route path="/" element={<Markets />} />
+        <Route path="/analytics" element={<Analytics />} />{" "}
         <Route path="/dashboard" element={<Dashboard />} />{" "}
         <Route path="/markets" element={<Markets />} />
         <Route path="/tokens" element={<TokenList />} />
