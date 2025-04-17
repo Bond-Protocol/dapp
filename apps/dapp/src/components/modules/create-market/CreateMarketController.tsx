@@ -364,10 +364,7 @@ export function getBondType(state: CreateMarketState) {
        SDA v1.1 has not been deployed to Ethereum Mainnet
        It has been deployed to Goerli, but using the old SDA contracts for consistency
       */
-      if (
-        chainId === CHAIN_ID.ETHEREUM_MAINNET ||
-        chainId === CHAIN_ID.GOERLI_TESTNET
-      ) {
+      if (chainId === CHAIN_ID.ETHEREUM_MAINNET) {
         return state.vestingType === "term"
           ? BondType.FIXED_TERM_SDA
           : BondType.FIXED_EXPIRY_SDA;

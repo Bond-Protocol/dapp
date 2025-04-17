@@ -24,14 +24,17 @@ export const orderApiServerMap = {
 };
 
 export const mainnetSubgraphs = {
-  "1": "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-ethereum/api", //mainnet
+  "1": "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-ethereum/api",
   "42161":
-    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-arbitrum/api", //arb
-  "10": "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-optimism/api", //op
+    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-arbitrum/api",
+  "10": "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-optimism/api",
   "8453":
-    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-base/api", //base
+    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-base/api",
   "137":
-    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-polygon/api", //polygon
+    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-polygon/api",
+  "146":
+    "https://subgraph.satsuma-prod.com/44c4cc082f74/spaces-team/bond-protocol-sonic-mainnet/api",
+  "56": "https://subgraph.satsuma-prod.com/44c4cc082f74/spaces-team/bond-protocol-bsc/api",
 };
 
 //Added to prevent leaking to prod and triggering unnecessary queries

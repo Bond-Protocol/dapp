@@ -9,7 +9,8 @@ import {
 import { environment } from "src/environment";
 import { ANVIL_RPC_URL } from "./auto-signer";
 import { PublicClient, createPublicClient, http } from "viem";
-import { baseSepolia } from "viem/chains";
+import { baseSepolia, bsc } from "viem/chains";
+import { sonic } from "@bond-protocol/contract-library";
 const key = import.meta.env.VITE_ALCHEMY_RPC_KEY;
 
 const rpcConfigs = [
@@ -40,6 +41,14 @@ const rpcConfigs = [
   {
     chain: baseSepolia,
     endpoint: `https://base-sepolia.g.alchemy.com/v2/${key}`,
+  },
+  {
+    chain: sonic,
+    endpoint: `https://sonic-mainnet.g.alchemy.com/v2/${key}`,
+  },
+  {
+    chain: bsc,
+    endpoint: `https://bnb-mainnet.g.alchemy.com/v2/${key}`,
   },
 ];
 

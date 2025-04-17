@@ -32,6 +32,14 @@ export const mainnetEndpoints = [
     url: subgraphEndpoints[CHAIN_ID.BASE_MAINNET],
     chain: CHAIN_ID.BASE_MAINNET,
   },
+  {
+    url: subgraphEndpoints[CHAIN_ID.SONIC],
+    chain: CHAIN_ID.SONIC,
+  },
+  {
+    url: subgraphEndpoints[CHAIN_ID.BSC_MAINNET],
+    chain: CHAIN_ID.BSC_MAINNET[CHAIN_ID.BSC_MAINNET],
+  },
 ];
 
 export const testnetEndpoints = [

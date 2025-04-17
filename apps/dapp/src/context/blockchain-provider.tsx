@@ -10,7 +10,10 @@ import { getWallets, providers } from "src/config/wagmi";
 import { clients } from "src/config/public-clients";
 import { ACTIVE_CHAINS } from "src/config/chains";
 
-const { chains, publicClient } = configureChains(ACTIVE_CHAINS, providers);
+const { chains, publicClient } = configureChains(
+  ACTIVE_CHAINS.sort((a, b) => a.name.localeCompare(b.name)),
+  providers
+);
 
 const connectors = connectorsForWallets([
   {
