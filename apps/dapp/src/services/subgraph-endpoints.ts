@@ -1,75 +1,27 @@
 import { UseQueryResult, useQueries } from "@tanstack/react-query";
 import { environment } from "src/environment";
-import { mainnetSubgraphs, testnetSubgraphs } from "src/config";
 import { Variables } from "graphql-request";
 import { queryAllEndpoints } from "src/utils/queryAllEndpoints";
 import { CHAIN_ID } from "@bond-protocol/types";
+import { mainnetDeployments } from "@bond-protocol/contract-library/src/deployments/mainnets";
+import { testnetDeployments } from "@bond-protocol/contract-library/src/deployments/testnets";
+import { BondDeployment } from "@bond-protocol/contract-library/src/deployments/types";
 
-/**List of available subgraph endpoint urls indexed by chain*/
-export const subgraphEndpoints = {
-  ...mainnetSubgraphs,
-  ...testnetSubgraphs,
-} as Record<number, string>;
+function toSubgraphURL(deployment: BondDeployment) {
+  return {
+    url: deployment.subgraphURL,
+    chain: deployment.chain,
+  };
+}
+export const mainnetEndpoints = mainnetDeployments.map(toSubgraphURL);
+export const testnetEndpoints = testnetDeployments.map(toSubgraphURL);
 
-export const mainnetEndpoints = [
-  {
-    url: subgraphEndpoints[CHAIN_ID.ETHEREUM_MAINNET],
-    chain: CHAIN_ID.ETHEREUM_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.ARBITRUM_MAINNET],
-    chain: CHAIN_ID.ARBITRUM_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.OPTIMISM_MAINNET],
-    chain: CHAIN_ID.OPTIMISM_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.POLYGON_MAINNET],
-    chain: CHAIN_ID.POLYGON_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.BASE_MAINNET],
-    chain: CHAIN_ID.BASE_MAINNET,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.SONIC],
-    chain: CHAIN_ID.SONIC,
-  },
-  {
-    url: subgraphEndpoints[CHAIN_ID.BSC_MAINNET],
-    chain: CHAIN_ID.BSC_MAINNET[CHAIN_ID.BSC_MAINNET],
-  },
-];
-
-export const testnetEndpoints = [
-  // {
-  //   url: subgraphEndpoints[CHAIN_ID.GOERLI_TESTNET],
-  //   chain: CHAIN_ID.GOERLI_TESTNET,
-  // },
-  // {
-  //   url: subgraphEndpoints[CHAIN_ID.ARBITRUM_GOERLI_TESTNET],
-  //   chain: CHAIN_ID.ARBITRUM_GOERLI_TESTNET,
-  // },
-  // {
-  //   url: subgraphEndpoints[CHAIN_ID.OPTIMISM_GOERLI_TESTNET],
-  //   chain: CHAIN_ID.OPTIMISM_GOERLI_TESTNET,
-  // },
-
-  // {
-  //   url: subgraphEndpoints[CHAIN_ID.POLYGON_MUMBAI_TESTNET],
-  //   chain: CHAIN_ID.POLYGON_MUMBAI_TESTNET,
-  // },
-  {
-    url: subgraphEndpoints[CHAIN_ID.BASE_SEPOLIA],
-    chain: CHAIN_ID.BASE_SEPOLIA,
-  },
-  /*{
-    url: subgraphEndpoints[CHAIN_ID.AVALANCHE_FUJI_TESTNET],
-    chain: CHAIN_ID.AVALANCHE_FUJI_TESTNET,
-  },
-   */
-];
+export const subgraphEndpoints: Record<number, string> = [
+  ...mainnetEndpoints,
+  ...testnetEndpoints,
+].reduce((record, element) => {
+  return { ...record, [element.chain.id]: element.url };
+}, {});
 
 export const currentEndpoints = environment.isTesting
   ? testnetEndpoints
