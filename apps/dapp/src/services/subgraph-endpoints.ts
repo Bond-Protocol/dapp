@@ -2,7 +2,6 @@ import { UseQueryResult, useQueries } from "@tanstack/react-query";
 import { environment } from "src/environment";
 import { Variables } from "graphql-request";
 import { queryAllEndpoints } from "src/utils/queryAllEndpoints";
-import { CHAIN_ID } from "@bond-protocol/types";
 import { mainnetDeployments } from "@bond-protocol/contract-library/src/deployments/mainnets";
 import { testnetDeployments } from "@bond-protocol/contract-library/src/deployments/testnets";
 import { BondDeployment } from "@bond-protocol/contract-library/src/deployments/types";
@@ -79,7 +78,7 @@ export function useGetSubgraphQueries<TQuery>({
 
 export const getSubgraphQueriesPerChainFn = (
   query: ({}: any, {}: any, {}: any) => UseQueryResult<any, any>,
-  func: (chain: CHAIN_ID) => any,
+  func: (chain: number) => any,
   fieldName: string
 ): UseQueryResult<any, any>[] => {
   const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;

@@ -7,7 +7,7 @@ import { PriceModelDetails } from "./PriceModelDetails";
 import { PriceModel, PriceType } from "./create-market-reducer";
 import { PriceControl, PriceControlProps } from "./PriceControl";
 import { useNetwork } from "wagmi";
-import { unavailableOracleChains } from "./config";
+import { availableOracleChains } from "./config";
 import { featureToggles } from "src/feature-toggles";
 
 export type PriceModelPickerProps = {
@@ -128,7 +128,7 @@ export const PriceModelPicker = (props: PriceModelPickerProps) => {
       <div className="flex items-center justify-between">
         <p className="text-sm text-light-grey-400">Price Model</p>
         {featureToggles.ORACLE_BONDS ? (
-          props.chain && !unavailableOracleChains.includes(props.chain) ? (
+          props.chain && availableOracleChains.includes(props.chain) ? (
             <Switch
               label="Oracle"
               onChange={(e) => {

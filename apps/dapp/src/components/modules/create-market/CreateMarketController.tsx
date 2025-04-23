@@ -7,14 +7,13 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import * as contractLib from "@bond-protocol/contract-library";
-import { BondType, CHAIN_ID, CreateMarketParams } from "@bond-protocol/types";
+import { BondType, CreateMarketParams } from "@bond-protocol/types";
 import {
   checkOraclePairValidity,
   getBlockExplorer,
   getOracleDecimals,
   getOraclePrice,
   getTeller,
-  getAuctioneerForCreate,
 } from "@bond-protocol/contract-library";
 import {
   CreateMarketAction,
@@ -28,6 +27,7 @@ import { useTokens } from "hooks";
 import { parseUnits, formatUnits } from "viem";
 import { useAllowance } from "hooks/contracts/useAllowance";
 import { useCreateMarket as useCreateMarketContract } from "hooks/contracts/useCreateMarket";
+import { mainnet } from "@wagmi/chains";
 
 export const CreateMarketController = () => {
   const [creationHash, setCreationHash] = useState<Address>();
@@ -364,7 +364,7 @@ export function getBondType(state: CreateMarketState) {
        SDA v1.1 has not been deployed to Ethereum Mainnet
        It has been deployed to Goerli, but using the old SDA contracts for consistency
       */
-      if (chainId === CHAIN_ID.ETHEREUM_MAINNET) {
+      if (chainId === mainnet.id.toString()) {
         return state.vestingType === "term"
           ? BondType.FIXED_TERM_SDA
           : BondType.FIXED_EXPIRY_SDA;
