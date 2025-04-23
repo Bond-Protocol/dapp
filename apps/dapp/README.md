@@ -1,6 +1,6 @@
 # Bond Protocol dApp
 
-## Dev setup (for now)
+## Dev setup
 
 ```bash
 pnpm install
@@ -14,9 +14,6 @@ pnpm build
 #Serve prod/compiled code locally
 pnpm preview
 ```
-
-> [!WARNING]
-> App still need the [caching API](https://github.com/Bond-Protocol/api) to be running in order to work, this should be deprecated in a near future
 
 ## Testing
 
@@ -38,11 +35,8 @@ pnpm test:run # Headless mode
 pnpm test:open # Open browser mode -- useful for development
 ```
 
-### New Chain Deployment Setup
+### Enabling new Chains
 
-- Add addresses to `packages/contract-library/.../address-provider.tsx`
-- Add chain to `CHAIN_ID` enum in `packages/types/.../chains.ts`
-- Add chain to `dapp/.../blockchain-provider.tsx`
-- Add subgraph to `dapp/.../services/subgraph-endpoints.ts`
-- Add chain handlers for defillama/coingecko to `dapp/.../defillama`
-- If oracle markets are not available, add it to `dapp/.../create-market/config.ts`
+- Check examples under `packages/contract-library/src/deployments` for the configuration structure
+- Update `../deployments/(mainnets/testnets)/index.ts` to include the newly added deployment configuration
+- If oracle markets or fixed expiry is available, add it to `dapp/.../create-market/config.ts`

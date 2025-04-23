@@ -1,6 +1,6 @@
 import { WalletClient } from "wagmi";
 import { baseSepolia, foundry } from "viem/chains";
-import { custom, createWalletClient, Account, Address } from "viem";
+import { custom, createWalletClient, Address } from "viem";
 import { Connector } from "wagmi";
 import { injectAutoSignerProvider } from "@axis-finance/auto-signer-provider";
 import { privateKeyToAccount } from "viem/accounts";

@@ -1,5 +1,5 @@
 import { abis } from "../abis";
-import { ContractAddresses } from "./address-provider";
+import { ContractAddresses } from "./types";
 import { BondType } from "@bond-protocol/types";
 
 export enum Auctioneer {

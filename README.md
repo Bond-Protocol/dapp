@@ -41,6 +41,12 @@ cd apps/dapp
 pnpm test:open
 ```
 
+### Enabling new Chains
+
+- Check examples under `packages/contract-library/src/deployments` for the configuration structure
+- Update `../deployments/(mainnets/testnets)/index.ts` to include the newly added deployment configuration
+- If oracle markets or fixed expiry is available, add it to `dapp/.../create-market/config.ts`
+
 ## Useful Links
 
 [Turbopack](https://turbo.build/repo/docs)

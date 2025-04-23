@@ -440,6 +440,12 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2
 
+  packages/deployments:
+    devDependencies:
+      viem:
+        specifier: 1.17.2
+        version: 1.17.2(typescript@5.2.2)(zod@3.22.4)
+
   packages/formatters:
     dependencies:
       date-fns:
@@ -4063,7 +4069,7 @@ packages:
       graphql-ws: 6.0.4(graphql@16.5.0)(ws@8.18.1)
       isomorphic-ws: 5.0.0(ws@8.18.1)
       tslib: 2.8.1
-      ws: 8.18.1
+      ws: 8.18.1(bufferutil@4.0.6)(utf-8-validate@5.0.9)
     transitivePeerDependencies:
       - '@fastify/websocket'
       - bufferutil
@@ -4101,7 +4107,7 @@ packages:
       graphql: 16.5.0
       isomorphic-ws: 5.0.0(ws@8.18.1)
       tslib: 2.5.0
-      ws: 8.18.1
+      ws: 8.18.1(bufferutil@4.0.6)(utf-8-validate@5.0.9)
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -4349,7 +4355,7 @@ packages:
       isomorphic-ws: 5.0.0(ws@8.18.1)
       sync-fetch: 0.6.0-2
       tslib: 2.5.0
-      ws: 8.18.1
+      ws: 8.18.1(bufferutil@4.0.6)(utf-8-validate@5.0.9)
     transitivePeerDependencies:
       - '@fastify/websocket'
       - '@types/node'
@@ -5180,7 +5186,6 @@ packages:
   /@noble/hashes@1.7.1:
     resolution: {integrity: sha512-B8XBPsn4vT/KJAGqDzbwztd+6Yte3P4V7iafm24bxgDe/mlRuK6xmWPuCNrKt2vDafZ8MfJLlchDG/vYafQEjQ==}
     engines: {node: ^14.21.3 || >=16}
-    dev: true
 
   /@noble/secp256k1@1.7.1:
     resolution: {integrity: sha512-hOUk6AyBFmqVrv7k5WAw/LpszxVbj9gGN4JRkIX52fdFAj1UA61KXmZDvqVEm+pOyec3+fIeZB02LYa/pWOArw==}
@@ -6160,7 +6165,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.23.2
       '@noble/ed25519': 1.7.1
-      '@noble/hashes': 1.3.2
+      '@noble/hashes': 1.7.1
       '@noble/secp256k1': 1.7.1
       '@solana/buffer-layout': 4.0.0
       agentkeepalive: 4.2.1
@@ -7059,7 +7064,7 @@ packages:
       util: 0.12.5
       util-deprecate: 1.0.2
       watchpack: 2.4.0
-      ws: 8.13.0(bufferutil@4.0.6)(utf-8-validate@5.0.9)
+      ws: 8.18.1(bufferutil@4.0.6)(utf-8-validate@5.0.9)
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -14237,7 +14242,7 @@ packages:
         optional: true
     dependencies:
       graphql: 16.5.0
-      ws: 8.18.1
+      ws: 8.18.1(bufferutil@4.0.6)(utf-8-validate@5.0.9)
     dev: true
 
   /graphql@16.5.0:
@@ -15111,7 +15116,7 @@ packages:
     peerDependencies:
       ws: '*'
     dependencies:
-      ws: 8.18.1
+      ws: 8.18.1(bufferutil@4.0.6)(utf-8-validate@5.0.9)
     dev: true
 
   /isows@1.0.3(ws@8.13.0):
@@ -15119,7 +15124,7 @@ packages:
     peerDependencies:
       ws: '*'
     dependencies:
-      ws: 8.13.0(bufferutil@4.0.6)(utf-8-validate@5.0.9)
+      ws: 8.13.0
 
   /isstream@0.1.2:
     resolution: {integrity: sha512-Yljz7ffyPbrLpLngrMtZ7NduUgVvi6wG9RJ9IUcyCd59YQ911PBJphODUcbOVbqYfxe1wuYf/LJ8PauMRwsM/g==}
@@ -18573,7 +18578,7 @@ packages:
       '@babel/runtime': 7.23.2
       eventemitter3: 4.0.7
       uuid: 8.3.2
-      ws: 8.13.0(bufferutil@4.0.6)(utf-8-validate@5.0.9)
+      ws: 8.18.1(bufferutil@4.0.6)(utf-8-validate@5.0.9)
     optionalDependencies:
       bufferutil: 4.0.6
       utf-8-validate: 5.0.9
@@ -20613,7 +20618,7 @@ packages:
       abitype: 0.9.8(typescript@5.2.2)(zod@3.22.4)
       isows: 1.0.3(ws@8.13.0)
       typescript: 5.2.2
-      ws: 8.13.0(bufferutil@4.0.6)(utf-8-validate@5.0.9)
+      ws: 8.13.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
@@ -21087,8 +21092,20 @@ packages:
       utf-8-validate:
         optional: true
 
-  /ws@8.13.0(bufferutil@4.0.6)(utf-8-validate@5.0.9):
+  /ws@8.13.0:
     resolution: {integrity: sha512-x9vcZYTrFPC7aSIbj7sRCYo7L/Xb8Iy+pW0ng0wt2vCJv7M9HOMy0UoN3rr+IFC7hb7vXoqS+P9ktyLLLhO+LA==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
+
+  /ws@8.18.1(bufferutil@4.0.6)(utf-8-validate@5.0.9):
+    resolution: {integrity: sha512-RKW2aJZMXeMxVpnZ6bck+RswznaxmzdULiBr6KY7XkTnW8uvt0iT9H5DkHUChXrc+uurzwa0rVI16n/Xzjdz1w==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -21101,19 +21118,6 @@ packages:
     dependencies:
       bufferutil: 4.0.6
       utf-8-validate: 5.0.9
-
-  /ws@8.18.1:
-    resolution: {integrity: sha512-RKW2aJZMXeMxVpnZ6bck+RswznaxmzdULiBr6KY7XkTnW8uvt0iT9H5DkHUChXrc+uurzwa0rVI16n/Xzjdz1w==}
-    engines: {node: '>=10.0.0'}
-    peerDependencies:
-      bufferutil: ^4.0.1
-      utf-8-validate: '>=5.0.2'
-    peerDependenciesMeta:
-      bufferutil:
-        optional: true
-      utf-8-validate:
-        optional: true
-    dev: true
 
   /xml-name-validator@3.0.0:
     resolution: {integrity: sha512-A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==}

@@ -1,5 +1,5 @@
-/** Chains where the Oracle Auctioneers are not avaiable*/
-export const unavailableOracleChains = [1, 8453, 84532, 56, 34443];
+/** Chains where the Oracle Auctioneers are avaiable*/
+export const availableOracleChains = [42161, 10, 137];
 
-/** Chains where the Fixed Expiry Auctioneers are not avaiable*/
-export const unavailableFixedExpiry = [34443, 80084];
+/** Chains where the Fixed Expiry Auctioneers are avaiable*/
+export const availableFixedExpiry = [1, 10, 42161, 56];

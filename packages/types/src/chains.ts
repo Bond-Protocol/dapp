@@ -1,21 +1,3 @@
-export enum CHAIN_ID {
-  ETHEREUM_MAINNET = "1",
-  POLYGON_MAINNET = "137",
-  POLYGON_MUMBAI_TESTNET = "80001",
-  BSC_MAINNET = "56",
-  AVALANCHE_MAINNET = "43114",
-  AVALANCHE_FUJI_TESTNET = "43113",
-  ARBITRUM_MAINNET = "42161",
-  ARBITRUM_GOERLI_TESTNET = "421613",
-  OPTIMISM_MAINNET = "10",
-  OPTIMISM_GOERLI_TESTNET = "420",
-  BASE_MAINNET = "8453",
-  BASE_SEPOLIA = "84532",
-  MODE_MAINNET = "34443",
-  BERA_BARTIO = "80084",
-  SONIC = "146",
-}
-
 export const chainLogos: Record<number, string> = {
   1: "/chains/ethereum.png",
   10: "/chains/optimism.png",
