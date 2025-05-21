@@ -198,11 +198,7 @@ function calculateAllowance(
   let payoutTokenPrice = payoutToken.price;
 
   if (state.priceModel === "static") {
-    if (
-      state.priceModels?.static?.fixedPrice &&
-      !payoutToken.price &&
-      capacityType === "quote"
-    ) {
+    if (state.priceModels?.static?.fixedPrice && !payoutToken.price) {
       payoutTokenPrice = state.priceModels?.static?.fixedPrice;
     } else if (!payoutToken.price) {
       return {
