@@ -26,7 +26,7 @@ const deployment: BondDeployment = {
   chain: baseSepolia,
   subgraphURL:
     "https://subgraph.satsuma-prod.com/35414fbc50a7/spaces-team/bond-protocol-base-sepolia/api",
-  getRpcURL: (key?: string) => `https://base-sepolia.g.alchemy.com/v2${key}`,
+  getRpcURL: (key?: string) => `https://base-sepolia.g.alchemy.com/v2/${key}`,
 };
 
 export default deployment;
