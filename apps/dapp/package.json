@@ -93,7 +93,7 @@
     "babel-loader": "^8.2.5",
     "concurrently": "^7.6.0",
     "husky": "^8.0.0",
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.1",
     "lint-staged": "^13.0.1",
     "postcss": "^8.4.31",
     "prettier": "^2.7.0",
