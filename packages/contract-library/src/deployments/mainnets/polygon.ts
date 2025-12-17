@@ -25,7 +25,7 @@ export default {
   chain: polygon,
   addresses: addresses,
   subgraphURL:
-    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-polygon/api",
+    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-polygon/v0.0.1/gn",
   getRpcURL: (key?: string) =>
     `https://polygon-mainnet.g.alchemy.com/v2/${key}`,
 };
