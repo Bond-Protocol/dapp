@@ -24,6 +24,6 @@ export default {
   chain: base,
   addresses: addresses,
   subgraphURL:
-    "https://subgraph.satsuma-prod.com/8cad5c83fb09/spaces-team/bond-protocol-base/api",
+    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-base/v0.0.3/gn",
   getRpcURL: (key?: string) => `https://base-mainnet.g.alchemy.com/v2/${key}`,
 };
