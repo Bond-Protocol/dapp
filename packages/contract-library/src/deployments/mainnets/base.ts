@@ -24,6 +24,6 @@ export default {
   chain: base,
   addresses: addresses,
   subgraphURL:
-    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-base/v0.0.3/gn",
+    "https://gateway.thegraph.com/api/subgraphs/id/8mab7L62yataWPcKSBqcLpLoSw7WU5VLsfwqnHmzzgX1",
   getRpcURL: (key?: string) => `https://base-mainnet.g.alchemy.com/v2/${key}`,
 };

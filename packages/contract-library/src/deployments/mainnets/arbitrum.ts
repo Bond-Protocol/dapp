@@ -23,6 +23,6 @@ export default {
   chain: arbitrum,
   addresses,
   subgraphURL:
-    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-arbitrum/v0.0.3/gn",
+    "https://gateway.thegraph.com/api/subgraphs/id/4ePbdoXWVGRgUFJk2GirF4Gi3X3qcKPhAzWJJvH5M6g1",
   getRpcURL: (key?: string) => `https://arb-mainnet.g.alchemy.com/v2/${key}`,
 };

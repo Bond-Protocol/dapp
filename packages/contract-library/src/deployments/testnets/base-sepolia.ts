@@ -25,7 +25,7 @@ const deployment: BondDeployment = {
   addresses,
   chain: baseSepolia,
   subgraphURL:
-    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-base-sepolia/v0.0.3/gn",
+    "https://gateway.thegraph.com/api/subgraphs/id/3AvuwA5Zn8mF3obaYcvUoRNVN5WFzX8SfN1f362dprag",
   getRpcURL: (key?: string) => `https://base-sepolia.g.alchemy.com/v2/${key}`,
 };
 

@@ -25,6 +25,6 @@ export default {
   chain: sonic,
   addresses: addresses,
   subgraphURL:
-    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-sonic-mainnet/v0.0.1/gn",
+    "https://gateway.thegraph.com/api/subgraphs/id/44bPCgvSEQVe1aFzxXYMMgdUFyhRk7FxnSD5C6VmJV1D",
   getRpcURL: (key?: string) => `https://sonic-mainnet.g.alchemy.com/v2/${key}`,
 };
