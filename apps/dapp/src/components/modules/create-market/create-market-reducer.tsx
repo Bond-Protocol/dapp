@@ -1,9 +1,9 @@
 import { calculateTrimDigits, trimAsNumber, formatDate } from "formatters";
 import { createContext, Dispatch, useContext, useReducer } from "react";
 import { differenceInCalendarDays } from "date-fns";
-import { formatUnits, parseUnits } from "viem";
+import { parseUnits } from "viem";
 import { switchNetwork } from "@wagmi/core";
-import { unavailableOracleChains } from "./config";
+import { availableOracleChains } from "./config";
 
 const DEFAULT_DEPOSIT_INTERVAL = 86400;
 const DEFAULT_DEBT_BUFFER = 75;
@@ -198,11 +198,7 @@ function calculateAllowance(
   let payoutTokenPrice = payoutToken.price;
 
   if (state.priceModel === "static") {
-    if (
-      state.priceModels?.static?.fixedPrice &&
-      !payoutToken.price &&
-      capacityType === "quote"
-    ) {
+    if (state.priceModels?.static?.fixedPrice && !payoutToken.price) {
       payoutTokenPrice = state.priceModels?.static?.fixedPrice;
     } else if (!payoutToken.price) {
       return {
@@ -272,7 +268,7 @@ export const reducer = (
 
       switchNetwork({ chainId });
 
-      const oracleUnavailable = unavailableOracleChains.includes(chainId);
+      const oracleUnavailable = !availableOracleChains.includes(chainId);
 
       return {
         ...state,

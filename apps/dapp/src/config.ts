@@ -45,3 +45,6 @@ export const testnetSubgraphs =
           "https://subgraph.satsuma-prod.com/35414fbc50a7/spaces-team/bond-protocol-base-sepolia/api",
       }
     : {};
+
+// Key is domain restricted to *.bondprotocol.finance
+export const GRAPH_API_KEY = "70873ff55ac0869c81ba8a128ef5e786";
