@@ -24,6 +24,6 @@ export default {
   chain: optimism,
   addresses: addresses,
   subgraphURL:
-    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-optimism/v0.0.1/gn",
+    "https://gateway.thegraph.com/api/subgraphs/id/36u2MphKvLra96HPfFVYeEtHkj2G62eBe9BJZojFTfWx",
   getRpcURL: (key?: string) => `https://opt-mainnet.g.alchemy.com/v2/${key}`,
 };

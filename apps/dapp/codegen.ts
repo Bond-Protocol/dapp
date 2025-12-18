@@ -5,7 +5,8 @@ dotenv.config();
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: process.env.VITE_SUBGRAPH_CODEGEN_SCHEMA_ENDPOINT,
+  schema:
+    "https://api.studio.thegraph.com/query/47265/bond-protocol-base/version/latest",
   documents: "src/graphql/queries.gql",
   config: {
     legacyMode: false,

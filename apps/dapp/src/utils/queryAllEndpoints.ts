@@ -5,15 +5,18 @@ import {
 import { environment } from "src/environment";
 import { request } from "./request";
 import { Variables } from "graphql-request";
+import { GRAPH_API_KEY } from "src/config";
 
 export function queryAllEndpoints<TQuery>({
   document,
   variables,
   enabled = true,
+  headers = { Authorization: `Bearer ${GRAPH_API_KEY}` },
 }: {
   document: string;
   variables?: Variables;
   enabled?: boolean;
+  headers?: Record<string, string>;
 }) {
   const isTestnet = environment.isTestnet;
   const endpoints = isTestnet ? testnetEndpoints : mainnetEndpoints;
@@ -26,9 +29,10 @@ export function queryAllEndpoints<TQuery>({
   const queries = endpoints.map(({ url }) => ({
     queryKey: [url, document],
     queryFn: async () => {
-      const response = await request<TQuery>(url, document, vars);
+      const response = await request<TQuery>(url, document, vars, headers);
       return response;
     },
+
     enabled,
   }));
 

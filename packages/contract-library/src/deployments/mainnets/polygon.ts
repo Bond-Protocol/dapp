@@ -25,7 +25,7 @@ export default {
   chain: polygon,
   addresses: addresses,
   subgraphURL:
-    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-polygon/v0.0.1/gn",
+    "https://gateway.thegraph.com/api/subgraphs/id/3pfu8JLfU29gum3EmRwy9QMNudnZEzME3aqEpbH6So84",
   getRpcURL: (key?: string) =>
     `https://polygon-mainnet.g.alchemy.com/v2/${key}`,
 };

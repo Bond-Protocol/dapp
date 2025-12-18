@@ -25,6 +25,6 @@ export default {
   chain: bsc,
   addresses,
   subgraphURL:
-    "https://api.goldsky.com/api/public/project_cmgzjlmla004j5np2cgyz7il6/subgraphs/bond-protocol-bsc/v0.0.1/gn",
+    "https://gateway.thegraph.com/api/subgraphs/id/ZoGqhRHsndEdvqQ6aJeG5xtLRq4LnrMajotrApRyUuM",
   getRpcURL: (key?: string) => `https://bnb-mainnet.g.alchemy.com/v2/${key}`,
 };
