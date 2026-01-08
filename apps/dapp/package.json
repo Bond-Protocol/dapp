@@ -99,7 +99,7 @@
     "prettier": "^2.7.0",
     "prettier-plugin-tailwindcss": "^0.1.13",
     "prop-types": "^15.8.1",
-    "storybook": "^7.2.1",
+    "storybook": "^7.6.21",
     "tsx": "^4.19.3",
     "typescript": "^5.2.2",
     "vite": "^3.2.7",
