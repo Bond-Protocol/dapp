@@ -23,7 +23,7 @@
   "devDependencies": {
     "@bond-protocol/eslint-config-custom": "workspace:*",
     "@bond-protocol/tsconfig": "workspace:*",
-    "eslint": "^8.17.0",
+    "eslint": "^9.26.0",
     "prettier": "^2.7.0",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "turbo": "^2.4.4"
